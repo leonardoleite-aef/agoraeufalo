@@ -136,10 +136,11 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 ---
 
 ### [Elementos de Conversão & Suporte]
-- **💬 WhatsApp Flutuante Oficial:**
+- **💬 WhatsApp Flutuante Oficial & Redes:**
   - Número: `+55 (31) 99981-7975`
-  - Link: `https://wa.me/5531999817975?text=Hello%20Leo!%20Quero%20entrar%20no%20Projeto%20AEF%202026.%20Pode%20me%20ajudar%3F`
-  - Mensagem pré-pronta: *"Hello Leo! Quero entrar no Projeto AEF 2026. Pode me ajudar?"*
+  - Vendas / Matrícula: *"Hello Leo! Quero entrar no Projeto AEF 2026. Pode me ajudar?"*
+  - Suporte ao Aluno: *"Hello Leo! Preciso da sua ajuda!"*
+  - Link Suporte: `https://wa.me/5531999817975?text=Hello%20Leo!%20Preciso%20da%20sua%20ajuda!`
 - **📱 Barra Fixa no Celular (Sticky CTA):**
   - Aparece no scroll mobile com *"Projeto 2026 • Vagas Abertas"* e botão *"Garantir Vaga"* (`?src=sticky_mobile`).
 - **🌐 Redes Sociais Oficiais Memorizadas para o Projeto:**
