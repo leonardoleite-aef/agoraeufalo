@@ -310,23 +310,24 @@
               <h4 class="text-lg font-bold text-white mb-1">Onde devemos enviar seu material?</h4>
               <p class="text-xs text-slate-400 mb-6">Preencha seus dados para receber o acesso imediato.</p>
 
-              <!-- Formulário compatível com Hotmart Send -->
+              <!-- Formulário Integrado Hotmart Send (ID: lEunEEB) -->
               <form 
-                id="lead-capture-form" 
-                action="#" 
-                method="POST" 
+                klicksend-form-id="lEunEEB" 
+                autocomplete="off" 
+                method="post" 
+                action="https://handler.send.hotmart.com/subscription/lEunEEB?hotfeature=53"
                 class="space-y-4"
               >
                 <!-- Campo Nome -->
                 <div>
-                  <label for="lead-name" class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Seu Primeiro Nome</label>
+                  <label for="first_name" class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Seu Primeiro Nome</label>
                   <div class="relative">
                     <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                     <input 
                       type="text" 
-                      id="lead-name" 
-                      name="name" 
-                      required 
+                      id="first_name" 
+                      name="first_name" 
+                      autocomplete="off" 
                       placeholder="Como podemos te chamar?"
                       class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-amber-400 transition-colors"
                     />
@@ -335,13 +336,14 @@
 
                 <!-- Campo E-mail -->
                 <div>
-                  <label for="lead-email" class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Seu Melhor E-mail</label>
+                  <label for="email" class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Seu Melhor E-mail</label>
                   <div class="relative">
                     <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                     <input 
                       type="email" 
-                      id="lead-email" 
+                      id="email" 
                       name="email" 
+                      autocomplete="off" 
                       required 
                       placeholder="seuemail@exemplo.com"
                       class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-amber-400 transition-colors"
@@ -349,9 +351,15 @@
                   </div>
                 </div>
 
+                <!-- Campo Oculto Anti-Bot Hotmart Send -->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                  <input type="text" autocomplete="new-password" name="b_lEunEEB" tabindex="-1" value="">
+                </div>
+
                 <!-- Botão de Envio CTA -->
                 <button 
                   type="submit" 
+                  klicksend-form-submit-id="lEunEEB"
                   class="btn-cta-primary w-full py-4 rounded-xl text-sm sm:text-base font-extrabold inline-flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
                 >
                   <i data-lucide="sparkles" class="w-4 h-4 text-slate-950"></i>
@@ -362,6 +370,24 @@
                   <i data-lucide="lock" class="w-3 h-3 text-amber-400"></i>
                   <span>Seus dados estão 100% protegidos. Zero spam.</span>
                 </p>
+
+                <!-- Script Oficial de Rastreamento de UTMs do Hotmart Send -->
+                <script>
+                  (function() {
+                    try {
+                      var pageParams = new URLSearchParams(window.location.search);
+                      var form = document.querySelector('form[klicksend-form-id="lEunEEB"]');
+                      if (form && pageParams.toString()) {
+                        var formActionUrl = new URL(form.action);
+                        var formActionSearchParams = formActionUrl.searchParams.size > 0 ? formActionUrl.searchParams.toString() + '&' : '';
+                        var combinedParams = formActionSearchParams + pageParams.toString();
+                        form.action = formActionUrl.origin + formActionUrl.pathname + '?' + combinedParams;
+                      }
+                    } catch (e) {
+                      console.warn('Hotmart Send UTM script:', e);
+                    }
+                  })();
+                </script>
               </form>
 
             </div>
