@@ -96,14 +96,14 @@ body {
 .premium-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 1rem;
+  border-radius: 1.25rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .premium-card:hover {
   border-color: #CBD5E1;
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px -10px rgba(10, 25, 47, 0.08);
+  box-shadow: 0 16px 36px -12px rgba(10, 25, 47, 0.09);
 }
 
 /* Lead Capture Section */
@@ -180,4 +180,104 @@ body {
 .offer-box {
   background: radial-gradient(circle at 50% 0%, #172A45 0%, #0A192F 100%);
   border: 1px solid rgba(197, 126, 30, 0.35);
+}
+
+/* ========================================================================= */
+/* INFOGRÁFICO HEXÁGONO CÍCLICO AMPLIADO (MAGIC STORIES)                      */
+/* ========================================================================= */
+.magic-hero-card {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+  border: 2px solid rgba(197, 126, 30, 0.4);
+  box-shadow: 0 20px 45px -15px rgba(10, 25, 47, 0.12);
+  border-radius: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.magic-hero-card:hover {
+  border-color: rgba(197, 126, 30, 0.6);
+  box-shadow: 0 24px 55px -15px rgba(10, 25, 47, 0.16);
+}
+
+.hexagon-svg {
+  filter: drop-shadow(0 8px 24px rgba(10, 25, 47, 0.1));
+}
+
+.hex-vertex {
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hex-vertex .vertex-circle {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hex-vertex:hover .vertex-circle,
+.hex-vertex.active .vertex-circle {
+  fill: #C57E1E !important;
+  stroke: #FFFFFF !important;
+  stroke-width: 3.5px !important;
+  filter: drop-shadow(0 0 12px rgba(197, 126, 30, 0.8));
+}
+
+.hex-vertex:hover .vertex-text,
+.hex-vertex.active .vertex-text {
+  fill: #FFFFFF !important;
+  font-weight: 800;
+}
+
+.hex-vertex:hover .vertex-label,
+.hex-vertex.active .vertex-label {
+  fill: #C57E1E !important;
+  font-weight: 800 !important;
+}
+
+.hex-line {
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.hex-vertex.active + .hex-line,
+.hex-vertex:hover + .hex-line {
+  stroke: #C57E1E;
+  stroke-width: 3px;
+}
+
+/* Step pulse animation */
+@keyframes vertexPulseLarge {
+  0%, 100% {
+    r: 22;
+  }
+  50% {
+    r: 26;
+  }
+}
+
+.hex-vertex.active .vertex-circle {
+  animation: vertexPulseLarge 2s infinite ease-in-out;
+}
+
+/* Prompt indicator badge */
+.pulse-indicator {
+  animation: badgeGlow 2.5s infinite ease-in-out;
+}
+
+@keyframes badgeGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(197, 126, 30, 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 8px rgba(197, 126, 30, 0);
+  }
+}
+
+.cycle-step-btn {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cycle-step-btn.active {
+  background-color: #0A192F !important;
+  color: #FFFFFF !important;
+  border-color: #C57E1E !important;
+  box-shadow: 0 4px 12px rgba(10, 25, 47, 0.2);
 }
