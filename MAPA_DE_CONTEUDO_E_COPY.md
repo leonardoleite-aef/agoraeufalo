@@ -124,9 +124,10 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 
 ## 🌐 ARQUITETURA DE PÁGINAS DO PROJETO
 
-1. **Página Principal Ativa (Carro-Chefe):**
-   - [`index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/index.html) — Página de Vendas do **Projeto AgoraEuFalo 2026** (Formação Completa com Mentorias).
-   - [`projeto2026.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto2026.html) — Espelho preparado para quando a Home for promovida a index.
+1. **Página Principal Ativa & Programa Anual Atemporal:**
+   - [`index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/index.html) — Página de Vendas ativa no domínio raiz.
+   - [`projeto-aef.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto-aef.html) — **URL Atemporal Oficial do Programa** (`agoraeufalo.com.br/projeto-aef.html` ou `/projeto-aef`), atualizada a cada ano sem quebrar links externos.
+   - [`projeto2026.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto2026.html) — Alias específico do ano 2026.
 
 2. **Futura Home Page Institucional (Super Clean):**
    - [`home.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/home.html) — Portal Oficial da Marca, apresentação da autoridade do Professor Leo, método e vitrine de todos os 4 produtos.
