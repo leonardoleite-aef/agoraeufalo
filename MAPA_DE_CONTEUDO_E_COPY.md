@@ -126,21 +126,25 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 ### [Bloco 9] FAQ (5 OBJEÇÕES CHAVE)
 - Dúvidas sobre iniciante do zero, idade +50, mentoria ao vivo e material.
 
-### [Bloco 11] FOOTER & REDES SOCIAIS OFICIAIS
+### [Bloco 11] FOOTER & SUBPÁGINAS INSTITUCIONAIS
+- **Subpáginas Oficiais Ativas:**
+  - [Termos de Uso](file:///Users/macbookpro/Desktop/agoraeufalo_site/termos-de-uso.html) (`termos-de-uso.html`)
+  - [Política de Privacidade (LGPD)](file:///Users/macbookpro/Desktop/agoraeufalo_site/politica-de-privacidade.html) (`politica-de-privacidade.html`)
 - **Instagram Oficial:** `https://www.instagram.com/leonardoagoraeufalo/`
 - **YouTube Oficial:** `https://www.youtube.com/@agoraeufaloingles`
 - **Facebook Oficial:** `https://www.facebook.com/agoraeufalo`
-- **WhatsApp Oficial:** `https://wa.me/5531999817975?text=Hello%20Leo!%20Quero%20entrar%20no%20Projeto%20AEF%202026.%20Pode%20me%20ajudar%3F`
+- **WhatsApp Oficial:** `+55 (31) 99981-7975`
+- **E-mail Oficial:** `selexenglish@gmail.com`
 - **Copyright:** *© 2026 AgoraEuFalo. Todos os direitos reservados.*
 
 ---
 
-### [Elementos de Conversão & Suporte]
-- **💬 WhatsApp Flutuante Oficial & Redes:**
+### [Elementos de Conversão & Suporte Memorizados]
+- **💬 WhatsApp Oficial:**
   - Número: `+55 (31) 99981-7975`
   - Vendas / Matrícula: *"Hello Leo! Quero entrar no Projeto AEF 2026. Pode me ajudar?"*
   - Suporte ao Aluno: *"Hello Leo! Preciso da sua ajuda!"*
-  - Link Suporte: `https://wa.me/5531999817975?text=Hello%20Leo!%20Preciso%20da%20sua%20ajuda!`
+- **📧 E-mail Oficial:** `selexenglish@gmail.com`
 - **📱 Barra Fixa no Celular (Sticky CTA):**
   - Aparece no scroll mobile com *"Projeto 2026 • Vagas Abertas"* e botão *"Garantir Vaga"* (`?src=sticky_mobile`).
 - **🌐 Redes Sociais Oficiais Memorizadas para o Projeto:**
