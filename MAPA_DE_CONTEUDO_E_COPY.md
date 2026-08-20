@@ -137,7 +137,8 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
    - [`quick-start.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/quick-start.html) — Curso English Quick Start (Base Sólida em 6 Módulos).
    - [`frases-prontas.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/frases-prontas.html) — Curso Frases Prontas (Kit de Sobrevivência para Viagens e Trabalho).
 
-4. **Subpáginas Institucionais & Legais:**
+4. **Subpáginas Institucionais, Legais & Conversão:**
+   - [`obrigado.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/obrigado.html) — **Página de Obrigado / Confirmação de Inscrição** (direcionamento para e-mail, grupo/WhatsApp oficial e redes sociais).
    - [`termos-de-uso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/termos-de-uso.html) — Termos de Uso (Direitos autorais, licença, CDC e garantia).
    - [`politica-de-privacidade.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/politica-de-privacidade.html) — Política de Privacidade (LGPD Lei 13.709/2018).
 
