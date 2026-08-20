@@ -122,28 +122,32 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 ### [Bloco 8] FAQ (5 OBJEÇÕES CHAVE)
 - Dúvidas sobre iniciante do zero, idade +50, mentoria ao vivo e material.
 
-### [Bloco 11] FOOTER & SUBPÁGINAS INSTITUCIONAIS
-- **Subpáginas Oficiais Ativas:**
-  - [Termos de Uso](file:///Users/macbookpro/Desktop/agoraeufalo_site/termos-de-uso.html) (`termos-de-uso.html`)
-  - [Política de Privacidade (LGPD)](file:///Users/macbookpro/Desktop/agoraeufalo_site/politica-de-privacidade.html) (`politica-de-privacidade.html`)
-- **Instagram Oficial:** `https://www.instagram.com/leonardoagoraeufalo/`
-- **YouTube Oficial:** `https://www.youtube.com/@agoraeufaloingles`
-- **Facebook Oficial:** `https://www.facebook.com/agoraeufalo`
-- **WhatsApp Oficial:** `+55 (31) 99981-7975`
-- **E-mail Oficial:** `selexenglish@gmail.com`
-- **Copyright:** *© 2026 AgoraEuFalo. Todos os direitos reservados.*
+## 🌐 ARQUITETURA DE PÁGINAS DO PROJETO
+
+1. **Página Principal Ativa (Carro-Chefe):**
+   - [`index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/index.html) — Página de Vendas do **Projeto AgoraEuFalo 2026** (Formação Completa com Mentorias).
+   - [`projeto2026.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto2026.html) — Espelho preparado para quando a Home for promovida a index.
+
+2. **Futura Home Page Institucional (Super Clean):**
+   - [`home.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/home.html) — Portal Oficial da Marca, apresentação da autoridade do Professor Leo, método e vitrine de todos os 4 produtos.
+
+3. **Páginas de Vendas Específicas (Cursos Avulsos):**
+   - [`magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/magic-stories.html) — Curso Magic Stories (30 Ciclos de Treino Auditivo & Pronúncia).
+   - [`quick-start.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/quick-start.html) — Curso English Quick Start (Base Sólida em 6 Módulos).
+   - [`frases-prontas.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/frases-prontas.html) — Curso Frases Prontas (Kit de Sobrevivência para Viagens e Trabalho).
+
+4. **Subpáginas Institucionais & Legais:**
+   - [`termos-de-uso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/termos-de-uso.html) — Termos de Uso (Direitos autorais, licença, CDC e garantia).
+   - [`politica-de-privacidade.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/politica-de-privacidade.html) — Política de Privacidade (LGPD Lei 13.709/2018).
 
 ---
 
-### [Elementos de Conversão & Suporte Memorizados]
-- **💬 WhatsApp Oficial:**
-  - Número: `+55 (31) 99981-7975`
+### [Canais de Atendimento & Redes Memorizados]
+- **💬 WhatsApp Oficial:** `+55 (31) 99981-7975`
   - Vendas / Matrícula: *"Hello Leo! Quero entrar no Projeto AEF 2026. Pode me ajudar?"*
   - Suporte ao Aluno: *"Hello Leo! Preciso da sua ajuda!"*
 - **📧 E-mail Oficial:** `selexenglish@gmail.com`
-- **📱 Barra Fixa no Celular (Sticky CTA):**
-  - Aparece no scroll mobile com *"Projeto 2026 • Vagas Abertas"* e botão *"Garantir Vaga"* (`?src=sticky_mobile`).
-- **🌐 Redes Sociais Oficiais Memorizadas para o Projeto:**
+- **🌐 Redes Sociais Oficiais:**
   - Instagram: `https://www.instagram.com/leonardoagoraeufalo/`
   - YouTube: `https://www.youtube.com/@agoraeufaloingles`
   - Facebook: `https://www.facebook.com/agoraeufalo`
