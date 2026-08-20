@@ -38,6 +38,14 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 
 ---
 
+## 🔍 Configuração de SEO & Social Sharing (WhatsApp / Google)
+- **Title Tag:** `AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade`
+- **Meta Description:** `O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça!`
+- **OG Share Image:** `assets/images/og-image.jpg` (1200x630 px)
+- **Schema.org Rich Snippets:** Course, Person, FAQPage e EducationalOrganization (JSON-LD).
+
+---
+
 ## 🔍 Detalhamento das Seções
 
 ### [Bloco 0] HEADER
