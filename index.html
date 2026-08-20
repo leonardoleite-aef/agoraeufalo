@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgoraEuFalo | Professor Leonardo Leite</title>
-  <meta name="description" content="Aqui você aprende e treina Inglês todos os dias com o Professor Leonardo Leite. 35 anos de experiência em sala de aula premium.">
+  <title>AgoraEuFalo | Professor Leonardo Leite - Projeto 2026</title>
+  <meta name="description" content="Pare de memorizar listas de regras. Treine seu ouvido para falar Inglês com naturalidade com o Professor Leonardo Leite. 35 anos de experiência em sala de aula.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -41,294 +41,182 @@
 <body class="bg-white text-slate-900 antialiased selection:bg-amber-100 selection:text-amber-900">
 
   <!-- ========================================================================= -->
-  <!-- HEADER / NAVEGAÇÃO MINIMALISTA                                            -->
+  <!-- HEADER / BARRA DE NAVEGAÇÃO                                               -->
   <!-- ========================================================================= -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
     <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
       
       <!-- Marca / Logo -->
       <a href="#" class="group flex items-center gap-2">
-        <span class="text-2xl sm:text-[26px] font-extrabold tracking-tight text-slate-900 transition-colors group-hover:text-brand-accent">
+        <span class="text-2xl sm:text-[26px] font-extrabold tracking-tight text-slate-950 transition-colors group-hover:text-brand-accent">
           AgoraEuFalo<span class="text-brand-accent">.</span>
         </span>
       </a>
 
-      <!-- Ações Diretas / Header Links -->
-      <nav class="flex items-center gap-4 sm:gap-6">
-        <a href="#metodologia" class="hidden md:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-          Metodologia
-        </a>
-        <a href="#ecossistema" class="hidden md:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-          O que está incluído
-        </a>
-        <a href="#material-gratuito" class="hidden sm:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
-          Guia Gratuito
-        </a>
-        <a href="#projeto-2026" class="btn-cta-primary px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold inline-flex items-center gap-2">
-          <span>Garantir Vaga</span>
+      <!-- Navegação para Seções da Sales Page -->
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
+        <a href="#o-metodo" class="hover:text-slate-950 transition-colors">O Método</a>
+        <a href="#o-que-inclui" class="hover:text-slate-950 transition-colors">O Que Inclui</a>
+        <a href="#sobre-o-professor" class="hover:text-slate-950 transition-colors">Professor Leonardo</a>
+        <a href="#depoimentos" class="hover:text-slate-950 transition-colors">Depoimentos</a>
+        <a href="#faq" class="hover:text-slate-950 transition-colors">Dúvidas</a>
+      </nav>
+
+      <!-- CTA Topo -->
+      <div class="flex items-center gap-3">
+        <a href="#inscricao" class="btn-cta-primary px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold inline-flex items-center gap-2">
+          <span>Garantir Vaga 2026</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </a>
-      </nav>
+      </div>
 
     </div>
   </header>
 
   <!-- ========================================================================= -->
-  <!-- BLOCO 1: O HERO (TOPO) - O IMPACTO INICIAL                                -->
+  <!-- 1. HERO SECTION: A GRANDE PROMESSA & VÍDEO CENTRAL (VSL)                 -->
   <!-- ========================================================================= -->
-  <section id="hero" class="relative pt-10 pb-16 sm:pt-16 sm:pb-24 overflow-hidden">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        
-        <!-- Coluna de Texto e Apresentação -->
-        <div class="lg:col-span-7 flex flex-col items-start text-left">
-          
-          <!-- Badge de Sala de Aula Premium -->
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-xs font-semibold tracking-wide uppercase mb-6">
-            <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
-            35 Anos de Experiência em Sala de Aula
-          </div>
-
-          <!-- Título Principal -->
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.12] mb-5">
-            AgoraEuFalo<span class="text-brand-accent">.</span>
-          </h1>
-
-          <!-- Subtítulo -->
-          <p class="text-xl sm:text-2xl font-medium text-slate-800 leading-snug mb-5">
-            Aqui você aprende e treina Inglês todos os dias.
-          </p>
-
-          <!-- Bio do Professor Leonardo Leite -->
-          <div class="border-l-2 border-brand-accent/60 pl-4 py-1 mb-8">
-            <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-              <strong class="font-semibold text-slate-900">Professor Leonardo Leite.</strong> 35 anos de experiência ajudando pessoas a escutar, entender e falar Inglês com confiança e naturalidade.
-            </p>
-          </div>
-
-          <!-- Chamada para Ação (CTA) Principal -->
-          <div id="projeto-2026" class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-            <a href="#ecossistema" class="btn-cta-primary px-8 py-4 rounded-xl text-base sm:text-lg font-semibold inline-flex items-center justify-center gap-3 text-center shadow-lg">
-              <span>Quero garantir minha vaga no Projeto 2026</span>
-              <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
-            </a>
-          </div>
-
-          <!-- Micro-garantias / Credibilidade sóbria -->
-          <div class="mt-6 flex items-center gap-6 text-xs text-slate-500 font-medium">
-            <div class="flex items-center gap-1.5">
-              <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
-              <span>Metodologia testada e aprovada</span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
-              <span>Acompanhamento direto</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Coluna Visual / Foto do Professor Leonardo Leite -->
-        <div class="lg:col-span-5 flex justify-center">
-          <div class="relative w-full max-w-md">
-            
-            <!-- Moldura Retrato Elegante -->
-            <div class="portrait-frame bg-slate-900 aspect-square sm:aspect-[4/4.5] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
-              <img 
-                src="assets/images/leonardo-leite.png" 
-                alt="Professor Leonardo Leite - AgoraEuFalo" 
-                class="w-full h-full object-cover object-top filter contrast-[1.03] transition-transform duration-700 hover:scale-[1.02]"
-                loading="eager"
-              />
-              
-              <!-- Gradiente sutil inferior com legenda de autoridade -->
-              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent p-5 text-white">
-                <p class="text-sm font-bold tracking-wide">Prof. Leonardo Leite</p>
-                <p class="text-xs text-slate-300">Fundador do AgoraEuFalo • 35 anos de docência</p>
-              </div>
-            </div>
-
-            <!-- Efeito de sombra sutil na base -->
-            <div class="absolute -bottom-4 -right-4 -z-10 w-full h-full bg-slate-100 rounded-2xl border border-slate-200 hidden sm:block"></div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- BLOCO 2: O ECOSSISTEMA (O QUE VOCÊ LEVA)                                  -->
-  <!-- ========================================================================= -->
-  <section id="ecossistema" class="py-16 sm:py-24 bg-white border-t border-slate-100">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      
-      <!-- Cabeçalho da Seção -->
-      <div class="max-w-2xl mb-12 sm:mb-16">
-        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Currículo de Aprendizado</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight">
-          Sua jornada completa inclui:
-        </h2>
-        <p class="mt-3 text-base sm:text-lg text-slate-600">
-          Um ambiente estruturado com tudo o que você precisa para desenvolver fluência prática, sem distrações.
-        </p>
-      </div>
-
-      <!-- Grid de 4 Cards (1 por linha no mobile, 2 no tablet, 4 no desktop) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
-        
-        <!-- Card 1: Magic Stories -->
-        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5 group-hover:bg-amber-50 group-hover:text-brand-accent transition-colors">
-              <i data-lucide="book-open" class="w-6 h-6"></i>
-            </div>
-            
-            <div class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
-              Curso Completo
-            </div>
-            
-            <h3 class="text-xl font-bold text-slate-900 mb-2">
-              Magic Stories
-            </h3>
-            
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Treine sua escuta e retenção natural através de narrativas inteligentes e contextualizadas.
-            </p>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-500 group-hover:text-brand-accent transition-colors">
-            <span>Treino de escuta e compreensão</span>
-          </div>
-        </div>
-
-        <!-- Card 2: English Quick Start -->
-        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5 group-hover:bg-amber-50 group-hover:text-brand-accent transition-colors">
-              <i data-lucide="zap" class="w-6 h-6"></i>
-            </div>
-            
-            <div class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
-              Curso Completo
-            </div>
-            
-            <h3 class="text-xl font-bold text-slate-900 mb-2">
-              English Quick Start
-            </h3>
-            
-            <p class="text-sm text-slate-600 leading-relaxed">
-              A base essencial e a estrutura inicial para destravar sua fala com segurança desde os primeiros passos.
-            </p>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-500 group-hover:text-brand-accent transition-colors">
-            <span>Fundamentos & destrave rápido</span>
-          </div>
-        </div>
-
-        <!-- Card 3: Frases Prontas -->
-        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5 group-hover:bg-amber-50 group-hover:text-brand-accent transition-colors">
-              <i data-lucide="message-square-quote" class="w-6 h-6"></i>
-            </div>
-            
-            <div class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
-              Curso Completo
-            </div>
-            
-            <h3 class="text-xl font-bold text-slate-900 mb-2">
-              Frases Prontas
-            </h3>
-            
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Repertório direto ao ponto para situações reais do cotidiano, trabalho, reuniões e viagens.
-            </p>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-500 group-hover:text-brand-accent transition-colors">
-            <span>Comunicação prática e imediata</span>
-          </div>
-        </div>
-
-        <!-- Card 4: Mentoria ao Vivo Semanal -->
-        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group border-brand-accent/30 bg-amber-50/20">
-          <div>
-            <div class="w-12 h-12 rounded-xl bg-amber-100/70 text-brand-accent flex items-center justify-center mb-5">
-              <i data-lucide="video" class="w-6 h-6"></i>
-            </div>
-            
-            <div class="inline-block px-2.5 py-1 rounded-md bg-brand-accent text-white text-[11px] font-bold uppercase tracking-wider mb-3">
-              O seu acompanhamento
-            </div>
-            
-            <h3 class="text-xl font-bold text-slate-900 mb-2">
-              Mentoria ao vivo semanal
-            </h3>
-            
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Encontros regulares comigo para tirar dúvidas, ajustar pronúncia e praticar o Inglês em tempo real.
-            </p>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-amber-200/60 flex items-center text-xs font-semibold text-brand-accent">
-            <span>Acesso direto ao professor</span>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- BLOCO 3: A PROVA DE AUTORIDADE (O VÍDEO / DIDÁTICA)                       -->
-  <!-- ========================================================================= -->
-  <section id="metodologia" class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
+  <section id="hero" class="relative pt-12 pb-16 sm:pt-16 sm:pb-24 bg-gradient-to-b from-slate-50 via-white to-white overflow-hidden">
     <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
       
-      <!-- Título da Seção -->
-      <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Didática em Ação</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-4">
-        A metodologia na prática: veja como eu ensino.
-      </h2>
-      <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-10">
-        Assista a uma demonstração real de como 35 anos de prática tornam o aprendizado de Inglês simples, intuitivo e definitivo.
+      <!-- Badge de Autoridade Superior -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-slate-800 text-xs font-bold tracking-wide uppercase mb-6">
+        <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
+        Método Validado em 35 Anos de Sala de Aula
+      </div>
+
+      <!-- Headline Principal (Curta, Direta e Cortante) -->
+      <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-950 tracking-tight leading-[1.18] mb-6">
+        Pare de memorizar listas de regras.<br class="hidden sm:inline"> Treine seu ouvido para <span class="underline decoration-brand-accent decoration-wavy decoration-2 underline-offset-8">falar Inglês com naturalidade</span>.
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-lg sm:text-xl text-slate-600 font-normal max-w-2xl mx-auto leading-relaxed mb-10">
+        Um sistema diário de escuta, compreensão e conversação real para você destravar sua comunicação de forma definitiva — sem fórmulas mágicas e sem rodeios.
       </p>
 
-      <!-- Container do Vídeo -->
-      <div class="video-preview-wrapper relative aspect-video w-full max-w-3xl mx-auto shadow-2xl group cursor-pointer" id="video-wrapper">
+      <!-- VÍDEO CENTRAL (VSL / AULA DEMONSTRATIVA) -->
+      <div class="video-preview-wrapper relative aspect-video w-full max-w-3xl mx-auto shadow-2xl group cursor-pointer mb-10" id="video-wrapper">
         
         <!-- Capa / Poster do Vídeo -->
         <div id="video-cover" class="absolute inset-0 w-full h-full bg-slate-900 flex items-center justify-center">
           <img 
             src="assets/images/leonardo-leite.png" 
-            alt="Professor Leonardo Leite Aula" 
-            class="w-full h-full object-cover opacity-40 filter brightness-90 group-hover:scale-105 transition-transform duration-700"
+            alt="Professor Leonardo Leite - Aula Demonstrativa AgoraEuFalo" 
+            class="w-full h-full object-cover opacity-45 filter contrast-[1.05] brightness-90 group-hover:scale-105 transition-transform duration-700"
           />
           
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/60"></div>
 
           <!-- Botão de Play Estilizado -->
-          <div class="relative z-10 flex flex-col items-center">
-            <button id="play-video-btn" aria-label="Assistir ao vídeo de demonstração" class="w-20 h-20 rounded-full bg-brand-accent text-white flex items-center justify-center play-pulse shadow-xl hover:bg-brand-accent-hover transition-all">
-              <i data-lucide="play" class="w-8 h-8 ml-1 fill-white"></i>
+          <div class="relative z-10 flex flex-col items-center px-4">
+            <button id="play-video-btn" aria-label="Assistir ao vídeo demonstrativo" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-brand-accent text-white flex items-center justify-center play-pulse shadow-2xl hover:bg-brand-accent-hover transition-all">
+              <i data-lucide="play" class="w-8 h-8 sm:w-10 sm:h-10 ml-1 fill-white"></i>
             </button>
-            <span class="mt-4 text-sm font-semibold text-white tracking-wide bg-slate-900/80 px-4 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
-              Clique para assistir à aula demonstrativa
+            <span class="mt-4 text-xs sm:text-sm font-bold text-white tracking-wide bg-slate-950/80 px-4 py-2 rounded-full border border-white/15 backdrop-blur-sm shadow-md">
+              ▶ Clique para assistir à aula demonstrativa (100% Gratuita)
             </span>
           </div>
 
-          <!-- Duração / Badge discreta -->
-          <div class="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white/90 text-xs px-2.5 py-1 rounded font-medium">
-            Didática na Prática
+          <!-- Badge discreta -->
+          <div class="absolute bottom-4 left-4 sm:left-6 flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white/90 text-xs px-3 py-1.5 rounded-lg border border-white/10">
+            <i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-accent"></i>
+            <span>Professor Leonardo Leite ensina a metodologia</span>
           </div>
         </div>
 
-        <!-- Container de Incorporação Dinâmica (Embed) -->
+        <!-- Container de Embed Dinâmico -->
         <div id="video-embed-container" class="hidden w-full h-full"></div>
+
+      </div>
+
+      <!-- CTA Principal do Hero -->
+      <div class="flex flex-col items-center gap-3">
+        <a href="#inscricao" class="btn-cta-primary w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 rounded-2xl text-base sm:text-xl font-extrabold inline-flex items-center justify-center gap-3 shadow-xl">
+          <span>QUERO GARANTIR MINHA VAGA NO PROJETO 2026</span>
+          <i data-lucide="arrow-right" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+        </a>
+
+        <!-- Micro-provas de segurança -->
+        <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-slate-500 font-medium mt-2">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+            Acesso Imediato
+          </span>
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="video" class="w-4 h-4 text-brand-accent"></i>
+            Mentorias Semanais ao Vivo
+          </span>
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-700"></i>
+            7 Dias de Garantia Incondicional
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 2. A DOR / O ERRO CLÁSSICO: POR QUE O MÉTODO TRADICIONAL TRAVA VOCÊ?     -->
+  <!-- ========================================================================= -->
+  <section class="py-16 sm:py-24 bg-white border-t border-slate-100">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">O Grande Obstáculo</span>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight mb-4">
+          Por que tantas pessoas estudam durante anos e ainda travam na hora de falar?
+        </h2>
+        <p class="text-base sm:text-lg text-slate-600">
+          A culpa <strong>não é da sua memória</strong> e nem da sua idade. O problema é que te ensinaram o idioma pelo caminho contrário ao funcionamento do cérebro.
+        </p>
+      </div>
+
+      <!-- 3 Cards de Contraste -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        
+        <!-- Card 1 -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-5 font-bold">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">A Prisão da Gramática Excessiva</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Tentar montar regras gramaticais na cabeça antes de falar gera insegurança, lentidão e o clássico bloqueio ("branco").
+            </p>
+          </div>
+          <p class="mt-6 text-xs font-semibold text-red-700 bg-red-50 p-2 rounded-lg">Causa: Tradução mental constante</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-5 font-bold">
+              <i data-lucide="help-circle" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Listas Soltas & Apps Repetitivos</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Memorizar palavras isoladas ou clicar em botões de joguinhos não treina seu ouvido para a velocidade e o ritmo de uma conversa real.
+            </p>
+          </div>
+          <p class="mt-6 text-xs font-semibold text-amber-800 bg-amber-50 p-2 rounded-lg">Causa: Falta de contexto sonoro</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-brand-accent-light border border-amber-200/80 flex flex-col justify-between shadow-sm">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-brand-accent text-white flex items-center justify-center mb-5 font-bold">
+              <i data-lucide="check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-950 mb-2">A Solução: Treino de Ouvido Real</h3>
+            <p class="text-sm text-slate-700 leading-relaxed">
+              Ouvir estruturas naturais em histórias e frases reais até que seu cérebro reconheça os padrões sem esforço consciente.
+            </p>
+          </div>
+          <p class="mt-6 text-xs font-bold text-amber-900 bg-amber-200/60 p-2 rounded-lg">O Método AgoraEuFalo</p>
+        </div>
 
       </div>
 
@@ -336,9 +224,471 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- BLOCO 4: CAPTURA DE LEAD (O GOSTINHO / MATERIAL GRATUITO)                 -->
+  <!-- 3. O MÉTODO AGORAEUFALO: O TRIPÉ DO APRENDIZADO NATURAL                    -->
   <!-- ========================================================================= -->
-  <section id="material-gratuito" class="py-16 sm:py-20 bg-slate-100/70 border-t border-b border-slate-200">
+  <section id="o-metodo" class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Como Funciona</span>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight mb-4">
+          O Tripé do Aprendizado Natural
+        </h2>
+        <p class="text-base sm:text-lg text-slate-600">
+          Uma metodologia lapidada em mais de três décadas de sala de aula para quem busca falar sem medo.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Pilar 1 -->
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-start text-left">
+          <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center mb-6 font-extrabold text-lg">
+            01
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-3">1. Escuta Ativa & Treino de Ouvido</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Você acostuma seu ouvido com a fonética real do inglês, conectando sons a significados sem precisar traduzir mentalmente.
+          </p>
+        </div>
+
+        <!-- Pilar 2 -->
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-start text-left">
+          <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center mb-6 font-extrabold text-lg">
+            02
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-3">2. Estruturas Prontas & Contexto</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Em vez de decorar regras soltas, você absorve blocos de linguagem (chunks) que são usados 90% do tempo por nativos.
+          </p>
+        </div>
+
+        <!-- Pilar 3 -->
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-start text-left">
+          <div class="w-12 h-12 rounded-xl bg-brand-accent text-white flex items-center justify-center mb-6 font-extrabold text-lg">
+            03
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-3">3. Fala Guiada & Mentoria ao Vivo</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Prática contínua com acompanhamento semanal para calibrar pronúncia, corrigir vícios e consolidar a segurança ao falar.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. QUEM É O PROFESSOR LEONARDO LEITE (AUTORIDADE MÁXIMA & FOTO)          -->
+  <!-- ========================================================================= -->
+  <section id="sobre-o-professor" class="py-16 sm:py-24 bg-white border-t border-slate-100">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        
+        <!-- Foto Oficial com Moldura de Autoridade -->
+        <div class="lg:col-span-5 flex justify-center order-2 lg:order-1">
+          <div class="relative w-full max-w-md">
+            
+            <div class="portrait-frame bg-slate-900 aspect-[4/4.8] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+              <img 
+                src="assets/images/leonardo-leite.png" 
+                alt="Professor Leonardo Leite - Fundador do AgoraEuFalo" 
+                class="w-full h-full object-cover object-top filter contrast-[1.03]"
+                loading="lazy"
+              />
+              
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent p-6 text-white">
+                <p class="text-base font-bold tracking-wide">Professor Leonardo Leite</p>
+                <p class="text-xs text-slate-300">Fundador do AgoraEuFalo • 35 Anos de Magistério</p>
+              </div>
+            </div>
+
+            <!-- Detalhe de fundo -->
+            <div class="absolute -bottom-4 -left-4 -z-10 w-full h-full bg-slate-100 rounded-2xl border border-slate-200 hidden sm:block"></div>
+
+          </div>
+        </div>
+
+        <!-- Conteúdo Biográfico / Narrativa do Professor -->
+        <div class="lg:col-span-7 order-1 lg:order-2 flex flex-col items-start text-left">
+          
+          <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Quem é seu mentor</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight mb-6">
+            "Dediquei 35 anos da minha vida a uma única missão: fazer você falar inglês de verdade."
+          </h2>
+
+          <div class="space-y-4 text-base sm:text-lg text-slate-600 font-normal leading-relaxed mb-8">
+            <p>
+              Olá, eu sou o <strong>Professor Leonardo Leite</strong>. Durante mais de três décadas dentro da sala de aula, ensinei estudantes, executivos, médicos e profissionais de todas as áreas a superar o medo da língua inglesa.
+            </p>
+            <p>
+              Ao longo desses anos, vi centenas de pessoas talentosas perderem oportunidades de trabalho e crescimento porque ficavam travadas na hora de conversar.
+            </p>
+            <p class="font-medium text-slate-800 border-l-2 border-brand-accent pl-4">
+              Criei o <strong>AgoraEuFalo</strong> para eliminar os intermediários e entregar a você exatamente o que funciona no mundo real: didática clara, respeito pelo seu tempo e o meu acompanhamento pessoal em cada etapa.
+            </p>
+          </div>
+
+          <!-- Badges de Autoridade -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full pt-4 border-t border-slate-100">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+              <span class="block text-xl sm:text-2xl font-extrabold text-slate-950">+35 Anos</span>
+              <span class="text-xs text-slate-500 font-medium">De Docência Direta</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+              <span class="block text-xl sm:text-2xl font-extrabold text-slate-950">Milhares</span>
+              <span class="text-xs text-slate-500 font-medium">De Alunos Destravados</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 col-span-2 sm:col-span-1">
+              <span class="block text-xl sm:text-2xl font-extrabold text-brand-accent">100% Direto</span>
+              <span class="text-xs text-slate-500 font-medium">Sem Promessas Falsas</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 5. O QUE VOCÊ LEVA (O ECOSSISTEMA COMPLETO 2026)                          -->
+  <!-- ========================================================================= -->
+  <section id="o-que-inclui" class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">O Programa Completo</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight mb-4">
+          Tudo o que você leva ao entrar no Projeto 2026
+        </h2>
+        <p class="text-base sm:text-lg text-slate-600">
+          Um ambiente estruturado com cursos completos e acompanhamento ao vivo para cobrir todas as fases da sua fluência.
+        </p>
+      </div>
+
+      <!-- Grid dos 4 Cursos/Pilares -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1: Magic Stories -->
+        <div class="premium-card p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5">
+              <i data-lucide="book-open" class="w-6 h-6"></i>
+            </div>
+            <span class="inline-block px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">Curso Completo</span>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Magic Stories</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Narrativas inteligentes em áudio e texto para treinar sua escuta profunda e fixar vocabulário de forma 100% intuitiva.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs font-semibold text-slate-500">
+            ✓ Compreensão Auditiva e Retenção
+          </div>
+        </div>
+
+        <!-- Card 2: English Quick Start -->
+        <div class="premium-card p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <span class="inline-block px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">Curso Completo</span>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">English Quick Start</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              A base essencial para destravar sua fala desde os primeiros dias, construindo confiança e estrutura sólida.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs font-semibold text-slate-500">
+            ✓ Fundamentos e Segurança
+          </div>
+        </div>
+
+        <!-- Card 3: Frases Prontas -->
+        <div class="premium-card p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5">
+              <i data-lucide="message-square-quote" class="w-6 h-6"></i>
+            </div>
+            <span class="inline-block px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">Curso Completo</span>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Frases Prontas</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              O arsenal prático com as frases e expressões mais utilizadas no dia a dia, trabalho, reuniões e viagens.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs font-semibold text-slate-500">
+            ✓ Aplicação Imediata
+          </div>
+        </div>
+
+        <!-- Card 4: Mentoria Semanal -->
+        <div class="premium-card p-6 flex flex-col justify-between border-brand-accent/40 bg-amber-50/20">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-brand-accent flex items-center justify-center mb-5">
+              <i data-lucide="video" class="w-6 h-6"></i>
+            </div>
+            <span class="inline-block px-2.5 py-1 rounded bg-brand-accent text-white text-[11px] font-bold uppercase tracking-wider mb-3">Acompanhamento</span>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Mentoria Semanal</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Encontros ao vivo semanais com o Professor Leonardo Leite para tirar dúvidas, treinar pronúncia e praticar em tempo real.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-amber-200/60 text-xs font-bold text-brand-accent">
+            ★ Acesso Direto ao Professor
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 6. DEPOIMENTOS / PROVA SOCIAL                                            -->
+  <!-- ========================================================================= -->
+  <section id="depoimentos" class="py-16 sm:py-24 bg-white border-t border-slate-100">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Prova Social</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight mb-4">
+          Quem treinou o ouvido com o Professor Leonardo fala:
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        
+        <!-- Depoimento 1 -->
+        <div class="p-6 sm:p-7 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex text-amber-500 gap-1">
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 italic leading-relaxed">
+              "Passei 4 anos em cursinhos tradicionais e sempre travava em reuniões. Quando comecei o treino de ouvido do Leonardo, em 3 meses eu já conseguia entender nativos sem traduzir."
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200">
+            <p class="font-bold text-sm text-slate-900">Rodrigo Silveira</p>
+            <p class="text-xs text-slate-500">Gerente de Projetos de TI</p>
+          </div>
+        </div>
+
+        <!-- Depoimento 2 -->
+        <div class="p-6 sm:p-7 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex text-amber-500 gap-1">
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 italic leading-relaxed">
+              "Tenho 54 anos e achava que não tinha mais idade para aprender. A didática do Leonardo é tão humana e sem enrolação que falar inglês se tornou parte natural da minha rotina."
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200">
+            <p class="font-bold text-sm text-slate-900">Cláudia Mendonça</p>
+            <p class="text-xs text-slate-500">Médica</p>
+          </div>
+        </div>
+
+        <!-- Depoimento 3 -->
+        <div class="p-6 sm:p-7 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex text-amber-500 gap-1">
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 italic leading-relaxed">
+              "As mentorias semanais ao vivo são o grande diferencial. Ter o próprio professor corrigindo nossa fala e tirando dúvidas não tem preço."
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200">
+            <p class="font-bold text-sm text-slate-900">Marcos Vinícius</p>
+            <p class="text-xs text-slate-500">Engenheiro Civil</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 7. A OFERTA IRRECUSÁVEL (BOX DE INSCRIÇÃO PROJETO 2026)                  -->
+  <!-- ========================================================================= -->
+  <section id="inscricao" class="py-16 sm:py-24 bg-slate-900 text-white border-t border-slate-800">
+    <div class="max-w-4xl mx-auto px-5 sm:px-8">
+      
+      <div class="offer-box p-8 sm:p-12 rounded-3xl text-center shadow-2xl border border-amber-500/30">
+        
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-brand-accent/20 border border-brand-accent/40 text-amber-300 text-xs font-bold uppercase tracking-wider mb-6">
+          Vagas Abertas • Turma Projeto 2026
+        </div>
+
+        <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 text-white">
+          Garanta seu Acesso Completo ao AgoraEuFalo
+        </h2>
+        
+        <p class="text-base sm:text-lg text-slate-300 max-w-xl mx-auto mb-8">
+          Junte-se ao Professor Leonardo Leite e comece hoje mesmo a treinar o seu ouvido para falar inglês com segurança.
+        </p>
+
+        <!-- Lista de Inclusões -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-2xl mx-auto text-left mb-10 text-sm sm:text-base text-slate-200">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span>Curso Completo <strong>Magic Stories</strong></span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span>Curso Completo <strong>English Quick Start</strong></span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span>Curso Completo <strong>Frases Prontas</strong></span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span><strong>Mentorias Semanais ao Vivo</strong> com o Professor</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span>Comunidade Exclusiva de Alunos</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span>Acesso Imediato pelo Computador e Celular</span>
+          </div>
+        </div>
+
+        <!-- Botão Principal de Matrícula -->
+        <div class="max-w-md mx-auto">
+          <a href="#" class="btn-cta-primary w-full py-5 rounded-2xl text-lg sm:text-xl font-extrabold inline-flex items-center justify-center gap-3 shadow-2xl">
+            <span>QUERO ME MATRICULAR AGORA</span>
+            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+          </a>
+          <p class="mt-3 text-xs text-slate-400">
+            🔒 Pagamento 100% Seguro • Acesso Imediato
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 8. GARANTIA INCONDICIONAL (RISCO ZERO)                                    -->
+  <!-- ========================================================================= -->
+  <section class="py-12 bg-white border-b border-slate-100">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+      <div class="w-20 h-20 shrink-0 rounded-2xl bg-amber-50 text-brand-accent flex items-center justify-center border border-amber-200">
+        <i data-lucide="shield-check" class="w-10 h-10"></i>
+      </div>
+      <div class="text-center sm:text-left">
+        <h3 class="text-xl font-bold text-slate-950 mb-1">Garantia Incondicional de 7 Dias</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Entre no curso, assista às aulas e participe da mentoria. Se dentro de 7 dias você sentir que a metodologia não é para você, basta um único e-mail e devolveremos 100% do seu dinheiro. Sem perguntas e sem letras miúdas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 9. PERGUNTAS FREQUENTES (FAQ ACORDEÃO)                                    -->
+  <!-- ========================================================================= -->
+  <section id="faq" class="py-16 sm:py-24 bg-slate-50">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8">
+      
+      <div class="text-center mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Tire Suas Dúvidas</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-3">
+          Perguntas Frequentes
+        </h2>
+        <p class="text-base text-slate-600">
+          Tudo o que você precisa saber antes de iniciar seus treinos.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ 1 -->
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-header w-full p-5 sm:p-6 text-left font-bold text-base sm:text-lg text-slate-900 flex items-center justify-between gap-4">
+            <span>1. Nunca estudei inglês ou sou iniciante do zero, o curso serve para mim?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-slate-400 shrink-0"></i>
+          </button>
+          <div class="faq-content px-5 sm:px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Sim! O módulo <strong>English Quick Start</strong> foi desenhado exatamente para quem está começando do zero absoluto, construindo a base sonora e estrutural de forma simples e sem termos técnicos complexos.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-header w-full p-5 sm:p-6 text-left font-bold text-base sm:text-lg text-slate-900 flex items-center justify-between gap-4">
+            <span>2. Já estudei anos em escolas tradicionais e ainda travo. Vou conseguir destravar?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-slate-400 shrink-0"></i>
+          </button>
+          <div class="faq-content px-5 sm:px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Com certeza. Na verdade, a grande maioria dos nossos alunos veio de métodos tradicionais. O foco no treino de ouvido elimina o hábito de traduzir mentalmente e destrava a fala automática.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-header w-full p-5 sm:p-6 text-left font-bold text-base sm:text-lg text-slate-900 flex items-center justify-between gap-4">
+            <span>3. Tenho mais de 50 anos, ainda consigo aprender com esse método?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-slate-400 shrink-0"></i>
+          </button>
+          <div class="faq-content px-5 sm:px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Sim! Nosso método respeita o ritmo natural do adulto. Como não exigimos decoreba de regras complexas, o aprendizado é muito mais prazeroso e eficiente em qualquer idade.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-header w-full p-5 sm:p-6 text-left font-bold text-base sm:text-lg text-slate-900 flex items-center justify-between gap-4">
+            <span>4. Como funcionam as mentorias ao vivo semanais?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-slate-400 shrink-0"></i>
+          </button>
+          <div class="faq-content px-5 sm:px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Os encontros acontecem semanalmente em ambiente interativo com o Professor Leonardo Leite. Você pode tirar dúvidas em tempo real, receber orientações de pronúncia e treinar conversação.
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <button class="faq-header w-full p-5 sm:p-6 text-left font-bold text-base sm:text-lg text-slate-900 flex items-center justify-between gap-4">
+            <span>5. Por quanto tempo terei acesso às aulas?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-slate-400 shrink-0"></i>
+          </button>
+          <div class="faq-content px-5 sm:px-6 pb-6 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Você terá acesso completo durante todo o período do seu plano, podendo assistir e reassistir às aulas quando e onde quiser, quantas vezes precisar.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 10. CAPTURA DE LEAD: MATERIAL GRATUITO                                    -->
+  <!-- ========================================================================= -->
+  <section id="material-gratuito" class="py-16 sm:py-20 bg-slate-100/80 border-t border-b border-slate-200">
     <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center">
       
       <div class="lead-capture-box bg-white p-8 sm:p-12 rounded-2xl shadow-sm border border-slate-200">
@@ -348,7 +698,7 @@
         </div>
 
         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight mb-2">
-          Quer um material gratuito para começar?
+          Quer um material gratuito para começar hoje?
         </h2>
         
         <p class="text-base sm:text-lg text-slate-600 mb-8 max-w-xl mx-auto">
@@ -400,7 +750,7 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- BLOCO 5: FOOTER (O ESSENCIAL)                                             -->
+  <!-- 11. FOOTER (O ESSENCIAL)                                                 -->
   <!-- ========================================================================= -->
   <footer class="bg-[#0A192F] text-white pt-14 pb-12 border-t border-slate-800">
     <div class="max-w-6xl mx-auto px-5 sm:px-8">
