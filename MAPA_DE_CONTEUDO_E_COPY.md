@@ -111,19 +111,15 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 
 ---
 
-### [Bloco 7] OFERTA E MATRÍCULA
-- **Selo Oficial Projeto 2026:** Em destaque amplo com fundo transparente e iluminação dourada ([selo-2026.png](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/images/selo-2026.png)).
-- **Checklist da Entrega** + Botão `QUERO ME MATRICULAR AGORA`.
-- **Link Oficial de Checkout (Hotmart):** `https://pay.hotmart.com/E106082992D?src=bloco_oferta`
+### [Bloco 7] OFERTA, MATRÍCULA & GARANTIA DE 7 DIAS (PROJETO 2026)
+- **Selo Oficial do Projeto 2026** no topo do Box da Oferta.
+- Checklist da entrega completa (Magic Stories, Quick Start, Frases Prontas, Mentorias Semanais).
+- Botão Principal de Matrícula (Hotmart).
+- **Garantia Incondicional de 7 Dias Integrada** com o **Selo Oficial Customizado 7 Dias Risco Zero** (`assets/images/selo-garantia-7dias.png`).
 
 ---
 
-### [Bloco 8] GARANTIA
-- 7 Dias Incondicionais (Risco Zero).
-
----
-
-### [Bloco 9] FAQ (5 OBJEÇÕES CHAVE)
+### [Bloco 8] FAQ (5 OBJEÇÕES CHAVE)
 - Dúvidas sobre iniciante do zero, idade +50, mentoria ao vivo e material.
 
 ### [Bloco 11] FOOTER & SUBPÁGINAS INSTITUCIONAIS
