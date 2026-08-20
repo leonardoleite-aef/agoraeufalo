@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgoraEuFalo | Professor Leonardo Leite</title>
+  <meta name="description" content="Aqui você aprende e treina Inglês todos os dias com o Professor Leonardo Leite. 35 anos de experiência em sala de aula premium.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              petrol: '#0D2040',
+              slate: '#1E293B',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              'accent-light': '#FDF8F0',
+              muted: '#64748B',
+              subtle: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-white text-slate-900 antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <!-- ========================================================================= -->
+  <!-- HEADER / NAVEGAÇÃO MINIMALISTA                                            -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Marca / Logo -->
+      <a href="#" class="group flex items-center gap-2">
+        <span class="text-2xl sm:text-[26px] font-extrabold tracking-tight text-slate-900 transition-colors group-hover:text-brand-accent">
+          AgoraEuFalo<span class="text-brand-accent">.</span>
+        </span>
+      </a>
+
+      <!-- Ações Diretas / Header Links -->
+      <nav class="flex items-center gap-4 sm:gap-6">
+        <a href="#metodologia" class="hidden md:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+          Metodologia
+        </a>
+        <a href="#ecossistema" class="hidden md:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+          O que está incluído
+        </a>
+        <a href="#material-gratuito" class="hidden sm:inline-block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+          Guia Gratuito
+        </a>
+        <a href="#projeto-2026" class="btn-cta-primary px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold inline-flex items-center gap-2">
+          <span>Garantir Vaga</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- BLOCO 1: O HERO (TOPO) - O IMPACTO INICIAL                                -->
+  <!-- ========================================================================= -->
+  <section id="hero" class="relative pt-10 pb-16 sm:pt-16 sm:pb-24 overflow-hidden">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        
+        <!-- Coluna de Texto e Apresentação -->
+        <div class="lg:col-span-7 flex flex-col items-start text-left">
+          
+          <!-- Badge de Sala de Aula Premium -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-xs font-semibold tracking-wide uppercase mb-6">
+            <span class="w-2 h-2 rounded-full bg-brand-accent"></span>
+            35 Anos de Experiência em Sala de Aula
+          </div>
+
+          <!-- Título Principal -->
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.12] mb-5">
+            AgoraEuFalo<span class="text-brand-accent">.</span>
+          </h1>
+
+          <!-- Subtítulo -->
+          <p class="text-xl sm:text-2xl font-medium text-slate-800 leading-snug mb-5">
+            Aqui você aprende e treina Inglês todos os dias.
+          </p>
+
+          <!-- Bio do Professor Leonardo Leite -->
+          <div class="border-l-2 border-brand-accent/60 pl-4 py-1 mb-8">
+            <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+              <strong class="font-semibold text-slate-900">Professor Leonardo Leite.</strong> 35 anos de experiência ajudando pessoas a escutar, entender e falar Inglês com confiança e naturalidade.
+            </p>
+          </div>
+
+          <!-- Chamada para Ação (CTA) Principal -->
+          <div id="projeto-2026" class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <a href="#ecossistema" class="btn-cta-primary px-8 py-4 rounded-xl text-base sm:text-lg font-semibold inline-flex items-center justify-center gap-3 text-center shadow-lg">
+              <span>Quero garantir minha vaga no Projeto 2026</span>
+              <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+          <!-- Micro-garantias / Credibilidade sóbria -->
+          <div class="mt-6 flex items-center gap-6 text-xs text-slate-500 font-medium">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+              <span>Metodologia testada e aprovada</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
+              <span>Acompanhamento direto</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Coluna Visual / Foto do Professor Leonardo Leite -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-md">
+            
+            <!-- Moldura Retrato Elegante -->
+            <div class="portrait-frame bg-slate-900 aspect-square sm:aspect-[4/4.5] w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+              <img 
+                src="assets/images/leonardo-leite.png" 
+                alt="Professor Leonardo Leite - AgoraEuFalo" 
+                class="w-full h-full object-cover object-top filter contrast-[1.03] transition-transform duration-700 hover:scale-[1.02]"
+                loading="eager"
+              />
+              
+              <!-- Gradiente sutil inferior com legenda de autoridade -->
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent p-5 text-white">
+                <p class="text-sm font-bold tracking-wide">Prof. Leonardo Leite</p>
+                <p class="text-xs text-slate-300">Fundador do AgoraEuFalo • 35 anos de docência</p>
+              </div>
+            </div>
+
+            <!-- Efeito de sombra sutil na base -->
+            <div class="absolute -bottom-4 -right-4 -z-10 w-full h-full bg-slate-100 rounded-2xl border border-slate-200 hidden sm:block"></div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- BLOCO 2: O ECOSSISTEMA (O QUE VOCÊ LEVA)                                  -->
+  <!-- ========================================================================= -->
+  <section id="ecossistema" class="py-16 sm:py-24 bg-white border-t border-slate-100">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <!-- Cabeçalho da Seção -->
+      <div class="max-w-2xl mb-12 sm:mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Currículo de Aprendizado</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight">
+          Sua jornada completa inclui:
+        </h2>
+        <p class="mt-3 text-base sm:text-lg text-slate-600">
+          Um ambiente estruturado com tudo o que você precisa para desenvolver fluência prática, sem distrações.
+        </p>
+      </div>
+
+      <!-- Grid de 4 Cards (1 por linha no mobile, 2 no tablet, 4 no desktop) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
+        
+        <!-- Card 1: Magic Stories -->
+        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5 group-hover:bg-amber-50 group-hover:text-brand-accent transition-colors">
+              <i data-lucide="book-open" class="w-6 h-6"></i>
+            </div>
+            
+            <div class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
+              Curso Completo
+            </div>
+            
+            <h3 class="text-xl font-bold text-slate-900 mb-2">
+              Magic Stories
+            </h3>
+            
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Treine sua escuta e retenção natural através de narrativas inteligentes e contextualizadas.
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-500 group-hover:text-brand-accent transition-colors">
+            <span>Treino de escuta e compreensão</span>
+          </div>
+        </div>
+
+        <!-- Card 2: English Quick Start -->
+        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5 group-hover:bg-amber-50 group-hover:text-brand-accent transition-colors">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            
+            <div class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
+              Curso Completo
+            </div>
+            
+            <h3 class="text-xl font-bold text-slate-900 mb-2">
+              English Quick Start
+            </h3>
+            
+            <p class="text-sm text-slate-600 leading-relaxed">
+              A base essencial e a estrutura inicial para destravar sua fala com segurança desde os primeiros passos.
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-500 group-hover:text-brand-accent transition-colors">
+            <span>Fundamentos & destrave rápido</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Frases Prontas -->
+        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center mb-5 group-hover:bg-amber-50 group-hover:text-brand-accent transition-colors">
+              <i data-lucide="message-square-quote" class="w-6 h-6"></i>
+            </div>
+            
+            <div class="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-3">
+              Curso Completo
+            </div>
+            
+            <h3 class="text-xl font-bold text-slate-900 mb-2">
+              Frases Prontas
+            </h3>
+            
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Repertório direto ao ponto para situações reais do cotidiano, trabalho, reuniões e viagens.
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-500 group-hover:text-brand-accent transition-colors">
+            <span>Comunicação prática e imediata</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Mentoria ao Vivo Semanal -->
+        <div class="premium-card p-6 sm:p-7 flex flex-col justify-between group border-brand-accent/30 bg-amber-50/20">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100/70 text-brand-accent flex items-center justify-center mb-5">
+              <i data-lucide="video" class="w-6 h-6"></i>
+            </div>
+            
+            <div class="inline-block px-2.5 py-1 rounded-md bg-brand-accent text-white text-[11px] font-bold uppercase tracking-wider mb-3">
+              O seu acompanhamento
+            </div>
+            
+            <h3 class="text-xl font-bold text-slate-900 mb-2">
+              Mentoria ao vivo semanal
+            </h3>
+            
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Encontros regulares comigo para tirar dúvidas, ajustar pronúncia e praticar o Inglês em tempo real.
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-amber-200/60 flex items-center text-xs font-semibold text-brand-accent">
+            <span>Acesso direto ao professor</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- BLOCO 3: A PROVA DE AUTORIDADE (O VÍDEO / DIDÁTICA)                       -->
+  <!-- ========================================================================= -->
+  <section id="metodologia" class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
+    <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
+      
+      <!-- Título da Seção -->
+      <span class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3 block">Didática em Ação</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-4">
+        A metodologia na prática: veja como eu ensino.
+      </h2>
+      <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-10">
+        Assista a uma demonstração real de como 35 anos de prática tornam o aprendizado de Inglês simples, intuitivo e definitivo.
+      </p>
+
+      <!-- Container do Vídeo -->
+      <div class="video-preview-wrapper relative aspect-video w-full max-w-3xl mx-auto shadow-2xl group cursor-pointer" id="video-wrapper">
+        
+        <!-- Capa / Poster do Vídeo -->
+        <div id="video-cover" class="absolute inset-0 w-full h-full bg-slate-900 flex items-center justify-center">
+          <img 
+            src="assets/images/leonardo-leite.png" 
+            alt="Professor Leonardo Leite Aula" 
+            class="w-full h-full object-cover opacity-40 filter brightness-90 group-hover:scale-105 transition-transform duration-700"
+          />
+          
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+
+          <!-- Botão de Play Estilizado -->
+          <div class="relative z-10 flex flex-col items-center">
+            <button id="play-video-btn" aria-label="Assistir ao vídeo de demonstração" class="w-20 h-20 rounded-full bg-brand-accent text-white flex items-center justify-center play-pulse shadow-xl hover:bg-brand-accent-hover transition-all">
+              <i data-lucide="play" class="w-8 h-8 ml-1 fill-white"></i>
+            </button>
+            <span class="mt-4 text-sm font-semibold text-white tracking-wide bg-slate-900/80 px-4 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
+              Clique para assistir à aula demonstrativa
+            </span>
+          </div>
+
+          <!-- Duração / Badge discreta -->
+          <div class="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white/90 text-xs px-2.5 py-1 rounded font-medium">
+            Didática na Prática
+          </div>
+        </div>
+
+        <!-- Container de Incorporação Dinâmica (Embed) -->
+        <div id="video-embed-container" class="hidden w-full h-full"></div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- BLOCO 4: CAPTURA DE LEAD (O GOSTINHO / MATERIAL GRATUITO)                 -->
+  <!-- ========================================================================= -->
+  <section id="material-gratuito" class="py-16 sm:py-20 bg-slate-100/70 border-t border-b border-slate-200">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+      
+      <div class="lead-capture-box bg-white p-8 sm:p-12 rounded-2xl shadow-sm border border-slate-200">
+        
+        <div class="w-12 h-12 rounded-full bg-amber-50 text-brand-accent flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="download-cloud" class="w-6 h-6"></i>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight mb-2">
+          Quer um material gratuito para começar?
+        </h2>
+        
+        <p class="text-base sm:text-lg text-slate-600 mb-8 max-w-xl mx-auto">
+          Baixe meu guia prático de frases para o dia a dia e dê os primeiros passos na sua rotina de treino de Inglês.
+        </p>
+
+        <!-- Formulário de Captura Simples (E-mail ou WhatsApp) -->
+        <form id="lead-form" class="max-w-lg mx-auto flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-grow">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i data-lucide="mail" class="w-5 h-5"></i>
+            </div>
+            <input 
+              type="text" 
+              id="lead-input"
+              name="contact" 
+              required 
+              placeholder="Seu E-mail ou WhatsApp" 
+              class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent text-sm sm:text-base transition-all bg-white"
+            />
+          </div>
+          
+          <button 
+            type="submit" 
+            id="lead-submit-btn"
+            class="btn-cta-primary px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold whitespace-nowrap inline-flex items-center justify-center gap-2"
+          >
+            <span>Baixar agora</span>
+            <i data-lucide="arrow-down" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <!-- Mensagem de Sucesso (após envio) -->
+        <div id="lead-feedback" class="hidden max-w-lg mx-auto flex-col items-center p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900 text-sm">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2">
+            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+          </div>
+          <p class="font-bold text-base mb-1">Pronto! Material a caminho.</p>
+          <p class="text-emerald-700 text-center">Verifique seu contato para acessar o guia prático de frases para o dia a dia.</p>
+        </div>
+
+        <p class="mt-4 text-xs text-slate-400">
+          Sem spam. Seus dados estão seguros e serão usados exclusivamente para o envio do material.
+        </p>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- BLOCO 5: FOOTER (O ESSENCIAL)                                             -->
+  <!-- ========================================================================= -->
+  <footer class="bg-[#0A192F] text-white pt-14 pb-12 border-t border-slate-800">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-slate-800/80">
+        
+        <!-- Identidade no Rodapé -->
+        <div class="text-center md:text-left">
+          <span class="text-2xl font-extrabold tracking-tight text-white">
+            AgoraEuFalo<span class="text-brand-accent">.</span>
+          </span>
+          <p class="text-xs text-slate-400 mt-1 max-w-sm">
+            Professor Leonardo Leite • 35 anos de experiência ensinando pessoas a escutar, entender e falar Inglês.
+          </p>
+        </div>
+
+        <!-- Links Institucionais e Suporte -->
+        <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-sm text-slate-300">
+          <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
+          <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
+          <a href="#" class="hover:text-white transition-colors">Suporte ao Aluno</a>
+        </div>
+
+        <!-- Redes Sociais / Contato -->
+        <div class="flex items-center gap-4">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+          </a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+            <i data-lucide="youtube" class="w-4 h-4"></i>
+          </a>
+          <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>© 2026 AgoraEuFalo. Todos os direitos reservados.</p>
+        <p>Desenvolvido com padrão visual de sala de aula premium.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
