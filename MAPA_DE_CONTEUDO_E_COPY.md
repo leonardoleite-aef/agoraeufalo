@@ -126,6 +126,13 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 ### [Bloco 9] FAQ (5 OBJEÇÕES CHAVE)
 - Dúvidas sobre iniciante do zero, idade +50, mentoria ao vivo e material.
 
+### [Bloco 11] FOOTER & REDES SOCIAIS OFICIAIS
+- **Instagram Oficial:** `https://www.instagram.com/leonardoagoraeufalo/`
+- **YouTube Oficial:** `https://www.youtube.com/@agoraeufaloingles`
+- **Facebook Oficial:** `https://www.facebook.com/agoraeufalo`
+- **WhatsApp Oficial:** `https://wa.me/5531999817975?text=Hello%20Leo!%20Quero%20entrar%20no%20Projeto%20AEF%202026.%20Pode%20me%20ajudar%3F`
+- **Copyright:** *© 2026 AgoraEuFalo. Todos os direitos reservados.*
+
 ---
 
 ### [Elementos de Conversão & Suporte]
@@ -135,3 +142,7 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
   - Mensagem pré-pronta: *"Hello Leo! Quero entrar no Projeto AEF 2026. Pode me ajudar?"*
 - **📱 Barra Fixa no Celular (Sticky CTA):**
   - Aparece no scroll mobile com *"Projeto 2026 • Vagas Abertas"* e botão *"Garantir Vaga"* (`?src=sticky_mobile`).
+- **🌐 Redes Sociais Oficiais Memorizadas para o Projeto:**
+  - Instagram: `https://www.instagram.com/leonardoagoraeufalo/`
+  - YouTube: `https://www.youtube.com/@agoraeufaloingles`
+  - Facebook: `https://www.facebook.com/agoraeufalo`
