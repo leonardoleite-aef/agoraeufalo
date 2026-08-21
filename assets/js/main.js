@@ -378,4 +378,34 @@ document.addEventListener('DOMContentLoaded', () => {
       closeCheckoutModal();
     }
   });
+
+  // 6. Menu Mobile Toggle (Responsivo)
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+  if (mobileMenuToggle && mobileMenu) {
+    mobileMenuToggle.addEventListener('click', () => {
+      const isClosed = mobileMenu.classList.contains('hidden');
+      if (isClosed) {
+        mobileMenu.classList.remove('hidden');
+        if (hamburgerIcon) hamburgerIcon.classList.add('hidden');
+        if (closeIcon) closeIcon.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
+        if (closeIcon) closeIcon.classList.add('hidden');
+      }
+    });
+
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
+        if (closeIcon) closeIcon.classList.add('hidden');
+      });
+    });
+  }
 });

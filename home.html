@@ -162,30 +162,49 @@
       </a>
 
       <!-- Menu de Navegação Desktop -->
-      <nav class="hidden md:flex items-center gap-7 text-sm font-bold text-slate-600">
-        <a href="#metodo" class="hover:text-brand-accent transition-colors">O Método</a>
-        <a href="guia-magic-stories.html" class="text-amber-600 font-extrabold hover:text-amber-700 transition-colors flex items-center gap-1.5">
-          <i data-lucide="book-open" class="w-4 h-4 text-amber-500"></i>
-          <span>Guia Magic Stories</span>
-        </a>
-        <a href="#material-gratuito" class="hover:text-brand-accent transition-colors flex items-center gap-1"><i data-lucide="gift" class="w-3.5 h-3.5"></i> Aula Gratuita</a>
-        <a href="#cursos" class="hover:text-brand-accent transition-colors">Cursos & Programas</a>
-        <a href="#professor" class="hover:text-brand-accent transition-colors">O Professor</a>
-        <a href="#depoimentos" class="hover:text-brand-accent transition-colors">Depoimentos</a>
-        <a href="#faq" class="hover:text-brand-accent transition-colors">Dúvidas</a>
+      <nav class="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-bold text-slate-600">
+        <a href="#metodo" class="hover:text-brand-accent whitespace-nowrap transition-colors">O Método</a>
+        <a href="guia-magic-stories.html" class="text-amber-600 font-extrabold hover:text-amber-700 whitespace-nowrap transition-colors">Guia Definitivo</a>
+        <a href="#material-gratuito" class="hover:text-brand-accent whitespace-nowrap transition-colors">Aula Gratuita</a>
+        <a href="#cursos" class="hover:text-brand-accent whitespace-nowrap transition-colors">Cursos</a>
+        <a href="#professor" class="hover:text-brand-accent whitespace-nowrap transition-colors">O Professor</a>
+        <a href="#depoimentos" class="hover:text-brand-accent whitespace-nowrap transition-colors">Depoimentos</a>
+        <a href="#faq" class="hover:text-brand-accent whitespace-nowrap transition-colors">Dúvidas</a>
       </nav>
 
-      <!-- Botão CTA Header -->
-      <div class="flex items-center gap-3">
+      <!-- Botão CTA Header & Menu Mobile Toggle -->
+      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
         <a 
           href="#cursos" 
-          class="btn-cta-primary px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold inline-flex items-center gap-2 shadow-md hover:scale-105 transition-all"
+          class="btn-cta-primary px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap inline-flex items-center gap-1.5 sm:gap-2 shadow-md hover:scale-105 transition-all"
         >
           <span>Conhecer Cursos</span>
-          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
         </a>
+
+        <!-- Botão Hamburger Mobile -->
+        <button 
+          type="button" 
+          id="mobile-menu-toggle"
+          class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center border border-slate-200 transition-colors"
+          aria-label="Abrir Menu de Navegação"
+        >
+          <i data-lucide="menu" id="hamburger-icon" class="w-5 h-5"></i>
+          <i data-lucide="x" id="close-icon" class="w-5 h-5 hidden"></i>
+        </button>
       </div>
 
+    </div>
+
+    <!-- Menu Dropdown Mobile -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-5 py-4 space-y-2 shadow-xl">
+      <a href="#metodo" class="mobile-nav-link block py-2 px-3 rounded-lg font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-accent transition-colors">O Método</a>
+      <a href="guia-magic-stories.html" class="mobile-nav-link block py-2 px-3 rounded-lg font-extrabold text-amber-600 hover:bg-amber-50 transition-colors">📖 Guia Definitivo</a>
+      <a href="#material-gratuito" class="mobile-nav-link block py-2 px-3 rounded-lg font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-accent transition-colors">🎁 Aula Gratuita</a>
+      <a href="#cursos" class="mobile-nav-link block py-2 px-3 rounded-lg font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-accent transition-colors">Cursos & Programas</a>
+      <a href="#professor" class="mobile-nav-link block py-2 px-3 rounded-lg font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-accent transition-colors">O Professor</a>
+      <a href="#depoimentos" class="mobile-nav-link block py-2 px-3 rounded-lg font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-accent transition-colors">Depoimentos</a>
+      <a href="#faq" class="mobile-nav-link block py-2 px-3 rounded-lg font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-accent transition-colors">Dúvidas Frequentes</a>
     </div>
   </header>
 
