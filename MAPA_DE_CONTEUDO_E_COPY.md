@@ -151,6 +151,7 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
   - Suporte ao Aluno: *"Hello Leo! Preciso da sua ajuda!"*
 - **📧 E-mail Oficial:** `selexenglish@gmail.com`
 - **🌐 Redes Sociais Oficiais:**
+  - Substack (Newsletter Oficial): `https://leoleite.substack.com`
   - Instagram: `https://www.instagram.com/leonardoagoraeufalo/`
   - YouTube: `https://www.youtube.com/@agoraeufaloingles`
   - Facebook: `https://www.facebook.com/agoraeufalo`
