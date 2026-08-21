@@ -132,7 +132,8 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 2. **Futura Home Page Institucional (Super Clean):**
    - [`home.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/home.html) — Portal Oficial da Marca, apresentação da autoridade do Professor Leo, método e vitrine de todos os 4 produtos.
 
-3. **Páginas de Vendas Específicas (Cursos Avulsos):**
+3. **Páginas de Vendas Específicas & Guias de Filosofia:**
+   - [`guia-magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/guia-magic-stories.html) — **O Guia Definitivo do Método Magic Stories** (Filosofia, Neurociência, Diagrama Hexagonal Interativo das 6 Etapas, Aula com Leo Gringo `8DbXCHwZTL0` e Carta do Professor com CTA para o Projeto).
    - [`magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/magic-stories.html) — Curso Magic Stories (30 Ciclos de Treino Auditivo & Pronúncia).
    - [`quick-start.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/quick-start.html) — Curso English Quick Start (Base Sólida em 6 Módulos).
    - [`frases-prontas.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/frases-prontas.html) — Curso Frases Prontas (Kit de Sobrevivência para Viagens e Trabalho).
