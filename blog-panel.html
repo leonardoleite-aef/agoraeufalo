@@ -480,6 +480,25 @@
               </div>
             </div>
 
+            <!-- Box Direto com o Leo (Preview) -->
+            <div class="p-5 rounded-2xl bg-white border-2 border-amber-400/40 space-y-3 shadow-xs">
+              <div class="flex items-center justify-between border-b border-pastel-border pb-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-xs">LL</div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-900">Dúvidas sobre a Aula?</h4>
+                    <p class="text-[10px] text-slate-400">Envie direto para o Leo (resposta via email/WhatsApp)</p>
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full">selexenglish@gmail.com</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-400">
+                <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">Nome do aluno...</div>
+                <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">WhatsApp / E-mail...</div>
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100 text-[11px] text-slate-400">Escreva sua dúvida aqui...</div>
+            </div>
+
             <!-- Call to Action Box in Post -->
             <div class="p-6 rounded-2xl bg-brand-navy text-white space-y-4 shadow-xl">
               <div class="flex items-center gap-2">
@@ -1679,6 +1698,95 @@ ${schemaCode}
         </div>
       </div>
 
+      <!-- Direct Question to Professor Leo Box -->
+      <section class="p-6 sm:p-8 rounded-3xl bg-white border-2 border-amber-400/50 shadow-md my-10 space-y-6 relative overflow-hidden" id="duvidas-box">
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div class="flex items-center gap-3.5">
+            <div class="relative">
+              <img src="../assets/images/leonardo-leite.png" alt="Professor Leonardo Leite" class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-500 shadow-sm">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white absolute -bottom-0.5 -right-0.5" title="Professor Online"></span>
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-brand-navy">Ficou com alguma dúvida sobre esta aula?</h3>
+              <p class="text-xs text-slate-500">Mande sua pergunta. Eu leio pessoalmente e te respondo no seu WhatsApp ou E-mail!</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-200 self-start sm:self-auto shrink-0">
+            💬 Resposta Direta do Leo
+          </span>
+        </div>
+
+        <form id="ask-leo-form" onsubmit="handleAskLeoSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700">Seu Nome:</label>
+              <input 
+                type="text" 
+                id="ask-name" 
+                required 
+                placeholder="Ex: Carlos Silva" 
+                class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
+              >
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700">Seu WhatsApp ou E-mail para resposta:</label>
+              <input 
+                type="text" 
+                id="ask-contact" 
+                required 
+                placeholder="(31) 99999-9999 ou seu@email.com" 
+                class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
+              >
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700">Sua Pergunta ou Dúvida sobre o Inglês:</label>
+            <textarea 
+              id="ask-message" 
+              required 
+              rows="3" 
+              placeholder="Professor Leo, na parte do Connected Speech, como eu faço para..." 
+              class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all resize-y"
+            ></textarea>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+            <button 
+              type="submit" 
+              id="ask-submit-btn" 
+              class="btn-cta-primary px-6 py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] transition-all"
+            >
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>Enviar Pergunta para o Professor Leo</span>
+            </button>
+
+            <a 
+              href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20tirar%20uma%20d%C3%BAvida!" 
+              target="_blank" 
+              class="text-xs text-slate-500 hover:text-emerald-700 font-semibold flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Ou fale agora no WhatsApp</span>
+            </a>
+          </div>
+        </form>
+
+        <!-- Estado de Sucesso -->
+        <div id="ask-success-msg" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-2">
+          <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-sm">
+            <i data-lucide="check" class="w-5 h-5"></i>
+          </div>
+          <h4 class="text-sm font-bold text-emerald-900">Pergunta enviada com sucesso!</h4>
+          <p class="text-xs text-emerald-800 max-w-md mx-auto">
+            O Professor Leonardo Leite já recebeu sua mensagem em <strong>selexenglish@gmail.com</strong> e vai te responder diretamente no seu WhatsApp/E-mail assim que terminar as mentorias de hoje.
+          </p>
+        </div>
+      </section>
+
       <!-- Conversion Box (Projeto 2026) -->
       <div class="p-8 sm:p-10 rounded-3xl bg-brand-navy text-white space-y-5 shadow-2xl my-12">
         <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-accent text-brand-navy inline-block">SELO OFICIAL • PROJETO 2026</span>
@@ -1736,6 +1844,46 @@ ${schemaCode}
       container.innerHTML = '<iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/' + youtubeId + '?autoplay=1&rel=0&modestbranding=1" title="Aula do Professor Leonardo Leite" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
       container.classList.remove('cursor-pointer');
       container.onclick = null;
+    }
+
+    function handleAskLeoSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('ask-submit-btn');
+      const form = document.getElementById('ask-leo-form');
+      const success = document.getElementById('ask-success-msg');
+      const name = document.getElementById('ask-name').value;
+      const contact = document.getElementById('ask-contact').value;
+      const message = document.getElementById('ask-message').value;
+
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Enviando para o Leo...</span>';
+      if (window.lucide) window.lucide.createIcons();
+
+      fetch('https://formsubmit.co/ajax/selexenglish@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Nome: name,
+          Contato: contact,
+          Pergunta: message,
+          Artigo: window.location.href,
+          _subject: 'Nova Dúvida no Blog AgoraEuFalo (' + name + ')'
+        })
+      })
+      .then(response => {
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+      })
+      .catch(error => {
+        window.open('https://wa.me/5531999817975?text=' + encodeURIComponent('Hello Leo! Sou ' + name + ' (' + contact + '). Minha dúvida sobre a aula é: ' + message), '_blank');
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+      });
     }
   <` + `/script>
 </body>
