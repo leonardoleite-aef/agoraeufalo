@@ -29,12 +29,12 @@
     <priority>0.90</priority>
   </url>
 
-  <!-- 4. Portal Oficial / Vitrine de Cursos -->
+  <!-- 4. Portal Oficial / Vitrine de Cursos (Alias) -->
   <url>
     <loc>https://agoraeufalo.com.br/home.html</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
+    <priority>0.80</priority>
   </url>
 
   <!-- 5. Curso Magic Stories (30 Ciclos de Treino Auditivo) -->

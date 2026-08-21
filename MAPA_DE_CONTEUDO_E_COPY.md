@@ -124,13 +124,13 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
 
 ## 🌐 ARQUITETURA DE PÁGINAS DO PROJETO
 
-1. **Página Principal Ativa & Programa Anual Atemporal:**
-   - [`index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/index.html) — Página de Vendas ativa no domínio raiz.
-   - [`projeto-aef.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto-aef.html) — **URL Atemporal Oficial do Programa** (`agoraeufalo.com.br/projeto-aef.html` ou `/projeto-aef`), atualizada a cada ano sem quebrar links externos.
-   - [`projeto2026.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto2026.html) — Alias específico do ano 2026.
+1. **Portal Institucional Oficial (Home Principal no Domínio Raiz):**
+   - [`index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/index.html) — **Portal Oficial da Marca AgoraEuFalo no domínio raiz** (`https://agoraeufalo.com.br/`), apresentação da autoridade do Professor Leo, método autoral desde 2009, captura de leads Hotmart Send, vitrine de todos os 4 produtos, depoimentos reais e acesso à newsletter Substack.
+   - [`home.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/home.html) — Alias espelhado da Home Page.
 
-2. **Futura Home Page Institucional (Super Clean):**
-   - [`home.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/home.html) — Portal Oficial da Marca, apresentação da autoridade do Professor Leo, método e vitrine de todos os 4 produtos.
+2. **Página de Vendas do Programa Anual de Formação (Flagship):**
+   - [`projeto-aef.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto-aef.html) — **URL Atemporal Oficial do Programa de Formação** (`agoraeufalo.com.br/projeto-aef.html`), atualizada a cada ano sem quebrar links externos.
+   - [`projeto2026.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto2026.html) — Alias específico do ano 2026.
 
 3. **Páginas de Vendas Específicas & Guias de Filosofia:**
    - [`guia-magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/guia-magic-stories.html) — **O Guia Definitivo do Método Magic Stories** (Filosofia, Neurociência, Diagrama Hexagonal Interativo das 6 Etapas, Aula com Leo Gringo `8DbXCHwZTL0` e Carta do Professor com CTA para o Projeto).
