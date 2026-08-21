@@ -257,8 +257,6 @@
         <!-- Injetado dinamicamente via JavaScript com base nos posts com status 'Publicado' -->
       </div>
 
-      </div>
-
       <!-- SIDEBAR EDITORIAL (AUTOR & CURSOS) -->
       <aside class="lg:col-span-4 space-y-8">
         
@@ -430,6 +428,21 @@
       return defaultPublishedSeed;
     }
 
+    function resolvePostImage(post) {
+      if (!post) return '../assets/images/og-magic-stories.jpg';
+      if (post.imageUrl && (post.imageUrl.startsWith('http://') || post.imageUrl.startsWith('https://'))) {
+        return post.imageUrl;
+      }
+      if (post.youtubeId) {
+        return `https://img.youtube.com/vi/${post.youtubeId}/hqdefault.jpg`;
+      }
+      if (post.imageUrl) {
+        const clean = post.imageUrl.replace(/^\.\.\//, '').replace(/^\//, '');
+        return clean.startsWith('assets/') ? '../' + clean : clean;
+      }
+      return '../assets/images/og-magic-stories.jpg';
+    }
+
     function renderBlogFeed() {
       const col = document.getElementById('blog-articles-column');
       if (!col) return;
@@ -466,13 +479,15 @@
 
       // Hero Post
       if (heroPost) {
+        const heroImg = resolvePostImage(heroPost);
         html += `
           <!-- ARTIGO HERO EM DESTAQUE -->
           <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm blog-card-hover group flex flex-col" data-category="${heroPost.category}">
             <div class="relative aspect-video sm:aspect-[21/9] bg-slate-950 overflow-hidden">
               <img 
-                src="../${heroPost.imageUrl || 'assets/images/og-magic-stories.jpg'}" 
+                src="${heroImg}" 
                 alt="${heroPost.title}" 
+                onerror="this.onerror=null; this.src='https://img.youtube.com/vi/${heroPost.youtubeId || '8DbXCHwZTL0'}/hqdefault.jpg';"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
               >
               <div class="absolute top-4 left-4">
@@ -542,10 +557,12 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="blog-posts-grid">
-              ${otherPosts.map(p => `
+              ${otherPosts.map(p => {
+                const imgUrl = resolvePostImage(p);
+                return `
                 <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs blog-card-hover group flex flex-col" data-category="${p.category}">
                   <div class="aspect-video bg-slate-900 overflow-hidden relative">
-                    <img src="../${p.imageUrl || 'assets/images/og-magic-stories.jpg'}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img src="${imgUrl}" alt="${p.title}" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/${p.youtubeId || '8DbXCHwZTL0'}/hqdefault.jpg';" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900">
                       ${p.category}
                     </span>
@@ -574,7 +591,8 @@
                     </div>
                   </div>
                 </article>
-              `).join('')}
+              `;
+              }).join('')}
             </div>
           </div>
         `;
