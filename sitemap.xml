@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- 1. Página Principal / Flagship Sales Page -->
+  <url>
+    <loc>https://agoraeufalo.com.br/</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://agoraeufalo.com.br/assets/images/og-image.jpg</image:loc>
+      <image:title>AgoraEuFalo - Método de Treino Auditivo e Fala Natural com Prof. Leonardo Leite</image:title>
+    </image:image>
+  </url>
+
+  <!-- 2. URL Atemporal do Programa AEF -->
+  <url>
+    <loc>https://agoraeufalo.com.br/projeto-aef.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- 3. O Guia Definitivo do Método Magic Stories (Artigo Flagship / Pilar de Conteúdo) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/guia-magic-stories.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- 4. Portal Oficial / Vitrine de Cursos -->
+  <url>
+    <loc>https://agoraeufalo.com.br/home.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- 5. Curso Magic Stories (30 Ciclos de Treino Auditivo) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/magic-stories.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 6. Curso English Quick Start (Base em 6 Módulos) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/quick-start.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 7. Curso Frases Prontas & Expressões (Kit de Sobrevivência) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/frases-prontas.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 8. Alias Projeto 2026 -->
+  <url>
+    <loc>https://agoraeufalo.com.br/projeto2026.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 9. Termos de Uso (Institucional / Legal) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/termos-de-uso.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+
+  <!-- 10. Política de Privacidade (Institucional / Legal) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/politica-de-privacidade.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+</urlset>

@@ -1,0 +1,42 @@
+# ==============================================================================
+# AgoraEuFalo (agoraeufalo.com.br) - Robots.txt Oficial
+# Professor Leonardo Leite - Treinamento de Inglês com Treino Auditivo
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /assets/images/
+Allow: /assets/css/
+Allow: /assets/js/
+
+# Páginas privadas de conversão / confirmação pós-compra (não indexar)
+Disallow: /obrigado.html
+Disallow: /obrigado
+
+# Painel administrativo interno de SEO
+Disallow: /seo-manager.html
+Disallow: /seo-manager
+
+# Crawlers de Redes Sociais & Mensageiros (Permissão explícita para Rich Previews)
+User-agent: WhatsApp
+Allow: /
+Allow: /assets/images/
+
+User-agent: facebookexternalhit
+Allow: /
+Allow: /assets/images/
+
+User-agent: Twitterbot
+Allow: /
+Allow: /assets/images/
+
+User-agent: LinkedInBot
+Allow: /
+Allow: /assets/images/
+
+User-agent: Googlebot
+Allow: /
+
+# Sitemap Index
+Sitemap: https://agoraeufalo.com.br/sitemap.xml

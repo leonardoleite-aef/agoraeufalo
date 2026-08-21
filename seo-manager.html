@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-slate-900 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Manager & Audit Dashboard | AgoraEuFalo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              petrol: '#0D2040',
+              slate: '#1E293B',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              'accent-light': '#FDF8F0',
+              muted: '#64748B',
+              subtle: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"Fira Code"', 'ui-monospace', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A192F; }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #C57E1E; }
+
+    .glow-gold {
+      box-shadow: 0 0 25px -5px rgba(197, 126, 30, 0.3);
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased overflow-hidden">
+
+  <!-- ========================================================================= -->
+  <!-- TOP NAVBAR                                                                -->
+  <!-- ========================================================================= -->
+  <header class="bg-brand-navy border-b border-slate-800 z-30 shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & App Title -->
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="flex items-center gap-2 group" title="Ver Site Oficial">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-accent to-amber-600 flex items-center justify-center text-brand-navy font-black text-xl shadow-lg group-hover:scale-105 transition-transform">
+            AEF
+          </div>
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base font-bold text-white tracking-wide">AgoraEuFalo SEO Master</h1>
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-brand-accent/20 text-brand-accent border border-brand-accent/30">v2.0 Gold</span>
+          </div>
+          <p class="text-xs text-slate-400">Painel de Gestão, Auditoria e Geração de SEO em Tempo Real</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-950/60 p-1.5 rounded-xl border border-slate-800">
+        <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="nav-tab active px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-brand-accent text-brand-navy shadow-sm">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </button>
+        <button onclick="switchTab('editor')" id="tab-btn-editor" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+          <i data-lucide="edit-3" class="w-4 h-4"></i> Editor On-Page
+        </button>
+        <button onclick="switchTab('preview')" id="tab-btn-preview" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+          <i data-lucide="eye" class="w-4 h-4"></i> Simuladores Sociais
+        </button>
+        <button onclick="switchTab('schema')" id="tab-btn-schema" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+          <i data-lucide="code" class="w-4 h-4"></i> Schema JSON-LD
+        </button>
+        <button onclick="switchTab('tools')" id="tab-btn-tools" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+          <i data-lucide="file-code" class="w-4 h-4"></i> Sitemap & Robots
+        </button>
+      </nav>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-2">
+        <button onclick="openNewPageModal()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700 flex items-center gap-1.5 transition-colors">
+          <i data-lucide="plus" class="w-3.5 h-3.5 text-brand-accent"></i> Nova Página
+        </button>
+        <button onclick="copyCurrentHeadTag()" class="px-3 py-1.5 rounded-lg bg-brand-accent hover:bg-brand-accent-hover text-xs font-bold text-brand-navy flex items-center gap-1.5 transition-colors shadow-md">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar &lt;head&gt;
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN APP CONTAINER                                                        -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 flex overflow-hidden">
+    
+    <!-- LEFT SIDEBAR: Pages List & Health Scores -->
+    <aside class="w-80 bg-brand-navy/90 border-r border-slate-800 flex flex-col shrink-0">
+      
+      <!-- Search & Filters -->
+      <div class="p-3 border-b border-slate-800">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
+          <input type="text" id="page-search" placeholder="Buscar página do site..." oninput="filterPages()" class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-accent transition-colors">
+        </div>
+      </div>
+
+      <!-- Pages List Scrollable -->
+      <div id="pages-list" class="flex-1 overflow-y-auto p-2 space-y-1">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Quick Summary Footer -->
+      <div class="p-3 border-t border-slate-800 bg-slate-950/40 text-xs flex items-center justify-between text-slate-400">
+        <span>Total: <strong id="total-pages-count" class="text-white">11</strong> páginas</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> 100% Otimizadas</span>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT CONTENT AREA -->
+    <div class="flex-1 overflow-y-auto bg-slate-950 p-6 lg:p-8 space-y-6">
+
+      <!-- ===================================================================== -->
+      <!-- TAB 1: DASHBOARD GERAL & HEALTH SCORE                                 -->
+      <!-- ===================================================================== -->
+      <section id="tab-content-dashboard" class="tab-pane space-y-6">
+        
+        <!-- Metrics Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div class="p-4 rounded-2xl bg-brand-navy border border-slate-800 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">SEO Health Score</p>
+              <h3 class="text-2xl font-black text-white">98 <span class="text-xs text-emerald-400 font-bold">/ 100</span></h3>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-navy border border-slate-800 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent">
+              <i data-lucide="file-check-2" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Páginas Auditadas</p>
+              <h3 class="text-2xl font-black text-white">11 <span class="text-xs text-slate-400 font-normal">arquivos</span></h3>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-navy border border-slate-800 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <i data-lucide="share-2" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Open Graph & Twitter</p>
+              <h3 class="text-2xl font-black text-emerald-400">100% <span class="text-xs text-slate-400 font-normal">ativos</span></h3>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-navy border border-slate-800 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+              <i data-lucide="boxes" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Schema Rich Snippets</p>
+              <h3 class="text-2xl font-black text-white">8 <span class="text-xs text-emerald-400 font-bold">estruturados</span></h3>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SEO Health Matrix Table -->
+        <div class="rounded-2xl bg-brand-navy border border-slate-800 overflow-hidden shadow-xl">
+          <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="list-checks" class="w-5 h-5 text-brand-accent"></i> Auditoria On-Page de Todas as Páginas
+              </h2>
+              <p class="text-xs text-slate-400">Diagnóstico automatizado das tags essenciais de cada URL canônica</p>
+            </div>
+            <button onclick="exportFullSEOReport()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700 flex items-center gap-1.5 transition-colors">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-brand-accent"></i> Exportar Relatório JSON
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-950/60 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-4 font-bold">Arquivo / URL</th>
+                  <th class="py-3 px-4 font-bold">Title (50-60 chars)</th>
+                  <th class="py-3 px-4 font-bold">Meta Description (140-160)</th>
+                  <th class="py-3 px-4 font-bold">Open Graph</th>
+                  <th class="py-3 px-4 font-bold">Schema JSON-LD</th>
+                  <th class="py-3 px-4 font-bold">Score</th>
+                  <th class="py-3 px-4 font-bold text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-table-body" class="divide-y divide-slate-800/60">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 2: EDITOR ON-PAGE                                                 -->
+      <!-- ===================================================================== -->
+      <section id="tab-content-editor" class="tab-pane hidden space-y-6">
+        
+        <!-- Page Header Card -->
+        <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent font-bold text-lg">
+              &lt;/&gt;
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 id="editor-page-name" class="text-xl font-bold text-white">index.html</h2>
+                <span id="editor-page-badge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Sales Page</span>
+              </div>
+              <p id="editor-page-url" class="text-xs text-slate-400 font-mono">https://agoraeufalo.com.br/</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button onclick="saveCurrentPageData()" class="px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-brand-navy font-bold text-xs flex items-center gap-2 shadow-lg transition-all">
+              <i data-lucide="save" class="w-4 h-4"></i> Salvar Alterações
+            </button>
+            <button onclick="copyCurrentHeadTag()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-2 border border-slate-700 transition-all">
+              <i data-lucide="copy" class="w-4 h-4 text-brand-accent"></i> Copiar &lt;head&gt;
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Primary Meta Tags -->
+          <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+              <i data-lucide="tag" class="w-4 h-4 text-brand-accent"></i> Metadados Primários (Google SERP)
+            </h3>
+
+            <!-- Title -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <label class="font-semibold text-slate-300">Meta Title Tag</label>
+                <span id="title-char-count" class="font-mono text-emerald-400 font-bold">58 / 60 chars</span>
+              </div>
+              <input type="text" id="input-meta-title" oninput="updateLiveCounters()" class="w-full px-3.5 py-2.5 text-xs bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent transition-colors">
+              <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
+                <div id="title-progress-bar" class="bg-emerald-500 h-full transition-all" style="width: 96%"></div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <label class="font-semibold text-slate-300">Meta Description Tag</label>
+                <span id="desc-char-count" class="font-mono text-emerald-400 font-bold">148 / 160 chars</span>
+              </div>
+              <textarea id="input-meta-desc" rows="3" oninput="updateLiveCounters()" class="w-full px-3.5 py-2.5 text-xs bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent transition-colors resize-none"></textarea>
+              <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden">
+                <div id="desc-progress-bar" class="bg-emerald-500 h-full transition-all" style="width: 92%"></div>
+              </div>
+            </div>
+
+            <!-- Canonical & Robots -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-300">Canonical URL</label>
+                <input type="text" id="input-canonical-url" class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-300 font-mono focus:outline-none focus:border-brand-accent">
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-300">Robots Directive</label>
+                <select id="input-robots" class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-300 focus:outline-none focus:border-brand-accent">
+                  <option value="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">index, follow (Padrão Ouro)</option>
+                  <option value="index, follow">index, follow (Simples)</option>
+                  <option value="noindex, nofollow">noindex, nofollow (Privada / Obrigado)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Primary & LSI Keywords -->
+            <div class="space-y-2 pt-2">
+              <label class="text-xs font-semibold text-slate-300">Palavras-Chave Foco (Primárias e LSI)</label>
+              <input type="text" id="input-keywords" placeholder="Digite palavras separadas por vírgula..." class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-300 focus:outline-none focus:border-brand-accent">
+              <div id="keywords-tags-container" class="flex flex-wrap gap-1.5 pt-1">
+                <!-- Badges injected via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Open Graph & Social Cards -->
+          <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+              <i data-lucide="share-2" class="w-4 h-4 text-brand-accent"></i> Open Graph & Twitter Card
+            </h3>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-slate-300">og:title (WhatsApp / Facebook)</label>
+              <input type="text" id="input-og-title" class="w-full px-3.5 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent">
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-slate-300">og:description</label>
+              <textarea id="input-og-desc" rows="2" class="w-full px-3.5 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent resize-none"></textarea>
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-slate-300">Imagem de Compartilhamento (og:image 1200x630)</label>
+              <select id="input-og-image-select" onchange="updateSelectedImage()" class="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-300 focus:outline-none focus:border-brand-accent">
+                <option value="https://agoraeufalo.com.br/assets/images/og-image-oficial.jpg">Projeto Oficial (Atemporal / Permanente)</option>
+                <option value="https://agoraeufalo.com.br/assets/images/og-image.jpg">Projeto 2026 (Sazonal / Anual)</option>
+                <option value="https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg">Magic Stories (og-magic-stories.jpg)</option>
+                <option value="https://agoraeufalo.com.br/assets/images/og-quick-start.jpg">English Quick Start (og-quick-start.jpg)</option>
+                <option value="https://agoraeufalo.com.br/assets/images/og-frases-prontas.jpg">Frases Prontas (og-frases-prontas.jpg)</option>
+              </select>
+            </div>
+
+            <!-- Preview Thumbnail -->
+            <div class="pt-2">
+              <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center">
+                <img id="og-preview-thumb" src="assets/images/og-image.jpg" alt="Preview OG Image" class="w-full h-full object-cover">
+                <div class="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/70 backdrop-blur text-[10px] text-slate-300 font-mono">
+                  1200 x 630 px (16:9 HD)
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: SIMULADORES SOCIAIS (GOOGLE / WHATSAPP / TWITTER)              -->
+      <!-- ===================================================================== -->
+      <section id="tab-content-preview" class="tab-pane hidden space-y-6">
+        
+        <!-- Google SERP Simulator Card -->
+        <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i data-lucide="search" class="w-4 h-4 text-brand-accent"></i> Simulador Google SERP (Resultados de Busca)
+            </h3>
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
+              <button onclick="setSerpDevice('desktop')" id="btn-serp-desktop" class="px-2.5 py-1 rounded bg-slate-800 text-white font-semibold">Desktop</button>
+              <button onclick="setSerpDevice('mobile')" id="btn-serp-mobile" class="px-2.5 py-1 rounded text-slate-400 font-semibold hover:text-white">Mobile</button>
+            </div>
+          </div>
+
+          <!-- Google Snippet Mockup -->
+          <div id="google-serp-box" class="p-5 rounded-xl bg-white text-slate-900 shadow-lg max-w-2xl transition-all">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 mb-1.5 text-xs text-slate-600">
+              <div class="w-4 h-4 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center p-0.5">
+                <img src="assets/images/favicon.svg" alt="Favicon" class="w-full h-full">
+              </div>
+              <div class="flex items-center gap-1 font-sans">
+                <span class="font-medium text-slate-800">AgoraEuFalo</span>
+                <span class="text-slate-400">›</span>
+                <span id="serp-breadcrumb-url" class="text-slate-500 truncate">https://agoraeufalo.com.br</span>
+              </div>
+            </div>
+            <!-- Title Link -->
+            <h4 id="serp-preview-title" class="text-lg text-[#1a0dab] hover:underline font-normal cursor-pointer leading-snug mb-1">
+              AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade
+            </h4>
+            <!-- Snippet Description -->
+            <p id="serp-preview-desc" class="text-xs text-[#4d5156] leading-relaxed">
+              O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça!
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- WhatsApp Link Preview Simulator -->
+          <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+              <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i> Simulador de Compartilhamento no WhatsApp
+            </h3>
+
+            <div class="p-4 rounded-2xl bg-[#0b141a] border border-slate-800 flex justify-end">
+              <!-- WhatsApp Message Bubble -->
+              <div class="max-w-sm rounded-2xl rounded-tr-none bg-[#005c4b] p-1.5 shadow-lg space-y-1 text-white">
+                <div class="rounded-xl overflow-hidden bg-[#025144]">
+                  <img id="wa-preview-img" src="assets/images/og-image.jpg" alt="WhatsApp Preview" class="w-full aspect-video object-cover">
+                  <div class="p-3 space-y-1 bg-[#025144]/90">
+                    <h5 id="wa-preview-title" class="text-xs font-bold leading-tight">
+                      AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade
+                    </h5>
+                    <p id="wa-preview-desc" class="text-[11px] text-slate-300 line-clamp-2 leading-tight">
+                      O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite.
+                    </p>
+                    <span class="text-[9px] text-slate-400 uppercase tracking-wider block pt-1 font-mono">agoraeufalo.com.br</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-end gap-1 px-2 pt-0.5 text-[10px] text-slate-300">
+                  <span>14:30</span>
+                  <i data-lucide="check-check" class="w-3 h-3 text-cyan-300"></i>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Twitter / X Card Simulator -->
+          <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+              <i data-lucide="twitter" class="w-4 h-4 text-sky-400"></i> Simulador Twitter / X Card (Large Image)
+            </h3>
+
+            <div class="p-4 rounded-2xl bg-black border border-slate-800">
+              <div class="rounded-2xl border border-slate-800 overflow-hidden bg-slate-950">
+                <img id="twitter-preview-img" src="assets/images/og-image.jpg" alt="Twitter Preview" class="w-full aspect-video object-cover">
+                <div class="p-3 space-y-0.5">
+                  <span class="text-[11px] text-slate-500 font-sans block">agoraeufalo.com.br</span>
+                  <h5 id="twitter-preview-title" class="text-xs font-bold text-white truncate">
+                    AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade
+                  </h5>
+                  <p id="twitter-preview-desc" class="text-[11px] text-slate-400 line-clamp-2">
+                    Pare de memorizar regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 4: CONSTRUTOR DE SCHEMA.ORG (JSON-LD)                            -->
+      <!-- ===================================================================== -->
+      <section id="tab-content-schema" class="tab-pane hidden space-y-6">
+        
+        <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="boxes" class="w-4 h-4 text-brand-accent"></i> Dados Estruturados Schema.org (JSON-LD)
+              </h3>
+              <p class="text-xs text-slate-400">Rich snippets para destacar cursos, autoridade do professor, FAQ e organização no Google</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="copySchemaJson()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700 flex items-center gap-1.5">
+                <i data-lucide="copy" class="w-3.5 h-3.5 text-brand-accent"></i> Copiar JSON-LD
+              </button>
+            </div>
+          </div>
+
+          <!-- Code View Area -->
+          <div class="relative">
+            <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-amber-300 overflow-x-auto max-h-96 leading-relaxed"><code id="schema-code-display">// Carregando Schema JSON-LD...</code></pre>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 5: SITEMAP & ROBOTS                                              -->
+      <!-- ===================================================================== -->
+      <section id="tab-content-tools" class="tab-pane hidden space-y-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Sitemap.xml Viewer -->
+          <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="map" class="w-4 h-4 text-brand-accent"></i> sitemap.xml
+              </h3>
+              <button onclick="copySitemapXml()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 flex items-center gap-1">
+                <i data-lucide="copy" class="w-3 h-3 text-brand-accent"></i> Copiar XML
+              </button>
+            </div>
+            <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 overflow-x-auto max-h-80"><code id="sitemap-code-display">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+    &lt;priority&gt;1.0&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/projeto-aef.html&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+    &lt;priority&gt;0.95&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/guia-magic-stories.html&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;monthly&lt;/changefreq&gt;
+    &lt;priority&gt;0.90&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/home.html&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+    &lt;priority&gt;0.90&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/magic-stories.html&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;monthly&lt;/changefreq&gt;
+    &lt;priority&gt;0.85&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/quick-start.html&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;monthly&lt;/changefreq&gt;
+    &lt;priority&gt;0.85&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://agoraeufalo.com.br/frases-prontas.html&lt;/loc&gt;
+    &lt;lastmod&gt;2026-08-21&lt;/lastmod&gt;
+    &lt;changefreq&gt;monthly&lt;/changefreq&gt;
+    &lt;priority&gt;0.85&lt;/priority&gt;
+  &lt;/url&gt;
+&lt;/urlset&gt;</code></pre>
+          </div>
+
+          <!-- Robots.txt Viewer -->
+          <div class="p-6 rounded-2xl bg-brand-navy border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="bot" class="w-4 h-4 text-brand-accent"></i> robots.txt
+              </h3>
+              <button onclick="copyRobotsTxt()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 flex items-center gap-1">
+                <i data-lucide="copy" class="w-3 h-3 text-brand-accent"></i> Copiar TXT
+              </button>
+            </div>
+            <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 overflow-x-auto max-h-80"><code id="robots-code-display">User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /assets/images/
+
+Disallow: /obrigado.html
+Disallow: /seo-manager.html
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+Sitemap: https://agoraeufalo.com.br/sitemap.xml</code></pre>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: ADICIONAR NOVA PÁGINA                                              -->
+  <!-- ========================================================================= -->
+  <div id="new-page-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-brand-navy border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-5 h-5 text-brand-accent"></i> Cadastrar Nova Página SEO
+        </h3>
+        <button onclick="closeNewPageModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="space-y-1">
+          <label class="font-semibold text-slate-300">Tipo de Página</label>
+          <select id="modal-type" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent">
+            <option value="public">🌐 Página Pública Indexável (Google Index = ON)</option>
+            <option value="thankyou">🔒 Página de Obrigado / Captura / Funil Privado (noindex, nofollow = ON)</option>
+          </select>
+          <p class="text-[10px] text-slate-500">Páginas de obrigado recebem noindex para não inflar métricas de conversão e não expor links diretos na busca.</p>
+        </div>
+        <div class="space-y-1">
+          <label class="font-semibold text-slate-300">Nome do Arquivo HTML</label>
+          <input type="text" id="modal-filename" placeholder="ex: nova-aula.html ou obrigado-lead.html" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent">
+        </div>
+        <div class="space-y-1">
+          <label class="font-semibold text-slate-300">Meta Title (50-60 chars)</label>
+          <input type="text" id="modal-title" placeholder="Título atraente | AgoraEuFalo" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent">
+        </div>
+        <div class="space-y-1">
+          <label class="font-semibold text-slate-300">Meta Description (140-160 chars)</label>
+          <textarea id="modal-desc" rows="2" placeholder="Descrição clara com proposta de valor e CTA..." class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent resize-none"></textarea>
+        </div>
+        <div class="space-y-1">
+          <label class="font-semibold text-slate-300">Palavras-chave Foco</label>
+          <input type="text" id="modal-keywords" placeholder="ingles adultos, escuta ativa..." class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-brand-accent">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+        <button onclick="closeNewPageModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300">Cancelar</button>
+        <button onclick="submitNewPage()" class="px-4 py-2 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-brand-navy text-xs font-bold">Criar & Configurar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- TOAST NOTIFICATION                                                        -->
+  <!-- ========================================================================= -->
+  <div id="toast" class="fixed bottom-6 right-6 px-4 py-3 rounded-xl bg-emerald-500 text-brand-navy font-bold text-xs shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all z-50">
+    <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <span id="toast-message">Copiado com sucesso!</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- CORE APP JAVASCRIPT LOGIC                                                 -->
+  <!-- ========================================================================= -->
+  <script>
+    // =========================================================================
+    // DATABASE OF ALL SITE PAGES WITH FULL SEO METRICS
+    // =========================================================================
+    const SEO_DATABASE = [
+      {
+        id: "index",
+        file: "index.html",
+        badge: "Flagship Sales Page",
+        url: "https://agoraeufalo.com.br/",
+        canonical: "https://agoraeufalo.com.br/",
+        title: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        description: "O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça!",
+        robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        ogTitle: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        ogDesc: "Pare de memorizar listas de regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Treine seu ouvido para falar com naturalidade.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        twitterDesc: "Pare de memorizar regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite.",
+        keywords: ["curso de ingles para adultos", "treino auditivo ingles", "falar ingles com naturalidade", "metodo magic stories", "professor leonardo leite"],
+        schemaType: "Course, Person, EducationalOrganization, FAQPage",
+        score: 98
+      },
+      {
+        id: "projeto-aef",
+        file: "projeto-aef.html",
+        badge: "URL Atemporal Oficial",
+        url: "https://agoraeufalo.com.br/projeto-aef.html",
+        canonical: "https://agoraeufalo.com.br/projeto-aef.html",
+        title: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        description: "O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça!",
+        robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        ogTitle: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        ogDesc: "Pare de memorizar listas de regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Treine seu ouvido para falar com naturalidade.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        twitterDesc: "Pare de memorizar regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite.",
+        keywords: ["projeto aef", "curso de ingles para adultos", "treino auditivo", "leonardo leite"],
+        schemaType: "Course, Person, EducationalOrganization, FAQPage",
+        score: 98
+      },
+      {
+        id: "guia-magic-stories",
+        file: "guia-magic-stories.html",
+        badge: "Guia Definitivo & Artigo",
+        url: "https://agoraeufalo.com.br/guia-magic-stories.html",
+        canonical: "https://agoraeufalo.com.br/guia-magic-stories.html",
+        title: "O Guia Definitivo do Método Magic Stories | Como Treinar seu Ouvido para Falar Inglês",
+        description: "Descubra a filosofia, a neurociência e o passo a passo das 6 atividades essenciais do Método Magic Stories com o Professor Leonardo Leite. Assista à aula prática!",
+        robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        ogTitle: "O Guia Definitivo do Método Magic Stories | AgoraEuFalo",
+        ogDesc: "O cérebro não aprende inglês por regras, mas por experiências reais. Conheça as 6 atividades e assista à aula prática com o Professor Leonardo Leite.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg",
+        twitterTitle: "O Guia Definitivo do Método Magic Stories | AgoraEuFalo",
+        twitterDesc: "Descubra a neurociência e as 6 etapas práticas do Método Magic Stories para destravar o ouvido e falar inglês.",
+        keywords: ["metodo magic stories ingles", "como treinar ouvido ingles", "neurociencia aprendizado ingles", "6 atividades magic stories", "surdez fonetica ingles"],
+        schemaType: "Article, VideoObject, Course",
+        score: 96
+      },
+      {
+        id: "home",
+        file: "home.html",
+        badge: "Portal Institucional",
+        url: "https://agoraeufalo.com.br/home.html",
+        canonical: "https://agoraeufalo.com.br/home.html",
+        title: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        description: "Portal oficial do método AgoraEuFalo com o Professor Leonardo Leite. Conheça nossos cursos de treino auditivo, reflexo rápido e fala natural em inglês.",
+        robots: "index, follow, max-image-preview:large",
+        ogTitle: "AgoraEuFalo | Portal Oficial - Professor Leonardo Leite",
+        ogDesc: "Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça os cursos e a metodologia de 35 anos de sala de aula.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "AgoraEuFalo | Portal Oficial - Professor Leonardo Leite",
+        twitterDesc: "Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça a metodologia de 35 anos de sala de aula.",
+        keywords: ["escola de ingles online agoraeufalo", "aprender ingles escuta ativa", "metodo natural de ingles", "cursos leonardo leite"],
+        schemaType: "WebSite, EducationalOrganization, Person, ItemList",
+        score: 96
+      },
+      {
+        id: "magic-stories",
+        file: "magic-stories.html",
+        badge: "Curso Flagship",
+        url: "https://agoraeufalo.com.br/magic-stories.html",
+        canonical: "https://agoraeufalo.com.br/magic-stories.html",
+        title: "Magic Stories | Treino Auditivo e Pronúncia Natural - AgoraEuFalo",
+        description: "Destrave sua escuta e fale inglês com naturalidade através dos 30 Ciclos de Treino das Magic Stories com o Professor Leonardo Leite. Conheça!",
+        robots: "index, follow, max-image-preview:large",
+        ogTitle: "Magic Stories | Treinamento Auditivo - AgoraEuFalo",
+        ogDesc: "30 histórias narradas em ciclos graduais para eliminar a surdez fonética e destravar o reflexo de fala.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg",
+        twitterTitle: "Magic Stories | Treinamento Auditivo - AgoraEuFalo",
+        twitterDesc: "30 histórias narradas em ciclos graduais para eliminar a surdez fonética e falar com naturalidade.",
+        keywords: ["treinamento auditivo ingles", "30 ciclos magic stories", "destravar fala ingles", "listening and speaking ingles"],
+        schemaType: "Course, FAQPage",
+        score: 95
+      },
+      {
+        id: "quick-start",
+        file: "quick-start.html",
+        badge: "Curso Base",
+        url: "https://agoraeufalo.com.br/quick-start.html",
+        canonical: "https://agoraeufalo.com.br/quick-start.html",
+        title: "English Quick Start | A Base Sólida para Destravar seu Inglês - AgoraEuFalo",
+        description: "Aprenda a base essencial da língua inglesa em 6 módulos práticos com o Professor Leonardo Leite. Sem regras complicadas, direto ao ponto.",
+        robots: "index, follow, max-image-preview:large",
+        ogTitle: "English Quick Start | AgoraEuFalo",
+        ogDesc: "6 Módulos diretos ao ponto para construir sua base e começar a falar inglês com segurança.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-quick-start.jpg",
+        twitterTitle: "English Quick Start | A Base Sólida para Destravar seu Inglês",
+        twitterDesc: "Aprenda a base prática da língua inglesa em 6 módulos objetivos sem decoreba gramatical.",
+        keywords: ["english quick start", "curso de ingles basico adultos", "base de ingles sem gramatica", "aprender ingles rapido"],
+        schemaType: "Course, FAQPage",
+        score: 95
+      },
+      {
+        id: "frases-prontas",
+        file: "frases-prontas.html",
+        badge: "Kit de Sobrevivência",
+        url: "https://agoraeufalo.com.br/frases-prontas.html",
+        canonical: "https://agoraeufalo.com.br/frases-prontas.html",
+        title: "Frases Prontas & Expressões | Kit de Sobrevivência em Inglês - AgoraEuFalo",
+        description: "O kit prático de frases e expressões prontas para você não passar aperto em viagens, reuniões de trabalho e no dia a dia. Conheça!",
+        robots: "index, follow, max-image-preview:large",
+        ogTitle: "Frases Prontas & Expressões | AgoraEuFalo",
+        ogDesc: "Blocos de comunicação pré-montados para viagens, trabalho e emergências com o Professor Leonardo Leite.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-frases-prontas.jpg",
+        twitterTitle: "Frases Prontas & Expressões | Kit de Sobrevivência em Inglês",
+        twitterDesc: "Blocos de comunicação pré-montados para você não passar aperto em viagens e no trabalho.",
+        keywords: ["frases prontas ingles viagens", "expressoes uteis ingles", "ingles reunioes trabalho", "kit sobrevivencia ingles"],
+        schemaType: "Course, FAQPage",
+        score: 95
+      },
+      {
+        id: "projeto2026",
+        file: "projeto2026.html",
+        badge: "Alias Específico",
+        url: "https://agoraeufalo.com.br/projeto2026.html",
+        canonical: "https://agoraeufalo.com.br/projeto2026.html",
+        title: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        description: "O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Não estude inglês, treine seu ouvido para falar com naturalidade. Conheça!",
+        robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        ogTitle: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        ogDesc: "Pare de memorizar listas de regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite. Treine seu ouvido para falar com naturalidade.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade",
+        twitterDesc: "Pare de memorizar regras. O sistema definitivo de 35 anos de sala de aula com o Professor Leonardo Leite.",
+        keywords: ["projeto 2026", "agoraeufalo 2026", "curso de ingles leonardo leite"],
+        schemaType: "Course, FAQPage",
+        score: 95
+      },
+      {
+        id: "obrigado",
+        file: "obrigado.html",
+        badge: "Página de Sucesso",
+        url: "https://agoraeufalo.com.br/obrigado.html",
+        canonical: "https://agoraeufalo.com.br/obrigado.html",
+        title: "Inscrição Confirmada! | AgoraEuFalo - Professor Leonardo Leite",
+        description: "Sua inscrição foi confirmada com sucesso! Confira os próximos passos para acessar seus materiais e treinamentos do AgoraEuFalo.",
+        robots: "noindex, nofollow",
+        ogTitle: "Inscrição Confirmada | AgoraEuFalo",
+        ogDesc: "Parabéns! Confira as instruções para acessar seus conteúdos.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "Inscrição Confirmada | AgoraEuFalo",
+        twitterDesc: "Sua inscrição foi confirmada com sucesso no AgoraEuFalo.",
+        keywords: ["inscricao confirmada agoraeufalo"],
+        schemaType: "None (Privada)",
+        score: 100
+      },
+      {
+        id: "termos-de-uso",
+        file: "termos-de-uso.html",
+        badge: "Institucional / Legal",
+        url: "https://agoraeufalo.com.br/termos-de-uso.html",
+        canonical: "https://agoraeufalo.com.br/termos-de-uso.html",
+        title: "Termos de Uso | AgoraEuFalo - Professor Leonardo Leite",
+        description: "Conheça os Termos de Uso e as regras de utilização dos cursos, materiais e mentorias do AgoraEuFalo, de titularidade do Professor Leonardo Leite.",
+        robots: "index, follow",
+        ogTitle: "Termos de Uso | AgoraEuFalo",
+        ogDesc: "Termos e condições de uso dos treinamentos e materiais pedagógicos do AgoraEuFalo.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "Termos de Uso | AgoraEuFalo",
+        twitterDesc: "Termos e condições de uso dos treinamentos do AgoraEuFalo.",
+        keywords: ["termos de uso agoraeufalo", "condicoes de contratacao"],
+        schemaType: "WebPage",
+        score: 94
+      },
+      {
+        id: "politica-de-privacidade",
+        file: "politica-de-privacidade.html",
+        badge: "Institucional / Legal",
+        url: "https://agoraeufalo.com.br/politica-de-privacidade.html",
+        canonical: "https://agoraeufalo.com.br/politica-de-privacidade.html",
+        title: "Política de Privacidade | AgoraEuFalo - Professor Leonardo Leite",
+        description: "Conheça a Política de Privacidade e Proteção de Dados (LGPD) do AgoraEuFalo, com total transparência e segurança no tratamento das suas informações.",
+        robots: "index, follow",
+        ogTitle: "Política de Privacidade | AgoraEuFalo",
+        ogDesc: "Compromisso com a sua privacidade e conformidade com a LGPD no AgoraEuFalo.",
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image.jpg",
+        twitterTitle: "Política de Privacidade | AgoraEuFalo",
+        twitterDesc: "Compromisso com a sua privacidade e conformidade com a LGPD no AgoraEuFalo.",
+        keywords: ["politica de privacidade agoraeufalo", "lgpd agoraeufalo"],
+        schemaType: "WebPage",
+        score: 94
+      }
+    ];
+
+    let currentPageId = "index";
+
+    // Load custom pages from localStorage if any
+    const savedData = localStorage.getItem("aef_seo_database");
+    let currentDatabase = savedData ? JSON.parse(savedData) : SEO_DATABASE;
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      renderSidebarPages();
+      renderDashboardTable();
+      loadPageToEditor(currentPageId);
+    });
+
+    // =========================================================================
+    // TAB SWITCHING
+    // =========================================================================
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-pane").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll(".nav-tab").forEach(el => {
+        el.classList.remove("active", "bg-brand-accent", "text-brand-navy", "shadow-sm");
+        el.classList.add("text-slate-400");
+      });
+
+      const targetPane = document.getElementById(`tab-content-${tabId}`);
+      const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+
+      if (targetPane) targetPane.classList.remove("hidden");
+      if (targetBtn) {
+        targetBtn.classList.add("active", "bg-brand-accent", "text-brand-navy", "shadow-sm");
+        targetBtn.classList.remove("text-slate-400");
+      }
+
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // SIDEBAR RENDERING & SELECTION
+    // =========================================================================
+    function renderSidebarPages() {
+      const container = document.getElementById("pages-list");
+      container.innerHTML = "";
+
+      currentDatabase.forEach(page => {
+        const isSelected = page.id === currentPageId;
+        const div = document.createElement("div");
+        div.onclick = () => selectPage(page.id);
+        div.className = `p-2.5 rounded-xl cursor-pointer transition-all flex items-center justify-between group ${
+          isSelected ? "bg-slate-800/90 border border-brand-accent/40 text-white" : "hover:bg-slate-900/60 text-slate-400"
+        }`;
+
+        div.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <i data-lucide="file-text" class="w-4 h-4 shrink-0 ${isSelected ? 'text-brand-accent' : 'text-slate-500'}"></i>
+            <div class="truncate">
+              <p class="text-xs font-bold text-slate-200 truncate group-hover:text-white">${page.file}</p>
+              <p class="text-[10px] text-slate-500 truncate">${page.badge}</p>
+            </div>
+          </div>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${page.score >= 95 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}">
+            ${page.score}
+          </span>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById("total-pages-count").textContent = currentDatabase.length;
+      lucide.createIcons();
+    }
+
+    function selectPage(pageId) {
+      currentPageId = pageId;
+      renderSidebarPages();
+      loadPageToEditor(pageId);
+    }
+
+    function filterPages() {
+      const q = document.getElementById("page-search").value.toLowerCase();
+      const items = document.querySelectorAll("#pages-list > div");
+      currentDatabase.forEach((p, idx) => {
+        const matches = p.file.toLowerCase().includes(q) || p.badge.toLowerCase().includes(q) || p.title.toLowerCase().includes(q);
+        if (items[idx]) items[idx].style.display = matches ? "flex" : "none";
+      });
+    }
+
+    // =========================================================================
+    // DASHBOARD TABLE RENDERING
+    // =========================================================================
+    function renderDashboardTable() {
+      const tbody = document.getElementById("dashboard-table-body");
+      tbody.innerHTML = "";
+
+      currentDatabase.forEach(page => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-900/50 transition-colors";
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono font-bold text-white flex items-center gap-2">
+            <i data-lucide="file-code-2" class="w-4 h-4 text-brand-accent"></i> ${page.file}
+          </td>
+          <td class="py-3 px-4 max-w-xs truncate text-slate-300" title="${page.title}">
+            <span class="inline-block w-2 h-2 rounded-full ${page.title.length <= 60 ? 'bg-emerald-400' : 'bg-amber-400'} mr-1.5"></span>
+            ${page.title}
+          </td>
+          <td class="py-3 px-4 max-w-xs truncate text-slate-400" title="${page.description}">
+            <span class="inline-block w-2 h-2 rounded-full ${page.description.length <= 160 ? 'bg-emerald-400' : 'bg-amber-400'} mr-1.5"></span>
+            ${page.description}
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">1200x630</span>
+          </td>
+          <td class="py-3 px-4 text-[11px] text-slate-400 truncate max-w-[150px]">
+            ${page.schemaType}
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded font-mono font-bold ${page.score >= 95 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">
+              ${page.score}/100
+            </span>
+          </td>
+          <td class="py-3 px-4 text-right">
+            <button onclick="selectPage('${page.id}'); switchTab('editor');" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold hover:text-white transition-colors">
+              Editar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // LOAD PAGE DATA INTO EDITOR & SIMULATORS
+    // =========================================================================
+    function loadPageToEditor(pageId) {
+      const page = currentDatabase.find(p => p.id === pageId) || currentDatabase[0];
+
+      // Page Header
+      document.getElementById("editor-page-name").textContent = page.file;
+      document.getElementById("editor-page-badge").textContent = page.badge;
+      document.getElementById("editor-page-url").textContent = page.url;
+
+      // Inputs
+      document.getElementById("input-meta-title").value = page.title;
+      document.getElementById("input-meta-desc").value = page.description;
+      document.getElementById("input-canonical-url").value = page.canonical;
+      document.getElementById("input-robots").value = page.robots;
+      document.getElementById("input-keywords").value = page.keywords.join(", ");
+
+      document.getElementById("input-og-title").value = page.ogTitle;
+      document.getElementById("input-og-desc").value = page.ogDesc;
+      document.getElementById("input-og-image-select").value = page.ogImage;
+      document.getElementById("og-preview-thumb").src = page.ogImage.replace("https://agoraeufalo.com.br/", "");
+
+      // Previews
+      document.getElementById("serp-breadcrumb-url").textContent = page.url;
+      document.getElementById("serp-preview-title").textContent = page.title;
+      document.getElementById("serp-preview-desc").textContent = page.description;
+
+      document.getElementById("wa-preview-img").src = page.ogImage.replace("https://agoraeufalo.com.br/", "");
+      document.getElementById("wa-preview-title").textContent = page.ogTitle;
+      document.getElementById("wa-preview-desc").textContent = page.ogDesc;
+
+      document.getElementById("twitter-preview-img").src = page.ogImage.replace("https://agoraeufalo.com.br/", "");
+      document.getElementById("twitter-preview-title").textContent = page.twitterTitle;
+      document.getElementById("twitter-preview-desc").textContent = page.twitterDesc;
+
+      // Keywords Badges
+      renderKeywordBadges(page.keywords);
+
+      // Schema Code
+      renderSchemaCode(page);
+
+      updateLiveCounters();
+    }
+
+    function renderKeywordBadges(keywords) {
+      const container = document.getElementById("keywords-tags-container");
+      container.innerHTML = "";
+      keywords.forEach(kw => {
+        const badge = document.createElement("span");
+        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-1";
+        badge.innerHTML = `<i data-lucide="hash" class="w-2.5 h-2.5 text-brand-accent"></i> ${kw}`;
+        container.appendChild(badge);
+      });
+      lucide.createIcons();
+    }
+
+    function updateSelectedImage() {
+      const sel = document.getElementById("input-og-image-select").value;
+      const localPath = sel.replace("https://agoraeufalo.com.br/", "");
+      document.getElementById("og-preview-thumb").src = localPath;
+      document.getElementById("wa-preview-img").src = localPath;
+      document.getElementById("twitter-preview-img").src = localPath;
+    }
+
+    function updateLiveCounters() {
+      const title = document.getElementById("input-meta-title").value;
+      const desc = document.getElementById("input-meta-desc").value;
+
+      // Title Counter
+      const titleLen = title.length;
+      const titleCountEl = document.getElementById("title-char-count");
+      const titleBar = document.getElementById("title-progress-bar");
+      titleCountEl.textContent = `${titleLen} / 60 chars`;
+      
+      const titlePct = Math.min(100, (titleLen / 60) * 100);
+      titleBar.style.width = `${titlePct}%`;
+
+      if (titleLen >= 45 && titleLen <= 60) {
+        titleCountEl.className = "font-mono text-emerald-400 font-bold";
+        titleBar.className = "bg-emerald-500 h-full transition-all";
+      } else if (titleLen > 60) {
+        titleCountEl.className = "font-mono text-amber-400 font-bold";
+        titleBar.className = "bg-amber-500 h-full transition-all";
+      } else {
+        titleCountEl.className = "font-mono text-slate-400 font-bold";
+        titleBar.className = "bg-slate-600 h-full transition-all";
+      }
+
+      // Desc Counter
+      const descLen = desc.length;
+      const descCountEl = document.getElementById("desc-char-count");
+      const descBar = document.getElementById("desc-progress-bar");
+      descCountEl.textContent = `${descLen} / 160 chars`;
+
+      const descPct = Math.min(100, (descLen / 160) * 100);
+      descBar.style.width = `${descPct}%`;
+
+      if (descLen >= 120 && descLen <= 160) {
+        descCountEl.className = "font-mono text-emerald-400 font-bold";
+        descBar.className = "bg-emerald-500 h-full transition-all";
+      } else if (descLen > 160) {
+        descCountEl.className = "font-mono text-amber-400 font-bold";
+        descBar.className = "bg-amber-500 h-full transition-all";
+      } else {
+        descCountEl.className = "font-mono text-slate-400 font-bold";
+        descBar.className = "bg-slate-600 h-full transition-all";
+      }
+
+      // Live update Serp & social
+      document.getElementById("serp-preview-title").textContent = title || "Título da Página";
+      document.getElementById("serp-preview-desc").textContent = desc || "Descrição da página...";
+    }
+
+    function setSerpDevice(dev) {
+      const box = document.getElementById("google-serp-box");
+      const btnD = document.getElementById("btn-serp-desktop");
+      const btnM = document.getElementById("btn-serp-mobile");
+
+      if (dev === "mobile") {
+        box.className = "p-4 rounded-xl bg-white text-slate-900 shadow-lg max-w-sm border-2 border-slate-300 transition-all";
+        btnM.className = "px-2.5 py-1 rounded bg-slate-800 text-white font-semibold";
+        btnD.className = "px-2.5 py-1 rounded text-slate-400 font-semibold hover:text-white";
+      } else {
+        box.className = "p-5 rounded-xl bg-white text-slate-900 shadow-lg max-w-2xl transition-all";
+        btnD.className = "px-2.5 py-1 rounded bg-slate-800 text-white font-semibold";
+        btnM.className = "px-2.5 py-1 rounded text-slate-400 font-semibold hover:text-white";
+      }
+    }
+
+    function renderSchemaCode(page) {
+      const codeEl = document.getElementById("schema-code-display");
+      const schemaObj = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "EducationalOrganization",
+            "@id": "https://agoraeufalo.com.br/#organization",
+            "name": "AgoraEuFalo",
+            "url": "https://agoraeufalo.com.br/",
+            "logo": "https://agoraeufalo.com.br/assets/images/logo.png"
+          },
+          {
+            "@type": "Person",
+            "@id": "https://agoraeufalo.com.br/#instructor",
+            "name": "Leonardo Leite",
+            "jobTitle": "Professor de Inglês",
+            "image": "https://agoraeufalo.com.br/assets/images/leonardo-leite.png"
+          },
+          {
+            "@type": "WebPage",
+            "@id": page.canonical,
+            "url": page.canonical,
+            "name": page.title,
+            "description": page.description
+          }
+        ]
+      };
+      codeEl.textContent = JSON.stringify(schemaObj, null, 2);
+    }
+
+    // =========================================================================
+    // COPY HEAD CODE GENERATOR
+    // =========================================================================
+    function generateFullHeadCode(page) {
+      return `<!-- ========================================================================= -->
+<!-- SEO & Social Sharing (Padrão Ouro AgoraEuFalo)                            -->
+<!-- ========================================================================= -->
+<title>${page.title}</title>
+<meta name="title" content="${page.title}">
+<meta name="description" content="${page.description}">
+<meta name="robots" content="${page.robots}">
+<link rel="canonical" href="${page.canonical}">
+
+<!-- Open Graph / WhatsApp / Facebook / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="${page.canonical}">
+<meta property="og:title" content="${page.ogTitle}">
+<meta property="og:description" content="${page.ogDesc}">
+<meta property="og:image" content="${page.ogImage}">
+<meta property="og:image:secure_url" content="${page.ogImage}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${page.ogTitle}">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="AgoraEuFalo">
+
+<!-- Twitter / X Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="${page.canonical}">
+<meta name="twitter:title" content="${page.twitterTitle}">
+<meta name="twitter:description" content="${page.twitterDesc}">
+<meta name="twitter:image" content="${page.ogImage}">
+
+<!-- Favicon & App Icons -->
+<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+<!-- Structured Data (Schema.org JSON-LD) -->
+<script type="application/ld+json">
+${document.getElementById("schema-code-display").textContent}
+<\/script>`;
+    }
+
+    function copyCurrentHeadTag() {
+      const page = currentDatabase.find(p => p.id === currentPageId);
+      const code = generateFullHeadCode(page);
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("Bloco <head> completo copiado com sucesso!");
+      });
+    }
+
+    function copySchemaJson() {
+      const code = document.getElementById("schema-code-display").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("Schema JSON-LD copiado!");
+      });
+    }
+
+    function copySitemapXml() {
+      const code = document.getElementById("sitemap-code-display").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("Sitemap XML copiado!");
+      });
+    }
+
+    function copyRobotsTxt() {
+      const code = document.getElementById("robots-code-display").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("Robots.txt copiado!");
+      });
+    }
+
+    function saveCurrentPageData() {
+      const page = currentDatabase.find(p => p.id === currentPageId);
+      if (!page) return;
+
+      page.title = document.getElementById("input-meta-title").value;
+      page.description = document.getElementById("input-meta-desc").value;
+      page.canonical = document.getElementById("input-canonical-url").value;
+      page.robots = document.getElementById("input-robots").value;
+      page.ogTitle = document.getElementById("input-og-title").value;
+      page.ogDesc = document.getElementById("input-og-desc").value;
+      page.ogImage = document.getElementById("input-og-image-select").value;
+      page.keywords = document.getElementById("input-keywords").value.split(",").map(s => s.trim()).filter(Boolean);
+
+      localStorage.setItem("aef_seo_database", JSON.stringify(currentDatabase));
+      renderSidebarPages();
+      renderDashboardTable();
+      showToast("Alterações salvas localmente!");
+    }
+
+    function exportFullSEOReport() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentDatabase, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "agoraeufalo-seo-report.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Relatório SEO exportado!");
+    }
+
+    // =========================================================================
+    // MODAL: ADD NEW PAGE
+    // =========================================================================
+    function openNewPageModal() {
+      document.getElementById("new-page-modal").classList.remove("hidden");
+    }
+
+    function closeNewPageModal() {
+      document.getElementById("new-page-modal").classList.add("hidden");
+    }
+
+    function submitNewPage() {
+      const type = document.getElementById("modal-type").value;
+      const filename = document.getElementById("modal-filename").value.trim();
+      const title = document.getElementById("modal-title").value.trim();
+      const desc = document.getElementById("modal-desc").value.trim();
+      const kw = document.getElementById("modal-keywords").value.trim();
+
+      if (!filename || !title) {
+        alert("Por favor preencha o nome do arquivo e o título!");
+        return;
+      }
+
+      const isThankYou = type === "thankyou";
+      const id = filename.replace(".html", "").toLowerCase();
+      const newPage = {
+        id: id,
+        file: filename.endsWith(".html") ? filename : `${filename}.html`,
+        badge: isThankYou ? "Página Privada (Obrigado)" : "Nova Página Pública",
+        url: `https://agoraeufalo.com.br/${filename}`,
+        canonical: `https://agoraeufalo.com.br/${filename}`,
+        title: title,
+        description: desc || (isThankYou ? "Sua inscrição foi confirmada com sucesso!" : "Treinamento prático de inglês com o Professor Leonardo Leite."),
+        robots: isThankYou ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+        ogTitle: title,
+        ogDesc: desc || (isThankYou ? "Sua inscrição foi confirmada com sucesso!" : "Treinamento prático de inglês com o Professor Leonardo Leite."),
+        ogImage: "https://agoraeufalo.com.br/assets/images/og-image-oficial.jpg",
+        twitterTitle: title,
+        twitterDesc: desc || (isThankYou ? "Sua inscrição foi confirmada com sucesso!" : "Treinamento prático de inglês com o Professor Leonardo Leite."),
+        keywords: kw ? kw.split(",").map(s => s.trim()) : ["ingles agoraeufalo"],
+        schemaType: isThankYou ? "None (Privada)" : "WebPage, EducationalOrganization",
+        score: isThankYou ? 100 : 95
+      };
+
+      currentDatabase.push(newPage);
+      localStorage.setItem("aef_seo_database", JSON.stringify(currentDatabase));
+      closeNewPageModal();
+      renderSidebarPages();
+      renderDashboardTable();
+      selectPage(id);
+      switchTab('editor');
+      showToast(`Página ${newPage.file} adicionada (${isThankYou ? 'noindex ativado' : 'index ativado'})!`);
+    }
+
+    // =========================================================================
+    // TOAST SYSTEM
+    // =========================================================================
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toast-message").textContent = msg;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
