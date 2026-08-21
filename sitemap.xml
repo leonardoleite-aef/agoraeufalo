@@ -85,7 +85,15 @@
     <priority>0.80</priority>
   </url>
 
-  <!-- 9. Termos de Uso (Institucional / Legal) -->
+  <!-- 11. Página Oficial de Contato Direto -->
+  <url>
+    <loc>https://agoraeufalo.com.br/contato.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- 12. Termos de Uso (Institucional / Legal) -->
   <url>
     <loc>https://agoraeufalo.com.br/termos-de-uso.html</loc>
     <lastmod>2026-08-21</lastmod>
@@ -93,7 +101,7 @@
     <priority>0.30</priority>
   </url>
 
-  <!-- 10. Política de Privacidade (Institucional / Legal) -->
+  <!-- 13. Política de Privacidade (Institucional / Legal) -->
   <url>
     <loc>https://agoraeufalo.com.br/politica-de-privacidade.html</loc>
     <lastmod>2026-08-21</lastmod>
