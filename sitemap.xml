@@ -69,6 +69,22 @@
     <priority>0.80</priority>
   </url>
 
+  <!-- 9. Hub Oficial do Blog AgoraEuFalo -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 10. Artigo: Como Treinar o Ouvido para Entender Inglês Rápido -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
   <!-- 9. Termos de Uso (Institucional / Legal) -->
   <url>
     <loc>https://agoraeufalo.com.br/termos-de-uso.html</loc>

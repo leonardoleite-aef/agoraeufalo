@@ -14,9 +14,11 @@ Allow: /assets/js/
 Disallow: /obrigado.html
 Disallow: /obrigado
 
-# Painel administrativo interno de SEO
+# Painel administrativo interno de SEO & Blog Studio (Acesso Exclusivo / Não Indexar)
 Disallow: /seo-manager.html
 Disallow: /seo-manager
+Disallow: /blog-panel.html
+Disallow: /blog-panel
 
 # Crawlers de Redes Sociais & Mensageiros (Permissão explícita para Rich Previews)
 User-agent: WhatsApp

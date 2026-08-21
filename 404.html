@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Página Não Encontrada (404) | AgoraEuFalo</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="description" content="A página que você tentou acessar não existe, foi despublicada ou mudou de endereço. Volte para o início ou explore o Blog do AgoraEuFalo.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+
+  <!-- Google Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              accent: '#C57E1E',
+              'accent-hover': '#A06314',
+              surface: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    .glow-gold {
+      box-shadow: 0 0 50px -10px rgba(197, 126, 30, 0.4);
+    }
+    .btn-cta-primary {
+      background: linear-gradient(135deg, #C57E1E 0%, #E5982A 50%, #C57E1E 100%);
+      background-size: 200% auto;
+      color: #0A192F;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-cta-primary:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(197, 126, 30, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-brand-navy text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950 relative overflow-x-hidden">
+
+  <!-- Efeitos de Fundo (Luzes Douradas) -->
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 sm:w-[600px] h-96 sm:h-[600px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="absolute -top-20 -left-20 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- ========================================================================= -->
+  <!-- HEADER SIMPLIFICADO                                                       -->
+  <!-- ========================================================================= -->
+  <header class="border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="assets/images/logo-fundo-escuro.png" alt="Logo AgoraEuFalo" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105">
+      </a>
+      <nav class="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm font-bold text-slate-300">
+        <a href="index.html" class="hover:text-amber-400 transition-colors">Início</a>
+        <a href="blog/index.html" class="hover:text-amber-400 transition-colors flex items-center gap-1">
+          <span>Blog</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+        </a>
+        <a href="projeto-aef.html" class="hidden sm:inline hover:text-amber-400 transition-colors">Projeto 2026</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- CONTEÚDO PRINCIPAL 404                                                    -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-4xl mx-auto px-5 sm:px-8 py-16 sm:py-24 flex flex-col items-center justify-center text-center space-y-8">
+    
+    <!-- Selo de Erro e Ícone Divertido -->
+    <div class="space-y-4">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-extrabold uppercase tracking-widest backdrop-blur-md">
+        <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
+        <span>Erro 404 • Rota Perdida</span>
+      </div>
+
+      <!-- Grande Título 404 com Gradiente -->
+      <div class="relative">
+        <h1 class="text-7xl sm:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-amber-200 via-amber-400 to-amber-600 drop-shadow-2xl">
+          404
+        </h1>
+        <span class="absolute -bottom-2 sm:-bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs sm:text-sm font-mono text-slate-400 uppercase tracking-widest bg-slate-900/90 px-3 py-0.5 rounded-full border border-slate-700">
+          Page Not Found
+        </span>
+      </div>
+    </div>
+
+    <!-- Headline e Analogia do Leo -->
+    <div class="space-y-3 max-w-2xl">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug">
+        Ops! Deu um "branco" nesta página... ou ela foi arquivada! 😅
+      </h2>
+      <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+        Assim como aquele momento em que a palavra foge da cabeça na hora de falar inglês, a página que você tentou acessar não existe, foi <strong>despublicada</strong> pelo professor ou mudou de endereço.
+      </p>
+    </div>
+
+    <!-- Box da Sacada de Ouro do Leo -->
+    <div class="max-w-xl w-full p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-400/30 text-left space-y-2 shadow-lg backdrop-blur-md">
+      <div class="flex items-center gap-2.5 text-amber-300 font-bold text-sm">
+        <i data-lucide="lightbulb" class="w-4 h-4 text-amber-400"></i>
+        <span>A Sacada do Professor Leo:</span>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-200 leading-relaxed italic">
+        "Na conversação e na internet, quando você se perder no caminho, não congele nem tente traduzir o erro. Recalcule a rota e siga em frente!"
+      </p>
+    </div>
+
+    <!-- Hub de Ações Rápidas (Para onde ir agora?) -->
+    <div class="w-full space-y-4 pt-2">
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-400">
+        Escolha para onde deseja ir agora:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-left">
+        
+        <!-- Card 1: Blog Oficial -->
+        <a href="blog/index.html" class="p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-400/50 transition-all group flex flex-col justify-between space-y-3">
+          <div class="space-y-1">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Blog Oficial</h3>
+            <p class="text-[11px] text-slate-400">Artigos e treinos de escuta e connected speech.</p>
+          </div>
+          <span class="text-[11px] font-bold text-amber-400 flex items-center gap-1">
+            <span>Acessar Blog</span>
+            <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+          </span>
+        </a>
+
+        <!-- Card 2: Início -->
+        <a href="index.html" class="p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-400/50 transition-all group flex flex-col justify-between space-y-3">
+          <div class="space-y-1">
+            <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="home" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Página Inicial</h3>
+            <p class="text-[11px] text-slate-400">Voltar para a página principal do AgoraEuFalo.</p>
+          </div>
+          <span class="text-[11px] font-bold text-amber-400 flex items-center gap-1">
+            <span>Ir para Início</span>
+            <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+          </span>
+        </a>
+
+        <!-- Card 3: Projeto 2026 -->
+        <a href="projeto-aef.html" class="p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-400/50 transition-all group flex flex-col justify-between space-y-3">
+          <div class="space-y-1">
+            <div class="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Projeto 2026</h3>
+            <p class="text-[11px] text-slate-400">Magic Stories, Quick Start e Mentorias ao Vivo.</p>
+          </div>
+          <span class="text-[11px] font-bold text-amber-400 flex items-center gap-1">
+            <span>Conhecer Projeto</span>
+            <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+          </span>
+        </a>
+
+        <!-- Card 4: WhatsApp -->
+        <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Ca%C3%AD%20na%20p%C3%A1gina%20404%20e%20quero%20tirar%20uma%20d%C3%BAvida!" target="_blank" rel="noopener noreferrer" class="p-4 rounded-2xl bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-800/60 hover:border-emerald-500 transition-all group flex flex-col justify-between space-y-3">
+          <div class="space-y-1">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">WhatsApp do Leo</h3>
+            <p class="text-[11px] text-slate-400">Tire dúvidas direto com o professor.</p>
+          </div>
+          <span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
+            <span>Chamar no Zap</span>
+            <i data-lucide="external-link" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
+          </span>
+        </a>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER OFICIAL                                                            -->
+  <!-- ========================================================================= -->
+  <footer class="bg-slate-950 text-slate-400 py-8 border-t border-slate-800/80 text-xs">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 AgoraEuFalo. Todos os direitos reservados.</p>
+      <p>Professor Leonardo Leite • 35 anos de sala de aula.</p>
+    </div>
+  </footer>
+
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

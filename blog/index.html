@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Primary Meta Tags -->
+  <title>Blog Oficial AgoraEuFalo | Treino Auditivo, Histórias e Inglês Natural</title>
+  <meta name="title" content="Blog Oficial AgoraEuFalo | Professor Leonardo Leite">
+  <meta name="description" content="Artigos, aulas em vídeo e dicas práticas de treino auditivo, reflexo e fala em inglês com o Professor Leonardo Leite (35 anos de sala de aula). Não estude gramática, treine seu ouvido!">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://agoraeufalo.com.br/blog/">
+
+  <!-- Open Graph / WhatsApp / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agoraeufalo.com.br/blog/">
+  <meta property="og:title" content="Blog Oficial AgoraEuFalo | Professor Leonardo Leite">
+  <meta property="og:description" content="Dicas práticas de escuta ativa, destrave da fala e o Método Magic Stories com 35 anos de didática em sala de aula.">
+  <meta property="og:image" content="https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="AgoraEuFalo">
+
+  <!-- Twitter / X Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://agoraeufalo.com.br/blog/">
+  <meta name="twitter:title" content="Blog Oficial AgoraEuFalo | Professor Leonardo Leite">
+  <meta name="twitter:description" content="Dicas práticas de escuta ativa, destrave da fala e o Método Magic Stories.">
+  <meta name="twitter:image" content="https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/android-chrome-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
+
+  <!-- Structured Data (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": "https://agoraeufalo.com.br/blog/#blog",
+        "name": "Blog AgoraEuFalo",
+        "url": "https://agoraeufalo.com.br/blog/",
+        "description": "Artigos práticos sobre treino auditivo, destrave de fala em inglês e neurociência do aprendizado pelo Professor Leonardo Leite.",
+        "publisher": {
+          "@type": "EducationalOrganization",
+          "name": "AgoraEuFalo",
+          "url": "https://agoraeufalo.com.br/",
+          "logo": "https://agoraeufalo.com.br/assets/images/logo.png"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://agoraeufalo.com.br/blog/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Início",
+            "item": "https://agoraeufalo.com.br/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://agoraeufalo.com.br/blog/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              petrol: '#0D2040',
+              slate: '#1E293B',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              'accent-light': '#FDF8F0',
+              muted: '#64748B',
+              subtle: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/styles.css">
+
+  <style>
+    .gradient-hero-blog {
+      background: radial-gradient(circle at 85% 20%, rgba(197, 126, 30, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 15% 80%, rgba(13, 32, 64, 0.8) 0%, transparent 60%),
+                  #0A192F;
+    }
+    .blog-card-hover {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .blog-card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px -8px rgba(10, 25, 47, 0.12);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen selection:bg-amber-100 selection:text-brand-accent">
+
+  <!-- ========================================================================= -->
+  <!-- HEADER INSTITUCIONAL                                                      -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo Oficial -->
+      <a href="../index.html" class="flex items-center gap-3 group" aria-label="Página Inicial AgoraEuFalo">
+        <img 
+          src="../assets/images/logo.png" 
+          alt="Logo AgoraEuFalo - Professor Leonardo Leite" 
+          class="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+      </a>
+
+      <!-- Menu de Navegação Desktop -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-slate-600">
+        <a href="../index.html" class="hover:text-brand-accent transition-colors">Início</a>
+        <a href="index.html" class="text-amber-600 font-extrabold hover:text-amber-700 transition-colors flex items-center gap-1.5">
+          <span>Blog</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+        </a>
+        <a href="../guia-magic-stories.html" class="hover:text-brand-accent transition-colors">Guia Definitivo</a>
+        <a href="../magic-stories.html" class="hover:text-brand-accent transition-colors">Magic Stories</a>
+        <a href="../quick-start.html" class="hover:text-brand-accent transition-colors">Quick Start</a>
+        <a href="../projeto-aef.html" class="hover:text-brand-accent transition-colors">Projeto AEF</a>
+      </nav>
+
+      <!-- Botão CTA Header -->
+      <div class="flex items-center gap-3">
+        <a 
+          href="../projeto-aef.html" 
+          class="btn-cta-primary px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap inline-flex items-center gap-2 shadow-md hover:scale-105 transition-all"
+        >
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Garantir Vaga 2026</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- HERO BANNER CRIATIVO DO BLOG                                              -->
+  <!-- ========================================================================= -->
+  <section class="gradient-hero-blog text-white py-16 sm:py-24 relative overflow-hidden border-b border-slate-800">
+    
+    <!-- Elementos Decorativos de Fundo -->
+    <div class="absolute -right-20 -top-20 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative z-10 space-y-6">
+      
+      <!-- Badges de Autoridade -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+          <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>O BLOG DO AGORAEUFALO</span>
+        </span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800/80 text-slate-300 border border-slate-700">
+          35 anos de sala de aula • Prof. Leonardo Leite
+        </span>
+      </div>
+
+      <!-- Headline Principal -->
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-3xl leading-tight">
+        Não estude regras. <br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-500">
+          Treine seu ouvido para falar Inglês.
+        </span>
+      </h1>
+
+      <p class="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+        Artigos práticos, histórias narradas, desconstrução de bloqueios e a didática de quem passou 3 décadas ensinando brasileiros a pensar e falar no reflexo.
+      </p>
+
+      <!-- Barra de Pesquisa & Filtros -->
+      <div class="pt-4 max-w-xl">
+        <div class="relative">
+          <i data-lucide="search" class="w-5 h-5 absolute left-4 top-3.5 text-slate-400"></i>
+          <input 
+            type="text" 
+            id="blog-search-input"
+            placeholder="Buscar por assunto, connected speech, reflexo rápido..." 
+            oninput="handleBlogSearch()"
+            class="w-full pl-12 pr-4 py-3.5 text-sm bg-slate-900/90 border border-slate-700 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-md shadow-lg"
+          >
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- BARRA DE CATEGORIAS / FILTROS                                             -->
+  <!-- ========================================================================= -->
+  <section class="bg-white border-b border-slate-200/80 sticky top-20 z-30 shadow-xs">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-3.5 overflow-x-auto">
+      <div class="flex items-center gap-2 min-w-max" id="category-filter-bar">
+        <button onclick="filterCategory('todos')" class="cat-pill active px-4 py-1.5 rounded-full text-xs font-bold bg-brand-navy text-white shadow-xs transition-all">
+          Todos os Artigos
+        </button>
+        <button onclick="filterCategory('Treino Auditivo')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          🎧 Treino Auditivo
+        </button>
+        <button onclick="filterCategory('Método Magic Stories')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          📖 Magic Stories
+        </button>
+        <button onclick="filterCategory('Destrave da Fala')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          🗣️ Destrave da Fala
+        </button>
+        <button onclick="filterCategory('Expressões & Chunks')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          💡 Expressões & Chunks
+        </button>
+        <button onclick="filterCategory('Dicas do Professor Leo')" class="cat-pill px-4 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all">
+          🎯 Dicas do Professor Leo
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CONTEÚDO PRINCIPAL DO BLOG (GRID + SIDEBAR)                               -->
+  <!-- ========================================================================= -->
+  <main class="max-w-6xl mx-auto px-5 sm:px-8 py-12 lg:py-16 flex-1">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+      
+      <!-- COLUNA PRINCIPAL (ARTIGOS PUBLICADOS) -->
+      <div class="lg:col-span-8 space-y-10" id="blog-articles-column">
+        <!-- Injetado dinamicamente via JavaScript com base nos posts com status 'Publicado' -->
+      </div>
+
+      </div>
+
+      <!-- SIDEBAR EDITORIAL (AUTOR & CURSOS) -->
+      <aside class="lg:col-span-4 space-y-8">
+        
+        <!-- CARD DO PROFESSOR LEONARDO LEITE -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-4">
+          <div class="flex items-center gap-4">
+            <img 
+              src="../assets/images/leonardo-leite.png" 
+              alt="Professor Leonardo Leite" 
+              class="w-16 h-16 rounded-2xl object-cover border-2 border-amber-500 shadow-md"
+            >
+            <div>
+              <h3 class="text-base font-bold text-brand-navy">Professor Leonardo Leite</h3>
+              <p class="text-xs text-amber-700 font-extrabold">35 anos de sala de aula</p>
+              <div class="flex items-center gap-1 text-[11px] text-slate-400 mt-0.5">
+                <i data-lucide="map-pin" class="w-3 h-3"></i> Belo Horizonte, Brasil
+              </div>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-600 leading-relaxed">
+            "Não sou aventureiro de internet. Sou professor. Criei o método AgoraEuFalo para libertar adultos da prisão da gramática tradicional e ensinar o inglês real que os ouvidos entendem e a boca fala sem travar."
+          </p>
+
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+            <a href="https://www.youtube.com/@agoraeufaloingles" target="_blank" class="p-2 rounded-xl bg-slate-50 hover:bg-red-50 text-slate-600 hover:text-red-600 transition-colors" title="Canal Oficial no YouTube">
+              <i data-lucide="youtube" class="w-4 h-4"></i>
+            </a>
+            <a href="https://www.instagram.com/leonardoagoraeufalo/" target="_blank" class="p-2 rounded-xl bg-slate-50 hover:bg-pink-50 text-slate-600 hover:text-pink-600 transition-colors" title="Instagram Oficial">
+              <i data-lucide="instagram" class="w-4 h-4"></i>
+            </a>
+            <a href="https://wa.me/5531999817975" target="_blank" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-600 transition-colors" title="WhatsApp do Leo">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- CONVERSÃO RÁPIDA / BOX PROJETO 2026 -->
+        <div class="bg-brand-navy text-white rounded-3xl p-6 sm:p-7 shadow-xl space-y-4 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-brand-accent text-brand-navy inline-block">
+            PROJETO OFICIAL 2026
+          </span>
+
+          <h3 class="text-lg font-bold text-white tracking-tight">
+            Entre para o Projeto AgoraEuFalo 2026
+          </h3>
+
+          <p class="text-xs text-slate-300 leading-relaxed">
+            O ecossistema completo: 30 Ciclos Magic Stories, Quick Start, Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> com o Professor Leonardo Leite.
+          </p>
+
+          <a 
+            href="../projeto-aef.html" 
+            class="btn-cta-primary w-full py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] transition-all"
+          >
+            <span>Garantir Vaga no Projeto 2026</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- NEWSLETTER / WHATSAPP VIP -->
+        <div class="bg-amber-50/70 border border-amber-200/80 rounded-3xl p-6 space-y-3">
+          <div class="flex items-center gap-2 text-amber-900 font-bold text-sm">
+            <i data-lucide="bell" class="w-4 h-4 text-amber-700"></i>
+            <span>Dicas do Leo no seu WhatsApp</span>
+          </div>
+          <p class="text-xs text-amber-950/80 leading-relaxed">
+            Receba novos treinos de escuta, áudios e histórias direto no seu celular com o Professor Leonardo Leite.
+          </p>
+          <a 
+            href="https://wa.me/5531999817975?text=Hello%20Leo!%20Quero%20receber%20as%20aulas%20e%20dicas%20do%20Blog%20no%20meu%20WhatsApp!" 
+            target="_blank" 
+            class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
+          >
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Entrar na Lista VIP do WhatsApp</span>
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER OFICIAL                                                            -->
+  <!-- ========================================================================= -->
+  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800/80">
+        <div class="text-center md:text-left">
+          <a href="../index.html" class="inline-block mb-2">
+            <img 
+              src="../assets/images/logo-fundo-escuro.png" 
+              alt="Logo AgoraEuFalo" 
+              class="h-8 w-auto object-contain mx-auto md:mx-0 opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </a>
+          <p class="text-xs text-slate-400">
+            Treinamento prático de escuta e fala em língua inglesa com o Professor Leonardo Leite.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-300">
+          <a href="../index.html" class="hover:text-white transition-colors">Início</a>
+          <a href="index.html" class="text-amber-400 font-bold hover:text-white transition-colors">Blog</a>
+          <a href="../projeto-aef.html" class="hover:text-white transition-colors">Projeto AEF</a>
+          <a href="../termos-de-uso.html" class="hover:text-white transition-colors">Termos de Uso</a>
+          <a href="../politica-de-privacidade.html" class="hover:text-white transition-colors">Política de Privacidade</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="https://www.youtube.com/@agoraeufaloingles" target="_blank" rel="noopener noreferrer" aria-label="YouTube Oficial" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-red-600 flex items-center justify-center transition-all">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/leonardoagoraeufalo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Oficial" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-pink-600 flex items-center justify-center transition-all">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20Blog%20e%20quero%20tirar%20uma%20d%C3%BAvida!" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Oficial" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-emerald-600 flex items-center justify-center transition-all">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.277-.1-.479-.15-.68.15-.202.3-.78.978-.956 1.178-.176.2-.352.226-.653.075-.301-.15-1.272-.469-2.424-1.496-.895-.798-1.5-1.784-1.676-2.085-.176-.3-.019-.462.132-.612.136-.135.301-.351.452-.527.15-.175.201-.3.301-.5.101-.2.051-.376-.025-.526-.075-.15-.68-1.64-.931-2.245-.245-.589-.494-.509-.68-.518-.176-.009-.377-.01-.578-.01-.201 0-.527.075-.804.376-.276.3-1.055 1.03-1.055 2.511 0 1.48 1.08 2.91 1.231 3.111.15.2 2.124 3.244 5.145 4.551.719.311 1.281.497 1.719.636.723.23 1.381.197 1.901.12.58-.087 1.78-.727 2.031-1.43.251-.703.251-1.305.176-1.43-.075-.125-.276-.2-.577-.35zM12.042 21.936c-1.803 0-3.571-.486-5.118-1.408l-.367-.218-3.805.998 1.016-3.71-.24-.381c-1.011-1.608-1.546-3.473-1.546-5.385 0-5.503 4.478-9.98 9.983-9.98 2.666 0 5.172 1.038 7.057 2.923 1.884 1.885 2.921 4.391 2.92 7.058 0 5.503-4.478 9.98-9.899 9.981zM12.042 0C5.394 0 0 5.393 0 12.041c0 2.124.555 4.197 1.609 6.024L0 24l6.115-1.604c1.767.963 3.766 1.472 5.927 1.472 6.648 0 12.042-5.393 12.042-12.041C24.084 5.393 18.69 0 12.042 0z"/></svg>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>© 2026 AgoraEuFalo. Todos os direitos reservados.</p>
+        <p>Professor Leonardo Leite • 35 anos de sala de aula.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts: Dynamic Blog Engine -->
+  <script>
+    const defaultPublishedSeed = [
+      {
+        id: 'demo-post-1',
+        title: 'Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade',
+        subtitle: 'Pare de traduzir mentalmente. O segredo de 35 anos de sala de aula para condicionar o seu cérebro a reconhecer sons conectados (connected speech) e responder no reflexo.',
+        category: 'Treino Auditivo',
+        readTime: '5 min de leitura',
+        date: '21 de Agosto, 2026',
+        youtubeId: '8DbXCHwZTL0',
+        imageUrl: 'assets/images/og-magic-stories.jpg',
+        slug: 'como-treinar-o-ouvido-para-entender-ingles-rapido',
+        status: 'Publicado'
+      }
+    ];
+
+    let currentPublishedCategory = 'todos';
+    let currentSearchQuery = '';
+
+    function getPublishedPosts() {
+      const stored = localStorage.getItem('aef_blog_posts');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            const pub = parsed.filter(p => p.status === 'Publicado');
+            if (pub.length > 0) return pub;
+          }
+        } catch(e){}
+      }
+      return defaultPublishedSeed;
+    }
+
+    function renderBlogFeed() {
+      const col = document.getElementById('blog-articles-column');
+      if (!col) return;
+
+      const posts = getPublishedPosts();
+      let filtered = posts;
+
+      if (currentPublishedCategory !== 'todos') {
+        filtered = filtered.filter(p => p.category === currentPublishedCategory);
+      }
+
+      if (currentSearchQuery) {
+        filtered = filtered.filter(p => (p.title + ' ' + (p.subtitle || '') + ' ' + (p.category || '')).toLowerCase().includes(currentSearchQuery));
+      }
+
+      if (!filtered.length) {
+        col.innerHTML = `
+          <div class="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-3 shadow-xs">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+              <i data-lucide="book-open" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-800">Nenhum artigo encontrado nesta categoria</h3>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">Tente buscar por outro termo ou selecione "Todos os Artigos" acima.</p>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      const heroPost = filtered[0];
+      const otherPosts = filtered.slice(1);
+
+      let html = '';
+
+      // Hero Post
+      if (heroPost) {
+        html += `
+          <!-- ARTIGO HERO EM DESTAQUE -->
+          <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm blog-card-hover group flex flex-col" data-category="${heroPost.category}">
+            <div class="relative aspect-video sm:aspect-[21/9] bg-slate-950 overflow-hidden">
+              <img 
+                src="../${heroPost.imageUrl || 'assets/images/og-magic-stories.jpg'}" 
+                alt="${heroPost.title}" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+              >
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-slate-950 shadow-md">
+                  ⭐ POST EM DESTAQUE
+                </span>
+              </div>
+              ${heroPost.youtubeId ? `
+                <div class="absolute bottom-4 right-4">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-950/80 text-white backdrop-blur-md flex items-center gap-1.5">
+                    <i data-lucide="play-circle" class="w-4 h-4 text-amber-400"></i> Com Vídeo-Aula
+                  </span>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-4 flex-1 flex flex-col justify-between">
+              <div class="space-y-2.5">
+                <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                  <span class="text-amber-700 font-bold uppercase tracking-wider">${heroPost.category}</span>
+                  <span>•</span>
+                  <span>${heroPost.readTime || '5 min de leitura'}</span>
+                  <span>•</span>
+                  <span>${heroPost.date || '2026'}</span>
+                </div>
+
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-navy group-hover:text-amber-700 transition-colors tracking-tight leading-snug">
+                  <a href="${heroPost.slug}.html">
+                    ${heroPost.title}
+                  </a>
+                </h2>
+
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed line-clamp-3">
+                  ${heroPost.subtitle}
+                </p>
+              </div>
+
+              <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <img src="../assets/images/leonardo-leite.png" alt="Prof. Leonardo Leite" class="w-10 h-10 rounded-full object-cover border border-amber-400">
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 block">Prof. Leonardo Leite</span>
+                    <span class="text-[11px] text-slate-500">35 anos de sala de aula</span>
+                  </div>
+                </div>
+
+                <a href="${heroPost.slug}.html" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-amber-700 group-hover:text-amber-800 group-hover:translate-x-1 transition-all">
+                  <span>Ler Artigo Completo</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      // Grid de Artigos Restantes
+      if (otherPosts.length > 0) {
+        html += `
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 class="text-lg font-extrabold text-brand-navy tracking-tight flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i>
+                <span>Outros Artigos Publicados</span>
+              </h3>
+              <span class="text-xs text-slate-500">${filtered.length} artigo(s) no ar</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="blog-posts-grid">
+              ${otherPosts.map(p => `
+                <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs blog-card-hover group flex flex-col" data-category="${p.category}">
+                  <div class="aspect-video bg-slate-900 overflow-hidden relative">
+                    <img src="../${p.imageUrl || 'assets/images/og-magic-stories.jpg'}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900">
+                      ${p.category}
+                    </span>
+                  </div>
+                  <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="space-y-1.5">
+                      <div class="flex items-center gap-2 text-[11px] text-slate-400 font-medium">
+                        <span>${p.readTime || '5 min'}</span>
+                        <span>•</span>
+                        <span>${p.date || '2026'}</span>
+                      </div>
+                      <h4 class="text-base font-bold text-brand-navy group-hover:text-amber-700 transition-colors leading-snug line-clamp-2">
+                        <a href="${p.slug}.html">
+                          ${p.title}
+                        </a>
+                      </h4>
+                      <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                        ${p.subtitle || ''}
+                      </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <span class="text-[11px] text-slate-400">Por Prof. Leonardo Leite</span>
+                      <a href="${p.slug}.html" class="font-bold text-amber-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                        <span>Ler</span> <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      col.innerHTML = html;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBlogFeed();
+    });
+
+    // Filtro por Categoria
+    function filterCategory(cat) {
+      currentPublishedCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-navy', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      if (event && event.target) {
+        event.target.classList.add('active', 'bg-brand-navy', 'text-white');
+        event.target.classList.remove('bg-slate-100', 'text-slate-700');
+      }
+      renderBlogFeed();
+    }
+
+    // Busca Dinâmica no Blog
+    function handleBlogSearch() {
+      currentSearchQuery = document.getElementById('blog-search-input').value.toLowerCase().trim();
+      renderBlogFeed();
+    }
+  </script>
+</body>
+</html>
