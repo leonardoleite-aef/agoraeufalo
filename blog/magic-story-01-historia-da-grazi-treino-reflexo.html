@@ -113,13 +113,13 @@
               slate: "#1E293B",
               accent: "#C57E1E",
               "accent-hover": "#D98A26",
+              "accent-light": "#FDF8F0",
               muted: "#64748B",
               subtle: "#F8FAFC"
             }
           },
           fontFamily: {
-            sans: [""Plus Jakarta Sans"", "system-ui", "-apple-system", "sans-serif"],
-            mono: [""Fira Code"", "ui-monospace", "monospace"]
+            sans: [""Plus Jakarta Sans"", "sans-serif"],
           }
         }
       }
@@ -129,112 +129,186 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap");
-    
-    .btn-cta-primary {
-      background: linear-gradient(135deg, #C57E1E 0%, #D98A26 50%, #B36F16 100%);
-      color: #0A192F;
-      font-weight: 800;
-      box-shadow: 0 4px 14px 0 rgba(197, 126, 30, 0.35);
-    }
-    .btn-cta-primary:hover {
-      background: linear-gradient(135deg, #D98A26 0%, #E89A35 50%, #C57E1E 100%);
-      transform: translateY(-1px);
-    }
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/styles.css">
 
-    .prose-editorial h2 { font-size: 1.65rem; font-weight: 800; margin-top: 2.25rem; margin-bottom: 1rem; color: #0F172A; letter-spacing: -0.02em; line-height: 1.3; }
-    .prose-editorial h3 { font-size: 1.3rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #1E293B; }
-    .prose-editorial p { margin-bottom: 1.25rem; line-height: 1.8; color: #334155; }
-    .prose-editorial ul { list-style-type: disc; padding-left: 1.75rem; margin-bottom: 1.25rem; }
-    .prose-editorial li { margin-bottom: 0.5rem; color: #334155; }
-    .prose-editorial blockquote { border-left: 4px solid #C57E1E; padding-left: 1.25rem; font-style: italic; color: #334155; margin: 1.75rem 0; background: #FFFBEB; padding: 1.1rem 1.25rem; border-radius: 0 0.75rem 0.75rem 0; font-size: 1.05rem; }
+  <style>
+    .prose-content h2 { font-size: 1.65rem; font-weight: 800; color: #0A192F; margin-top: 2.25rem; margin-bottom: 0.85rem; letter-spacing: -0.02em; }
+    .prose-content h3 { font-size: 1.3rem; font-weight: 700; color: #1E293B; margin-top: 1.75rem; margin-bottom: 0.6rem; }
+    .prose-content p { margin-bottom: 1.25rem; line-height: 1.8; color: #334155; }
+    .prose-content blockquote { border-left: 4px solid #C57E1E; padding: 1rem 1.25rem; font-style: italic; color: #1E293B; background: #FDF8F0; border-radius: 0 1rem 1rem 0; margin: 1.75rem 0; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans antialiased bg-slate-50 text-slate-800 selection:bg-amber-100 selection:text-amber-900">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen selection:bg-amber-100 selection:text-brand-accent">
 
-  <!-- HEADER / NAVBAR OFICIAL -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-2xs">
-    <div class="max-w-6xl mx-auto px-4 sm:px-8 h-18 flex items-center justify-between">
-      <a href="../index.html" class="flex items-center gap-3">
-        <img src="../assets/images/logo.png" alt="Logo AgoraEuFalo" class="h-8 w-auto object-contain">
+  <!-- ========================================================================= -->
+  <!-- HEADER INSTITUCIONAL                                                      -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo Oficial -->
+      <a href="../index.html" class="flex items-center gap-3 group" aria-label="Página Inicial AgoraEuFalo">
+        <img 
+          src="../assets/images/logo.png" 
+          alt="Logo AgoraEuFalo - Professor Leonardo Leite" 
+          class="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+        />
       </a>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
-        <a href="index.html" class="text-brand-accent font-bold hover:text-brand-accent-hover transition-colors">Blog</a>
-        <a href="../magic-stories.html" class="hover:text-brand-accent transition-colors">Magic Stories</a>
-        <a href="../guia-magic-stories.html" class="hover:text-brand-accent transition-colors">Guia Gratuito</a>
-        <a href="../projeto-aef.html" class="hover:text-brand-accent transition-colors">Projeto 2026</a>
+      <!-- Menu de Navegação Desktop (SEM LINK MAGIC STORIES) -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-slate-600">
+        <a href="../index.html" class="hover:text-brand-accent transition-colors">Início</a>
+        <a href="index.html" class="text-amber-600 font-extrabold hover:text-amber-700 transition-colors">Blog</a>
+        <a href="../guia-magic-stories.html" class="hover:text-brand-accent transition-colors">Guia Definitivo</a>
+        <a href="../projeto-aef.html" class="hover:text-brand-accent transition-colors">Projeto AEF</a>
+        <a href="../contato.html" class="hover:text-brand-accent transition-colors">Contato</a>
       </nav>
 
+      <!-- Botão CTA Header -->
       <div class="flex items-center gap-3">
-        <a href="index.html" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs">
-          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-          <span>Voltar ao Blog</span>
+        <a 
+          href="../projeto-aef.html" 
+          class="btn-cta-primary px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap inline-flex items-center gap-2 shadow-md hover:scale-105 transition-all"
+        >
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Garantir Vaga 2026</span>
         </a>
       </div>
+
     </div>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL DO ARTIGO -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-8 py-10 sm:py-14">
-    <article class="space-y-8">
+  <!-- ========================================================================= -->
+  <!-- POST ARTICLE CONTAINER                                                    -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 py-10 sm:py-16">
+    <article class="max-w-4xl mx-auto px-4 sm:px-6">
       
-      <!-- Meta Cabeçalho -->
-      <div class="space-y-3 border-b border-slate-200/80 pb-6">
-        <div class="flex flex-wrap items-center gap-2.5 text-xs">
-          <span class="px-3 py-1 rounded-full font-extrabold uppercase bg-amber-100 text-amber-900 tracking-wide text-[11px]">Magic Stories</span>
-          <span class="text-slate-300">•</span>
-          <span class="text-slate-500 font-medium">22 de Agosto de 2026</span>
-          <span class="text-slate-300">•</span>
-          <span class="text-slate-500 font-medium">7 min de leitura</span>
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
+        <a href="../index.html" class="hover:text-brand-accent">Início</a>
+        <span>/</span>
+        <a href="index.html" class="hover:text-brand-accent">Blog</a>
+        <span>/</span>
+        <span class="text-amber-700 font-bold">Magic Stories</span>
+      </nav>
+
+      <!-- Post Header -->
+      <header class="space-y-4 border-b border-slate-200 pb-8 mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-200">
+              📖 Magic Stories
+            </span>
+            <span class="text-xs text-slate-500 font-medium flex items-center gap-1">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> 7 min de leitura
+            </span>
+            <span class="text-slate-300">•</span>
+            <span class="text-xs text-slate-500 font-medium">22 de Agosto, 2026</span>
+          </div>
+
+          <a href="../Material-PDF/magic-story-01-historia-da-grazi-treino-reflexo.pdf" download class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-all" title="Baixar Apostila em PDF formatada">
+            <i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Baixar em PDF</span>
+          </a>
         </div>
 
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight pt-2">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-navy tracking-tight leading-tight">
           Magic Story 01: A História da Grazi e o Passo a Passo Para Destravar o Inglês no Reflexo
         </h1>
 
-        <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-normal pt-1">
+        <p class="text-lg sm:text-xl text-slate-600 font-medium leading-relaxed">
           Como uma história real de 1 minuto em Brasília — com Listen & Read, Vocabulário, Listen & Answer, Look & Retell e Listen & Ask — condiciona o cérebro a falar sem tradução mental.
         </p>
 
-        <!-- Autor Info & PDF Download -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3">
-          <div class="flex items-center gap-3">
-            <img src="../assets/images/leonardo-leite.png" alt="Professor Leonardo Leite" class="w-11 h-11 rounded-full object-cover border-2 border-brand-accent shadow-sm">
-            <div>
-              <span class="block text-sm font-bold text-slate-900">Professor Leonardo Leite</span>
-              <span class="block text-xs text-slate-500">Fundador do Método AgoraEuFalo • 35 anos de sala de aula</span>
+        <!-- Author Card Mini -->
+        <div class="flex items-center gap-3.5 pt-4">
+          <img src="../assets/images/leonardo-leite.png" alt="Prof. Leonardo Leite" class="w-12 h-12 rounded-full object-cover border-2 border-amber-500 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-slate-900">Professor Leonardo Leite</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-900">35 anos de sala de aula</span>
+            </div>
+            <p class="text-xs text-slate-500">Fundador do Método AgoraEuFalo • Especialista em Escuta & Fala</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- YouTube Embed Section (Interactive Facade - Evita Erro e Toca na Hora) -->
+      <div class="my-8">
+        <div 
+          id="post-video-container" 
+          class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-400/40 bg-slate-950 cursor-pointer group"
+          onclick="playPostVideo('pQryEQ0-FhA')"
+        >
+          <!-- Thumbnail Oficial de Alta Qualidade -->
+          <img 
+            id="post-video-thumb"
+            src="https://img.youtube.com/vi/pQryEQ0-FhA/maxresdefault.jpg" 
+            onerror="this.src='https://img.youtube.com/vi/pQryEQ0-FhA/hqdefault.jpg'"
+            alt="Magic Story 01: A História da Grazi - Professor Leonardo Leite" 
+            class="w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500"
+          />
+
+          <!-- Overlay Cinematográfico -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+
+          <!-- Badges Superiores -->
+          <div class="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 text-amber-300 text-xs font-extrabold tracking-wide uppercase border border-amber-400/40 backdrop-blur-md shadow-lg">
+              <i data-lucide="play-circle" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Aula em Vídeo Completa</span>
+            </span>
+          </div>
+
+          <!-- Botão Play Gigante em Ouro com Efeito Glow -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="relative flex items-center justify-center">
+              <div class="absolute w-20 sm:w-24 h-20 sm:h-24 rounded-full bg-amber-500/30 animate-ping"></div>
+              <div class="relative w-16 sm:w-20 h-16 sm:h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center shadow-[0_0_40px_rgba(197,126,30,0.6)] group-hover:scale-110 transition-transform duration-300">
+                <i data-lucide="play" class="w-7 sm:w-8 h-7 sm:h-8 fill-slate-950 text-slate-950 ml-1"></i>
+              </div>
             </div>
           </div>
 
-          <a href="../Material-PDF/magic-story-01-historia-da-grazi-treino-reflexo.pdf" download class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold inline-flex items-center justify-center gap-2 transition-all shadow-xs" title="Baixar Apostila em PDF formatada com design completo">
-            <i data-lucide="file-down" class="w-4 h-4 text-amber-400"></i>
-            <span>Baixar Versão em PDF</span>
+          <!-- Rodapé do Card do Vídeo -->
+          <div class="absolute bottom-4 sm:bottom-6 inset-x-4 sm:inset-x-6 flex items-center justify-between">
+            <div>
+              <p class="text-white font-extrabold text-sm sm:text-base drop-shadow">Clique para assistir à aula com o Professor Leonardo Leite</p>
+              <p class="text-slate-300 text-xs hidden sm:block">Aula prática do Ciclo Magic Story #01 da Graziella</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs font-bold shrink-0">
+              HD 1080p
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-400 mt-2 px-1">
+          <span>Vídeo oficial do canal @agoraeufaloingles</span>
+          <a href="https://www.youtube.com/watch?v=pQryEQ0-FhA" target="_blank" rel="noopener noreferrer" class="text-amber-700 hover:text-amber-800 font-semibold flex items-center gap-1">
+            <span>Abrir no YouTube</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
           </a>
         </div>
       </div>
 
-      <!-- Mídia Principal: Aula Completa no YouTube -->
-      <div class="rounded-3xl overflow-hidden shadow-2xl aspect-video bg-slate-950 border border-slate-200">
-        <iframe src="https://www.youtube.com/embed/pQryEQ0-FhA" title="Magic Story 01: A História da Grazi" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-
-      <!-- Box de Destaques Pedagógicos Deste Artigo -->
-      <div class="p-6 sm:p-7 rounded-3xl bg-amber-50/80 border border-amber-200/90 space-y-3 shadow-xs">
-        <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-900 flex items-center gap-2">
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Pedagógicos Deste Artigo:
-        </h3>
-        <ul class="text-sm sm:text-base text-amber-950 space-y-2.5 pl-4 list-disc leading-relaxed">
-          <li><strong>O Paradoxo da Vida da Grazi:</strong> Uma advogada concursada do governo federal de 45 anos que mora no Lago em Brasília, ama as filhas Anna e Flávia, mas quer mudar de vida.</li>
-          <li><strong>Listen & Read vs. Leitura Passiva:</strong> Por que você deve sincronizar som e texto sem parar no dicionário para destravar o reconhecimento auditivo.</li>
-          <li><strong>Vocabulário e Chunks em Contexto Real:</strong> A análise fonética e estrutural de <em>"a 45-year-old woman"</em>, <em>"federal government"</em>, <em>"waterfront"</em>, <em>"outgoing vs. shy"</em> e <em>"stand out"</em>.</li>
-          <li><strong>O Treino Completo de Ativação Oral:</strong> A dinâmica prática de Listen & Answer, Look & Retell e o desafio de formular perguntas com Listen & Ask.</li>
+      <!-- Quick Takeaways / Key Takeaways Box -->
+      <div class="p-6 rounded-2xl bg-amber-50/80 border border-amber-200/80 shadow-xs my-8 space-y-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i>
+          <span>Destaques Pedagógicos Desta Aula (Key Takeaways):</span>
+        </h4>
+        <ul class="text-sm text-amber-950 space-y-2 pl-4 list-disc leading-relaxed">
+          <li><strong>O Paradoxo da Vida da Grazi:</strong> Uma advogada concursada do governo federal de 45 anos que mora no Lago em Brasília, mas quer mudar de vida.</li>
+          <li><strong>Listen & Read vs. Leitura Passiva:</strong> Sincronizar som e texto sem parar no dicionário para destravar o reconhecimento auditivo.</li>
+          <li><strong>Vocabulário e Chunks em Contexto:</strong> Análise fonética de <em>"a 45-year-old woman"</em>, <em>"federal government"</em>, <em>"waterfront"</em>, <em>"outgoing vs. shy"</em> e <em>"stand out"</em>.</li>
+          <li><strong>Treino Completo de Ativação Oral:</strong> Listen & Answer, Look & Retell e o desafio de formular perguntas com Listen & Ask.</li>
         </ul>
       </div>
 
       <!-- Corpo Editorial do Artigo -->
-      <div class="prose-editorial text-slate-700 text-base sm:text-lg leading-relaxed space-y-6">
+      <div class="prose-content text-slate-700 text-base leading-relaxed space-y-6">
         
         <h2>1. O Segredo das Magic Stories: Repetir a Experiência vs. Repetir Feito Papagaio</h2>
         <p>
@@ -282,28 +356,22 @@
           No segundo momento, analisamos as estruturas e expressões da história em contexto:
         </p>
         
-        <div class="my-6 p-5 sm:p-6 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-4 shadow-2xs">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 uppercase tracking-wide border border-amber-500/40 shadow-2xs">
-            <i data-lucide="book-open" class="w-3.5 h-3.5 text-slate-950"></i> Análise de Chunks e Vocabulário da Aula
-          </span>
-          
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1 text-xs sm:text-sm">
-            <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
-              <span class="font-extrabold text-slate-900 text-xs block">📌 "A 45-year-old woman"</span>
-              <p class="text-slate-600">Quando a idade funciona como adjetivo antes do substantivo, ela fica no singular: <em>a 45-year-old woman, a 2-year-old baby, a thousand-dollar car</em>.</p>
-            </div>
-            <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
-              <span class="font-extrabold text-slate-900 text-xs block">📌 "Waterfront & Near the Lake"</span>
-              <p class="text-slate-600"><em>Waterfront</em> é a orla ou calçadão em frente à água (no caso de Brasília, a beira do Lago Paranoá).</p>
-            </div>
-            <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
-              <span class="font-extrabold text-slate-900 text-xs block">📌 "Outgoing vs. Shy" (O Paradoxo da Personalidade)</span>
-              <p class="text-slate-600"><em>Outgoing</em> é extrovertida, expansiva e comunicativa; <em>Shy</em> é tímida e introvertida. A palavra <em>Although</em> ("embora / apesar de") introduz esse contraste.</p>
-            </div>
-            <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
-              <span class="font-extrabold text-slate-900 text-xs block">📌 "Stand out & Get embarrassed"</span>
-              <p class="text-slate-600"><em>Stand out</em> significa se destacar ou querer aparecer. <em>Get embarrassed</em> significa ficar com vergonha ou encabulada facilmente.</p>
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+            <span class="font-bold text-slate-900 text-sm block">📌 "A 45-year-old woman"</span>
+            <p class="text-xs text-slate-600">Quando a idade funciona como adjetivo antes do substantivo, ela fica no singular: <em>a 45-year-old woman, a 2-year-old baby, a thousand-dollar car</em>.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+            <span class="font-bold text-slate-900 text-sm block">📌 "Waterfront & Near the Lake"</span>
+            <p class="text-xs text-slate-600"><em>Waterfront</em> é a orla ou calçadão em frente à água (no caso de Brasília, a beira do Lago Paranoá).</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+            <span class="font-bold text-slate-900 text-sm block">📌 "Outgoing vs. Shy" (O Paradoxo)</span>
+            <p class="text-xs text-slate-600"><em>Outgoing</em> é extrovertida, expansiva e comunicativa; <em>Shy</em> é tímida e introvertida. A palavra <em>Although</em> ("embora") introduz esse contraste.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+            <span class="font-bold text-slate-900 text-sm block">📌 "Stand out & Get embarrassed"</span>
+            <p class="text-xs text-slate-600"><em>Stand out</em> significa se destacar ou querer aparecer. <em>Get embarrassed</em> significa ficar com vergonha ou encabulada facilmente.</p>
           </div>
         </div>
 
@@ -314,7 +382,7 @@
         <ul class="space-y-2.5 my-4 pl-4 list-disc text-slate-700 text-sm sm:text-base">
           <li><strong>How old is Grazi?</strong> &rarr; <em>"45!"</em> ou <em>"She is 45 years old."</em></li>
           <li><strong>Where is Grazi from?</strong> &rarr; <em>"Brasília, the capital of Brazil."</em> (Se você responder <em>New York</em> ou <em>Goiânia</em>, não tem problema: o importante é que você processou a pergunta e respondeu no reflexo!).</li>
-          <li><strong>What does Grazi do?</strong> &rarr; <em>"She is a lawyer. She works for the federal government."</em> (No dia a dia, usa-se <em>What does she do?</em> em vez do formal <em>What is her profession?</em>).</li>
+          <li><strong>What does Grazi do?</strong> &rarr; <em>"She is a lawyer. She works for the federal government."</em> (No dia a dia, usa-se <em>What does she do?</em> em vez de <em>What is her profession?</em>).</li>
           <li><strong>House or apartment?</strong> &rarr; <em>"A big house near the lake with a beautiful view to the waterfront."</em></li>
         </ul>
 
@@ -343,48 +411,114 @@
         <p>
           Por fim, na <strong>Pronunciation Practice</strong>, treinamos a musculatura oral de trás para frente em blocos musicais:
         </p>
-        <div class="p-4 rounded-xl bg-slate-900 text-emerald-400 font-mono text-xs sm:text-sm space-y-1.5 shadow-inner border border-slate-800 my-4">
-          <p>&bull; <em>"her life"</em></p>
-          <p>&bull; <em>"change her life"</em></p>
-          <p>&bull; <em>"woman who wants to change her life"</em></p>
-          <p>&bull; <em>"45-year-old woman who wants to change her life"</em></p>
-          <p class="text-white font-bold">&bull; <em>"Graziella is a 45-year-old woman who wants to change her life."</em></p>
+
+        <!-- Box Claro e de Alto Contraste da Seção 7 (Sem Fundos Escuros) -->
+        <div class="my-6 p-5 sm:p-6 rounded-2xl bg-amber-50/80 border-2 border-amber-200/90 shadow-2xs space-y-3">
+          <span class="text-amber-900 font-black uppercase text-xs tracking-wider flex items-center gap-1.5">
+            <i data-lucide="music" class="w-4 h-4 text-amber-700"></i> Construção Fonética de Trás para Frente:
+          </span>
+          <div class="font-mono text-xs sm:text-sm text-slate-900 space-y-1.5 bg-white p-4 rounded-xl border border-slate-200">
+            <p class="text-slate-600">&bull; <em>"her life"</em></p>
+            <p class="text-slate-700">&bull; <em>"change her life"</em></p>
+            <p class="text-slate-800">&bull; <em>"woman who wants to change her life"</em></p>
+            <p class="text-slate-900 font-semibold">&bull; <em>"45-year-old woman who wants to change her life"</em></p>
+            <p class="text-amber-950 font-black pt-1.5 border-t border-slate-100">&bull; <em>"Graziella is a 45-year-old woman who wants to change her life."</em></p>
+          </div>
         </div>
+
         <p>
           Ao assistir ao filminho animado da Grazi no final da lição, o seu cérebro conecta a imagem, a história e a pronúncia em uma única memória de longo prazo.
         </p>
 
       </div>
 
-      <!-- Sacada de Ouro do Leo -->
-      <div class="p-6 sm:p-8 rounded-3xl bg-amber-50/90 border-l-4 border-amber-500 space-y-2 shadow-xs my-8">
-        <div class="flex items-center gap-2 text-amber-900 font-extrabold text-xs sm:text-sm">
+      <!-- Leo's Golden Tip Box -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200 shadow-sm my-10 space-y-3">
+        <div class="flex items-center gap-2.5 text-amber-900 font-bold text-base">
           <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600"></i>
           <span>A Sacada de Ouro do Professor Leo:</span>
         </div>
-        <p class="text-base sm:text-lg text-amber-950 leading-relaxed italic font-medium">
+        <p class="text-sm sm:text-base text-amber-950/80 leading-relaxed italic">
           "Você não precisa de 50 regras de gramática para destravar o seu inglês. Você precisa vivenciar a mesma história — como a história da Grazi — escutando, respondendo no reflexo e recontando com as suas palavras até que cada frase saia da sua boca com a mesma naturalidade com que você fala em português."
         </p>
       </div>
 
-      <!-- FORMULÁRIO: DÚVIDAS SOBRE A AULA DIRETAS COM O PROFESSOR LEO -->
-      <section class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-5 my-10" id="duvidas-aula">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center shadow-xs">
-              LL
-            </div>
-            <div>
-              <h3 class="text-base sm:text-lg font-bold text-slate-900">Ficou com alguma dúvida sobre a história da Grazi?</h3>
-              <p class="text-xs text-slate-500">Mande sua pergunta que o Professor Leonardo Leite te responde diretamente.</p>
-            </div>
-          </div>
-          <span class="hidden sm:inline-block text-[11px] font-bold text-slate-400">selexenglish@gmail.com</span>
+      <!-- Social Share Bar (Exclusivo WhatsApp) -->
+      <div class="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm my-8">
+        <span class="text-xs font-bold text-slate-700 flex items-center gap-2">
+          <i data-lucide="share-2" class="w-4 h-4 text-amber-600"></i> Compartilhe este post com quem precisa destravar o inglês:
+        </span>
+        <a href="https://api.whatsapp.com/send?text=Magic%20Story%2001%3A%20A%20Hist%C3%B3ria%20da%20Grazi%20-%20https://agoraeufalo.com.br/blog/magic-story-01-historia-da-grazi-treino-reflexo.html" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all hover:scale-105">
+          <i data-lucide="message-circle" class="w-4 h-4"></i> Compartilhar no WhatsApp
+        </a>
+      </div>
+
+      <!-- Redes Sociais do Professor Leo (YT, Instagram, Substack) -->
+      <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm my-8 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h3 class="text-sm font-extrabold text-brand-navy flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i> Siga o Professor Leo nas Redes
+          </h3>
+          <span class="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">Canais Oficiais</span>
         </div>
 
-        <form onsubmit="handleAskTeacher(event)" class="space-y-4" id="ask-teacher-form">
-          <input type="hidden" id="ask-post-title" value="Magic Story 01: A História da Grazi">
-          
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@agoraeufaloingles" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-red-50/80 border border-slate-100 hover:border-red-200 transition-all group">
+            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 group-hover:text-red-700 transition-colors">YouTube</h4>
+              <p class="text-[10px] text-slate-400">Aulas e treinos</p>
+            </div>
+          </a>
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/leonardoagoraeufalo/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-pink-50/80 border border-slate-100 hover:border-pink-200 transition-all group">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 group-hover:text-pink-700 transition-colors">Instagram</h4>
+              <p class="text-[10px] text-slate-400">@leonardoagoraeufalo</p>
+            </div>
+          </a>
+
+          <!-- Substack -->
+          <a href="https://leoleite.substack.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-orange-50/80 border border-slate-100 hover:border-orange-200 transition-all group">
+            <div class="w-9 h-9 rounded-xl bg-[#FF6719] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 group-hover:text-orange-700 transition-colors">Substack</h4>
+              <p class="text-[10px] text-slate-400">Artigos e newsletters</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Direct Question to Professor Leo Box (EXATAMENTE COMO O ORIGINAL) -->
+      <section class="p-6 sm:p-8 rounded-3xl bg-white border-2 border-amber-400/50 shadow-md my-10 space-y-6 relative overflow-hidden" id="duvidas-box">
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div class="flex items-center gap-3.5">
+            <div class="relative">
+              <img src="../assets/images/leonardo-leite.png" alt="Professor Leonardo Leite" class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-500 shadow-sm">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white absolute -bottom-0.5 -right-0.5" title="Professor Online"></span>
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-brand-navy">Ficou com alguma dúvida sobre esta aula?</h3>
+              <p class="text-xs text-slate-500">Mande sua pergunta. Eu leio pessoalmente e te respondo no seu WhatsApp ou E-mail!</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-200 self-start sm:self-auto shrink-0">
+            💬 Resposta Direta do Leo
+          </span>
+        </div>
+
+        <form id="ask-leo-form" onsubmit="handleAskLeoSubmit(event)" class="space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1.5">
               <label class="block text-xs font-bold text-slate-700">Seu Nome:</label>
@@ -392,13 +526,13 @@
                 type="text" 
                 id="ask-name" 
                 required 
-                placeholder="Como prefere ser chamado(a)?" 
+                placeholder="Ex: Carlos Silva" 
                 class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
               >
             </div>
 
             <div class="space-y-1.5">
-              <label class="block text-xs font-bold text-slate-700">Seu WhatsApp ou E-mail:</label>
+              <label class="block text-xs font-bold text-slate-700">Seu WhatsApp ou E-mail para resposta:</label>
               <input 
                 type="text" 
                 id="ask-contact" 
@@ -410,12 +544,12 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-slate-700">Sua Pergunta ou Dúvida sobre o Treino:</label>
+            <label class="block text-xs font-bold text-slate-700">Sua Pergunta ou Dúvida sobre o Inglês:</label>
             <textarea 
               id="ask-message" 
               required 
               rows="3" 
-              placeholder="Professor Leo, como eu faço para responder no Listen & Answer sem travar..." 
+              placeholder="Professor Leo, na história da Grazi, como eu faço para..." 
               class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all resize-y"
             ></textarea>
           </div>
@@ -448,24 +582,28 @@
           </div>
           <h4 class="text-sm font-bold text-emerald-900">Pergunta enviada com sucesso!</h4>
           <p class="text-xs text-emerald-800 max-w-md mx-auto">
-            O Professor Leonardo Leite já recebeu sua mensagem em <strong>selexenglish@gmail.com</strong> e vai te responder diretamente no seu WhatsApp/E-mail.
+            O Professor Leonardo Leite já recebeu sua mensagem em <strong>selexenglish@gmail.com</strong> e vai te responder diretamente no seu WhatsApp/E-mail assim que terminar as mentorias de hoje.
           </p>
         </div>
       </section>
 
-      <!-- Banner Institucional Projeto 2026 -->
-      <div class="p-8 sm:p-10 rounded-3xl bg-brand-navy text-white space-y-5 shadow-2xl my-10 border border-amber-400/20">
-        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-accent text-brand-navy inline-block">SELO OFICIAL • PROJETO 2026</span>
-        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Quer vivenciar os 30 Ciclos Magic Stories em 2026?</h3>
+      <!-- Conversion Box (Projeto 2026 - EXATAMENTE COMO O ORIGINAL) -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-brand-navy text-white space-y-5 shadow-2xl my-12">
+        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-accent text-brand-navy inline-block">
+          SELO OFICIAL • PROJETO 2026
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          Pronto para falar inglês com naturalidade e destravar o seu ouvido em 2026?
+        </h3>
         <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-          Conheça o <strong>Projeto AgoraEuFalo 2026</strong>: 30 Ciclos Completos de Magic Stories, English Quick Start, Kit de Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> direto com o Professor Leonardo Leite.
+          Entre para o <strong>Projeto AgoraEuFalo 2026</strong>. Tenha acesso completo aos 30 Ciclos do Magic Stories, English Quick Start, Kit de Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> direto com o Professor Leonardo Leite.
         </p>
         <div class="flex flex-wrap gap-4 pt-2">
           <a href="../projeto-aef.html" class="btn-cta-primary px-6 py-3.5 rounded-xl text-sm font-extrabold inline-flex items-center gap-2 shadow-lg hover:scale-105 transition-all">
-            <span>Conhecer o Projeto 2026</span>
+            <span>Garantir Vaga no Projeto 2026</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </a>
-          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20da%20Grazi%20no%20Blog%20e%20quero%20conhecer%20o%20Projeto%202026!" target="_blank" class="px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm inline-flex items-center gap-2 transition-colors border border-slate-700">
+          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20da%20Grazi%20no%20Blog%20e%20quero%20saber%20mais%20sobre%20o%20Projeto%202026!" target="_blank" class="px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm inline-flex items-center gap-2 transition-colors border border-slate-700">
             <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
             <span>Falar com o Leo no WhatsApp</span>
           </a>
@@ -475,9 +613,11 @@
     </article>
   </main>
 
-  <!-- FOOTER OFICIAL -->
+  <!-- ========================================================================= -->
+  <!-- FOOTER OFICIAL                                                            -->
+  <!-- ========================================================================= -->
   <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-8">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800/80">
         <div>
           <a href="../index.html" class="inline-block mb-2">
@@ -486,15 +626,17 @@
           <p class="text-xs text-slate-400">Treinamento prático de escuta e fala em língua inglesa com o Professor Leonardo Leite.</p>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-300">
-          <a href="index.html" class="hover:text-amber-400 transition-colors">Blog</a>
-          <a href="../magic-stories.html" class="hover:text-amber-400 transition-colors">Magic Stories</a>
-          <a href="../guia-magic-stories.html" class="hover:text-amber-400 transition-colors">Guia Gratuito</a>
-          <a href="../projeto-aef.html" class="hover:text-amber-400 transition-colors">Projeto 2026</a>
+          <a href="../index.html" class="hover:text-white transition-colors">Início</a>
+          <a href="index.html" class="hover:text-white transition-colors">Blog</a>
+          <a href="../projeto-aef.html" class="hover:text-white transition-colors">Projeto AEF</a>
+          <a href="../contato.html" class="hover:text-white transition-colors">Contato</a>
+          <a href="../termos-de-uso.html" class="hover:text-white transition-colors">Termos de Uso</a>
+          <a href="../politica-de-privacidade.html" class="hover:text-white transition-colors">Política de Privacidade</a>
         </div>
       </div>
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
         <p>© 2026 AgoraEuFalo. Todos os direitos reservados.</p>
-        <p>Desenvolvido com excelência pedagógica por Leonardo Leite.</p>
+        <p>Professor Leonardo Leite • 35 anos de sala de aula.</p>
       </div>
     </div>
   </footer>
@@ -502,19 +644,62 @@
   <script>
     if (window.lucide) window.lucide.createIcons();
 
-    // Script do Formulário de Dúvidas
-    function handleAskTeacher(e) {
+    function playPostVideo(youtubeId) {
+      const container = document.getElementById("post-video-container");
+      if (!container || !youtubeId) return;
+
+      container.innerHTML = `
+        <iframe 
+          class="w-full h-full" 
+          src="https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+          title="Aula do Professor Leonardo Leite" 
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen
+        ></iframe>
+      `;
+      container.classList.remove("cursor-pointer");
+      container.onclick = null;
+    }
+
+    function handleAskLeoSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById("ask-submit-btn");
+      const form = document.getElementById("ask-leo-form");
+      const success = document.getElementById("ask-success-msg");
+      const name = document.getElementById("ask-name").value;
+      const contact = document.getElementById("ask-contact").value;
+      const message = document.getElementById("ask-message").value;
+
       btn.disabled = true;
-      btn.innerHTML = "<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Enviando...</span>";
+      btn.innerHTML = "<i data-lucide=\"loader-2\" class=\"w-4 h-4 animate-spin\"></i><span>Enviando para o Leo...</span>";
       if (window.lucide) window.lucide.createIcons();
 
-      setTimeout(() => {
-        document.getElementById("ask-teacher-form").classList.add("hidden");
-        document.getElementById("ask-success-msg").classList.remove("hidden");
+      fetch("https://formsubmit.co/ajax/selexenglish@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          Nome: name,
+          Contato: contact,
+          Pergunta: message,
+          Artigo: window.location.href,
+          _subject: "Nova Dúvida no Blog AgoraEuFalo (" + name + ")"
+        })
+      })
+      .then(response => {
+        form.classList.add("hidden");
+        success.classList.remove("hidden");
         if (window.lucide) window.lucide.createIcons();
-      }, 700);
+      })
+      .catch(error => {
+        window.open("https://wa.me/5531999817975?text=" + encodeURIComponent("Hello Leo! Sou " + name + " (" + contact + "). Minha dúvida sobre a aula é: " + message), "_blank");
+        form.classList.add("hidden");
+        success.classList.remove("hidden");
+        if (window.lucide) window.lucide.createIcons();
+      });
     }
   </script>
 </body>
