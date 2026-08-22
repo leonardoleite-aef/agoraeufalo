@@ -415,7 +415,7 @@
                   <div class="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs">LL</div>
                   <div>
                     <h4 class="text-xs font-bold text-slate-900">Dúvidas sobre a Aula?</h4>
-                    <p class="text-[10px] text-slate-400">Resposta pessoal do Leo no e-mail ou WhatsApp</p>
+                    <p class="text-[10px] text-slate-400">Resposta pessoal do Professor Leo no e-mail ou WhatsApp</p>
                   </div>
                 </div>
                 <span class="text-[9px] font-bold text-slate-500">selexenglish@gmail.com</span>
@@ -424,29 +424,7 @@
                 <div class="p-1.5 rounded bg-slate-50 border border-slate-100">Nome do aluno...</div>
                 <div class="p-1.5 rounded bg-slate-50 border border-slate-100">WhatsApp / E-mail...</div>
               </div>
-              <div class="p-1.5 rounded bg-slate-50 border border-slate-100 text-[11px] text-slate-400">Escreva sua dúvida aqui...</div>
-            </div>
-
-            <!-- Call to Action Box in Post -->
-            <div class="p-5 rounded-xl bg-slate-900 text-white space-y-3 shadow-md">
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950">PROJETO 2026</span>
-                <span class="text-xs text-slate-300">Treinamento Oficial AgoraEuFalo</span>
-              </div>
-              <h3 class="text-base font-bold text-white tracking-tight">Pronto para falar inglês com naturalidade e destravar o seu ouvido em 2026?</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Entre para o <strong>Projeto AgoraEuFalo 2026</strong>: 30 Ciclos Magic Stories, Quick Start, Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> com o Professor Leonardo Leite.
-              </p>
-              <div class="flex flex-wrap gap-2.5 pt-1">
-                <a href="projeto-aef.html" target="_blank" class="px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-xs">
-                  <span>Garantir Vaga no Projeto 2026</span>
-                  <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </a>
-                <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20saber%20mais%20sobre%20o%20Projeto%202026!" target="_blank" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors border border-slate-700">
-                  <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
-                  <span>Falar no WhatsApp</span>
-                </a>
-              </div>
+              <div class="p-1.5 rounded bg-slate-50 border border-slate-100 text-[11px] text-slate-400">Escreva sua dúvida sobre o treino auditivo aqui...</div>
             </div>
 
           </div>
@@ -718,34 +696,53 @@
   </main>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: GEMINI API KEY CONFIG (OPCIONAL)                                   -->
+  <!-- MODAL: GOOGLE GEMINI AI CONFIG (+5.000 CARACTERES DENSOS)                 -->
   <!-- ========================================================================= -->
-  <div id="api-key-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full border border-slate-200 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-700 border border-amber-200">
-            <i data-lucide="key" class="w-4 h-4"></i>
+  <div id="api-key-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full border border-slate-200 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-sm shadow-xs">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-900">Google Gemini API Key</h3>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Ativar Google Gemini AI</h3>
+            <p class="text-[11px] text-slate-500">Geração profunda de artigos longos (+5.000 caracteres)</p>
+          </div>
         </div>
         <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-slate-600">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <p class="text-xs text-slate-600 leading-relaxed">
-        <strong>Opcional:</strong> O Blog Panel já funciona 100% no modo instantâneo offline. Inserir sua chave permite geração ao vivo via Gemini Flash para nuances ilimitadas.
-      </p>
-
-      <div class="space-y-1.5">
-        <label class="block text-xs font-semibold text-slate-700">Sua API Key do Google AI Studio:</label>
-        <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono">
+      <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 space-y-2">
+        <p class="font-bold flex items-center gap-1 text-amber-900">
+          <i data-lucide="info" class="w-4 h-4 text-amber-600"></i> Por que conectar sua Chave Gemini gratuita?
+        </p>
+        <p class="text-[11px] leading-relaxed text-amber-900/90">
+          Com a chave da API, o modelo neural do <strong>Google Gemini</strong> analisa cada parágrafo da sua transcrição ou vídeo, sintetiza todas as ideias pedagógicas e redige um artigo denso de <strong>+5.000 caracteres</strong> sem páginas de vendas, com 100% de foco no método do Professor Leonardo Leite.
+        </p>
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-amber-800 hover:text-amber-950 underline pt-1">
+          <span>Criar Chave Gratuita no Google AI Studio (Leva 10 segundos)</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </a>
       </div>
 
-      <div class="flex items-center justify-end gap-2 pt-2">
-        <button onclick="closeApiKeyModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
-        <button onclick="saveApiKey()" class="px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white shadow-xs">Salvar Chave</button>
+      <div class="space-y-1.5">
+        <label class="block text-xs font-bold text-slate-700">Cole sua API Key do Google AI Studio:</label>
+        <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono focus:bg-white focus:border-amber-500 focus:outline-none">
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" onclick="runLocalGeneratorFallback()" class="text-xs text-slate-500 hover:text-slate-700 underline font-medium">
+          Continuar com Motor Local
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="closeApiKeyModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">Fechar</button>
+          <button onclick="saveApiKeyAndGenerate()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-xs flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Salvar e Escrever Artigo
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1221,164 +1218,138 @@
 
     // MOTOR DE SÍNTESE EDITORIAL INTELIGENTE (ESTRUTURA ARTIGOS REAIS DE QUALQUER TRANSCRIÇÃO)
     function synthesizeEditorialArticle(rawTranscript, category, customTitle, ytId) {
-      const lower = (rawTranscript + ' ' + (customTitle || '') + ' ' + category).toLowerCase();
-      
-      // 1. TEMA: MAGIC STORIES / REPETIÇÃO INTENCIONAL / PAPAGAIO
-      if (lower.includes('magic stor') || lower.includes('repetir') || lower.includes('papagaio') || lower.includes('experiência') || lower.includes('história')) {
-        const title = customTitle || "O Segredo do Método Magic Stories: Por Que Repetir Não É Falar Feito Papagaio";
-        const subtitle = "Como a repetição intencional da mesma história condiciona o seu cérebro a reconhecer padrões sonoros e falar no reflexo.";
-        const bannerTitle = "MÉTODO MAGIC STORIES • O SEGREDO DO REFLEXO";
-        const keyTakeaways = [
-          "Inglês Não É Matéria de Escola: Pare de tentar memorizar regras e passe a vivenciar a língua.",
-          "Repetir a Experiência vs. Decoreba: Por que se expor à mesma história treina a musculatura auditiva e oral sem esforço artificial.",
-          "Reflexo da Fala: Como a familiaridade com histórias contextualizadas faz as frases saírem sem tradução mental."
-        ];
-        const bodyHtml = `
-          <h2>O Grande Erro de Tratar o Inglês Como Matéria de Prova</h2>
-          <p>
-            Depois de <strong>mais de 35 anos lecionando inglês e vivenciando o idioma diariamente</strong>, eu tomei uma decisão: preciso mostrar a verdade que a escola tradicional sempre escondeu. Inglês não se aprende como matemática ou física — decorando listas de regras para passar em um teste.
-          </p>
-          <p>
-            Quando você estuda apenas a gramática no papel, seu cérebro cria uma dependência da leitura. Aí, quando você precisa conversar com um nativo, dá o famoso <em>"branco"</em>: você trava porque está tentando traduzir regras na cabeça enquanto a conversa já seguiu em frente.
-          </p>
+      const cleanTranscript = (rawTranscript || '').replace(/\[\d+:\d+\]/g, '').replace(/https?:\/\/\S+/g, '').trim();
+      const lower = (cleanTranscript + ' ' + (customTitle || '') + ' ' + category).toLowerCase();
 
-          <h2>Repetir a Experiência vs. Repetir Feito Papagaio</h2>
-          <p>
-            No <strong>Método Magic Stories</strong>, nós usamos um pilar fundamental: a <strong>repetição intencional</strong>. Mas é fundamental entender a diferença: não é repetir palavras soltas feito um papagaio sem entender o que diz. É <strong>repetir a experiência</strong>.
-          </p>
-          <p>
-            Pense em um filme que você ama ou na sua música predileta: quanto mais vezes você assiste ou ouve, mais detalhes o seu ouvido absorve. Você antecipa as falas, sente o ritmo e a melodia sem precisar fazer força.
-          </p>
+      // Extrai parágrafos reais da transcrição do usuário para ancoragem autêntica
+      const rawSentences = cleanTranscript.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 25 && !s.includes('boa noite') && !s.includes('estamos ao vivo') && !s.includes('deixa o like'));
+      const sampleQuotes = rawSentences.slice(0, 8);
 
-          <blockquote>
-            "Quanto mais vezes você se expõe à mesma história, às mesmas frases e à mesma escuta, melhor o seu cérebro decodifica os padrões sonoros. A fala torna-se uma consequência direta do que você escutou."
-          </blockquote>
+      let title = customTitle || "O Segredo da Escuta Ativa e a Repetição da Experiência no Inglês Real";
+      let subtitle = "Como condicionar o ouvido para decodificar sons conectados e falar no reflexo automático — sem travas, sem tradução mental e sem decoreba de regras.";
+      let bannerTitle = "MÉTODO AGORAEUFALO • O SEGREDO DO REFLEXO";
+      let cat = category || "Treino Auditivo";
 
-          <h2>Da Escuta Imersiva ao Reflexo de Fala</h2>
-          <p>
-            Quando você pratica com uma Magic Story, o processo transforma o seu aprendizado em duas fases integradas:
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
-            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-              <span class="font-bold text-slate-700 uppercase text-[10px] block mb-1">1. Treino Auditivo Profundo</span>
-              <p class="text-slate-600">Seu ouvido reconhece onde as palavras se fundem (connected speech) e como o nativo realmente pronuncia na vida real.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs">
-              <span class="font-bold text-amber-800 uppercase text-[10px] block mb-1">2. Atividade de Fala no Reflexo</span>
-              <p class="text-amber-900">Você reproduz o ritmo e a música da história, condicionando sua musculatura oral a responder sem medo de errar.</p>
-            </div>
-          </div>
-          <p>
-            É esse processo que elimina de vez a tradução mental e faz você falar inglês com naturalidade e segurança.
-          </p>
-        `;
-        const goldenTip = "Você não precisa de 50 histórias diferentes para destravar o inglês. Você precisa vivenciar a mesma história com profundidade até que cada frase saia da sua boca no reflexo.";
-        return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: 'Magic Stories' };
+      if (lower.includes('magic stor') || lower.includes('repetir') || lower.includes('papagaio') || lower.includes('história')) {
+        title = customTitle || "O Segredo do Método Magic Stories: Por Que Repetir Não É Falar Feito Papagaio";
+        subtitle = "A diferença neurológica entre memorizar regras isoladas e vivenciar repetidamente a mesma história até que o reflexo da fala surja com naturalidade.";
+        bannerTitle = "MAGIC STORIES • O SEGREDO DO REFLEXO";
+        cat = "Magic Stories";
+      } else if (lower.includes('connect') || lower.includes('som') || lower.includes('rápido') || lower.includes('velocidade') || lower.includes('whaddya')) {
+        title = customTitle || "Connected Speech: A Verdade Por Trás do Inglês Falado Rápido Pelos Nativos";
+        subtitle = "Por que você lê perfeitamente mas não entende conversas reais, e o método prático para decodificar junções sonoras sem esforço.";
+        bannerTitle = "CONNECTED SPEECH • O SEGREDO DA VELOCIDADE";
+        cat = "Connected Speech";
+      } else if (lower.includes('traduz') || lower.includes('trava') || lower.includes('branco') || lower.includes('fala')) {
+        title = customTitle || "Como Parar de Traduzir Mentalmente e Desenvolver o Reflexo Imediato de Resposta";
+        subtitle = "O gargalo cognitivo que causa o famoso 'branco' na conversação e o treino auditivo para fazer as frases saírem espontaneamente.";
+        bannerTitle = "FALE NO REFLEXO • O FIM DA TRADUÇÃO MENTAL";
+        cat = "Fluência & Reflexo";
       }
 
-      // 2. TEMA: CONNECTED SPEECH / ESCUTA RÁPIDA / REDUÇÕES
-      if (lower.includes('connect') || lower.includes('som') || lower.includes('rápido') || lower.includes('velocidade') || lower.includes('whaddya') || lower.includes('gringo') || lower.includes('junç')) {
-        const title = customTitle || "Connected Speech: Por Que Você Não Entende o Inglês Falado em Alta Velocidade";
-        const subtitle = "Entenda o segredo das junções sonoras e reduções no inglês real e treine seu ouvido para não travar.";
-        const bannerTitle = "CONNECTED SPEECH • O SEGREDO DO INGLÊS RÁPIDO";
-        const keyTakeaways = [
-          "O Mito do Inglês Separado: Por que ninguém fala com as pausas de um dicionário na vida real.",
-          "Junções e Reduções: Como 'What do you want' vira 'Whaddya wanna' e por que isso confunde seu cérebro.",
-          "Decodificação Auditiva: O segredo de 35 anos de sala de aula para reconhecer blocos sonoros."
-        ];
-        const bodyHtml = `
-          <h2>Por Que Você Lê Bem Mas Não Entende Quando Nativos Falam Rápido?</h2>
-          <p>
-            Em <strong>35 anos de sala de aula</strong>, a dúvida número um dos alunos é: <em>"Professor Leo, se eu leio o texto eu compreendo tudo, mas quando o gringo fala sem legenda parece outro idioma!"</em>.
-          </p>
-          <p>
-            O motivo é claro: você foi treinado para ler palavras separadas no papel. Mas na vida real, o inglês falado é um fluxo contínuo de <strong>sons conectados (Connected Speech)</strong>.
-          </p>
-          <h2>Como o Inglês da Vida Real Funciona</h2>
-          <p>
-            No português, ninguém fala <em>"Você... vai... para... onde?"</em>. Nós dizemos <em>"Cê vai pr'onde?"</em>. No inglês acontece a mesma coisa:
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
-            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-              <span class="font-bold text-slate-500 uppercase text-[10px] block mb-1">Como você tenta escutar (Gramática):</span>
-              <p class="font-mono text-slate-800">"What do you want to do tonight?"</p>
-              <span class="text-[11px] text-slate-400 mt-1 block">Separado e mecânico</span>
-            </div>
-            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs">
-              <span class="font-bold text-amber-700 uppercase text-[10px] block mb-1">Como o nativo realmente fala (Vida Real):</span>
-              <p class="font-mono text-amber-900 font-bold">"Whaddya wanna do t'night?"</p>
-              <span class="text-[11px] text-amber-700 mt-1 block">Fluido, conectado e musical</span>
-            </div>
-          </div>
-          <blockquote>
-            "O cérebro não aprende a reconhecer sons novos analisando gramática no papel. Ele aprende por exposição rítmica e identificação de blocos sonoros em contexto real."
-          </blockquote>
-          <h2>O Treino Auditivo do Método AgoraEuFalo</h2>
-          <p>
-            Quando você condiciona o seu ouvido a escutar blocos sonoros inteiros em vez de traduzir palavras isoladas, o inglês falado deixa de parecer rápido e se torna cristalino.
-          </p>
-        `;
-        const goldenTip = "No dia a dia ninguém fala com pausas de dicionário. Treine seu ouvido para decodificar a música e as junções sonoras do idioma, e a fala será uma consequência natural.";
-        return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: 'Connected Speech' };
-      }
-
-      // 3. TEMA: DESTRAVE DA FALA / TRADUÇÃO MENTAL / REFLEXO
-      if (lower.includes('traduz') || lower.includes('trava') || lower.includes('branco') || lower.includes('vergonha') || lower.includes('fala') || lower.includes('fluência')) {
-        const title = customTitle || "Como Parar de Traduzir Mentalmente e Falar Inglês no Reflexo Imediato";
-        const subtitle = "Por que traduzir na cabeça causa o famoso 'branco' e o método prático para desenvolver o reflexo automático de resposta.";
-        const bannerTitle = "DESTRAVE SUA FALA • O FIM DA TRADUÇÃO MENTAL";
-        const keyTakeaways = [
-          "A Ponte da Tradução: Por que pensar em português antes de falar sobrecarrega seu cérebro e gera bloqueios.",
-          "Resposta no Reflexo: Como acionar respostas imediatas assimiladas através de histórias de escuta ativa.",
-          "Condicionamento Oral: O treino prático para falar com confiança e sem medo de errar."
-        ];
-        const bodyHtml = `
-          <h2>Por Que Traduzir na Cabeça Bloqueia Sua Conversação?</h2>
-          <p>
-            Quando você tenta falar inglês fazendo a tradução do português, o seu cérebro é obrigado a executar 4 etapas ao mesmo tempo: pensar em português, buscar o vocabulário, aplicar regras de gramática e tentar pronunciar.
-          </p>
-          <p>
-            Esse gargalo cognitivo é o responsável direto pela sensação de trava. Enquanto você calcula a frase, o interlocutor já passou para o próximo assunto.
-          </p>
-          <blockquote>
-            "Fluência não é falar com pressa: é responder no reflexo imediato sem precisar passar pela ponte da tradução do português."
-          </blockquote>
-          <h2>Como Treinar o Reflexo de Resposta</h2>
-          <p>
-            Para eliminar a tradução mental, você precisa alimentar o seu cérebro com blocos prontos de linguagem vivenciados através de histórias imersivas. Quando o ouvido reconhece o padrão sonoro, a fala é acionada de forma instintiva.
-          </p>
-        `;
-        const goldenTip = "Você não trava porque seu vocabulário é pequeno. Você trava porque tenta montar regras na cabeça. Treine o ouvido com histórias reais e a fala fluirá no reflexo.";
-        return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: 'Fluência & Reflexo' };
-      }
-
-      // 4. TEMA GERAL / CHUNKS / TREINO AUDITIVO
-      const title = customTitle || "Como Destravar o Ouvido e Falar Inglês com Naturalidade";
-      const subtitle = "O método prático de 35 anos de sala de aula com o Professor Leonardo Leite para treinar sua escuta ativa e falar no reflexo.";
-      const bannerTitle = "MÉTODO AGORAEUFALO • DESTRAVE SEU INGLÊS";
       const keyTakeaways = [
-        "Escuta Ativa: O primeiro passo indispensável para destravar a compreensão auditiva no dia a dia.",
-        "Vivência Real: Por que aprender em contexto de histórias supera qualquer método tradicional de decoreba.",
-        "Reflexo e Segurança: Como condicionar sua musculatura oral para conversar com tranquilidade."
+        "O Paradoxo da Escola Tradicional: Tratar o inglês como matéria de prova no papel bloqueia a capacidade auditiva na vida real.",
+        "Repetir a Experiência vs. Decoreba de Papagaio: A exposição intencional à mesma narrativa ancora padrões sonoros permanentes na memória de longo prazo.",
+        "O Inglês da Vida Real Não Escolhe Nível: Nativos não adaptam o vocabulário à velocidade do ouvinte; o ouvido precisa ser treinado para o ritmo natural.",
+        "Reflexo Sem Tradução Mental: A fala natural é uma consequência bioacústica direta de uma escuta profunda, imersiva e consistente."
       ];
+
       const bodyHtml = `
-        <h2>O Ponto Central desta Aula do Professor Leo Leite</h2>
+        <h2>1. O Paradoxo do Ensino Tradicional: Inglês Não É Matéria de Prova</h2>
         <p>
-          Ao longo de <strong>mais de 35 anos lecionando inglês</strong>, ensinei milhares de brasileiros que a maior barreira para falar inglês com naturalidade é o hábito de estudar regras isoladas em vez de treinar a escuta atenta.
+          Ao longo de <strong>mais de 35 anos dentro de salas de aula</strong> ensinando adultos brasileiros, uma constatação sempre se repete com precisão cirúrgica: quem estuda inglês acumulando regras gramaticais em tabelas desenvolve uma enorme capacidade analítica, mas trava miseravelmente no segundo em que precisa responder a uma pergunta simples cara a cara.
         </p>
-        <blockquote>
-          "O cérebro não aprende a falar uma língua analisando regras no papel. Ele aprende por ritmo, experiência e reconhecimento de padrões sonoros em contexto real."
-        </blockquote>
-        <h2>Como Aplicar o Método AgoraEuFalo na Prática</h2>
         <p>
-          Quando você treina o seu ouvido com histórias contextualizadas e repetição intencional, seu cérebro assimila a cadência do idioma de forma natural, permitindo que a fala surja no reflexo imediato.
+          Isso acontece porque fomos condicionados pelo sistema escolar a tratar a língua inglesa da mesma forma que tratamos a física ou a história: uma disciplina teórica com fórmulas para memorizar e aplicar no dia da prova. Mas a linguagem falada não funciona por análise lógica prévia. A conversa real opera em frações de segundo — uma velocidade na qual o córtex pré-frontal não tem tempo hábil de conjugar verbos ou consultar tabelas de preposições.
+        </p>
+        <p>
+          Quando você tenta formular uma frase passando pelo filtro da gramática analítica, você cria um congestionamento cognitivo brutal. O cérebro precisa pensar no que quer dizer em português, traduzir as palavras-chave, selecionar o tempo verbal, ordenar os adjetivos e, finalmente, coordenar os músculos da boca. O resultado é o famoso <em>"deu um branco"</em>: o interlocutor já mudou de assunto enquanto você ainda estava calculando o auxiliar da frase.
+        </p>
+
+        <blockquote>
+          "O cérebro humano não aprende a falar uma língua analisando regras no papel. Ele aprende por imersão rítmica, reconhecimento acústico de padrões e vivência contextualizada."
+        </blockquote>
+
+        <h2>2. Repetir a Experiência vs. Repetir Feito Papagaio</h2>
+        <p>
+          Um dos pilares mais mal compreendidos no aprendizado de idiomas é o papel da repetição. Muitos métodos tradicionais propõem a repetição mecânica: listas de vocabulário solto, drills descontextualizados e frases artificiais como <em>"the book is on the table"</em>. Essa é a repetição do papagaio — barulhenta, cansativa e completamente inútil para a conversação real.
+        </p>
+        <p>
+          No <strong>Método AgoraEuFalo</strong>, o princípio reitor é outro: trata-se de <strong>repetir a experiência</strong>. Pense no que acontece quando você assiste várias vezes ao seu filme favorito ou escuta aquela canção marcante. Na primeira vez, seu foco está no enredo geral. Na terceira, você começa a perceber as nuances de iluminação e as falas secundárias. Na décima, você é capaz de recitar os diálogos com a mesma entonação, musicalidade e tempo de cena dos atores, sem precisar fazer o menor esforço consciente.
+        </p>
+        <p>
+          Quando o aluno vivencia uma história completa — uma <strong>Magic Story</strong> — várias vezes consecutivas, a mente para de traduzir palavra por palavra e passa a absorver blocos inteiros de significado (chunks). As estruturas deixam de ser conceitos abstratos e tornam-se memórias sensoriais auditivas.
+        </p>
+
+        <h2>3. Connected Speech e a Ilusão do "Nativo Que Fala Rápido Demais"</h2>
+        <p>
+          A queixa mais frequente de quem estuda inglês há anos é: <em>"Professor Leo, quando eu leio o texto em inglês eu entendo quase 100%, mas quando um nativo abre a boca parece que ele fala em código ou na velocidade da luz!"</em>.
+        </p>
+        <p>
+          A realidade é que o nativo não está falando rápido de propósito para te confundir. Ele está simplesmente usando o fenômeno universal da fala humana chamado <strong>Connected Speech</strong> (fala conectada). No dia a dia, nenhum ser humano no planeta pronuncia as palavras com as pausas artificiais de um dicionário.
+        </p>
+        
+        <div class="my-6 p-5 rounded-2xl bg-slate-900 text-white space-y-3 shadow-lg">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-400 text-slate-950 uppercase">Análise Comparativa Fonética</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-1">
+            <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700 space-y-1">
+              <span class="text-slate-400 font-bold uppercase text-[10px]">O Inglês Escrito (No Papel):</span>
+              <p class="font-mono text-slate-200 text-sm">"What do you want to do tonight?"</p>
+              <p class="text-[11px] text-slate-400">7 palavras isoladas, pausas mecânicas, leitura linear.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-400/30 space-y-1">
+              <span class="text-amber-400 font-bold uppercase text-[10px]">O Inglês Falado (Vida Real):</span>
+              <p class="font-mono text-amber-300 font-bold text-sm">"Whaddya wanna do t'night?"</p>
+              <p class="text-[11px] text-amber-200/80">Junções sonoras, reduções de vogais, ritmo contínuo.</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Se o seu treino auditivo foi construído ouvindo áudios lentificados e robotizados de livros didáticos, seu cérebro cria uma expectativa acústica falsa. Quando confrontado com a música real do idioma, o sistema de reconhecimento sonoro entra em pane. O único antídoto é treinar o ouvido desde o primeiro instante com áudios naturais, mapeando onde os sons se fundem, onde as consoantes caem e como o ritmo conduz o sentido da mensagem.
+        </p>
+
+        <h2>4. O Inglês da Vida Real Não Escolhe o Nível do Ouvinte</h2>
+        <p>
+          Nas escolas convencionais, cria-se a ilusão dos "níveis herméticos": básico 1, básico 2, intermediário, avançado. Cria-se a falsa sensação de que um iniciante só deve ouvir frases com três palavras e tempos verbais no presente simples.
+        </p>
+        <p>
+          Porém, quando você desembarca em um aeroporto internacional, entra em uma reunião de negócios ou assiste a uma entrevista, a vida real não te pergunta: <em>"Com licença, qual é o seu nível para que eu escolha as palavras certas?"</em>. O inglês do mundo real é complexo, misturado, cheio de gírias, contrações e entonações variadas.
+        </p>
+        <p>
+          Por essa razão, o treino com histórias reais coloca o aluno diante do idioma autêntico em um ambiente seguro e controlado. Você não precisa decodificar cada elemento gramatical para captar a essência da história; você precisa se acostumar com a densidade acústica da língua até que ela soe familiar e confortável para o seu sistema nervoso.
+        </p>
+
+        ${sampleQuotes.length > 0 ? `
+        <h2>5. Trechos e Reflexões Extraídas da Aula ao Vivo</h2>
+        <p>
+          Durante a explicação gravada, alguns pontos centrais foram destacados com veemência pelo Professor Leonardo Leite, demonstrando como a atitude mental do estudante define o seu sucesso na comunicação:
+        </p>
+        <ul class="space-y-2.5 my-4 pl-4 list-disc text-slate-700 text-xs sm:text-sm">
+          ${sampleQuotes.map(q => `<li><em>"${q}."</em></li>`).join('')}
+        </ul>
+        ` : ''}
+
+        <h2>6. Da Escuta Ativa à Fala Espontânea no Reflexo</h2>
+        <p>
+          A pergunta final que todo estudante faz é: <em>"Professor Leo, quando é que eu vou começar a falar?"</em>. A resposta pedagógica fundamentada em neurociência é clara: <strong>você começará a falar no momento em que seu cérebro tiver referências auditivas suficientes para prever a próxima palavra antes mesmo de você pensar nela</strong>.
+        </p>
+        <p>
+          A fala humana não é um ato de criação do nada; é um ato de reprodução de padrões previamente armazenados no ouvido. Um bebê não nasce falando gramática; ele passa dois anos inteiros apenas em escuta ativa e imersão rítmica. Quando finalmente solta as primeiras palavras, ele não está traduzindo: ele está reproduzindo a música que escutou incansavelmente ao seu redor.
+        </p>
+        <p>
+          Ao aplicar a metodologia do <strong>AgoraEuFalo</strong> com consistência diária — ouvindo histórias, prestando atenção nas junções sonoras e repetindo em voz alta com a mesma intenção —, você reconecta os circuitos naturais de aquisição de linguagem. A fala deixa de ser um teste de ansiedade e passa a ser uma consequência leve, espontânea e irresistível do seu treinamento auditivo.
         </p>
       `;
-      const goldenTip = "Treine o seu ouvido com histórias reais e consistência. O inglês falado é um reflexo natural do que você escuta com atenção.";
-      return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: category || 'Treino Auditivo' };
+
+      const goldenTip = "Você não trava na hora de falar porque seu vocabulário é pequeno. Você trava porque tenta montar equações gramaticais na cabeça. Treine o seu ouvido para reconhecer a música do inglês real e a fala sairá no reflexo natural.";
+
+      return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: cat };
     }
 
-    // AI POST GENERATION ENGINE (LEO LEITE PERSONA + GEMINI FLASH SUPPORT)
+    // AI POST GENERATION ENGINE (LEO LEITE PERSONA + GEMINI 2.5 FLASH SUPPORT)
     async function generateCompletePost() {
       const transcript = document.getElementById('input-transcript').value.trim();
       const customTitle = document.getElementById('input-post-title').value.trim();
@@ -1389,47 +1360,85 @@
 
       // Validação: Exige ao menos um dado do usuário
       if (!transcript && !customTitle && !ytId) {
-        showToast('Insira um link do YouTube ou digite uma ideia/transcrição para criar o artigo.');
+        showToast('Insira um link do YouTube ou cole sua transcrição/ideia para criar o artigo.');
+        return;
+      }
+
+      // Se não tiver chave de API do Gemini, convida a configurar para ter o artigo denso de 5.000 caracteres
+      if (!apiKey) {
+        openApiKeyModal();
         return;
       }
 
       const btn = document.getElementById('btn-generate');
       btn.disabled = true;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>A IA do Professor Leo está escrevendo...</span>`;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>A IA do Gemini está analisando e escrevendo (+5.000 chars)...</span>`;
       if (window.lucide) window.lucide.createIcons();
 
-      // 1. GERAÇÃO AO VIVO COM GEMINI FLASH (SE API KEY ESTIVER CONFIGURADA)
-      if (apiKey && (transcript || customTitle || ytId)) {
-        try {
-          const prompt = `Você é o Professor Leonardo Leite, fundador do Método AgoraEuFalo, com 35 anos de sala de aula ensinando brasileiros adultos a destravar o inglês na vida real.
-Seu estilo é espirituoso, direto ao ponto, sagaz, extremamente didático, com analogias práticas da vida real e focado em escuta ativa antes da fala (connected speech, reduções fonéticas, chunks práticos, método Magic Stories). Você NUNCA usa jargões gramaticais pesados nem tabelas chatas de regras.
-IMPORTANTE: Se o usuário enviou uma transcrição bruta de live ou aula, você DEVE limpar os ruídos orais (saudações iniciais, comentários de chat, etc.) e extrair a ESSÊNCIA didática, reescrevendo em um artigo de blog magnífico, estruturado e empolgante.
+      // 1. GERAÇÃO AO VIVO COM GOOGLE GEMINI (MODELS 2.5 / 1.5 FLASH)
+      try {
+        const prompt = `Você é o Professor Leonardo Leite, fundador do Método AgoraEuFalo, educador com mais de 35 anos de experiência real em sala de aula ensinando brasileiros adultos a destravarem o inglês na vida real.
+Seu estilo é espirituoso, direto ao ponto, sagaz, extremamente didático, envolvente, com analogias práticas do cotidiano e foco absoluto na escuta ativa antes da fala (connected speech, reduções fonéticas, chunks práticos, método Magic Stories).
 
-Com base nas informações do usuário, crie um post de blog completo em formato JSON:
-- Título do Usuário (se fornecido): "${customTitle}"
+DIRETRIZES FUNDAMENTAIS (LEIA COM MÁXIMA ATENÇÃO):
+
+1. NÃO É UMA PÁGINA DE VENDAS (ZERO SALES PAGE):
+- NÃO tente vender cursos, NÃO faça promessas publicitárias, NÃO crie CTAs apelativos de compra ("garanta sua vaga", "compre agora").
+- Este é um ARTIGO DE BLOG EDITORIAL E PEDAGÓGICO DE ALTÍSSIMO VALOR INTELECTUAL E EDUCACIONAL. O foco absoluto é ensinar e aprofundar os conceitos.
+
+2. EXTENSÃO E DENSIDADE OBRIGATÓRIAS (MÍNIMO 5.000 CARACTERES / 1.000 A 1.500 PALAVRAS):
+- O artigo DEVE ser longo, denso, minucioso, profundo e repleto de explicações ricas e bem desenvolvidas.
+- NADA de resumos superficiais ou artigos de 3 parágrafos.
+- Desenvolva de 5 a 6 seções temáticas profundas utilizando <h2> e subtópicos <h3>, com múltiplos parágrafos ricos em cada seção.
+- Inclua blocos de citação pedagógica <blockquote>, exemplos práticos de diálogos/frases em inglês com análise de Connected Speech e pronúncia real, listas estruturadas e reflexões dos 35 anos de sala de aula.
+
+3. DISSECAÇÃO PROFUNDA DA TRANSCRIÇÃO FORNECIDA:
+- Analise cada detalhe, história, analogia e argumento que o professor mencionou na transcrição/vídeo (ex: a diferença entre repetir uma experiência vs repetir feito papagaio, a história do Magic Stories, por que o inglês da vida real não escolhe nível básico ou avançado, o mito da matéria de prova da escola, os passos da prática auditiva).
+- Elimine ruídos orais de gravação (saudações soltas, avisos de chat) e transforme as ideias em prosa editorial fluida e cativante.
+
+DADOS FORNECIDOS PELO PROFESSOR:
+- Título sugerido: "${customTitle}"
 - Categoria: "${category}"
-- Transcrição / Ideia / Roteiro fornecido pelo usuário: "${transcript}"
+- Transcrição do vídeo / Roteiro da aula:
+"""
+${transcript.substring(0, 30000)}
+"""
 - ID do YouTube: "${ytId}"
 
-Responda ESTRITAMENTE em formato JSON com este schema:
+Responda ESTRITAMENTE em formato JSON com o seguinte schema:
 {
-  "title": "Título magnético em português",
-  "bannerHeadline": "2 a 4 PALAVRAS IMPACTANTES EM MAIÚSCULAS PARA A CAPA THUMBNAIL (ex: MÉTODO MAGIC STORIES • FALE NO REFLEXO)",
-  "subtitle": "Subtítulo atraente de 1 a 2 linhas",
+  "title": "Título Editorial Magnético e Profundo em Português",
+  "bannerHeadline": "2 A 4 PALAVRAS IMPACTANTES EM MAIÚSCULAS PARA A CAPA THUMBNAIL (ex: MÉTODO MAGIC STORIES • O SEGREDO DO REFLEXO)",
+  "subtitle": "Subtítulo substancial e envolvente de 2 linhas explicando o tema central",
   "category": "${category}",
   "keyTakeaways": [
-    "Destaque principal 1",
-    "Destaque principal 2",
-    "Destaque principal 3"
+    "Destaque pedagógico 1 aprofundado e minucioso",
+    "Destaque pedagógico 2 aprofundado e minucioso",
+    "Destaque pedagógico 3 aprofundado e minucioso",
+    "Destaque pedagógico 4 aprofundado e minucioso"
   ],
-  "bodyHtml": "<h2>...</h2><p>...</p><blockquote>...</blockquote><p>...</p>",
-  "goldenTip": "A sacada de ouro e conselho prático do Professor Leo (2 a 3 frases em primeira pessoa)",
-  "metaTitle": "Title SEO até 60 caracteres | AgoraEuFalo",
-  "metaDesc": "Descrição SEO até 155 caracteres",
-  "keywords": "palavra1, palavra2, palavra3"
+  "bodyHtml": "Conteúdo HTML denso e extenso (+5000 caracteres) com <h2>, <h3>, <p>, <blockquote>, listas detalhadas e comparações práticas de áudio/fala",
+  "goldenTip": "A Sacada de Ouro autêntica do Professor Leo: 3 a 4 frases profundas, práticas e memoráveis em primeira pessoa",
+  "metaTitle": "Title SEO até 60 chars | AgoraEuFalo",
+  "metaDesc": "Descrição SEO detalhada até 155 chars",
+  "keywords": "palavra1, palavra2, palavra3, palavra4"
 }`;
 
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              responseMimeType: "application/json",
+              temperature: 0.7
+            }
+          })
+        });
+
+        if (!response.ok) {
+          // Fallback para gemini-1.5-flash
+          response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1440,63 +1449,80 @@ Responda ESTRITAMENTE em formato JSON com este schema:
               }
             })
           });
-
-          if (res.ok) {
-            const data = await res.json();
-            const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (textResponse) {
-              const aiData = JSON.parse(textResponse);
-              const title = customTitle || aiData.title || "Como Destravar seu Inglês com o Método AgoraEuFalo";
-              const slug = slugify(title);
-
-              currentPost.title = title;
-              currentPost.slug = slug;
-              currentPost.subtitle = aiData.subtitle || "O método prático de 35 anos de sala de aula para treinar sua escuta ativa e falar no reflexo.";
-              currentPost.category = aiData.category || category;
-              
-              // Auto-calcula tempo de leitura
-              const wordCount = (aiData.bodyHtml || '').replace(/<[^>]*>/g, ' ').split(/\s+/).length;
-              currentPost.readTime = Math.max(3, Math.ceil(wordCount / 180)) + ' min de leitura';
-              currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-              
-              // Gera Capa em Letras Garrafais de acordo com o tema
-              const bannerWords = aiData.bannerHeadline || title;
-              currentPost.imageUrl = customImg || generateDynamicCoverBanner(bannerWords, currentPost.category);
-
-              let takeawaysHtml = '';
-              if (aiData.keyTakeaways && Array.isArray(aiData.keyTakeaways)) {
-                takeawaysHtml = `
-                  <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 my-4">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2">
-                      <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Rápidos deste Post:
-                    </h4>
-                    <ul class="text-xs text-amber-950 space-y-1.5 pl-4 list-disc">
-                      ${aiData.keyTakeaways.map(t => `<li>${t}</li>`).join('')}
-                    </ul>
-                  </div>
-                `;
-              }
-
-              currentPost.bodyHtml = takeawaysHtml + (aiData.bodyHtml || '');
-              currentPost.goldenTip = aiData.goldenTip || "Treine o ouvido com histórias reais e a fala será uma consequência natural.";
-              currentPost.metaTitle = aiData.metaTitle || `${title.substring(0, 50)} | AgoraEuFalo`;
-              currentPost.metaDesc = aiData.metaDesc || `Artigo do Professor Leonardo Leite no Blog AgoraEuFalo.`;
-              currentPost.keywords = aiData.keywords || `${category.toLowerCase()}, treino auditivo ingles, professor leonardo leite`;
-
-              updateWorkbench();
-              showToast('Artigo gerado com sucesso via Gemini AI ⚡');
-              btn.disabled = false;
-              btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i><span>CRIAR ARTIGO COM IA</span>`;
-              if (window.lucide) window.lucide.createIcons();
-              return;
-            }
-          }
-        } catch (err) {
-          console.warn('Fallback para motor neural local:', err);
         }
+
+        if (response.ok) {
+          const data = await response.json();
+          const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (textResponse) {
+            const aiData = JSON.parse(textResponse);
+            const title = customTitle || aiData.title || "Como Destravar seu Inglês com o Método AgoraEuFalo";
+            const slug = slugify(title);
+
+            currentPost.title = title;
+            currentPost.slug = slug;
+            currentPost.subtitle = aiData.subtitle || "O método prático de 35 anos de sala de aula para treinar sua escuta ativa e falar no reflexo.";
+            currentPost.category = aiData.category || category;
+            
+            // Auto-calcula tempo de leitura
+            const wordCount = (aiData.bodyHtml || '').replace(/<[^>]*>/g, ' ').split(/\s+/).length;
+            currentPost.readTime = Math.max(4, Math.ceil(wordCount / 180)) + ' min de leitura';
+            currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            // Capa: Se houver vídeo, usa a capa oficial em HD do YouTube; se não, usa letras garrafais sobre o tema
+            const bannerWords = aiData.bannerHeadline || title;
+            currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : generateDynamicCoverBanner(bannerWords, currentPost.category));
+
+            let takeawaysHtml = '';
+            if (aiData.keyTakeaways && Array.isArray(aiData.keyTakeaways)) {
+              takeawaysHtml = `
+                <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 my-5">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2.5">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Pedagógicos Deste Artigo:
+                  </h4>
+                  <ul class="text-xs text-amber-950 space-y-2 pl-4 list-disc leading-relaxed">
+                    ${aiData.keyTakeaways.map(t => `<li>${t}</li>`).join('')}
+                  </ul>
+                </div>
+              `;
+            }
+
+            currentPost.bodyHtml = takeawaysHtml + (aiData.bodyHtml || '');
+            currentPost.goldenTip = aiData.goldenTip || "Treine o ouvido com histórias reais e a fala será uma consequência natural.";
+            currentPost.metaTitle = aiData.metaTitle || `${title.substring(0, 50)} | AgoraEuFalo`;
+            currentPost.metaDesc = aiData.metaDesc || aiData.subtitle?.substring(0, 150) || `Artigo do Professor Leonardo Leite no Blog AgoraEuFalo.`;
+            currentPost.keywords = aiData.keywords || `${category.toLowerCase()}, treino auditivo ingles, professor leonardo leite`;
+
+            updateWorkbench();
+            showToast('Artigo denso (+5.000 caracteres) criado com sucesso pelo Gemini AI! ⚡');
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i><span>CRIAR ARTIGO COM IA</span>`;
+            if (window.lucide) window.lucide.createIcons();
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Erro na chamada da Gemini API:', err);
+        showToast('Falha na conexão com a Gemini API. Usando motor local de alta densidade...');
       }
 
-      // 2. MOTOR INTELIGENTE INTEGRADO (QUANDO SEM GEMINI API KEY)
+      // 2. FALLBACK PARA MOTOR LOCAL DE ALTA DENSIDADE
+      runLocalGeneratorFallback();
+    }
+
+    function runLocalGeneratorFallback() {
+      closeApiKeyModal();
+      const transcript = document.getElementById('input-transcript').value.trim();
+      const customTitle = document.getElementById('input-post-title').value.trim();
+      const category = document.getElementById('input-category').value || 'Treino Auditivo';
+      const customImg = document.getElementById('input-image-url').value.trim();
+      const ytId = currentPost.youtubeId;
+
+      const btn = document.getElementById('btn-generate');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Estruturando artigo denso (+5.000 caracteres)...</span>`;
+      if (window.lucide) window.lucide.createIcons();
+
       setTimeout(() => {
         const synth = synthesizeEditorialArticle(transcript, category, customTitle, ytId);
         
@@ -1506,15 +1532,14 @@ Responda ESTRITAMENTE em formato JSON com este schema:
         currentPost.category = synth.category;
         currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
         
-        // Gera capa em Letras Garrafais exatamente sobre o tema do artigo
-        currentPost.imageUrl = customImg || generateDynamicCoverBanner(synth.bannerTitle || synth.title, synth.category);
+        currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : generateDynamicCoverBanner(synth.bannerTitle || synth.title, synth.category));
 
         const takeawaysHtml = `
-          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 my-4">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2">
-              <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Rápidos deste Post:
+          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 my-5">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Pedagógicos Deste Artigo:
             </h4>
-            <ul class="text-xs text-amber-950 space-y-1.5 pl-4 list-disc">
+            <ul class="text-xs text-amber-950 space-y-2 pl-4 list-disc leading-relaxed">
               ${synth.keyTakeaways.map(t => `<li>${t}</li>`).join('')}
             </ul>
           </div>
@@ -1524,17 +1549,17 @@ Responda ESTRITAMENTE em formato JSON com este schema:
         currentPost.goldenTip = synth.goldenTip;
         
         const words = currentPost.bodyHtml.replace(/<[^>]*>/g, ' ').split(/\s+/).length;
-        currentPost.readTime = Math.max(3, Math.ceil(words / 160)) + ' min de leitura';
+        currentPost.readTime = Math.max(4, Math.ceil(words / 160)) + ' min de leitura';
         currentPost.metaTitle = `${synth.title.substring(0, 50)} | AgoraEuFalo`;
         currentPost.metaDesc = synth.subtitle.substring(0, 150);
         currentPost.keywords = `${synth.category.toLowerCase()}, treino auditivo ingles, metodo magic stories, professor leonardo leite`;
 
         updateWorkbench();
-        showToast('Artigo estruturado com sucesso no tom do Professor Leo! ⚡');
+        showToast('Artigo denso de +5.000 caracteres estruturado com sucesso! ⚡');
         btn.disabled = false;
         btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i><span>CRIAR ARTIGO COM IA</span>`;
         if (window.lucide) window.lucide.createIcons();
-      }, 400);
+      }, 300);
     }
 
     function updateWorkbench() {
@@ -2041,24 +2066,8 @@ ${schemaCode}
         </div>
       </section>
 
-      <!-- Conversion Box (Projeto 2026) -->
-      <div class="p-8 sm:p-10 rounded-3xl bg-brand-navy text-white space-y-5 shadow-2xl my-12">
-        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-accent text-brand-navy inline-block">SELO OFICIAL • PROJETO 2026</span>
-        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Pronto para falar inglês com naturalidade e destravar o seu ouvido em 2026?</h3>
-        <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-          Entre para o <strong>Projeto AgoraEuFalo 2026</strong>. Tenha acesso completo aos 30 Ciclos do Magic Stories, English Quick Start, Kit de Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> direto com o Professor Leonardo Leite.
-        </p>
-        <div class="flex flex-wrap gap-4 pt-2">
-          <a href="../projeto-aef.html" class="btn-cta-primary px-6 py-3.5 rounded-xl text-sm font-extrabold inline-flex items-center gap-2 shadow-lg hover:scale-105 transition-all">
-            <span>Garantir Vaga no Projeto 2026</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </a>
-          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20conhecer%20o%20Projeto%202026!" target="_blank" class="px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm inline-flex items-center gap-2 transition-colors border border-slate-700">
-            <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
-            <span>Falar com o Leo no WhatsApp</span>
-          </a>
-        </div>
-      </div>
+      <!-- Box de Dúvidas Direto com o Leo -->
+      <!-- O formulário de contato acima já atende para tirar dúvidas pedagógicas diretamente com o Leo -->
 
     </article>
   </main>
@@ -2536,11 +2545,21 @@ ${schemaCode}
       }
       closeApiKeyModal();
     }
+    function saveApiKeyAndGenerate() {
+      const key = document.getElementById('gemini-api-key-input').value.trim();
+      if (key) {
+        localStorage.setItem('aef_gemini_api_key', key);
+        loadApiKeyStatus();
+        showToast('Chave Gemini conectada! Iniciando análise profunda...');
+      }
+      closeApiKeyModal();
+      generateCompletePost();
+    }
     function loadApiKeyStatus() {
       const key = localStorage.getItem('aef_gemini_api_key');
       const label = document.getElementById('api-key-status-text');
       if (key && label) {
-        label.textContent = 'Gemini Ativo ⚡';
+        label.textContent = 'Gemini 2.5 Ativo ⚡';
         label.classList.add('text-emerald-700', 'font-bold');
       }
     }
