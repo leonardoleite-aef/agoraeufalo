@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-[#FAF8F5] text-slate-800">
+<html lang="pt-BR" class="h-full bg-slate-100 text-slate-800">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog Panel Studio | Painel Editorial Inteligente • AgoraEuFalo</title>
+  <title>Blog Panel Studio | Painel Editorial • AgoraEuFalo</title>
   <!-- Proteção Total: Ferramenta Interna e Privada -->
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
@@ -21,34 +21,12 @@
               slate: '#1E293B',
               accent: '#C57E1E',
               'accent-hover': '#D98A26',
-              'accent-light': '#FDF8F0',
               muted: '#64748B',
               subtle: '#F8FAFC'
-            },
-            pastel: {
-              bg: '#FAF8F5',
-              surface: '#FFFFFF',
-              card: '#F4F1EA',
-              border: '#E8E3D9',
-              borderHover: '#D4CDC0',
-              sage: '#E2EBE5',
-              'sage-dark': '#2D5B48',
-              lavender: '#EAE8F5',
-              'lavender-dark': '#483C78',
-              peach: '#FAEAE1',
-              'peach-dark': '#8A4A28',
-              honey: '#FDF3DF',
-              'honey-dark': '#8C6212',
-              sky: '#E5F0FA',
-              'sky-dark': '#1F4F7A',
-              sand: '#EFECE6',
-              text: '#2C3038',
-              textMuted: '#6B7280'
             }
           },
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
             mono: ['"Fira Code"', 'ui-monospace', 'monospace']
           }
         }
@@ -60,99 +38,74 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
     
-    /* Custom Scrollbars suaves */
-    ::-webkit-scrollbar { width: 7px; height: 7px; }
-    ::-webkit-scrollbar-track { background: #FAF8F5; }
-    ::-webkit-scrollbar-thumb { background: #D9D2C5; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #BDB4A4; }
-
-    .pastel-shadow {
-      box-shadow: 0 4px 20px -2px rgba(100, 80, 60, 0.05), 0 2px 6px -1px rgba(0,0,0,0.02);
-    }
-    .pastel-shadow-lg {
-      box-shadow: 0 10px 30px -4px rgba(100, 80, 60, 0.08), 0 4px 12px -2px rgba(0,0,0,0.03);
-    }
+    /* Clean Minimal Scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
     
-    /* Code syntax highlight mock */
-    .prose-preview h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #0A192F; }
-    .prose-preview h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #1E293B; }
-    .prose-preview p { margin-bottom: 1rem; line-height: 1.7; color: #334155; }
+    /* Typography Preview */
+    .prose-preview h2 { font-size: 1.4rem; font-weight: 800; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #0F172A; letter-spacing: -0.02em; }
+    .prose-preview h3 { font-size: 1.2rem; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #1E293B; }
+    .prose-preview p { margin-bottom: 1rem; line-height: 1.75; color: #334155; }
     .prose-preview ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
     .prose-preview li { margin-bottom: 0.35rem; color: #334155; }
-    .prose-preview blockquote { border-left: 4px solid #C57E1E; padding-left: 1rem; font-style: italic; color: #475569; margin: 1.25rem 0; background: #FDF8F0; padding: 0.75rem 1rem; border-radius: 0 0.5rem 0.5rem 0; }
+    .prose-preview blockquote { border-left: 4px solid #F59E0B; padding-left: 1rem; font-style: italic; color: #334155; margin: 1.25rem 0; background: #FFFBEB; padding: 0.75rem 1rem; border-radius: 0 0.5rem 0.5rem 0; }
   </style>
 </head>
-<body class="h-full flex flex-col font-sans antialiased bg-[#FAF8F5] text-slate-800 selection:bg-amber-100 selection:text-amber-900 overflow-hidden">
+<body class="h-full flex flex-col font-sans antialiased bg-slate-100 text-slate-800 selection:bg-amber-100 selection:text-amber-900 overflow-hidden">
 
   <!-- ========================================================================= -->
-  <!-- TOP NAVBAR: PASTEL & CALM EDITORIAL DESIGN                                -->
+  <!-- TOP NAVBAR: COMPACT SAAS BACKOFFICE (48px)                                -->
   <!-- ========================================================================= -->
-  <header class="bg-white/90 backdrop-blur-md border-b border-pastel-border z-30 shrink-0">
-    <div class="max-w-[1700px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      
-      <!-- Brand & Studio Title -->
-      <div class="flex items-center gap-3.5">
-        <a href="blog/index.html" target="_blank" class="flex items-center gap-2.5 group" title="Ver Hub do Blog Público">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-white font-black text-sm shadow-sm group-hover:scale-105 transition-transform">
-            AEF
-          </div>
-        </a>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-sm font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
-              <span>Blog Panel Studio</span>
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
-            </h1>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pastel-honey text-pastel-honey-dark border border-amber-200/80">
-              Leo Leite AI Engine
-            </span>
-          </div>
-          <p class="text-[11px] text-slate-500">Transforme Vídeos e Transcrições em Artigos no Tom e Sagacidade do Professor</p>
+  <header class="bg-white border-b border-slate-200 z-30 shrink-0 h-12 flex items-center px-4 justify-between shadow-2xs">
+    
+    <!-- Brand & Status -->
+    <div class="flex items-center gap-3">
+      <a href="blog/index.html" target="_blank" class="flex items-center gap-2 group" title="Ver Hub do Blog Público">
+        <div class="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center text-amber-400 font-extrabold text-xs shadow-xs">
+          AEF
         </div>
-      </div>
-
-      <!-- Navigation Tabs (Studio Modes) -->
-      <nav class="hidden md:flex items-center gap-1 bg-pastel-card p-1 rounded-xl border border-pastel-border">
-        <button onclick="switchTab('creator')" id="tab-btn-creator" class="nav-tab active px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-slate-900 shadow-sm border border-pastel-border/60">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i> Estúdio de Criação
-        </button>
-        <button onclick="switchTab('preview')" id="tab-btn-preview" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900">
-          <i data-lucide="eye" class="w-3.5 h-3.5"></i> Preview do Blog
-        </button>
-        <button onclick="switchTab('seo')" id="tab-btn-seo" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900">
-          <i data-lucide="search" class="w-3.5 h-3.5"></i> Gestão de SEO
-        </button>
-        <button onclick="switchTab('library')" id="tab-btn-library" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-slate-500 hover:text-slate-900">
-          <i data-lucide="folder-kanban" class="w-3.5 h-3.5"></i> Biblioteca (<span id="saved-count-badge">1</span>)
-        </button>
-      </nav>
-
-      <!-- Quick Actions Header -->
-      <div class="flex items-center gap-2">
-        <button onclick="startFreshPost()" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-pastel-border text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs" title="Iniciar um novo post com todos os campos limpos">
-          <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-amber-600"></i>
-          <span>Novo Post</span>
-        </button>
-
-        <button onclick="openApiKeyModal()" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-600 border border-pastel-border flex items-center gap-1.5 transition-colors shadow-sm" title="Configurar Gemini API Key (Opcional)">
-          <i data-lucide="key" class="w-3.5 h-3.5 text-amber-600"></i>
-          <span class="hidden sm:inline" id="api-key-status-text">Gemini AI</span>
-        </button>
-
-        <a href="seo-manager.html" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-600 border border-pastel-border flex items-center gap-1.5 transition-colors shadow-sm" title="Ir para o SEO Manager Oficial">
-          <i data-lucide="gauge" class="w-3.5 h-3.5 text-slate-500"></i>
-          <span class="hidden sm:inline">SEO Manager</span>
-        </a>
-
-        <button onclick="publishCurrentPost()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-1.5 transition-all shadow-sm" title="Publicar e Exportar Artigo">
-          <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          <span>Publicar Post</span>
-        </button>
-      </div>
-
+        <span class="font-extrabold text-xs text-slate-900 tracking-tight">Studio Blog</span>
+      </a>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Pronto
+      </span>
     </div>
+
+    <!-- Navigation Tabs (SaaS Segmented Controls) -->
+    <nav class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+      <button onclick="switchTab('creator')" id="tab-btn-creator" class="nav-tab active px-3 py-1 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-slate-900 shadow-2xs">
+        <i data-lucide="edit-3" class="w-3.5 h-3.5 text-amber-600"></i> Estúdio
+      </button>
+      <button onclick="switchTab('library')" id="tab-btn-library" class="nav-tab px-3 py-1 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
+        <i data-lucide="folder" class="w-3.5 h-3.5"></i> Biblioteca (<span id="saved-count-badge">1</span>)
+      </button>
+      <button onclick="switchTab('seo')" id="tab-btn-seo" class="nav-tab px-3 py-1 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
+        <i data-lucide="search" class="w-3.5 h-3.5"></i> SEO
+      </button>
+    </nav>
+
+    <!-- Quick Actions Header -->
+    <div class="flex items-center gap-2">
+      <button onclick="startFreshPost()" class="px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex items-center gap-1 transition-all" title="Limpar campos e começar novo post">
+        <i data-lucide="plus" class="w-3.5 h-3.5 text-slate-500"></i>
+        <span class="hidden sm:inline">Novo Post</span>
+      </button>
+
+      <button onclick="openApiKeyModal()" class="px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-600 border border-slate-200 flex items-center gap-1 transition-colors" title="Configurar Gemini API Key">
+        <i data-lucide="key" class="w-3.5 h-3.5 text-amber-600"></i>
+        <span class="hidden sm:inline" id="api-key-status-text">Gemini AI</span>
+      </button>
+
+      <button onclick="publishCurrentPost()" class="px-3.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold text-white flex items-center gap-1.5 transition-all shadow-xs" title="Publicar Post no Blog">
+        <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        <span>Publicar Post</span>
+      </button>
+    </div>
+
   </header>
 
   <!-- ========================================================================= -->
@@ -165,108 +118,102 @@
     <!-- ======================================================================= -->
     <div id="tab-content-creator" class="tab-pane flex-1 flex flex-col lg:flex-row overflow-hidden">
       
-      <!-- LEFT COLUMN: INPUT CONTROLS (PASTEL CARDS) -->
-      <section class="w-full lg:w-[460px] xl:w-[500px] bg-[#FAF8F5] border-r border-pastel-border flex flex-col shrink-0 overflow-y-auto p-4 sm:p-5 space-y-4">
+      <!-- LEFT COLUMN: INPUT CONTROLS (COMPACT SAAS SIDEBAR) -->
+      <section class="w-full lg:w-[380px] xl:w-[410px] bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto p-4 space-y-3.5">
         
-        <!-- CARD ÚNICO E UNIFICADO DO ESTÚDIO -->
-        <div class="bg-white rounded-2xl p-5 border border-pastel-border pastel-shadow space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div class="flex items-center gap-2">
-              <span class="w-7 h-7 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-xs">
-                <i data-lucide="sparkles" class="w-4 h-4"></i>
-              </span>
-              <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-800">Criar Artigo com IA</h2>
-                <p class="text-[10px] text-slate-400">Preencha o que tiver e aperte o botão</p>
-              </div>
-            </div>
-            <button type="button" onclick="startFreshPost()" class="text-[11px] font-bold text-slate-400 hover:text-amber-700 flex items-center gap-1 transition-colors" title="Limpar todos os campos e começar novo post">
+        <!-- CARD ÚNICO DO ESTÚDIO -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>Entrada de Conteúdo</span>
+            </h2>
+            <button type="button" onclick="startFreshPost()" class="text-[11px] font-semibold text-slate-400 hover:text-amber-700 flex items-center gap-1 transition-colors" title="Limpar campos">
               <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Limpar
             </button>
           </div>
 
           <!-- Campo 1: YouTube URL (Opcional) -->
           <div class="space-y-1">
-            <label class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1">
               <i data-lucide="youtube" class="w-3.5 h-3.5 text-red-600"></i>
-              <span>URL ou Link do Vídeo do YouTube (Opcional):</span>
+              <span>Vídeo do YouTube (Opcional):</span>
             </label>
             <div class="relative">
-              <i data-lucide="link" class="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400"></i>
+              <i data-lucide="link" class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400"></i>
               <input 
                 type="text" 
                 id="input-youtube-url" 
-                placeholder="Ex: https://www.youtube.com/watch?v=Ib7ETfIzVjU" 
+                placeholder="Ex: https://www.youtube.com/watch?v=..." 
                 oninput="handleYoutubeInput()"
-                class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all"
+                class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all font-mono text-[11px]"
               >
             </div>
-            <p class="text-[10px] text-slate-400">Se colar o link, o player e a capa são adicionados automaticamente.</p>
           </div>
 
           <!-- YouTube Live Preview Box (Quando detectado) -->
-          <div id="youtube-preview-box" class="hidden p-2 rounded-xl bg-pastel-card border border-pastel-border flex items-center gap-2.5">
-            <img id="youtube-thumb-preview" src="" alt="Thumbnail" class="w-16 h-10 object-cover rounded-lg border border-pastel-border shadow-2xs shrink-0">
+          <div id="youtube-preview-box" class="hidden p-2 rounded-lg bg-slate-50 border border-slate-200 flex items-center gap-2.5">
+            <img id="youtube-thumb-preview" src="" alt="Thumbnail" class="w-14 h-9 object-cover rounded border border-slate-200 shrink-0">
             <div class="overflow-hidden flex-1">
               <span class="inline-flex items-center gap-1 text-[9px] font-bold text-red-600">
                 <i data-lucide="video" class="w-3 h-3"></i> Vídeo Conectado
               </span>
-              <p id="youtube-id-preview" class="text-[11px] font-mono text-slate-700 truncate"></p>
+              <p id="youtube-id-preview" class="text-[10px] font-mono text-slate-700 truncate"></p>
             </div>
             <button onclick="clearYoutubeInput()" class="p-1 text-slate-400 hover:text-red-500" title="Remover Vídeo">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+              <i data-lucide="x" class="w-3 h-3"></i>
             </button>
           </div>
 
           <!-- Campo 2: Transcrição, Roteiro ou Prompt / Ideia (Principal) -->
           <div class="space-y-1">
             <div class="flex items-center justify-between">
-              <label class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1">
                 <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-600"></i>
-                <span>Roteiro, Transcrição ou Ideia do Post (Prompt):</span>
+                <span>Roteiro / Transcrição / Prompt:</span>
               </label>
               <span id="transcript-count" class="text-[10px] text-slate-400 font-mono">0 palavras</span>
             </div>
             <textarea 
               id="input-transcript" 
-              rows="8" 
-              placeholder="Cole a transcrição do vídeo, tópicos de uma aula ou simplesmente digite a ideia do artigo (ex: 'Escreva um artigo explicando por que o brasileiro trava ao tentar traduzir regras na cabeça e como o connected speech resolve isso')..."
+              rows="9" 
+              placeholder="Cole a transcrição do vídeo ou simplesmente digite a ideia do artigo (ex: 'Escreva um artigo explicando por que o brasileiro trava ao tentar traduzir regras na cabeça e como destravar o ouvido')..."
               oninput="handleTranscriptInput()"
-              class="w-full p-3 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all font-sans leading-relaxed resize-y"
+              class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all font-sans leading-relaxed resize-y"
             ></textarea>
           </div>
 
           <!-- Campo 3: Título do Post (Opcional) -->
           <div class="space-y-1">
-            <label class="block text-xs font-semibold text-slate-700">Título do Post (Opcional):</label>
+            <label class="block text-[11px] font-semibold text-slate-700">Título do Artigo (Opcional):</label>
             <input 
               type="text" 
               id="input-post-title" 
-              placeholder="Deixe em branco que a IA cria o melhor título para você..." 
-              class="w-full px-3 py-2 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all"
+              placeholder="Deixe em branco p/ IA criar o título..." 
+              class="w-full px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all"
             >
           </div>
 
           <!-- Campo 4: Categoria & Capa (Opcionais) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div class="grid grid-cols-2 gap-2.5 pt-0.5">
             <div class="space-y-1">
-              <label class="block text-xs font-semibold text-slate-700">Categoria:</label>
-              <select id="input-category" class="w-full px-3 py-2 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 focus:outline-none focus:bg-white focus:border-amber-500 cursor-pointer">
+              <label class="block text-[11px] font-semibold text-slate-700">Categoria:</label>
+              <select id="input-category" class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:bg-white focus:border-amber-500 cursor-pointer">
                 <option value="Treino Auditivo">🎧 Treino Auditivo</option>
-                <option value="Método Magic Stories">📖 Método Magic Stories</option>
+                <option value="Método Magic Stories">📖 Magic Stories</option>
                 <option value="Destrave da Fala">🗣️ Destrave da Fala</option>
-                <option value="Expressões & Chunks">💡 Expressões & Chunks</option>
-                <option value="Dicas do Professor Leo">🎯 Dicas do Professor Leo</option>
+                <option value="Expressões & Chunks">💡 Expressões</option>
+                <option value="Dicas do Professor Leo">🎯 Dicas do Leo</option>
               </select>
             </div>
 
             <div class="space-y-1">
-              <label class="block text-xs font-semibold text-slate-700">Capa do Post (Opcional):</label>
+              <label class="block text-[11px] font-semibold text-slate-700">Capa do Post:</label>
               <input 
                 type="text" 
                 id="input-image-url" 
-                placeholder="Deixe em branco p/ automático" 
-                class="w-full px-3 py-2 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all"
+                placeholder="Em branco = Auto" 
+                class="w-full px-2 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all"
               >
             </div>
           </div>
@@ -274,15 +221,15 @@
           <!-- Input oculto para compatibilidade interna de tempo de leitura -->
           <input type="hidden" id="input-read-time" value="">
 
-          <!-- BOTÃO GIGANTE DE AÇÃO ÚNICA -->
-          <div class="pt-2">
+          <!-- BOTÃO PRINCIPAL DE GERAÇÃO -->
+          <div class="pt-1">
             <button 
               id="btn-generate" 
               onclick="generateCompletePost()" 
-              class="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-700 active:scale-[0.99] text-white font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              class="w-full py-3 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
             >
-              <i data-lucide="sparkles" class="w-5 h-5 text-amber-200"></i>
-              <span>CRIAR ARTIGO COMPLETO COM IA</span>
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+              <span>CRIAR ARTIGO COM IA</span>
             </button>
           </div>
 
@@ -290,64 +237,66 @@
 
       </section>
 
-      <!-- RIGHT COLUMN: LIVE WORKBENCH & EDITOR (RICH PREVIEW & CODE) -->
-      <section class="flex-1 bg-white flex flex-col overflow-hidden">
+      <!-- RIGHT COLUMN: LIVE WORKBENCH & PREVIEW (EXPANSIVE SCREEN REAL ESTATE) -->
+      <section class="flex-1 bg-slate-50 flex flex-col overflow-hidden">
         
-        <!-- Workbench Toolbar -->
-        <div class="h-12 border-b border-pastel-border px-4 sm:px-6 flex items-center justify-between bg-pastel-sand/40 shrink-0">
+        <!-- Workbench Compact Toolbar -->
+        <div class="h-10 border-b border-slate-200 px-4 flex items-center justify-between bg-white shrink-0">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <i data-lucide="file-text" class="w-4 h-4 text-amber-600"></i>
+            <span class="text-xs font-mono font-bold text-slate-700 flex items-center gap-1.5">
+              <i data-lucide="file-code" class="w-3.5 h-3.5 text-slate-400"></i>
               <span id="current-post-slug-label">novo-post.html</span>
             </span>
-            <span id="post-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+            <span id="post-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
               Rascunho
             </span>
           </div>
 
-          <!-- View Mode Toggles -->
-          <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-pastel-border">
-            <button onclick="setWorkbenchView('visual')" id="btn-view-visual" class="px-2.5 py-1 rounded text-xs font-bold bg-pastel-card text-slate-900 shadow-2xs">
+          <!-- View Mode Toggles (Segmented) -->
+          <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+            <button onclick="setWorkbenchView('visual')" id="btn-view-visual" class="px-2.5 py-0.5 rounded text-xs font-bold bg-white text-slate-900 shadow-2xs">
               Visual Preview
             </button>
-            <button onclick="setWorkbenchView('editor')" id="btn-view-editor" class="px-2.5 py-1 rounded text-xs font-bold text-slate-500 hover:text-slate-900">
+            <button onclick="setWorkbenchView('editor')" id="btn-view-editor" class="px-2.5 py-0.5 rounded text-xs font-semibold text-slate-600 hover:text-slate-900">
               Editor de Texto
             </button>
-            <button onclick="setWorkbenchView('code')" id="btn-view-code" class="px-2.5 py-1 rounded text-xs font-bold text-slate-500 hover:text-slate-900">
+            <button onclick="setWorkbenchView('code')" id="btn-view-code" class="px-2.5 py-0.5 rounded text-xs font-semibold text-slate-600 hover:text-slate-900">
               Código HTML
             </button>
           </div>
 
           <!-- Action Buttons -->
           <div class="flex items-center gap-1.5">
-            <button onclick="savePostToLibrary()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-pastel-border flex items-center gap-1 transition-colors shadow-2xs" title="Salvar Rascunho">
-              <i data-lucide="save" class="w-3.5 h-3.5 text-slate-500"></i> Salvar Rascunho
+            <button onclick="savePostToLibrary()" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-200 flex items-center gap-1 transition-colors shadow-2xs" title="Salvar Rascunho">
+              <i data-lucide="save" class="w-3 h-3 text-slate-500"></i>
+              <span class="hidden sm:inline">Salvar</span>
             </button>
-            <button onclick="copyGeneratedHtml()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-pastel-border flex items-center gap-1 transition-colors shadow-2xs" title="Copiar HTML Completo">
-              <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-500"></i> Copiar HTML
+            <button onclick="copyGeneratedHtml()" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-200 flex items-center gap-1 transition-colors shadow-2xs" title="Copiar HTML Completo">
+              <i data-lucide="copy" class="w-3 h-3 text-slate-500"></i>
+              <span class="hidden sm:inline">Copiar HTML</span>
             </button>
           </div>
         </div>
 
         <!-- Workbench Content Area -->
-        <div class="flex-1 overflow-y-auto p-6 lg:p-10 bg-[#FCFBF9]">
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-100/80">
           
           <!-- VIEW 1: VISUAL PREVIEW OF THE BLOG POST -->
-          <div id="workbench-visual-view" class="max-w-3xl mx-auto bg-white rounded-2xl border border-pastel-border p-6 sm:p-10 pastel-shadow-lg space-y-8">
+          <div id="workbench-visual-view" class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-200 p-6 sm:p-10 shadow-xs space-y-6">
             
             <!-- Breadcrumbs -->
-            <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
+            <div class="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
               <span>Início</span>
               <span>/</span>
               <span>Blog</span>
               <span>/</span>
-              <span id="preview-category-bread" class="text-amber-700 font-bold">Treino Auditivo</span>
+              <span id="preview-category-bread" class="text-amber-600 font-semibold">Treino Auditivo</span>
             </div>
 
             <!-- Post Header -->
-            <div class="space-y-4 border-b border-slate-100 pb-6">
+            <div class="space-y-3 border-b border-slate-100 pb-5">
               <div class="flex flex-wrap items-center gap-2">
-                <span id="preview-category-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
+                <span id="preview-category-badge" class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
                   Treino Auditivo
                 </span>
                 <span id="preview-read-badge" class="text-xs text-slate-400 font-medium flex items-center gap-1">
@@ -357,29 +306,29 @@
                 <span id="preview-date-text" class="text-xs text-slate-400 font-medium">21 de Agosto, 2026</span>
               </div>
 
-              <h1 id="preview-post-title" class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              <h1 id="preview-post-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
                 Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade
               </h1>
 
-              <p id="preview-post-subtitle" class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed">
+              <p id="preview-post-subtitle" class="text-base text-slate-600 font-medium leading-relaxed">
                 Pare de traduzir mentalmente. O segredo de 35 anos de sala de aula para condicionar o seu cérebro a reconhecer sons conectados sem travar.
               </p>
 
               <!-- Author Box Mini -->
-              <div class="flex items-center gap-3 pt-2">
-                <img src="assets/images/leonardo-leite.png" alt="Prof. Leonardo Leite" class="w-11 h-11 rounded-full object-cover border-2 border-amber-500 shadow-sm">
+              <div class="flex items-center gap-2.5 pt-1">
+                <img src="assets/images/leonardo-leite.png" alt="Prof. Leonardo Leite" class="w-9 h-9 rounded-full object-cover border border-amber-400 shadow-2xs">
                 <div>
                   <div class="flex items-center gap-1.5">
                     <span class="text-xs font-bold text-slate-900">Professor Leonardo Leite</span>
-                    <span class="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-amber-100 text-amber-900">35 anos de aula</span>
+                    <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900">35 anos de sala</span>
                   </div>
-                  <p class="text-[11px] text-slate-500">Fundador do Método AgoraEuFalo • Especialista em Escuta & Fala</p>
+                  <p class="text-[10px] text-slate-500">Fundador do Método AgoraEuFalo</p>
                 </div>
               </div>
             </div>
 
             <!-- YouTube Video Embed or Featured Image -->
-            <div id="preview-media-container" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-950 aspect-video relative">
+            <div id="preview-media-container" class="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-950 aspect-video relative">
               <iframe 
                 id="preview-video-iframe" 
                 class="w-full h-full" 
@@ -391,104 +340,104 @@
             </div>
 
             <!-- Toolbar da Capa & Redes Sociais -->
-            <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-pastel-card border border-pastel-border text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200 text-xs">
               <span class="font-bold text-slate-700 flex items-center gap-1.5 text-[11px]">
-                <i data-lucide="image" class="w-3.5 h-3.5 text-amber-600"></i> Capa em Letras Garrafais (YouTube & Social)
+                <i data-lucide="image" class="w-3.5 h-3.5 text-amber-600"></i> Capa do Post (Letras Garrafais)
               </span>
               <div class="flex items-center gap-2">
-                <button type="button" onclick="regenerateCoverBanner()" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 border border-pastel-border text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-colors cursor-pointer" title="Gerar outra versão do banner">
+                <button type="button" onclick="regenerateCoverBanner()" class="px-2 py-0.5 rounded bg-white hover:bg-slate-50 border border-slate-200 text-[11px] font-semibold text-slate-700 flex items-center gap-1 transition-colors cursor-pointer" title="Gerar outra versão do banner">
                   <i data-lucide="refresh-cw" class="w-3 h-3 text-amber-600"></i> Nova Capa
                 </button>
-                <button type="button" onclick="downloadCoverImage()" class="px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center gap-1 transition-colors shadow-2xs cursor-pointer" title="Baixar imagem em 1280x720 para YouTube / Redes Sociais">
+                <button type="button" onclick="downloadCoverImage()" class="px-2.5 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center gap-1 transition-colors shadow-2xs cursor-pointer" title="Baixar imagem em 1280x720 para YouTube / Redes Sociais">
                   <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Baixar Capa HD
                 </button>
               </div>
             </div>
 
             <!-- Post Body (Dynamic Render) -->
-            <div id="preview-post-body" class="prose-preview text-slate-700 text-sm sm:text-base leading-relaxed space-y-4">
+            <div id="preview-post-body" class="prose-preview text-slate-700 text-sm leading-relaxed space-y-4">
               <!-- Content Injected via JavaScript -->
             </div>
 
             <!-- Leo's Signature Callout Box -->
-            <div class="p-5 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200/80 space-y-2">
-              <div class="flex items-center gap-2 text-amber-900 font-bold text-sm">
+            <div class="p-4 rounded-xl bg-amber-50/60 border-l-4 border-amber-500 space-y-1.5">
+              <div class="flex items-center gap-1.5 text-amber-900 font-bold text-xs">
                 <i data-lucide="lightbulb" class="w-4 h-4 text-amber-600"></i>
                 <span>A Sacada de Ouro do Professor:</span>
               </div>
-              <p id="preview-golden-tip" class="text-xs sm:text-sm text-amber-950/80 leading-relaxed italic">
+              <p id="preview-golden-tip" class="text-xs text-amber-950/80 leading-relaxed italic">
                 "Você não fala inglês travado porque seu vocabulário é pequeno. Você trava porque tenta montar frases com regras gramaticais na cabeça enquanto o interlocutor já está no terceiro parágrafo. Treine o ouvido com histórias, e a fala será uma consequência natural."
               </p>
             </div>
 
             <!-- Social Share Bar (Exclusivo WhatsApp) -->
-            <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-slate-50 border border-pastel-border text-xs">
-              <span class="font-bold text-slate-700 flex items-center gap-1.5">
-                <i data-lucide="share-2" class="w-3.5 h-3.5 text-amber-600"></i> Compartilhe com quem precisa destravar:
+            <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+              <span class="font-semibold text-slate-700 flex items-center gap-1.5 text-xs">
+                <i data-lucide="share-2" class="w-3.5 h-3.5 text-amber-600"></i> Compartilhar no WhatsApp:
               </span>
-              <span class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-2xs">
+              <span class="px-3 py-1 rounded-md bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-2xs">
                 <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Compartilhar no WhatsApp
               </span>
             </div>
 
             <!-- Redes Sociais do Professor Leo (YT, Instagram, Substack) -->
-            <div class="p-4 rounded-2xl bg-white border border-pastel-border space-y-3">
-              <div class="flex items-center justify-between border-b border-pastel-border pb-2">
+            <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-2.5">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                 <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                   <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i> Siga o Professor Leo nas Redes
                 </h4>
-                <span class="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">Canais Oficiais</span>
+                <span class="text-[10px] font-bold text-slate-500">Canais Oficiais</span>
               </div>
               <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center gap-1.5 text-slate-700 font-bold text-[11px]">
+                <div class="p-1.5 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center gap-1 text-slate-700 font-bold text-[11px]">
                   <span class="w-2 h-2 rounded-full bg-red-600"></span> YouTube
                 </div>
-                <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center gap-1.5 text-slate-700 font-bold text-[11px]">
+                <div class="p-1.5 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center gap-1 text-slate-700 font-bold text-[11px]">
                   <span class="w-2 h-2 rounded-full bg-pink-600"></span> Instagram
                 </div>
-                <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center gap-1.5 text-slate-700 font-bold text-[11px]">
+                <div class="p-1.5 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center gap-1 text-slate-700 font-bold text-[11px]">
                   <span class="w-2 h-2 rounded-full bg-[#FF6719]"></span> Substack
                 </div>
               </div>
             </div>
 
             <!-- Box Direto com o Leo (Preview) -->
-            <div class="p-5 rounded-2xl bg-white border-2 border-amber-400/40 space-y-3 shadow-xs">
-              <div class="flex items-center justify-between border-b border-pastel-border pb-2">
+            <div class="p-4 rounded-xl bg-white border border-amber-300 space-y-2.5 shadow-2xs">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                 <div class="flex items-center gap-2">
-                  <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-xs">LL</div>
+                  <div class="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs">LL</div>
                   <div>
                     <h4 class="text-xs font-bold text-slate-900">Dúvidas sobre a Aula?</h4>
-                    <p class="text-[10px] text-slate-400">Envie direto para o Leo (resposta via email/WhatsApp)</p>
+                    <p class="text-[10px] text-slate-400">Resposta pessoal do Leo no e-mail ou WhatsApp</p>
                   </div>
                 </div>
-                <span class="text-[9px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full">selexenglish@gmail.com</span>
+                <span class="text-[9px] font-bold text-slate-500">selexenglish@gmail.com</span>
               </div>
               <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-400">
-                <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">Nome do aluno...</div>
-                <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">WhatsApp / E-mail...</div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-100">Nome do aluno...</div>
+                <div class="p-1.5 rounded bg-slate-50 border border-slate-100">WhatsApp / E-mail...</div>
               </div>
-              <div class="p-2 rounded-lg bg-slate-50 border border-slate-100 text-[11px] text-slate-400">Escreva sua dúvida aqui...</div>
+              <div class="p-1.5 rounded bg-slate-50 border border-slate-100 text-[11px] text-slate-400">Escreva sua dúvida aqui...</div>
             </div>
 
             <!-- Call to Action Box in Post -->
-            <div class="p-6 rounded-2xl bg-brand-navy text-white space-y-4 shadow-xl">
+            <div class="p-5 rounded-xl bg-slate-900 text-white space-y-3 shadow-md">
               <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-brand-accent text-brand-navy">SELO OFICIAL • PROJETO 2026</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950">PROJETO 2026</span>
                 <span class="text-xs text-slate-300">Treinamento Oficial AgoraEuFalo</span>
               </div>
-              <h3 class="text-xl font-bold text-white tracking-tight">Pronto para falar inglês com naturalidade e destravar o seu ouvido em 2026?</h3>
+              <h3 class="text-base font-bold text-white tracking-tight">Pronto para falar inglês com naturalidade e destravar o seu ouvido em 2026?</h3>
               <p class="text-xs text-slate-300 leading-relaxed">
                 Entre para o <strong>Projeto AgoraEuFalo 2026</strong>: 30 Ciclos Magic Stories, Quick Start, Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> com o Professor Leonardo Leite.
               </p>
-              <div class="flex flex-wrap gap-3 pt-2">
-                <a href="projeto-aef.html" target="_blank" class="px-4 py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-brand-navy font-bold text-xs inline-flex items-center gap-2 transition-all shadow-md">
+              <div class="flex flex-wrap gap-2.5 pt-1">
+                <a href="projeto-aef.html" target="_blank" class="px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs inline-flex items-center gap-1.5 transition-all shadow-xs">
                   <span>Garantir Vaga no Projeto 2026</span>
-                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  <i data-lucide="arrow-right" class="w-3 h-3"></i>
                 </a>
-                <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20saber%20mais%20sobre%20o%20Projeto%202026!" target="_blank" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs inline-flex items-center gap-2 transition-colors border border-slate-700">
+                <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20saber%20mais%20sobre%20o%20Projeto%202026!" target="_blank" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs inline-flex items-center gap-1.5 transition-colors border border-slate-700">
                   <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
-                  <span>Tirar Dúvidas no WhatsApp</span>
+                  <span>Falar no WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -496,40 +445,40 @@
           </div>
 
           <!-- VIEW 2: DIRECT TEXT & SECTION EDITOR -->
-          <div id="workbench-editor-view" class="hidden max-w-3xl mx-auto space-y-4">
-            <div class="bg-white rounded-2xl border border-pastel-border p-6 pastel-shadow space-y-4">
-              <div class="flex items-center justify-between border-b border-pastel-border pb-3">
+          <div id="workbench-editor-view" class="hidden max-w-4xl mx-auto space-y-4">
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-xs space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Editor do Artigo (Conteúdo Bruto)</h3>
-                <span class="text-xs text-slate-400">Edite os parágrafos diretamente se desejar</span>
+                <span class="text-xs text-slate-400">Edite o texto e as tags diretamente</span>
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Subtítulo / Chamada:</label>
-                <input type="text" id="editor-subtitle" class="w-full p-2 text-xs bg-slate-50 border border-pastel-border rounded-lg text-slate-800" oninput="syncFromEditor()">
+                <input type="text" id="editor-subtitle" class="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800" oninput="syncFromEditor()">
               </div>
 
-              <div class="space-y-2">
-                <label class="block text-xs font-semibold text-slate-700">Corpo do Artigo (Suporta HTML & Markdown simples):</label>
-                <textarea id="editor-body-raw" rows="18" class="w-full p-3 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 font-mono leading-relaxed resize-y" oninput="syncFromEditor()"></textarea>
+              <div class="space-y-1.5">
+                <label class="block text-xs font-semibold text-slate-700">Corpo do Artigo (HTML / Parágrafos):</label>
+                <textarea id="editor-body-raw" rows="18" class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-mono leading-relaxed resize-y" oninput="syncFromEditor()"></textarea>
               </div>
 
-              <div class="space-y-2">
+              <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">A Sacada de Ouro do Leo:</label>
-                <textarea id="editor-golden-tip" rows="3" class="w-full p-2 text-xs bg-slate-50 border border-pastel-border rounded-lg text-slate-800" oninput="syncFromEditor()"></textarea>
+                <textarea id="editor-golden-tip" rows="3" class="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800" oninput="syncFromEditor()"></textarea>
               </div>
             </div>
           </div>
 
           <!-- VIEW 3: FULL HTML CODE EXPORT VIEWER -->
           <div id="workbench-code-view" class="hidden max-w-4xl mx-auto space-y-3">
-            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 shadow-xl space-y-3">
+            <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 shadow-lg space-y-3">
               <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
                 <span class="text-xs font-mono font-bold text-amber-400">código-completo-post.html (Pronto para salvar em /blog/)</span>
                 <button onclick="copyGeneratedHtml()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-mono text-white flex items-center gap-1 border border-slate-700">
                   <i data-lucide="copy" class="w-3 h-3 text-amber-400"></i> Copiar Tudo
                 </button>
               </div>
-              <pre class="p-3 bg-slate-950 rounded-xl overflow-x-auto text-[11px] font-mono text-slate-300 leading-relaxed max-h-[600px]"><code id="code-export-viewer">&lt;!-- Gerando código... --&gt;</code></pre>
+              <pre class="p-3 bg-slate-950 rounded-lg overflow-x-auto text-[11px] font-mono text-slate-300 leading-relaxed max-h-[600px]"><code id="code-export-viewer">&lt;!-- Gerando código... --&gt;</code></pre>
             </div>
           </div>
 
@@ -542,39 +491,39 @@
     <!-- ======================================================================= -->
     <!-- TAB 2: SIMULADOR & AUDITORIA DE SEO DO POST                             -->
     <!-- ======================================================================= -->
-    <div id="tab-content-seo" class="tab-pane hidden flex-1 bg-[#FAF8F5] overflow-y-auto p-6 lg:p-10 space-y-6">
+    <div id="tab-content-seo" class="tab-pane hidden flex-1 bg-slate-100/70 overflow-y-auto p-6 space-y-6">
       <div class="max-w-5xl mx-auto space-y-6">
         
         <!-- Header SEO -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-pastel-border pastel-shadow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
           <div>
-            <h2 class="text-lg font-bold text-slate-900">Gestão de SEO On-Page do Artigo</h2>
+            <h2 class="text-base font-bold text-slate-900">Gestão de SEO On-Page do Artigo</h2>
             <p class="text-xs text-slate-500">Validação em tempo real dos limites do Google, OpenGraph social e Schema.org JSON-LD</p>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-right">
-              <span class="text-[10px] uppercase font-bold text-slate-400">SEO Health Score</span>
+              <span class="text-[10px] uppercase font-bold text-slate-400">SEO Score</span>
               <div class="text-xl font-black text-emerald-600" id="seo-score-display">100/100</div>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
-              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            <div class="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
             </div>
           </div>
         </div>
 
         <!-- Meta Tags Editor Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
           
           <!-- Form Inputs -->
-          <div class="bg-white rounded-2xl border border-pastel-border p-6 pastel-shadow space-y-4">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-pastel-border pb-2">Metatags Principais</h3>
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-100 pb-2">Metatags Principais</h3>
             
             <div class="space-y-1.5">
               <div class="flex items-center justify-between text-xs">
                 <label class="font-semibold text-slate-700">Meta Title:</label>
                 <span id="title-char-count" class="font-mono text-emerald-600 font-bold">58 / 60 chars</span>
               </div>
-              <input type="text" id="seo-meta-title" class="w-full p-2.5 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 focus:outline-none focus:border-amber-500" oninput="updateSeoLiveCounters()">
+              <input type="text" id="seo-meta-title" class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-amber-500" oninput="updateSeoLiveCounters()">
             </div>
 
             <div class="space-y-1.5">
@@ -582,32 +531,32 @@
                 <label class="font-semibold text-slate-700">Meta Description:</label>
                 <span id="desc-char-count" class="font-mono text-emerald-600 font-bold">148 / 160 chars</span>
               </div>
-              <textarea id="seo-meta-desc" rows="3" class="w-full p-2.5 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 focus:outline-none focus:border-amber-500 leading-relaxed" oninput="updateSeoLiveCounters()"></textarea>
+              <textarea id="seo-meta-desc" rows="3" class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-amber-500 leading-relaxed" oninput="updateSeoLiveCounters()"></textarea>
             </div>
 
             <div class="space-y-1.5">
               <label class="block text-xs font-semibold text-slate-700">URL Canônica / Slug:</label>
-              <input type="text" id="seo-canonical-slug" class="w-full p-2 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 font-mono" oninput="updateSeoLiveCounters()">
+              <input type="text" id="seo-canonical-slug" class="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono" oninput="updateSeoLiveCounters()">
             </div>
 
             <div class="space-y-1.5">
               <label class="block text-xs font-semibold text-slate-700">Palavras-Chave de Foco (Tags):</label>
-              <input type="text" id="seo-keywords" value="treino auditivo ingles, metodo magic stories, entender ingles rapido, professor leonardo leite" class="w-full p-2 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800" oninput="updateSeoLiveCounters()">
+              <input type="text" id="seo-keywords" value="treino auditivo ingles, metodo magic stories, entender ingles rapido, professor leonardo leite" class="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800" oninput="updateSeoLiveCounters()">
             </div>
           </div>
 
           <!-- Social & SERP Previews -->
-          <div class="space-y-6">
+          <div class="space-y-5">
             
             <!-- Google SERP Preview Card -->
-            <div class="bg-white rounded-2xl border border-pastel-border p-6 pastel-shadow space-y-3">
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                  <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-600"></i> Preview nos Resultados do Google
+                  <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-600"></i> Preview Google Search
                 </span>
                 <span class="text-[10px] font-bold text-slate-400">Desktop / Mobile</span>
               </div>
-              <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1">
+              <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
                 <div class="flex items-center gap-1.5 text-[11px] text-slate-500">
                   <span>https://agoraeufalo.com.br</span>
                   <span>›</span>
@@ -623,12 +572,12 @@
             </div>
 
             <!-- WhatsApp Social Card Preview -->
-            <div class="bg-white rounded-2xl border border-pastel-border p-6 pastel-shadow space-y-3">
+            <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-3">
               <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <i data-lucide="message-square" class="w-3.5 h-3.5 text-emerald-600"></i> Compartilhamento no WhatsApp
+                <i data-lucide="message-square" class="w-3.5 h-3.5 text-emerald-600"></i> Card de Compartilhamento WhatsApp
               </span>
-              <div class="max-w-xs bg-[#EFEAE2] p-2.5 rounded-2xl shadow-xs space-y-2">
-                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
+              <div class="max-w-xs bg-slate-100 p-2 rounded-xl border border-slate-200 space-y-2">
+                <div class="bg-white rounded-lg overflow-hidden border border-slate-200 shadow-2xs">
                   <img id="wa-preview-img" src="assets/images/og-magic-stories.jpg" alt="Preview" class="w-full h-28 object-cover">
                   <div class="p-2.5 space-y-1">
                     <span class="text-[9px] uppercase font-bold text-slate-400">AGORAEUFALO.COM.BR</span>
@@ -644,19 +593,19 @@
         </div>
 
         <!-- Schema JSON-LD Box -->
-        <div class="bg-white rounded-2xl border border-pastel-border p-6 pastel-shadow space-y-3">
-          <div class="flex items-center justify-between border-b border-pastel-border pb-3">
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
             <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-lg bg-pastel-lavender flex items-center justify-center text-pastel-lavender-dark">
+              <span class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center text-slate-700">
                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
               </span>
-              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Schema.org JSON-LD (Article + VideoObject)</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Schema.org JSON-LD</h3>
             </div>
             <button onclick="copySchemaJson()" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1 transition-colors">
               <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Schema
             </button>
           </div>
-          <pre class="p-3.5 bg-slate-900 rounded-xl overflow-x-auto text-[11px] font-mono text-emerald-400 max-h-56"><code id="schema-json-code"></code></pre>
+          <pre class="p-3.5 bg-slate-900 rounded-lg overflow-x-auto text-[11px] font-mono text-emerald-400 max-h-56"><code id="schema-json-code"></code></pre>
         </div>
 
       </div>
@@ -665,36 +614,33 @@
     <!-- ======================================================================= -->
     <!-- TAB 3: BIBLIOTECA & RASCUNHOS SALVOS                                    -->
     <!-- ======================================================================= -->
-    <div id="tab-content-library" class="tab-pane hidden flex-1 bg-[#FAF8F5] overflow-y-auto p-6 lg:p-10 space-y-6">
+    <div id="tab-content-library" class="tab-pane hidden flex-1 bg-slate-100/70 overflow-y-auto p-6 space-y-6">
       <div class="max-w-5xl mx-auto space-y-6">
         
-        <!-- Header da Biblioteca com Filtros de Status -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-pastel-border pastel-shadow">
+        <!-- Header da Biblioteca -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
           <div>
-            <div class="flex items-center gap-2">
-              <h2 class="text-lg font-bold text-slate-900">Gerenciador de Artigos & Publicações</h2>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900">CMS Autônomo</span>
-            </div>
-            <p class="text-xs text-slate-500">Publique, despublique e gerencie todos os seus artigos com total autonomia</p>
+            <h2 class="text-base font-bold text-slate-900">Gerenciador de Artigos & Publicações</h2>
+            <p class="text-xs text-slate-500">Publique, despublique e gerencie todos os seus artigos</p>
           </div>
           
           <div class="flex items-center gap-2">
-            <button onclick="startFreshPost()" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm">
-              <i data-lucide="plus" class="w-4 h-4"></i> Escrever Novo Artigo
+            <button onclick="startFreshPost()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-xs">
+              <i data-lucide="plus" class="w-3.5 h-3.5 text-amber-400"></i> Escrever Novo Artigo
             </button>
           </div>
         </div>
 
         <!-- Filtros de Status (Todos / Publicados / Rascunhos) -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-pastel-border shadow-2xs">
-            <button onclick="filterLibraryStatus('all')" id="lib-tab-all" class="lib-status-tab active px-3 py-1 rounded-lg text-xs font-bold bg-pastel-card text-slate-900 shadow-2xs transition-all">
+          <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-200 shadow-2xs">
+            <button onclick="filterLibraryStatus('all')" id="lib-tab-all" class="lib-status-tab active px-3 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-900 transition-all">
               Todos (<span id="lib-count-all">0</span>)
             </button>
-            <button onclick="filterLibraryStatus('published')" id="lib-tab-published" class="lib-status-tab px-3 py-1 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">
+            <button onclick="filterLibraryStatus('published')" id="lib-tab-published" class="lib-status-tab px-3 py-1 rounded-md text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">
               🟢 Publicados (<span id="lib-count-published">0</span>)
             </button>
-            <button onclick="filterLibraryStatus('draft')" id="lib-tab-draft" class="lib-status-tab px-3 py-1 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">
+            <button onclick="filterLibraryStatus('draft')" id="lib-tab-draft" class="lib-status-tab px-3 py-1 rounded-md text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">
               ⚪ Rascunhos (<span id="lib-count-draft">0</span>)
             </button>
           </div>
@@ -706,12 +652,12 @@
               id="library-search-input" 
               placeholder="Buscar nos artigos..." 
               oninput="renderLibraryGrid()"
-              class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-pastel-border rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+              class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:border-amber-500"
             >
           </div>
         </div>
 
-        <div id="posts-library-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div id="posts-library-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- Injected via JavaScript -->
         </div>
 
@@ -724,10 +670,10 @@
   <!-- MODAL: GEMINI API KEY CONFIG (OPCIONAL)                                   -->
   <!-- ========================================================================= -->
   <div id="api-key-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-pastel-border shadow-2xl space-y-4">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full border border-slate-200 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-pastel-honey flex items-center justify-center text-amber-700">
+          <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-700 border border-amber-200">
             <i data-lucide="key" class="w-4 h-4"></i>
           </div>
           <h3 class="text-base font-bold text-slate-900">Google Gemini API Key</h3>
@@ -743,12 +689,12 @@
 
       <div class="space-y-1.5">
         <label class="block text-xs font-semibold text-slate-700">Sua API Key do Google AI Studio:</label>
-        <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." class="w-full p-2.5 text-xs bg-slate-50 border border-pastel-border rounded-xl text-slate-800 font-mono">
+        <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." class="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-mono">
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2">
-        <button onclick="closeApiKeyModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
-        <button onclick="saveApiKey()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-xs font-bold text-white shadow-sm">Salvar Chave</button>
+        <button onclick="closeApiKeyModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
+        <button onclick="saveApiKey()" class="px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white shadow-xs">Salvar Chave</button>
       </div>
     </div>
   </div>
@@ -757,13 +703,13 @@
   <!-- MODAL: PUBLICAÇÃO COM SUCESSO & SNIPPETS                                  -->
   <!-- ========================================================================= -->
   <div id="publish-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full border border-pastel-border shadow-2xl space-y-6 my-8">
+    <div class="bg-white rounded-2xl p-6 max-w-2xl w-full border border-slate-200 shadow-2xl space-y-5 my-8">
       
       <!-- Modal Header -->
-      <div class="flex items-center justify-between border-b border-pastel-border pb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
-            <i data-lucide="check-circle" class="w-6 h-6"></i>
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
           </div>
           <div>
             <h3 class="text-base font-bold text-slate-900">Post Publicado com Sucesso! 🚀</h3>
@@ -826,7 +772,7 @@
       </div>
 
       <!-- Modal Footer -->
-      <div class="flex items-center justify-end pt-2 border-t border-pastel-border">
+      <div class="flex items-center justify-end pt-2 border-t border-slate-100">
         <button onclick="closePublishModal()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white shadow-sm">
           Concluir
         </button>
@@ -941,15 +887,15 @@
     // Navigation Tabs
     function switchTab(tabId) {
       document.querySelectorAll('.nav-tab').forEach(b => {
-        b.classList.remove('bg-white', 'text-slate-900', 'shadow-sm', 'border', 'border-pastel-border/60');
-        b.classList.add('text-slate-500');
+        b.classList.remove('bg-white', 'text-slate-900', 'shadow-2xs');
+        b.classList.add('text-slate-600');
       });
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
 
       const activeBtn = document.getElementById(`tab-btn-${tabId}`);
       if (activeBtn) {
-        activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm', 'border', 'border-pastel-border/60');
-        activeBtn.classList.remove('text-slate-500');
+        activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-2xs');
+        activeBtn.classList.remove('text-slate-600');
       }
 
       const activePane = document.getElementById(`tab-content-${tabId}`);
@@ -967,11 +913,11 @@
     function setWorkbenchView(view) {
       ['visual', 'editor', 'code'].forEach(v => {
         document.getElementById(`workbench-${v}-view`).classList.add('hidden');
-        document.getElementById(`btn-view-${v}`).className = "px-2.5 py-1 rounded text-xs font-bold text-slate-500 hover:text-slate-900";
+        document.getElementById(`btn-view-${v}`).className = "px-2.5 py-0.5 rounded text-xs font-semibold text-slate-600 hover:text-slate-900";
       });
 
       document.getElementById(`workbench-${view}-view`).classList.remove('hidden');
-      document.getElementById(`btn-view-${view}`).className = "px-2.5 py-1 rounded text-xs font-bold bg-pastel-card text-slate-900 shadow-2xs";
+      document.getElementById(`btn-view-${view}`).className = "px-2.5 py-0.5 rounded text-xs font-bold bg-white text-slate-900 shadow-2xs";
 
       if (view === 'editor') {
         document.getElementById('editor-subtitle').value = currentPost.subtitle;
@@ -1062,6 +1008,8 @@ No inglês falado da vida real, as palavras se fundem (connected speech). Quando
       const randomTitle = titles[Math.floor(Math.random() * titles.length)];
       document.getElementById('input-post-title').value = randomTitle;
       showToast('Título sugerido!');
+    }
+
     // =========================================================================
     // GERADOR DE CAPAS DINÂMICAS COM LETRAS GARRAFAIS (THUMBNAIL IMPACTO ALTO)
     // =========================================================================
@@ -2189,12 +2137,12 @@ ${schemaCode}
     function filterLibraryStatus(status) {
       currentLibraryFilter = status;
       document.querySelectorAll('.lib-status-tab').forEach(b => {
-        b.classList.remove('active', 'bg-pastel-card', 'text-slate-900', 'shadow-2xs');
+        b.classList.remove('active', 'bg-slate-100', 'text-slate-900');
         b.classList.add('text-slate-500');
       });
       const activeBtn = document.getElementById(`lib-tab-${status}`);
       if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-pastel-card', 'text-slate-900', 'shadow-2xs');
+        activeBtn.classList.add('active', 'bg-slate-100', 'text-slate-900');
         activeBtn.classList.remove('text-slate-500');
       }
       renderLibraryGrid();
@@ -2228,25 +2176,25 @@ ${schemaCode}
       }
 
       if (!filtered.length) {
-        grid.innerHTML = `<div class="col-span-full text-center py-16 bg-white rounded-2xl border border-pastel-border text-slate-400 text-xs">Nenhum artigo encontrado nesta categoria.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-16 bg-white rounded-xl border border-slate-200 text-slate-400 text-xs">Nenhum artigo encontrado nesta categoria.</div>`;
         return;
       }
 
       grid.innerHTML = filtered.map(p => {
         const isPub = p.status === 'Publicado';
         return `
-          <div class="bg-white rounded-2xl border border-pastel-border p-5 pastel-shadow space-y-3 flex flex-col justify-between hover:border-amber-400/60 transition-all group">
-            <div class="space-y-2.5">
+          <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs space-y-3 flex flex-col justify-between hover:border-slate-300 transition-all group">
+            <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">${p.category || 'Geral'}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">${p.category || 'Geral'}</span>
                 
                 <!-- Status Badge -->
                 ${isPub ? `
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Publicado
                   </span>
                 ` : `
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Rascunho
                   </span>
                 `}
@@ -2261,26 +2209,26 @@ ${schemaCode}
               </div>
             </div>
 
-            <div class="pt-3 border-t border-pastel-border flex items-center justify-between gap-1.5">
+            <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
               <!-- Toggle Publicar / Despublicar -->
               ${isPub ? `
-                <button onclick="togglePublishPost('${p.id || p.slug}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-800 text-[11px] font-bold flex items-center gap-1 transition-colors" title="Despublicar artigo (mover para rascunho)">
+                <button onclick="togglePublishPost('${p.id || p.slug}')" class="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-800 text-[11px] font-bold flex items-center gap-1 transition-colors" title="Despublicar artigo (mover para rascunho)">
                   <i data-lucide="eye-off" class="w-3 h-3 text-slate-500"></i> Despublicar
                 </button>
               ` : `
-                <button onclick="togglePublishPost('${p.id || p.slug}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 transition-all shadow-2xs" title="Publicar artigo no Blog">
+                <button onclick="togglePublishPost('${p.id || p.slug}')" class="px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 transition-all shadow-2xs" title="Publicar artigo no Blog">
                   <i data-lucide="send" class="w-3 h-3"></i> Publicar
                 </button>
               `}
 
               <div class="flex items-center gap-1">
-                <button onclick="downloadLibraryPostHtml('${p.id || p.slug}')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" title="Baixar arquivo HTML">
+                <button onclick="downloadLibraryPostHtml('${p.id || p.slug}')" class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" title="Baixar arquivo HTML">
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
                 </button>
-                <button onclick="loadPostFromLibrary('${p.id || p.slug}')" class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold transition-colors">
+                <button onclick="loadPostFromLibrary('${p.id || p.slug}')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
                   Editar
                 </button>
-                <button onclick="deletePostFromLibrary('${p.id || p.slug}')" class="p-1.5 rounded-lg text-slate-300 hover:text-red-600 hover:bg-red-50 transition-colors" title="Excluir post">
+                <button onclick="deletePostFromLibrary('${p.id || p.slug}')" class="p-1 rounded text-slate-300 hover:text-red-600 hover:bg-red-50 transition-colors" title="Excluir post">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
