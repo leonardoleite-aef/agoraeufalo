@@ -791,97 +791,33 @@
   <!-- JAVASCRIPT: STUDIO LOGIC, AI ENGINE & EXPORTER                            -->
   <!-- ========================================================================= -->
   <script>
-    // State
+    // State Inicial Limpo (Sem Demo)
     let currentPost = {
-      id: 'demo-post-1',
-      title: 'Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade',
-      subtitle: 'Pare de traduzir mentalmente. O segredo de 35 anos de sala de aula para condicionar seu cérebro a reconhecer sons conectados sem travar.',
+      id: '',
+      title: '',
+      subtitle: '',
       category: 'Treino Auditivo',
-      readTime: '5 min de leitura',
-      date: '21 de Agosto, 2026',
-      youtubeUrl: 'https://www.youtube.com/watch?v=8DbXCHwZTL0',
-      youtubeId: '8DbXCHwZTL0',
-      imageUrl: 'assets/images/og-magic-stories.jpg',
-      slug: 'como-treinar-o-ouvido-para-entender-ingles-rapido',
+      readTime: '',
+      date: new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }),
+      youtubeUrl: '',
+      youtubeId: '',
+      imageUrl: '',
+      slug: 'novo-artigo',
       transcript: '',
       bodyHtml: '',
-      goldenTip: 'Você não fala inglês travado porque seu vocabulário é pequeno. Você trava porque tenta montar frases com regras gramaticais na cabeça enquanto o interlocutor já está no terceiro parágrafo. Treine o ouvido com histórias, e a fala será uma consequência natural.',
-      metaTitle: 'Como Treinar seu Ouvido para Entender Inglês | AgoraEuFalo',
-      metaDesc: 'Descubra o método de treino auditivo de 35 anos de sala de aula com o Professor Leonardo Leite. Entenda o inglês falado sem tradução mental!',
-      keywords: 'treino auditivo ingles, metodo magic stories, entender ingles rapido, professor leonardo leite'
+      goldenTip: '',
+      metaTitle: '',
+      metaDesc: '',
+      keywords: ''
     };
 
-    const defaultPostsSeed = [
-      {
-        id: 'demo-post-1',
-        title: 'Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade',
-        subtitle: 'Pare de traduzir mentalmente. O segredo de 35 anos de sala de aula para condicionar seu cérebro a reconhecer sons conectados.',
-        category: 'Treino Auditivo',
-        readTime: '5 min de leitura',
-        date: '21 de Agosto, 2026',
-        youtubeId: '8DbXCHwZTL0',
-        youtubeUrl: 'https://www.youtube.com/watch?v=8DbXCHwZTL0',
-        imageUrl: 'assets/images/og-magic-stories.jpg',
-        slug: 'como-treinar-o-ouvido-para-entender-ingles-rapido',
-        goldenTip: 'Você não fala inglês travado porque seu vocabulário é pequeno. Você trava porque tenta montar frases com regras gramaticais na cabeça enquanto o interlocutor já está no terceiro parágrafo. Treine o ouvido com histórias, e a fala será uma consequência natural.',
-        metaTitle: 'Como Treinar seu Ouvido para Entender Inglês | AgoraEuFalo',
-        metaDesc: 'Descubra o método de treino auditivo de 35 anos de sala de aula com o Professor Leonardo Leite. Entenda o inglês falado sem tradução mental!'
-      },
-      {
-        id: 'demo-post-2',
-        title: 'Connected Speech: Por Que Você Não Entende os Nativos Falando Rápido',
-        subtitle: 'O segredo das junções sonoras no inglês da vida real. Entenda como "What do you want" vira "Whaddya wanna" e treine seu ouvido para não travar.',
-        category: 'Connected Speech',
-        readTime: '6 min de leitura',
-        date: '20 de Agosto, 2026',
-        youtubeId: 'Ib7ETfIzVjU',
-        youtubeUrl: 'https://www.youtube.com/watch?v=Ib7ETfIzVjU',
-        imageUrl: 'assets/images/og-magic-stories.jpg',
-        slug: 'connected-speech-por-que-voce-nao-entende-nativos',
-        goldenTip: 'No dia a dia ninguém fala com pausas de dicionário. Aprenda a ouvir blocos de som e o inglês parecerá 50% mais lento e 100% mais compreensível.',
-        metaTitle: 'Connected Speech no Inglês: O Guia Prático | AgoraEuFalo',
-        metaDesc: 'Entenda o segredo das reduções e junções sonoras do inglês falado com o Professor Leonardo Leite.'
-      },
-      {
-        id: 'demo-post-3',
-        title: 'Destrave Sua Fala: O Erro de Ficar Traduzindo Mentalmente Antes de Responder',
-        subtitle: 'Por que traduzir na cabeça causa o famoso "branco" e como treinar o reflexo automático de resposta com histórias de escuta ativa.',
-        category: 'Fluência & Reflexo',
-        readTime: '4 min de leitura',
-        date: '19 de Agosto, 2026',
-        youtubeId: '',
-        youtubeUrl: '',
-        imageUrl: 'assets/images/og-magic-stories.jpg',
-        slug: 'destrave-sua-fala-o-erro-de-traduzir-mentalmente',
-        goldenTip: 'Falar com fluência não é falar rápido: é responder no reflexo sem passar pela ponte da tradução do português.',
-        metaTitle: 'Como Parar de Traduzir Mentalmente no Inglês | AgoraEuFalo',
-        metaDesc: 'Aprenda a eliminar a tradução mental e desenvolver o reflexo imediato de resposta em inglês.'
-      },
-      {
-        id: 'demo-post-4',
-        title: 'O Segredo dos Chunks: Como Pensar em Blocos no Inglês sem Pensar em Regras',
-        subtitle: 'Esqueça as regras isoladas de gramática. Veja como nativos combinam blocos prontos de linguagem para falar de forma natural e sem esforço.',
-        category: 'Chunks & Expressões',
-        readTime: '7 min de leitura',
-        date: '18 de Agosto, 2026',
-        youtubeId: '',
-        youtubeUrl: '',
-        imageUrl: 'assets/images/og-magic-stories.jpg',
-        slug: 'o-segredo-dos-chunks-como-pensar-em-blocos',
-        goldenTip: 'Quem estuda palavra solta constrói frases de robô. Quem aprende por chunks fala com a melodia natural do idioma.',
-        metaTitle: 'Chunks no Inglês: Como Pensar em Blocos | AgoraEuFalo',
-        metaDesc: 'Descubra o poder dos Chunks de linguagem para falar inglês natural sem decorar tabelas de gramática.'
-      }
-    ];
-
-    let samplePostsLibrary = [...defaultPostsSeed];
+    let samplePostsLibrary = [];
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) window.lucide.createIcons();
       loadStoredPosts();
       loadApiKeyStatus();
-      initDefaultContent();
-      updateWorkbench();
+      startFreshPost(false);
     });
 
     // Navigation Tabs
@@ -963,38 +899,10 @@
       updateWorkbench();
     }
 
-    function loadSampleVideo(type) {
-      const demoUrl = 'https://www.youtube.com/watch?v=8DbXCHwZTL0';
-      document.getElementById('input-youtube-url').value = demoUrl;
-      handleYoutubeInput();
-      showToast('Vídeo demo carregado com sucesso!');
-    }
-
     function handleTranscriptInput() {
       const text = document.getElementById('input-transcript').value;
       const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
       document.getElementById('transcript-count').textContent = `${wordCount} palavras`;
-    }
-
-    function loadSampleTranscript() {
-      const sample = `Hello my friend! Leo Leite aqui. Hoje nós vamos falar sobre por que a maioria dos estudantes trava quando um gringo fala rápido. 
-Você estuda gramática por anos, faz lista de verbos irregulares, passa no teste escrito. Mas quando alguém fala: "Whaddya wanna do tonight?", o seu cérebro dá um curto-circuito. 
-Sabe por que isso acontece? Não é porque o seu vocabulário é fraco. É porque o cérebro brasileiro foi treinado para LER os sons do inglês, e não para ESCUTAR os sons conectados.
-No inglês falado da vida real, as palavras se fundem (connected speech). Quando você aprende através do Método Magic Stories, você treina o seu ouvido com as 6 atividades: escuta imersiva, reflexo rápido e repetição natural.`;
-      
-      document.getElementById('input-transcript').value = sample;
-      handleTranscriptInput();
-      showToast('Roteiro demonstrativo carregado!');
-    }
-
-    function updateToneLabel() {
-      const val = document.getElementById('input-tone-slider').value;
-      const labels = {
-        '1': 'Didático Formal',
-        '2': 'Equilibrado & Acolhedor',
-        '3': 'Máxima (Didática + Humor Fino ⚡)'
-      };
-      document.getElementById('tone-intensity-label').textContent = labels[val];
     }
 
     function generateCatchyTitles() {
@@ -1366,13 +1274,6 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
         btn.disabled = false;
         btn.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-amber-200"></i><span>CRIAR ARTIGO COMPLETO COM IA</span>`;
       }, 400);
-    }
-
-    function initDefaultContent() {
-      document.getElementById('input-post-title').value = currentPost.title;
-      document.getElementById('input-youtube-url').value = currentPost.youtubeUrl;
-      handleYoutubeInput();
-      generateCompletePost();
     }
 
     function updateWorkbench() {
@@ -2099,28 +2000,31 @@ ${schemaCode}
       });
     }
 
-    // Local Storage Library
+    // Local Storage Library (100% Livre de Demo)
     function loadStoredPosts() {
       const stored = localStorage.getItem('aef_blog_posts');
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            const existingSlugs = new Set(parsed.map(p => p.slug));
-            const merged = [...parsed];
-            defaultPostsSeed.forEach(dp => {
-              if (!existingSlugs.has(dp.slug)) merged.push(dp);
-            });
-            samplePostsLibrary = merged;
+          if (Array.isArray(parsed)) {
+            // Remove qualquer resquício de posts demo antigos
+            samplePostsLibrary = parsed.filter(p => !p.id?.startsWith('demo-') && !p.slug?.includes('demo'));
+            localStorage.setItem('aef_blog_posts', JSON.stringify(samplePostsLibrary));
           }
-        } catch(e){}
+        } catch(e){
+          samplePostsLibrary = [];
+        }
       } else {
-        samplePostsLibrary = [...defaultPostsSeed];
+        samplePostsLibrary = [];
       }
       document.getElementById('saved-count-badge').textContent = samplePostsLibrary.length;
     }
 
     function savePostToLibrary() {
+      if (!currentPost.title || currentPost.title === 'Título do Seu Novo Artigo') {
+        showToast('Crie ou digite um título para o artigo antes de salvar.');
+        return;
+      }
       const existingIdx = samplePostsLibrary.findIndex(p => p.slug === currentPost.slug || p.id === currentPost.id);
       if (existingIdx >= 0) {
         samplePostsLibrary[existingIdx] = { ...currentPost };
@@ -2176,7 +2080,16 @@ ${schemaCode}
       }
 
       if (!filtered.length) {
-        grid.innerHTML = `<div class="col-span-full text-center py-16 bg-white rounded-xl border border-slate-200 text-slate-400 text-xs">Nenhum artigo encontrado nesta categoria.</div>`;
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-16 bg-white rounded-xl border border-slate-200 text-slate-400 space-y-2">
+            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+              <i data-lucide="folder-open" class="w-5 h-5"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-700">Nenhum artigo salvo ainda</p>
+            <p class="text-[11px] text-slate-400">Seus artigos criados e rascunhos salvos aparecerão aqui.</p>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
         return;
       }
 
@@ -2248,7 +2161,7 @@ ${schemaCode}
           showToast(`Artigo despublicado e movido para Rascunhos.`);
         } else {
           post.status = 'Publicado';
-          showToast(`Artigo "${post.title.substring(0, 25)}..." publicado no Blog! 🎉`);
+          showToast(`Artigo publicado!`);
         }
         localStorage.setItem('aef_blog_posts', JSON.stringify(samplePostsLibrary));
         renderLibraryGrid();
@@ -2298,38 +2211,47 @@ ${schemaCode}
       }
     }
 
-    function startFreshPost() {
+    function startFreshPost(showToastMsg = true) {
       currentPost = {
         id: 'post_' + Date.now(),
-        title: 'Título do Seu Novo Post',
-        subtitle: 'Subtítulo atraente explicando o ponto principal da aula.',
+        title: 'Título do Seu Novo Artigo',
+        subtitle: 'O subtítulo e resumo gerados pela IA aparecerão aqui.',
         category: 'Treino Auditivo',
-        readTime: '5 min de leitura',
+        readTime: '3 min de leitura',
         date: new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }),
         youtubeUrl: '',
         youtubeId: '',
-        imageUrl: 'assets/images/og-magic-stories.jpg',
+        imageUrl: '',
         slug: 'novo-artigo',
         transcript: '',
-        bodyHtml: '<p class="text-slate-400 italic">Insira o link de um vídeo do YouTube ou cole o roteiro/transcrição ao lado e clique em "Gerar Post" para o Professor Leo criar o conteúdo completo...</p>',
-        goldenTip: 'A sacada de ouro do professor aparecerá aqui...',
-        metaTitle: 'Novo Post | AgoraEuFalo',
+        bodyHtml: `
+          <div class="text-center py-12 px-4 border-2 border-dashed border-slate-200 rounded-xl space-y-2.5 bg-slate-50/50">
+            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-amber-600">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-800">Seu artigo completo aparecerá aqui</p>
+            <p class="text-[11px] text-slate-400 max-w-sm mx-auto leading-relaxed">
+              Insira o link de um vídeo do YouTube ou digite a sua ideia/roteiro no painel à esquerda e clique em <strong>"CRIAR ARTIGO COM IA"</strong>.
+            </p>
+          </div>
+        `,
+        goldenTip: 'A sacada de ouro do Professor Leo Leite aparecerá aqui após a criação do artigo.',
+        metaTitle: 'Novo Artigo | AgoraEuFalo',
         metaDesc: 'Artigo do Professor Leonardo Leite no Blog Oficial AgoraEuFalo.',
         keywords: 'ingles, treino auditivo, metodo magic stories'
       };
 
-      // Limpar todos os inputs do formulário
+      // Limpar inputs do formulário
       document.getElementById('input-post-title').value = '';
       document.getElementById('input-transcript').value = '';
       document.getElementById('input-image-url').value = '';
-      document.getElementById('input-read-time').value = '5 min de leitura';
       document.getElementById('input-category').value = 'Treino Auditivo';
       document.getElementById('transcript-count').textContent = '0 palavras';
       
       clearYoutubeInput();
       updateWorkbench();
       switchTab('creator');
-      showToast('Campos limpos! Pronto para criar um novo post.');
+      if (showToastMsg) showToast('Campos limpos! Pronto para criar.');
     }
 
     // Modal API Key
