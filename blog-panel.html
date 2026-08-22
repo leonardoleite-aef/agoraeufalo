@@ -144,8 +144,10 @@
               <input 
                 type="text" 
                 id="input-youtube-url" 
-                placeholder="Ex: https://www.youtube.com/watch?v=..." 
+                placeholder="Ex: https://www.youtube.com/watch?v=... ou /live/..." 
                 oninput="handleYoutubeInput()"
+                onpaste="setTimeout(handleYoutubeInput, 50)"
+                onchange="handleYoutubeInput()"
                 class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 transition-all font-mono text-[11px]"
               >
             </div>
@@ -869,12 +871,34 @@
       }
     }
 
-    // YouTube Parser
+    // YouTube Parser Universal (Suporta /live/, /watch?v=, /shorts/, youtu.be/, /embed/ e ID direto)
     function extractYoutubeId(url) {
       if (!url) return '';
-      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      const match = url.match(regExp);
-      return (match && match[2].length === 11) ? match[2] : '';
+      const cleanUrl = url.trim();
+      
+      // Se for apenas o ID de 11 caracteres (ex: pQryEQ0-FhA)
+      if (/^[a-zA-Z0-9_-]{11}$/.test(cleanUrl)) {
+        return cleanUrl;
+      }
+      
+      // Suporte a youtube.com/live/ID ou /shorts/ID ou /embed/ID
+      const liveMatch = cleanUrl.match(/(?:youtube\.com\/(?:live|shorts|embed)\/)([a-zA-Z0-9_-]{11})/i);
+      if (liveMatch && liveMatch[1]) return liveMatch[1];
+      
+      // Suporte a youtu.be/ID
+      const shortMatch = cleanUrl.match(/(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+      if (shortMatch && shortMatch[1]) return shortMatch[1];
+      
+      // Suporte a watch?v=ID ou &v=ID
+      const regExp = /(?:[?&]v=|\/v\/)([a-zA-Z0-9_-]{11})/i;
+      const match = cleanUrl.match(regExp);
+      if (match && match[1]) return match[1];
+
+      // Fallback genérico para qualquer padrão do YouTube
+      const fallback = cleanUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|live\/|shorts\/)?([a-zA-Z0-9_-]{11})/i);
+      if (fallback && fallback[1]) return fallback[1];
+
+      return '';
     }
 
     function handleYoutubeInput() {
