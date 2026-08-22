@@ -300,18 +300,18 @@
                   Treino Auditivo
                 </span>
                 <span id="preview-read-badge" class="text-xs text-slate-400 font-medium flex items-center gap-1">
-                  <i data-lucide="clock" class="w-3.5 h-3.5"></i> <span id="preview-read-time-text">5 min de leitura</span>
+                  <i data-lucide="clock" class="w-3.5 h-3.5"></i> <span id="preview-read-time-text">3 min de leitura</span>
                 </span>
                 <span class="text-slate-300">•</span>
-                <span id="preview-date-text" class="text-xs text-slate-400 font-medium">21 de Agosto, 2026</span>
+                <span id="preview-date-text" class="text-xs text-slate-400 font-medium">Hoje</span>
               </div>
 
               <h1 id="preview-post-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade
+                Título do Seu Artigo
               </h1>
 
               <p id="preview-post-subtitle" class="text-base text-slate-600 font-medium leading-relaxed">
-                Pare de traduzir mentalmente. O segredo de 35 anos de sala de aula para condicionar o seu cérebro a reconhecer sons conectados sem travar.
+                O subtítulo explicativo e resumo do conteúdo aparecerão aqui após a geração.
               </p>
 
               <!-- Author Box Mini -->
@@ -328,15 +328,12 @@
             </div>
 
             <!-- YouTube Video Embed or Featured Image -->
-            <div id="preview-media-container" class="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-950 aspect-video relative">
-              <iframe 
-                id="preview-video-iframe" 
-                class="w-full h-full" 
-                src="https://www.youtube.com/embed/8DbXCHwZTL0" 
-                title="Aula do Professor Leonardo Leite" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen
-              ></iframe>
+            <div id="preview-media-container" class="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-900 aspect-video relative flex items-center justify-center">
+              <div class="text-center p-4 space-y-1.5 text-slate-400">
+                <i data-lucide="image" class="w-8 h-8 mx-auto text-slate-600"></i>
+                <p class="text-xs font-semibold text-slate-300">Capa ou Vídeo do YouTube</p>
+                <p class="text-[11px] text-slate-500">A capa ou o player do YouTube aparecerão aqui</p>
+              </div>
             </div>
 
             <!-- Toolbar da Capa & Redes Sociais -->
@@ -356,7 +353,15 @@
 
             <!-- Post Body (Dynamic Render) -->
             <div id="preview-post-body" class="prose-preview text-slate-700 text-sm leading-relaxed space-y-4">
-              <!-- Content Injected via JavaScript -->
+              <div class="text-center py-12 px-4 border-2 border-dashed border-slate-200 rounded-xl space-y-2.5 bg-slate-50/50">
+                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-amber-600">
+                  <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <p class="text-xs font-bold text-slate-800">Seu artigo completo aparecerá aqui</p>
+                <p class="text-[11px] text-slate-400 max-w-sm mx-auto leading-relaxed">
+                  Insira o link de um vídeo do YouTube ou digite a sua ideia/roteiro no painel à esquerda e clique em <strong>"CRIAR ARTIGO COM IA"</strong>.
+                </p>
+              </div>
             </div>
 
             <!-- Leo's Signature Callout Box -->
@@ -366,7 +371,7 @@
                 <span>A Sacada de Ouro do Professor:</span>
               </div>
               <p id="preview-golden-tip" class="text-xs text-amber-950/80 leading-relaxed italic">
-                "Você não fala inglês travado porque seu vocabulário é pequeno. Você trava porque tenta montar frases com regras gramaticais na cabeça enquanto o interlocutor já está no terceiro parágrafo. Treine o ouvido com histórias, e a fala será uma consequência natural."
+                A sacada de ouro do Professor Leo Leite aparecerá aqui após a criação do artigo.
               </p>
             </div>
 
@@ -1072,17 +1077,23 @@
 
     // AI POST GENERATION ENGINE (LEO LEITE PERSONA + GEMINI FLASH SUPPORT)
     async function generateCompletePost() {
-      const btn = document.getElementById('btn-generate');
-      btn.disabled = true;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>A IA do Professor Leo está escrevendo...</span>`;
-      if (window.lucide) window.lucide.createIcons();
-
       const transcript = document.getElementById('input-transcript').value.trim();
       const customTitle = document.getElementById('input-post-title').value.trim();
       const category = document.getElementById('input-category').value || 'Treino Auditivo';
       const customImg = document.getElementById('input-image-url').value.trim();
       const ytId = currentPost.youtubeId;
       const apiKey = localStorage.getItem('aef_gemini_api_key');
+
+      // Validação: Exige ao menos um dado do usuário
+      if (!transcript && !customTitle && !ytId) {
+        showToast('Insira um link do YouTube ou digite uma ideia/transcrição para criar o artigo.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-generate');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>A IA do Professor Leo está escrevendo...</span>`;
+      if (window.lucide) window.lucide.createIcons();
 
       // 1. GERAÇÃO AO VIVO COM GEMINI FLASH (SE API KEY ESTIVER CONFIGURADA)
       if (apiKey && (transcript || customTitle || ytId)) {
@@ -1094,22 +1105,26 @@ Ao final do post, lembre que o próximo passo prático é o Projeto AgoraEuFalo 
 Com base nas informações do usuário, crie um post de blog completo, altamente magnético e didático em formato JSON:
 - Título do Usuário (se fornecido): "${customTitle}" (se vazio, crie um título irresistível em português no tom do Leo)
 - Categoria: "${category}"
-- Roteiro / Transcrição / Prompt ou Ideia:
-"${transcript || (ytId ? 'Aula em vídeo do Professor Leonardo Leite sobre treino auditivo e pronúncia natural.' : 'Como destravar o ouvido e falar inglês sem tradução mental.')}"
+- Transcrição / Ideia / Roteiro fornecido pelo usuário: "${transcript}"
+- ID do YouTube: "${ytId}"
 
-Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos:
+Responda ESTRITAMENTE em formato JSON com este schema:
 {
-  "title": "Título magnético e direto (H1)",
-  "subtitle": "Subtítulo atraente e explicativo em 1 ou 2 frases",
-  "keyTakeaways": ["Destaque prático 1", "Destaque prático 2", "Destaque prático 3"],
-  "bodyHtml": "Conteúdo completo formatado em HTML com subtítulos <h2>, parágrafos <p>, citações <blockquote> e exemplos de frases",
-  "goldenTip": "A Sacada de Ouro marcante do Professor Leo para este post",
-  "metaTitle": "Meta Title SEO (máx 60 caracteres)",
-  "metaDesc": "Meta Description SEO (máx 155 caracteres)",
-  "keywords": "palavras-chave separadas por virgula"
+  "title": "Título magnético em português",
+  "subtitle": "Subtítulo atraente de 1 a 2 linhas",
+  "keyTakeaways": [
+    "Destaque principal 1",
+    "Destaque principal 2",
+    "Destaque principal 3"
+  ],
+  "bodyHtml": "<h2>...</h2><p>...</p><blockquote>...</blockquote><p>...</p>",
+  "goldenTip": "A sacada de ouro e conselho prático do Professor Leo (2 a 3 frases em primeira pessoa)",
+  "metaTitle": "Title SEO até 60 caracteres | AgoraEuFalo",
+  "metaDesc": "Descrição SEO até 155 caracteres",
+  "keywords": "palavra1, palavra2, palavra3"
 }`;
 
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1126,7 +1141,7 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
             const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
             if (textResponse) {
               const aiData = JSON.parse(textResponse);
-              const title = customTitle || aiData.title || "Como Treinar seu Ouvido para Entender Inglês em Alta Velocidade";
+              const title = customTitle || aiData.title || "Como Destravar seu Inglês com o Método AgoraEuFalo";
               const slug = slugify(title);
 
               currentPost.title = title;
@@ -1139,8 +1154,6 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
               currentPost.readTime = Math.max(3, Math.ceil(wordCount / 180)) + ' min de leitura';
               
               currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-              
-              // Se não informou imagem, gera banner dinâmico em letras garrafais (ou thumb do YT se houver)
               currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : generateDynamicCoverBanner(title, category));
 
               let takeawaysHtml = '';
@@ -1148,7 +1161,7 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
                 takeawaysHtml = `
                   <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 my-4">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2">
-                      <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Rápidos deste Post (Key Takeaways):
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Rápidos:
                     </h4>
                     <ul class="text-xs text-amber-950 space-y-1.5 pl-4 list-disc">
                       ${aiData.keyTakeaways.map(t => `<li>${t}</li>`).join('')}
@@ -1158,7 +1171,7 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
               }
 
               currentPost.bodyHtml = takeawaysHtml + (aiData.bodyHtml || '');
-              currentPost.goldenTip = aiData.goldenTip || "Treine o ouvido com histórias reais e a fala será uma consequência natural.";
+              currentPost.goldenTip = aiData.goldenTip || "";
               currentPost.metaTitle = aiData.metaTitle || `${title.substring(0, 50)} | AgoraEuFalo`;
               currentPost.metaDesc = aiData.metaDesc || `Artigo do Professor Leonardo Leite no Blog AgoraEuFalo.`;
               currentPost.keywords = aiData.keywords || `${category.toLowerCase()}, treino auditivo ingles, professor leonardo leite`;
@@ -1166,25 +1179,25 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
               updateWorkbench();
               showToast('Artigo gerado com sucesso via Gemini AI ⚡');
               btn.disabled = false;
-              btn.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-amber-200"></i><span>CRIAR ARTIGO COMPLETO COM IA</span>`;
+              btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i><span>CRIAR ARTIGO COM IA</span>`;
               if (window.lucide) window.lucide.createIcons();
               return;
             }
           }
         } catch (err) {
-          console.warn('Fallback para motor neural local:', err);
+          console.warn('Fallback para motor local:', err);
         }
       }
 
-      // 2. MOTOR INTELIGENTE INTEGRADO (FALLBACK OU MODO RÁPIDO)
+      // 2. MOTOR INTELIGENTE INTEGRADO (QUANDO SEM GEMINI API KEY)
       setTimeout(() => {
         let title = customTitle;
         if (!title) {
-          if (transcript.length > 10) {
+          if (transcript.length > 5) {
             title = transcript.split('\n')[0].replace(/[#*]/g, '').substring(0, 65).trim();
-            if (title.length < 15) title = "O Segredo para Destravar o Ouvido e Falar Inglês sem Traduzir Mentalmente";
+            if (title.length < 10) title = `Como Dominar ${category}: O Segredo dos 35 Anos de Sala de Aula`;
           } else {
-            title = "Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade";
+            title = `Como Dominar ${category}: O Método do Professor Leonardo Leite`;
           }
         }
 
@@ -1196,10 +1209,10 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
         // Se imagem em branco, gera a Capa em Letras Garrafais automaticamente!
         currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : generateDynamicCoverBanner(title, category));
         currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-        currentPost.subtitle = "Não estude listas de regras isoladas. O método de 35 anos de sala de aula para treinar sua escuta ativa e responder no reflexo.";
+        currentPost.subtitle = "Não estude listas de regras isoladas. O método prático de 35 anos de sala de aula para treinar sua escuta ativa e responder no reflexo.";
 
         let customBody = '';
-        if (transcript && transcript.length > 50) {
+        if (transcript && transcript.length > 20) {
           // Converte o texto fornecido pelo usuário em parágrafos organizados
           const paragraphs = transcript.split('\n\n').filter(p => p.trim().length > 0);
           customBody = paragraphs.map(p => {
@@ -1208,40 +1221,16 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
           }).join('\n');
         } else {
           customBody = `
-            <h2>Por que você entende o inglês escrito, mas fica surdo ao escutar?</h2>
+            <h2>O Ponto Central desta Aula</h2>
             <p>
-              Depois de <strong>35 anos de sala de aula</strong>, perdi as contas de quantos alunos brilhantes sentaram na minha frente com a mesma queixa: <em>"Professor Leo, eu leio artigos em inglês, assisto vídeos com legenda e compreendo quase tudo. Mas quando um nativo fala comigo sem legenda, parece que ele está falando grego!"</em>
+              Ao longo de <strong>35 anos de sala de aula</strong>, ensinei milhares de alunos que a maior barreira para falar inglês com naturalidade não é falta de vocabulário, mas a dependência da tradução mental.
             </p>
-            <p>
-              Se você se identificou com isso, respire fundo. O problema não é você. O problema é que a escola tradicional te ensinou a ler com os olhos da gramática, em vez de <strong>treinar o seu ouvido para decodificar sons</strong>.
-            </p>
-
             <blockquote>
-              "O cérebro não aprende a falar uma língua analisando regras no papel. Ele aprende por experiência, ritmo e reconhecimento de padrões sonoros em contexto real."
+              "O cérebro não aprende a falar uma língua analisando regras no papel. Ele aprende por ritmo, experiência e reconhecimento de padrões sonoros em contexto real."
             </blockquote>
-
-            <h2>O Fenômeno do Connected Speech (Sons Conectados)</h2>
+            <h2>Como aplicar o Método AgoraEuFalo na Prática</h2>
             <p>
-              No português falado do dia a dia, ninguém diz: <em>"Você... vai... para... onde?"</em>. Nós dizemos: <em>"Cê vai pr'onde?"</em>. 
-              No inglês acontece exatamente a mesma coisa. Quando um nativo quer perguntar o que você vai fazer hoje à noite, ele não pronuncia as palavras destacadas em um dicionário:
-            </p>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
-              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-                <span class="font-bold text-slate-500 uppercase text-[10px] block mb-1">Como você tenta escutar (Gramática):</span>
-                <p class="font-mono text-slate-800">"What do you want to do tonight?"</p>
-                <span class="text-[11px] text-slate-400 mt-1 block">Separado e engessado</span>
-              </div>
-              <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs">
-                <span class="font-bold text-amber-700 uppercase text-[10px] block mb-1">Como o nativo realmente fala (Vida Real):</span>
-                <p class="font-mono text-amber-900 font-bold">"Whaddya wanna do t'night?"</p>
-                <span class="text-[11px] text-amber-700 mt-1 block">Fluido, conectado e musical</span>
-              </div>
-            </div>
-
-            <h2>Como o Método Magic Stories resolve essa trava auditiva</h2>
-            <p>
-              No <strong>Método Magic Stories</strong>, nós eliminamos as regras chatas e colocamos você em uma jornada prática de treino auditivo, reflexo e recontagem de histórias.
+              Quando você treina o seu ouvido com escuta ativa e histórias contextualizadas, o cérebro assimila as estruturas da língua de forma intuitiva, permitindo que a fala flua no reflexo imediato.
             </p>
           `;
         }
@@ -1249,30 +1238,31 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
         currentPost.bodyHtml = `
           <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200/60 my-4">
             <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2">
-              <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Rápidos deste Post (Key Takeaways):
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i> Destaques Rápidos:
             </h4>
             <ul class="text-xs text-amber-950 space-y-1.5 pl-4 list-disc">
-              <li><strong>O Erro Clássico:</strong> Tentar traduzir palavra por palavra enquanto a outra pessoa fala.</li>
-              <li><strong>Connected Speech:</strong> Por que os nativos não falam palavras separadas e como seu ouvido pode aprender o ritmo natural.</li>
-              <li><strong>Reflexo vs. Decoreba:</strong> Como o método de escuta ativa condiciona a musculatura da fala.</li>
+              <li><strong>Escuta Ativa:</strong> Como condicionar seu ouvido para reconhecer o inglês da vida real.</li>
+              <li><strong>Eliminação da Tradução:</strong> Por que pensar em português antes de falar causa bloqueios.</li>
+              <li><strong>Reflexo e Fluência:</strong> Treine a musculatura da fala através de repetições naturais.</li>
             </ul>
           </div>
           ${customBody}
         `;
 
-        currentPost.goldenTip = "Você não fala inglês travado porque seu vocabulário é pequeno. Você trava porque tenta montar frases com regras gramaticais na cabeça enquanto o interlocutor já está no terceiro parágrafo. Treine o ouvido com histórias, e a fala será uma consequência natural.";
+        currentPost.goldenTip = "Você não fala inglês travado porque seu vocabulário é pequeno. Você trava porque tenta montar frases com regras gramaticais na cabeça. Treine o ouvido com histórias, e a fala será uma consequência natural.";
         
         const words = currentPost.bodyHtml.replace(/<[^>]*>/g, ' ').split(/\s+/).length;
         currentPost.readTime = Math.max(3, Math.ceil(words / 160)) + ' min de leitura';
         
         currentPost.metaTitle = `${title.substring(0, 50)} | AgoraEuFalo`;
-        currentPost.metaDesc = `Descubra o método de 35 anos de sala de aula com o Professor Leonardo Leite para destravar o ouvido e falar inglês sem tradução mental. Leia agora!`;
-        currentPost.keywords = `${category.toLowerCase()}, treino auditivo ingles, metodo magic stories, professor leonardo leite, falar ingles natural`;
+        currentPost.metaDesc = `Descubra o método de 35 anos de sala de aula com o Professor Leonardo Leite para destravar o ouvido e falar inglês sem tradução mental.`;
+        currentPost.keywords = `${category.toLowerCase()}, treino auditivo ingles, metodo magic stories, professor leonardo leite`;
 
         updateWorkbench();
         showToast('Artigo estruturado com sucesso!');
         btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-amber-200"></i><span>CRIAR ARTIGO COMPLETO COM IA</span>`;
+        btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i><span>CRIAR ARTIGO COM IA</span>`;
+        if (window.lucide) window.lucide.createIcons();
       }, 400);
     }
 
