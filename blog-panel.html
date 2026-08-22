@@ -390,6 +390,21 @@
               ></iframe>
             </div>
 
+            <!-- Toolbar da Capa & Redes Sociais -->
+            <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-pastel-card border border-pastel-border text-xs">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5 text-[11px]">
+                <i data-lucide="image" class="w-3.5 h-3.5 text-amber-600"></i> Capa em Letras Garrafais (YouTube & Social)
+              </span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="regenerateCoverBanner()" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 border border-pastel-border text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-colors cursor-pointer" title="Gerar outra versão do banner">
+                  <i data-lucide="refresh-cw" class="w-3 h-3 text-amber-600"></i> Nova Capa
+                </button>
+                <button type="button" onclick="downloadCoverImage()" class="px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center gap-1 transition-colors shadow-2xs cursor-pointer" title="Baixar imagem em 1280x720 para YouTube / Redes Sociais">
+                  <i data-lucide="download" class="w-3 h-3 text-amber-400"></i> Baixar Capa HD
+                </button>
+              </div>
+            </div>
+
             <!-- Post Body (Dynamic Render) -->
             <div id="preview-post-body" class="prose-preview text-slate-700 text-sm sm:text-base leading-relaxed space-y-4">
               <!-- Content Injected via JavaScript -->
@@ -1047,19 +1062,156 @@ No inglês falado da vida real, as palavras se fundem (connected speech). Quando
       const randomTitle = titles[Math.floor(Math.random() * titles.length)];
       document.getElementById('input-post-title').value = randomTitle;
       showToast('Título sugerido!');
+    // =========================================================================
+    // GERADOR DE CAPAS DINÂMICAS COM LETRAS GARRAFAIS (THUMBNAIL IMPACTO ALTO)
+    // =========================================================================
+    function generateDynamicCoverBanner(title, category) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1280;
+      canvas.height = 720;
+      const ctx = canvas.getContext('2d');
+
+      // 1. Fundo Gradiente Dark Luxo
+      const bgGrad = ctx.createLinearGradient(0, 0, 1280, 720);
+      bgGrad.addColorStop(0, '#020617');
+      bgGrad.addColorStop(0.5, '#0B132B');
+      bgGrad.addColorStop(1, '#020617');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1280, 720);
+
+      // 2. Brilho Radial Dourado / Âmbar de Fundo (Glow de Alta Conversão)
+      const radialGlow = ctx.createRadialGradient(980, 220, 40, 980, 220, 650);
+      radialGlow.addColorStop(0, 'rgba(245, 158, 11, 0.30)');
+      radialGlow.addColorStop(0.6, 'rgba(217, 119, 6, 0.08)');
+      radialGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = radialGlow;
+      ctx.fillRect(0, 0, 1280, 720);
+
+      // 3. Linha Lateral de Destaque
+      ctx.fillStyle = '#F59E0B';
+      ctx.fillRect(0, 0, 16, 720);
+
+      // 4. Badge Topo Esquerda: AgoraEuFalo
+      ctx.fillStyle = '#F59E0B';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(70, 50, 230, 46, 12);
+      else ctx.rect(70, 50, 230, 46);
+      ctx.fill();
+
+      ctx.fillStyle = '#020617';
+      ctx.font = '900 20px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('AGORAEUFALO', 95, 81);
+
+      // 5. Pill da Categoria
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(320, 50, 300, 46, 12);
+      else ctx.rect(320, 50, 300, 46);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#FDE68A';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText((category || 'TREINO AUDITIVO').toUpperCase(), 345, 80);
+
+      // 6. LETRAS GARRAFAIS: Texto Gigante de Alto Impacto
+      const cleanTitle = (title || 'COMO DESTRAVAR O OUVIDO E FALAR INGLÊS')
+        .toUpperCase()
+        .replace(/[“"”]/g, '')
+        .trim();
+
+      const words = cleanTitle.split(' ');
+      const lines = [];
+      let currentLine = '';
+
+      for (let i = 0; i < words.length; i++) {
+        const testLine = currentLine ? currentLine + ' ' + words[i] : words[i];
+        if (testLine.length > 22 && currentLine) {
+          lines.push(currentLine);
+          currentLine = words[i];
+        } else {
+          currentLine = testLine;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
+
+      const displayLines = lines.slice(0, 3);
+      const startY = displayLines.length === 1 ? 380 : (displayLines.length === 2 ? 310 : 255);
+      const lineHeight = 105;
+
+      displayLines.forEach((line, idx) => {
+        const y = startY + (idx * lineHeight);
+        
+        // Destaca a primeira linha com caixa âmbar para estética YouTube Thumbnail
+        if (idx === 0) {
+          ctx.font = '900 80px "Plus Jakarta Sans", "Impact", sans-serif';
+          const textWidth = ctx.measureText(line).width;
+          
+          ctx.fillStyle = '#F59E0B';
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(65, y - 72, Math.min(textWidth + 35, 1150), 92, 16);
+          else ctx.rect(65, y - 72, Math.min(textWidth + 35, 1150), 92);
+          ctx.fill();
+
+          ctx.fillStyle = '#020617';
+          ctx.fillText(line, 82, y);
+        } else {
+          ctx.font = '900 80px "Plus Jakarta Sans", "Impact", sans-serif';
+          
+          // Sombra forte para leitura perfeita
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+          ctx.shadowBlur = 22;
+          ctx.shadowOffsetX = 4;
+          ctx.shadowOffsetY = 4;
+          
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillText(line, 75, y);
+          
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+        }
+      });
+
+      // 7. Rodapé de Credibilidade
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+      ctx.fillRect(70, 595, 1140, 72);
+      ctx.strokeStyle = '#F59E0B';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(70, 595, 1140, 72);
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('PROF. LEONARDO LEITE • 35 ANOS DE SALA DE AULA', 105, 640);
+
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('MÉTODO AGORAEUFALO 2026', 890, 640);
+
+      return canvas.toDataURL('image/jpeg', 0.92);
     }
 
-    function pickPresetImage() {
-      const presets = [
-        'assets/images/og-magic-stories.jpg',
-        'assets/images/og-quick-start.jpg',
-        'assets/images/og-frases-prontas.jpg',
-        'assets/images/og-image.jpg'
-      ];
-      const random = presets[Math.floor(Math.random() * presets.length)];
-      document.getElementById('input-image-url').value = random;
-      showToast('Imagem oficial selecionada!');
+    function downloadCoverImage() {
+      if (!currentPost.imageUrl) {
+        showToast('Nenhuma capa gerada para download!');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = currentPost.imageUrl;
+      a.download = `capa-${currentPost.slug || 'agoraeufalo'}-1280x720.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Download da Capa em Alta Resolução iniciado! ⬇️');
+    }
+
+    function regenerateCoverBanner() {
+      currentPost.imageUrl = generateDynamicCoverBanner(currentPost.title, currentPost.category);
+      document.getElementById('input-image-url').value = '';
       updateWorkbench();
+      showToast('Nova capa em Letras Garrafais gerada com sucesso! ✨');
     }
 
     // AI POST GENERATION ENGINE (LEO LEITE PERSONA + GEMINI FLASH SUPPORT)
@@ -1131,7 +1283,9 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
               currentPost.readTime = Math.max(3, Math.ceil(wordCount / 180)) + ' min de leitura';
               
               currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-              currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : 'assets/images/og-magic-stories.jpg');
+              
+              // Se não informou imagem, gera banner dinâmico em letras garrafais (ou thumb do YT se houver)
+              currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : generateDynamicCoverBanner(title, category));
 
               let takeawaysHtml = '';
               if (aiData.keyTakeaways && Array.isArray(aiData.keyTakeaways)) {
@@ -1182,7 +1336,9 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
         currentPost.title = title;
         currentPost.slug = slug;
         currentPost.category = category;
-        currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : 'assets/images/og-magic-stories.jpg');
+        
+        // Se imagem em branco, gera a Capa em Letras Garrafais automaticamente!
+        currentPost.imageUrl = customImg || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : generateDynamicCoverBanner(title, category));
         currentPost.date = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
         currentPost.subtitle = "Não estude listas de regras isoladas. O método de 35 anos de sala de aula para treinar sua escuta ativa e responder no reflexo.";
 
@@ -1261,7 +1417,7 @@ Retorne APENAS um objeto JSON válido (sem blocos markdown extras) com os campos
         showToast('Artigo estruturado com sucesso!');
         btn.disabled = false;
         btn.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-amber-200"></i><span>CRIAR ARTIGO COMPLETO COM IA</span>`;
-        if (window.lucide) window.lucide.createIcons();
+      }, 400);
     }
 
     function initDefaultContent() {
