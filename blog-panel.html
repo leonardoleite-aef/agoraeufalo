@@ -701,9 +701,12 @@
 ];
 
     function getLibrary() {
-      const stored = localStorage.getItem('aef_blog_library_v4');
+      // Limpa versoes antigas se existirem
+      ['aef_blog_library', 'aef_blog_library_v2', 'aef_blog_library_v3', 'aef_blog_library_v4'].forEach(k => localStorage.removeItem(k));
+
+      const stored = localStorage.getItem('aef_blog_library_v5');
       if (!stored) {
-        localStorage.setItem('aef_blog_library_v4', JSON.stringify(INITIAL_LIBRARY));
+        localStorage.setItem('aef_blog_library_v5', JSON.stringify(INITIAL_LIBRARY));
         return INITIAL_LIBRARY;
       }
       try {
@@ -715,25 +718,25 @@
             parsed.unshift(initialPost);
             updated = true;
           } else {
-            // Atualiza com o texto completo se estiver curto
-            if (!parsed[idx].bodyHtml || parsed[idx].bodyHtml.length < initialPost.bodyHtml.length) {
+            // Força a atualização do texto integral se no storage estiver incompleto
+            if (!parsed[idx].bodyHtml || parsed[idx].bodyHtml.length < (initialPost.bodyHtml ? initialPost.bodyHtml.length : 0)) {
               parsed[idx] = initialPost;
               updated = true;
             }
           }
         });
         if (updated) {
-          localStorage.setItem('aef_blog_library_v4', JSON.stringify(parsed));
+          localStorage.setItem('aef_blog_library_v5', JSON.stringify(parsed));
         }
         return parsed;
       } catch (e) {
-        localStorage.setItem('aef_blog_library_v4', JSON.stringify(INITIAL_LIBRARY));
+        localStorage.setItem('aef_blog_library_v5', JSON.stringify(INITIAL_LIBRARY));
         return INITIAL_LIBRARY;
       }
     }
 
     function saveLibrary(lib) {
-      localStorage.setItem('aef_blog_library_v2', JSON.stringify(lib));
+      localStorage.setItem('aef_blog_library_v5', JSON.stringify(lib));
       renderLibrary();
     }
 
