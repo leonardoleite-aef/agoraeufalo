@@ -1239,38 +1239,116 @@
       const cleanTranscript = (rawTranscript || '').replace(/\[\d+:\d+\]/g, '').replace(/https?:\/\/\S+/g, '').trim();
       const lower = (cleanTranscript + ' ' + (customTitle || '') + ' ' + category).toLowerCase();
 
-      // Extrai parágrafos reais da transcrição do usuário para ancoragem autêntica
-      const rawSentences = cleanTranscript.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 25 && !s.includes('boa noite') && !s.includes('estamos ao vivo') && !s.includes('deixa o like'));
-      const sampleQuotes = rawSentences.slice(0, 8);
+      // 1. TEMA: AULA PRÁTICA MAGIC STORY / HISTÓRIA DA GRAZI / ATIVIDADES DA AULA
+      if (lower.includes('grazi') || lower.includes('magic stor') || lower.includes('listen and read') || lower.includes('listen and answer') || lower.includes('live')) {
+        const title = customTitle || "Aula Prática Magic Story: A História da Grazi, Vocabulário Real e Treino de Reflexo";
+        const subtitle = "Acompanhe o passo a passo da aula do Professor Leonardo Leite: a narrativa da Grazi, a prática de Listen & Read, o vocabulário em contexto e o treino de perguntas e respostas no reflexo imediato.";
+        const bannerTitle = "MAGIC STORY DA GRAZI • TREINO DE REFLEXO";
+        const keyTakeaways = [
+          "A História da Grazi: Como uma narrativa contextualizada ensina estruturas reais de inglês sem decoreba de regras.",
+          "Atividade Listen & Read: A sincronização entre o ouvido e o texto escrito para absorver o ritmo e as junções sonoras da pronúncia.",
+          "Vocabulário e Chunks em Contexto: Desmistificando as palavras, expressões e conexões fonéticas utilizadas na história.",
+          "Atividade Listen & Answer: O exercício de perguntas e respostas rápidas para eliminar a tradução mental e responder instintivamente."
+        ];
 
-      let title = customTitle || "O Segredo da Escuta Ativa e a Repetição da Experiência no Inglês Real";
-      let subtitle = "Como condicionar o ouvido para decodificar sons conectados e falar no reflexo automático — sem travas, sem tradução mental e sem decoreba de regras.";
-      let bannerTitle = "MÉTODO AGORAEUFALO • O SEGREDO DO REFLEXO";
-      let cat = category || "Treino Auditivo";
+        const bodyHtml = `
+          <h2>1. Por Dentro da Aula: O Que É a Magic Story da Grazi?</h2>
+          <p>
+            Nesta aula prática com o <strong>Professor Leonardo Leite</strong>, você não encontra teorias abstratas sobre gramática ou listas chatas de verbos isolados. O método vai direto ao ponto através de uma <strong>Magic Story real e envolvente: a História da Grazi</strong>.
+          </p>
+          <p>
+            Em vez de tentar explicar regras no quadro, o Professor Leo conta a história da Grazi alternando o inglês com explicações em português. Esse processo cria o que a neurociência chama de <em>comprehensible input</em> (estímulo compreensível): você entende exatamente o que está acontecendo na narrativa e, ao mesmo tempo, seu ouvido é exposto à cadência, à melodia e aos sons autênticos da língua inglesa.
+          </p>
 
-      if (lower.includes('magic stor') || lower.includes('repetir') || lower.includes('papagaio') || lower.includes('história')) {
-        title = customTitle || "O Segredo do Método Magic Stories: Por Que Repetir Não É Falar Feito Papagaio";
-        subtitle = "A diferença neurológica entre memorizar regras isoladas e vivenciar repetidamente a mesma história até que o reflexo da fala surja com naturalidade.";
-        bannerTitle = "MAGIC STORIES • O SEGREDO DO REFLEXO";
-        cat = "Magic Stories";
-      } else if (lower.includes('connect') || lower.includes('som') || lower.includes('rápido') || lower.includes('velocidade') || lower.includes('whaddya')) {
-        title = customTitle || "Connected Speech: A Verdade Por Trás do Inglês Falado Rápido Pelos Nativos";
-        subtitle = "Por que você lê perfeitamente mas não entende conversas reais, e o método prático para decodificar junções sonoras sem esforço.";
-        bannerTitle = "CONNECTED SPEECH • O SEGREDO DA VELOCIDADE";
-        cat = "Connected Speech";
-      } else if (lower.includes('traduz') || lower.includes('trava') || lower.includes('branco') || lower.includes('fala')) {
-        title = customTitle || "Como Parar de Traduzir Mentalmente e Desenvolver o Reflexo Imediato de Resposta";
-        subtitle = "O gargalo cognitivo que causa o famoso 'branco' na conversação e o treino auditivo para fazer as frases saírem espontaneamente.";
-        bannerTitle = "FALE NO REFLEXO • O FIM DA TRADUÇÃO MENTAL";
-        cat = "Fluência & Reflexo";
+          <blockquote>
+            "O cérebro não aprende a falar uma língua decorando fórmulas no papel. Ele aprende acompanhando histórias de pessoas reais, absorvendo os padrões sonoros da narrativa e respondendo no reflexo."
+          </blockquote>
+
+          <h2>2. Atividade 1: Listen & Read (Escutar e Acompanhar o Texto)</h2>
+          <p>
+            A primeira atividade prática da aula é o <strong>Listen & Read</strong>. Muitos estudantes cometem o erro de ler o texto antes de ouvir ou tentar traduzir mentalmente cada palavra. Na aula do Professor Leo, a dinâmica é estruturada para treinar o reconhecimento auditivo imediato:
+          </p>
+          <div class="my-5 p-5 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-3 shadow-2xs">
+            <h4 class="text-xs font-black uppercase tracking-wide text-amber-900 flex items-center gap-1.5">
+              <i data-lucide="headphones" class="w-4 h-4 text-amber-700"></i> Como Executar a Prática de Listen & Read:
+            </h4>
+            <ul class="text-xs sm:text-sm text-amber-950 space-y-2 pl-4 list-disc leading-relaxed">
+              <li><strong>Primeiro Contato:</strong> Escute a voz do professor narrando os fatos da vida da Grazi sem interromper.</li>
+              <li><strong>Acompanhamento Visual:</strong> Siga as frases com os olhos no texto em inglês para mapear como as palavras escritas são realmente pronunciadas.</li>
+              <li><strong>Percepção de Junções (Connected Speech):</strong> Note como palavras não são ditas isoladas, mas ligadas em blocos sonoros naturais.</li>
+            </ul>
+          </div>
+
+          <h2>3. Atividade 2: Vocabulário e Expressões em Contexto Real</h2>
+          <p>
+            Durante a aula, o Professor Leo disseca as palavras e expressões centrais que surgem na história da Grazi. O diferencial pedagógico é que o vocabulário não é ensinado como uma lista solta de dicionário, mas sim como <strong>blocos de sentido (chunks)</strong> dentro da história.
+          </p>
+          <p>
+            Quando você aprende que uma expressão faz parte de uma situação real que a Grazi viveu, o seu cérebro cria uma âncora emocional e situacional. Você não precisa pensar: <em>"qual é o tempo verbal desta frase?"</em>. Você simplesmente lembra da história da Grazi e a expressão vem pronta na sua mente.
+          </p>
+
+          <div class="my-6 p-5 sm:p-6 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-3.5 shadow-2xs">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 uppercase tracking-wide border border-amber-500/40 shadow-2xs">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 text-slate-950"></i> Análise de Pronúncia e Sons da História
+              </span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+              <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+                <span class="text-slate-600 font-extrabold uppercase text-[11px] block tracking-wide">📖 O Inglês Escrito (No Papel):</span>
+                <p class="font-mono text-slate-900 font-extrabold text-sm sm:text-base leading-snug">"She wanted to talk to them yesterday"</p>
+                <p class="text-xs text-slate-600 leading-relaxed pt-0.5">Palavras lidas de forma separada, pausada e analítica.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-amber-100/90 border border-amber-300 shadow-2xs space-y-1.5">
+                <span class="text-amber-950 font-extrabold uppercase text-[11px] block tracking-wide">🎧 O Inglês Falado na Magic Story:</span>
+                <p class="font-mono text-amber-950 font-black text-sm sm:text-base leading-snug">"She wanted to talk to 'em yesterday"</p>
+                <p class="text-xs text-amber-900 font-semibold leading-relaxed pt-0.5">Redução natural do 'them', conexão sonora fluida e ritmo espontâneo.</p>
+              </div>
+            </div>
+          </div>
+
+          <h2>4. Atividade 3: Listen & Answer — O Treino do Reflexo Imediato</h2>
+          <p>
+            O momento mais dinâmico e transformador da aula acontece na atividade de <strong>Listen & Answer</strong>. É aqui que o aluno destrava a fala e elimina de vez a tradução mental do português.
+          </p>
+          <p>
+            O Professor Leo faz perguntas rápidas em inglês sobre os acontecimentos da história da Grazi. Por exemplo:
+          </p>
+          <ul class="space-y-2 my-4 pl-4 list-disc text-slate-700 text-xs sm:text-sm">
+            <li><em>"Did Grazi want to learn English?"</em> &rarr; <strong>"Yes! She wanted to learn English!"</strong></li>
+            <li><em>"Was it easy for her in the beginning?"</em> &rarr; <strong>"No, it wasn't easy!"</strong></li>
+            <li><em>"What did she decide to do?"</em> &rarr; <strong>"She decided to practice every day!"</strong></li>
+          </ul>
+          <p>
+            Como as perguntas são feitas com uma pausa curta proposital, você é forçado a responder no reflexo imediato. Não dá tempo de pensar em português, conjugar o verbo no passado e montar a frase. A resposta sai como um reflexo automático da sua musculatura oral, exatamente como você responde no seu idioma nativo.
+          </p>
+
+          <h2>5. Por Que Essa Prática Funciona Onde as Escolas Tradicionais Falham</h2>
+          <p>
+            Em mais de <strong>35 anos de sala de aula</strong>, o Professor Leonardo Leite comprovou que o estudante adulto não trava por falta de inteligência ou por vocabulário pequeno. Ele trava porque foi condicionado a pensar que falar inglês é um exercício de cálculo matemático.
+          </p>
+          <p>
+            Ao vivenciar a Magic Story da Grazi em 3 etapas integradas (<strong>Listen & Read &rarr; Vocabulário em Contexto &rarr; Listen & Answer</strong>), o seu cérebro completa o ciclo biológico de aquisição de linguagem:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-5">
+            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-1.5">
+              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">1. Ouvido Treinado</span>
+              <p class="text-xs text-amber-950/90 leading-relaxed">Você reconhece os sons e as junções da fala real sem precisar de tradução simultânea.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-1.5">
+              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">2. Memória Situacional</span>
+              <p class="text-xs text-amber-950/90 leading-relaxed">As frases ficam ancoradas nos acontecimentos da história da Grazi, fáceis de resgatar.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-1.5">
+              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">3. Fala no Reflexo</span>
+              <p class="text-xs text-amber-950/90 leading-relaxed">Com o Listen & Answer, você responde sem hesitação, com confiança e naturalidade.</p>
+            </div>
+          </div>
+        `;
+
+        const goldenTip = "Você não precisa de 50 histórias diferentes para destravar o seu inglês. Você precisa vivenciar a mesma história — como a história da Grazi — até que cada pergunta e resposta saia da sua boca no reflexo imediato.";
+        return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: 'Magic Stories' };
       }
-
-      const keyTakeaways = [
-        "O Paradoxo da Escola Tradicional: Tratar o inglês como matéria de prova no papel bloqueia a capacidade auditiva na vida real.",
-        "Repetir a Experiência vs. Decoreba de Papagaio: A exposição intencional à mesma narrativa ancora padrões sonoros permanentes na memória de longo prazo.",
-        "O Inglês da Vida Real Não Escolhe Nível: Nativos não adaptam o vocabulário à velocidade do ouvinte; o ouvido precisa ser treinado para o ritmo natural.",
-        "Reflexo Sem Tradução Mental: A fala natural é uma consequência bioacústica direta de uma escuta profunda, imersiva e consistente."
-      ];
 
       const bodyHtml = `
         <h2>1. O Paradoxo do Ensino Tradicional: Inglês Não É Matéria de Prova</h2>
