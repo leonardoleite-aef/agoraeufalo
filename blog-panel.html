@@ -1239,114 +1239,139 @@
       const cleanTranscript = (rawTranscript || '').replace(/\[\d+:\d+\]/g, '').replace(/https?:\/\/\S+/g, '').trim();
       const lower = (cleanTranscript + ' ' + (customTitle || '') + ' ' + category).toLowerCase();
 
-      // 1. TEMA: AULA PRÁTICA MAGIC STORY / HISTÓRIA DA GRAZI / ATIVIDADES DA AULA
-      if (lower.includes('grazi') || lower.includes('magic stor') || lower.includes('listen and read') || lower.includes('listen and answer') || lower.includes('live')) {
-        const title = customTitle || "Aula Prática Magic Story: A História da Grazi, Vocabulário Real e Treino de Reflexo";
-        const subtitle = "Acompanhe o passo a passo da aula do Professor Leonardo Leite: a narrativa da Grazi, a prática de Listen & Read, o vocabulário em contexto e o treino de perguntas e respostas no reflexo imediato.";
-        const bannerTitle = "MAGIC STORY DA GRAZI • TREINO DE REFLEXO";
+      // 1. TEMA: MAGIC STORY 01 — A HISTÓRIA DA GRAZI (ANÁLISE 100% FACTUAL DA TRANSCRIÇÃO)
+      if (lower.includes('grazi') || lower.includes('magic stor') || lower.includes('change her life') || lower.includes('federal government') || lower.includes('live')) {
+        const title = customTitle || "Magic Story 01: A História da Grazi e o Passo a Passo Para Destravar o Inglês no Reflexo";
+        const subtitle = "Como uma história real de 1 minuto em Brasília — com Listen & Read, Vocabulário, Listen & Answer, Look & Retell e Listen & Ask — condiciona o cérebro a falar sem tradução mental.";
+        const bannerTitle = "MAGIC STORY 01 • GRAZI WANTS TO CHANGE";
         const keyTakeaways = [
-          "A História da Grazi: Como uma narrativa contextualizada ensina estruturas reais de inglês sem decoreba de regras.",
-          "Atividade Listen & Read: A sincronização entre o ouvido e o texto escrito para absorver o ritmo e as junções sonoras da pronúncia.",
-          "Vocabulário e Chunks em Contexto: Desmistificando as palavras, expressões e conexões fonéticas utilizadas na história.",
-          "Atividade Listen & Answer: O exercício de perguntas e respostas rápidas para eliminar a tradução mental e responder instintivamente."
+          "O Paradoxo da Vida da Grazi: Uma advogada do governo federal de 45 anos que mora no Lago Paranoá, ama a família, mas quer mudar de vida.",
+          "Listen & Read vs Leitura Passiva: Por que você deve sincronizar som e texto sem parar no dicionário para destravar o reconhecimento auditivo.",
+          "Vocabulário e Chunks da História: A análise de estruturas reais como 'a 45-year-old woman', 'federal government', 'waterfront', 'outgoing vs. shy' e 'stand out'.",
+          "O Treino Completo de Ativação Oral: A dinâmica prática de Listen & Answer, Look & Retell e o desafio de formular perguntas com Listen & Ask."
         ];
 
         const bodyHtml = `
-          <h2>1. Por Dentro da Aula: O Que É a Magic Story da Grazi?</h2>
+          <h2>1. O Segredo das Magic Stories: Repetir a Experiência vs. Repetir Feito Papagaio</h2>
           <p>
-            Nesta aula prática com o <strong>Professor Leonardo Leite</strong>, você não encontra teorias abstratas sobre gramática ou listas chatas de verbos isolados. O método vai direto ao ponto através de uma <strong>Magic Story real e envolvente: a História da Grazi</strong>.
+            Depois de <strong>mais de 35 anos utilizando o idioma e mais de 30 anos lecionando inglês para brasileiros</strong>, eu tomei uma decisão: mostrar como o cérebro humano realmente adquire fluência. Inglês não é matéria de escola para você decorar tabelas no papel e fazer prova; inglês é uma experiência viva.
           </p>
           <p>
-            Em vez de tentar explicar regras no quadro, o Professor Leo conta a história da Grazi alternando o inglês com explicações em português. Esse processo cria o que a neurociência chama de <em>comprehensible input</em> (estímulo compreensível): você entende exatamente o que está acontecendo na narrativa e, ao mesmo tempo, seu ouvido é exposto à cadência, à melodia e aos sons autênticos da língua inglesa.
+            O inglês da vida real não escolhe quem está ouvindo. Quando um nativo fala, ele não pergunta se você é nível básico, intermediário ou avançado. O que muda é a sua <strong>experiência com o conteúdo</strong>. E para atingir um excelente nível de escuta e de fala, o segredo é a repetição intencional da mesma narrativa.
+          </p>
+          <p>
+            Não é repetir palavras soltas feito um papagaio sem entender o contexto. É <strong>repetir a experiência</strong> — exatamente como quando você assiste várias vezes ao seu filme predileto ou escuta a sua música favorita. Quanto mais vezes você se expõe à mesma história e às mesmas frases, mais o seu ouvido decodifica a melodia do idioma, até que a fala surja como consequência natural.
           </p>
 
           <blockquote>
-            "O cérebro não aprende a falar uma língua decorando fórmulas no papel. Ele aprende acompanhando histórias de pessoas reais, absorvendo os padrões sonoros da narrativa e respondendo no reflexo."
+            "Toda descoberta fantástica que você tiver sobre o idioma hoje, você vai esquecer. A partir do momento em que você aceita isso, você fica livre: você entende que precisa revisitar e vivenciar a mesma história de novo, de novo e de novo até virar reflexo."
           </blockquote>
 
-          <h2>2. Atividade 1: Listen & Read (Escutar e Acompanhar o Texto)</h2>
+          <h2>2. A História da Grazi (Graziella Wants to Change Her Life)</h2>
           <p>
-            A primeira atividade prática da aula é o <strong>Listen & Read</strong>. Muitos estudantes cometem o erro de ler o texto antes de ouvir ou tentar traduzir mentalmente cada palavra. Na aula do Professor Leo, a dinâmica é estruturada para treinar o reconhecimento auditivo imediato:
+            Toda Magic Story começa pelo contexto: você precisa saber exatamente sobre o que é a história antes de começar a treinar. A <strong>Magic Story #01</strong> apresenta a vida de Graziela:
           </p>
           <div class="my-5 p-5 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-3 shadow-2xs">
             <h4 class="text-xs font-black uppercase tracking-wide text-amber-900 flex items-center gap-1.5">
-              <i data-lucide="headphones" class="w-4 h-4 text-amber-700"></i> Como Executar a Prática de Listen & Read:
+              <i data-lucide="file-text" class="w-4 h-4 text-amber-700"></i> O Texto Integral da História da Grazi:
             </h4>
-            <ul class="text-xs sm:text-sm text-amber-950 space-y-2 pl-4 list-disc leading-relaxed">
-              <li><strong>Primeiro Contato:</strong> Escute a voz do professor narrando os fatos da vida da Grazi sem interromper.</li>
-              <li><strong>Acompanhamento Visual:</strong> Siga as frases com os olhos no texto em inglês para mapear como as palavras escritas são realmente pronunciadas.</li>
-              <li><strong>Percepção de Junções (Connected Speech):</strong> Note como palavras não são ditas isoladas, mas ligadas em blocos sonoros naturais.</li>
-            </ul>
+            <p class="font-mono text-xs sm:text-sm text-slate-800 leading-relaxed italic bg-white p-4 rounded-xl border border-slate-200">
+              "Graziella is a 45-year-old woman who wants to change her life. She lives in Brasília, the capital of Brazil, with her husband and two kids. She's a lawyer and she works for the federal government. She lives in a big house near the lake with a beautiful view to the waterfront. She's a very friendly and outgoing person. She loves talking to people although she sees herself as a very shy woman. Grazi doesn't like to stand out and she gets embarrassed very easily. Grazi loves outdoor activities like biking, hiking, swimming and taking walks with her daughters Anna and Flavia. Grazi is crazy about her daughters. Every day she gets up early about 7:00, goes running in the park for about 50 minutes. Then she gets back home, jumps in the pool, takes a shower, has some breakfast, and goes to work at 9:00. She works until 5:00 PM. In the evening, she sits in the backyard, puts her headphones on, and listens to English lessons on her iPad. The question, my friend, is: why does Grazi want to change her life?"
+            </p>
+          </div>
+          <p>
+            A história carrega um paradoxo fascinante: a Grazi tem uma vida que muitos considerariam perfeita — mora numa casa linda no Lago em Brasília, é advogada concursada do governo federal, tem uma família linda —, mas ela não está feliz e quer mudar de vida. Essa identificação humana conecta o estudante à história.
+          </p>
+
+          <h2>3. Atividade 1: Listen & Read (Escutar e Acompanhar)</h2>
+          <p>
+            O primeiro passo do treinamento é o <strong>Listen & Read</strong>. O grande erro da maioria das pessoas é ler com os olhos enquanto o ouvido desliga e transforma a fala em ruído de fundo.
+          </p>
+          <p>
+            Na Magic Story, você escuta a narrativa enquanto passa os olhos pelo texto, não para checar se entendeu a gramática, mas para <strong>conectar o som real das palavras à sua representação escrita</strong>. Palavras como <em>"federal government"</em> parecem idênticas ao português no papel, mas têm uma melodia e fonética completamente diferentes quando faladas no inglês da vida real.
+          </p>
+
+          <h2>4. Atividade 2: Vocabulary Practice (Dissecação de Chunks em Contexto)</h2>
+          <p>
+            No segundo momento da aula, dissecamos as estruturas reais que aparecem na narrativa da Grazi:
+          </p>
+          
+          <div class="my-6 p-5 sm:p-6 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-4 shadow-2xs">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 uppercase tracking-wide border border-amber-500/40 shadow-2xs">
+              <i data-lucide="book-open" class="w-3.5 h-3.5 text-slate-950"></i> Análise de Chunks e Vocabulário da Aula
+            </span>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1 text-xs">
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+                <span class="font-extrabold text-slate-900 text-[11px] block">📌 "A 45-year-old woman"</span>
+                <p class="text-slate-600">Quando a idade funciona como adjetivo antes do substantivo, volta para o singular: <em>a 45-year-old woman, a 2-year-old baby, a thousand-dollar car</em>.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+                <span class="font-extrabold text-slate-900 text-[11px] block">📌 "Waterfront & Near the Lake"</span>
+                <p class="text-slate-600"><em>Waterfront</em> é a orla/beira do lago ou calçadão em frente à água. A Grazi mora perto do lago com vista para a orla.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+                <span class="font-extrabold text-slate-900 text-[11px] block">📌 "Outgoing vs. Shy (Paradoxo)"</span>
+                <p class="text-slate-600"><em>Outgoing</em> é extrovertida e comunicativa; <em>Shy</em> é tímida. A conjunção <em>Although</em> ("embora/apesar de") marca esse contraste de personalidade.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+                <span class="font-extrabold text-slate-900 text-[11px] block">📌 "Stand out & Get embarrassed"</span>
+                <p class="text-slate-600"><em>Stand out</em> é se destacar, chamar atenção ou aparecer. <em>Get embarrassed</em> é ficar com vergonha ou encabulada facilmente.</p>
+              </div>
+            </div>
           </div>
 
-          <h2>3. Atividade 2: Vocabulário e Expressões em Contexto Real</h2>
+          <h2>5. Atividade 3: Listen & Answer (Treino de Reflexo Imediato)</h2>
           <p>
-            Durante a aula, o Professor Leo disseca as palavras e expressões centrais que surgem na história da Grazi. O diferencial pedagógico é que o vocabulário não é ensinado como uma lista solta de dicionário, mas sim como <strong>blocos de sentido (chunks)</strong> dentro da história.
+            O <strong>Listen & Answer</strong> é a virada de chave para parar de traduzir mentalmente. O professor faz perguntas diretas sobre a história da Grazi e você responde na hora com o que lembrar:
           </p>
-          <p>
-            Quando você aprende que uma expressão faz parte de uma situação real que a Grazi viveu, o seu cérebro cria uma âncora emocional e situacional. Você não precisa pensar: <em>"qual é o tempo verbal desta frase?"</em>. Você simplesmente lembra da história da Grazi e a expressão vem pronta na sua mente.
-          </p>
-
-          <div class="my-6 p-5 sm:p-6 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-3.5 shadow-2xs">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 uppercase tracking-wide border border-amber-500/40 shadow-2xs">
-                <i data-lucide="book-open" class="w-3.5 h-3.5 text-slate-950"></i> Análise de Pronúncia e Sons da História
-              </span>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-              <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
-                <span class="text-slate-600 font-extrabold uppercase text-[11px] block tracking-wide">📖 O Inglês Escrito (No Papel):</span>
-                <p class="font-mono text-slate-900 font-extrabold text-sm sm:text-base leading-snug">"She wanted to talk to them yesterday"</p>
-                <p class="text-xs text-slate-600 leading-relaxed pt-0.5">Palavras lidas de forma separada, pausada e analítica.</p>
-              </div>
-              <div class="p-4 rounded-xl bg-amber-100/90 border border-amber-300 shadow-2xs space-y-1.5">
-                <span class="text-amber-950 font-extrabold uppercase text-[11px] block tracking-wide">🎧 O Inglês Falado na Magic Story:</span>
-                <p class="font-mono text-amber-950 font-black text-sm sm:text-base leading-snug">"She wanted to talk to 'em yesterday"</p>
-                <p class="text-xs text-amber-900 font-semibold leading-relaxed pt-0.5">Redução natural do 'them', conexão sonora fluida e ritmo espontâneo.</p>
-              </div>
-            </div>
-          </div>
-
-          <h2>4. Atividade 3: Listen & Answer — O Treino do Reflexo Imediato</h2>
-          <p>
-            O momento mais dinâmico e transformador da aula acontece na atividade de <strong>Listen & Answer</strong>. É aqui que o aluno destrava a fala e elimina de vez a tradução mental do português.
-          </p>
-          <p>
-            O Professor Leo faz perguntas rápidas em inglês sobre os acontecimentos da história da Grazi. Por exemplo:
-          </p>
-          <ul class="space-y-2 my-4 pl-4 list-disc text-slate-700 text-xs sm:text-sm">
-            <li><em>"Did Grazi want to learn English?"</em> &rarr; <strong>"Yes! She wanted to learn English!"</strong></li>
-            <li><em>"Was it easy for her in the beginning?"</em> &rarr; <strong>"No, it wasn't easy!"</strong></li>
-            <li><em>"What did she decide to do?"</em> &rarr; <strong>"She decided to practice every day!"</strong></li>
+          <ul class="space-y-2.5 my-4 pl-4 list-disc text-slate-700 text-xs sm:text-sm">
+            <li><strong>How old is Grazi?</strong> &rarr; <em>"45!"</em> ou <em>"She's 45 years old."</em></li>
+            <li><strong>Where is Grazi from?</strong> &rarr; <em>"From Brasília, the capital of Brazil."</em></li>
+            <li><strong>What does Grazi do?</strong> &rarr; <em>"She is a lawyer. She works for the federal government."</em> (Note que no dia a dia usamos <em>What does she do?</em> em vez de <em>What is her profession?</em>).</li>
+            <li><strong>Does she live in a house or an apartment?</strong> &rarr; <em>"A big house near the lake with a beautiful view to the waterfront."</em></li>
           </ul>
           <p>
-            Como as perguntas são feitas com uma pausa curta proposital, você é forçado a responder no reflexo imediato. Não dá tempo de pensar em português, conjugar o verbo no passado e montar a frase. A resposta sai como um reflexo automático da sua musculatura oral, exatamente como você responde no seu idioma nativo.
+            O objetivo não é um teste de memória; é treinar a velocidade de processamento auditivo e resposta oral. Se você responder <em>"Brasília"</em> e logo em seguida escutar <em>"Very good! She's from Brasília"</em>, o seu cérebro valida a resposta no reflexo.
           </p>
 
-          <h2>5. Por Que Essa Prática Funciona Onde as Escolas Tradicionais Falham</h2>
+          <h2>6. Look & Retell e Listen & Ask: O Desafio da Expressão Ativa</h2>
           <p>
-            Em mais de <strong>35 anos de sala de aula</strong>, o Professor Leonardo Leite comprovou que o estudante adulto não trava por falta de inteligência ou por vocabulário pequeno. Ele trava porque foi condicionado a pensar que falar inglês é um exercício de cálculo matemático.
+            Para fechar o ciclo de domínio, a aula avança para as atividades de produção ativa:
           </p>
-          <p>
-            Ao vivenciar a Magic Story da Grazi em 3 etapas integradas (<strong>Listen & Read &rarr; Vocabulário em Contexto &rarr; Listen & Answer</strong>), o seu cérebro completa o ciclo biológico de aquisição de linguagem:
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-5">
-            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-1.5">
-              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">1. Ouvido Treinado</span>
-              <p class="text-xs text-amber-950/90 leading-relaxed">Você reconhece os sons e as junções da fala real sem precisar de tradução simultânea.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5">
+            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-2">
+              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">🗣️ Look & Retell (Watch & Retell)</span>
+              <p class="text-xs text-amber-950/90 leading-relaxed">
+                Você reconta a história da Grazi com as suas próprias palavras apenas olhando para as ilustrações ou para o filme gerado com IA. Um aluno iniciante reconta em frases curtas (<em>"Grazi is 45. She is from Brasília. She is a lawyer."</em>); o avançado conecta com fluidez. O importante é se expressar sem decorar.
+              </p>
             </div>
-            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-1.5">
-              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">2. Memória Situacional</span>
-              <p class="text-xs text-amber-950/90 leading-relaxed">As frases ficam ancoradas nos acontecimentos da história da Grazi, fáceis de resgatar.</p>
-            </div>
-            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-1.5">
-              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">3. Fala no Reflexo</span>
-              <p class="text-xs text-amber-950/90 leading-relaxed">Com o Listen & Answer, você responde sem hesitação, com confiança e naturalidade.</p>
+            <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200 shadow-2xs space-y-2">
+              <span class="text-amber-900 font-extrabold uppercase text-[11px] block">❓ Listen & Ask (O Desafio de Perguntar)</span>
+              <p class="text-xs text-amber-950/90 leading-relaxed">
+                A atividade mais desafiadora: o professor dá uma afirmação falsa provocativa para você formular a pergunta correta na hora. Exemplo: <em>"Grazi is not from Ohio!"</em> &rarr; Pergunta imediata: <strong>"Where is she from?"</strong>. Ou: <em>"Grazi doesn't live in a small condo!"</em> &rarr; <strong>"Where does she live?"</strong>.
+              </p>
             </div>
           </div>
+
+          <h2>7. A Pronunciation Practice e o Filminho da Grazi</h2>
+          <p>
+            No final da aula, a técnica de <strong>Pronunciation Practice</strong> trabalha a musicalidade da frase de trás para frente em blocos rítmicos:
+          </p>
+          <p class="font-mono text-xs text-slate-800 bg-slate-100 p-3 rounded-xl border border-slate-200">
+            &bull; <em>"her life"</em><br>
+            &bull; <em>"change her life"</em><br>
+            &bull; <em>"woman who wants to change her life"</em><br>
+            &bull; <em>"45-year-old woman who wants to change her life"</em><br>
+            &bull; <em>"Graziella is a 45-year-old woman who wants to change her life."</em>
+          </p>
+          <p>
+            Ao assistir ao filminho animado da Grazi no encerramento, tudo o que você treinou se consolida na sua mente como uma experiência visual e auditiva inesquecível.
+          </p>
         `;
 
-        const goldenTip = "Você não precisa de 50 histórias diferentes para destravar o seu inglês. Você precisa vivenciar a mesma história — como a história da Grazi — até que cada pergunta e resposta saia da sua boca no reflexo imediato.";
+        const goldenTip = "Você não precisa de 50 regras de gramática para falar inglês. Você precisa vivenciar uma história como a da Grazi — escutando, respondendo no reflexo e recontando com as suas palavras — até que cada frase saia da sua boca com a mesma naturalidade do seu português.";
+
         return { title, subtitle, bannerTitle, keyTakeaways, bodyHtml, goldenTip, category: 'Magic Stories' };
       }
 
