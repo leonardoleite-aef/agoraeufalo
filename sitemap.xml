@@ -85,6 +85,14 @@
     <priority>0.80</priority>
   </url>
 
+  <!-- 11. Artigo: Magic Story 01 - A História da Grazi -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/magic-story-01-historia-da-grazi-treino-reflexo.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
   <!-- 11. Página Oficial de Contato Direto -->
   <url>
     <loc>https://agoraeufalo.com.br/contato.html</loc>
