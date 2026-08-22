@@ -93,6 +93,14 @@
     <priority>0.85</priority>
   </url>
 
+  <!-- 12. Artigo: Magic Story 02 - A História do Tom -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/magic-story-02-historia-do-tom-present-perfect.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
   <!-- 11. Página Oficial de Contato Direto -->
   <url>
     <loc>https://agoraeufalo.com.br/contato.html</loc>
