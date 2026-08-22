@@ -385,8 +385,38 @@
     let currentFilter = 'all';
     let currentModalPost = null;
 
-    // SEED INICIAL: O ARTIGO OFICIAL DA GRAZI + RASCUNHO
+    // SEED INICIAL: ARTIGOS OFICIAIS (GRAZI + TOM)
     const INITIAL_LIBRARY = [
+      {
+        id: 'post-tom-02',
+        title: 'Magic Story 02: O Melhor Jeito de Treinar Inglês e o Segredo do Present Perfect Sem Regras Chatas',
+        subtitle: 'Como a história do Tom — o marido workaholic da Grazi — ensina a falar estruturas como "They\'ve been married for 18 years" e "How long have you been an engineer?" no reflexo imediato.',
+        category: 'Magic Stories',
+        status: 'published',
+        readTime: '8 min de leitura',
+        date: '22 de Agosto de 2026',
+        slug: 'magic-story-02-historia-do-tom-present-perfect',
+        youtubeUrl: 'https://www.youtube.com/watch?v=umjf4UyqgR4',
+        youtubeId: 'umjf4UyqgR4',
+        imageUrl: 'https://img.youtube.com/vi/umjf4UyqgR4/maxresdefault.jpg',
+        keyTakeaways: [
+          'O Personagem do Tom: Um administrador de empresas de 50 anos de Cleveland, Ohio, que é CEO de uma multinacional farmacêutica em Brasília.',
+          'O Drama do Workaholic: Um cara super legal e easy-going que tenta ser o melhor pai do mundo, mas viaja todo mês para os EUA e quase não vê as filhas.',
+          'A Estrutura de Ouro ("Have Been for..."): Desmistificando o Present Perfect através de frases da vida real ("They\'ve been married for 18 years" / "I\'ve been a teacher for 30 years").',
+          'Treino Completo de Ativação Oral: A dinâmica prática de Listen & Read, Vocabulary, Listen & Answer, Look & Retell e Listen & Ask.'
+        ],
+        bodyHtml: `
+          <h2>1. Por Que a Repetição da Experiência é o Único Caminho Para a Fluência</h2>
+          <p>Se você não domina o idioma inglês, você não sabe como o cérebro adulto adquire uma nova língua. O <strong>Método Magic Stories</strong> funciona no sentido oposto das escolas tradicionais: você entra dentro de um universo narrativo.</p>
+          <h2>2. A História do Tom (Tom, The Workaholic Executive)</h2>
+          <p>Tom is a 50-year-old business administrator from Cleveland, Ohio. He is the CEO of a multinational pharmaceutical company based in Brasília. Tom is a great guy, very friendly and easy-going, but Tom is a workaholic.</p>
+          <h2>3. A Estrutura de Ouro: Dominando "They Have Been Married" Sem Regras</h2>
+          <p>Em inglês, quando uma ação começou no passado e continua no presente, usamos <em>"have been... for"</em>: <strong>"They've been married for 18 years"</strong> / <strong>"How long have you been an engineer?"</strong>.</p>
+          <h2>4. Treino de Ativação Oral e Reflexo</h2>
+          <p>Exercícios de Listen & Answer rápido, recontar no Look & Retell e o desafio de formular perguntas no Listen & Ask.</p>
+        `,
+        goldenTip: 'Você não aprende Present Perfect decorando tabela de particípio no caderno. Você aprende vivenciando frases como "They\'ve been married for 18 years" até o som virar natural no seu ouvido e você responder "I\'ve been an engineer for 10 years" sem precisar parar para conjugar.'
+      },
       {
         id: 'post-grazi-01',
         title: 'Magic Story 01: A História da Grazi e o Passo a Passo Para Destravar o Inglês no Reflexo',
@@ -407,36 +437,39 @@
         ],
         bodyHtml: `
           <h2>1. O Segredo das Magic Stories: Repetir a Experiência vs. Repetir Feito Papagaio</h2>
-          <p>Depois de <strong>mais de 35 anos utilizando o idioma inglês diariamente e mais de 30 anos lecionando</strong>, eu tomei uma decisão: mostrar a verdade sobre como o cérebro humano adquire fluência. Inglês não é matéria de escola para você ficar decorando regras no papel para passar em prova; inglês é uma experiência viva.</p>
-          <p>O inglês da vida real não escolhe quem está ouvindo. Quando um nativo fala na rua, no aeroporto ou em uma reunião, ele não pergunta se você é iniciante, intermediário ou avançado. O que muda é a sua <strong>experiência com o conteúdo</strong>. E para atingir um nível excelente de escuta e fala, o segredo é a repetição intencional da mesma história.</p>
-          <p>Não é repetir palavras soltas feito um papagaio sem entender nada. É <strong>repetir a experiência</strong> — exatamente como quando você assiste várias vezes ao seu filme predileto ou escuta a sua música favorita. Quanto mais vezes você se expõe à mesma história, às mesmas frases e à mesma melodia, mais o seu ouvido decodifica os padrões sonoros, até que a fala surja como consequência direta do que você escutou.</p>
-          <blockquote>"Tudo de novo que você aprende hoje sobre inglês, você vai esquecer. A partir do momento em que você aceita isso, a sua vida muda e você fica livre: você entende que precisa revisitar e vivenciar a mesma história de novo, de novo e de novo até virar reflexo."</blockquote>
+          <p>Depois de <strong>mais de 35 anos utilizando o idioma inglês diariamente e mais de 30 anos lecionando</strong>, eu tomei uma decisão: mostrar a verdade sobre como o cérebro humano adquire fluência.</p>
           <h2>2. A História da Grazi (Graziella Wants to Change Her Life)</h2>
-          <p>Toda Magic Story começa pelo contexto: não adianta ouvir uma história sem saber previamente do que ela se trata. A <strong>Magic Story #01</strong> apresenta a vida de Graziela:</p>
-          <div class="my-5 p-5 rounded-2xl bg-amber-50/70 border-2 border-amber-200/90 space-y-3 shadow-2xs">
-            <h4 class="text-xs font-black uppercase tracking-wide text-amber-900 flex items-center gap-1.5"><i data-lucide="file-text" class="w-4 h-4 text-amber-700"></i> O Texto Integral da História da Grazi:</h4>
-            <p class="font-mono text-xs sm:text-sm text-slate-800 leading-relaxed italic bg-white p-4 rounded-xl border border-slate-200">"Graziella is a 45-year-old woman who wants to change her life. She lives in Brasília, the capital of Brazil, with her husband and two kids. She's a lawyer and she works for the federal government. She lives in a big house near the lake with a beautiful view to the waterfront. She's a very friendly and outgoing person. She loves talking to people although she sees herself as a very shy woman. Grazi doesn't like to stand out and she gets embarrassed very easily. Grazi loves outdoor activities like biking, hiking, swimming and taking walks with her daughters Anna and Flavia. Grazi is crazy about her daughters. Every day she gets up early about 7:00, goes running in the park for about 50 minutes. Then she gets back home, jumps in the pool, takes a shower, has some breakfast, and goes to work at 9:00. She works until 5:00 PM. In the evening, she sits in the backyard, puts her headphones on, and listens to English lessons on her iPad. The question, my friend, is: why does Grazi want to change her life?"</p>
-          </div>
-          <h2>3. Atividade 1: Listen & Read (Escutar e Acompanhar)</h2>
-          <p>O primeiro passo do treinamento é o <strong>Listen & Read</strong>. O erro clássico de quem estuda com legenda é deixar os olhos dominarem enquanto o ouvido se desliga e transforma a fala em ruído. Na Magic Story, o objetivo é ler e escutar simultaneamente para <strong>conectar o som real à palavra escrita</strong>.</p>
-          <h2>4. Atividade 2: Vocabulary Practice (Dissecação dos Chunks da Aula)</h2>
-          <p>No segundo momento, analisamos as estruturas reais da história: <em>"a 45-year-old woman"</em>, <em>"waterfront"</em>, <em>"outgoing vs shy"</em>, <em>"stand out"</em> e <em>"get embarrassed"</em>.</p>
-          <h2>5. Atividade 3: Listen & Answer (O Treino do Reflexo Imediato)</h2>
-          <p>O <strong>Listen & Answer</strong> é onde quebramos a dependência da tradução mental. O professor faz perguntas diretas em inglês sobre a Grazi (<em>How old is Grazi?, Where is she from?, What does she do?</em>) e o aluno responde imediatamente no reflexo.</p>
+          <p>"Graziella is a 45-year-old woman who wants to change her life. She lives in Brasília, the capital of Brazil, with her husband and two kids. She's a lawyer and she works for the federal government."</p>
+          <h2>3. Ativação Oral: Listen & Answer</h2>
+          <p>O <strong>Listen & Answer</strong> é onde quebramos a dependência da tradução mental respondendo no reflexo.</p>
         `,
         goldenTip: 'Você não precisa de 50 regras de gramática para destravar o seu inglês. Você precisa vivenciar a mesma história — como a história da Grazi — escutando, respondendo no reflexo e recontando com as suas palavras até que cada frase saia da sua boca com a mesma naturalidade do seu português.'
       }
     ];
 
     function getLibrary() {
-      const stored = localStorage.getItem('aef_blog_library_v2');
+      const stored = localStorage.getItem('aef_blog_library_v3');
       if (!stored) {
-        localStorage.setItem('aef_blog_library_v2', JSON.stringify(INITIAL_LIBRARY));
+        localStorage.setItem('aef_blog_library_v3', JSON.stringify(INITIAL_LIBRARY));
         return INITIAL_LIBRARY;
       }
       try {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        // Auto-merge: garante que qualquer post novo de INITIAL_LIBRARY seja adicionado
+        let updated = false;
+        INITIAL_LIBRARY.forEach(initialPost => {
+          const exists = parsed.some(p => p.id === initialPost.id || p.slug === initialPost.slug);
+          if (!exists) {
+            parsed.unshift(initialPost);
+            updated = true;
+          }
+        });
+        if (updated) {
+          localStorage.setItem('aef_blog_library_v3', JSON.stringify(parsed));
+        }
+        return parsed;
       } catch (e) {
+        localStorage.setItem('aef_blog_library_v3', JSON.stringify(INITIAL_LIBRARY));
         return INITIAL_LIBRARY;
       }
     }
