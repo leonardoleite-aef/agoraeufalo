@@ -784,10 +784,12 @@
       }, 3000);
     }
 
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', () => {
+    // Inicialização imediata e segura
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderLibrary);
+    } else {
       renderLibrary();
-    });
+    }
   </script>
 </body>
 </html>
