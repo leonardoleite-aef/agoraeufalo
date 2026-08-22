@@ -37,7 +37,7 @@ Sempre que o usuário enviar um prompt baseado no **Template Mestre do Google Do
 2. **Sincronização no Feed Principal do Blog:**
    - Adicionar o novo post no topo do array `defaultPublishedSeed` em `blog/index.html`.
 3. **Sincronização na Biblioteca do Blog Panel:**
-   - Adicionar o objeto do post no array `INITIAL_LIBRARY` em `blog-panel.html`.
+   - Adicionar o objeto do post com o **texto integral completo (`bodyHtml`)**, takeaways, vídeo e golden tip no array `INITIAL_LIBRARY` em `blog-panel.html`.
 4. **Geração da Apostila em PDF Diagramada:**
    - Compilar o PDF com padrão editorial A4, logo AgoraEuFalo, caixas claras de chunks e CTA final do Projeto 2026.
    - Salvar na pasta `Material-PDF/[slug].pdf`.
