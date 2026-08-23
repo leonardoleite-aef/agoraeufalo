@@ -40,6 +40,10 @@ Sempre que o usuário enviar um prompt baseado no **Template Mestre do Google Do
    - Adicionar o objeto do post com o **texto integral completo (`bodyHtml`)**, takeaways, vídeo e golden tip no array `INITIAL_LIBRARY` em `blog-panel.html`.
 4. **Geração da Apostila em PDF Diagramada:**
    - Compilar o PDF com padrão editorial A4, logo AgoraEuFalo, caixas claras de chunks e CTA final do Projeto 2026.
+   - **Controle Rigoroso de Quebras de Página (Zero Títulos/Blocos Órfãos):**
+     - Aplicar `break-after: avoid;` / `page-break-after: avoid;` em todos os cabeçalhos (`h1, h2, h3, h4`) para que nenhum título fique isolado no rodapé da página.
+     - Aplicar `break-inside: avoid;` / `page-break-inside: avoid;` em todos os boxes de história, caixas de chunks, blocos de exercícios, tabelas e no container do CTA final.
+     - Configurar `orphans: 3; widows: 3;` nos parágrafos e inserir quebras explícitas (`page-break-before: always;`) antes de novas seções principais se necessário, mantendo o fluxo harmônico e profissional.
    - Salvar na pasta `Material-PDF/[slug].pdf`.
 5. **Registro de SEO & Sitemap:**
    - Adicionar a nova URL no arquivo `sitemap.xml`.
