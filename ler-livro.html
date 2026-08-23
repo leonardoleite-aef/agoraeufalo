@@ -459,59 +459,12 @@
       </h3>
       <p>Assistir a filmes em inglês com legendas em português só serve para você entender o filme. Os seus olhos assumem o controle lendo em português e seus ouvidos se desligam dos sons em inglês. No Capítulo 4, você aprenderá o <strong>Protocolo dos 11 Passos</strong> para transformar qualquer cena de filme em um poderoso treino de fluência.</p>
 
-      <!-- Dica de Ouro -->
-      <div class="p-5 rounded-2xl bg-amber-500/10 border-l-4 border-amber-500 font-sans text-xs sm:text-sm font-bold">
-        💡 <strong>Aprenda:</strong> Pare de cavar no lugar errado. O primeiro passo para destravar o seu inglês é eliminar esses 5 erros da sua rotina a partir de hoje e focar nas ações contra-intuitivas do próximo capítulo.
-      </div>
-
     </section>
 
     <!-- ========================================================================= -->
-    <!-- GATE DE DESBLOQUEIO / PAYWALL SUAVE (VISÍVEL APENAS SE BLOQUEADO)          -->
+    <!-- 3. CAPÍTULO 2: AS LEIS CONTRA-INTUITIVAS                                   -->
     <!-- ========================================================================= -->
-    <div id="unlock-gate" class="hidden p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-900 to-brand-navy border-2 border-amber-400/60 shadow-2xl text-white font-sans text-center space-y-6 relative overflow-hidden">
-      <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 mx-auto">
-        <i data-lucide="sparkles" class="w-8 h-8"></i>
-      </div>
-      <div class="space-y-2 max-w-lg mx-auto">
-        <h3 class="text-2xl font-black text-white">Gostou do início da leitura?</h3>
-        <p class="text-xs sm:text-sm text-slate-300">
-          Digite seu nome e e-mail abaixo para <strong>desbloquear os Capítulos 2, 3, 4 (Filmes & Séries), 5 e o Manifesto</strong> imediatamente no navegador e receber a versão diagramada em PDF!
-        </p>
-      </div>
-
-      <form id="inline-unlock-form" action="https://handler.send.hotmart.com/subscription/lEunEEB?hotfeature=53" method="POST" class="max-w-md mx-auto space-y-3">
-        <input 
-          type="text" 
-          name="name" 
-          required 
-          placeholder="Seu primeiro nome" 
-          class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
-        />
-        <input 
-          type="email" 
-          name="email" 
-          required 
-          placeholder="Seu melhor e-mail" 
-          class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
-        />
-        <button 
-          type="submit" 
-          class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
-        >
-          DESBLOQUEAR LEITOR COMPLETO AGORA ➔
-        </button>
-        <p class="text-[11px] text-slate-400">100% Gratuito • Acesso Imediato • Sem Spam</p>
-      </form>
-    </div>
-
-    <!-- WRAPPER DO RESTANTE DO LIVRO (PODE SER BLURREADO SE BLOQUEADO) -->
-    <div id="gated-content" class="space-y-16 sm:space-y-24">
-
-      <!-- ========================================================================= -->
-      <!-- 3. CAPÍTULO 2: AS LEIS CONTRA-INTUITIVAS                                   -->
-      <!-- ========================================================================= -->
-      <section id="cap2" class="chapter-section space-y-6">
+    <section id="cap2" class="chapter-section space-y-6">
         
         <div class="space-y-1 font-sans">
           <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Capítulo 02</span>
@@ -898,9 +851,77 @@
 
       </section>
 
-    </div>
-
   </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL DE BOAS-VINDAS / ACESSO 100% GRATUITO (NOVOS VISITANTES)            -->
+  <!-- ========================================================================= -->
+  <div id="welcome-gate-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl border-2 border-amber-400/60 text-center font-sans relative overflow-hidden">
+      
+      <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-500 border border-amber-400/30 flex items-center justify-center mx-auto shadow-sm">
+        <i data-lucide="book-open-check" class="w-7 h-7"></i>
+      </div>
+
+      <div class="space-y-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-black uppercase">
+          📖 Leitor Digital Oficial • 100% Gratuito
+        </span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004]">
+          Acesse o Livro Completo
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 [data-theme='sepia']:text-[#6D5130] leading-relaxed">
+          Cadastre seu nome e melhor e-mail abaixo para liberar a leitura completa no navegador agora mesmo e receber o PDF diagramado.
+        </p>
+      </div>
+
+      <form 
+        id="welcome-unlock-form" 
+        action="https://handler.send.hotmart.com/subscription/lEunEEB?hotfeature=53" 
+        method="POST" 
+        class="space-y-3.5 text-left"
+      >
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 [data-theme='sepia']:text-[#3A2712] mb-1">
+            Seu Primeiro Nome:
+          </label>
+          <input 
+            type="text" 
+            name="name" 
+            required 
+            placeholder="Ex: Leonardo" 
+            class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 [data-theme='sepia']:bg-[#EFE0BD] border border-slate-300 dark:border-slate-700 [data-theme='sepia']:border-[#DCBE84] text-sm font-medium text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-xs"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 [data-theme='sepia']:text-[#3A2712] mb-1">
+            Seu Melhor E-mail:
+          </label>
+          <input 
+            type="email" 
+            name="email" 
+            required 
+            placeholder="seu.email@exemplo.com" 
+            class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 [data-theme='sepia']:bg-[#EFE0BD] border border-slate-300 dark:border-slate-700 [data-theme='sepia']:border-[#DCBE84] text-sm font-medium text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all shadow-xs"
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg cursor-pointer"
+        >
+          LIBERAR LEITURA IMEDIATA ➔
+        </button>
+
+        <div class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 text-center pt-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
+          <span>100% Gratuito • Zero Spam • Acesso Instantâneo</span>
+        </div>
+      </form>
+
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- MODAL FLUTUANTE DE COMPARTILHAMENTO VIRAL                                 -->
@@ -1040,33 +1061,34 @@
       });
     });
 
-    // 7. Lógica de Acesso Autenticado / Paywall Suave
+    // 7. Lógica de Acesso Autenticado / Modal de Boas-Vindas Inicial
     const urlParams = new URLSearchParams(window.location.search);
     const isUnlockedParam = urlParams.get('autenticado') === 'true' || urlParams.get('email');
     const isUnlockedStorage = localStorage.getItem('aef_ebook_unlocked') === 'true';
 
-    const gatedContent = document.getElementById('gated-content');
-    const unlockGate = document.getElementById('unlock-gate');
+    const welcomeModal = document.getElementById('welcome-gate-modal');
 
     if (isUnlockedParam || isUnlockedStorage) {
-      // Acesso liberado
-      gatedContent.classList.remove('gated-blur');
-      unlockGate.classList.add('hidden');
+      // Usuário já cadastrado: Liberado sem modal
+      welcomeModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
       localStorage.setItem('aef_ebook_unlocked', 'true');
     } else {
-      // Bloqueado parcialmente para novos visitantes
-      gatedContent.classList.add('gated-blur');
-      unlockGate.classList.remove('hidden');
+      // Visitante Novo: Abrir modal de cadastro imediato
+      welcomeModal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
     }
 
-    // Desbloqueio Inline
-    document.getElementById('inline-unlock-form').addEventListener('submit', function() {
+    // Submissão do Modal Inicial
+    document.getElementById('welcome-unlock-form').addEventListener('submit', function() {
       const email = this.querySelector('input[name="email"]').value;
+      const name = this.querySelector('input[name="name"]').value;
       if (email) {
         localStorage.setItem('aef_ebook_unlocked', 'true');
         localStorage.setItem('aef_user_email', email.trim());
-        gatedContent.classList.remove('gated-blur');
-        unlockGate.classList.add('hidden');
+        if (name) localStorage.setItem('aef_user_name', name.trim());
+        welcomeModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
       }
     });
   </script>
