@@ -40,11 +40,11 @@ Sempre que o usuário enviar um prompt baseado no **Template Mestre do Google Do
    - Adicionar o objeto do post com o **texto integral completo (`bodyHtml`)**, takeaways, vídeo e golden tip no array `INITIAL_LIBRARY` em `blog-panel.html`.
 4. **Geração da Apostila em PDF Diagramada:**
    - Compilar o PDF com padrão editorial A4, logo AgoraEuFalo, caixas claras de chunks e CTA final do Projeto 2026.
-    - **Controle Rigoroso de Diagramação e Quebras de Página:**
-      - Aplicar `break-after: avoid;` / `page-break-after: avoid;` em todos os cabeçalhos (`h1, h2, h3, h4`) para que nenhum título fique isolado no rodapé da página.
-      - Aplicar `break-inside: avoid;` / `page-break-inside: avoid;` em todos os boxes de história, caixas de chunks, blocos de exercícios, tabelas e no container do CTA final.
-      - **Zero Buracos em Branco:** Nunca inserir quebras manuais forçadas que deixem metade da folha vazia; manter o fluxo de texto contínuo, denso e harmonioso entre as páginas.
-      - Configurar numeração de página no rodapé (`Página X de Y`) e margens elegantes (12mm).
+    - **Controle Rigoroso de Diagramação e Tipografia:**
+      - **Fontes Amplas e Confortáveis:** Manter corpo de texto em `10.5pt`, entrelinha `1.6`, títulos em `20pt`/`13.5pt` e caixas em `9.5pt`–`10pt`. Nunca encolher a fonte para caber em menos páginas; permitir que o conteúdo se espalhe naturalmente pelas páginas necessárias.
+      - **Proteção Anti-Órfão:** Aplicar `break-after: avoid;` / `page-break-after: avoid;` em todos os cabeçalhos (`h1, h2, h3, h4`).
+      - **Proteção Anti-Corte:** Aplicar `break-inside: avoid;` / `page-break-inside: avoid;` em caixas de história, chunks, exercícios e CTA do Projeto 2026.
+      - Configurar numeração de página no rodapé (`Página X de Y`) e margens elegantes (15mm).
    - Salvar na pasta `Material-PDF/[slug].pdf`.
 5. **Registro de SEO & Sitemap:**
    - Adicionar a nova URL no arquivo `sitemap.xml`.
