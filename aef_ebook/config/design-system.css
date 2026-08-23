@@ -1,0 +1,419 @@
+/* ==========================================================================
+   AGORAEUFALO EBOOK DESIGN SYSTEM (EDICAO 2026)
+   Diretrizes Tipograficas e Diagramacao Editorial para A4 / PDF
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+:root {
+  --color-navy-dark: #0A192F;
+  --color-navy-light: #1E293B;
+  --color-gold: #D97706;
+  --color-gold-light: #F59E0B;
+  --color-amber-bg: #FFFBEB;
+  --color-amber-border: #FCD34D;
+  --color-slate-text: #1E293B;
+  --color-slate-muted: #64748B;
+  --color-emerald: #059669;
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 18mm 16mm 20mm 16mm;
+  @bottom-right {
+    content: counter(page);
+    font-family: var(--font-main);
+    font-size: 8.5pt;
+    color: #94A3B8;
+  }
+  @bottom-left {
+    content: "AgoraEuFalo • O Milagre que Faz Falar Inglês • Edição 2026";
+    font-family: var(--font-main);
+    font-size: 8.5pt;
+    color: #94A3B8;
+  }
+}
+
+@page :first {
+  margin: 0;
+  @bottom-right { content: ""; }
+  @bottom-left { content: ""; }
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: 10.5pt;
+  line-height: 1.65;
+  color: var(--color-slate-text);
+  background-color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+  text-rendering: optimizeLegibility;
+}
+
+/* Protecao Anti-Orfao e Anti-Corte */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-navy-dark);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  break-after: avoid;
+  page-break-after: avoid;
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+}
+
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Capa Editorial */
+.cover-page {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0A192F 0%, #0D2040 60%, #060D1A 100%);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40mm 25mm 30mm 25mm;
+  page-break-after: always;
+  break-after: page;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(217, 119, 6, 0.15);
+  border: 1px solid #D97706;
+  color: #FBBF24;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 25px;
+}
+
+.cover-title {
+  font-size: 34pt;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 15px 0;
+  letter-spacing: -0.03em;
+}
+
+.cover-title span {
+  color: #F59E0B;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  line-height: 1.45;
+  color: #E2E8F0;
+  font-weight: 400;
+  max-width: 90%;
+  margin-bottom: 30px;
+}
+
+.cover-author-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cover-author-name {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.cover-author-desc {
+  font-size: 9.5pt;
+  color: #94A3B8;
+}
+
+/* Titulos de Capitulo */
+.chapter-header {
+  margin-top: 10px;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #E2E8F0;
+}
+
+.chapter-number {
+  font-size: 9pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-gold);
+  margin-bottom: 4px;
+}
+
+.chapter-title {
+  font-size: 20pt;
+  line-height: 1.25;
+  color: var(--color-navy-dark);
+  margin: 0;
+}
+
+/* Caixas Pedagogicas de Alto Contraste (Regra Permanente AEF) */
+.box-didactic {
+  background-color: var(--color-amber-bg);
+  border: 1.5px solid var(--color-amber-border);
+  border-left: 5px solid var(--color-gold);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.box-didactic-title {
+  font-size: 10.5pt;
+  font-weight: 800;
+  color: #78350F;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.box-golden-tip {
+  background-color: #FEF3C7;
+  border: 2px solid #F59E0B;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 18px 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.box-golden-tip .tip-badge {
+  display: inline-block;
+  background-color: #D97706;
+  color: #FFFFFF;
+  font-size: 8pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+/* Card CTA Projeto AEF 2026 */
+.cta-projeto-2026 {
+  background: linear-gradient(135deg, #0A192F 0%, #0D2040 100%);
+  color: #FFFFFF;
+  border: 2px solid #D97706;
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin: 24px 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.cta-projeto-2026 h3 {
+  color: #FFFFFF;
+  margin-top: 0;
+  font-size: 14pt;
+}
+
+.cta-projeto-2026 p {
+  color: #CBD5E1;
+  font-size: 9.5pt;
+  line-height: 1.55;
+}
+
+.cta-projeto-2026 .benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 9.5pt;
+  color: #F1F5F9;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: #D97706;
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 10pt;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 12px;
+}
+
+/* Tabelas e Chunks Grids */
+table.chunks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+table.chunks-table th {
+  background-color: #F8FAFC;
+  color: var(--color-navy-dark);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid #CBD5E1;
+}
+
+table.chunks-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #E2E8F0;
+  vertical-align: top;
+}
+
+table.chunks-table tr:nth-child(even) {
+  background-color: #F8FAFC;
+}
+
+/* Elementos de Destaque */
+.highlight-quote {
+  font-size: 11.5pt;
+  font-style: italic;
+  color: var(--color-navy-dark);
+  border-left: 3px solid var(--color-gold);
+  padding-left: 16px;
+  margin: 18px 0;
+  line-height: 1.6;
+}
+
+.step-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-gold);
+  color: #FFFFFF;
+  border-radius: 50%;
+  font-size: 9pt;
+  font-weight: 800;
+  margin-right: 8px;
+}
+
+/* Infografico do Protocolo dos 11 Passos */
+.infographic-wrapper {
+  margin: 20px 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.phase-container {
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9.5pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.phase-badge {
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 7.5pt;
+  font-weight: 800;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.step-item {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.step-item-num {
+  font-size: 8pt;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.step-item-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #0A192F;
+  margin-bottom: 3px;
+}
+
+.step-item-desc {
+  font-size: 8.5pt;
+  color: #475569;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Cores das Fases */
+.phase-1 { background-color: #F8FAFC; border: 1.5px solid #CBD5E1; }
+.phase-1 .phase-badge { background-color: #0A192F; }
+.phase-1 .phase-header { color: #0A192F; }
+.phase-1 .step-item-num { color: #0A192F; }
+
+.phase-2 { background-color: #FFFBEB; border: 1.5px solid #FCD34D; }
+.phase-2 .phase-badge { background-color: #D97706; }
+.phase-2 .phase-header { color: #92400E; }
+.phase-2 .step-item-num { color: #D97706; }
+
+.phase-3 { background-color: #ECFDF5; border: 1.5px solid #A7F3D0; }
+.phase-3 .phase-badge { background-color: #059669; }
+.phase-3 .phase-header { color: #065F46; }
+.phase-3 .step-item-num { color: #059669; }
+
+.phase-4 { background-color: #EEF2FF; border: 1.5px solid #C7D2FE; }
+.phase-4 .phase-badge { background-color: #4F46E5; }
+.phase-4 .phase-header { color: #3730A3; }
+.phase-4 .step-item-num { color: #4F46E5; }

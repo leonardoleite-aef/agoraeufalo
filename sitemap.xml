@@ -24,9 +24,21 @@
   <!-- 3. O Guia Definitivo do Método Magic Stories (Artigo Flagship / Pilar de Conteúdo) -->
   <url>
     <loc>https://agoraeufalo.com.br/guia-magic-stories.html</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
+  </url>
+
+  <!-- 4. Livro Digital Oficial: Agora Eu Falo Inglês! (E-book / Captura) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/ebook.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://agoraeufalo.com.br/assets/images/og-image.jpg</image:loc>
+      <image:title>Livro Agora Eu Falo Inglês - Professor Leonardo Leite</image:title>
+    </image:image>
   </url>
 
   <!-- 4. Portal Oficial / Vitrine de Cursos (Alias) -->
