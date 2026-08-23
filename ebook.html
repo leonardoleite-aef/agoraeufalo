@@ -356,11 +356,13 @@
               </div>
 
               <!-- ================================================================= -->
-              <!-- FORMULÁRIO DE CAPTURA HOTMART SEND INTEGRADO                     -->
+              <!-- FORMULÁRIO DE CAPTURA HOTMART SEND INTEGRADO (J2uGWne)            -->
               <!-- ================================================================= -->
               <form 
-                action="https://handler.send.hotmart.com/subscription/lEunEEB?hotfeature=53" 
+                action="https://handler.send.hotmart.com/subscription/J2uGWne?hotfeature=53" 
                 method="POST" 
+                klicksend-form-id="J2uGWne"
+                autocomplete="off"
                 class="space-y-4"
                 id="ebook-lead-form"
               >
@@ -374,8 +376,9 @@
                     <input 
                       type="text" 
                       id="lead_name" 
-                      name="name" 
+                      name="first_name" 
                       required 
+                      autocomplete="off"
                       placeholder="Ex: Leonardo" 
                       class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all shadow-sm"
                     />
@@ -394,15 +397,22 @@
                       id="lead_email" 
                       name="email" 
                       required 
+                      autocomplete="off"
                       placeholder="seu.email@exemplo.com" 
                       class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all shadow-sm"
                     />
                   </div>
                 </div>
 
+                <!-- Campo Honeypot Anti-Spam Hotmart Send -->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                  <input type="text" autocomplete="new-password" name="b_J2uGWne" tabindex="-1" value="">
+                </div>
+
                 <!-- Botão de Envio / CTA -->
                 <button 
                   type="submit" 
+                  klicksend-form-submit-id="J2uGWne"
                   class="btn-cta-gold w-full py-3.5 px-6 rounded-xl font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg cursor-pointer active:scale-[0.98] transition-all"
                 >
                   <i data-lucide="download" class="w-5 h-5"></i>
@@ -888,16 +898,19 @@
       <!-- Formulário Simplificado de Rodapé -->
       <div class="max-w-xl mx-auto bg-slate-900/90 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl">
         <form 
-          action="https://handler.send.hotmart.com/subscription/lEunEEB?hotfeature=53" 
+          action="https://handler.send.hotmart.com/subscription/J2uGWne?hotfeature=53" 
           method="POST" 
+          klicksend-form-id="J2uGWne"
+          autocomplete="off"
           class="space-y-4 text-left"
         >
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1.5">Seu Primeiro Nome:</label>
             <input 
               type="text" 
-              name="name" 
+              name="first_name" 
               required 
+              autocomplete="off"
               placeholder="Ex: Leonardo" 
               class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             />
@@ -909,13 +922,20 @@
               type="email" 
               name="email" 
               required 
+              autocomplete="off"
               placeholder="seu.email@exemplo.com" 
               class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             />
           </div>
 
+          <!-- Campo Honeypot Anti-Spam Hotmart Send -->
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" autocomplete="new-password" name="b_J2uGWne" tabindex="-1" value="">
+          </div>
+
           <button 
             type="submit" 
+            klicksend-form-submit-id="J2uGWne"
             class="btn-cta-gold w-full py-3.5 px-6 rounded-xl font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl cursor-pointer active:scale-[0.98] transition-all"
           >
             <i data-lucide="download" class="w-5 h-5"></i>
