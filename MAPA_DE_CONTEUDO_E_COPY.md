@@ -133,7 +133,8 @@ Este documento reflete a versão atualizada da copy da **Sales Page do AgoraEuFa
    - [`projeto2026.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto2026.html) — Alias específico do ano 2026.
 
 3. **Páginas de Vendas Específicas, Guias & E-books:**
-   - [`ebook.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/ebook.html) — **Página Oficial de Apresentação e Captura do Livro "Agora Eu Falo Inglês!"** (Mockup 3D do livro, Protocolo dos 11 Passos com Cinema/Séries, os 5 erros fatais, leis contra-intuitivas e formulário Hotmart Send).
+   - [`ebook.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/ebook.html) — **Página Oficial de Apresentação e Captura do Livro "Agora Eu Falo Inglês!"** (Mockup 3D do livro, Teaser dos 11 Passos com Cinema/Séries, os 5 erros fatais, leis contra-intuitivas e formulário Hotmart Send).
+   - [`leitor-ebook.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/leitor-ebook.html) — **Leitor Web Interativo Oficial do Livro** (Leitura digital responsiva para celular/tablet com modos Claro/Sépia/Noturno, controle de fonte A-/A+, barra de progresso, desbloqueio inteligente e compartilhamento viral).
    - [`guia-magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/guia-magic-stories.html) — **O Guia Definitivo do Método Magic Stories** (Filosofia, Neurociência, Diagrama Hexagonal Interativo das 6 Etapas, Aula com Leo Gringo `8DbXCHwZTL0` e Carta do Professor com CTA para o Projeto).
    - [`magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/magic-stories.html) — Curso Magic Stories (30 Ciclos de Treino Auditivo & Pronúncia).
    - [`quick-start.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/quick-start.html) — Curso English Quick Start (Base Sólida em 6 Módulos).

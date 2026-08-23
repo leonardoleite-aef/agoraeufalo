@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth" data-theme="light" data-font="md">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Leitor Digital: Agora Eu Falo Inglês! | Professor Leonardo Leite</title>
+  <meta name="title" content="Leitor Digital: Agora Eu Falo Inglês! | Professor Leonardo Leite">
+  <meta name="description" content="Leia online o livro oficial do Professor Leonardo Leite. O guia definitivo de treino de ouvido, Magic Stories e reflexo de fala. Edição Master 2026.">
+  <meta name="author" content="Professor Leonardo Leite">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://agoraeufalo.com.br/leitor-ebook.html">
+
+  <!-- Open Graph / Redes Sociais -->
+  <meta property="og:type" content="book">
+  <meta property="og:url" content="https://agoraeufalo.com.br/ebook.html">
+  <meta property="og:title" content="Livro Digital: Agora Eu Falo Inglês! - Professor Leonardo Leite">
+  <meta property="og:description" content="O guia definitivo de treino de ouvido, Magic Stories e reflexo de fala. Acesse o livro completo.">
+  <meta property="og:image" content="https://agoraeufalo.com.br/assets/images/og-image.jpg">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              gold: '#F59E0B'
+            },
+            sepia: {
+              bg: '#FBF0D9',
+              card: '#F4E4C1',
+              border: '#E6CF9B',
+              text: '#3A2712',
+              muted: '#785A32'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            reader: ['"Newsreader"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ========================================================================= */
+    /* THEMES DEFINITIONS (LIGHT, SEPIA, DARK)                                   */
+    /* ========================================================================= */
+    :root {
+      --reader-bg: #F8FAFC;
+      --reader-card-bg: #FFFFFF;
+      --reader-border: #E2E8F0;
+      --reader-text: #1E293B;
+      --reader-text-muted: #64748B;
+      --reader-heading: #0F172A;
+      --reader-accent: #C57E1E;
+      --reader-box-bg: #FFFBEB;
+      --reader-box-border: #FDE68A;
+      --reader-box-text: #78350F;
+    }
+
+    [data-theme="sepia"] {
+      --reader-bg: #FBF0D9;
+      --reader-card-bg: #F5E7C8;
+      --reader-border: #E4D0A4;
+      --reader-text: #2C1B0B;
+      --reader-text-muted: #6D5130;
+      --reader-heading: #1C1004;
+      --reader-accent: #B45309;
+      --reader-box-bg: #EFE0BD;
+      --reader-box-border: #DCBE84;
+      --reader-box-text: #5A3205;
+    }
+
+    [data-theme="dark"] {
+      --reader-bg: #060D17;
+      --reader-card-bg: #0A192F;
+      --reader-border: #1E293B;
+      --reader-text: #E2E8F0;
+      --reader-text-muted: #94A3B8;
+      --reader-heading: #FFFFFF;
+      --reader-accent: #F59E0B;
+      --reader-box-bg: #112240;
+      --reader-box-border: #1E3A8A;
+      --reader-box-text: #FEF3C7;
+    }
+
+    /* Font Size Presets */
+    [data-font="sm"] .reader-content { font-size: 15px; line-height: 1.68; }
+    [data-font="md"] .reader-content { font-size: 17.5px; line-height: 1.76; }
+    [data-font="lg"] .reader-content { font-size: 20px; line-height: 1.82; }
+    [data-font="xl"] .reader-content { font-size: 23px; line-height: 1.88; }
+
+    body {
+      background-color: var(--reader-bg);
+      color: var(--reader-text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .theme-card {
+      background-color: var(--reader-card-bg);
+      border-color: var(--reader-border);
+    }
+
+    .theme-box {
+      background-color: var(--reader-box-bg);
+      border-color: var(--reader-box-border);
+      color: var(--reader-box-text);
+    }
+
+    /* Progress bar smooth */
+    #reading-progress-bar {
+      transition: width 0.1s linear;
+    }
+
+    /* Smooth page animations */
+    .chapter-section {
+      scroll-margin-top: 100px;
+    }
+
+    /* Paywall Blur Gate */
+    .gated-blur {
+      filter: blur(6px);
+      user-select: none;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen selection:bg-amber-500/30 selection:text-amber-950">
+
+  <!-- ========================================================================= -->
+  <!-- BARRA DE PROGRESSO DE LEITURA (STICKY TOPO)                              -->
+  <!-- ========================================================================= -->
+  <div class="fixed top-0 left-0 right-0 h-1.5 bg-slate-200/50 dark:bg-slate-800 z-50">
+    <div id="reading-progress-bar" class="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 w-0"></div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- HEADER CONTROLES DO LEITOR (STICKY)                                      -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-1.5 z-40 bg-white/95 dark:bg-slate-950/95 [data-theme='sepia']:bg-[#F5E7C8]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] transition-colors">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Lado Esquerdo: Voltar / Título -->
+      <div class="flex items-center gap-3 min-w-0">
+        <a href="ebook.html" class="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shrink-0" title="Voltar à apresentação">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </a>
+        <div class="truncate">
+          <div class="text-[10px] uppercase tracking-wider font-extrabold text-amber-600 dark:text-amber-400">Leitor Interativo</div>
+          <h1 class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B] truncate">
+            Agora Eu Falo Inglês! • Edição 2026
+          </h1>
+        </div>
+      </div>
+
+      <!-- Lado Direito: Controles de Leitura -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        
+        <!-- Botão Índice (Menu de Capítulos) -->
+        <button 
+          type="button" 
+          id="btn-toc-toggle"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] bg-slate-50 dark:bg-slate-900 [data-theme='sepia']:bg-[#EFE0BD] text-xs font-bold text-slate-700 dark:text-slate-200 [data-theme='sepia']:text-[#3A2712] hover:scale-105 active:scale-95 transition-all shadow-sm"
+        >
+          <i data-lucide="list" class="w-4 h-4 text-amber-500"></i>
+          <span class="hidden sm:inline">Índice</span>
+        </button>
+
+        <!-- Ajuste de Tamanho da Fonte (A- / A+) -->
+        <div class="flex items-center rounded-xl border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] bg-slate-50 dark:bg-slate-900 [data-theme='sepia']:bg-[#EFE0BD] p-0.5">
+          <button id="btn-font-dec" class="px-2.5 py-1 text-xs font-black text-slate-600 dark:text-slate-300 hover:text-amber-600 transition-colors" title="Diminuir texto">A-</button>
+          <div class="w-px h-3.5 bg-slate-200 dark:bg-slate-700 [data-theme='sepia']:bg-[#DCBE84]"></div>
+          <button id="btn-font-inc" class="px-2.5 py-1 text-xs font-black text-slate-600 dark:text-slate-300 hover:text-amber-600 transition-colors" title="Aumentar texto">A+</button>
+        </div>
+
+        <!-- Seletor de Tema (Claro, Sépia, Escuro) -->
+        <div class="flex items-center rounded-xl border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] bg-slate-50 dark:bg-slate-900 [data-theme='sepia']:bg-[#EFE0BD] p-1 gap-1">
+          <!-- Claro -->
+          <button id="btn-theme-light" class="w-6 h-6 rounded-lg flex items-center justify-center text-amber-600 bg-white shadow-xs" title="Modo Claro">
+            <i data-lucide="sun" class="w-3.5 h-3.5"></i>
+          </button>
+          <!-- Sépia -->
+          <button id="btn-theme-sepia" class="w-6 h-6 rounded-lg flex items-center justify-center text-[#785A32] hover:bg-[#E4D0A4]" title="Modo Sépia">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+          </button>
+          <!-- Noturno -->
+          <button id="btn-theme-dark" class="w-6 h-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-white" title="Modo Noturno">
+            <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Botão Compartilhar Viral -->
+        <button 
+          id="btn-share" 
+          class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold transition-all hover:scale-105 active:scale-95 shadow-sm"
+          title="Compartilhar livro"
+        >
+          <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+          <span>Compartilhar</span>
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- DRAWER / MENU FLUTUANTE DE ÍNDICE DE CAPÍTULOS                           -->
+  <!-- ========================================================================= -->
+  <div id="toc-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden transition-opacity">
+    <div class="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] p-6 shadow-2xl overflow-y-auto border-l border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] flex flex-col justify-between">
+      
+      <div>
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4]">
+          <h2 class="text-base font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B] flex items-center gap-2">
+            <i data-lucide="book-marked" class="w-4 h-4 text-amber-500"></i>
+            <span>Sumário da Obra</span>
+          </h2>
+          <button id="btn-toc-close" class="p-1 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <nav class="space-y-2 text-sm">
+          <a href="#capa" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            📖 Capa & Abertura Oficial
+          </a>
+          <a href="#intro" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            👋 Introdução: De 2007 a 2026
+          </a>
+          <a href="#cap1" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            ❌ Cap 1: Os 5 Erros Fatais
+          </a>
+          <a href="#cap2" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            🔄 Cap 2: As Leis Contra-Intuitivas
+          </a>
+          <a href="#cap3" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            ⚡ Cap 3: As 5 Ações Práticas (20 min)
+          </a>
+          <a href="#cap4" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors text-amber-600 font-extrabold">
+            🎬 Cap 4: Treino com Filmes (11 Passos)
+          </a>
+          <a href="#cap5" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            🏛️ Cap 5: O Arsenal AgoraEuFalo
+          </a>
+          <a href="#manifesto" class="toc-link block p-2.5 rounded-xl font-bold hover:bg-amber-500/10 hover:text-amber-600 transition-colors">
+            🔥 Manifesto Final do Professor
+          </a>
+        </nav>
+      </div>
+
+      <!-- Rodapé do Drawer -->
+      <div class="pt-6 border-t border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] space-y-3">
+        <a 
+          href="Material-PDF/Agora_Eu_Falo_Ingles_Leo_Leite_2026.pdf" 
+          download 
+          class="w-full py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 [data-theme='sepia']:bg-[#EFE0BD] text-xs font-extrabold text-slate-800 dark:text-slate-200 [data-theme='sepia']:text-[#3A2712] flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors"
+        >
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Baixar Versão PDF</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- CORPO PRINCIPAL DO LEITOR                                                -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-3xl w-full mx-auto px-5 sm:px-8 py-10 sm:py-16 space-y-16 sm:space-y-24 reader-content font-reader">
+
+    <!-- ========================================================================= -->
+    <!-- 0. CAPA & ABERTURA OFICIAL                                                -->
+    <!-- ========================================================================= -->
+    <section id="capa" class="chapter-section text-center space-y-6 pt-4 pb-12 border-b border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4]">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-widest font-sans">
+        <span>Edição Master 2026 • Versão Oficial</span>
+      </div>
+
+      <div class="space-y-3">
+        <span class="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-sans font-bold block">
+          Metodologia AgoraEuFalo
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif tracking-tight leading-tight">
+          Agora Eu Falo <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700">Inglês!</span>
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 [data-theme='sepia']:text-[#6D5130] max-w-xl mx-auto font-sans leading-relaxed">
+          O guia definitivo de treino de ouvido, Magic Stories e reflexo de fala para destravar sua comunicação sem traduzir na cabeça.
+        </p>
+      </div>
+
+      <!-- Autor Card -->
+      <div class="inline-flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] shadow-sm font-sans text-left">
+        <img 
+          src="assets/images/leonardo-leite.png" 
+          alt="Professor Leonardo Leite" 
+          class="w-12 h-12 rounded-full border-2 border-amber-500 object-cover object-top"
+        />
+        <div>
+          <div class="text-xs font-black text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">Professor Leonardo Leite</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 [data-theme='sepia']:text-[#6D5130]">35 anos de sala de aula e vivência da língua</div>
+        </div>
+      </div>
+
+      <!-- Epígrafe -->
+      <div class="max-w-xl mx-auto pt-6 text-left">
+        <blockquote class="p-5 rounded-2xl bg-amber-500/10 border-l-4 border-amber-500 text-sm sm:text-base italic text-slate-800 dark:text-slate-200 [data-theme='sepia']:text-[#3A2712] leading-relaxed">
+          “Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Você não aprende a falar pensando em regras; você aprende repetindo a experiência da mesma história até a resposta virar reflexo.”
+          <footer class="text-xs font-bold text-amber-700 dark:text-amber-400 not-italic mt-2 font-sans">
+            — Professor Leonardo Leite
+          </footer>
+        </blockquote>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 1. INTRODUÇÃO: DE 2007 A 2026                                             -->
+    <!-- ========================================================================= -->
+    <section id="intro" class="chapter-section space-y-6">
+      
+      <div class="space-y-1 font-sans">
+        <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Abertura Oficial</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+          Introdução: De 2007 a 2026
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 3 min de leitura</p>
+      </div>
+
+      <p>Este é um livro vivo e dinâmico.</p>
+
+      <p>O que eu quero dizer com isso? Simples: eu estou em constante movimento com meus alunos, testando em sala de aula, refinando lições e ajustando o que funciona no mundo real. Portanto, o que você tem em mãos agora é a <strong>Edição Master 2026</strong>, totalmente atualizada para a nossa realidade contemporânea.</p>
+
+      <p>A primeiríssima versão deste livro nasceu em 2007. Naquela época, o conceito de e-book ainda dava seus primeiros passos no Brasil. Eu dava aulas particulares para dezenas de alunos e precisava desesperadamente de uma forma de alinhar a cabeça de todo mundo com os princípios corretos de aprendizagem. Escrevi um guia direto ao ponto, salvei em PDF, fui até uma gráfica rápida da esquina, imprimi várias cópias encadernadas e entreguei em mãos para cada um dos meus alunos.</p>
+
+      <p>Quase duas décadas se passaram desde aquela primeira impressão em papel. Hoje, com mais de 35 anos dedicados ao ensino diário da língua inglesa e mais de 40.000 alunos que já passaram pelo AgoraEuFalo, algumas verdades se tornaram absolutamente inquestionáveis:</p>
+
+      <div class="p-6 rounded-3xl theme-box border my-6 space-y-3 font-sans">
+        <h3 class="font-extrabold text-sm sm:text-base flex items-center gap-2">
+          <span>🏛️ As 4 Grandes Conclusões de Mais de Três Décadas:</span>
+        </h3>
+        <ol class="space-y-2 text-xs sm:text-sm list-decimal pl-5 leading-relaxed">
+          <li><strong>A necessidade de falar inglês nunca foi tão urgente:</strong> Em 2026, com trabalho global e tecnologia acelerada, quem não se comunica em inglês perde as melhores oportunidades de carreira e vida.</li>
+          <li><strong>O excesso de informação travou os alunos:</strong> Aplicativos e fórmulas mágicas de internet ensinam regras e palavras soltas, mas geram pânico na hora de conversar com um nativo.</li>
+          <li><strong>Inglês é habilidade física e reflexo:</strong> Aprender inglês é como andar de bicicleta ou tocar um instrumento — exige treino muscular e auditivo, não memorização passiva.</li>
+          <li><strong>O caminho mais rápido continua sendo o mesmo:</strong> Ouvir, compreender e responder no reflexo antes de querer dissecar regras gramaticais.</li>
+        </ol>
+      </div>
+
+      <p>O objetivo deste livro é muito claro: <strong>virar a sua chave mental</strong>. Quero te mostrar o que você precisa PARAR de fazer hoje mesmo e quais são as ações práticas para o seu inglês finalmente sair da cabeça e ir para a ponta da língua.</p>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 2. CAPÍTULO 1: OS 5 ERROS FATAIS                                          -->
+    <!-- ========================================================================= -->
+    <section id="cap1" class="chapter-section space-y-6">
+      
+      <div class="space-y-1 font-sans">
+        <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Capítulo 01</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+          Os 5 Erros Fatais ao Aprender Inglês
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 5 min de leitura</p>
+      </div>
+
+      <p>Antes de entrarmos nas técnicas aceleradas de treino, precisamos fazer uma limpeza de terreno.</p>
+
+      <p>Ao longo dos meus mais de 35 anos ensinando inglês, percebi que a maioria dos alunos não falha por falta de inteligência ou por não ter o suposto "dom dos idiomas". Eles falham simplesmente porque colocam 100% da sua energia nas <strong>atividades erradas</strong>.</p>
+
+      <!-- Erro 1 -->
+      <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+        [Erro Fatal #1] Ficar aprendendo palavras avulsas ao invés de blocos de frases (Chunks)
+      </h3>
+      <p>Essa é a armadilha número um. Ninguém fala por palavras soltas; nós nos comunicamos por <strong>blocos de linguagem (chunks)</strong> e expressões contextuais prontas. Quando você decora palavras isoladas, você vira um dicionário ambulante que trava na hora de formular uma frase.</p>
+
+      <!-- Tabela Chunks -->
+      <div class="overflow-x-auto my-4 font-sans text-xs sm:text-sm">
+        <table class="w-full text-left border-collapse rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4]">
+          <thead class="bg-amber-500/10 text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B] font-extrabold">
+            <tr>
+              <th class="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-800">Abordagem Errada (Palavra Solta)</th>
+              <th class="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-800">Abordagem Certa AgoraEuFalo (Chunk)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+            <tr>
+              <td class="p-3 sm:p-4"><strong>Step</strong> = degrau / passo</td>
+              <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Watch your step! (Cuidado onde pisa!)</td>
+            </tr>
+            <tr>
+              <td class="p-3 sm:p-4"><strong>Mind</strong> = mente / importar-se</td>
+              <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Never mind! (Deixa pra lá! / Não se preocupe!)</td>
+            </tr>
+            <tr>
+              <td class="p-3 sm:p-4"><strong>Come</strong> = vir</td>
+              <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">I'm coming! (Já estou indo!)</td>
+            </tr>
+            <tr>
+              <td class="p-3 sm:p-4"><strong>Marry</strong> = casar</td>
+              <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Will you marry me? (Quer casar comigo?)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Erro 2 -->
+      <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+        [Erro Fatal #2] Estudar ao invés de TREINAR Inglês
+      </h3>
+      <p>Existe um abismo entre <strong>estudar</strong> (atividade intelectual passiva sobre regras) e <strong>treinar</strong> (atividade prática que condiciona os ouvidos e a musculatura da fala). Troque imediatamente a postura de estudante passivo pela de <strong>praticante diário</strong>.</p>
+
+      <!-- Erro 3 -->
+      <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+        [Erro Fatal #3] Memorizar e dissecar regras gramaticais antes de falar
+      </h3>
+      <p>Tentar falar inglês calculando regras gramaticais na cabeça gera travamento imediato. A gramática correta deve ser assimilada <strong>intuitivamente pelos ouvidos</strong>, através de histórias repetitivas, e não por tabelas teóricas.</p>
+
+      <!-- Erro 4 -->
+      <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+        [Erro Fatal #4] Achar que vai conseguir falar no mesmo ritmo e volume que entende
+      </h3>
+      <div class="p-4 rounded-2xl theme-box border font-sans text-xs sm:text-sm space-y-1">
+        <p class="font-extrabold">📢 A sua habilidade de ESCUTAR e ENTENDER sempre será muito maior e mais rápida do que a sua habilidade de FALAR.</p>
+        <p class="opacity-90">Isso é biologicamente normal! O cérebro precisa de um volume gigante de absorção auditiva compreensível antes de verbalizar frases com naturalidade. Não se cobre uma simetria impossível.</p>
+      </div>
+
+      <!-- Erro 5 -->
+      <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+        [Erro Fatal #5] Assistir a filmes em inglês com legendas em português
+      </h3>
+      <p>Assistir a filmes em inglês com legendas em português só serve para você entender o filme. Os seus olhos assumem o controle lendo em português e seus ouvidos se desligam dos sons em inglês. No Capítulo 4, você aprenderá o <strong>Protocolo dos 11 Passos</strong> para transformar qualquer cena de filme em um poderoso treino de fluência.</p>
+
+      <!-- Dica de Ouro -->
+      <div class="p-5 rounded-2xl bg-amber-500/10 border-l-4 border-amber-500 font-sans text-xs sm:text-sm font-bold">
+        💡 <strong>Aprenda:</strong> Pare de cavar no lugar errado. O primeiro passo para destravar o seu inglês é eliminar esses 5 erros da sua rotina a partir de hoje e focar nas ações contra-intuitivas do próximo capítulo.
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- GATE DE DESBLOQUEIO / PAYWALL SUAVE (VISÍVEL APENAS SE BLOQUEADO)          -->
+    <!-- ========================================================================= -->
+    <div id="unlock-gate" class="hidden p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-900 to-brand-navy border-2 border-amber-400/60 shadow-2xl text-white font-sans text-center space-y-6 relative overflow-hidden">
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-400 mx-auto">
+        <i data-lucide="sparkles" class="w-8 h-8"></i>
+      </div>
+      <div class="space-y-2 max-w-lg mx-auto">
+        <h3 class="text-2xl font-black text-white">Gostou do início da leitura?</h3>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Digite seu nome e e-mail abaixo para <strong>desbloquear os Capítulos 2, 3, 4 (Filmes & Séries), 5 e o Manifesto</strong> imediatamente no navegador e receber a versão diagramada em PDF!
+        </p>
+      </div>
+
+      <form id="inline-unlock-form" action="https://handler.send.hotmart.com/subscription/lEunEEB?hotfeature=53" method="POST" class="max-w-md mx-auto space-y-3">
+        <input 
+          type="text" 
+          name="name" 
+          required 
+          placeholder="Seu primeiro nome" 
+          class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+        />
+        <input 
+          type="email" 
+          name="email" 
+          required 
+          placeholder="Seu melhor e-mail" 
+          class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+        />
+        <button 
+          type="submit" 
+          class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg"
+        >
+          DESBLOQUEAR LEITOR COMPLETO AGORA ➔
+        </button>
+        <p class="text-[11px] text-slate-400">100% Gratuito • Acesso Imediato • Sem Spam</p>
+      </form>
+    </div>
+
+    <!-- WRAPPER DO RESTANTE DO LIVRO (PODE SER BLURREADO SE BLOQUEADO) -->
+    <div id="gated-content" class="space-y-16 sm:space-y-24">
+
+      <!-- ========================================================================= -->
+      <!-- 3. CAPÍTULO 2: AS LEIS CONTRA-INTUITIVAS                                   -->
+      <!-- ========================================================================= -->
+      <section id="cap2" class="chapter-section space-y-6">
+        
+        <div class="space-y-1 font-sans">
+          <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Capítulo 02</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+            As Leis Contra-Intuitivas da Fluência Real
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 4 min de leitura</p>
+        </div>
+
+        <p>As pessoas que conseguem entender nativos com facilidade e falar inglês com naturalidade e rapidez fizeram exatamente o <strong>oposto</strong> do que a grande maioria pensa em fazer.</p>
+
+        <p>Por que isso acontece? Porque a maioria segue a própria intuição escolar tradicional. E quando o assunto é aprender um novo idioma, a intuição é uma das maiores armadilhas que existem.</p>
+
+        <div class="p-5 rounded-2xl theme-box border font-sans text-xs sm:text-sm space-y-2">
+          <span class="font-extrabold block">⚠️ O Ciclo da Ilusão Intuitiva Tradicional:</span>
+          <p class="opacity-90 leading-relaxed">
+            1. Quero aprender inglês ➔ 2. Preciso estudar ➔ 3. Compro livros de gramática e sento em uma carteira de escola tradicional ➔ 4. Passo meses preenchendo exercícios silenciosos ➔ 5. Tento falar com um estrangeiro, travo, não entendo nada e concluo: <em>"Eu não tenho o dom dos idiomas!"</em>
+          </p>
+        </div>
+
+        <p>Percebeu a loucura? Você tomou decisões 100% intuitivas, investiu tempo e dinheiro, e no final achou que a culpa pelo fracasso era sua!</p>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+          A Abordagem Contra-Intuitiva AgoraEuFalo
+        </h3>
+        <p>Uma ação contra-intuitiva é aquela que, à primeira vista, parece estranha ou contrária ao bom senso comum, mas que na prática gera <strong>10 vezes mais resultados</strong>.</p>
+
+        <!-- Tabela Comparativa -->
+        <div class="overflow-x-auto my-4 font-sans text-xs sm:text-sm">
+          <table class="w-full text-left border-collapse rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4]">
+            <thead class="bg-amber-500/10 text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B] font-extrabold">
+              <tr>
+                <th class="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-800">Abordagem Intuitiva Tradicional (Trava)</th>
+                <th class="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-800">Abordagem Contra-Intuitiva AEF (Fluência)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr>
+                <td class="p-3 sm:p-4">Comprar gramáticas e decorar regras.</td>
+                <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Treinar ouvidos com histórias repetitivas.</td>
+              </tr>
+              <tr>
+                <td class="p-3 sm:p-4">Consumir inglês difícil demais (jornais).</td>
+                <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Consumir inglês fácil, claro e compreensível.</td>
+              </tr>
+              <tr>
+                <td class="p-3 sm:p-4">Assistir uma vez e pular de assunto.</td>
+                <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Repetir a mesma lição até virar reflexo.</td>
+              </tr>
+              <tr>
+                <td class="p-3 sm:p-4">Colecionar milhares de palavras soltas.</td>
+                <td class="p-3 sm:p-4 text-amber-700 dark:text-amber-300 font-bold">Colecionar blocos de frases prontas (Chunks).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-amber-500/10 border-l-4 border-amber-500 font-sans text-xs sm:text-sm font-bold">
+          💡 <strong>Aprenda:</strong> A intuição é fantástica na hora de FALAR (a resposta sai sem pensar). Mas é perigosa na hora de ESCOLHER COMO ESTUDAR. Fique com o método comprovado e esqueça as velhas receitas de lousa.
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- 4. CAPÍTULO 3: AS 5 AÇÕES PRÁTICAS                                         -->
+      <!-- ========================================================================= -->
+      <section id="cap3" class="chapter-section space-y-6">
+        
+        <div class="space-y-1 font-sans">
+          <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Capítulo 03</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+            As 5 Ações Práticas para a Fluência Real
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 6 min de leitura</p>
+        </div>
+
+        <p>Para transformar a língua inglesa em algo automático e espontâneo no seu cérebro, você precisa executar <strong>5 ações fundamentais</strong>:</p>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-2">
+          [Ação #1] Focar o treinamento na ESCUTA COMPREENSÍVEL E REPETITIVA
+        </h3>
+        <p>Para alcançar a fluência, você precisa aprender inglês com os <strong>ouvidos</strong> e não com os olhos. E a escuta precisa ser <strong>fácil e altamente repetitiva</strong>. Para reconhecer uma estrutura instantaneamente sem traduzir, você precisa escutá-la de <strong>50 a 100 vezes</strong>.</p>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+          [Ação #2] Treinar todos os dias em pequenas doses consistentes
+        </h3>
+        <p>É infinitamente melhor treinar <strong>20 minutos por dia todos os dias</strong> do que assistir a uma maratona de 2 horas uma vez por semana. O cérebro aprende por frequência de estímulos.</p>
+
+        <div class="p-5 rounded-2xl theme-box border font-sans text-xs sm:text-sm space-y-2">
+          <span class="font-extrabold block">⏰ Sugestão de Programação Diária do Leo:</span>
+          <ul class="space-y-1.5 list-disc pl-5">
+            <li><strong>20 min pela manhã:</strong> No trajeto para o trabalho ou logo ao acordar.</li>
+            <li><strong>20 min no almoço:</strong> Uma rápida revisão auditiva com fones.</li>
+            <li><strong>20 min antes de dormir:</strong> Consolidação da memória acústica durante o sono.</li>
+          </ul>
+        </div>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+          [Ação #3] Aprender e treinar gramática escutando (Point of View Stories)
+        </h3>
+        <p>Técnica revolucionária aprendida com o professor <strong>Mr. Robert "Bob" Kelly</strong> na Mount Rainier High School: contar a mesma história variando a perspectiva temporal através de advérbios de tempo, sem palestras teóricas de gramática:</p>
+
+        <div class="p-5 rounded-2xl theme-box border font-sans text-xs sm:text-sm space-y-2">
+          <span class="font-extrabold block">📖 Exemplo Prático com a História da Mary:</span>
+          <p><strong>Presente:</strong> <em>Mary gets up at seven, goes to the bathroom and takes a shower.</em></p>
+          <p><strong>Passado (Last Monday):</strong> <em><strong>Last Monday</strong>, Mary <strong>got up</strong> at seven, <strong>went</strong> to the bathroom and <strong>took</strong> a shower.</em></p>
+          <p><strong>Present Perfect:</strong> <em><strong>Ever since she moved here</strong>, Mary <strong>has gotten up</strong> at seven, <strong>gone</strong> to the bathroom and <strong>taken</strong> a shower.</em></p>
+          <p><strong>Futuro (Next week):</strong> <em><strong>Next week</strong>, Mary <strong>is going to get up</strong> at seven and take a shower.</em></p>
+        </div>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+          [Ação #4] Aprender as Frases Prontas (Chunks de Entendimento Imediato)
+        </h3>
+        <p>O inglês falado na vida real é composto por blocos de comunicação prontos. Quando você aprende o bloco inteiro, a resposta sai imediata sem esforço mental.</p>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-4">
+          [Ação #5] Divertir-se seriamente durante toda a jornada
+        </h3>
+        <p>Aprender inglês é uma jornada linda para a vida inteira. Encontre prazer no treino diário e <em>be happy, my friend!</em></p>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- 5. CAPÍTULO 4: MÉTODO MAGIC STORIES & INFOGRÁFICO DOS 11 PASSOS           -->
+      <!-- ========================================================================= -->
+      <section id="cap4" class="chapter-section space-y-8">
+        
+        <div class="space-y-1 font-sans">
+          <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Capítulo 04</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+            O Método Magic Stories & O Treinamento com Filmes
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 8 min de leitura</p>
+        </div>
+
+        <p>O cérebro humano é biologicamente programado para absorver histórias. É por isso que listas gramaticais são esquecidas em minutos, mas a narrativa de um personagem marcante fica gravada para sempre.</p>
+
+        <h3 class="text-lg sm:text-xl font-extrabold text-amber-600 dark:text-amber-400 font-sans pt-2">
+          O Ciclo de Treino em 6 Etapas das Magic Stories
+        </h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs sm:text-sm">
+          <div class="p-4 rounded-2xl theme-card border shadow-xs space-y-1">
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">1. Listen & Read</div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Escuta ativa acompanhando o texto para sincronizar sons e grafia.</p>
+          </div>
+          <div class="p-4 rounded-2xl theme-card border shadow-xs space-y-1">
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">2. Vocabulary Chunks</div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Identificação dos blocos de linguagem viva e expressões práticas.</p>
+          </div>
+          <div class="p-4 rounded-2xl theme-card border shadow-xs space-y-1">
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">3. Listen & Answer</div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Perguntas rápidas e respostas em voz alta no reflexo, sem pausar.</p>
+          </div>
+          <div class="p-4 rounded-2xl theme-card border shadow-xs space-y-1">
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">4. Look & Retell</div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Recontar a história com pistas visuais para criar autonomia de fala.</p>
+          </div>
+          <div class="p-4 rounded-2xl theme-card border shadow-xs space-y-1">
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">5. POV Grammar Stories</div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Mudança de tempo verbal para absorver gramática pelo som.</p>
+          </div>
+          <div class="p-4 rounded-2xl theme-card border shadow-xs space-y-1">
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">6. Pronunciation Practice</div>
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Treino de connected speech, ritmo e entonação natural.</p>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- O PROTOCOLO COMPLETO DOS 11 PASSOS                                        -->
+        <!-- ========================================================================= -->
+        <div class="pt-6 space-y-6 font-sans">
+          
+          <div class="text-center space-y-2 max-w-xl mx-auto">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-black uppercase">
+              🎬 O Infográfico Oficial
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-slate-950 dark:text-white font-serif">
+              O Protocolo dos 11 Passos com Cinema & Séries
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Como transformar qualquer trecho de 2 a 4 minutos em um laboratório acelerado de fluência:
+            </p>
+          </div>
+
+          <!-- As 4 Fases Completas -->
+          <div class="space-y-6">
+            
+            <!-- FASE 1 -->
+            <div class="p-6 rounded-3xl bg-blue-500/5 border-2 border-blue-500/20 space-y-4">
+              <div class="flex items-center gap-2.5 font-black text-blue-600 dark:text-blue-400 text-sm uppercase tracking-wider">
+                <span class="px-2 py-0.5 rounded-lg bg-blue-500/20">FASE 1</span>
+                <span>Preparação & Contexto (Fundação)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-blue-500/10 space-y-1">
+                  <div class="font-black text-blue-600 dark:text-blue-400">PASSO 01</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Escolha o Trecho</div>
+                  <p class="text-slate-500 dark:text-slate-400">Isole uma cena com diálogos reais entre 2 e 4 minutos de um filme que você ama.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-blue-500/10 space-y-1">
+                  <div class="font-black text-blue-600 dark:text-blue-400">PASSO 02</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Script em Mãos</div>
+                  <p class="text-slate-500 dark:text-slate-400">Tenha a transcrição exata das falas em inglês daquela cena em mãos.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-blue-500/10 space-y-1">
+                  <div class="font-black text-blue-600 dark:text-blue-400">PASSO 03</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Domínio de Vocabulário</div>
+                  <p class="text-slate-500 dark:text-slate-400">Entenda todas as palavras, expressões e gírias daquele trecho (zero dúvidas).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- FASE 2 -->
+            <div class="p-6 rounded-3xl bg-amber-500/5 border-2 border-amber-500/20 space-y-4">
+              <div class="flex items-center gap-2.5 font-black text-amber-600 dark:text-amber-400 text-sm uppercase tracking-wider">
+                <span class="px-2 py-0.5 rounded-lg bg-amber-500/20">FASE 2</span>
+                <span>Calibração Auditiva (Saturação de Ouvido)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-amber-500/10 space-y-1">
+                  <div class="font-black text-amber-600 dark:text-amber-400">PASSO 04</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Escuta com Legenda em Inglês</div>
+                  <p class="text-slate-500 dark:text-slate-400">Assista e escute com legendas em inglês até sentir total conforto acústico.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-amber-500/10 space-y-1">
+                  <div class="font-black text-amber-600 dark:text-amber-400">PASSO 05</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Escuta Limpa (Sem Legenda)</div>
+                  <p class="text-slate-500 dark:text-slate-400">Assista sem legendas e sem texto pelo menos 3 vezes consecutivas para testar os ouvidos.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- FASE 3 -->
+            <div class="p-6 rounded-3xl bg-emerald-500/5 border-2 border-emerald-500/20 space-y-4">
+              <div class="flex items-center gap-2.5 font-black text-emerald-600 dark:text-emerald-400 text-sm uppercase tracking-wider">
+                <span class="px-2 py-0.5 rounded-lg bg-emerald-500/20">FASE 3</span>
+                <span>Ativação Vocal & Memória Muscular (Fala Ativa)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-emerald-500/10 space-y-1">
+                  <div class="font-black text-emerald-600 dark:text-emerald-400">PASSO 06</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Shadowing (Repetição)</div>
+                  <p class="text-slate-500 dark:text-slate-400">Repita as falas em voz alta em tempo real junto com os atores (2 a 3x).</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-emerald-500/10 space-y-1">
+                  <div class="font-black text-emerald-600 dark:text-emerald-400">PASSO 07</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Dublagem Ativa (Sem Som)</div>
+                  <p class="text-slate-500 dark:text-slate-400">Tire o volume do vídeo e faça você mesmo as falas dos personagens em sincronia.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-emerald-500/10 space-y-1">
+                  <div class="font-black text-emerald-600 dark:text-emerald-400">PASSO 08</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Escuta Cega (Apenas Áudio)</div>
+                  <p class="text-slate-500 dark:text-slate-400">Feche os olhos, escute apenas o áudio e visualize mentalmente cada detalhe da cena.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- FASE 4 -->
+            <div class="p-6 rounded-3xl bg-purple-500/5 border-2 border-purple-500/20 space-y-4">
+              <div class="flex items-center gap-2.5 font-black text-purple-600 dark:text-purple-400 text-sm uppercase tracking-wider">
+                <span class="px-2 py-0.5 rounded-lg bg-purple-500/20">FASE 4</span>
+                <span>Autonomia & Reflexo (Consolidação)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-purple-500/10 space-y-1">
+                  <div class="font-black text-purple-600 dark:text-purple-400">PASSO 09</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Recontar a Cena</div>
+                  <p class="text-slate-500 dark:text-slate-400">Explique em voz alta o que aconteceu usando suas próprias palavras em inglês.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-purple-500/10 space-y-1">
+                  <div class="font-black text-purple-600 dark:text-purple-400">PASSO 10</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Perguntas & Respostas</div>
+                  <p class="text-slate-500 dark:text-slate-400">Crie perguntas sobre a cena (Who? Why? Where?) e responda no reflexo imediato.</p>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] border border-purple-500/10 space-y-1">
+                  <div class="font-black text-purple-600 dark:text-purple-400">PASSO 11</div>
+                  <div class="font-extrabold text-slate-900 dark:text-white">Assimilação Plena</div>
+                  <p class="text-slate-500 dark:text-slate-400">Assista à cena mais uma vez e perceba como você agora entende tudo instantaneamente!</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="p-5 rounded-2xl bg-amber-500/10 border-l-4 border-amber-500 font-sans text-xs sm:text-sm font-bold">
+          💡 <strong>Aprenda:</strong> Trabalhe um mesmo trecho de filme por 5 a 7 dias consecutivos. É infinitamente melhor dominar completamente uma cena de 3 minutos do que assistir a duas horas de filme sem absorver nada de verdade.
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- 6. CAPÍTULO 5: O ARSENAL AGORAEUFALO & PROJETO AEF                         -->
+      <!-- ========================================================================= -->
+      <section id="cap5" class="chapter-section space-y-6">
+        
+        <div class="space-y-1 font-sans">
+          <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Capítulo 05</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+            O Arsenal de Treinamento AgoraEuFalo & O Projeto AEF
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 5 min de leitura</p>
+        </div>
+
+        <p>Para colocar tudo isso em prática de forma estruturada, desenvolvi o <strong>Arsenal Completo de Treinamento AgoraEuFalo</strong> composto por 3 cursos fundamentais e complementares:</p>
+
+        <!-- Tríade de Cursos -->
+        <div class="space-y-3 font-sans text-xs sm:text-sm">
+          <div class="p-5 rounded-2xl theme-card border shadow-xs space-y-1 border-l-4 border-l-slate-900">
+            <h4 class="font-extrabold text-slate-900 dark:text-white text-base">1. English Quick Start — A Base Sólida</h4>
+            <p class="text-slate-600 dark:text-slate-300">Curso em 6 módulos objetivos desenhado para quem está no zero ou quer limpar a confusão de regras teóricas.</p>
+          </div>
+          <div class="p-5 rounded-2xl theme-card border shadow-xs space-y-1 border-l-4 border-l-amber-500">
+            <h4 class="font-extrabold text-amber-600 dark:text-amber-400 text-base">2. Método Magic Stories — 30 Ciclos de Treino</h4>
+            <p class="text-slate-600 dark:text-slate-300">O motor da sua fluência! 30 histórias narradas em ciclos graduais para condicionamento auditivo e resposta instantânea.</p>
+          </div>
+          <div class="p-5 rounded-2xl theme-card border shadow-xs space-y-1 border-l-4 border-l-emerald-500">
+            <h4 class="font-extrabold text-emerald-600 dark:text-emerald-400 text-base">3. Frases Prontas & Expressões — O Kit de Sobrevivência</h4>
+            <p class="text-slate-600 dark:text-slate-300">Treinamento focado em blocos contextuais para viagens, trabalho, dia a dia e emergências sem esforço de montagem mental.</p>
+          </div>
+        </div>
+
+        <!-- Card CTA Projeto AEF 2026 -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-brand-navy border-2 border-amber-400/50 text-white font-sans space-y-4 shadow-xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-xs font-black uppercase">
+            Ecossistema Oficial • Projeto AEF 2026
+          </div>
+          <h3 class="text-xl sm:text-2xl font-black text-white">Treine com Mentoria Semanal ao Vivo com o Leo</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            No <strong>Projeto AEF</strong>, você tem acesso à tríade completa de cursos, comunidade fechada e encontros semanais 100% ao vivo para calibrar sua fala em tempo real.
+          </p>
+          <div class="pt-2">
+            <a 
+              href="projeto-aef.html" 
+              class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs sm:text-sm hover:scale-105 transition-all shadow-lg"
+            >
+              <span>GARANTIR VAGA NO PROJETO AEF 2026 ➔</span>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- 7. MANIFESTO FINAL & ENCERRAMENTO                                         -->
+      <!-- ========================================================================= -->
+      <section id="manifesto" class="chapter-section space-y-6 pb-12">
+        
+        <div class="space-y-1 font-sans">
+          <span class="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400 font-extrabold">Encerramento Oficial</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white [data-theme='sepia']:text-[#1C1004] font-serif">
+            Manifesto Final: Comece Hoje e Nunca Mais Desista
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">⏱️ 2 min de leitura</p>
+        </div>
+
+        <p><em>My dear friend!</em></p>
+
+        <p>Chegamos ao final deste livro, mas este é apenas o primeiro dia da sua nova jornada em inglês. Ao longo de mais de 35 anos de sala de aula, vi milhares de alunos começarem do absoluto zero e alcançarem a independência na fala. E você também é plenamente capaz.</p>
+
+        <div class="p-6 rounded-3xl bg-amber-500/10 border-2 border-amber-400/40 text-center space-y-2 font-sans">
+          <p class="text-base sm:text-lg font-black text-amber-900 dark:text-amber-200 [data-theme='sepia']:text-[#2C1B0B] leading-relaxed">
+            “Só existem duas maneiras de você NUNCA falar inglês:<br>
+            1. A primeira é não começando.<br>
+            2. A segunda é desistindo no meio do caminho.”
+          </p>
+          <p class="text-xs sm:text-sm text-amber-700 dark:text-amber-400 font-bold">
+            Estou aqui para você começar do jeito certo e nunca mais desistir!
+          </p>
+        </div>
+
+        <div class="pt-6 border-t border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-slate-500">
+          <div>
+            <div class="font-extrabold text-slate-900 dark:text-white [data-theme='sepia']:text-[#2C1B0B]">Professor Leonardo Leite</div>
+            <div>AgoraEuFalo English Training • 2026</div>
+          </div>
+          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Acabei%20de%20ler%20o%20livro%20Agora%20Eu%20Falo%20Ingl%C3%AAs." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 text-white font-extrabold hover:bg-emerald-700 transition-colors">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Mandar Mensagem no WhatsApp do Leo</span>
+          </a>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL FLUTUANTE DE COMPARTILHAMENTO VIRAL                                 -->
+  <!-- ========================================================================= -->
+  <div id="share-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 [data-theme='sepia']:bg-[#F5E7C8] rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800 [data-theme='sepia']:border-[#E4D0A4] text-center font-sans">
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center mx-auto">
+        <i data-lucide="share-2" class="w-6 h-6"></i>
+      </div>
+      <div class="space-y-1">
+        <h3 class="text-base font-black text-slate-900 dark:text-white">Compartilhe com um amigo</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Envie o livro gratuito para quem também precisa destravar o inglês!</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2">
+        <a 
+          href="https://api.whatsapp.com/send?text=Olha%20esse%20livro%20gratuito%20do%20Prof.%20Leonardo%20Leite%20para%20destravar%20o%20ingl%C3%AAs%20sem%20traduzir:%20https://agoraeufalo.com.br/ebook.html" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="p-3 rounded-xl bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 hover:bg-emerald-700 transition-colors"
+        >
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>WhatsApp</span>
+        </a>
+        <button 
+          id="btn-copy-link" 
+          class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 [data-theme='sepia']:bg-[#EFE0BD] text-slate-800 dark:text-white font-extrabold text-xs flex items-center justify-center gap-1.5 hover:bg-slate-200 transition-colors"
+        >
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span id="copy-btn-text">Copiar Link</span>
+        </button>
+      </div>
+
+      <button id="btn-share-close" class="text-xs font-bold text-slate-400 hover:text-slate-600 pt-2 block w-full">
+        Fechar
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT DE INTERATIVIDADE DO LEITOR                                    -->
+  <!-- ========================================================================= -->
+  <script>
+    // 1. Inicializar Ícones Lucide
+    lucide.createIcons();
+
+    // 2. Barra de Progresso de Leitura
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+      document.getElementById('reading-progress-bar').style.width = progress + '%';
+    });
+
+    // 3. Controle de Temas (Claro, Sépia, Noturno)
+    const htmlEl = document.documentElement;
+    const btnLight = document.getElementById('btn-theme-light');
+    const btnSepia = document.getElementById('btn-theme-sepia');
+    const btnDark = document.getElementById('btn-theme-dark');
+
+    function setTheme(theme) {
+      htmlEl.setAttribute('data-theme', theme);
+      if (theme === 'dark') {
+        htmlEl.classList.add('dark');
+      } else {
+        htmlEl.classList.remove('dark');
+      }
+      localStorage.setItem('aef_reader_theme', theme);
+    }
+
+    btnLight.addEventListener('click', () => setTheme('light'));
+    btnSepia.addEventListener('click', () => setTheme('sepia'));
+    btnDark.addEventListener('click', () => setTheme('dark'));
+
+    // Restaurar tema salvo
+    const savedTheme = localStorage.getItem('aef_reader_theme') || 'light';
+    setTheme(savedTheme);
+
+    // 4. Controle de Tamanho de Fonte (A- / A+)
+    const fontSizes = ['sm', 'md', 'lg', 'xl'];
+    let currentFontIdx = 1; // 'md' por padrão
+
+    const savedFont = localStorage.getItem('aef_reader_font');
+    if (savedFont && fontSizes.includes(savedFont)) {
+      currentFontIdx = fontSizes.indexOf(savedFont);
+      htmlEl.setAttribute('data-font', savedFont);
+    }
+
+    document.getElementById('btn-font-dec').addEventListener('click', () => {
+      if (currentFontIdx > 0) {
+        currentFontIdx--;
+        const newFont = fontSizes[currentFontIdx];
+        htmlEl.setAttribute('data-font', newFont);
+        localStorage.setItem('aef_reader_font', newFont);
+      }
+    });
+
+    document.getElementById('btn-font-inc').addEventListener('click', () => {
+      if (currentFontIdx < fontSizes.length - 1) {
+        currentFontIdx++;
+        const newFont = fontSizes[currentFontIdx];
+        htmlEl.setAttribute('data-font', newFont);
+        localStorage.setItem('aef_reader_font', newFont);
+      }
+    });
+
+    // 5. Drawer de Índice (Sumário)
+    const tocDrawer = document.getElementById('toc-drawer');
+    const btnTocToggle = document.getElementById('btn-toc-toggle');
+    const btnTocClose = document.getElementById('btn-toc-close');
+
+    btnTocToggle.addEventListener('click', () => tocDrawer.classList.remove('hidden'));
+    btnTocClose.addEventListener('click', () => tocDrawer.classList.add('hidden'));
+    tocDrawer.addEventListener('click', (e) => {
+      if (e.target === tocDrawer) tocDrawer.classList.add('hidden');
+    });
+    document.querySelectorAll('.toc-link').forEach(link => {
+      link.addEventListener('click', () => tocDrawer.classList.add('hidden'));
+    });
+
+    // 6. Modal de Compartilhamento Viral
+    const shareModal = document.getElementById('share-modal');
+    const btnShare = document.getElementById('btn-share');
+    const btnShareClose = document.getElementById('btn-share-close');
+    const btnCopyLink = document.getElementById('btn-copy-link');
+    const copyBtnText = document.getElementById('copy-btn-text');
+
+    if (btnShare) btnShare.addEventListener('click', () => shareModal.classList.remove('hidden'));
+    btnShareClose.addEventListener('click', () => shareModal.classList.add('hidden'));
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) shareModal.classList.add('hidden');
+    });
+
+    btnCopyLink.addEventListener('click', () => {
+      navigator.clipboard.writeText('https://agoraeufalo.com.br/ebook.html').then(() => {
+        copyBtnText.textContent = 'Copiado! ✓';
+        setTimeout(() => { copyBtnText.textContent = 'Copiar Link'; }, 2000);
+      });
+    });
+
+    // 7. Lógica de Acesso Autenticado / Paywall Suave
+    const urlParams = new URLSearchParams(window.location.search);
+    const isUnlockedParam = urlParams.get('autenticado') === 'true' || urlParams.get('email');
+    const isUnlockedStorage = localStorage.getItem('aef_ebook_unlocked') === 'true';
+
+    const gatedContent = document.getElementById('gated-content');
+    const unlockGate = document.getElementById('unlock-gate');
+
+    if (isUnlockedParam || isUnlockedStorage) {
+      // Acesso liberado
+      gatedContent.classList.remove('gated-blur');
+      unlockGate.classList.add('hidden');
+      localStorage.setItem('aef_ebook_unlocked', 'true');
+    } else {
+      // Bloqueado parcialmente para novos visitantes
+      gatedContent.classList.add('gated-blur');
+      unlockGate.classList.remove('hidden');
+    }
+
+    // Desbloqueio Inline
+    document.getElementById('inline-unlock-form').addEventListener('submit', function() {
+      const email = this.querySelector('input[name="email"]').value;
+      if (email) {
+        localStorage.setItem('aef_ebook_unlocked', 'true');
+        localStorage.setItem('aef_user_email', email.trim());
+        gatedContent.classList.remove('gated-blur');
+        unlockGate.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

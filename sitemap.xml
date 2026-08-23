@@ -41,6 +41,14 @@
     </image:image>
   </url>
 
+  <!-- 5. Leitor Web Interativo Oficial do Livro -->
+  <url>
+    <loc>https://agoraeufalo.com.br/leitor-ebook.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
   <!-- 4. Portal Oficial / Vitrine de Cursos (Alias) -->
   <url>
     <loc>https://agoraeufalo.com.br/home.html</loc>
