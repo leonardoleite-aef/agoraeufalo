@@ -166,6 +166,37 @@ class AEFAudioHub {
   // =========================================================================
   // 4. STUDENT PROFILES & MERGED TRACK PLAYLISTS
   // =========================================================================
+  sanitizeCoverImage(currentCover, title = "") {
+    const titleLower = (title || "").toLowerCase();
+    
+    // Check if current cover is an old dark badge or empty
+    const isOldDarkCover = !currentCover || 
+      currentCover.includes("cover-carlos") || 
+      currentCover.includes("cover-marcos") || 
+      currentCover.includes("cover-patricia") ||
+      currentCover.includes("app-icon-final");
+
+    if (titleLower.includes("morning")) {
+      return "../assets/images/cover-thomas-morning-person.jpg";
+    } else if (titleLower.includes("coffee") || titleLower.includes("tea") || titleLower.includes("cafe")) {
+      return "../assets/images/cover-thomas-coffee-shop-decisions.jpg";
+    } else if (titleLower.includes("office") || titleLower.includes("logistics") || titleLower.includes("meeting")) {
+      return "../assets/images/cover-thomas-office-logistics.jpg";
+    } else if (titleLower.includes("keynote") || titleLower.includes("presentation") || titleLower.includes("uk")) {
+      return "../assets/images/cover-estevao-session01.jpg";
+    } else if (titleLower.includes("career") || titleLower.includes("pitch") || titleLower.includes("interview")) {
+      return "../assets/images/cover-andre-session01.jpg";
+    } else if (titleLower.includes("travel") || titleLower.includes("networking") || titleLower.includes("airport") || titleLower.includes("flight")) {
+      return "../assets/images/cover-matheus-session01.jpg";
+    }
+
+    if (isOldDarkCover) {
+      return "../assets/images/cover-thomas-office-logistics.jpg";
+    }
+
+    return currentCover;
+  }
+
   getStudents() {
     const baseStudents = (window.AEF_REGISTRY && window.AEF_REGISTRY.students) ? [...window.AEF_REGISTRY.students] : [
       { id: "estevao", name: "Estevão", badge: "VIP Mentee", subtitle: "Keynote Delivery & International Fluency", avatarEmoji: "👨‍💻", avatarBg: "bg-amber-500/10 text-amber-500 border-amber-500/20", pin: "1234", active: true },
@@ -214,21 +245,39 @@ class AEFAudioHub {
       return assigned.includes(studentId) || assigned.includes("all") || (studentId === "public" && assigned.includes("public"));
     });
 
-    // 3. Resolve audio blobs for custom tracks
-    const resolvedCustomTracks = [];
-    for (const ct of libTracks) {
-      const trackCopy = { ...ct };
-      if (ct.hasBlob || !ct.audioUrl) {
-        const blob = await this.getAudioBlob(ct.id);
-        if (blob) {
-          trackCopy.audioUrl = URL.createObjectURL(blob);
+    // 3. Resolve audio blobs & sanitize covers for all tracks
+    const resolveAndSanitize = async (trackList) => {
+      const result = [];
+      for (const t of trackList) {
+        const trackCopy = { ...t };
+        if (t.hasBlob || !t.audioUrl) {
+          const blob = await this.getAudioBlob(t.id);
+          if (blob) {
+            trackCopy.audioUrl = URL.createObjectURL(blob);
+          }
         }
+        trackCopy.coverImage = this.sanitizeCoverImage(trackCopy.coverImage, trackCopy.title);
+        result.push(trackCopy);
       }
-      resolvedCustomTracks.push(trackCopy);
+      return result;
+    };
+
+    // Combine base tracks and lib tracks, deduplicating by ID or normalized title
+    const allTracks = [...baseTracks];
+    for (const lt of libTracks) {
+      const existingIdx = allTracks.findIndex(bt => 
+        bt.id === lt.id || 
+        (bt.title && lt.title && bt.title.toLowerCase().replace(/[^a-z0-9]/g, '') === lt.title.toLowerCase().replace(/[^a-z0-9]/g, ''))
+      );
+      if (existingIdx >= 0) {
+        // Merge dynamically published data over base seed data if newer
+        allTracks[existingIdx] = { ...allTracks[existingIdx], ...lt };
+      } else {
+        allTracks.push(lt);
+      }
     }
 
-    // Return custom tracks first (newest assignments), followed by baseline seed tracks
-    return [...resolvedCustomTracks, ...baseTracks];
+    return await resolveAndSanitize(allTracks);
   }
 
   // =========================================================================

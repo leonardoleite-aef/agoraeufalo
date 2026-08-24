@@ -28,23 +28,46 @@ class AEFPlayerEngine {
     this.onSpeedChange = options.onSpeedChange || (() => {});
     this.onTrackEnded = options.onTrackEnded || (() => {});
 
+    this._rafId = null;
     this._bindAudioEvents();
     this._setupMediaSession();
   }
 
   _bindAudioEvents() {
+    const tick = () => {
+      if (!this.audio.paused && !this.audio.ended) {
+        const curTime = this.audio.currentTime;
+        const duration = this.audio.duration || 0;
+        this.onTimeUpdate(curTime, duration);
+        this._checkSentenceSync(curTime);
+        this._rafId = requestAnimationFrame(tick);
+      }
+    };
+
     this.audio.addEventListener("play", () => {
       this.onPlayStateChange(true);
       this._updateMediaSessionPlaybackState("playing");
       this._updateMediaSessionMetadata();
+      cancelAnimationFrame(this._rafId);
+      this._rafId = requestAnimationFrame(tick);
     });
 
     this.audio.addEventListener("pause", () => {
       this.onPlayStateChange(false);
       this._updateMediaSessionPlaybackState("paused");
+      cancelAnimationFrame(this._rafId);
+    });
+
+    this.audio.addEventListener("seeked", () => {
+      const curTime = this.audio.currentTime;
+      const duration = this.audio.duration || 0;
+      this.onTimeUpdate(curTime, duration);
+      this._checkSentenceSync(curTime);
+      this._updateMediaSessionPosition();
     });
 
     this.audio.addEventListener("timeupdate", () => {
+      // Fallback update for background/inactive tabs
       const curTime = this.audio.currentTime;
       const duration = this.audio.duration || 0;
       this.onTimeUpdate(curTime, duration);
@@ -54,6 +77,7 @@ class AEFPlayerEngine {
 
     this.audio.addEventListener("ended", () => {
       this.onPlayStateChange(false);
+      cancelAnimationFrame(this._rafId);
       this.onTrackEnded();
     });
 
@@ -178,31 +202,42 @@ class AEFPlayerEngine {
   }
 
   _checkSentenceSync(curTime) {
+    if (!this.isKaraokeEnabled || !this.sentences || this.sentences.length === 0) return;
+
     // Se estiver em modo Loop de Frase
     if (this.isLoopSentenceEnabled && this.loopSentenceIndex >= 0 && this.sentences[this.loopSentenceIndex]) {
       const target = this.sentences[this.loopSentenceIndex];
-      // Se passou do fim da frase, volta para o início com margem suave
-      if (curTime >= target.end) {
+      if (curTime >= target.end + 0.05) {
         this.audio.currentTime = target.start;
         return;
       }
     }
 
-    // Busca da frase correspondente ao tempo atual
+    // Busca milimétrica da frase correspondente ao tempo atual
     let foundIndex = -1;
     for (let i = 0; i < this.sentences.length; i++) {
       const s = this.sentences[i];
-      if (curTime >= s.start && curTime <= s.end + 0.3) {
+      const next = this.sentences[i + 1];
+
+      // Se está exatamente dentro da frase
+      if (curTime >= s.start && curTime <= s.end) {
+        foundIndex = i;
+        break;
+      }
+
+      // Se está na pausa natural antes da próxima frase, sustenta a frase atual até a próxima soar
+      if (next && curTime > s.end && curTime < next.start) {
         foundIndex = i;
         break;
       }
     }
 
-    // Se estiver entre frases, mantém a mais recente se estiver próxima
-    if (foundIndex === -1 && this.activeSentenceIndex >= 0) {
-      const prev = this.sentences[this.activeSentenceIndex];
-      if (curTime >= prev.start && curTime <= prev.end + 1.2) {
-        foundIndex = this.activeSentenceIndex;
+    // Fallback inteligente para início/fim
+    if (foundIndex === -1 && this.sentences.length > 0) {
+      if (curTime < this.sentences[0].start) {
+        foundIndex = 0;
+      } else if (curTime >= this.sentences[this.sentences.length - 1].end) {
+        foundIndex = this.sentences.length - 1;
       }
     }
 

@@ -506,16 +506,18 @@
           }
         },
         onSentenceChange: (index, sentence) => {
-          document.querySelectorAll(".sentence-card").forEach((card, i) => {
-            if (i === index) {
-              card.classList.add("active-sentence");
-              if (window.autoScrollEnabled && !window.isEditModeActive) {
-                card.scrollIntoView({ behavior: "smooth", block: "center" });
-              }
-            } else {
-              card.classList.remove("active-sentence");
+          // O(1) fast class toggle
+          const prevCard = document.querySelector(".sentence-card.active-sentence");
+          if (prevCard) {
+            prevCard.classList.remove("active-sentence");
+          }
+          const targetCard = document.getElementById(`sentence-${index}`);
+          if (targetCard) {
+            targetCard.classList.add("active-sentence");
+            if (window.autoScrollEnabled && !window.isEditModeActive) {
+              targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
             }
-          });
+          }
 
           if (sentence) {
             document.getElementById("driving-active-ticker").innerText = `"${sentence.text}"`;
