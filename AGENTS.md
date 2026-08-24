@@ -60,4 +60,12 @@ Sempre que um novo áudio/episódio for adicionado para qualquer aluno da Mentor
 - **Otimização iOS/Android (Lock Screen):** Otimizar a imagem com `sips` para **512x512 pixels (<90 KB)** para garantir exibição imediata e sem falhas na tela bloqueada do iPhone (MediaSession API).
 - **Armazenamento:** Salvar em `assets/images/cover-[aluno]-[slug].jpg` e apontar o campo `coverImage` no arquivo de dados do aluno (`treino/data/[aluno].js`).
 
+---
+
+## 5. Proibição de Switch Automático de Janela (Foco no Antigravity)
+- **PROIBIÇÃO ABSOLUTA de executar comandos `open` que roubem o foco ou forcem a abertura do Chrome/Safari.**
+- Manter o usuário focado no ambiente do Antigravity. Todas as atualizações, builds e testes devem ocorrer em segundo plano.
+- Fornecer links markdown clicáveis no chat para que o usuário decida quando abrir.
+
+
 
