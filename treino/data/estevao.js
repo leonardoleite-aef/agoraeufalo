@@ -13,7 +13,7 @@ window.AEF_STUDENT_ESTEVAO = {
       id: "estevao-01",
       title: "Session 01: UK International Keynote Presentation",
       duration: "16:29",
-      coverImage: "../assets/images/cover-carlos-session01.jpg",
+      coverImage: "../assets/images/cover-estevao-session01.jpg",
       audioUrl: "/assets/audio/alunos/estevao/Estevao_presentation_leo.mp3",
       summary: "High-impact keynote speech coaching by Prof. Leo Leite focusing on public education policy, the Pororoca implementation model, and systemic feedback loops.",
       goldenTip: "Breathe naturally at comma pauses. Speech clarity comes from linking sound chunks together, not from rushing speed.",
@@ -1020,6 +1020,66 @@ window.AEF_STUDENT_ESTEVAO = {
                 "id": 143
         }
 ]
+    },
+    {
+      id: "estevao-02",
+      title: "Dialogue 2: Oxford Presentation Casual",
+      duration: "00:38",
+      coverImage: "../assets/images/cover-estevao-session01.jpg",
+      audioUrl: "/assets/audio/alunos/estevao/Estevao_presentation_leo.mp3",
+      summary: "Spontaneous conversational practice based on the Oxford presentation: opening remarks, Motriz NGO impact, and engaging questions.",
+      goldenTip: "Keep your cadence relaxed and clear. Stress content words ('pleasure', 'Motriz', 'Oxford') and blend function words smoothly.",
+      sentences: [
+        {
+          "id": 1,
+          "start": 1.97,
+          "end": 8.59,
+          "text": "Good afternoon, everyone. My name is Estevão. I'm from Brazil and this is my first time in the UK.",
+          "notes": "Warm opening & steady projection"
+        },
+        {
+          "id": 2,
+          "start": 10.05,
+          "end": 17.63,
+          "text": "It's a pleasure to be here with you today. So let me tell you a little about my work at Motriz.",
+          "notes": "Rhythm chunk: 'pleasure to be here'"
+        },
+        {
+          "id": 3,
+          "start": 17.63,
+          "end": 28.07,
+          "text": "We are an NGO that supports more than forty municipalities in seven state governments across Brazil.",
+          "notes": "Natural number pauses"
+        },
+        {
+          "id": 4,
+          "start": 28.73,
+          "end": 34.99,
+          "text": "Together we reach around three million students and two hundred thousand teachers.",
+          "notes": "Assertive delivery"
+        },
+        {
+          "id": 5,
+          "start": 110.51,
+          "end": 117.33,
+          "text": "A study by Olavo Nogueira Filho right here at Oxford shows something very important.",
+          "notes": "Academic reference linking: 'study by' | 'right here at Oxford'"
+        },
+        {
+          "id": 6,
+          "start": 118.35,
+          "end": 125.71,
+          "text": "Larger education systems in Brazil improve more slowly than smaller ones.",
+          "notes": "Contrast emphasis on 'Larger' vs 'smaller'"
+        },
+        {
+          "id": 7,
+          "start": 132.07,
+          "end": 138.69,
+          "text": "So the question is: how can large public education systems turn policies into better learning outcomes?",
+          "notes": "Key presentation thesis question"
+        }
+      ]
     }
   ]
 };
