@@ -1,7 +1,7 @@
 /**
  * Student Session: Thomas
  * Mentorship VIP - Prof. Leonardo Leite
- * Generated and Calibrated for Interactive Audio Reader
+ * Interactive Audio Reader Playlist
  */
 window.AEF_STUDENT_THOMAS = {
   id: "thomas",
@@ -65,6 +65,101 @@ window.AEF_STUDENT_THOMAS = {
           "end": 31.5,
           "text": "It definitely is. The sky is so clear and blue today.",
           "notes": "Assertive agreement with stress on 'definitely'"
+        }
+      ]
+    },
+    {
+      id: "thomas-02",
+      title: "Dialogue 2: Coffee Shop Decisions",
+      duration: "00:32",
+      coverImage: "../assets/images/cover-thomas-coffee-shop-decisions.jpg",
+      audioUrl: "/assets/audio/alunos/thomas/Dialogue_2_Coffee_Shop_Decisions.mp3",
+      summary: "Everyday conversation at a busy cafe: ordering drinks, asking for recommendations, and natural politeness phrasing.",
+      goldenTip: "Pay attention to polite conversational chunks like 'feel free to' (/fiːl friː tə/) and 'kind of you' (/kaɪnd əv juː/). Link words smoothly.",
+      sentences: [
+        {
+          "id": 1,
+          "start": 0.0,
+          "end": 1.92,
+          "text": "Excuse me, is this seat taken?",
+          "notes": "Polite inquiry with gentle rising intonation at the end"
+        },
+        {
+          "id": 2,
+          "start": 2.28,
+          "end": 4.2,
+          "text": "It's a very busy afternoon in here.",
+          "notes": "Natural cadence: blend 'afternoon_in_here'"
+        },
+        {
+          "id": 3,
+          "start": 4.66,
+          "end": 6.78,
+          "text": "No it isn't. Please feel free to sit down.",
+          "notes": "Warm hospitality chunk: 'feel_free_to_sit_down'"
+        },
+        {
+          "id": 4,
+          "start": 7.16,
+          "end": 9.1,
+          "text": "Oh, thank you. That's very kind of you.",
+          "notes": "Polite fixed expression: 'kind_of_you'"
+        },
+        {
+          "id": 5,
+          "start": 9.52,
+          "end": 11.74,
+          "text": "What is that drink you have there? It looks delicious.",
+          "notes": "Casual curiosity: stress on 'delicious'"
+        },
+        {
+          "id": 6,
+          "start": 12.28,
+          "end": 15.24,
+          "text": "This? It's an iced matcha latte with almond milk.",
+          "notes": "Food & drink chunk: 'iced_matcha_latte_with_almond_milk'"
+        },
+        {
+          "id": 7,
+          "start": 15.56,
+          "end": 17.28,
+          "text": "It's actually my favorite drink in this cafe.",
+          "notes": "Affirmative emphasis on 'favorite drink'"
+        },
+        {
+          "id": 8,
+          "start": 17.72,
+          "end": 22.04,
+          "text": "Oh wow. I don't usually like green tea, but that looks very refreshing.",
+          "notes": "Contrast transition: 'but that looks very refreshing'"
+        },
+        {
+          "id": 9,
+          "start": 22.6,
+          "end": 23.04,
+          "text": "Is it sweet?",
+          "notes": "Quick conversational check: rising pitch"
+        },
+        {
+          "id": 10,
+          "start": 23.4,
+          "end": 25.28,
+          "text": "It's a little bit sweet, but not too much.",
+          "notes": "Nuanced modifier: 'a_little_bit_sweet'"
+        },
+        {
+          "id": 11,
+          "start": 25.62,
+          "end": 26.84,
+          "text": "Do you want to try something similar?",
+          "notes": "Friendly suggestion: blend 'try_something'"
+        },
+        {
+          "id": 12,
+          "start": 26.84,
+          "end": 31.86,
+          "text": "Maybe. I usually just order a plain espresso, but today I feel like something different.",
+          "notes": "Spontaneous decision expression: 'feel_like_something_different'"
         }
       ]
     }
