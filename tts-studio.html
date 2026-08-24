@@ -211,53 +211,113 @@
     <!-- ======================================================================= -->
     <div class="lg:col-span-7 flex flex-col bg-[#0B0F17] border-r border-[#1F2B45] overflow-y-auto p-4 sm:p-6 space-y-5">
       
-      <!-- Voice Mode Switcher: 1 Speaker vs 2 Speakers -->
+      <!-- Primary Studio Mode Switcher: ✍️ TTS vs 🎙️ Upload de Áudio Gravado -->
       <div class="space-y-2">
-        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-          <span>Modo de Voz</span>
+        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+          <span>Origem da Produção</span>
+          <span class="text-[10px] text-amber-400 font-mono font-normal">Fábrica Completa de Treinos</span>
         </label>
         
-        <div class="grid grid-cols-2 gap-2 p-1 bg-[#111726] border border-[#1F2B45] rounded-xl max-w-md">
-          <button id="modeBtnSingle" onclick="setSpeakerMode('single')" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200">
-            <i data-lucide="user" class="w-4 h-4"></i>
-            <span>1 Speaker (Narração)</span>
+        <div class="grid grid-cols-2 gap-2 p-1 bg-[#111726] border border-[#1F2B45] rounded-xl">
+          <button id="prodModeBtnTTS" type="button" onclick="setProductionMode('tts')" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md">
+            <i data-lucide="sparkles" class="w-4 h-4 fill-current"></i>
+            <span>✍️ Criar com TTS (Gemini)</span>
           </button>
           
-          <button id="modeBtnDual" onclick="setSpeakerMode('dual')" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md">
-            <i data-lucide="users" class="w-4 h-4"></i>
-            <span>2 Speakers (Diálogo)</span>
+          <button id="prodModeBtnUpload" type="button" onclick="setProductionMode('upload')" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+            <span>🎙️ Subir Áudio Gravado</span>
           </button>
         </div>
       </div>
 
-      <!-- Speaker Configuration Card -->
-      <div id="speakerConfigContainer" class="space-y-3">
-        
-        <!-- SINGLE SPEAKER CONFIG -->
-        <div id="singleSpeakerBox" class="hidden p-4 rounded-2xl bg-[#111726] border border-[#1F2B45] space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="mic" class="w-3.5 h-3.5"></i>
-              Voz Principal (Gemini HD)
-            </span>
-            <button onclick="openVoiceGalleryModal()" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1">
-              <span>Explorar todas as 23 vozes</span>
-              <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </button>
+      <!-- UPLOAD CONTROLS WRAPPER (Shown only in Upload Mode) -->
+      <div id="uploadControlsWrapper" class="hidden space-y-3">
+        <div id="uploadDropZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleFileDrop(event)" onclick="document.getElementById('audioFileInput').click()" class="border-2 border-dashed border-[#2D3D60] hover:border-amber-400 bg-[#111726]/60 rounded-2xl p-6 text-center cursor-pointer transition space-y-2 group">
+          <input type="file" id="audioFileInput" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg" onchange="handleFileSelect(this.files)" class="hidden">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 group-hover:scale-110 flex items-center justify-center mx-auto transition">
+            <i data-lucide="upload-cloud" class="w-6 h-6"></i>
           </div>
+          <div>
+            <h4 class="text-sm font-bold text-slate-200 group-hover:text-amber-300 transition">Arraste seu arquivo de áudio ou clique para selecionar</h4>
+            <p class="text-[11px] text-slate-400 mt-0.5">Suporta MP3, WAV, M4A, AAC, OGG (Gravações de aulas, mentorias ou treinos)</p>
+          </div>
+        </div>
 
-          <div class="flex items-center gap-2">
-            <select id="singleVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none cursor-pointer truncate">
-              <!-- Populado via JS -->
-            </select>
+        <!-- Loaded Audio Preview Card -->
+        <div id="uploadedAudioInfoCard" class="hidden p-4 rounded-2xl bg-[#111726] border border-amber-500/30 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 truncate">
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-sm shrink-0">
+              <i data-lucide="music" class="w-5 h-5"></i>
+            </div>
+            <div class="truncate">
+              <h4 id="uploadedFileName" class="text-xs font-bold text-white truncate">audio_recording.mp3</h4>
+              <p class="text-[10px] text-slate-400 flex items-center gap-2 mt-0.5">
+                <span id="uploadedFileSize" class="font-mono text-amber-400">0 MB</span>
+                <span>•</span>
+                <span id="uploadedFileDuration" class="font-mono text-slate-300">Duração: --:--</span>
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="document.getElementById('audioFileInput').click()" class="px-3 py-1.5 rounded-lg bg-[#161F33] hover:bg-[#1F2B45] text-slate-300 text-xs font-semibold shrink-0 transition">
+            Trocar
+          </button>
+        </div>
+      </div>
+
+      <!-- TTS CONTROLS WRAPPER (Shown only in TTS Mode) -->
+      <div id="ttsControlsWrapper" class="space-y-4">
+        <!-- Voice Mode Switcher: 1 Speaker vs 2 Speakers -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span>Modo de Voz</span>
+          </label>
+          
+          <div class="grid grid-cols-2 gap-2 p-1 bg-[#111726] border border-[#1F2B45] rounded-xl max-w-md">
+            <button id="modeBtnSingle" type="button" onclick="setSpeakerMode('single')" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200">
+              <i data-lucide="user" class="w-4 h-4"></i>
+              <span>1 Speaker (Narração)</span>
+            </button>
             
-            <button id="singleSampleBtn" onclick="testVoiceSample('single')" title="Ouvir Amostra desta Voz" class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition">
-              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+            <button id="modeBtnDual" type="button" onclick="setSpeakerMode('dual')" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              <span>2 Speakers (Diálogo)</span>
             </button>
           </div>
+        </div>
 
-          <div id="singleVoiceInfo" class="text-[11px] text-slate-400 flex items-center justify-between px-1">
-            <span>Carregando informações da voz...</span>
+        <!-- Speaker Configuration Card -->
+        <div id="speakerConfigContainer" class="space-y-3">
+          
+          <!-- SINGLE SPEAKER CONFIG -->
+          <div id="singleSpeakerBox" class="hidden p-4 rounded-2xl bg-[#111726] border border-[#1F2B45] space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+                Voz Principal (Gemini HD)
+              </span>
+              <button type="button" onclick="openVoiceGalleryModal()" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1">
+                <span>Explorar todas as 23 vozes</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <select id="singleVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none cursor-pointer truncate">
+                <!-- Populado via JS -->
+              </select>
+              
+              <button id="singleSampleBtn" type="button" onclick="testVoiceSample('single')" title="Ouvir Amostra desta Voz" class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition">
+                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+              </button>
+            </div>
+
+            <div id="singleVoiceInfo" class="text-[11px] text-slate-400 flex items-center justify-between px-1">
+              <span>Carregando informações da voz...</span>
+            </div>
+          </div>
+        </div>
+      </div>
           </div>
         </div>
 
@@ -361,13 +421,20 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
             <span>Estimativa: <strong id="metricEstDuration" class="text-amber-400">~0s</strong></span>
           </div>
 
-          <!-- Title Input & Generate Button -->
+          <!-- Title Input & Action Buttons (TTS vs Transcrição) -->
           <div class="flex items-center gap-2 w-full sm:w-auto">
             <input type="text" id="audioTitleInput" value="magic_story_reflex_01" placeholder="Nome do arquivo (slug)" class="flex-1 sm:w-48 bg-[#111726] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 font-mono outline-none">
 
-            <button id="generateAudioBtn" onclick="generateAudioTTS()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
+            <!-- TTS Generate Button -->
+            <button id="generateAudioBtn" type="button" onclick="generateAudioTTS()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
               <i data-lucide="sparkles" class="w-4 h-4 fill-current"></i>
               <span>Gerar Áudio MP3 (Gemini TTS)</span>
+            </button>
+
+            <!-- Audio Upload Transcription Button -->
+            <button id="transcribeAudioBtn" type="button" onclick="transcribeUploadedAudio()" class="hidden w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20 active:scale-95 transition-all">
+              <i data-lucide="bot" class="w-4 h-4"></i>
+              <span>Transcrever com IA (Gemini)</span>
             </button>
           </div>
         </div>
@@ -779,6 +846,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
     }
 
     const STATE = {
+      productionMode: 'tts', // 'tts' or 'upload'
       mode: 'dual',
       apiKey: localStorage.getItem('AEF_GEMINI_API_KEY') || '',
       model: initialModel,
@@ -786,8 +854,164 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       currentWavBlob: null,
       currentMp3Blob: null,
       currentMeta: null,
+      uploadedFile: null,
       history: JSON.parse(localStorage.getItem('AEF_TTS_HISTORY') || '[]')
     };
+
+    // =========================================================================
+    // 2.1 PRODUCTION MODE (TTS vs UPLOAD)
+    // =========================================================================
+    function setProductionMode(mode) {
+      STATE.productionMode = mode;
+      const ttsBtn = document.getElementById('prodModeBtnTTS');
+      const uploadBtn = document.getElementById('prodModeBtnUpload');
+      const ttsWrapper = document.getElementById('ttsControlsWrapper');
+      const uploadWrapper = document.getElementById('uploadControlsWrapper');
+      const genBtn = document.getElementById('generateAudioBtn');
+      const transBtn = document.getElementById('transcribeAudioBtn');
+
+      if (mode === 'upload') {
+        if (ttsBtn) ttsBtn.className = "flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200";
+        if (uploadBtn) uploadBtn.className = "flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md";
+        if (ttsWrapper) ttsWrapper.classList.add('hidden');
+        if (uploadWrapper) uploadWrapper.classList.remove('hidden');
+        if (genBtn) genBtn.classList.add('hidden');
+        if (transBtn) transBtn.classList.remove('hidden');
+      } else {
+        if (ttsBtn) ttsBtn.className = "flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md";
+        if (uploadBtn) uploadBtn.className = "flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200";
+        if (ttsWrapper) ttsWrapper.classList.remove('hidden');
+        if (uploadWrapper) uploadWrapper.classList.add('hidden');
+        if (genBtn) genBtn.classList.remove('hidden');
+        if (transBtn) transBtn.classList.add('hidden');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      const zone = document.getElementById('uploadDropZone');
+      if (zone) zone.classList.add('border-amber-400', 'bg-[#161F33]');
+    }
+
+    function handleDragLeave(e) {
+      e.preventDefault();
+      const zone = document.getElementById('uploadDropZone');
+      if (zone) zone.classList.remove('border-amber-400', 'bg-[#161F33]');
+    }
+
+    function handleFileDrop(e) {
+      e.preventDefault();
+      const zone = document.getElementById('uploadDropZone');
+      if (zone) zone.classList.remove('border-amber-400', 'bg-[#161F33]');
+      if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+        handleFileSelect(e.dataTransfer.files);
+      }
+    }
+
+    function handleFileSelect(files) {
+      if (!files || files.length === 0) return;
+      const file = files[0];
+      if (!file.type.startsWith('audio/') && !file.name.match(/\.(mp3|wav|m4a|aac|ogg)$/i)) {
+        showToast("Por favor, selecione um arquivo de áudio válido (.mp3, .wav, .m4a, .aac, .ogg).", "warning");
+        return;
+      }
+
+      STATE.uploadedFile = file;
+      STATE.currentAudioBlob = file;
+      STATE.currentMp3Blob = file;
+
+      // Update UI Info Card
+      const infoCard = document.getElementById('uploadedAudioInfoCard');
+      const fileNameEl = document.getElementById('uploadedFileName');
+      const fileSizeEl = document.getElementById('uploadedFileSize');
+      const fileDurationEl = document.getElementById('uploadedFileDuration');
+      const titleInput = document.getElementById('audioTitleInput');
+
+      if (infoCard) infoCard.classList.remove('hidden');
+      if (fileNameEl) fileNameEl.textContent = file.name;
+      if (fileSizeEl) fileSizeEl.textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+
+      const slug = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase();
+      if (titleInput && (!titleInput.value || titleInput.value === 'magic_story_reflex_01')) {
+        titleInput.value = slug;
+      }
+
+      // Load into Mastering Player
+      const tempUrl = URL.createObjectURL(file);
+      const tempAudio = new Audio(tempUrl);
+      tempAudio.addEventListener('loadedmetadata', () => {
+        const durSec = Math.round(tempAudio.duration);
+        if (fileDurationEl) fileDurationEl.textContent = `Duração: ${formatTime(durSec)}`;
+        loadMasterAudio(file, slug, durSec);
+      });
+
+      showToast(`Áudio <strong>${file.name}</strong> carregado com sucesso! Clique em "Transcrever com IA" para gerar as frases.`, "success");
+    }
+
+    async function transcribeUploadedAudio() {
+      if (!STATE.uploadedFile) {
+        showToast("Selecione ou arraste um arquivo de áudio antes de transcrever.", "warning");
+        return;
+      }
+
+      if (!STATE.apiKey) {
+        openConfigModal();
+        showToast("Insira sua Gemini API Key para transcrever o áudio com IA.", "warning");
+        return;
+      }
+
+      const btn = document.getElementById('transcribeAudioBtn');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Transcrevendo com Gemini 2.0 Flash...</span>`;
+      }
+
+      try {
+        const sentences = await window.aefAudioHub.transcribeAudioWithGemini(
+          STATE.uploadedFile,
+          STATE.apiKey,
+          STATE.uploadedFile.type || "audio/mp3"
+        );
+
+        if (!sentences || sentences.length === 0) {
+          throw new Error("Nenhuma fala identificada no áudio.");
+        }
+
+        // Format script in editor
+        const scriptLines = sentences.map(s => {
+          const prefix = s.notes && s.notes.includes('Speaker') ? s.notes.replace('Speaker: ', '') : 'Leo';
+          return `${prefix}: ${s.text}`;
+        }).join('\n');
+
+        const scriptArea = document.getElementById('scriptInput');
+        if (scriptArea) {
+          scriptArea.value = scriptLines;
+          updateMetrics();
+        }
+
+        const title = document.getElementById('audioTitleInput')?.value || STATE.uploadedFile.name.replace(/\.[^/.]+$/, "");
+        STATE.currentMeta = {
+          id: title.toLowerCase().replace(/[^a-z0-9_-]/g, '_'),
+          title: title,
+          script: scriptLines,
+          speakers: "Gravação Real (Transcrição Gemini)",
+          sentences: sentences
+        };
+
+        showToast(`🎉 Transcrição concluída com sucesso! <strong>${sentences.length} frases mapeadas</strong> com timestamps milimétricos. Pronto para publicar!`, "success", 7000);
+
+      } catch (err) {
+        console.error("Transcription Error:", err);
+        showToast(`Erro na transcrição por IA: ${err.message}`, "error");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+        }
+      }
+    }
 
     const VOICE_SAMPLE_CACHE = {};
     let activeSampleVoice = null;

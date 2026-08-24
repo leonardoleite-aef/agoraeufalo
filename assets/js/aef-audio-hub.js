@@ -321,6 +321,93 @@ class AEFAudioHub {
       };
     });
   }
+
+  // =========================================================================
+  // 6. MULTIMODAL AUDIO TRANSCRIPTION (GEMINI 2.0 FLASH)
+  // =========================================================================
+  async transcribeAudioWithGemini(audioBlob, apiKey, mimeType = "audio/mp3") {
+    if (!apiKey) throw new Error("Chave da Gemini API não informada.");
+
+    // Convert blob to base64
+    const base64Data = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result.split(',')[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(audioBlob);
+    });
+
+    const promptText = `You are an expert English phonetics coach and audio transcriber for Professor Leonardo Leite's AgoraEuFalo training program.
+Transcribe this spoken English audio recording. Break it down into clear, natural conversational sentences or sound chunks.
+For each sentence, identify:
+1. start: Approximate start time in seconds (float, e.g. 0.0)
+2. end: Approximate end time in seconds (float, e.g. 4.2)
+3. text: The exact English spoken words.
+4. notes: Key phonetic chunks, rhythm links, contractions, or speaker names if identifiable.
+
+Return ONLY a valid JSON array of objects:
+[
+  { "id": 1, "start": 0.0, "end": 3.5, "text": "Good morning everyone.", "notes": "Warm opening" }
+]`;
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            {
+              inline_data: {
+                mime_type: mimeType || "audio/mp3",
+                data: base64Data
+              }
+            },
+            {
+              text: promptText
+            }
+          ]
+        }],
+        generationConfig: {
+          temperature: 0.2,
+          responseMimeType: "application/json"
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errJson = await response.json().catch(() => ({}));
+      throw new Error(errJson.error?.message || `Erro na API Gemini (${response.status})`);
+    }
+
+    const resJson = await response.json();
+    const rawText = resJson.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    
+    // Parse JSON
+    try {
+      const cleanJsonStr = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const parsed = JSON.parse(cleanJsonStr);
+      if (Array.isArray(parsed)) {
+        return parsed.map((item, idx) => ({
+          id: idx + 1,
+          start: typeof item.start === 'number' ? item.start : parseFloat(item.start) || 0.0,
+          end: typeof item.end === 'number' ? item.end : parseFloat(item.end) || 0.0,
+          text: (item.text || "").trim(),
+          notes: (item.notes || "").trim()
+        }));
+      }
+    } catch (e) {
+      console.warn("Could not parse direct JSON from Gemini, falling back to text parsing:", e);
+    }
+
+    // Fallback: parse plain lines
+    return this.parseScriptToSentences(rawText, 30);
+  }
 }
 
 // Global Singleton
