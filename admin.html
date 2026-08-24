@@ -35,8 +35,12 @@
         <span class="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs">PAINEL DO PROFESSOR</span>
       </div>
       <div class="flex items-center gap-3 text-xs">
-        <a href="mentoria.html" class="text-slate-300 hover:text-amber-400 font-semibold">Landing Page Mentoria</a>
-        <a href="treino/player.html?aluno=estevao" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 text-white hover:bg-white/20 font-bold">Abrir Player do Estevao ↗</a>
+        <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 hover:bg-amber-400 font-extrabold flex items-center gap-1.5 shadow-sm transition">
+          <span>🎙️</span> TTS Studio (Fábrica MP3)
+        </a>
+        <a href="blog-panel.html" class="text-slate-300 hover:text-amber-400 font-semibold">Biblioteca de Artigos</a>
+        <a href="mentoria.html" class="text-slate-300 hover:text-amber-400 font-semibold">Landing Page</a>
+        <a href="treino/player.html?aluno=estevao" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 text-white hover:bg-white/20 font-bold">Player Estevao ↗</a>
       </div>
     </div>
   </header>
@@ -44,14 +48,47 @@
   <!-- Main Content -->
   <main class="max-w-6xl mx-auto w-full p-6 sm:p-8 flex-1">
     
-    <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <!-- Quick Studio Tools Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <a href="tts-studio.html" class="group bg-[#0A192F] text-white p-5 rounded-2xl border border-amber-500/40 shadow-sm hover:border-amber-400 transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="p-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs">🎙️ NOVO</span>
+            <span class="text-xs text-amber-400 group-hover:translate-x-0.5 transition">Abrir Estúdio ↗</span>
+          </div>
+          <h2 class="font-extrabold text-base text-white group-hover:text-amber-300 transition">TTS Studio • Fábrica MP3</h2>
+          <p class="text-xs text-slate-300 mt-1">Gere áudios didáticos de 1 ou 2 speakers com vozes HD do Gemini e baixe em MP3.</p>
+        </div>
+      </a>
+
+      <a href="blog-panel.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-slate-400 transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="p-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">✍️ BLOG</span>
+            <span class="text-xs text-slate-600 group-hover:translate-x-0.5 transition">Acessar ↗</span>
+          </div>
+          <h2 class="font-extrabold text-base text-slate-900 group-hover:text-amber-600 transition">Biblioteca de Artigos</h2>
+          <p class="text-xs text-slate-600 mt-1">Gestão de posts, takeaways, sacadas de ouro e sincronização de feeds.</p>
+        </div>
+      </a>
+
+      <a href="seo-manager.html" class="group bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-slate-400 transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="p-2 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">⚡ SEO</span>
+            <span class="text-xs text-slate-600 group-hover:translate-x-0.5 transition">Acessar ↗</span>
+          </div>
+          <h2 class="font-extrabold text-base text-slate-900 group-hover:text-amber-600 transition">SEO & Performance</h2>
+          <p class="text-xs text-slate-600 mt-1">Auditoria de metatags, schema JSON-LD, sitemap e indexação no Google.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#0A192F]">Gestão de Mentorados VIP</h1>
+        <h2 class="text-2xl font-bold font-serif text-[#0A192F]">Gestão de Mentorados VIP</h2>
         <p class="text-slate-600 text-sm mt-1">Acesse e teste as sessões de áudio individuais dos seus 4 alunos mentorados.</p>
       </div>
-      <a href="https://wa.me/5511993245466" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm transition">
-        <span>💬</span> WhatsApp Oficial do Leo
-      </a>
     </div>
 
     <!-- Student Cards Grid -->
