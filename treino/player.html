@@ -473,9 +473,9 @@
   <!-- Core Scripts -->
   <script src="data/registry.js"></script>
   <script src="data/estevao.js"></script>
-  <script src="data/marcos.js"></script>
-  <script src="data/patricia.js"></script>
-  <script src="data/carlos.js"></script>
+  <script src="data/thomas.js"></script>
+  <script src="data/andre.js"></script>
+  <script src="data/matheus.js"></script>
   <script src="js/offline-manager.js"></script>
   <script src="js/player-engine.js"></script>
   <script src="js/ui-controller.js"></script>
@@ -556,9 +556,9 @@
       function getStudentData(id) {
         id = id.toLowerCase().trim();
         if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return window.AEF_STUDENT_ESTEVAO;
-        if (id === "marcos" && window.AEF_STUDENT_MARCOS) return window.AEF_STUDENT_MARCOS;
-        if (id === "patricia" && window.AEF_STUDENT_PATRICIA) return window.AEF_STUDENT_PATRICIA;
-        if (id === "carlos" && window.AEF_STUDENT_CARLOS) return window.AEF_STUDENT_CARLOS;
+        if (id === "thomas" && window.AEF_STUDENT_THOMAS) return window.AEF_STUDENT_THOMAS;
+        if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return window.AEF_STUDENT_ANDRE;
+        if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return window.AEF_STUDENT_MATHEUS;
         return window.AEF_STUDENT_ESTEVAO || { id: "estevao", name: "Estevao", tracks: [] };
       }
 

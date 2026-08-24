@@ -6,7 +6,7 @@ window.AEF_REGISTRY = {
   students: [
     {
       id: "estevao",
-      name: "Estevão",
+      name: "Estevao",
       badge: "VIP Mentee",
       subtitle: "Keynote Delivery & International Fluency",
       avatarEmoji: "👨‍💻",
@@ -16,37 +16,37 @@ window.AEF_REGISTRY = {
       dataFile: "data/estevao.js"
     },
     {
-      id: "marcos",
-      name: "Marcos",
+      id: "thomas",
+      name: "Thomas",
       badge: "VIP Mentee",
       subtitle: "Executive Meeting Reflex & Quick Phrasing",
       avatarEmoji: "👔",
       avatarBg: "bg-sky-500/10 text-sky-500 border-sky-500/20",
-      pin: "1234",
+      pin: "2345",
       active: true,
-      dataFile: "data/marcos.js"
+      dataFile: "data/thomas.js"
     },
     {
-      id: "patricia",
-      name: "Patrícia",
+      id: "andre",
+      name: "André",
       badge: "VIP Mentee",
       subtitle: "Professional Storytelling & Global Interviews",
-      avatarEmoji: "👩‍💼",
+      avatarEmoji: "💼",
       avatarBg: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-      pin: "1234",
+      pin: "3456",
       active: true,
-      dataFile: "data/patricia.js"
+      dataFile: "data/andre.js"
     },
     {
-      id: "carlos",
-      name: "Carlos",
+      id: "matheus",
+      name: "Matheus",
       badge: "VIP Mentee",
       subtitle: "Native Sound Reduction & Connected Speech",
       avatarEmoji: "🎯",
       avatarBg: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-      pin: "1234",
+      pin: "4567",
       active: true,
-      dataFile: "data/carlos.js"
+      dataFile: "data/matheus.js"
     }
   ]
 };
