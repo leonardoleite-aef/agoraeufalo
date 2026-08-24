@@ -1949,6 +1949,20 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
       }
     }
 
+    function updateApiKeyStatus() {
+      const badge = document.getElementById('apiKeyStatusBadge');
+      const text = document.getElementById('apiKeyStatusText');
+      if (!badge || !text) return;
+
+      if (STATE.apiKey) {
+        badge.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold cursor-pointer";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>API Key Conectada</span>`;
+      } else {
+        badge.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold cursor-pointer";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span><span>Inserir API Key</span>`;
+      }
+    }
+
     // =========================================================================
     // 13. PUBLISH TO INTERACTIVE PLAYER & CENTRAL HUB (ZERO TERMINAL)
     // =========================================================================
