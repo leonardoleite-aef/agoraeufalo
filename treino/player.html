@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VIP Spoken Reflex Player | AgoraEuFalo</title>
+  <meta name="description" content="High-precision interactive audio reader for Prof. Leonardo Leite's VIP mentees.">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0A192F">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AEF Training">
+  <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#D97706',
+              'gold-light': '#F59E0B',
+              'gold-bright': '#FBBF24',
+              'amber-bg': '#FFFBEB',
+              'amber-border': '#FCD34D',
+              slate: '#1E293B',
+              muted: '#64748B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .theme-light {
+      --bg-page: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --border-card: #E5E0D8;
+      --border-active: #D97706;
+      --text-title: #0A192F;
+      --text-body: #1E293B;
+      --text-muted: #64748B;
+      --highlight-bg: #FEF3C7;
+      --highlight-border: #D97706;
+      --highlight-text: #78350F;
+    }
+
+    .theme-sepia {
+      --bg-page: #F4ECD8;
+      --bg-card: #FDFBF7;
+      --border-card: #E2D3B3;
+      --border-active: #B45309;
+      --text-title: #382818;
+      --text-body: #4A3B2C;
+      --text-muted: #7D6B58;
+      --highlight-bg: #EADCC5;
+      --highlight-border: #B45309;
+      --highlight-text: #2C1B0D;
+    }
+
+    .theme-dark {
+      --bg-page: #0A192F;
+      --bg-card: #112240;
+      --border-card: #1E3A5F;
+      --border-active: #F59E0B;
+      --text-title: #FFFFFF;
+      --text-body: #E2E8F0;
+      --text-muted: #94A3B8;
+      --highlight-bg: #1E293B;
+      --highlight-border: #F59E0B;
+      --highlight-text: #FDE68A;
+    }
+
+    /* Millimetric Sentence Card */
+    .sentence-card {
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .sentence-card.active-sentence {
+      transform: translateY(-2px) scale(1.008);
+      border-color: #D97706 !important;
+      background-color: var(--highlight-bg) !important;
+      box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.2), 0 4px 10px -2px rgba(217, 119, 6, 0.1);
+    }
+    .sentence-card.active-sentence .sentence-text {
+      color: var(--highlight-text) !important;
+      font-weight: 700;
+    }
+    .sentence-card.active-sentence .time-pill {
+      background-color: #D97706 !important;
+      color: #FFFFFF !important;
+      border-color: #D97706 !important;
+    }
+
+    /* Range input styling */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+    }
+    input[type=range]:focus {
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: #F59E0B;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+  </style>
+</head>
+<body class="bg-[#FAF8F5] text-slate-800 min-h-screen flex flex-col antialiased selection:bg-amber-200 selection:text-amber-900 pb-36">
+
+  <!-- ========================================== -->
+  <!-- 1. HEADER (AgoraEuFalo Official Brand)      -->
+  <!-- ========================================== -->
+  <header class="bg-[#0A192F] text-white border-b border-white/10 sticky top-0 z-40 shadow-md">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      
+      <!-- Brand Logo & Mentee Badge -->
+      <div class="flex items-center gap-3">
+        <a href="../mentoria.html" class="flex items-center gap-2 group" title="AgoraEuFalo VIP Mentorship">
+          <img src="../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
+        </a>
+        <div class="h-5 w-px bg-white/20 hidden sm:block"></div>
+        <div class="flex items-center gap-1.5">
+          <span id="header-student-name" class="font-bold text-sm text-amber-400">Mentee Session</span>
+          <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold tracking-wider uppercase border border-amber-500/30">VIP</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <!-- Driving Mode Toggle -->
+        <button id="btn-toggle-driving" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-bold text-xs transition shadow-xs">
+          <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+          <span class="hidden sm:inline">Driving Mode</span>
+        </button>
+
+        <!-- Edit Transcript Toggle -->
+        <button id="btn-toggle-edit-mode" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-semibold text-xs transition shadow-xs" title="Review / Edit Transcript">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+
+        <!-- Theme Picker -->
+        <div class="relative">
+          <button id="btn-theme-menu" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white transition shadow-xs" title="Change Theme">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          </button>
+          <div id="theme-dropdown" class="hidden absolute right-0 mt-2 w-36 bg-[#0A192F] border border-white/20 rounded-xl shadow-2xl p-1.5 z-50 text-white">
+            <button onclick="window.uiController.setTheme('light')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/10 flex items-center justify-between">☀️ Light</button>
+            <button onclick="window.uiController.setTheme('sepia')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-200 hover:bg-white/10 flex items-center justify-between">📜 Sepia</button>
+            <button onclick="window.uiController.setTheme('dark')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/10 flex items-center justify-between">🌙 Navy Dark</button>
+          </div>
+        </div>
+
+        <!-- Playlist Drawer Button -->
+        <button id="btn-open-drawer" class="p-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition shadow-xs" title="View Training Tracks">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN READING CONTAINER                   -->
+  <!-- ========================================== -->
+  <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 pt-5">
+    
+    <!-- Reading View -->
+    <div id="reading-view" class="w-full flex flex-col space-y-4">
+      
+      <!-- Session Overview Card with Cover Artwork -->
+      <div class="bg-white dark:bg-[#112240] border-2 border-amber-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-4">
+          
+          <!-- Episode Cover Artwork -->
+          <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-amber-400/50 shadow-md shrink-0 bg-[#0A192F]">
+            <img id="track-cover-img" src="../assets/images/cover-estevao-session01.jpg" alt="Episode Cover" class="w-full h-full object-cover">
+          </div>
+
+          <div class="flex-1 text-center sm:text-left">
+            <div class="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">
+              <span>🎙️</span> <span>Personalized Audio Workout</span>
+            </div>
+            <h1 id="track-title" class="text-xl sm:text-2xl font-bold font-serif text-[#0A192F] dark:text-white leading-tight">
+              Loading Session...
+            </h1>
+            <p id="track-summary" class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mt-2">
+              Individual coaching session recorded by Professor Leonardo Leite.
+            </p>
+          </div>
+        </div>
+
+        <!-- Golden Insight Card -->
+        <div class="bg-amber-50/90 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 rounded-2xl p-4 text-xs sm:text-sm shadow-xs">
+          <div class="flex items-start gap-3">
+            <span class="text-xl shrink-0">💡</span>
+            <div>
+              <span class="font-extrabold text-amber-950 dark:text-amber-300 uppercase tracking-wider text-[10px] block mb-0.5">Prof. Leo's Golden Insight:</span>
+              <span id="track-golden-tip" class="text-slate-800 dark:text-slate-200 leading-relaxed font-medium">Breathe naturally during pause markers. Speech clarity comes from linking sound chunks together, not from rushing speed.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Toolbar -->
+      <div class="bg-white dark:bg-[#112240] border border-amber-200/70 dark:border-slate-800 rounded-2xl p-2.5 sm:p-3 shadow-xs flex flex-wrap items-center justify-between gap-2.5">
+        
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <!-- Karaoke Toggle -->
+          <button id="btn-toggle-karaoke" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition">
+            <span>🎤</span> <span id="karaoke-status-text">Karaoke ON</span>
+          </button>
+
+          <!-- Loop Sentence Toggle -->
+          <button id="btn-toggle-loop" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-amber-100 dark:hover:bg-amber-900/30 font-bold text-xs transition">
+            <span>🔁</span> <span id="loop-status-text">Loop Phrase</span>
+          </button>
+
+          <!-- Auto-Scroll Toggle -->
+          <button id="btn-toggle-autoscroll" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100/70 dark:bg-slate-800 text-amber-900 dark:text-amber-300 font-bold text-xs transition">
+            <span>📜</span> <span>Auto-Scroll</span>
+          </button>
+
+          <!-- Font Size Adjustments -->
+          <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            <button onclick="window.uiController.setFontSize('sm')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A-</button>
+            <button onclick="window.uiController.setFontSize('base')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A</button>
+            <button onclick="window.uiController.setFontSize('lg')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A+</button>
+          </div>
+        </div>
+
+        <!-- Playback Speed Controls -->
+        <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+          <button onclick="window.setSpeed(0.75)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-amber-600">0.75x</button>
+          <button onclick="window.setSpeed(0.9)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-amber-600">0.9x</button>
+          <button onclick="window.setSpeed(1.0)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold bg-amber-600 text-white shadow-xs">1.0x</button>
+          <button onclick="window.setSpeed(1.25)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-amber-600">1.25x</button>
+          <button onclick="window.setSpeed(1.5)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-amber-600">1.5x</button>
+        </div>
+      </div>
+
+      <!-- Edit Mode Banner -->
+      <div id="edit-mode-banner" class="hidden bg-sky-50 dark:bg-sky-950/40 border border-sky-300 dark:border-sky-800 rounded-2xl p-3.5 text-xs flex items-center justify-between gap-3 text-sky-950 dark:text-sky-200">
+        <div class="flex items-center gap-2">
+          <span>✏️</span>
+          <span><strong>Edit Mode Active:</strong> You can edit any phrase text directly below.</span>
+        </div>
+        <button onclick="window.exportUpdatedTranscript()" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold shadow-xs transition">
+          Export / Save JS
+        </button>
+      </div>
+
+      <!-- Sentences Container -->
+      <div id="sentences-container" class="space-y-3 pt-2 text-lg">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- DRIVING MODE VIEW (Album Cover & Big Icons)-->
+    <!-- ========================================== -->
+    <div id="driving-view" class="hidden w-full flex-1 flex flex-col items-center justify-center py-6 min-h-[75vh]">
+      
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-extrabold text-xs mb-2 border border-amber-500/30">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+          <span>DRIVING MODE • HANDS-FREE ACTIVE</span>
+        </div>
+        <h2 id="driving-track-title" class="text-xl sm:text-2xl font-bold font-serif text-[#0A192F] dark:text-white">
+          Session Title
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Professor Leonardo Leite • AgoraEuFalo VIP</p>
+      </div>
+
+      <!-- Large Centerpiece Album Cover Artwork -->
+      <div class="relative w-64 h-64 sm:w-80 sm:h-80 rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-400/40 bg-[#0A192F] my-4">
+        <img id="driving-cover-img" src="../assets/images/cover-estevao-session01.jpg" alt="Driving Album Cover" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        <div class="absolute bottom-3 left-4 right-4 text-center">
+          <p id="driving-active-ticker" class="text-xs sm:text-sm font-bold text-amber-300 truncate">
+            Tap Play to start hands-free listening
+          </p>
+        </div>
+      </div>
+
+      <!-- Giant Driver Tactile Controls (Vector SVGs) -->
+      <div class="flex items-center justify-center gap-6 sm:gap-10 pt-4">
+        
+        <!-- Rewind 15s -->
+        <button id="btn-driving-prev" class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white dark:bg-[#112240] border-2 border-amber-300 dark:border-slate-700 text-slate-800 dark:text-white flex flex-col items-center justify-center shadow-lg active:scale-95 transition cursor-pointer" title="Rewind 15 seconds">
+          <svg class="w-7 h-7 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-weight="900" fill="currentColor" stroke="none">15</text>
+          </svg>
+          <span class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 mt-1">-15s</span>
+        </button>
+
+        <!-- Giant Play/Pause -->
+        <button id="btn-driving-play" class="w-22 h-22 sm:w-26 sm:h-26 rounded-3xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 flex items-center justify-center shadow-2xl active:scale-95 transition cursor-pointer border-2 border-amber-300" title="Play/Pause">
+          <svg id="driving-play-icon" class="w-10 h-10 ml-1 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+
+        <!-- Forward 15s -->
+        <button id="btn-driving-next" class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white dark:bg-[#112240] border-2 border-amber-300 dark:border-slate-700 text-slate-800 dark:text-white flex flex-col items-center justify-center shadow-lg active:scale-95 transition cursor-pointer" title="Forward 15 seconds">
+          <svg class="w-7 h-7 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-weight="900" fill="currentColor" stroke="none">15</text>
+          </svg>
+          <span class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 mt-1">+15s</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 3. STICKY AUDIO PLAYER BAR (Navy / Gold)    -->
+  <!-- ========================================== -->
+  <footer id="audio-player-bar" class="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto bg-[#0A192F]/95 backdrop-blur-md border border-white/20 rounded-3xl p-3.5 sm:p-4 z-40 shadow-2xl text-white">
+    <div class="flex flex-col gap-2">
+      
+      <!-- Interactive Scrub Bar -->
+      <div class="flex items-center gap-3">
+        <span id="player-current-time" class="text-[11px] font-bold text-amber-300 w-10 text-right font-mono">00:00</span>
+        <div class="relative flex-1 flex items-center h-4 cursor-pointer" id="progress-bar-container">
+          <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+            <div id="progress-bar-fill" class="bg-gradient-to-r from-amber-500 to-amber-400 h-full w-0 transition-all duration-75"></div>
+          </div>
+          <input type="range" id="audio-scrub" min="0" max="100" value="0" step="0.1" class="absolute inset-0 w-full opacity-0 cursor-pointer">
+        </div>
+        <span id="player-duration" class="text-[11px] font-bold text-slate-400 w-10 font-mono">00:00</span>
+      </div>
+
+      <!-- Controls Row -->
+      <div class="flex items-center justify-between">
+        
+        <!-- Track Thumbnail -->
+        <div class="flex items-center gap-2.5 truncate max-w-[170px] sm:max-w-xs">
+          <img id="player-bar-thumb" src="../assets/images/cover-estevao-session01.jpg" alt="Thumb" class="w-10 h-10 rounded-xl object-cover border border-amber-400/40 shrink-0">
+          <div class="truncate">
+            <p id="player-bar-track-title" class="font-bold text-xs text-white truncate">Session Audio</p>
+            <p id="player-bar-status" class="text-[10px] text-amber-400 font-semibold">Prof. Leonardo Leite</p>
+          </div>
+        </div>
+
+        <!-- Center Play Controls (Vector SVGs) -->
+        <div class="flex items-center gap-2 sm:gap-4">
+          
+          <!-- -10s Rewind -->
+          <button id="btn-player-backward" class="p-2 rounded-xl text-white/80 hover:text-amber-400 hover:bg-white/10 transition cursor-pointer" title="Rewind 10s">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <text x="12" y="15.5" text-anchor="middle" font-size="7" font-weight="900" fill="currentColor" stroke="none">10</text>
+            </svg>
+          </button>
+
+          <!-- Master Play/Pause Button -->
+          <button id="btn-player-play" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 flex items-center justify-center shadow-lg active:scale-95 transition cursor-pointer" title="Play/Pause">
+            <svg id="master-play-icon" class="w-6 h-6 ml-0.5 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+
+          <!-- +10s Forward -->
+          <button id="btn-player-forward" class="p-2 rounded-xl text-white/80 hover:text-amber-400 hover:bg-white/10 transition cursor-pointer" title="Forward 10s">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <text x="12" y="15.5" text-anchor="middle" font-size="7" font-weight="900" fill="currentColor" stroke="none">10</text>
+            </svg>
+          </button>
+        </div>
+
+        <!-- WhatsApp Line to Leo -->
+        <div class="flex items-center gap-2">
+          <a href="https://wa.me/5511993245466?text=Hi%20Leo,%20I'm%20practicing%20my%20VIP%20audio%20workout" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-xs transition">
+            <span>💬 Ask Leo</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- 4. PLAYLIST DRAWER (SLIDE-IN)              -->
+  <!-- ========================================== -->
+  <div id="drawer-backdrop" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 transition-opacity"></div>
+  <aside id="playlist-drawer" class="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-[#0A192F] text-white border-l border-white/20 z-50 transform translate-x-full transition-transform duration-300 ease-in-out p-5 flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between pb-4 border-b border-white/15 mb-4">
+      <h3 class="font-bold text-white text-lg flex items-center gap-2">
+        <span>📑</span> Training Tracks
+      </h3>
+      <button id="btn-close-drawer" class="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <div id="drawer-tracks-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1">
+      <!-- Tracks list injected via JS -->
+    </div>
+
+    <div class="pt-4 border-t border-white/15 text-center">
+      <a href="https://wa.me/5511993245466" target="_blank" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
+        <span>💬</span> WhatsApp Direct Line
+      </a>
+    </div>
+  </aside>
+
+  <!-- Export Transcript Modal -->
+  <div id="export-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#112240] border-2 border-amber-300 dark:border-slate-700 rounded-3xl p-6 max-w-2xl w-full shadow-2xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-slate-800 mb-3">
+        <h3 class="text-lg font-bold text-[#0A192F] dark:text-white">💾 Updated Transcript JS Code</h3>
+        <button onclick="document.getElementById('export-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700 cursor-pointer">✕</button>
+      </div>
+      <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+        Copy the updated code below or replace your student data file (<code class="font-mono text-amber-600">treino/data/[student].js</code>):
+      </p>
+      <textarea id="export-textarea" class="flex-1 w-full bg-slate-50 dark:bg-slate-900 font-mono text-xs p-4 rounded-2xl border border-stone-300 dark:border-slate-700 text-slate-900 dark:text-slate-200 min-h-[280px] focus:outline-none"></textarea>
+      <div class="flex justify-end gap-2 pt-4">
+        <button onclick="navigator.clipboard.writeText(document.getElementById('export-textarea').value); alert('Copied to clipboard!');" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition cursor-pointer">
+          📋 Copy to Clipboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="data/registry.js"></script>
+  <script src="data/estevao.js"></script>
+  <script src="data/marcos.js"></script>
+  <script src="data/patricia.js"></script>
+  <script src="data/carlos.js"></script>
+  <script src="js/player-engine.js"></script>
+  <script src="js/ui-controller.js"></script>
+
+  <!-- Player Bootstrapper -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const playSvg = `<svg class="w-6 h-6 ml-0.5 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+      const pauseSvg = `<svg class="w-6 h-6 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+      const drivingPlaySvg = `<svg class="w-10 h-10 ml-1 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+      const drivingPauseSvg = `<svg class="w-10 h-10 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+      const engine = new AEFPlayerEngine({
+        onPlayStateChange: (isPlaying) => {
+          document.getElementById("btn-player-play").innerHTML = isPlaying ? pauseSvg : playSvg;
+          document.getElementById("btn-driving-play").innerHTML = isPlaying ? drivingPauseSvg : drivingPlaySvg;
+          document.getElementById("player-bar-status").innerText = isPlaying ? "Now Playing..." : "Paused";
+        },
+        onTimeUpdate: (curTime, duration) => {
+          document.getElementById("player-current-time").innerText = uiController.formatTime(curTime);
+          document.getElementById("player-duration").innerText = uiController.formatTime(duration);
+          
+          if (duration > 0) {
+            const pct = (curTime / duration) * 100;
+            document.getElementById("progress-bar-fill").style.width = pct + "%";
+            document.getElementById("audio-scrub").value = pct;
+          }
+        },
+        onSentenceChange: (index, sentence) => {
+          document.querySelectorAll(".sentence-card").forEach((card, i) => {
+            if (i === index) {
+              card.classList.add("active-sentence");
+              if (window.autoScrollEnabled && !window.isEditModeActive) {
+                card.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+            } else {
+              card.classList.remove("active-sentence");
+            }
+          });
+
+          if (sentence) {
+            document.getElementById("driving-active-ticker").innerText = `"${sentence.text}"`;
+          }
+        },
+        onTrackLoaded: (track, trackIndex, sentences) => {
+          document.getElementById("track-title").innerText = track.title;
+          document.getElementById("driving-track-title").innerText = track.title;
+          document.getElementById("player-bar-track-title").innerText = track.title;
+          document.getElementById("track-summary").innerText = track.summary || "";
+          document.getElementById("track-golden-tip").innerText = track.goldenTip || "Breathe naturally and link chunks.";
+          
+          const cover = track.coverImage || "../assets/images/cover-carlos-session01.jpg";
+          document.getElementById("track-cover-img").src = cover;
+          document.getElementById("driving-cover-img").src = cover;
+          document.getElementById("player-bar-thumb").src = cover;
+
+          renderSentencesList(sentences);
+          renderPlaylistDrawer(window.currentLoadedStudent.tracks, trackIndex);
+        }
+      });
+
+      const uiController = new AEFUIController(engine);
+      window.uiController = uiController;
+      window.playerEngine = engine;
+      window.autoScrollEnabled = true;
+      window.isEditModeActive = false;
+
+      // Identify student from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      let studentId = urlParams.get("aluno") || localStorage.getItem("aef_active_student") || "estevao";
+      
+      const studentData = getStudentData(studentId);
+      window.currentLoadedStudent = studentData;
+      document.getElementById("header-student-name").innerText = studentData.name;
+      
+      engine.loadStudentData(studentData, 0);
+
+      function getStudentData(id) {
+        id = id.toLowerCase().trim();
+        if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return window.AEF_STUDENT_ESTEVAO;
+        if (id === "marcos" && window.AEF_STUDENT_MARCOS) return window.AEF_STUDENT_MARCOS;
+        if (id === "patricia" && window.AEF_STUDENT_PATRICIA) return window.AEF_STUDENT_PATRICIA;
+        if (id === "carlos" && window.AEF_STUDENT_CARLOS) return window.AEF_STUDENT_CARLOS;
+        return window.AEF_STUDENT_ESTEVAO || { id: "estevao", name: "Estevao", tracks: [] };
+      }
+
+      function renderSentencesList(sentences) {
+        const container = document.getElementById("sentences-container");
+        if (!sentences || sentences.length === 0) {
+          container.innerHTML = `<div class="p-8 text-center bg-white dark:bg-[#112240] rounded-3xl border border-amber-200 dark:border-slate-800 text-slate-500">No session transcript found for this track.</div>`;
+          return;
+        }
+
+        container.innerHTML = sentences.map((s, idx) => `
+          <div id="sentence-${idx}" onclick="if(!window.isEditModeActive) window.playerEngine.jumpToSentence(${idx})" class="sentence-card bg-white dark:bg-[#112240] border-2 border-stone-200/90 dark:border-slate-800/80 hover:border-amber-400 rounded-2xl p-4 sm:p-5 cursor-pointer shadow-xs">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <span class="time-pill px-2.5 py-0.5 rounded-lg bg-amber-50 dark:bg-slate-800 text-amber-900 dark:text-amber-300 text-[11px] font-bold font-mono tracking-tight border border-amber-200/60 dark:border-slate-700">
+                ${uiController.formatTime(s.start)}
+              </span>
+              <button onclick="event.stopPropagation(); window.toggleSingleLoop(${idx})" class="text-xs px-2.5 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-700 dark:text-slate-300 font-bold transition cursor-pointer" title="Loop this sentence">
+                🔁 Loop
+              </button>
+            </div>
+            
+            <div class="sentence-content">
+              ${window.isEditModeActive ? `
+                <textarea onchange="window.updateSentenceText(${idx}, this.value)" class="w-full p-2.5 bg-amber-50/50 dark:bg-slate-900 rounded-xl border border-amber-300 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white leading-relaxed focus:outline-none focus:border-amber-500" rows="2">${s.text}</textarea>
+              ` : `
+                <p class="sentence-text text-[#0A192F] dark:text-slate-100 leading-relaxed font-medium text-base sm:text-lg">
+                  ${s.text}
+                </p>
+              `}
+            </div>
+
+            ${s.notes ? `
+              <div class="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[11px] font-semibold text-amber-900 dark:text-amber-300">
+                <span>🎯</span> <span>${s.notes}</span>
+              </div>
+            ` : ""}
+          </div>
+        `).join("");
+      }
+
+      window.updateSentenceText = (index, newText) => {
+        if (engine.sentences && engine.sentences[index]) {
+          engine.sentences[index].text = newText;
+        }
+      };
+
+      document.getElementById("btn-toggle-edit-mode").addEventListener("click", (e) => {
+        window.isEditModeActive = !window.isEditModeActive;
+        const banner = document.getElementById("edit-mode-banner");
+        if (window.isEditModeActive) {
+          banner.classList.remove("hidden");
+          e.currentTarget.classList.add("bg-sky-600", "text-white");
+        } else {
+          banner.classList.add("hidden");
+          e.currentTarget.classList.remove("bg-sky-600", "text-white");
+        }
+        renderSentencesList(engine.sentences);
+      });
+
+      window.exportUpdatedTranscript = () => {
+        const student = window.currentLoadedStudent;
+        const jsName = `AEF_STUDENT_${student.id.toUpperCase()}`;
+        const output = `/**\n * Student Session: ${student.name}\n * Mentorship VIP - Prof. Leonardo Leite\n */\nwindow.${jsName} = ${JSON.stringify(student, null, 2)};\n`;
+        document.getElementById("export-textarea").value = output;
+        document.getElementById("export-modal").classList.remove("hidden");
+      };
+
+      function renderPlaylistDrawer(tracks, activeIndex) {
+        const listEl = document.getElementById("drawer-tracks-list");
+        if (!tracks) return;
+
+        listEl.innerHTML = tracks.map((t, idx) => `
+          <div onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx}); window.uiController.togglePlaylistDrawer();" class="p-3.5 rounded-2xl border ${idx === activeIndex ? 'bg-amber-500/20 border-amber-400' : 'bg-white/5 border-white/10 hover:border-amber-400/40'} cursor-pointer transition flex items-center gap-3">
+            <img src="${t.coverImage || '../assets/images/cover-estevao-session01.jpg'}" class="w-12 h-12 rounded-xl object-cover border border-amber-400/30 shrink-0">
+            <div class="flex-1 truncate">
+              <div class="flex items-center justify-between mb-0.5">
+                <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full ${idx === activeIndex ? 'bg-amber-500 text-slate-950' : 'bg-white/10 text-white/70'}">
+                  Track ${idx + 1}
+                </span>
+                <span class="text-xs text-amber-300 font-bold font-mono">${t.duration || ""}</span>
+              </div>
+              <h4 class="font-bold text-xs text-white truncate">${t.title}</h4>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Event Controls
+      document.getElementById("btn-player-play").addEventListener("click", () => engine.togglePlay());
+      document.getElementById("btn-driving-play").addEventListener("click", () => engine.togglePlay());
+      
+      document.getElementById("btn-player-backward").addEventListener("click", () => engine.seekRelative(-10));
+      document.getElementById("btn-player-forward").addEventListener("click", () => engine.seekRelative(10));
+      document.getElementById("btn-driving-prev").addEventListener("click", () => engine.seekRelative(-15));
+      document.getElementById("btn-driving-next").addEventListener("click", () => engine.seekRelative(15));
+
+      document.getElementById("btn-toggle-driving").addEventListener("click", () => uiController.toggleDrivingMode());
+      document.getElementById("btn-open-drawer").addEventListener("click", () => uiController.togglePlaylistDrawer());
+      document.getElementById("btn-close-drawer").addEventListener("click", () => uiController.togglePlaylistDrawer());
+      document.getElementById("drawer-backdrop").addEventListener("click", () => uiController.togglePlaylistDrawer());
+
+      document.getElementById("btn-theme-menu").addEventListener("click", () => {
+        document.getElementById("theme-dropdown").classList.toggle("hidden");
+      });
+
+      document.getElementById("btn-toggle-autoscroll").addEventListener("click", (e) => {
+        window.autoScrollEnabled = !window.autoScrollEnabled;
+        e.currentTarget.classList.toggle("bg-amber-600", window.autoScrollEnabled);
+        e.currentTarget.classList.toggle("text-white", window.autoScrollEnabled);
+      });
+
+      document.getElementById("btn-toggle-karaoke").addEventListener("click", (e) => {
+        const isEnabled = !engine.isKaraokeEnabled;
+        engine.setKaraokeEnabled(isEnabled);
+        document.getElementById("karaoke-status-text").innerText = isEnabled ? "Karaoke ON" : "Karaoke OFF";
+        e.currentTarget.classList.toggle("bg-amber-600", isEnabled);
+        e.currentTarget.classList.toggle("bg-slate-200", !isEnabled);
+        e.currentTarget.classList.toggle("dark:bg-slate-800", !isEnabled);
+        e.currentTarget.classList.toggle("text-slate-700", !isEnabled);
+        e.currentTarget.classList.toggle("dark:text-slate-200", !isEnabled);
+      });
+
+      window.toggleSingleLoop = (idx) => {
+        const loopState = engine.toggleSentenceLoop(idx);
+        updateLoopUI(loopState.enabled);
+      };
+
+      document.getElementById("btn-toggle-loop").addEventListener("click", () => {
+        const loopState = engine.toggleSentenceLoop();
+        updateLoopUI(loopState.enabled);
+      });
+
+      function updateLoopUI(isEnabled) {
+        const btn = document.getElementById("btn-toggle-loop");
+        document.getElementById("loop-status-text").innerText = isEnabled ? "Loop Active" : "Loop Phrase";
+        btn.classList.toggle("bg-amber-600", isEnabled);
+        btn.classList.toggle("text-white", isEnabled);
+      }
+
+      window.setSpeed = (speed) => {
+        engine.setPlaybackRate(speed);
+        document.querySelectorAll(".speed-btn").forEach(b => {
+          if (b.innerText === `${speed}x`) {
+            b.classList.add("bg-amber-600", "text-white", "shadow-xs");
+            b.classList.remove("text-slate-600", "dark:text-slate-400");
+          } else {
+            b.classList.remove("bg-amber-600", "text-white", "shadow-xs");
+            b.classList.add("text-slate-600", "dark:text-slate-400");
+          }
+        });
+      };
+
+      document.getElementById("audio-scrub").addEventListener("input", (e) => {
+        const pct = parseFloat(e.target.value);
+        if (engine.audio.duration) {
+          const targetTime = (pct / 100) * engine.audio.duration;
+          engine.seek(targetTime);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

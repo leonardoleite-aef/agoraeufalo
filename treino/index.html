@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espaço de Treino VIP • AgoraEuFalo | Professor Leonardo Leite</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0A192F">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#0A192F] text-white min-h-screen flex flex-col items-center justify-center p-4 antialiased selection:bg-amber-200 selection:text-amber-900">
+
+  <div class="max-w-md w-full bg-[#112240] border-2 border-amber-400/40 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-6 relative overflow-hidden">
+    
+    <!-- Decorative Ambient Glow -->
+    <div style="position: absolute; top: -50px; right: -50px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(217,119,6,0.2) 0%, rgba(10,25,47,0) 70%); border-radius: 50%;"></div>
+
+    <!-- Header & Logo -->
+    <div>
+      <img src="../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-10 mx-auto object-contain mb-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider border border-amber-500/30">
+        <span>🔒</span> Espaço VIP do Aluno
+      </div>
+      <h1 class="text-2xl font-bold font-serif text-white mt-3">
+        Acesso ao Treino com Áudio
+      </h1>
+      <p class="text-xs text-slate-300 mt-1">
+        Digite seu <strong>nome</strong> ou <strong>PIN de 4 dígitos</strong> para abrir sua sessão personalizada.
+      </p>
+    </div>
+
+    <!-- Input Form -->
+    <div class="space-y-3">
+      <input type="text" id="student-query" placeholder="Digite seu nome ou PIN" class="w-full text-center text-lg font-bold py-3.5 px-4 bg-[#0A192F] border-2 border-amber-400/60 rounded-2xl focus:outline-none focus:border-amber-400 text-white placeholder-slate-500">
+      
+      <button onclick="window.enterStudentSpace()" class="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-xl transition transform hover:-translate-y-0.5">
+        Acessar Meu Treino
+      </button>
+
+      <p id="login-error" class="text-xs text-rose-400 font-semibold hidden">
+        Aluno não encontrado. Verifique seu nome ou PIN de acesso.
+      </p>
+    </div>
+
+    <!-- Direct WhatsApp Help -->
+    <div class="pt-3 border-t border-white/10 text-center">
+      <a href="https://wa.me/5511993245466?text=Oi%20Leo,%20estou%20tentando%20acessar%20meu%20treino%20VIP" target="_blank" class="text-xs text-slate-400 hover:text-amber-300 font-medium inline-flex items-center gap-1.5 transition">
+        <span>💬</span> Precisa de ajuda? Fale com o Leo no WhatsApp
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    // Auto-redirect if aluno parameter is present in URL
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const alunoParam = urlParams.get("aluno");
+      if (alunoParam) {
+        window.location.href = `player.html?aluno=${alunoParam}`;
+        return;
+      }
+      document.getElementById("student-query").focus();
+    });
+
+    window.enterStudentSpace = () => {
+      const rawInput = document.getElementById("student-query").value.trim().toLowerCase();
+      const query = rawInput.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      let targetStudent = null;
+
+      if (query.includes("estevao") || query === "1234") {
+        targetStudent = "estevao";
+      } else if (query.includes("marcos") || query === "2345") {
+        targetStudent = "marcos";
+      } else if (query.includes("patricia") || query === "3456") {
+        targetStudent = "patricia";
+      } else if (query.includes("carlos") || query === "4567") {
+        targetStudent = "carlos";
+      }
+
+      if (targetStudent) {
+        localStorage.setItem("aef_active_student", targetStudent);
+        window.location.href = `player.html?aluno=${targetStudent}`;
+      } else {
+        document.getElementById("login-error").classList.remove("hidden");
+      }
+    };
+
+    document.getElementById("student-query").addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        window.enterStudentSpace();
+      }
+    });
+  </script>
+</body>
+</html>

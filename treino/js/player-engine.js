@@ -1,0 +1,270 @@
+/**
+ * AgoraEuFalo - Player Engine & Karaoke Sincronizado
+ * Professor Leonardo Leite
+ */
+class AEFPlayerEngine {
+  constructor(options = {}) {
+    this.audio = new Audio();
+    this.audio.preload = "auto";
+    
+    // Configurações
+    this.currentStudent = null;
+    this.currentTrackIndex = 0;
+    this.currentTrack = null;
+    this.sentences = [];
+    this.activeSentenceIndex = -1;
+    
+    // Modos
+    this.isKaraokeEnabled = true;
+    this.isLoopSentenceEnabled = false;
+    this.loopSentenceIndex = -1;
+    this.autoScrollEnabled = true;
+    
+    // Callbacks de Eventos para UI
+    this.onTrackLoaded = options.onTrackLoaded || (() => {});
+    this.onPlayStateChange = options.onPlayStateChange || (() => {});
+    this.onTimeUpdate = options.onTimeUpdate || (() => {});
+    this.onSentenceChange = options.onSentenceChange || (() => {});
+    this.onSpeedChange = options.onSpeedChange || (() => {});
+    this.onTrackEnded = options.onTrackEnded || (() => {});
+
+    this._bindAudioEvents();
+    this._setupMediaSession();
+  }
+
+  _bindAudioEvents() {
+    this.audio.addEventListener("play", () => {
+      this.onPlayStateChange(true);
+      this._updateMediaSessionPlaybackState("playing");
+    });
+
+    this.audio.addEventListener("pause", () => {
+      this.onPlayStateChange(false);
+      this._updateMediaSessionPlaybackState("paused");
+    });
+
+    this.audio.addEventListener("timeupdate", () => {
+      const curTime = this.audio.currentTime;
+      const duration = this.audio.duration || 0;
+      this.onTimeUpdate(curTime, duration);
+      this._checkSentenceSync(curTime);
+      this._updateMediaSessionPosition();
+    });
+
+    this.audio.addEventListener("ended", () => {
+      this.onPlayStateChange(false);
+      this.onTrackEnded();
+    });
+
+    this.audio.addEventListener("ratechange", () => {
+      this.onSpeedChange(this.audio.playbackRate);
+    });
+  }
+
+  loadStudentData(student, trackIndex = 0) {
+    this.currentStudent = student;
+    this.currentTrackIndex = trackIndex;
+    
+    if (!student.tracks || student.tracks.length === 0) {
+      console.warn("Nenhuma faixa encontrada para o aluno", student.name);
+      return;
+    }
+
+    this.currentTrack = student.tracks[trackIndex];
+    this.sentences = this.currentTrack.sentences || [];
+    this.activeSentenceIndex = -1;
+    this.loopSentenceIndex = -1;
+    this.isLoopSentenceEnabled = false;
+
+    let audioSrc = this.currentTrack.audioUrl;
+    if (window.location.protocol === "file:" && audioSrc.startsWith("/")) {
+      audioSrc = ".." + audioSrc;
+    }
+    this.audio.src = audioSrc;
+    this.audio.load();
+
+    this._updateMediaSessionMetadata();
+    this.onTrackLoaded(this.currentTrack, this.currentTrackIndex, this.sentences);
+  }
+
+  play() {
+    return this.audio.play().catch(err => {
+      console.log("Autoplay bloqueado pelo navegador ou aguardando interação do usuário:", err);
+    });
+  }
+
+  pause() {
+    this.audio.pause();
+  }
+
+  togglePlay() {
+    if (this.audio.paused) {
+      this.play();
+    } else {
+      this.pause();
+    }
+  }
+
+  seek(seconds) {
+    if (Number.isFinite(seconds)) {
+      this.audio.currentTime = Math.max(0, Math.min(seconds, this.audio.duration || 999999));
+    }
+  }
+
+  seekRelative(deltaSeconds) {
+    this.seek(this.audio.currentTime + deltaSeconds);
+  }
+
+  setPlaybackRate(rate) {
+    this.audio.playbackRate = rate;
+    if ("preservesPitch" in this.audio) {
+      this.audio.preservesPitch = true;
+    }
+  }
+
+  jumpToSentence(index, autoPlay = true) {
+    if (index >= 0 && index < this.sentences.length) {
+      const sentence = this.sentences[index];
+      this.seek(sentence.start);
+      this.activeSentenceIndex = index;
+      if (this.isLoopSentenceEnabled) {
+        this.loopSentenceIndex = index;
+      }
+      this.onSentenceChange(index, sentence);
+      if (autoPlay && this.audio.paused) {
+        this.play();
+      }
+    }
+  }
+
+  toggleSentenceLoop(index = null) {
+    if (this.isLoopSentenceEnabled) {
+      this.isLoopSentenceEnabled = false;
+      this.loopSentenceIndex = -1;
+    } else {
+      this.isLoopSentenceEnabled = true;
+      this.loopSentenceIndex = index !== null ? index : (this.activeSentenceIndex >= 0 ? this.activeSentenceIndex : 0);
+      if (this.loopSentenceIndex >= 0 && this.sentences[this.loopSentenceIndex]) {
+        this.seek(this.sentences[this.loopSentenceIndex].start);
+        this.play();
+      }
+    }
+    return {
+      enabled: this.isLoopSentenceEnabled,
+      index: this.loopSentenceIndex
+    };
+  }
+
+  setKaraokeEnabled(enabled) {
+    this.isKaraokeEnabled = enabled;
+  }
+
+  _checkSentenceSync(curTime) {
+    // Se estiver em modo Loop de Frase
+    if (this.isLoopSentenceEnabled && this.loopSentenceIndex >= 0 && this.sentences[this.loopSentenceIndex]) {
+      const target = this.sentences[this.loopSentenceIndex];
+      // Se passou do fim da frase, volta para o início com margem suave
+      if (curTime >= target.end) {
+        this.audio.currentTime = target.start;
+        return;
+      }
+    }
+
+    // Busca da frase correspondente ao tempo atual
+    let foundIndex = -1;
+    for (let i = 0; i < this.sentences.length; i++) {
+      const s = this.sentences[i];
+      if (curTime >= s.start && curTime <= s.end + 0.3) {
+        foundIndex = i;
+        break;
+      }
+    }
+
+    // Se estiver entre frases, mantém a mais recente se estiver próxima
+    if (foundIndex === -1 && this.activeSentenceIndex >= 0) {
+      const prev = this.sentences[this.activeSentenceIndex];
+      if (curTime >= prev.start && curTime <= prev.end + 1.2) {
+        foundIndex = this.activeSentenceIndex;
+      }
+    }
+
+    if (foundIndex !== -1 && foundIndex !== this.activeSentenceIndex) {
+      this.activeSentenceIndex = foundIndex;
+      this.onSentenceChange(foundIndex, this.sentences[foundIndex]);
+    }
+  }
+
+  _setupMediaSession() {
+    if (!("mediaSession" in navigator)) return;
+
+    try {
+      navigator.mediaSession.setActionHandler("play", () => this.play());
+      navigator.mediaSession.setActionHandler("pause", () => this.pause());
+      navigator.mediaSession.setActionHandler("seekbackward", (details) => {
+        const skipTime = details.seekOffset || 10;
+        this.seekRelative(-skipTime);
+      });
+      navigator.mediaSession.setActionHandler("seekforward", (details) => {
+        const skipTime = details.seekOffset || 10;
+        this.seekRelative(skipTime);
+      });
+      navigator.mediaSession.setActionHandler("previoustrack", () => {
+        if (this.activeSentenceIndex > 0) {
+          this.jumpToSentence(this.activeSentenceIndex - 1);
+        } else if (this.currentTrackIndex > 0) {
+          this.loadStudentData(this.currentStudent, this.currentTrackIndex - 1);
+          this.play();
+        }
+      });
+      navigator.mediaSession.setActionHandler("nexttrack", () => {
+        if (this.activeSentenceIndex < this.sentences.length - 1) {
+          this.jumpToSentence(this.activeSentenceIndex + 1);
+        } else if (this.currentStudent && this.currentTrackIndex < this.currentStudent.tracks.length - 1) {
+          this.loadStudentData(this.currentStudent, this.currentTrackIndex + 1);
+          this.play();
+        }
+      });
+    } catch (e) {
+      console.warn("Erro ao registrar MediaSession handlers:", e);
+    }
+  }
+
+  _updateMediaSessionMetadata() {
+    if (!("mediaSession" in navigator) || !this.currentTrack) return;
+
+    const studentName = this.currentStudent ? this.currentStudent.name : "Mentee";
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: this.currentTrack.title || "Spoken Reflex Training",
+      artist: `Prof. Leonardo Leite | VIP Mentee ${studentName}`,
+      album: "AgoraEuFalo - VIP Spoken Reflex Suite",
+      artwork: [
+        { src: "/assets/images/AEF-Logo_2026_fundo_escuro-800x300.png", sizes: "800x300", type: "image/png" },
+        { src: "/assets/images/AEF-Logo_2026_fundo_escuro-512x512.png", sizes: "512x512", type: "image/png" }
+      ]
+    });
+  }
+
+  _updateMediaSessionPlaybackState(state) {
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = state;
+    }
+  }
+
+  _updateMediaSessionPosition() {
+    if ("mediaSession" in navigator && "setPositionState" in navigator.mediaSession) {
+      try {
+        if (this.audio.duration && !isNaN(this.audio.duration)) {
+          navigator.mediaSession.setPositionState({
+            duration: this.audio.duration,
+            playbackRate: this.audio.playbackRate,
+            position: this.audio.currentTime
+          });
+        }
+      } catch (e) {
+        // Ignora pequenos desvios de sincronização
+      }
+    }
+  }
+}
+
+window.AEFPlayerEngine = AEFPlayerEngine;

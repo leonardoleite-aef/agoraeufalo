@@ -1,0 +1,17 @@
+{
+  "name": "AgoraEuFalo - Treino VIP",
+  "short_name": "AEF Treino",
+  "description": "Espaço de Treino Interativo & Leitor com Áudio do Professor Leonardo Leite",
+  "start_url": "/treino/",
+  "display": "standalone",
+  "background_color": "#faf8f5",
+  "theme_color": "#d97706",
+  "icons": [
+    {
+      "src": "/assets/images/AEF-Logo_2026_fundo_escuro-800x300.png",
+      "sizes": "800x300",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
