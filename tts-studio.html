@@ -705,7 +705,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         <div>
           <label for="apiKeyInput" class="font-semibold text-slate-300 block mb-1">Gemini API Key (Google AI Studio)</label>
           <div class="relative">
-            <input type="password" id="apiKeyInput" placeholder="Cole sua chave aqui (AQ.Ab8... ou AIza...)" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-slate-100 font-mono text-xs outline-none transition">
+            <input type="password" id="apiKeyInput" onkeydown="if(event.key==='Enter') saveApiKeyConfig()" placeholder="Cole sua chave aqui (AQ.Ab8... ou AIza...)" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-slate-100 font-mono text-xs outline-none transition">
             <button onclick="toggleApiKeyVisibility()" type="button" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200">
               <i id="apiKeyEyeIcon" data-lucide="eye" class="w-4 h-4"></i>
             </button>
@@ -729,8 +729,8 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
           <i data-lucide="external-link" class="w-3 h-3"></i>
         </a>
         <div class="flex items-center gap-2">
-          <button onclick="closeConfigModal()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition">Cancelar</button>
-          <button onclick="saveApiKeyConfig()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Salvar Chave</button>
+          <button type="button" onclick="closeConfigModal()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition">Cancelar</button>
+          <button type="button" id="saveApiKeyBtn" onclick="saveApiKeyConfig()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Salvar Chave</button>
         </div>
       </div>
     </div>
@@ -1906,35 +1906,53 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
       const input = document.getElementById('apiKeyInput');
       const select = document.getElementById('modelSelect');
 
-      if (input) input.value = STATE.apiKey;
-      if (select) select.value = STATE.model;
+      if (input) input.value = STATE.apiKey || localStorage.getItem('AEF_GEMINI_API_KEY') || '';
+      if (select) select.value = STATE.model || localStorage.getItem('AEF_GEMINI_MODEL') || 'gemini-2.5-flash-preview-tts';
 
       if (modal) {
+        modal.style.display = 'flex';
         modal.classList.add('active');
         if (window.lucide) lucide.createIcons();
       }
+      setTimeout(() => {
+        if (input) input.focus();
+      }, 50);
     }
 
     function closeConfigModal() {
       const modal = document.getElementById('configModal');
-      if (modal) modal.classList.remove('active');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
     }
 
     function saveApiKeyConfig() {
-      const input = document.getElementById('apiKeyInput');
-      const select = document.getElementById('modelSelect');
-      const key = input ? input.value.trim() : '';
-      const model = select ? select.value : 'gemini-2.5-flash-preview-tts';
+      try {
+        const input = document.getElementById('apiKeyInput');
+        const select = document.getElementById('modelSelect');
+        const key = input ? input.value.trim() : '';
+        const model = select ? select.value : 'gemini-2.5-flash-preview-tts';
 
-      STATE.apiKey = key;
-      STATE.model = model;
+        if (!key) {
+          showToast("Cole sua API Key do Google AI Studio antes de salvar.", "warning");
+          if (input) input.focus();
+          return;
+        }
 
-      localStorage.setItem('AEF_GEMINI_API_KEY', key);
-      localStorage.setItem('AEF_GEMINI_MODEL', model);
+        STATE.apiKey = key;
+        STATE.model = model;
 
-      updateApiKeyStatus();
-      closeConfigModal();
-      showToast("Chave da API e modelo configurados com sucesso!", "success");
+        localStorage.setItem('AEF_GEMINI_API_KEY', key);
+        localStorage.setItem('AEF_GEMINI_MODEL', model);
+
+        updateApiKeyStatus();
+        closeConfigModal();
+        showToast("Chave da API salva e conectada com sucesso!", "success");
+      } catch (err) {
+        console.error("Save API Key Error:", err);
+        closeConfigModal();
+      }
     }
 
     function toggleApiKeyVisibility() {
