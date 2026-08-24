@@ -252,6 +252,11 @@
             <span>📜</span> <span>Auto-Scroll</span>
           </button>
 
+          <!-- In-Flight Offline Toggle Button -->
+          <button id="btn-save-flight-mode" onclick="window.saveForFlightMode()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 dark:bg-sky-950/60 border border-sky-300 dark:border-sky-700 text-sky-900 dark:text-sky-200 hover:bg-sky-100 font-bold text-xs shadow-xs transition cursor-pointer" title="Download entire workout for 100% offline use during flights">
+            <span id="flight-icon">✈️</span> <span id="flight-status-text">Save for Flight</span>
+          </button>
+
           <!-- Font Size Adjustments -->
           <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             <button onclick="window.uiController.setFontSize('sm')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A-</button>
@@ -268,6 +273,15 @@
           <button onclick="window.setSpeed(1.25)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-amber-600">1.25x</button>
           <button onclick="window.setSpeed(1.5)" class="speed-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-amber-600">1.5x</button>
         </div>
+      </div>
+
+      <!-- In-Flight Download Progress Toast/Banner -->
+      <div id="flight-mode-toast" class="hidden bg-emerald-50 dark:bg-emerald-950/60 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-3 text-xs flex items-center justify-between gap-3 text-emerald-950 dark:text-emerald-200 shadow-md">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">✈️</span>
+          <span id="flight-toast-message"><strong>Flight Mode Activated:</strong> Audio and study materials are 100% saved offline on your device!</span>
+        </div>
+        <button onclick="document.getElementById('flight-mode-toast').classList.add('hidden')" class="text-emerald-700 dark:text-emerald-300 font-bold px-2 py-1 hover:bg-emerald-100 rounded-lg">✕</button>
       </div>
 
       <!-- Edit Mode Banner -->
@@ -462,6 +476,7 @@
   <script src="data/marcos.js"></script>
   <script src="data/patricia.js"></script>
   <script src="data/carlos.js"></script>
+  <script src="js/offline-manager.js"></script>
   <script src="js/player-engine.js"></script>
   <script src="js/ui-controller.js"></script>
 
@@ -703,6 +718,60 @@
           engine.seek(targetTime);
         }
       });
+
+      // In-Flight Offline Mode Handler
+      window.saveForFlightMode = async () => {
+        const btn = document.getElementById("btn-save-flight-mode");
+        const icon = document.getElementById("flight-icon");
+        const text = document.getElementById("flight-status-text");
+        const toast = document.getElementById("flight-mode-toast");
+        const toastMsg = document.getElementById("flight-toast-message");
+
+        if (!window.aefOfflineManager) {
+          alert("Offline caching is not available in this browser.");
+          return;
+        }
+
+        try {
+          icon.innerText = "⏳";
+          text.innerText = "Downloading...";
+          btn.disabled = true;
+
+          await window.aefOfflineManager.cacheWorkout(engine.currentTrack, (progress, msg) => {
+            text.innerText = `${progress}%`;
+          });
+
+          icon.innerText = "✅";
+          text.innerText = "In-Flight Ready";
+          btn.classList.remove("bg-sky-50", "dark:bg-sky-950/60", "border-sky-300", "text-sky-900", "dark:text-sky-200");
+          btn.classList.add("bg-emerald-600", "text-white", "border-emerald-500");
+          btn.disabled = false;
+
+          toastMsg.innerHTML = "<strong>✈️ Flight Mode Ready!</strong> Audio and transcript are saved on your phone. You can now use this page with Airplane Mode ON (0% internet).";
+          toast.classList.remove("hidden");
+          setTimeout(() => toast.classList.add("hidden"), 8000);
+        } catch (err) {
+          console.error("Flight cache error:", err);
+          icon.innerText = "⚠️";
+          text.innerText = "Retry Save";
+          btn.disabled = false;
+          alert("Could not download full audio. Make sure you are connected to internet before caching.");
+        }
+      };
+
+      // Check if current track is already cached for flight
+      setTimeout(async () => {
+        if (window.aefOfflineManager && engine.currentTrack) {
+          const isCached = await window.aefOfflineManager.isTrackCached(engine.currentTrack.audioUrl);
+          if (isCached) {
+            const btn = document.getElementById("btn-save-flight-mode");
+            document.getElementById("flight-icon").innerText = "✅";
+            document.getElementById("flight-status-text").innerText = "In-Flight Ready";
+            btn.classList.remove("bg-sky-50", "dark:bg-sky-950/60", "border-sky-300", "text-sky-900", "dark:text-sky-200");
+            btn.classList.add("bg-emerald-600", "text-white", "border-emerald-500");
+          }
+        }
+      }, 500);
     });
   </script>
 </body>

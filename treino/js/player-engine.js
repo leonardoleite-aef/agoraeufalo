@@ -80,8 +80,25 @@ class AEFPlayerEngine {
     if (window.location.protocol === "file:" && audioSrc.startsWith("/")) {
       audioSrc = ".." + audioSrc;
     }
-    this.audio.src = audioSrc;
-    this.audio.load();
+
+    // Check if offline cached audio is available
+    if (window.aefOfflineManager) {
+      window.aefOfflineManager.getOfflineAudioUrl(audioSrc, this.currentTrack.id).then(offlineUrl => {
+        if (offlineUrl) {
+          console.log("✈️ In-Flight Offline Audio loaded from local storage!");
+          this.audio.src = offlineUrl;
+        } else {
+          this.audio.src = audioSrc;
+        }
+        this.audio.load();
+      }).catch(() => {
+        this.audio.src = audioSrc;
+        this.audio.load();
+      });
+    } else {
+      this.audio.src = audioSrc;
+      this.audio.load();
+    }
 
     this._updateMediaSessionMetadata();
     this.onTrackLoaded(this.currentTrack, this.currentTrackIndex, this.sentences);
