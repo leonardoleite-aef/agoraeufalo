@@ -56,7 +56,7 @@ class AEFOfflineManager {
       'player.html',
       '../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png',
       '../assets/images/favicon.svg',
-      track.coverImage || '../assets/images/cover-carlos-session01.jpg',
+      track.coverImage || '../assets/images/cover-office-logistics.jpg',
       'data/registry.js',
       'data/estevao.js',
       'data/marcos.js',

@@ -12,7 +12,7 @@ window.AEF_STUDENT_ESTEVAO = {
       id: "estevao-01",
       title: "Session 01: UK International Keynote Presentation",
       duration: "16:29",
-      coverImage: "../assets/images/cover-carlos-session01.jpg",
+      coverImage: "../assets/images/cover-estevao-session01.jpg",
       audioUrl: "/assets/audio/alunos/estevao/Estevao_presentation_leo.mp3",
       summary: "High-impact keynote speech coaching by Prof. Leo Leite focusing on public education policy, the Pororoca implementation model, and systemic feedback loops.",
       goldenTip: "Breathe naturally at comma pauses. Speech clarity comes from linking sound chunks together, not from rushing speed.",

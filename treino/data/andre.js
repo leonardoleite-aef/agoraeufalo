@@ -11,7 +11,7 @@ window.AEF_STUDENT_ANDRE = {
       id: "andre-01",
       title: "Session 01: Global Job Interview & Career Pitch",
       duration: "14:20",
-      coverImage: "../assets/images/cover-patricia-session01.jpg",
+      coverImage: "../assets/images/cover-andre-session01.jpg",
       audioUrl: "/assets/audio/alunos/andre/session-01.mp3",
       summary: "Mastering smooth sentence connections to articulate leadership achievements with authority and natural cadence.",
       goldenTip: "Breathe on intentional pauses. Descending final intonation projects executive confidence.",

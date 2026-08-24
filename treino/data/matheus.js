@@ -11,7 +11,7 @@ window.AEF_STUDENT_MATHEUS = {
       id: "matheus-01",
       title: "Session 01: International Business Travel & Networking",
       duration: "11:15",
-      coverImage: "../assets/images/cover-estevao-session01.jpg",
+      coverImage: "../assets/images/cover-matheus-session01.jpg",
       audioUrl: "/assets/audio/alunos/matheus/session-01.mp3",
       summary: "Auditory training on natural conversational flow and real-time comprehension of fast native English.",
       goldenTip: "Native speakers blend weak function words. Focus your attention on stressed content words.",

@@ -251,7 +251,7 @@ class AEFPlayerEngine {
     if (!("mediaSession" in navigator) || !this.currentTrack) return;
 
     const studentName = this.currentStudent ? this.currentStudent.name : "Mentee";
-    const coverRel = this.currentTrack.coverImage || "../assets/images/cover-carlos-session01.jpg";
+    const coverRel = this.currentTrack.coverImage || "../assets/images/cover-office-logistics.jpg";
     
     // Resolve absolute URL for lock screen compatibility on iOS / Android
     let coverAbs = "";
