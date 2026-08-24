@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Professor Leo Leite • Treino VIP | AgoraEuFalo</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#FAF8F5] text-slate-900 min-h-screen flex flex-col antialiased selection:bg-amber-200 selection:text-amber-900">
+
+  <!-- Header -->
+  <header class="bg-[#0A192F] text-white py-4 px-6 border-b border-white/10 shadow-md">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 object-contain">
+        <span class="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs">PAINEL DO PROFESSOR</span>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <a href="mentoria.html" class="text-slate-300 hover:text-amber-400 font-semibold">Landing Page Mentoria</a>
+        <a href="treino/player.html?aluno=estevao" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 text-white hover:bg-white/20 font-bold">Abrir Player do Estevao ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto w-full p-6 sm:p-8 flex-1">
+    
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-[#0A192F]">Gestão de Mentorados VIP</h1>
+        <p class="text-slate-600 text-sm mt-1">Acesse e teste as sessões de áudio individuais dos seus 4 alunos mentorados.</p>
+      </div>
+      <a href="https://wa.me/5511993245466" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm transition">
+        <span>💬</span> WhatsApp Oficial do Leo
+      </a>
+    </div>
+
+    <!-- Student Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10" id="admin-students-grid">
+      <!-- Injetado via JS -->
+    </div>
+
+    <!-- Automation Tool Guide -->
+    <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+      <div class="flex items-center gap-2 text-amber-800 font-bold text-sm">
+        <span>⚡</span> <span>Como Adicionar uma Nova Aula Gravada para Qualquer Aluno:</span>
+      </div>
+      
+      <p class="text-slate-600 text-xs sm:text-sm">
+        Para gravar e sincronizar uma nova aula automaticamente em 1 comando, coloque o áudio na pasta e rode no terminal:
+      </p>
+
+      <div class="bg-[#0A192F] text-amber-300 font-mono text-xs p-4 rounded-2xl overflow-x-auto shadow-inner">
+        python3 scripts/transcrever_audio.py --audio assets/audio/alunos/estevao/novo_treino.mp3 --aluno estevao --titulo "Session 02: Negotiation & Pitch"
+      </div>
+
+      <p class="text-xs text-slate-500 italic">
+        O sistema processará o áudio, calibrará os timestamps em segundos e atualizará a playlist do aluno imediatamente.
+      </p>
+    </div>
+  </main>
+
+  <footer class="bg-[#0A192F] text-white py-6 text-center text-xs text-slate-400 border-t border-white/10 mt-12">
+    © 2026 AgoraEuFalo • Professor Leonardo Leite • Área Administrativa Exclusiva
+  </footer>
+
+  <script src="treino/data/registry.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("admin-students-grid");
+      if (window.AEF_REGISTRY && window.AEF_REGISTRY.students) {
+        container.innerHTML = window.AEF_REGISTRY.students.map(s => `
+          <div class="bg-white border-2 border-amber-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl ${s.avatarBg} text-2xl flex items-center justify-center font-bold border">
+                  ${s.avatarEmoji}
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-lg">${s.name}</h3>
+                  <p class="text-xs text-slate-500">${s.subtitle}</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-mono font-bold">PIN: ${s.pin || s.name.toLowerCase()}</span>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
+              <span class="text-xs text-slate-500 font-medium">Link do Aluno:</span>
+              <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-4 py-2 rounded-xl bg-[#0A192F] hover:bg-slate-900 text-amber-400 font-bold text-xs shadow-xs transition flex items-center gap-1.5">
+                <span>🎧</span> Abrir Player ↗
+              </a>
+            </div>
+          </div>
+        `).join("");
+      }
+    });
+  </script>
+</body>
+</html>
