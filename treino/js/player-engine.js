@@ -36,6 +36,7 @@ class AEFPlayerEngine {
     this.audio.addEventListener("play", () => {
       this.onPlayStateChange(true);
       this._updateMediaSessionPlaybackState("playing");
+      this._updateMediaSessionMetadata();
     });
 
     this.audio.addEventListener("pause", () => {
