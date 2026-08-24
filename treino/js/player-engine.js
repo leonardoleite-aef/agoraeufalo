@@ -250,13 +250,26 @@ class AEFPlayerEngine {
     if (!("mediaSession" in navigator) || !this.currentTrack) return;
 
     const studentName = this.currentStudent ? this.currentStudent.name : "Mentee";
+    const coverRel = this.currentTrack.coverImage || "../assets/images/cover-carlos-session01.jpg";
+    
+    // Resolve absolute URL for lock screen compatibility on iOS / Android
+    let coverAbs = "";
+    try {
+      coverAbs = new URL(coverRel, window.location.href).href;
+    } catch (e) {
+      coverAbs = coverRel;
+    }
+
     navigator.mediaSession.metadata = new MediaMetadata({
       title: this.currentTrack.title || "Spoken Reflex Training",
       artist: `Prof. Leonardo Leite | VIP Mentee ${studentName}`,
       album: "AgoraEuFalo - VIP Spoken Reflex Suite",
       artwork: [
-        { src: "/assets/images/AEF-Logo_2026_fundo_escuro-800x300.png", sizes: "800x300", type: "image/png" },
-        { src: "/assets/images/AEF-Logo_2026_fundo_escuro-512x512.png", sizes: "512x512", type: "image/png" }
+        { src: coverAbs, sizes: "512x512", type: "image/jpeg" },
+        { src: coverAbs, sizes: "384x384", type: "image/jpeg" },
+        { src: coverAbs, sizes: "256x256", type: "image/jpeg" },
+        { src: coverAbs, sizes: "192x192", type: "image/jpeg" },
+        { src: coverAbs, sizes: "96x96", type: "image/jpeg" }
       ]
     });
   }
