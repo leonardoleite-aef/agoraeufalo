@@ -12,7 +12,7 @@ window.AEF_STUDENT_THOMAS = {
       id: "thomas-01",
       title: "Dialogue 1 - The morning Person",
       duration: "00:34",
-      coverImage: "../assets/images/cover-marcos-session01.jpg",
+      coverImage: "../assets/images/cover-thomas-morning-person.jpg",
       audioUrl: "/assets/audio/alunos/thomas/Dialogue_1_morning_person.mp3",
       summary: "Dialogue workout focusing on everyday conversational rhythm, natural sound reduction, and spontaneous phrase cadence.",
       goldenTip: "Notice how native speakers link 'not at all' (/nɒtətɔːl/) and blend 'cup of' (/kʌpəv/). Do not pause between individual words.",

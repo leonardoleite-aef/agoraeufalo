@@ -50,3 +50,13 @@ Sempre que o usuário enviar um prompt baseado no **Template Mestre do Google Do
    - Adicionar a nova URL no arquivo `sitemap.xml`.
 6. **Build & Deploy Git:**
    - Executar `npm run build` e enviar as alterações para a branch `main` (`git push origin main`).
+
+---
+
+## 4. Diretriz de Criação de Capas para Episódios de Treino dos Alunos
+Sempre que um novo áudio/episódio for adicionado para qualquer aluno da Mentoria VIP:
+- **Capa Customizada por Contexto:** Gerar uma arte de capa de álbum quadrada (1:1) baseada rigorosamente no **título**, **texto/diálogo** e **contexto pedagógico** daquela sessão específica.
+- **Identidade Visual:** Fundo azul-marinho profundo (`#0A192F`), detalhes dourados, estética executiva *AgoraEuFalo Masterclass Audio Album*.
+- **Otimização iOS/Android (Lock Screen):** Otimizar a imagem com `sips` para **512x512 pixels (<90 KB)** para garantir exibição imediata e sem falhas na tela bloqueada do iPhone (MediaSession API).
+- **Armazenamento:** Salvar em `assets/images/cover-[aluno]-[slug].jpg` e apontar o campo `coverImage` no arquivo de dados do aluno (`treino/data/[aluno].js`).
+
