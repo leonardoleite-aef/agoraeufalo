@@ -476,6 +476,7 @@
   <script src="data/thomas.js?v=3.0"></script>
   <script src="data/andre.js?v=3.0"></script>
   <script src="data/matheus.js?v=3.0"></script>
+  <script src="../assets/js/aef-cloud-sync.js"></script>
   <script src="../assets/js/aef-audio-hub.js"></script>
   <script src="js/offline-manager.js?v=3.0"></script>
   <script src="js/player-engine.js?v=3.0"></script>
@@ -569,6 +570,20 @@
         document.getElementById("header-student-name").innerText = studentData.name;
         
         engine.loadStudentData(studentData, 0);
+
+        // Real-time Cloud Sync Listener
+        if (window.aefCloudSync) {
+          window.aefCloudSync.subscribeToStudentTracks(studentId, async (cloudTracks) => {
+            if (cloudTracks && cloudTracks.length > 0) {
+              const updated = await window.aefAudioHub.getMergedTracksForStudent(studentId);
+              if (updated && updated.length > studentData.tracks.length) {
+                studentData.tracks = updated;
+                window.currentLoadedStudent = studentData;
+                renderPlaylistDrawer(updated, engine.currentTrackIndex);
+              }
+            }
+          });
+        }
       }
 
       bootPlayer();

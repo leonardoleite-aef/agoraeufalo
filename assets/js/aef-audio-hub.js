@@ -239,13 +239,23 @@ class AEFAudioHub {
     else if ((studentId === "andre" || studentId === "andré") && window.AEF_STUDENT_ANDRE) baseTracks = window.AEF_STUDENT_ANDRE.tracks || [];
     else if (studentId === "matheus" && window.AEF_STUDENT_MATHEUS) baseTracks = window.AEF_STUDENT_MATHEUS.tracks || [];
 
-    // 2. Get all tracks from Central Library assigned to this student or to "public" / "all"
+    // 2. Get all tracks from Cloud Firestore (Google Cloud Sync)
+    let cloudTracks = [];
+    if (window.aefCloudSync) {
+      try {
+        cloudTracks = await window.aefCloudSync.getStudentCloudTracks(studentId);
+      } catch (e) {
+        console.warn("⚠️ [AudioHub] Nuvem offline ou em carregamento:", e);
+      }
+    }
+
+    // 3. Get all tracks from Central Library assigned to this student or to "public" / "all"
     const libTracks = this.getLibraryTracks().filter(t => {
       const assigned = t.assignedTo || [];
       return assigned.includes(studentId) || assigned.includes("all") || (studentId === "public" && assigned.includes("public"));
     });
 
-    // 3. Resolve audio blobs & sanitize covers for all tracks
+    // 4. Resolve audio blobs & sanitize covers for all tracks
     const resolveAndSanitize = async (trackList) => {
       const result = [];
       for (const t of trackList) {
@@ -262,18 +272,19 @@ class AEFAudioHub {
       return result;
     };
 
-    // Combine base tracks and lib tracks, deduplicating by ID or normalized title
+    // Combine base tracks, cloud tracks and lib tracks, deduplicating by ID or normalized title
     const allTracks = [...baseTracks];
-    for (const lt of libTracks) {
+    const incomingTracks = [...cloudTracks, ...libTracks];
+
+    for (const inc of incomingTracks) {
       const existingIdx = allTracks.findIndex(bt => 
-        bt.id === lt.id || 
-        (bt.title && lt.title && bt.title.toLowerCase().replace(/[^a-z0-9]/g, '') === lt.title.toLowerCase().replace(/[^a-z0-9]/g, ''))
+        bt.id === inc.id || 
+        (bt.title && inc.title && bt.title.toLowerCase().replace(/[^a-z0-9]/g, '') === inc.title.toLowerCase().replace(/[^a-z0-9]/g, ''))
       );
       if (existingIdx >= 0) {
-        // Merge dynamically published data over base seed data if newer
-        allTracks[existingIdx] = { ...allTracks[existingIdx], ...lt };
+        allTracks[existingIdx] = { ...allTracks[existingIdx], ...inc };
       } else {
-        allTracks.push(lt);
+        allTracks.push(inc);
       }
     }
 
