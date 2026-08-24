@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TTS Studio • Fábrica de Áudios MP3 | AgoraEuFalo</title>
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+
+  <!-- Master Access Auth Gate -->
+  <script src="assets/js/aef-auth-gate.js"></script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,8 +50,12 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- LameJS (MP3 Encoder) via CDN -->
+  <!-- LameJS (MP3 Encoder) -->
   <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+
+  <!-- AgoraEuFalo Central Audio Hub & Registry -->
+  <script src="treino/data/registry.js"></script>
+  <script src="assets/js/aef-audio-hub.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,7 +78,7 @@
       display: inline-block;
       width: 3px;
       height: 12px;
-      background-color: #F59E0B;
+      background-color: currentColor;
       border-radius: 2px;
       animation: soundwave 1s infinite ease-in-out alternate;
     }
@@ -83,12 +90,37 @@
       0% { transform: scaleY(0.3); }
       100% { transform: scaleY(1.1); }
     }
+
+    /* Modal transition states */
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .modal-backdrop .modal-card {
+      transform: scale(0.96) translateY(8px);
+      transition: transform 0.2s ease;
+    }
+    .modal-backdrop.active .modal-card {
+      transform: scale(1) translateY(0);
+    }
   </style>
 </head>
 <body class="h-full flex flex-col font-sans antialiased bg-[#0B0F17] text-slate-200 selection:bg-amber-500/30 selection:text-amber-200">
 
-  <!-- Hidden Audio Element specifically for Voice Sample Previews -->
-  <audio id="voiceSampleAudioElement" class="hidden"></audio>
+  <!-- Audio Element specifically for Voice Sample Previews -->
+  <audio id="voiceSampleAudioElement" preload="none" class="hidden"></audio>
+
+  <!-- ========================================================================= -->
+  <!-- TOAST NOTIFICATION CONTAINER (Non-blocking modern UI alerts)              -->
+  <!-- ========================================================================= -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-[9999] flex flex-col gap-2.5 max-w-md w-full pointer-events-none px-4 sm:px-0"></div>
 
   <!-- ========================================================================= -->
   <!-- TOPBAR / HEADER (Google AI Studio Style)                                  -->
@@ -112,7 +144,7 @@
     <!-- Right Controls -->
     <div class="flex items-center gap-2 sm:gap-3">
       <!-- Status Badge -->
-      <div id="apiKeyStatusBadge" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold">
+      <div id="apiKeyStatusBadge" onclick="openConfigModal()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold cursor-pointer">
         <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
         <span id="apiKeyStatusText">API Key Necessária</span>
       </div>
@@ -179,172 +211,162 @@
     <!-- ======================================================================= -->
     <div class="lg:col-span-7 flex flex-col bg-[#0B0F17] border-r border-[#1F2B45] overflow-y-auto p-4 sm:p-6 space-y-5">
       
-      <!-- Top Box: Mode Selector & Title -->
-      <div class="bg-[#111726] border border-[#1F2B45] rounded-2xl p-4 space-y-3.5 shadow-lg">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <!-- Mode Tabs -->
-          <div>
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Modo de Voz</label>
-            <div class="inline-flex p-1 rounded-xl bg-[#0B0F17] border border-[#1F2B45]">
-              <button id="modeSingleBtn" onclick="setSpeakerMode('single')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 shadow">
-                <i data-lucide="user" class="w-3.5 h-3.5"></i>
-                <span>1 Speaker (Narração)</span>
-              </button>
-              <button id="modeDualBtn" onclick="setSpeakerMode('dual')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-slate-200">
-                <i data-lucide="users" class="w-3.5 h-3.5"></i>
-                <span>2 Speakers (Diálogo)</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Audio Title / Track Name -->
-          <div class="flex-1 max-w-xs">
-            <label for="audioTitleInput" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Título / Nome do Arquivo MP3</label>
-            <input type="text" id="audioTitleInput" value="dialogo_aef_01" placeholder="Ex: magic_story_grazi" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 outline-none transition font-mono">
-          </div>
-        </div>
-
-        <!-- Voice Selection Box (Dynamic Single vs Dual) -->
-        <div id="voiceConfigContainer" class="pt-2 border-t border-[#1F2B45]/60">
+      <!-- Voice Mode Switcher: 1 Speaker vs 2 Speakers -->
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <span>Modo de Voz</span>
+        </label>
+        
+        <div class="grid grid-cols-2 gap-2 p-1 bg-[#111726] border border-[#1F2B45] rounded-xl max-w-md">
+          <button id="modeBtnSingle" onclick="setSpeakerMode('single')" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200">
+            <i data-lucide="user" class="w-4 h-4"></i>
+            <span>1 Speaker (Narração)</span>
+          </button>
           
-          <!-- SINGLE SPEAKER CONTROLS -->
-          <div id="singleSpeakerBox" class="space-y-3">
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-              <div class="sm:col-span-8">
-                <div class="flex items-center justify-between mb-1.5">
-                  <label for="singleVoiceSelect" class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    <span>Voz Principal (Gemini HD)</span>
-                  </label>
-                  <button onclick="openVoiceGalleryModal()" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1">
-                    <span>Ver Galeria</span>
-                    <i data-lucide="external-link" class="w-3 h-3"></i>
-                  </button>
-                </div>
-                <div class="flex items-center gap-2">
-                  <select id="singleVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none cursor-pointer truncate">
-                    <!-- Populado via JS -->
-                  </select>
-                  <button id="singleSampleBtn" onclick="testVoiceSample('single')" class="w-9 h-9 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-amber-500/30 text-amber-300 flex items-center justify-center transition flex-shrink-0 shadow-xs" title="Ouvir amostra desta voz">
-                    <i data-lucide="play" class="w-4 h-4 ml-0.5"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="sm:col-span-4">
-                <label class="text-[10px] font-semibold text-slate-400 mb-1.5 block">Estilo da Voz</label>
-                <div id="singleVoiceInfo" class="px-3 py-2 rounded-xl bg-[#0B0F17]/80 border border-[#1F2B45] text-[11px] text-amber-300/90 font-mono flex items-center justify-between">
-                  <span>Puck • Upbeat</span>
-                  <span class="text-[10px] text-slate-400">HD 24kHz</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- DUAL SPEAKER CONTROLS -->
-          <div id="dualSpeakerBox" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Speaker A -->
-            <div class="p-3.5 rounded-xl bg-[#082F49]/40 border border-sky-500/30 space-y-2.5">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-sky-400"></span>
-                  <span>Speaker A (Personagem 1)</span>
-                </span>
-                <input type="text" id="speakerAAlias" value="Speaker A" placeholder="Ex: Leo" class="bg-[#0B0F17] border border-sky-500/40 rounded px-2 py-0.5 text-[10px] text-sky-200 font-mono w-28 text-right outline-none">
-              </div>
-              <div>
-                <label for="speakerAVoiceSelect" class="text-[10px] text-slate-400 block mb-1">Voz Gemini HD</label>
-                <div class="flex items-center gap-2">
-                  <select id="speakerAVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-sky-500/40 focus:border-sky-400 rounded-lg px-2.5 py-1.5 text-xs text-sky-200 outline-none cursor-pointer truncate">
-                    <!-- Populado via JS -->
-                  </select>
-                  <button id="speakerASampleBtn" onclick="testVoiceSample('speakerA')" class="w-8 h-8 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-300 flex items-center justify-center transition flex-shrink-0 shadow-xs" title="Ouvir amostra do Speaker A">
-                    <i data-lucide="play" class="w-3.5 h-3.5 ml-0.5"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Speaker B -->
-            <div class="p-3.5 rounded-xl bg-[#4C0519]/40 border border-pink-500/30 space-y-2.5">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-pink-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-pink-400"></span>
-                  <span>Speaker B (Personagem 2)</span>
-                </span>
-                <input type="text" id="speakerBAlias" value="Speaker B" placeholder="Ex: Sarah" class="bg-[#0B0F17] border border-pink-500/40 rounded px-2 py-0.5 text-[10px] text-pink-200 font-mono w-28 text-right outline-none">
-              </div>
-              <div>
-                <label for="speakerBVoiceSelect" class="text-[10px] text-slate-400 block mb-1">Voz Gemini HD</label>
-                <div class="flex items-center gap-2">
-                  <select id="speakerBVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-pink-500/40 focus:border-pink-400 rounded-lg px-2.5 py-1.5 text-xs text-pink-200 outline-none cursor-pointer truncate">
-                    <!-- Populado via JS -->
-                  </select>
-                  <button id="speakerBSampleBtn" onclick="testVoiceSample('speakerB')" class="w-8 h-8 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/30 text-pink-300 flex items-center justify-center transition flex-shrink-0 shadow-xs" title="Ouvir amostra do Speaker B">
-                    <i data-lucide="play" class="w-3.5 h-3.5 ml-0.5"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <button id="modeBtnDual" onclick="setSpeakerMode('dual')" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>2 Speakers (Diálogo)</span>
+          </button>
         </div>
       </div>
 
-      <!-- Dialogue Editor Box -->
-      <div class="flex-1 flex flex-col bg-[#111726] border border-[#1F2B45] rounded-2xl p-4 space-y-3 shadow-lg min-h-[360px]">
+      <!-- Speaker Configuration Card -->
+      <div id="speakerConfigContainer" class="space-y-3">
         
-        <!-- Editor Header & Quick Action Buttons -->
-        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#1F2B45]">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-slate-300">Roteiro / Texto do Áudio</span>
-            <span class="text-[10px] text-slate-500">• Digite as falas ou use os atalhos</span>
+        <!-- SINGLE SPEAKER CONFIG -->
+        <div id="singleSpeakerBox" class="hidden p-4 rounded-2xl bg-[#111726] border border-[#1F2B45] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+              Voz Principal (Gemini HD)
+            </span>
+            <button onclick="openVoiceGalleryModal()" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1">
+              <span>Explorar todas as 23 vozes</span>
+              <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </button>
           </div>
 
-          <!-- Quick Injection Tags -->
+          <div class="flex items-center gap-2">
+            <select id="singleVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 outline-none cursor-pointer truncate">
+              <!-- Populado via JS -->
+            </select>
+            
+            <button id="singleSampleBtn" onclick="testVoiceSample('single')" title="Ouvir Amostra desta Voz" class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+            </button>
+          </div>
+
+          <div id="singleVoiceInfo" class="text-[11px] text-slate-400 flex items-center justify-between px-1">
+            <span>Carregando informações da voz...</span>
+          </div>
+        </div>
+
+        <!-- DUAL SPEAKER CONFIG -->
+        <div id="dualSpeakerBox" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          
+          <!-- Speaker A (Left) -->
+          <div class="p-3.5 rounded-xl bg-[#082F49]/40 border border-sky-500/30 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                <span class="text-xs font-extrabold text-sky-300">Speaker A (Personagem 1)</span>
+              </div>
+              <input type="text" id="speakerAAlias" value="Leo" placeholder="Nome (ex: Leo)" class="w-24 bg-[#0B0F17] border border-sky-500/40 rounded-lg px-2 py-0.5 text-[11px] text-sky-200 text-right outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] text-sky-300 font-semibold block">Voz Gemini HD</label>
+              <div class="flex items-center gap-1.5">
+                <select id="speakerAVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-sky-500/40 focus:border-sky-400 rounded-lg px-2.5 py-1.5 text-xs text-sky-200 outline-none cursor-pointer truncate">
+                  <!-- Populado via JS -->
+                </select>
+                <button id="speakerASampleBtn" onclick="testVoiceSample('speakerA')" title="Ouvir Voz A" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 transition">
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Speaker B (Right) -->
+          <div class="p-3.5 rounded-xl bg-[#4C0519]/40 border border-pink-500/30 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-pink-400"></span>
+                <span class="text-xs font-extrabold text-pink-300">Speaker B (Personagem 2)</span>
+              </div>
+              <input type="text" id="speakerBAlias" value="Student" placeholder="Nome (ex: Student)" class="w-24 bg-[#0B0F17] border border-pink-500/40 rounded-lg px-2 py-0.5 text-[11px] text-pink-200 text-right outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-[10px] text-pink-300 font-semibold block">Voz Gemini HD</label>
+              <div class="flex items-center gap-1.5">
+                <select id="speakerBVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-pink-500/40 focus:border-pink-400 rounded-lg px-2.5 py-1.5 text-xs text-pink-200 outline-none cursor-pointer truncate">
+                  <!-- Populado via JS -->
+                </select>
+                <button id="speakerBSampleBtn" onclick="testVoiceSample('speakerB')" title="Ouvir Voz B" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-300 transition">
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Script Editor Section -->
+      <div class="flex-1 flex flex-col space-y-2">
+        <div class="flex items-center justify-between">
+          <label for="scriptInput" class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <span>Roteiro / Texto do Áudio</span>
+            <span class="text-[10px] text-slate-500 font-normal">• Digite as falas ou use os atalhos</span>
+          </label>
+
+          <!-- Insertion Toolbar -->
           <div class="flex items-center gap-1.5">
-            <button onclick="insertSpeakerTag('A')" class="px-2 py-1 rounded bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-[11px] font-mono font-semibold transition">
-              + Speaker A:
+            <button onclick="insertSpeakerTag('A')" class="px-2 py-1 rounded bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-300 text-[11px] font-semibold transition flex items-center gap-1">
+              <span>+ Speaker A:</span>
             </button>
-            <button onclick="insertSpeakerTag('B')" class="px-2 py-1 rounded bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/30 text-[11px] font-mono font-semibold transition">
-              + Speaker B:
+            <button onclick="insertSpeakerTag('B')" class="px-2 py-1 rounded bg-pink-500/10 hover:bg-pink-500/20 border border-pink-500/30 text-pink-300 text-[11px] font-semibold transition flex items-center gap-1">
+              <span>+ Speaker B:</span>
             </button>
-            <button onclick="insertPauseTag()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[11px] font-mono transition" title="Inserir pausa breve">
-              + [Pausa]
+            <button onclick="insertPauseTag()" class="px-2 py-1 rounded bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] text-slate-300 text-[11px] transition" title="Inserir pausa no áudio">
+              <span>+ [Pausa]</span>
             </button>
-            <button onclick="formatDialogueScript()" class="px-2 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold transition" title="Formatar e alinhar falas">
-              ✨ Alinhar
+            <button onclick="cleanAndFormatScript()" class="px-2 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[11px] transition" title="Formatar e alinhar falas">
+              <i data-lucide="wand-2" class="w-3 h-3 inline mr-0.5"></i>
+              <span>Alinhar</span>
             </button>
-            <button onclick="clearEditor()" class="px-2 py-1 rounded hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 text-[11px] transition" title="Limpar texto">
+            <button onclick="clearEditor()" class="p-1 rounded hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 transition" title="Limpar Editor">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>
           </div>
         </div>
 
-        <!-- Textarea Script Box -->
-        <div class="relative flex-1 flex flex-col">
-          <textarea id="scriptInput" spellcheck="false" class="w-full flex-1 min-h-[220px] bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl p-3.5 text-slate-100 font-mono text-xs sm:text-sm leading-relaxed outline-none transition resize-none placeholder-slate-600" placeholder="Digite ou cole aqui o seu diálogo ou história...
-
-Exemplo:
-Speaker A: Hello! How have you been practicing your English this week?
-Speaker B: I've been doing the Magic Stories every single morning!
-Speaker A: That's the golden key. Repetition until speech becomes reflex."></textarea>
+        <!-- Script Textarea Container -->
+        <div class="relative flex-1 min-h-[280px]">
+          <textarea id="scriptInput" placeholder="Leo: Listen carefully. Grazi lived in a small apartment in São Paulo.
+Student: Did she live in London?
+Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px] bg-[#111726] border border-[#1F2B45] focus:border-amber-500/60 rounded-2xl p-4 text-slate-100 font-mono text-xs sm:text-sm leading-relaxed outline-none resize-y transition shadow-inner"></textarea>
         </div>
 
-        <!-- Editor Footer Metrics & Big CTA -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+        <!-- Bottom Action Bar & Metrics -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
           <!-- Text Metrics -->
           <div class="flex items-center gap-3 text-[11px] text-slate-400 font-mono">
-            <span><strong id="charCount" class="text-slate-200">0</strong> caracteres</span>
+            <span><strong id="metricChars" class="text-slate-200">0</strong> caracteres</span>
             <span>•</span>
-            <span><strong id="wordCount" class="text-slate-200">0</strong> palavras</span>
+            <span><strong id="metricWords" class="text-slate-200">0</strong> palavras</span>
             <span>•</span>
-            <span>Estimativa: ~<strong id="estDuration" class="text-amber-400">0s</strong></span>
+            <span>Estimativa: <strong id="metricEstDuration" class="text-amber-400">~0s</strong></span>
           </div>
 
-          <!-- Generate Audio Button -->
-          <div class="flex items-center gap-2">
+          <!-- Title Input & Generate Button -->
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <input type="text" id="audioTitleInput" value="magic_story_reflex_01" placeholder="Nome do arquivo (slug)" class="flex-1 sm:w-48 bg-[#111726] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 font-mono outline-none">
+
             <button id="generateAudioBtn" onclick="generateAudioTTS()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
-              <i data-lucide="sparkles" class="w-4 h-4 text-slate-950"></i>
+              <i data-lucide="sparkles" class="w-4 h-4 fill-current"></i>
               <span>Gerar Áudio MP3 (Gemini TTS)</span>
             </button>
           </div>
@@ -355,118 +377,135 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
     </div>
 
     <!-- ======================================================================= -->
-    <!-- RIGHT PANEL: AUDIO STUDIO, PLAYER & RENDER QUEUE (Cols 8 to 12)        -->
+    <!-- RIGHT PANEL: MASTERING PLAYER & HISTORY (Cols 8 to 12)                  -->
     <!-- ======================================================================= -->
     <div class="lg:col-span-5 flex flex-col bg-[#0E131F] overflow-y-auto p-4 sm:p-6 space-y-5">
       
-      <!-- Current Render Player Card -->
-      <div class="bg-[#111726] border border-[#1F2B45] rounded-2xl p-5 space-y-4 shadow-xl">
+      <!-- Audio Mastering Studio Player Card -->
+      <div class="p-5 rounded-2xl bg-[#111726] border border-[#1F2B45] shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
             <h2 class="text-xs font-bold text-white uppercase tracking-wider">Player de Masterização</h2>
           </div>
-          <span id="playerModelBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1F2B45] text-slate-300">Gemini 3.6 Flash TTS</span>
+          <span id="playerModelBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1F2B45] text-slate-300">gemini-2.5-flash-preview-tts</span>
         </div>
 
         <!-- Generation Loading / Empty State -->
-        <div id="playerPlaceholder" class="p-8 border-2 border-dashed border-[#1F2B45] rounded-xl flex flex-col items-center justify-center text-center space-y-2">
+        <div id="playerPlaceholder" class="p-8 border border-dashed border-[#1F2B45] rounded-xl text-center flex flex-col items-center justify-center gap-3">
           <div class="w-12 h-12 rounded-full bg-[#161F33] flex items-center justify-center text-slate-500">
             <i data-lucide="headphones" class="w-6 h-6"></i>
           </div>
-          <p class="text-xs font-semibold text-slate-300">Nenhum áudio gerado ainda</p>
-          <p class="text-[11px] text-slate-500 max-w-xs">Escreva seu diálogo ao lado e clique em "Gerar Áudio MP3" para sintetizar as vozes em tempo real.</p>
+          <div class="space-y-1">
+            <p class="text-xs font-bold text-slate-300">Nenhum áudio gerado ainda</p>
+            <p class="text-[11px] text-slate-500 max-w-xs">Escreva seu diálogo ao lado e clique em "Gerar Áudio MP3" para sintetizar as vozes em tempo real.</p>
+          </div>
         </div>
 
-        <!-- Generating Progress Overlay (Hidden by default) -->
-        <div id="generatingProgress" class="hidden p-8 bg-[#0B0F17]/90 border border-amber-500/40 rounded-xl flex flex-col items-center justify-center text-center space-y-3">
-          <div class="w-12 h-12 rounded-full border-4 border-amber-500/20 border-t-amber-500 animate-spin flex items-center justify-center">
-            <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+        <!-- Generating Progress State (Hidden by default) -->
+        <div id="generatingProgress" class="hidden p-8 rounded-xl bg-[#0B0F17] border border-amber-500/30 text-center space-y-4">
+          <div class="flex items-center justify-center gap-1.5 text-amber-400">
+            <span class="sound-bar !h-5 !bg-amber-400"></span>
+            <span class="sound-bar !h-8 !bg-amber-400"></span>
+            <span class="sound-bar !h-12 !bg-amber-400"></span>
+            <span class="sound-bar !h-7 !bg-amber-400"></span>
+            <span class="sound-bar !h-4 !bg-amber-400"></span>
           </div>
           <div>
-            <p class="text-sm font-bold text-amber-300">Sintetizando Diálogo via Gemini...</p>
-            <p id="generatingStepText" class="text-xs text-slate-400 mt-0.5">Enviando diálogo e mapeamento de vozes HD</p>
+            <h4 class="text-xs font-bold text-white">Sintetizando Vozes com Gemini HD...</h4>
+            <p id="generatingStatusText" class="text-[11px] text-amber-300/80 mt-0.5">Construindo payload e conectando à API...</p>
+          </div>
+          <div class="w-full bg-[#161F33] rounded-full h-1.5 overflow-hidden">
+            <div class="bg-amber-500 h-full w-2/3 animate-pulse"></div>
           </div>
         </div>
 
-        <!-- Active Player Controls (Shown when audio is ready) -->
+        <!-- Active Master Player Controls (Hidden until generated) -->
         <div id="activePlayerControls" class="hidden space-y-4">
-          <!-- Audio Meta Header -->
-          <div class="bg-[#0B0F17] p-3 rounded-xl border border-[#1F2B45] space-y-1">
-            <div class="flex items-center justify-between">
-              <span id="activeAudioTitle" class="text-xs font-bold text-amber-400 font-mono truncate">dialogo_aef_01.mp3</span>
-              <span id="activeAudioDuration" class="text-xs font-mono text-slate-400">00:00</span>
+          
+          <!-- Audio Meta Info -->
+          <div class="p-3 bg-[#0B0F17] border border-[#1F2B45] rounded-xl flex items-center justify-between">
+            <div class="truncate mr-2">
+              <h4 id="currentAudioTitle" class="text-xs font-bold text-white truncate">magic_story_reflex_01.mp3</h4>
+              <p id="currentAudioDetails" class="text-[10px] text-slate-400">Gemini HD • 24kHz Mono • MP3 192kbps</p>
             </div>
-            <div class="flex items-center justify-between text-[10px] text-slate-500">
-              <span id="activeAudioSpeakers">Speakers: Kore & Puck</span>
-              <span id="activeAudioSize">~120 KB</span>
-            </div>
+            <span id="currentAudioDurationBadge" class="text-xs font-mono font-bold text-amber-400 px-2 py-1 rounded bg-amber-500/10 border border-amber-500/20">00:00</span>
           </div>
 
-          <!-- HTML5 Hidden Audio Element -->
-          <audio id="ttsAudioElement" class="hidden"></audio>
+          <!-- HTML Audio Native Element -->
+          <audio id="mainMasterAudio" class="w-full hidden"></audio>
 
-          <!-- Waveform / Progress Bar Scrubber -->
+          <!-- Waveform / Scrubber Bar -->
           <div class="space-y-1.5">
-            <div class="relative w-full h-3 bg-[#0B0F17] rounded-full overflow-hidden cursor-pointer border border-[#1F2B45]" id="progressBarTrack" onclick="seekAudio(event)">
-              <div id="progressBarFill" class="h-full bg-gradient-to-r from-amber-500 to-amber-400 w-0 transition-all duration-100"></div>
-            </div>
             <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
-              <span id="currentTimeDisplay">00:00</span>
-              <span id="totalTimeDisplay">00:00</span>
+              <span id="playerCurrentTime">00:00</span>
+              <span id="playerTotalTime">00:00</span>
             </div>
+            <input type="range" id="playerSeeker" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-[#161F33] rounded-lg appearance-none cursor-pointer">
           </div>
 
           <!-- Transport Buttons -->
           <div class="flex items-center justify-between pt-1">
             <!-- Speed Selector -->
             <div class="flex items-center gap-1">
-              <button onclick="setPlaybackSpeed(0.75)" class="speed-btn px-2 py-1 rounded bg-[#161F33] hover:bg-[#1F2B45] text-[10px] font-mono text-slate-300" data-speed="0.75">0.75x</button>
-              <button onclick="setPlaybackSpeed(1.0)" class="speed-btn px-2 py-1 rounded bg-amber-500 text-slate-950 font-bold text-[10px] font-mono" data-speed="1.0">1.0x</button>
-              <button onclick="setPlaybackSpeed(1.25)" class="speed-btn px-2 py-1 rounded bg-[#161F33] hover:bg-[#1F2B45] text-[10px] font-mono text-slate-300" data-speed="1.25">1.25x</button>
-              <button onclick="setPlaybackSpeed(1.5)" class="speed-btn px-2 py-1 rounded bg-[#161F33] hover:bg-[#1F2B45] text-[10px] font-mono text-slate-300" data-speed="1.5">1.5x</button>
+              <button onclick="setPlaybackSpeed(0.75)" class="speed-btn px-2 py-1 rounded text-[10px] font-bold bg-[#161F33] text-slate-400 hover:text-white" data-speed="0.75">0.75x</button>
+              <button onclick="setPlaybackSpeed(1.0)" class="speed-btn px-2 py-1 rounded text-[10px] font-bold bg-amber-500 text-slate-950" data-speed="1.0">1.0x</button>
+              <button onclick="setPlaybackSpeed(1.25)" class="speed-btn px-2 py-1 rounded text-[10px] font-bold bg-[#161F33] text-slate-400 hover:text-white" data-speed="1.25">1.25x</button>
+              <button onclick="setPlaybackSpeed(1.5)" class="speed-btn px-2 py-1 rounded text-[10px] font-bold bg-[#161F33] text-slate-400 hover:text-white" data-speed="1.5">1.5x</button>
             </div>
 
-            <!-- Play / Pause Center -->
+            <!-- Central Play / Pause -->
             <div class="flex items-center gap-2">
-              <button onclick="restartAudio()" class="p-2 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] text-slate-300 transition" title="Reiniciar do Início">
+              <button onclick="skipPlayer(-5)" class="p-2 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] text-slate-300 transition" title="Voltar 5s">
                 <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
               </button>
-              <button id="playPauseBtn" onclick="togglePlayPause()" class="w-12 h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold flex items-center justify-center shadow-lg shadow-amber-500/20 active:scale-95 transition">
-                <i id="playIcon" data-lucide="play" class="w-6 h-6 ml-0.5"></i>
-                <i id="pauseIcon" data-lucide="pause" class="w-6 h-6 hidden"></i>
+              
+              <button id="masterPlayBtn" onclick="toggleMasterPlay()" class="w-12 h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/20 active:scale-95 transition">
+                <i id="masterPlayIcon" data-lucide="play" class="w-6 h-6 fill-current ml-0.5"></i>
+              </button>
+
+              <button onclick="skipPlayer(5)" class="p-2 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] text-slate-300 transition" title="Avançar 5s">
+                <i data-lucide="rotate-cw" class="w-4 h-4"></i>
               </button>
             </div>
 
             <!-- Volume Control -->
-            <div class="flex items-center gap-1.5">
-              <i data-lucide="volume-2" class="w-3.5 h-3.5 text-slate-400"></i>
-              <input type="range" min="0" max="1" step="0.05" value="1" id="volumeSlider" oninput="changeVolume(this.value)" class="w-16 h-1.5 bg-[#1F2B45] rounded-lg cursor-pointer">
+            <div class="flex items-center gap-1.5 text-slate-400">
+              <i data-lucide="volume-2" class="w-4 h-4"></i>
+              <input type="range" id="masterVolume" min="0" max="1" step="0.05" value="1" class="w-16 h-1.5 bg-[#161F33] rounded-lg appearance-none cursor-pointer">
             </div>
           </div>
 
-          <!-- Download Action Bar -->
-          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#1F2B45]">
-            <button id="downloadMp3Btn" onclick="downloadCurrentAudio('mp3')" class="px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow transition active:scale-95">
-              <i data-lucide="download" class="w-4 h-4"></i>
-              <span>Baixar MP3 Oficial</span>
+          <!-- Download & Publish Action Bar -->
+          <div class="pt-3 border-t border-[#1F2B45] space-y-2">
+            <button id="publishToPlayerBtn" onclick="openPublishModal()" class="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-black flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
+              <i data-lucide="send" class="w-4 h-4 fill-current"></i>
+              <span>Publicar no Player do Aluno (VIP / Público)</span>
             </button>
-            <button id="downloadWavBtn" onclick="downloadCurrentAudio('wav')" class="px-3 py-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] text-slate-300 text-xs font-bold flex items-center justify-center gap-2 transition">
-              <i data-lucide="file-audio" class="w-4 h-4 text-amber-400"></i>
-              <span>Baixar WAV Master</span>
-            </button>
+            <div class="grid grid-cols-2 gap-2">
+              <button id="downloadMp3Btn" onclick="downloadCurrentAudio('mp3')" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow transition active:scale-95">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Baixar MP3</span>
+              </button>
+              <button id="downloadWavBtn" onclick="downloadCurrentAudio('wav')" class="px-3 py-2 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] text-slate-300 text-xs font-bold flex items-center justify-center gap-2 transition">
+                <i data-lucide="file-audio" class="w-3.5 h-3.5"></i>
+                <span>Baixar WAV</span>
+              </button>
+            </div>
           </div>
+
         </div>
+
       </div>
 
-      <!-- Factory History / Biblioteca de Áudios Gerados -->
-      <div class="flex-1 flex flex-col bg-[#111726] border border-[#1F2B45] rounded-2xl p-4 space-y-3 shadow-xl overflow-hidden">
-        <div class="flex items-center justify-between pb-2 border-b border-[#1F2B45]">
+      <!-- Recent Generation History -->
+      <div class="flex-1 p-5 rounded-2xl bg-[#111726] border border-[#1F2B45] flex flex-col space-y-3">
+        <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <i data-lucide="history" class="w-4 h-4 text-amber-400"></i>
             <h3 class="text-xs font-bold text-white uppercase tracking-wider">Histórico de Produção</h3>
           </div>
-          <button onclick="clearHistory()" class="text-[10px] text-slate-500 hover:text-rose-400 transition" title="Limpar histórico local">
+          <button onclick="clearHistory()" class="text-[10px] text-slate-500 hover:text-rose-400 transition">
             Limpar
           </button>
         </div>
@@ -487,8 +526,8 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
   <!-- ========================================================================= -->
   <!-- MODAL: GALERIA COMPLETA DE VOZES COM SAMPLES INTERATIVOS                  -->
   <!-- ========================================================================= -->
-  <div id="voiceGalleryModal" style="display: none;" onclick="if (event.target === this) closeVoiceGalleryModal()" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 items-center justify-center p-4">
-    <div class="bg-[#111726] border border-[#2D3D60] rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+  <div id="voiceGalleryModal" class="modal-backdrop fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="modal-card bg-[#111726] border border-[#2D3D60] rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       
       <!-- Modal Header -->
       <div class="p-5 border-b border-[#1F2B45] flex items-center justify-between flex-shrink-0 bg-[#0E131F]">
@@ -542,10 +581,111 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
   </div>
 
   <!-- ========================================================================= -->
+  <!-- MODAL: PUBLICAR EPISÓDIO NO PLAYER DO ALUNO                               -->
+  <!-- ========================================================================= -->
+  <div id="publishEpisodeModal" class="modal-backdrop fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="modal-card bg-[#111726] border border-[#2D3D60] rounded-2xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <!-- Header -->
+      <div class="p-5 border-b border-[#1F2B45] flex items-center justify-between flex-shrink-0 bg-[#0E131F]">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <i data-lucide="send" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-white text-base">Publicar no Player Interativo</h3>
+            <p class="text-xs text-slate-400">Distribua este áudio instantaneamente para seus alunos ou para o player público</p>
+          </div>
+        </div>
+        <button onclick="closePublishModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-[#1F2B45] transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Form Body -->
+      <div class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+        
+        <!-- Recipient Selection (Multi-select) -->
+        <div class="space-y-2">
+          <label class="font-bold text-slate-300 block uppercase tracking-wider text-[11px]">
+            <span>1. Selecione os Destinatários (Quem terá acesso a este treino?)</span>
+          </label>
+          <div id="publishStudentsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <!-- Injetado dinamicamente via JS -->
+          </div>
+        </div>
+
+        <!-- Title & Category -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label for="publishTitleInput" class="font-semibold text-slate-300 block">Título do Treino</label>
+            <input type="text" id="publishTitleInput" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 font-medium outline-none">
+          </div>
+          <div class="space-y-1">
+            <label for="publishCategorySelect" class="font-semibold text-slate-300 block">Categoria Didática</label>
+            <select id="publishCategorySelect" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-200 outline-none cursor-pointer">
+              <option value="Magic Story (Mini-Diálogo)">🪄 Magic Story (Mini-Diálogo)</option>
+              <option value="Listen & Answer Drill">🎧 Listen & Answer Drill</option>
+              <option value="Coffee Shop Real Talk">☕ Coffee Shop Real Talk</option>
+              <option value="VIP Spoken Coaching">🎙️ VIP Spoken Coaching</option>
+              <option value="Narração Didática">📖 Narração Didática</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="space-y-1">
+          <label for="publishSummaryInput" class="font-semibold text-slate-300 block">Resumo / Contexto Pedagógico</label>
+          <textarea id="publishSummaryInput" rows="2" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl p-3 text-slate-200 outline-none leading-relaxed" placeholder="Ex: Treino de reflexo rápido sobre mudança para Londres com foco em chunks de passado."></textarea>
+        </div>
+
+        <!-- Golden Tip -->
+        <div class="space-y-1">
+          <label for="publishGoldenTipInput" class="font-semibold text-amber-400 flex items-center gap-1.5">
+            <span>✨ Sacada de Ouro do Leo (Dica de Pronúncia & Ritmo)</span>
+          </label>
+          <input type="text" id="publishGoldenTipInput" value="Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra." class="w-full bg-[#0B0F17] border border-amber-500/40 focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
+        </div>
+
+        <!-- Sound Chunks Preview -->
+        <div class="space-y-1.5 p-3 rounded-xl bg-[#0B0F17] border border-[#1F2B45]">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="music" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Mapeamento dos Sound-Chunks (Modo Karaokê)</span>
+            </span>
+            <span id="publishChunksCountBadge" class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono font-bold">0 frases</span>
+          </div>
+          <div id="publishChunksPreviewList" class="max-h-36 overflow-y-auto space-y-1 pr-1 font-mono text-[11px] text-slate-300 divide-y divide-[#1F2B45]">
+            <!-- Injetado dinamicamente via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="p-4 border-t border-[#1F2B45] bg-[#0E131F] flex items-center justify-between flex-shrink-0">
+        <span class="text-[11px] text-slate-500 flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Zero terminal • Sincronização em tempo real</span>
+        </span>
+        <div class="flex items-center gap-2">
+          <button onclick="closePublishModal()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition">Cancelar</button>
+          <button id="confirmPublishBtn" onclick="confirmPublishEpisode()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Confirmar Publicação</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- MODAL: CONFIGURAÇÃO DE API KEY & MODELOS                                 -->
   <!-- ========================================================================= -->
-  <div id="configModal" style="display: none;" onclick="if (event.target === this) closeConfigModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 items-center justify-center p-4">
-    <div class="bg-[#111726] border border-[#2D3D60] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl" onclick="event.stopPropagation()">
+  <div id="configModal" class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="modal-card bg-[#111726] border border-[#2D3D60] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between pb-3 border-b border-[#1F2B45]">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
@@ -565,7 +705,7 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         <div>
           <label for="apiKeyInput" class="font-semibold text-slate-300 block mb-1">Gemini API Key (Google AI Studio)</label>
           <div class="relative">
-            <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-slate-100 font-mono text-xs outline-none transition">
+            <input type="password" id="apiKeyInput" placeholder="Cole sua chave aqui (AQ.Ab8... ou AIza...)" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-slate-100 font-mono text-xs outline-none transition">
             <button onclick="toggleApiKeyVisibility()" type="button" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200">
               <i id="apiKeyEyeIcon" data-lucide="eye" class="w-4 h-4"></i>
             </button>
@@ -576,11 +716,9 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         <div>
           <label for="modelSelect" class="font-semibold text-slate-300 block mb-1">Modelo Gemini para TTS</label>
           <select id="modelSelect" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-200 outline-none cursor-pointer">
-            <option value="gemini-2.0-flash">gemini-2.0-flash (Recomendado TTS - Rápido & Estável)</option>
-            <option value="gemini-2.5-flash">gemini-2.5-flash (Alta Fidelidade)</option>
-            <option value="gemini-2.5-pro">gemini-2.5-pro (Máxima Resolução)</option>
-            <option value="gemini-3.7-flash">gemini-3.7-flash (Mais Recente)</option>
-            <option value="gemini-3.6-flash">gemini-3.6-flash</option>
+            <option value="gemini-2.5-flash-preview-tts">gemini-2.5-flash-preview-tts (Google AI Studio TTS Oficial)</option>
+            <option value="gemini-2.0-flash">gemini-2.0-flash (Gemini 2.0 Flash Audio)</option>
+            <option value="gemini-3.1-flash-tts-preview">gemini-3.1-flash-tts-preview (Gemini 3.1 Flash TTS)</option>
           </select>
         </div>
       </div>
@@ -632,16 +770,16 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
     ];
 
     // =========================================================================
-    // 2. STATE MANAGEMENT & VOICE SAMPLE CACHE
+    // 2. STATE MANAGEMENT & TOAST NOTIFICATION SYSTEM
     // =========================================================================
-    let initialModel = localStorage.getItem('AEF_GEMINI_MODEL') || 'gemini-2.0-flash';
-    if (!initialModel || initialModel.includes('3.6') || initialModel.includes('3.5')) {
-      initialModel = 'gemini-2.0-flash';
+    let initialModel = localStorage.getItem('AEF_GEMINI_MODEL') || 'gemini-2.5-flash-preview-tts';
+    if (!initialModel || initialModel.includes('2.5-pro') || (initialModel.includes('2.5-flash') && !initialModel.includes('tts')) || initialModel.includes('3.7') || initialModel.includes('3.6')) {
+      initialModel = 'gemini-2.5-flash-preview-tts';
       localStorage.setItem('AEF_GEMINI_MODEL', initialModel);
     }
 
     const STATE = {
-      mode: 'single', // 'single' or 'dual'
+      mode: 'dual',
       apiKey: localStorage.getItem('AEF_GEMINI_API_KEY') || '',
       model: initialModel,
       currentAudioBlob: null,
@@ -651,24 +789,60 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
       history: JSON.parse(localStorage.getItem('AEF_TTS_HISTORY') || '[]')
     };
 
-    // In-memory cache for voice sample blobs and active playing state
     const VOICE_SAMPLE_CACHE = {};
     let activeSampleVoice = null;
     let sampleAudioElem = null;
+
+    // Toast Notification Component
+    function showToast(message, type = 'info', durationMs = 4000) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto p-3.5 rounded-xl shadow-2xl border text-xs font-semibold flex items-start gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 ${
+        type === 'error'
+          ? 'bg-[#2A0D15] border-rose-500/50 text-rose-200'
+          : type === 'success'
+          ? 'bg-[#08281D] border-emerald-500/50 text-emerald-200'
+          : type === 'warning'
+          ? 'bg-[#2A1D08] border-amber-500/50 text-amber-200'
+          : 'bg-[#111726] border-[#2D3D60] text-slate-200'
+      }`;
+
+      const iconName = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle' : type === 'warning' ? 'alert-triangle' : 'info';
+      
+      toast.innerHTML = `
+        <i data-lucide="${iconName}" class="w-4 h-4 flex-shrink-0 mt-0.5 ${type === 'error' ? 'text-rose-400' : type === 'success' ? 'text-emerald-400' : type === 'warning' ? 'text-amber-400' : 'text-sky-400'}"></i>
+        <div class="flex-1 leading-snug break-words">${message}</div>
+        <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white ml-1">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>
+      `;
+
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, durationMs);
+    }
 
     // =========================================================================
     // 3. INITIALIZATION
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
       sampleAudioElem = document.getElementById('voiceSampleAudioElement');
       
-      sampleAudioElem.addEventListener('ended', () => {
-        resetSamplePlayingUI();
-      });
-      sampleAudioElem.addEventListener('pause', () => {
-        resetSamplePlayingUI();
-      });
+      if (sampleAudioElem) {
+        sampleAudioElem.addEventListener('ended', resetSamplePlayingUI);
+        sampleAudioElem.addEventListener('pause', resetSamplePlayingUI);
+      }
 
       populateVoiceDropdowns();
       renderVoiceGallery();
@@ -677,11 +851,23 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
       initEditorMetrics();
       initAudioEvents();
 
+      // Set initial Dual Speaker mode UI
+      setSpeakerMode('dual');
+
       // Load initial template if editor is empty
       const scriptArea = document.getElementById('scriptInput');
-      if (!scriptArea.value.trim()) {
+      if (scriptArea && !scriptArea.value.trim()) {
         loadTemplate('magic_story');
       }
+
+      // Close modals when clicking background backdrop
+      document.querySelectorAll('.modal-backdrop').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+          }
+        });
+      });
     });
 
     // Populate Select elements with voices
@@ -694,24 +880,28 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         <option value="${v.name}">${v.name} (${v.gender === 'Male' ? '♂' : '♀'} ${v.style} - ${v.desc})</option>
       `).join('');
 
-      singleSelect.innerHTML = html;
-      speakerASelect.innerHTML = html;
-      speakerBSelect.innerHTML = html;
+      if (singleSelect) singleSelect.innerHTML = html;
+      if (speakerASelect) speakerASelect.innerHTML = html;
+      if (speakerBSelect) speakerBSelect.innerHTML = html;
 
       // Defaults
-      singleSelect.value = "Puck";
-      speakerASelect.value = "Kore";
-      speakerBSelect.value = "Puck";
-
-      singleSelect.addEventListener('change', updateSingleVoiceInfo);
-      updateSingleVoiceInfo();
+      if (singleSelect) {
+        singleSelect.value = "Puck";
+        singleSelect.addEventListener('change', updateSingleVoiceInfo);
+        updateSingleVoiceInfo();
+      }
+      if (speakerASelect) speakerASelect.value = "Kore";
+      if (speakerBSelect) speakerBSelect.value = "Puck";
     }
 
     function updateSingleVoiceInfo() {
-      const voiceName = document.getElementById('singleVoiceSelect').value;
+      const singleSelect = document.getElementById('singleVoiceSelect');
+      if (!singleSelect) return;
+      const voiceName = singleSelect.value;
       const voice = GEMINI_VOICES.find(v => v.name === voiceName);
-      if (voice) {
-        document.getElementById('singleVoiceInfo').innerHTML = `
+      const infoBox = document.getElementById('singleVoiceInfo');
+      if (voice && infoBox) {
+        infoBox.innerHTML = `
           <span><strong>${voice.name}</strong> • ${voice.gender === 'Male' ? 'Masculino' : 'Feminino'}, ${voice.style}</span>
           <span class="text-[10px] text-slate-400">HD 24kHz</span>
         `;
@@ -719,127 +909,30 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
     }
 
     // =========================================================================
-    // 4. VOICE SAMPLE PLAYBACK & GALLERY ENGINE
+    // 4. DETERMINISTIC GEMINI TTS CLIENT
     // =========================================================================
-    async function testVoiceSample(target) {
-      let voiceName = "Puck";
-      let btnId = "singleSampleBtn";
-
-      if (target === 'single') {
-        voiceName = document.getElementById('singleVoiceSelect').value;
-        btnId = "singleSampleBtn";
-      } else if (target === 'speakerA') {
-        voiceName = document.getElementById('speakerAVoiceSelect').value;
-        btnId = "speakerASampleBtn";
-      } else if (target === 'speakerB') {
-        voiceName = document.getElementById('speakerBVoiceSelect').value;
-        btnId = "speakerBSampleBtn";
-      } else {
-        voiceName = target;
-        btnId = `gallerySampleBtn_${voiceName}`;
+    async function requestGeminiTTS(payload, apiKey, preferredModel) {
+      const cleanKey = apiKey.trim();
+      if (!cleanKey) {
+        throw new Error("Chave da API não fornecida. Clique em 'API Key' para configurar.");
       }
 
-      await playVoiceSample(voiceName, btnId);
-    }
-
-    async function playVoiceSample(voiceName, triggerBtnId) {
-      // If already playing this voice, stop it
-      if (activeSampleVoice === voiceName && !sampleAudioElem.paused) {
-        sampleAudioElem.pause();
-        sampleAudioElem.currentTime = 0;
-        resetSamplePlayingUI();
-        return;
-      }
-
-      const apiKey = STATE.apiKey.trim();
-      if (!apiKey && !VOICE_SAMPLE_CACHE[voiceName]) {
-        openConfigModal();
-        alert('Para ouvir o sample da voz em tempo real, insira sua chave da Gemini API.');
-        return;
-      }
-
-      // Check in-memory cache
-      if (VOICE_SAMPLE_CACHE[voiceName]) {
-        playSampleUrl(VOICE_SAMPLE_CACHE[voiceName], voiceName, triggerBtnId);
-        return;
-      }
-
-      // Synthesize sample phrase with Gemini TTS
-      const triggerBtn = document.getElementById(triggerBtnId);
-      const isCompactBtn = triggerBtnId === 'singleSampleBtn' || triggerBtnId === 'speakerASampleBtn' || triggerBtnId === 'speakerBSampleBtn';
-      const originalBtnContent = triggerBtn ? triggerBtn.innerHTML : '';
-      
-      if (triggerBtn) {
-        if (isCompactBtn) {
-          triggerBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>`;
-        } else {
-          triggerBtn.innerHTML = `
-            <div class="w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-[10px]">Gerando...</span>
-          `;
-        }
-      }
-
-      const sampleText = "Hello, how can I help you today?";
-      const preferredModel = STATE.model || 'gemini-2.0-flash';
-
-      try {
-        const payload = {
-          contents: [{ role: "user", parts: [{ text: sampleText }] }],
-          generationConfig: {
-            responseModalities: ["AUDIO"],
-            speechConfig: {
-              voiceConfig: {
-                prebuiltVoiceConfig: { voiceName: voiceName }
-              }
-            }
-          }
-        };
-
-        const result = await callGeminiTTSWithFallback(payload, apiKey, preferredModel);
-        const rawBytes = base64ToUint8Array(result.data);
-        const wavBlob = processToWavBlob(rawBytes, result.mimeType || 'audio/wav');
-        const sampleUrl = URL.createObjectURL(wavBlob);
-
-        // Store in cache
-        VOICE_SAMPLE_CACHE[voiceName] = sampleUrl;
-
-        playSampleUrl(sampleUrl, voiceName, triggerBtnId);
-
-      } catch (err) {
-        console.error("Gemini TTS Voice Sample Error:", err);
-        alert(`Erro ao gerar sample da voz ${voiceName} via Gemini API:\n${err.message}\n\nVerifique se sua API Key tem acesso ao Gemini.`);
-        resetSamplePlayingUI();
-        if (triggerBtn) triggerBtn.innerHTML = originalBtnContent;
-      }
-    }
-
-    // Robust Gemini TTS API caller with automatic model fallback
-    async function callGeminiTTSWithFallback(payload, apiKey, preferredModel) {
       const modelsToTry = [
         preferredModel,
+        'gemini-2.5-flash-preview-tts',
         'gemini-2.0-flash',
-        'gemini-2.5-flash',
-        'gemini-2.0-flash-exp',
-        'gemini-2.5-pro'
+        'gemini-3.1-flash-tts-preview'
       ].filter((v, i, a) => v && a.indexOf(v) === i);
 
       let lastError = null;
 
       for (const model of modelsToTry) {
         try {
-          let endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-          const headers = { 'Content-Type': 'application/json' };
-
-          if (apiKey.startsWith('AIza')) {
-            endpoint += `?key=${encodeURIComponent(apiKey)}`;
-            headers['x-goog-api-key'] = apiKey;
-          } else if (apiKey.startsWith('AQ.') || apiKey.startsWith('ya29.')) {
-            headers['Authorization'] = `Bearer ${apiKey}`;
-          } else {
-            endpoint += `?key=${encodeURIComponent(apiKey)}`;
-            headers['x-goog-api-key'] = apiKey;
-          }
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(cleanKey)}`;
+          const headers = {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': cleanKey
+          };
 
           const response = await fetch(endpoint, {
             method: 'POST',
@@ -849,7 +942,8 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
 
           if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
-            lastError = new Error(errData.error?.message || `HTTP ${response.status}`);
+            const msg = errData.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+            lastError = new Error(`[${model}] ${msg}`);
             continue;
           }
 
@@ -869,10 +963,102 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         }
       }
 
-      throw lastError || new Error("Nenhum dado de áudio foi retornado pelos modelos Gemini.");
+      throw lastError || new Error("A API não retornou dados de áudio para o modelo especificado.");
+    }
+
+    // =========================================================================
+    // 5. VOICE SAMPLE PLAYBACK & GALLERY
+    // =========================================================================
+    async function testVoiceSample(target) {
+      let voiceName = "Puck";
+      let btnId = "singleSampleBtn";
+
+      if (target === 'single') {
+        voiceName = document.getElementById('singleVoiceSelect')?.value || "Puck";
+        btnId = "singleSampleBtn";
+      } else if (target === 'speakerA') {
+        voiceName = document.getElementById('speakerAVoiceSelect')?.value || "Kore";
+        btnId = "speakerASampleBtn";
+      } else if (target === 'speakerB') {
+        voiceName = document.getElementById('speakerBVoiceSelect')?.value || "Puck";
+        btnId = "speakerBSampleBtn";
+      } else {
+        voiceName = target;
+        btnId = `gallerySampleBtn_${voiceName}`;
+      }
+
+      await playVoiceSample(voiceName, btnId);
+    }
+
+    async function playVoiceSample(voiceName, triggerBtnId) {
+      if (activeSampleVoice === voiceName && sampleAudioElem && !sampleAudioElem.paused) {
+        sampleAudioElem.pause();
+        sampleAudioElem.currentTime = 0;
+        resetSamplePlayingUI();
+        return;
+      }
+
+      const apiKey = STATE.apiKey.trim();
+      if (!apiKey && !VOICE_SAMPLE_CACHE[voiceName]) {
+        openConfigModal();
+        showToast("Insira sua Gemini API Key para ouvir o sample da voz.", "warning");
+        return;
+      }
+
+      if (VOICE_SAMPLE_CACHE[voiceName]) {
+        playSampleUrl(VOICE_SAMPLE_CACHE[voiceName], voiceName, triggerBtnId);
+        return;
+      }
+
+      const triggerBtn = document.getElementById(triggerBtnId);
+      const isCompactBtn = triggerBtnId === 'singleSampleBtn' || triggerBtnId === 'speakerASampleBtn' || triggerBtnId === 'speakerBSampleBtn';
+      const originalBtnContent = triggerBtn ? triggerBtn.innerHTML : '';
+      
+      if (triggerBtn) {
+        if (isCompactBtn) {
+          triggerBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>`;
+        } else {
+          triggerBtn.innerHTML = `
+            <div class="w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+            <span class="text-[10px]">Gerando...</span>
+          `;
+        }
+      }
+
+      const sampleText = "Hello, how can I help you today?";
+      const preferredModel = STATE.model || 'gemini-2.5-flash-preview-tts';
+
+      try {
+        const payload = {
+          contents: [{ role: "user", parts: [{ text: sampleText }] }],
+          generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: { voiceName: voiceName }
+              }
+            }
+          }
+        };
+
+        const result = await requestGeminiTTS(payload, apiKey, preferredModel);
+        const rawBytes = base64ToUint8Array(result.data);
+        const wavBlob = processToWavBlob(rawBytes, result.mimeType || 'audio/wav');
+        const sampleUrl = URL.createObjectURL(wavBlob);
+
+        VOICE_SAMPLE_CACHE[voiceName] = sampleUrl;
+        playSampleUrl(sampleUrl, voiceName, triggerBtnId);
+
+      } catch (err) {
+        console.error("Voice Sample Error:", err);
+        showToast(`Erro no sample de ${voiceName}: ${err.message}`, "error", 6000);
+        resetSamplePlayingUI();
+        if (triggerBtn) triggerBtn.innerHTML = originalBtnContent;
+      }
     }
 
     function playSampleUrl(url, voiceName, triggerBtnId) {
+      if (!sampleAudioElem) return;
       activeSampleVoice = voiceName;
       sampleAudioElem.src = url;
       sampleAudioElem.currentTime = 0;
@@ -891,53 +1077,67 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         btn.dataset.activeSample = "true";
         btn.classList.add('bg-amber-500', 'text-slate-950', 'border-amber-400');
         
-        const isCompact = activeBtnId === 'singleSampleBtn' || activeBtnId === 'speakerASampleBtn' || activeBtnId === 'speakerBSampleBtn';
-        if (isCompact) {
+        if (activeBtnId === 'singleSampleBtn' || activeBtnId === 'speakerASampleBtn' || activeBtnId === 'speakerBSampleBtn') {
           btn.innerHTML = `
-            <div class="flex items-center gap-0.5 justify-center">
+            <div class="flex items-center gap-0.5 text-slate-950">
               <span class="sound-bar !h-2.5 !bg-slate-950"></span>
               <span class="sound-bar !h-3.5 !bg-slate-950"></span>
-              <span class="sound-bar !h-2 !bg-slate-950"></span>
+              <span class="sound-bar !h-2.5 !bg-slate-950"></span>
             </div>
           `;
         } else {
           btn.innerHTML = `
-            <div class="flex items-center gap-0.5">
-              <span class="sound-bar !bg-slate-950"></span>
-              <span class="sound-bar !bg-slate-950"></span>
-              <span class="sound-bar !bg-slate-950"></span>
+            <div class="flex items-center gap-0.5 text-slate-950 mr-1">
+              <span class="sound-bar !h-2.5 !bg-slate-950"></span>
+              <span class="sound-bar !h-3.5 !bg-slate-950"></span>
+              <span class="sound-bar !h-2.5 !bg-slate-950"></span>
             </div>
-            <span class="text-[10px] font-bold">Tocando...</span>
+            <span>Tocando...</span>
           `;
         }
       }
     }
 
     function resetSamplePlayingUI() {
-      document.querySelectorAll('[data-active-sample="true"]').forEach(btn => {
-        btn.removeAttribute('data-active-sample');
-        btn.classList.remove('bg-amber-500', 'text-slate-950', 'border-amber-400');
-        
-        if (btn.id === 'singleSampleBtn') {
-          btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 ml-0.5"></i>`;
-        } else if (btn.id === 'speakerASampleBtn' || btn.id === 'speakerBSampleBtn') {
-          btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 ml-0.5"></i>`;
-        } else {
-          btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5"></i><span>Sample</span>`;
-        }
+      // Reset Single / Speaker buttons
+      const singleBtn = document.getElementById('singleSampleBtn');
+      if (singleBtn) {
+        singleBtn.className = "w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition";
+        singleBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i>`;
+      }
+
+      const spkABtn = document.getElementById('speakerASampleBtn');
+      if (spkABtn) {
+        spkABtn.className = "w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 transition";
+        spkABtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>`;
+      }
+
+      const spkBBtn = document.getElementById('speakerBSampleBtn');
+      if (spkBBtn) {
+        spkBBtn.className = "w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-300 transition";
+        spkBBtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>`;
+      }
+
+      // Reset Gallery buttons
+      document.querySelectorAll('[id^="gallerySampleBtn_"]').forEach(btn => {
+        btn.className = "px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition flex-shrink-0";
+        btn.innerHTML = `<i data-lucide="play" class="w-3 h-3 fill-current"></i><span>Ouvir</span>`;
       });
-      lucide.createIcons();
+
+      if (window.lucide) lucide.createIcons();
       activeSampleVoice = null;
     }
 
     // =========================================================================
-    // 5. VOICE GALLERY MODAL
+    // 6. VOICE GALLERY MODAL
     // =========================================================================
     function openVoiceGalleryModal() {
       const modal = document.getElementById('voiceGalleryModal');
-      modal.style.display = 'flex';
-      renderVoiceGallery();
-      if (window.lucide) lucide.createIcons();
+      if (modal) {
+        modal.classList.add('active');
+        renderVoiceGallery();
+        if (window.lucide) lucide.createIcons();
+      }
     }
 
     function closeVoiceGalleryModal() {
@@ -946,7 +1146,7 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         resetSamplePlayingUI();
       }
       const modal = document.getElementById('voiceGalleryModal');
-      modal.style.display = 'none';
+      if (modal) modal.classList.remove('active');
     }
 
     let galleryFilter = 'all';
@@ -970,167 +1170,176 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
     }
 
     function renderVoiceGallery() {
-      const container = document.getElementById('voiceCardsGrid');
-      if (!container) return;
+      const grid = document.getElementById('voiceCardsGrid');
+      if (!grid) return;
 
       const filtered = GEMINI_VOICES.filter(v => {
         const matchesFilter = galleryFilter === 'all' || v.gender === galleryFilter;
         const matchesSearch = !gallerySearchQuery || 
-                              v.name.toLowerCase().includes(gallerySearchQuery) || 
-                              v.style.toLowerCase().includes(gallerySearchQuery) || 
-                              v.desc.toLowerCase().includes(gallerySearchQuery);
+          v.name.toLowerCase().includes(gallerySearchQuery) || 
+          v.style.toLowerCase().includes(gallerySearchQuery) || 
+          v.desc.toLowerCase().includes(gallerySearchQuery);
         return matchesFilter && matchesSearch;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-xs">Nenhuma voz encontrada com o termo buscado.</div>`;
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 text-xs">
+            Nenhuma voz encontrada com o filtro "${gallerySearchQuery}".
+          </div>
+        `;
         return;
       }
 
-      container.innerHTML = filtered.map(v => {
-        const isCached = !!VOICE_SAMPLE_CACHE[v.name];
-        const isMale = v.gender === 'Male';
-        
-        return `
-          <div class="bg-[#0E131F] border border-[#1F2B45] hover:border-amber-500/50 rounded-xl p-4 flex flex-col justify-between space-y-3 transition group">
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <div class="flex items-center gap-2">
-                  <span class="font-extrabold text-sm text-white group-hover:text-amber-300 transition">${v.name}</span>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isMale ? 'bg-sky-500/10 text-sky-400 border border-sky-500/30' : 'bg-pink-500/10 text-pink-400 border border-pink-500/30'}">
-                    ${isMale ? '♂ Masc' : '♀ Fem'}
-                  </span>
-                </div>
-                <span class="px-2 py-0.5 rounded bg-[#161F33] text-amber-400 text-[10px] font-mono font-bold">${v.style}</span>
+      grid.innerHTML = filtered.map(v => `
+        <div class="p-3.5 rounded-xl bg-[#0B0F17] border border-[#1F2B45] hover:border-amber-500/40 space-y-2.5 transition group">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg ${v.gender === 'Male' ? 'bg-sky-500/10 border-sky-500/30 text-sky-400' : 'bg-pink-500/10 border-pink-500/30 text-pink-400'} border flex items-center justify-center font-bold text-xs">
+                ${v.name[0]}
               </div>
-              <p class="text-xs text-slate-400 leading-relaxed">${v.desc}</p>
+              <div>
+                <h4 class="font-extrabold text-white text-sm leading-none">${v.name}</h4>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded ${v.gender === 'Male' ? 'bg-sky-500/10 text-sky-300' : 'bg-pink-500/10 text-pink-300'}">
+                    ${v.gender === 'Male' ? '♂ Masculino' : '♀ Feminino'}
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-mono">${v.style}</span>
+                </div>
+              </div>
             </div>
 
-            <div class="pt-2 border-t border-[#1F2B45]/60 flex items-center justify-between gap-2">
-              <button id="gallerySampleBtn_${v.name}" onclick="testVoiceSample('${v.name}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition flex-shrink-0">
-                <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                <span>${isCached ? 'Ouvir' : 'Sample'}</span>
-              </button>
+            <button id="gallerySampleBtn_${v.name}" onclick="testVoiceSample('${v.name}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition flex-shrink-0">
+              <i data-lucide="play" class="w-3 h-3 fill-current"></i>
+              <span>Ouvir</span>
+            </button>
+          </div>
 
-              <div class="flex items-center gap-1">
-                <button onclick="selectVoiceFromGallery('${v.name}', 'single')" class="px-2 py-1 rounded bg-[#161F33] hover:bg-[#1F2B45] text-slate-300 hover:text-white text-[10px] font-semibold transition" title="Definir no modo Single">
-                  Single
-                </button>
-                <button onclick="selectVoiceFromGallery('${v.name}', 'speakerA')" class="px-2 py-1 rounded bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-[10px] font-semibold transition" title="Definir no Speaker A">
-                  Spk A
-                </button>
-                <button onclick="selectVoiceFromGallery('${v.name}', 'speakerB')" class="px-2 py-1 rounded bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/30 text-[10px] font-semibold transition" title="Definir no Speaker B">
-                  Spk B
-                </button>
-              </div>
+          <p class="text-[11px] text-slate-400 line-clamp-2">${v.desc}</p>
+
+          <div class="pt-2 border-t border-[#1F2B45] flex items-center justify-between text-[11px]">
+            <span class="text-slate-500">Usar em:</span>
+            <div class="flex items-center gap-1">
+              <button onclick="assignVoiceTo('${v.name}', 'single')" class="px-2 py-0.5 rounded bg-[#161F33] hover:bg-amber-500 hover:text-slate-950 text-slate-300 text-[10px] font-bold transition">1 Speaker</button>
+              <button onclick="assignVoiceTo('${v.name}', 'A')" class="px-2 py-0.5 rounded bg-sky-500/10 hover:bg-sky-500 text-sky-300 hover:text-slate-950 text-[10px] font-bold transition">Spk A</button>
+              <button onclick="assignVoiceTo('${v.name}', 'B')" class="px-2 py-0.5 rounded bg-pink-500/10 hover:bg-pink-500 text-pink-300 hover:text-slate-950 text-[10px] font-bold transition">Spk B</button>
             </div>
           </div>
-        `;
-      }).join('');
+        </div>
+      `).join('');
 
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
-    function selectVoiceFromGallery(voiceName, target) {
+    function assignVoiceTo(voiceName, target) {
       if (target === 'single') {
-        document.getElementById('singleVoiceSelect').value = voiceName;
+        const select = document.getElementById('singleVoiceSelect');
+        if (select) select.value = voiceName;
         updateSingleVoiceInfo();
         setSpeakerMode('single');
-      } else if (target === 'speakerA') {
-        document.getElementById('speakerAVoiceSelect').value = voiceName;
+      } else if (target === 'A') {
+        const select = document.getElementById('speakerAVoiceSelect');
+        if (select) select.value = voiceName;
         setSpeakerMode('dual');
-      } else if (target === 'speakerB') {
-        document.getElementById('speakerBVoiceSelect').value = voiceName;
+      } else if (target === 'B') {
+        const select = document.getElementById('speakerBVoiceSelect');
+        if (select) select.value = voiceName;
         setSpeakerMode('dual');
       }
       closeVoiceGalleryModal();
+      showToast(`Voz ${voiceName} atribuída com sucesso!`, 'success');
     }
 
     // =========================================================================
-    // 6. SPEAKER MODE TOGGLE
+    // 7. SPEAKER MODE & EDITOR METRICS
     // =========================================================================
     function setSpeakerMode(mode) {
       STATE.mode = mode;
-      const singleBtn = document.getElementById('modeSingleBtn');
-      const dualBtn = document.getElementById('modeDualBtn');
-      const singleBox = document.getElementById('singleSpeakerBox');
-      const dualBox = document.getElementById('dualSpeakerBox');
+      const btnSingle = document.getElementById('modeBtnSingle');
+      const btnDual = document.getElementById('modeBtnDual');
+      const boxSingle = document.getElementById('singleSpeakerBox');
+      const boxDual = document.getElementById('dualSpeakerBox');
 
       if (mode === 'single') {
-        singleBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 shadow";
-        dualBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-slate-200";
-        singleBox.classList.remove('hidden');
-        dualBox.classList.add('hidden');
+        btnSingle.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md";
+        btnDual.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200";
+        boxSingle.classList.remove('hidden');
+        boxDual.classList.add('hidden');
       } else {
-        dualBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 shadow";
-        singleBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-slate-200";
-        dualBox.classList.remove('hidden');
-        singleBox.classList.add('hidden');
+        btnDual.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md";
+        btnSingle.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition text-slate-400 hover:text-slate-200";
+        boxDual.classList.remove('hidden');
+        boxSingle.classList.add('hidden');
       }
-      lucide.createIcons();
     }
 
-    // =========================================================================
-    // 7. EDITOR UTILITIES & METRICS
-    // =========================================================================
     function initEditorMetrics() {
-      const scriptArea = document.getElementById('scriptInput');
-      const update = () => {
-        const text = scriptArea.value;
-        document.getElementById('charCount').textContent = text.length;
+      const textarea = document.getElementById('scriptInput');
+      if (!textarea) return;
+
+      const updateMetrics = () => {
+        const text = textarea.value;
+        const chars = text.length;
         const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-        document.getElementById('wordCount').textContent = words;
         const estSecs = Math.ceil(words / 2.5);
-        document.getElementById('estDuration').textContent = `${estSecs}s`;
+
+        document.getElementById('metricChars').textContent = chars;
+        document.getElementById('metricWords').textContent = words;
+        document.getElementById('metricEstDuration').textContent = `~${estSecs}s`;
       };
-      scriptArea.addEventListener('input', update);
-      update();
+
+      textarea.addEventListener('input', updateMetrics);
+      updateMetrics();
     }
 
     function insertSpeakerTag(speaker) {
       const textarea = document.getElementById('scriptInput');
-      const aliasInput = speaker === 'A' ? document.getElementById('speakerAAlias') : document.getElementById('speakerBAlias');
-      const label = aliasInput ? aliasInput.value.trim() : (speaker === 'A' ? 'Speaker A' : 'Speaker B');
-      
-      const tag = `\n${label}: `;
+      if (!textarea) return;
+      const aliasA = document.getElementById('speakerAAlias')?.value.trim() || "Speaker A";
+      const aliasB = document.getElementById('speakerBAlias')?.value.trim() || "Speaker B";
+      const tag = speaker === 'A' ? `${aliasA}: ` : `${aliasB}: `;
+
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const val = textarea.value;
-
-      textarea.value = val.substring(0, start) + tag + val.substring(end);
-      textarea.selectionStart = textarea.selectionEnd = start + tag.length;
+      
+      const prefix = (start > 0 && val[start - 1] !== '\n') ? '\n' : '';
+      textarea.value = val.substring(0, start) + prefix + tag + val.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + prefix.length + tag.length;
       textarea.focus();
       textarea.dispatchEvent(new Event('input'));
     }
 
     function insertPauseTag() {
       const textarea = document.getElementById('scriptInput');
-      const tag = ` ... `;
+      if (!textarea) return;
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const val = textarea.value;
-
+      const tag = " ... ";
       textarea.value = val.substring(0, start) + tag + val.substring(end);
       textarea.selectionStart = textarea.selectionEnd = start + tag.length;
       textarea.focus();
       textarea.dispatchEvent(new Event('input'));
     }
 
-    function formatDialogueScript() {
+    function cleanAndFormatScript() {
       const textarea = document.getElementById('scriptInput');
+      if (!textarea) return;
       let text = textarea.value;
-      
-      text = text.replace(/\r\n/g, '\n')
-                 .replace(/\n{3,}/g, '\n\n')
-                 .trim();
-
+      text = text.split('\n')
+        .map(l => l.trim())
+        .filter(l => l.length > 0)
+        .join('\n\n');
       textarea.value = text;
       textarea.dispatchEvent(new Event('input'));
+      showToast("Texto alinhado e formatado!", "success");
     }
 
     function clearEditor() {
-      if (confirm('Deseja limpar todo o roteiro?')) {
-        const textarea = document.getElementById('scriptInput');
+      const textarea = document.getElementById('scriptInput');
+      if (!textarea) return;
+      if (confirm('Deseja limpar todo o roteiro do editor?')) {
         textarea.value = '';
         textarea.dispatchEvent(new Event('input'));
       }
@@ -1141,7 +1350,7 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
     // =========================================================================
     function toggleTemplateMenu() {
       const menu = document.getElementById('templateMenu');
-      menu.classList.toggle('hidden');
+      if (menu) menu.classList.toggle('hidden');
     }
 
     document.addEventListener('click', (e) => {
@@ -1164,78 +1373,100 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         document.getElementById('speakerBAlias').value = "Student";
         document.getElementById('speakerAVoiceSelect').value = "Kore";
         document.getElementById('speakerBVoiceSelect').value = "Puck";
-        titleInput.value = "magic_story_reflex_01";
-        scriptArea.value = `Leo: Listen carefully. Grazi lived in a small apartment in São Paulo. Did she live in New York?
+        if (titleInput) titleInput.value = "magic_story_reflex_01";
+        if (scriptArea) {
+          scriptArea.value = 
+`Leo: Listen carefully. Grazi lived in a small apartment in São Paulo. Did she live in New York?
 Student: No, she didn't! She lived in São Paulo.
 Leo: Exactly. Where did she want to move?
 Student: She wanted to move to London to work at a design studio.
 Leo: Brilliant! Repeat this sound chunk: "She wanted to move to London."`;
+        }
       } else if (type === 'listen_answer') {
         setSpeakerMode('dual');
         document.getElementById('speakerAAlias').value = "Coach";
-        document.getElementById('speakerBAlias').value = "Mentee";
+        document.getElementById('speakerBAlias').value = "Learner";
         document.getElementById('speakerAVoiceSelect').value = "Charon";
-        document.getElementById('speakerBVoiceSelect').value = "Aoede";
-        titleInput.value = "listen_answer_drill_01";
-        scriptArea.value = `Coach: Did Tom finish the financial report yesterday?
-Mentee: Yes, he finished it before the team meeting.
-Coach: Who did he send the report to?
-Mentee: He sent it directly to the vice president.
-Coach: Good job! Keep the cadence firm and clear.`;
+        document.getElementById('speakerBVoiceSelect').value = "Fenrir";
+        if (titleInput) titleInput.value = "drill_listen_and_answer_01";
+        if (scriptArea) {
+          scriptArea.value = 
+`Coach: Did Mark buy a new laptop yesterday?
+Learner: Yes, he bought a brand new MacBook.
+Coach: Did he pay with credit card?
+Learner: No, he paid with cash.
+Coach: Great reflex! Answer again: Was it cheap?
+Learner: No, it wasn't cheap at all!`;
+        }
       } else if (type === 'coffee_shop') {
         setSpeakerMode('dual');
         document.getElementById('speakerAAlias').value = "Barista";
         document.getElementById('speakerBAlias').value = "Customer";
-        document.getElementById('speakerAVoiceSelect').value = "Leda";
-        document.getElementById('speakerBVoiceSelect').value = "Zephyr";
-        titleInput.value = "coffee_shop_conversation";
-        scriptArea.value = `Barista: Good morning! What can I get started for you today?
-Customer: Hi! Could I please get a large iced oat milk latte with an extra shot?
-Barista: Absolutely. Would you like any syrup with that? Vanilla or caramel?
-Customer: Just a pump of sugar-free vanilla, please. To stay.
-Barista: Coming right up! That will be four dollars and fifty cents.`;
+        document.getElementById('speakerAVoiceSelect').value = "Aoede";
+        document.getElementById('speakerBVoiceSelect').value = "Puck";
+        if (titleInput) titleInput.value = "real_talk_coffee_shop";
+        if (scriptArea) {
+          scriptArea.value = 
+`Barista: Hi there! What can I get started for you today?
+Customer: Hey! Can I get a medium oat milk latte to go, please?
+Barista: Sure thing. Any syrup or sweetener with that?
+Customer: Just one pump of vanilla, thanks.
+Barista: You got it. That'll be four fifty at the register.`;
+        }
       } else if (type === 'vip_coaching') {
         setSpeakerMode('dual');
         document.getElementById('speakerAAlias').value = "Leo";
-        document.getElementById('speakerBAlias').value = "Estevao";
+        document.getElementById('speakerBAlias').value = "Mentee";
         document.getElementById('speakerAVoiceSelect').value = "Charon";
-        document.getElementById('speakerBVoiceSelect').value = "Fenrir";
-        titleInput.value = "vip_coaching_session_01";
-        scriptArea.value = `Leo: Estevão, remember the key principle: connect the words smoothly without robotic stops.
-Estevao: Like this: "As far as I'm concerned, the timeline is feasible"?
-Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do it one more time.`;
+        document.getElementById('speakerBVoiceSelect').value = "Zephyr";
+        if (titleInput) titleInput.value = "vip_mentoria_feedback";
+        if (scriptArea) {
+          scriptArea.value = 
+`Leo: Remember: don't translate word by word. Link the sounds naturally: "I've been working on it."
+Mentee: I've been working on it.
+Leo: Much better! Notice how "working on it" flows as a single chunk. Repeat three times with rhythm.
+Mentee: Working on it. Working on it. Working on it.
+Leo: Perfect. Now into automatic memory!`;
+        }
       } else if (type === 'story_narration') {
         setSpeakerMode('single');
-        document.getElementById('singleVoiceSelect').value = "Charon";
+        document.getElementById('singleVoiceSelect').value = "Puck";
         updateSingleVoiceInfo();
-        titleInput.value = "story_narration_lesson_01";
-        scriptArea.value = `Every morning, Tom walked into the office with a clear goal in mind. He did not waste time looking for grammar rules in his head. Instead, he allowed the rhythm of English to flow naturally, linking sound chunks with total confidence.`;
+        if (titleInput) titleInput.value = "story_narration_chapter_01";
+        if (scriptArea) {
+          scriptArea.value = 
+`English is not a school subject to pass a test; English is a living human experience.
+When you repeat the exact same story multiple times, the brain stops translating and starts reacting.
+Speak out loud every day, connect with the emotion of the words, and let fluency become a physical habit.`;
+        }
       }
 
-      scriptArea.dispatchEvent(new Event('input'));
+      if (scriptArea) scriptArea.dispatchEvent(new Event('input'));
+      showToast("Template carregado com sucesso!", "success");
     }
 
     // =========================================================================
-    // 9. GEMINI API CLIENT & TTS SYNTHESIS
+    // 9. FULL MASTER AUDIO GENERATION & CONVERSION (MP3 / WAV)
     // =========================================================================
     async function generateAudioTTS() {
       const apiKey = STATE.apiKey.trim();
       if (!apiKey) {
         openConfigModal();
-        alert('Por favor, insira sua chave da Gemini API para gerar o áudio.');
+        showToast("Por favor, insira sua chave da Gemini API.", "warning");
         return;
       }
 
-      const script = document.getElementById('scriptInput').value.trim();
+      const scriptArea = document.getElementById('scriptInput');
+      const script = scriptArea ? scriptArea.value.trim() : '';
       if (!script) {
-        alert('Por favor, digite um texto ou diálogo para sintetizar.');
+        showToast("Digite um texto ou diálogo para sintetizar.", "warning");
         return;
       }
 
-      const title = document.getElementById('audioTitleInput').value.trim() || 'audio_tts';
-      const model = STATE.model || 'gemini-3.6-flash';
+      const titleInput = document.getElementById('audioTitleInput');
+      const title = (titleInput && titleInput.value.trim()) || 'audio_tts';
+      const model = STATE.model || 'gemini-2.5-flash-preview-tts';
 
-      // UI Loading State
       setGeneratingUI(true, "Construindo payload de voz e conectando à Gemini API...");
 
       try {
@@ -1243,59 +1474,36 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
         let metaSpeakers = "";
 
         if (STATE.mode === 'single') {
-          const voiceName = document.getElementById('singleVoiceSelect').value;
+          const voiceName = document.getElementById('singleVoiceSelect')?.value || "Puck";
           metaSpeakers = voiceName;
 
           requestBody = {
-            contents: [
-              {
-                role: "user",
-                parts: [{ text: script }]
-              }
-            ],
+            contents: [{ role: "user", parts: [{ text: script }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
                 voiceConfig: {
-                  prebuiltVoiceConfig: {
-                    voiceName: voiceName
-                  }
+                  prebuiltVoiceConfig: { voiceName: voiceName }
                 }
               }
             }
           };
         } else {
-          // Dual Speaker Mode
-          const speakerA = document.getElementById('speakerAAlias').value.trim() || "Speaker A";
-          const speakerB = document.getElementById('speakerBAlias').value.trim() || "Speaker B";
-          const voiceA = document.getElementById('speakerAVoiceSelect').value;
-          const voiceB = document.getElementById('speakerBVoiceSelect').value;
+          const speakerA = document.getElementById('speakerAAlias')?.value.trim() || "Speaker A";
+          const speakerB = document.getElementById('speakerBAlias')?.value.trim() || "Speaker B";
+          const voiceA = document.getElementById('speakerAVoiceSelect')?.value || "Kore";
+          const voiceB = document.getElementById('speakerBVoiceSelect')?.value || "Puck";
           metaSpeakers = `${speakerA} (${voiceA}) & ${speakerB} (${voiceB})`;
 
           requestBody = {
-            contents: [
-              {
-                role: "user",
-                parts: [{ text: script }]
-              }
-            ],
+            contents: [{ role: "user", parts: [{ text: script }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
                 multiSpeakerVoiceConfig: {
                   speakerVoiceConfigs: [
-                    {
-                      speaker: speakerA,
-                      voiceConfig: {
-                        prebuiltVoiceConfig: { voiceName: voiceA }
-                      }
-                    },
-                    {
-                      speaker: speakerB,
-                      voiceConfig: {
-                        prebuiltVoiceConfig: { voiceName: voiceB }
-                      }
-                    }
+                    { speaker: speakerA, voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceA } } },
+                    { speaker: speakerB, voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceB } } }
                   ]
                 }
               }
@@ -1305,7 +1513,7 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
 
         setGeneratingUI(true, "Aguardando renderização de áudio em alta definição...");
 
-        const result = await callGeminiTTSWithFallback(requestBody, apiKey, model);
+        const result = await requestGeminiTTS(requestBody, apiKey, model);
 
         setGeneratingUI(true, "Processando dados de áudio PCM / WAV e codificando MP3...");
 
@@ -1313,7 +1521,6 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
         const wavBlob = processToWavBlob(rawBytes, result.mimeType || 'audio/wav');
         const mp3Blob = await convertWavBlobToMp3(wavBlob);
 
-        // Store active state
         STATE.currentWavBlob = wavBlob;
         STATE.currentMp3Blob = mp3Blob;
         STATE.currentAudioBlob = mp3Blob || wavBlob;
@@ -1332,23 +1539,20 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
           blobUrl: audioUrl
         };
 
-        // Save to History
         addToHistory(STATE.currentMeta);
-
-        // Mount to Player
         loadAudioIntoPlayer(audioUrl, STATE.currentMeta);
+        showToast("Áudio MP3 masterizado com sucesso!", "success");
 
       } catch (err) {
         console.error("TTS Generation Error:", err);
-        alert(`Falha na geração de áudio:\n${err.message}\n\nDica: Verifique se sua API Key tem acesso ao Gemini ou tente alternar o modelo em "API Key".`);
+        showToast(`Falha na geração: ${err.message}`, "error", 7000);
       } finally {
         setGeneratingUI(false);
       }
     }
 
-    // Convert Base64 string to Uint8Array
     function base64ToUint8Array(base64) {
-      const binaryString = atob(base64);
+      const binaryString = window.atob(base64);
       const len = binaryString.length;
       const bytes = new Uint8Array(len);
       for (let i = 0; i < len; i++) {
@@ -1357,7 +1561,6 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
       return bytes;
     }
 
-    // Process raw PCM or WAV data to a valid WAV Blob with proper RIFF header
     function processToWavBlob(bytes, mimeType) {
       if (bytes.length > 12 &&
           bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) {
@@ -1371,36 +1574,21 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
       const buffer = new ArrayBuffer(44 + dataSize);
       const view = new DataView(buffer);
 
-      /* RIFF identifier */
       writeString(view, 0, 'RIFF');
-      /* file length */
       view.setUint32(4, 36 + dataSize, true);
-      /* RIFF type */
       writeString(view, 8, 'WAVE');
-      /* format chunk identifier */
       writeString(view, 12, 'fmt ');
-      /* format chunk length */
       view.setUint32(16, 16, true);
-      /* sample format (1 = PCM) */
       view.setUint16(20, 1, true);
-      /* channel count */
       view.setUint16(22, numChannels, true);
-      /* sample rate */
       view.setUint32(24, sampleRate, true);
-      /* byte rate (sample rate * block align) */
       view.setUint32(28, sampleRate * numChannels * (bitsPerSample / 8), true);
-      /* block align (channel count * bytes per sample) */
       view.setUint16(32, numChannels * (bitsPerSample / 8), true);
-      /* bits per sample */
       view.setUint16(34, bitsPerSample, true);
-      /* data chunk identifier */
       writeString(view, 36, 'data');
-      /* data chunk length */
       view.setUint32(40, dataSize, true);
 
-      // Copy PCM data
       new Uint8Array(buffer, 44).set(bytes);
-
       return new Blob([buffer], { type: 'audio/wav' });
     }
 
@@ -1410,10 +1598,9 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
       }
     }
 
-    // Encode WAV Blob to MP3 using lamejs
     async function convertWavBlobToMp3(wavBlob) {
       if (typeof lamejs === 'undefined') {
-        console.warn("lamejs not loaded, falling back to WAV");
+        console.warn("lamejs não encontrado, utilizando WAV");
         return null;
       }
 
@@ -1435,9 +1622,7 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
           for (let i = 0; i < samples.length; i += sampleBlockSize) {
             const sampleChunk = samples.subarray(i, i + sampleBlockSize);
             const mp3buf = mp3encoder.encodeBuffer(sampleChunk);
-            if (mp3buf.length > 0) {
-              mp3Data.push(mp3buf);
-            }
+            if (mp3buf.length > 0) mp3Data.push(mp3buf);
           }
         } else {
           const leftSamples = floatTo16BitPCM(audioBuffer.getChannelData(0));
@@ -1447,227 +1632,261 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
             const leftChunk = leftSamples.subarray(i, i + sampleBlockSize);
             const rightChunk = rightSamples.subarray(i, i + sampleBlockSize);
             const mp3buf = mp3encoder.encodeBuffer(leftChunk, rightChunk);
-            if (mp3buf.length > 0) {
-              mp3Data.push(mp3buf);
-            }
+            if (mp3buf.length > 0) mp3Data.push(mp3buf);
           }
         }
 
-        const endBuf = mp3encoder.flush();
-        if (endBuf.length > 0) {
-          mp3Data.push(endBuf);
-        }
+        const mp3End = mp3encoder.flush();
+        if (mp3End.length > 0) mp3Data.push(mp3End);
 
         return new Blob(mp3Data, { type: 'audio/mp3' });
-      } catch (e) {
-        console.warn("Error encoding to MP3 with lamejs:", e);
+      } catch (err) {
+        console.warn("Falha na codificação MP3 via lamejs, utilizando WAV:", err);
         return null;
       }
     }
 
-    function floatTo16BitPCM(input) {
-      const output = new Int16Array(input.length);
-      for (let i = 0; i < input.length; i++) {
-        const s = Math.max(-1, Math.min(1, input[i]));
-        output[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+    function floatTo16BitPCM(float32Array) {
+      const int16Array = new Int16Array(float32Array.length);
+      for (let i = 0; i < float32Array.length; i++) {
+        const s = Math.max(-1, Math.min(1, float32Array[i]));
+        int16Array[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
       }
-      return output;
+      return int16Array;
+    }
+
+    function setGeneratingUI(isGenerating, statusText = "") {
+      const btn = document.getElementById('generateAudioBtn');
+      const placeholder = document.getElementById('playerPlaceholder');
+      const progress = document.getElementById('generatingProgress');
+      const activeControls = document.getElementById('activePlayerControls');
+      const statusLabel = document.getElementById('generatingStatusText');
+
+      if (isGenerating) {
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        if (placeholder) placeholder.classList.add('hidden');
+        if (activeControls) activeControls.classList.add('hidden');
+        if (progress) progress.classList.remove('hidden');
+        if (statusLabel) statusLabel.textContent = statusText;
+      } else {
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+        if (progress) progress.classList.add('hidden');
+      }
     }
 
     // =========================================================================
-    // 10. AUDIO PLAYER CONTROLS
+    // 10. MASTER PLAYER INTERACTIVITY
     // =========================================================================
-    let audioElem = null;
+    let masterAudio = null;
 
     function initAudioEvents() {
-      audioElem = document.getElementById('ttsAudioElement');
+      masterAudio = document.getElementById('mainMasterAudio');
+      if (!masterAudio) return;
 
-      audioElem.addEventListener('timeupdate', () => {
-        if (!audioElem.duration) return;
-        const progress = (audioElem.currentTime / audioElem.duration) * 100;
-        document.getElementById('progressBarFill').style.width = `${progress}%`;
-        document.getElementById('currentTimeDisplay').textContent = formatSeconds(audioElem.currentTime);
+      const seeker = document.getElementById('playerSeeker');
+      const currTime = document.getElementById('playerCurrentTime');
+      const totTime = document.getElementById('playerTotalTime');
+      const playIcon = document.getElementById('masterPlayIcon');
+      const vol = document.getElementById('masterVolume');
+
+      masterAudio.addEventListener('timeupdate', () => {
+        if (!masterAudio.duration) return;
+        const progress = (masterAudio.currentTime / masterAudio.duration) * 100;
+        if (seeker) seeker.value = progress;
+        if (currTime) currTime.textContent = formatTime(masterAudio.currentTime);
       });
 
-      audioElem.addEventListener('loadedmetadata', () => {
-        document.getElementById('totalTimeDisplay').textContent = formatSeconds(audioElem.duration);
-        document.getElementById('activeAudioDuration').textContent = formatSeconds(audioElem.duration);
+      masterAudio.addEventListener('loadedmetadata', () => {
+        if (totTime) totTime.textContent = formatTime(masterAudio.duration);
+        const durationBadge = document.getElementById('currentAudioDurationBadge');
+        if (durationBadge) durationBadge.textContent = formatTime(masterAudio.duration);
       });
 
-      audioElem.addEventListener('ended', () => {
-        togglePlayPauseUI(false);
+      masterAudio.addEventListener('play', () => {
+        if (playIcon) playIcon.setAttribute('data-lucide', 'pause');
+        if (window.lucide) lucide.createIcons();
       });
+
+      masterAudio.addEventListener('pause', () => {
+        if (playIcon) playIcon.setAttribute('data-lucide', 'play');
+        if (window.lucide) lucide.createIcons();
+      });
+
+      masterAudio.addEventListener('ended', () => {
+        if (playIcon) playIcon.setAttribute('data-lucide', 'play');
+        if (seeker) seeker.value = 0;
+        if (currTime) currTime.textContent = "00:00";
+        if (window.lucide) lucide.createIcons();
+      });
+
+      if (seeker) {
+        seeker.addEventListener('input', () => {
+          if (!masterAudio.duration) return;
+          masterAudio.currentTime = (seeker.value / 100) * masterAudio.duration;
+        });
+      }
+
+      if (vol) {
+        vol.addEventListener('input', () => {
+          masterAudio.volume = vol.value;
+        });
+      }
     }
 
     function loadAudioIntoPlayer(url, meta) {
-      document.getElementById('playerPlaceholder').classList.add('hidden');
-      document.getElementById('activePlayerControls').classList.remove('hidden');
+      if (!masterAudio) masterAudio = document.getElementById('mainMasterAudio');
+      
+      const placeholder = document.getElementById('playerPlaceholder');
+      const activeControls = document.getElementById('activePlayerControls');
+      const titleLabel = document.getElementById('currentAudioTitle');
+      const detailsLabel = document.getElementById('currentAudioDetails');
+      const badge = document.getElementById('playerModelBadge');
 
-      document.getElementById('activeAudioTitle').textContent = `${meta.title}.mp3`;
-      document.getElementById('activeAudioSpeakers').textContent = `Vozes: ${meta.speakers}`;
-      document.getElementById('activeAudioSize').textContent = `Tamanho: ~${meta.sizeKb} KB`;
-      document.getElementById('playerModelBadge').textContent = meta.model;
+      if (placeholder) placeholder.classList.add('hidden');
+      if (activeControls) activeControls.classList.remove('hidden');
 
-      audioElem.src = url;
-      audioElem.load();
-      audioElem.play().then(() => {
-        togglePlayPauseUI(true);
-      }).catch(() => {
-        togglePlayPauseUI(false);
-      });
-      lucide.createIcons();
+      if (titleLabel) titleLabel.textContent = meta.title.endsWith('.mp3') ? meta.title : `${meta.title}.mp3`;
+      if (detailsLabel) detailsLabel.textContent = `${meta.speakers} • ${meta.sizeKb} KB • 24kHz HD`;
+      if (badge) badge.textContent = meta.model;
+
+      masterAudio.src = url;
+      masterAudio.load();
+      masterAudio.play().catch(() => {});
     }
 
-    function togglePlayPause() {
-      if (!audioElem.src) return;
-      if (audioElem.paused) {
-        audioElem.play();
-        togglePlayPauseUI(true);
+    function toggleMasterPlay() {
+      if (!masterAudio || !masterAudio.src) return;
+      if (masterAudio.paused) {
+        masterAudio.play();
       } else {
-        audioElem.pause();
-        togglePlayPauseUI(false);
+        masterAudio.pause();
       }
     }
 
-    function togglePlayPauseUI(isPlaying) {
-      const playIcon = document.getElementById('playIcon');
-      const pauseIcon = document.getElementById('pauseIcon');
-      if (isPlaying) {
-        playIcon.classList.add('hidden');
-        pauseIcon.classList.remove('hidden');
-      } else {
-        playIcon.classList.remove('hidden');
-        pauseIcon.classList.add('hidden');
-      }
-    }
-
-    function restartAudio() {
-      if (!audioElem) return;
-      audioElem.currentTime = 0;
-      audioElem.play();
-      togglePlayPauseUI(true);
-    }
-
-    function seekAudio(e) {
-      if (!audioElem || !audioElem.duration) return;
-      const track = document.getElementById('progressBarTrack');
-      const rect = track.getBoundingClientRect();
-      const clickPos = (e.clientX - rect.left) / rect.width;
-      audioElem.currentTime = clickPos * audioElem.duration;
+    function skipPlayer(seconds) {
+      if (!masterAudio || !masterAudio.duration) return;
+      masterAudio.currentTime = Math.max(0, Math.min(masterAudio.duration, masterAudio.currentTime + seconds));
     }
 
     function setPlaybackSpeed(speed) {
-      if (!audioElem) return;
-      audioElem.playbackRate = speed;
+      if (!masterAudio) return;
+      masterAudio.playbackRate = speed;
       document.querySelectorAll('.speed-btn').forEach(btn => {
         if (parseFloat(btn.dataset.speed) === speed) {
-          btn.className = "speed-btn px-2 py-1 rounded bg-amber-500 text-slate-950 font-bold text-[10px] font-mono";
+          btn.className = "speed-btn px-2 py-1 rounded text-[10px] font-bold bg-amber-500 text-slate-950";
         } else {
-          btn.className = "speed-btn px-2 py-1 rounded bg-[#161F33] hover:bg-[#1F2B45] text-[10px] font-mono text-slate-300";
+          btn.className = "speed-btn px-2 py-1 rounded text-[10px] font-bold bg-[#161F33] text-slate-400 hover:text-white";
         }
       });
     }
 
-    function changeVolume(val) {
-      if (audioElem) audioElem.volume = parseFloat(val);
-    }
-
     function downloadCurrentAudio(format) {
-      const blob = (format === 'mp3' && STATE.currentMp3Blob) ? STATE.currentMp3Blob : (STATE.currentWavBlob || STATE.currentAudioBlob);
-      if (!blob) {
-        alert('Nenhum áudio disponível para download.');
+      if (!STATE.currentAudioBlob) {
+        showToast("Nenhum áudio gerado para download.", "warning");
         return;
       }
 
-      const filename = `${STATE.currentMeta?.title || 'audio_tts'}.${format}`;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+      const meta = STATE.currentMeta || { title: "audio_tts" };
+      let cleanTitle = meta.title.replace(/\.[^/.]+$/, "");
+      
+      let blobToDownload = STATE.currentAudioBlob;
+      let filename = `${cleanTitle}.${format}`;
 
-    function formatSeconds(secs) {
-      if (isNaN(secs)) return "00:00";
-      const m = Math.floor(secs / 60);
-      const s = Math.floor(secs % 60);
-      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-    }
-
-    function setGeneratingUI(isGenerating, stepText = "") {
-      const btn = document.getElementById('generateAudioBtn');
-      const progress = document.getElementById('generatingProgress');
-      const placeholder = document.getElementById('playerPlaceholder');
-      const activeControls = document.getElementById('activePlayerControls');
-
-      if (isGenerating) {
-        btn.disabled = true;
-        btn.classList.add('opacity-50', 'cursor-not-allowed');
-        progress.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-        activeControls.classList.add('hidden');
-        if (stepText) document.getElementById('generatingStepText').textContent = stepText;
-      } else {
-        btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        progress.classList.add('hidden');
+      if (format === 'wav' && STATE.currentWavBlob) {
+        blobToDownload = STATE.currentWavBlob;
+      } else if (format === 'mp3' && STATE.currentMp3Blob) {
+        blobToDownload = STATE.currentMp3Blob;
       }
-      lucide.createIcons();
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blobToDownload);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`Download de ${filename} iniciado!`, "success");
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
     // =========================================================================
-    // 11. HISTORY & PERSISTENCE
+    // 11. LOCAL HISTORY MANAGEMENT
     // =========================================================================
     function addToHistory(item) {
-      const serializable = { ...item, blobUrl: null };
-      STATE.history.unshift(serializable);
-      if (STATE.history.length > 20) STATE.history.pop();
-      try {
-        localStorage.setItem('AEF_TTS_HISTORY', JSON.stringify(STATE.history));
-      } catch (e) {
-        console.warn("Storage quota exceeded", e);
-      }
+      const historyItem = {
+        id: item.id,
+        title: item.title,
+        script: item.script,
+        mode: item.mode,
+        speakers: item.speakers,
+        model: item.model,
+        timestamp: item.timestamp,
+        sizeKb: item.sizeKb
+      };
+
+      STATE.history.unshift(historyItem);
+      if (STATE.history.length > 15) STATE.history.pop();
+      localStorage.setItem('AEF_TTS_HISTORY', JSON.stringify(STATE.history));
       renderHistory();
     }
 
     function renderHistory() {
       const container = document.getElementById('historyListContainer');
-      if (!STATE.history || STATE.history.length === 0) {
-        container.innerHTML = `<div id="historyEmptyMsg" class="py-8 text-center text-slate-500 text-xs">Nenhum áudio salvo no histórico recente.</div>`;
+      if (!container) return;
+
+      if (STATE.history.length === 0) {
+        container.innerHTML = `
+          <div id="historyEmptyMsg" class="py-8 text-center text-slate-500 text-xs">
+            Nenhum áudio salvo no histórico recente.
+          </div>
+        `;
         return;
       }
 
-      container.innerHTML = STATE.history.map((item, idx) => `
+      container.innerHTML = STATE.history.map(item => `
         <div class="p-2.5 rounded-xl bg-[#0B0F17] hover:bg-[#161F33] border border-[#1F2B45] text-xs space-y-1.5 transition group">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-amber-300 truncate max-w-[160px] font-mono">${item.title}.mp3</span>
-            <span class="text-[10px] text-slate-500">${new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            <h5 class="font-bold text-white truncate max-w-[180px]">${item.title}.mp3</h5>
+            <span class="text-[10px] text-slate-500 font-mono">${new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
           </div>
-          <p class="text-[11px] text-slate-400 truncate italic">"${item.script.replace(/\n/g, ' ')}"</p>
-          <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-[#1F2B45]/40">
-            <span>${item.speakers}</span>
-            <button onclick="restoreHistoryItem(${idx})" class="text-amber-400 hover:underline flex items-center gap-1 font-semibold">
-              <i data-lucide="edit-3" class="w-3 h-3"></i>
-              <span>Carregar</span>
+          <p class="text-[10px] text-slate-400 truncate">${item.speakers}</p>
+          <div class="flex items-center justify-between pt-1 border-t border-[#1F2B45]/60 text-[10px]">
+            <span class="text-amber-400 font-mono">${item.sizeKb || 0} KB</span>
+            <button onclick="restoreHistoryItem('${item.id}')" class="text-sky-400 hover:underline flex items-center gap-1 font-semibold">
+              <i data-lucide="corner-down-left" class="w-3 h-3"></i>
+              <span>Carregar Roteiro</span>
             </button>
           </div>
         </div>
       `).join('');
 
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
-    function restoreHistoryItem(index) {
-      const item = STATE.history[index];
+    function restoreHistoryItem(id) {
+      const item = STATE.history.find(h => h.id === id);
       if (!item) return;
 
-      document.getElementById('scriptInput').value = item.script;
-      document.getElementById('audioTitleInput').value = item.title;
-      setSpeakerMode(item.mode || 'single');
-      document.getElementById('scriptInput').dispatchEvent(new Event('input'));
+      const scriptArea = document.getElementById('scriptInput');
+      const titleInput = document.getElementById('audioTitleInput');
+
+      if (scriptArea) scriptArea.value = item.script;
+      if (titleInput) titleInput.value = item.title;
+      setSpeakerMode(item.mode || 'dual');
+
+      if (scriptArea) scriptArea.dispatchEvent(new Event('input'));
+      showToast(`Roteiro "${item.title}" carregado no editor!`, "success");
     }
 
     function clearHistory() {
@@ -1675,6 +1894,7 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
         STATE.history = [];
         localStorage.removeItem('AEF_TTS_HISTORY');
         renderHistory();
+        showToast("Histórico limpo.", "info");
       }
     }
 
@@ -1683,20 +1903,28 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
     // =========================================================================
     function openConfigModal() {
       const modal = document.getElementById('configModal');
-      document.getElementById('apiKeyInput').value = STATE.apiKey;
-      document.getElementById('modelSelect').value = STATE.model;
-      modal.style.display = 'flex';
-      if (window.lucide) lucide.createIcons();
+      const input = document.getElementById('apiKeyInput');
+      const select = document.getElementById('modelSelect');
+
+      if (input) input.value = STATE.apiKey;
+      if (select) select.value = STATE.model;
+
+      if (modal) {
+        modal.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
     }
 
     function closeConfigModal() {
       const modal = document.getElementById('configModal');
-      modal.style.display = 'none';
+      if (modal) modal.classList.remove('active');
     }
 
     function saveApiKeyConfig() {
-      const key = document.getElementById('apiKeyInput').value.trim();
-      const model = document.getElementById('modelSelect').value;
+      const input = document.getElementById('apiKeyInput');
+      const select = document.getElementById('modelSelect');
+      const key = input ? input.value.trim() : '';
+      const model = select ? select.value : 'gemini-2.5-flash-preview-tts';
 
       STATE.apiKey = key;
       STATE.model = model;
@@ -1706,11 +1934,14 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
 
       updateApiKeyStatus();
       closeConfigModal();
+      showToast("Chave da API e modelo configurados com sucesso!", "success");
     }
 
     function toggleApiKeyVisibility() {
       const input = document.getElementById('apiKeyInput');
       const icon = document.getElementById('apiKeyEyeIcon');
+      if (!input) return;
+
       if (input.type === 'password') {
         input.type = 'text';
       } else {
@@ -1718,16 +1949,156 @@ Leo: Spot on! Notice how "as far as" flows as a single unit of sound. Let's do i
       }
     }
 
-    function updateApiKeyStatus() {
-      const badge = document.getElementById('apiKeyStatusBadge');
-      const text = document.getElementById('apiKeyStatusText');
-      if (STATE.apiKey) {
-        badge.className = "hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold";
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>API Key Conectada</span>`;
-      } else {
-        badge.className = "hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold cursor-pointer";
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span><span>Inserir API Key</span>`;
-        badge.onclick = openConfigModal;
+    // =========================================================================
+    // 13. PUBLISH TO INTERACTIVE PLAYER & CENTRAL HUB (ZERO TERMINAL)
+    // =========================================================================
+    let currentParsedSentences = [];
+
+    function openPublishModal() {
+      if (!STATE.currentAudioBlob) {
+        showToast("Gere um áudio primeiro antes de publicar.", "warning");
+        return;
+      }
+
+      const modal = document.getElementById('publishEpisodeModal');
+      const titleInput = document.getElementById('publishTitleInput');
+      const summaryInput = document.getElementById('publishSummaryInput');
+      const studentsGrid = document.getElementById('publishStudentsGrid');
+      const chunksList = document.getElementById('publishChunksPreviewList');
+      const chunksBadge = document.getElementById('publishChunksCountBadge');
+
+      const meta = STATE.currentMeta || {};
+      if (titleInput) titleInput.value = meta.title || "Treino VIP: Spoken Reflex";
+      if (summaryInput) {
+        summaryInput.value = `Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.`;
+      }
+
+      // Populate Students Checkboxes
+      const students = window.aefAudioHub ? window.aefAudioHub.getStudents() : [];
+      if (studentsGrid) {
+        let gridHtml = students.map((s, idx) => `
+          <label class="flex items-center gap-2 p-2 rounded-xl bg-[#0B0F17] hover:bg-[#161F33] border border-[#1F2B45] cursor-pointer transition select-none">
+            <input type="checkbox" name="publishRecipient" value="${s.id}" ${idx === 0 ? 'checked' : ''} class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-[#161F33] border-[#2D3D60] cursor-pointer">
+            <span class="truncate font-semibold text-slate-200">${s.avatarEmoji || '👤'} ${s.name}</span>
+          </label>
+        `).join('');
+
+        gridHtml += `
+          <label class="flex items-center gap-2 p-2 rounded-xl bg-[#0B0F17] hover:bg-[#161F33] border border-amber-500/30 cursor-pointer transition select-none">
+            <input type="checkbox" name="publishRecipient" value="public" class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-[#161F33] border-[#2D3D60] cursor-pointer">
+            <span class="truncate font-semibold text-amber-400">🌐 Player Público</span>
+          </label>
+        `;
+        studentsGrid.innerHTML = gridHtml;
+      }
+
+      // Parse sentences and timestamps from script
+      const scriptText = meta.script || (document.getElementById('scriptInput')?.value || '');
+      const durationSec = (masterAudio && masterAudio.duration) ? masterAudio.duration : 30;
+      
+      currentParsedSentences = window.aefAudioHub ? window.aefAudioHub.parseScriptToSentences(scriptText, durationSec) : [];
+
+      if (chunksBadge) chunksBadge.textContent = `${currentParsedSentences.length} frases mapeadas`;
+      if (chunksList) {
+        if (currentParsedSentences.length === 0) {
+          chunksList.innerHTML = `<div class="py-3 text-center text-slate-500">Nenhuma frase identificada no roteiro.</div>`;
+        } else {
+          chunksList.innerHTML = currentParsedSentences.map(s => `
+            <div class="py-1.5 flex items-start justify-between gap-2">
+              <span class="text-amber-400 text-[10px] w-12 flex-shrink-0">[${formatTime(s.start)}]</span>
+              <span class="flex-1 text-slate-200 truncate">${s.text}</span>
+              ${s.notes ? `<span class="text-[10px] text-slate-500 flex-shrink-0">${s.notes}</span>` : ''}
+            </div>
+          `).join('');
+        }
+      }
+
+      if (modal) {
+        modal.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closePublishModal() {
+      const modal = document.getElementById('publishEpisodeModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    async function confirmPublishEpisode() {
+      const publishBtn = document.getElementById('confirmPublishBtn');
+      const title = document.getElementById('publishTitleInput')?.value.trim() || "Treino VIP";
+      const category = document.getElementById('publishCategorySelect')?.value || "Magic Story";
+      const summary = document.getElementById('publishSummaryInput')?.value.trim() || "";
+      const goldenTip = document.getElementById('publishGoldenTipInput')?.value.trim() || "Respire nas pausas e conecte os chunks.";
+
+      const selectedCheckboxes = document.querySelectorAll('input[name="publishRecipient"]:checked');
+      const assignedTo = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+      if (assignedTo.length === 0) {
+        showToast("Selecione pelo menos um aluno destinatário ou o Player Público.", "warning");
+        return;
+      }
+
+      if (!STATE.currentAudioBlob) {
+        showToast("Áudio não encontrado em memória. Gere novamente.", "error");
+        return;
+      }
+
+      if (publishBtn) {
+        publishBtn.disabled = true;
+        publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando...</span>`;
+      }
+
+      try {
+        const trackId = (STATE.currentMeta?.title || 'track_' + Date.now()).toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+        const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
+        const durationSec = Math.round((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
+
+        const trackData = {
+          id: trackId,
+          title: title,
+          category: category,
+          duration: durationStr,
+          durationSec: durationSec,
+          summary: summary,
+          goldenTip: goldenTip,
+          speakers: STATE.currentMeta?.speakers || "Gemini HD",
+          scriptRaw: STATE.currentMeta?.script || "",
+          sentences: currentParsedSentences,
+          assignedTo: assignedTo,
+          coverImage: "../assets/images/cover-carlos-session01.jpg"
+        };
+
+        if (window.aefAudioHub) {
+          await window.aefAudioHub.saveTrack(trackData, STATE.currentAudioBlob);
+        }
+
+        closePublishModal();
+
+        const firstTarget = assignedTo[0];
+        const studentObj = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === firstTarget) : null;
+        const studentName = studentObj ? studentObj.name : (firstTarget === 'public' ? 'Público' : firstTarget);
+
+        const targetUrl = firstTarget === 'public' ? `treino/player.html?aluno=public` : `treino/player.html?aluno=${firstTarget}`;
+
+        showToast(`
+          <div class="flex flex-col gap-1">
+            <span>🎉 <strong>${title}</strong> publicado com sucesso para <strong>${assignedTo.join(', ')}</strong>!</span>
+            <a href="${targetUrl}" target="_blank" class="inline-flex items-center gap-1 text-amber-300 hover:underline font-bold text-[11px] mt-0.5">
+              <span>Abrir Player de ${studentName}</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+        `, "success", 8000);
+
+      } catch (err) {
+        console.error("Publish Error:", err);
+        showToast(`Erro ao publicar episódio: ${err.message}`, "error");
+      } finally {
+        if (publishBtn) {
+          publishBtn.disabled = false;
+          publishBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Confirmar Publicação</span>`;
+        }
       }
     }
   </script>

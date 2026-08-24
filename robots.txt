@@ -14,31 +14,62 @@ Allow: /assets/js/
 Disallow: /obrigado.html
 Disallow: /obrigado
 
-# Painel administrativo interno de SEO & Blog Studio (Acesso Exclusivo / Não Indexar)
+# Áreas Administrativas Internas & Fábricas de Conteúdo (SIGILO ABSOLUTO / PROIBIDO INDEXAR)
+Disallow: /admin.html
+Disallow: /admin
+Disallow: /tts-studio.html
+Disallow: /tts-studio
 Disallow: /seo-manager.html
 Disallow: /seo-manager
 Disallow: /blog-panel.html
 Disallow: /blog-panel
+Disallow: /treino/
+Disallow: /treino
 
-# Crawlers de Redes Sociais & Mensageiros (Permissão explícita para Rich Previews)
+# Crawlers de Redes Sociais & Mensageiros (Permissão explícita para Rich Previews em Links Públicos)
 User-agent: WhatsApp
 Allow: /
 Allow: /assets/images/
+Disallow: /admin
+Disallow: /tts-studio
+Disallow: /blog-panel
+Disallow: /seo-manager
+Disallow: /treino
 
 User-agent: facebookexternalhit
 Allow: /
 Allow: /assets/images/
+Disallow: /admin
+Disallow: /tts-studio
+Disallow: /blog-panel
+Disallow: /seo-manager
+Disallow: /treino
 
 User-agent: Twitterbot
 Allow: /
 Allow: /assets/images/
+Disallow: /admin
+Disallow: /tts-studio
+Disallow: /blog-panel
+Disallow: /seo-manager
+Disallow: /treino
 
 User-agent: LinkedInBot
 Allow: /
 Allow: /assets/images/
+Disallow: /admin
+Disallow: /tts-studio
+Disallow: /blog-panel
+Disallow: /seo-manager
+Disallow: /treino
 
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /tts-studio
+Disallow: /blog-panel
+Disallow: /seo-manager
+Disallow: /treino
 
 # Sitemap Index
 Sitemap: https://agoraeufalo.com.br/sitemap.xml

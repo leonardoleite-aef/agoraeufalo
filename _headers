@@ -1,0 +1,22 @@
+# ==============================================================================
+# AgoraEuFalo - Server Security & Anti-Indexing Headers
+# ==============================================================================
+
+/admin*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/tts-studio*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/blog-panel*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/seo-manager*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/treino/*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex

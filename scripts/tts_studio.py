@@ -26,7 +26,7 @@ import urllib.request
 import urllib.error
 import subprocess
 
-GEMINI_DEFAULT_MODEL = "gemini-3.6-flash"
+GEMINI_DEFAULT_MODEL = "gemini-2.5-flash-preview-tts"
 
 def get_api_key():
     key = os.environ.get("GEMINI_API_KEY")
@@ -130,7 +130,11 @@ def generate_tts(text, output_path, model=GEMINI_DEFAULT_MODEL, voice="Puck", sp
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
     data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json", "x-goog-api-key": api_key}
+    )
 
     try:
         print("⏳ Chamando Gemini API...")

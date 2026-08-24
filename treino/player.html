@@ -476,6 +476,7 @@
   <script src="data/thomas.js?v=3.0"></script>
   <script src="data/andre.js?v=3.0"></script>
   <script src="data/matheus.js?v=3.0"></script>
+  <script src="../assets/js/aef-audio-hub.js"></script>
   <script src="js/offline-manager.js?v=3.0"></script>
   <script src="js/player-engine.js?v=3.0"></script>
   <script src="js/ui-controller.js?v=3.0"></script>
@@ -546,19 +547,42 @@
       // Identify student from URL parameter
       const urlParams = new URLSearchParams(window.location.search);
       let studentId = urlParams.get("aluno") || localStorage.getItem("aef_active_student") || "estevao";
-      
-      const studentData = getStudentData(studentId);
-      window.currentLoadedStudent = studentData;
-      document.getElementById("header-student-name").innerText = studentData.name;
-      
-      engine.loadStudentData(studentData, 0);
+      studentId = studentId.toLowerCase().trim();
 
-      function getStudentData(id) {
+      async function bootPlayer() {
+        let studentData = getBaseStudentData(studentId);
+        
+        if (window.aefAudioHub) {
+          try {
+            const mergedTracks = await window.aefAudioHub.getMergedTracksForStudent(studentId);
+            if (mergedTracks && mergedTracks.length > 0) {
+              studentData.tracks = mergedTracks;
+            }
+          } catch (e) {
+            console.warn("Could not load central hub tracks:", e);
+          }
+        }
+        
+        window.currentLoadedStudent = studentData;
+        document.getElementById("header-student-name").innerText = studentData.name;
+        
+        engine.loadStudentData(studentData, 0);
+      }
+
+      bootPlayer();
+
+      function getBaseStudentData(id) {
         id = id.toLowerCase().trim();
-        if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return window.AEF_STUDENT_ESTEVAO;
-        if (id === "thomas" && window.AEF_STUDENT_THOMAS) return window.AEF_STUDENT_THOMAS;
-        if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return window.AEF_STUDENT_ANDRE;
-        if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return window.AEF_STUDENT_MATHEUS;
+        if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ESTEVAO));
+        if (id === "thomas" && window.AEF_STUDENT_THOMAS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_THOMAS));
+        if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ANDRE));
+        if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_MATHEUS));
+        if (id === "public" || id === "publico") return { id: "public", name: "Player Público AgoraEuFalo", badge: "Acesso Aberto", tracks: [] };
+        
+        const registered = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === id) : null;
+        if (registered) {
+          return { id: registered.id, name: registered.name, badge: registered.badge || "VIP Mentee", tracks: [] };
+        }
         return window.AEF_STUDENT_ESTEVAO || { id: "estevao", name: "Estevao", tracks: [] };
       }
 
