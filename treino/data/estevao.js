@@ -1024,60 +1024,39 @@ window.AEF_STUDENT_ESTEVAO = {
     {
       id: "estevao-02",
       title: "Dialogue 2: Oxford Presentation Casual",
-      duration: "00:38",
+      duration: "00:20",
       coverImage: "../assets/images/cover-estevao-session01.jpg",
-      audioUrl: "/assets/audio/alunos/estevao/Estevao_presentation_leo.mp3",
+      audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.m4a",
       summary: "Spontaneous conversational practice based on the Oxford presentation: opening remarks, Motriz NGO impact, and engaging questions.",
       goldenTip: "Keep your cadence relaxed and clear. Stress content words ('pleasure', 'Motriz', 'Oxford') and blend function words smoothly.",
       sentences: [
         {
           "id": 1,
-          "start": 1.97,
-          "end": 8.59,
-          "text": "Good afternoon, everyone. My name is Estevão. I'm from Brazil and this is my first time in the UK.",
+          "start": 0.0,
+          "end": 5.8,
+          "text": "Good afternoon everyone. My name is Estevão. I am from Brazil and this is my first time in the UK.",
           "notes": "Warm opening & steady projection"
         },
         {
           "id": 2,
-          "start": 10.05,
-          "end": 17.63,
-          "text": "It's a pleasure to be here with you today. So let me tell you a little about my work at Motriz.",
-          "notes": "Rhythm chunk: 'pleasure to be here'"
+          "start": 6.0,
+          "end": 10.4,
+          "text": "It is a pleasure to meet you Estevão! Tell us about your research at Oxford.",
+          "notes": "Rhythm chunk: 'pleasure to meet you' | 'research at Oxford'"
         },
         {
           "id": 3,
-          "start": 17.63,
-          "end": 28.07,
-          "text": "We are an NGO that supports more than forty municipalities in seven state governments across Brazil.",
-          "notes": "Natural number pauses"
+          "start": 10.7,
+          "end": 15.2,
+          "text": "We analyzed large public education systems across forty municipalities.",
+          "notes": "Natural pauses on numbers: 'forty municipalities'"
         },
         {
           "id": 4,
-          "start": 28.73,
-          "end": 34.99,
-          "text": "Together we reach around three million students and two hundred thousand teachers.",
-          "notes": "Assertive delivery"
-        },
-        {
-          "id": 5,
-          "start": 110.51,
-          "end": 117.33,
-          "text": "A study by Olavo Nogueira Filho right here at Oxford shows something very important.",
-          "notes": "Academic reference linking: 'study by' | 'right here at Oxford'"
-        },
-        {
-          "id": 6,
-          "start": 118.35,
-          "end": 125.71,
-          "text": "Larger education systems in Brazil improve more slowly than smaller ones.",
-          "notes": "Contrast emphasis on 'Larger' vs 'smaller'"
-        },
-        {
-          "id": 7,
-          "start": 132.07,
-          "end": 138.69,
-          "text": "So the question is: how can large public education systems turn policies into better learning outcomes?",
-          "notes": "Key presentation thesis question"
+          "start": 15.5,
+          "end": 19.6,
+          "text": "The big question is: how can policy turn into real learning?",
+          "notes": "Key presentation thesis question with downward cadence"
         }
       ]
     }
