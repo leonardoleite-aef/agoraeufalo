@@ -316,58 +316,56 @@
               <span>Carregando informações da voz...</span>
             </div>
           </div>
-        </div>
-      </div>
-          </div>
-        </div>
 
-        <!-- DUAL SPEAKER CONFIG -->
-        <div id="dualSpeakerBox" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          
-          <!-- Speaker A (Left) -->
-          <div class="p-3.5 rounded-xl bg-[#082F49]/40 border border-sky-500/30 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-sky-400"></span>
-                <span class="text-xs font-extrabold text-sky-300">Speaker A (Personagem 1)</span>
+          <!-- DUAL SPEAKER CONFIG -->
+          <div id="dualSpeakerBox" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            
+            <!-- Speaker A (Left) -->
+            <div class="p-3.5 rounded-xl bg-[#082F49]/40 border border-sky-500/30 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                  <span class="text-xs font-extrabold text-sky-300">Speaker A (Personagem 1)</span>
+                </div>
+                <input type="text" id="speakerAAlias" value="Leo" placeholder="Nome (ex: Leo)" class="w-24 bg-[#0B0F17] border border-sky-500/40 rounded-lg px-2 py-0.5 text-[11px] text-sky-200 text-right outline-none">
               </div>
-              <input type="text" id="speakerAAlias" value="Leo" placeholder="Nome (ex: Leo)" class="w-24 bg-[#0B0F17] border border-sky-500/40 rounded-lg px-2 py-0.5 text-[11px] text-sky-200 text-right outline-none">
-            </div>
 
-            <div class="space-y-1">
-              <label class="text-[10px] text-sky-300 font-semibold block">Voz Gemini HD</label>
-              <div class="flex items-center gap-1.5">
-                <select id="speakerAVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-sky-500/40 focus:border-sky-400 rounded-lg px-2.5 py-1.5 text-xs text-sky-200 outline-none cursor-pointer truncate">
-                  <!-- Populado via JS -->
-                </select>
-                <button id="speakerASampleBtn" onclick="testVoiceSample('speakerA')" title="Ouvir Voz A" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 transition">
-                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-                </button>
+              <div class="space-y-1">
+                <label class="text-[10px] text-sky-300 font-semibold block">Voz Gemini HD</label>
+                <div class="flex items-center gap-1.5">
+                  <select id="speakerAVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-sky-500/40 focus:border-sky-400 rounded-lg px-2.5 py-1.5 text-xs text-sky-200 outline-none cursor-pointer truncate">
+                    <!-- Populado via JS -->
+                  </select>
+                  <button id="speakerASampleBtn" type="button" onclick="testVoiceSample('speakerA')" title="Ouvir Voz A" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 transition">
+                    <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Speaker B (Right) -->
-          <div class="p-3.5 rounded-xl bg-[#4C0519]/40 border border-pink-500/30 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-pink-400"></span>
-                <span class="text-xs font-extrabold text-pink-300">Speaker B (Personagem 2)</span>
+            <!-- Speaker B (Right) -->
+            <div class="p-3.5 rounded-xl bg-[#4C0519]/40 border border-pink-500/30 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-pink-400"></span>
+                  <span class="text-xs font-extrabold text-pink-300">Speaker B (Personagem 2)</span>
+                </div>
+                <input type="text" id="speakerBAlias" value="Student" placeholder="Nome (ex: Student)" class="w-24 bg-[#0B0F17] border border-pink-500/40 rounded-lg px-2 py-0.5 text-[11px] text-pink-200 text-right outline-none">
               </div>
-              <input type="text" id="speakerBAlias" value="Student" placeholder="Nome (ex: Student)" class="w-24 bg-[#0B0F17] border border-pink-500/40 rounded-lg px-2 py-0.5 text-[11px] text-pink-200 text-right outline-none">
+
+              <div class="space-y-1">
+                <label class="text-[10px] text-pink-300 font-semibold block">Voz Gemini HD</label>
+                <div class="flex items-center gap-1.5">
+                  <select id="speakerBVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-pink-500/40 focus:border-pink-400 rounded-lg px-2.5 py-1.5 text-xs text-pink-200 outline-none cursor-pointer truncate">
+                    <!-- Populado via JS -->
+                  </select>
+                  <button id="speakerBSampleBtn" type="button" onclick="testVoiceSample('speakerB')" title="Ouvir Voz B" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-300 transition">
+                    <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div class="space-y-1">
-              <label class="text-[10px] text-pink-300 font-semibold block">Voz Gemini HD</label>
-              <div class="flex items-center gap-1.5">
-                <select id="speakerBVoiceSelect" class="flex-1 min-w-0 bg-[#0B0F17] border border-pink-500/40 focus:border-pink-400 rounded-lg px-2.5 py-1.5 text-xs text-pink-200 outline-none cursor-pointer truncate">
-                  <!-- Populado via JS -->
-                </select>
-                <button id="speakerBSampleBtn" onclick="testVoiceSample('speakerB')" title="Ouvir Voz B" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-300 transition">
-                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-                </button>
-              </div>
-            </div>
           </div>
 
         </div>
