@@ -166,9 +166,9 @@ window.AEF_STUDENT_THOMAS = {
     {
       id: "thomas-03",
       title: "Dialogue 3: Office Logistics",
-      duration: "00:32",
+      duration: "00:28",
       coverImage: "../assets/images/cover-thomas-office-logistics.jpg",
-      audioUrl: "/assets/audio/alunos/thomas/Dialogue_3_Office_Logistics.mp3",
+      audioUrl: "/assets/audio/alunos/thomas/Dialogue_3_Office_Logistics.m4a",
       summary: "Workplace scheduling & coordination: asking about manager availability, meeting schedules, and confirming appointments.",
       goldenTip: "Observe how verbs connect with contractions ('she isn't', 'it's'). Keep a relaxed, polite rhythm.",
       sentences: [
@@ -182,43 +182,43 @@ window.AEF_STUDENT_THOMAS = {
         {
           "id": 2,
           "start": 3.4,
-          "end": 8.8,
-          "text": "I'm afraid she isn't. She is in a very important meeting with the regional directors.",
-          "notes": "Polite hesitation chunk: 'I'm afraid she isn't'"
+          "end": 7.6,
+          "text": "I am afraid she isn't. She is in a very important meeting with the regional directors.",
+          "notes": "Polite hesitation chunk: 'I am afraid she isn't'"
         },
         {
           "id": 3,
-          "start": 9.0,
-          "end": 14.5,
+          "start": 7.8,
+          "end": 12.5,
           "text": "Oh, I see. That's a shame. Is the meeting usually this long on Mondays?",
           "notes": "Sympathetic conversational cadence: 'That's a shame'"
         },
         {
           "id": 4,
-          "start": 14.8,
-          "end": 19.8,
+          "start": 12.8,
+          "end": 17.6,
           "text": "Yes, it is. They always discuss the weekly targets and the new campaign strategy.",
           "notes": "Business rhythm: 'weekly targets' and 'campaign strategy'"
         },
         {
           "id": 5,
-          "start": 20.0,
-          "end": 24.2,
+          "start": 17.9,
+          "end": 21.6,
           "text": "That sounds quite stressful. Does she have any free time later today?",
           "notes": "Natural check: 'free time later today'"
         },
         {
           "id": 6,
-          "start": 24.5,
-          "end": 28.8,
+          "start": 21.9,
+          "end": 25.4,
           "text": "Let me check her digital calendar... it looks like she is free around four thirty.",
           "notes": "Helpful tone: 'it looks like she is free'"
         },
         {
           "id": 7,
-          "start": 29.0,
-          "end": 32.0,
-          "text": "Perfect. I'm in the building until five, so I can wait in the main lobby.",
+          "start": 25.6,
+          "end": 27.9,
+          "text": "Perfect. I am in the building until five, so I can wait in the main lobby.",
           "notes": "Final confirmation: 'wait in the main lobby'"
         }
       ]
