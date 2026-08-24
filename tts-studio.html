@@ -780,7 +780,7 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         }
       }
 
-      const sampleText = `Hello! I am ${voiceName}. In the AgoraEuFalo ecosystem, repetition of the same story turns spoken English into a natural reflex.`;
+      const sampleText = "Hello, how can I help you today?";
       const preferredModel = STATE.model || 'gemini-2.0-flash';
 
       try {
@@ -807,9 +807,10 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         playSampleUrl(sampleUrl, voiceName, triggerBtnId);
 
       } catch (err) {
-        console.warn("API TTS sample error, falling back to Web Speech:", err);
-        // Fallback to browser Web Speech Synthesis so the user can always hear the voice sample
-        playWebSpeechFallback(voiceName, sampleText, triggerBtnId);
+        console.error("Gemini TTS Voice Sample Error:", err);
+        alert(`Erro ao gerar sample da voz ${voiceName} via Gemini API:\n${err.message}\n\nVerifique se sua API Key tem acesso ao Gemini.`);
+        resetSamplePlayingUI();
+        if (triggerBtn) triggerBtn.innerHTML = originalBtnContent;
       }
     }
 
@@ -827,10 +828,22 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
 
       for (const model of modelsToTry) {
         try {
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          let endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+          const headers = { 'Content-Type': 'application/json' };
+
+          if (apiKey.startsWith('AIza')) {
+            endpoint += `?key=${encodeURIComponent(apiKey)}`;
+            headers['x-goog-api-key'] = apiKey;
+          } else if (apiKey.startsWith('AQ.') || apiKey.startsWith('ya29.')) {
+            headers['Authorization'] = `Bearer ${apiKey}`;
+          } else {
+            endpoint += `?key=${encodeURIComponent(apiKey)}`;
+            headers['x-goog-api-key'] = apiKey;
+          }
+
           const response = await fetch(endpoint, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify(payload)
           });
 
@@ -856,45 +869,7 @@ Speaker A: That's the golden key. Repetition until speech becomes reflex."></tex
         }
       }
 
-      throw lastError || new Error("Nenhum dado de áudio foi retornado pelos modelos de voz.");
-    }
-
-    // Web Speech Synthesis Fallback for instant sample testing
-    function playWebSpeechFallback(voiceName, text, triggerBtnId) {
-      if (!('speechSynthesis' in window)) {
-        alert('Não foi possível gerar a amostra de áudio e seu navegador não suporta Web Speech.');
-        resetSamplePlayingUI();
-        return;
-      }
-
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      const voiceInfo = GEMINI_VOICES.find(v => v.name === voiceName);
-      
-      utterance.lang = 'en-US';
-      if (voiceInfo) {
-        if (voiceInfo.gender === 'Female') {
-          utterance.pitch = 1.2;
-          utterance.rate = 1.0;
-        } else {
-          utterance.pitch = 0.9;
-          utterance.rate = 1.0;
-        }
-      }
-
-      utterance.onstart = () => {
-        updateSamplePlayingUI(voiceName, triggerBtnId);
-      };
-
-      utterance.onend = () => {
-        resetSamplePlayingUI();
-      };
-
-      utterance.onerror = () => {
-        resetSamplePlayingUI();
-      };
-
-      window.speechSynthesis.speak(utterance);
+      throw lastError || new Error("Nenhum dado de áudio foi retornado pelos modelos Gemini.");
     }
 
     function playSampleUrl(url, voiceName, triggerBtnId) {
