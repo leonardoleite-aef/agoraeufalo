@@ -67,5 +67,24 @@ Sempre que um novo áudio/episódio for adicionado para qualquer aluno da Mentor
 - Manter o usuário focado no ambiente do Antigravity. Todas as atualizações, builds e testes devem ocorrer em segundo plano.
 - Fornecer links markdown clicáveis no chat para que o usuário decida quando abrir.
 
+---
+
+## 6. Diretrizes Técnicas e Pedagógicas do TTS Studio & Player Interativo
+Qualquer episódio criado ou modificado deve seguir rigorosamente estas 5 leis permanentes:
+
+1. **Distinção Rígida de Formato (Solo vs Diálogo):**
+   - **Apresentação / Keynote / Discurso (Solo):** Usar **APENAS 1 VOZ** (Single Speaker, ex: `Puck` ou `Charon`). Proibido inventar diálogos ou inserir o Professor Leo interrompendo a fala do aluno.
+   - **Diálogo / Conversação Real (Dual Speaker):** Usar **EXATAMENTE 2 VOZES** distintas (ex: `Leo:Charon` + `Student:Puck` ou `Person A` + `Person B`).
+2. **Padrão de Áudio Obrigatório (MP3 Puro 128kbps):**
+   - Todo áudio sintetizado ou gravado DEVE ser codificado em **MP3 puro (LAME 128 kbps / 24kHz ou 44.1kHz)**.
+   - **Proibido usar AAC/M4A sem tabela de frames**, pois quebra o seek no navegador e impede o loop de frases.
+3. **Interatividades do Player (`treino/player.html`):**
+   - **Seek Instantâneo:** Tocar em qualquer frase do texto DEVE mover o áudio para `sentence.start` e iniciar o play imediatamente.
+   - **Loop Contínuo:** O botão `🔁 Loop` em cada card DEVE repetir a frase selecionada infinitamente entre `sentence.start` e `sentence.end`.
+4. **Sincronização Obrigatória com Google Cloud Firestore:**
+   - Ao publicar ou atualizar faixas, sincronizar imediatamente o documento em `students/{studentId}/tracks/{trackId}` no Firestore.
+5. **Barra de Episódios Mobile-First:**
+   - Manter as pílulas de seleção de faixas ultracompactas, com nomes limpos (sem prefixos repetitivos), scroll horizontal suave e zero artefatos vazios.
+
 
 
