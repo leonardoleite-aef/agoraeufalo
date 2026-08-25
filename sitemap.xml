@@ -121,6 +121,30 @@
     <priority>0.85</priority>
   </url>
 
+  <!-- 13. Artigo: Como Falar Inglês com Personalidade (Inspiração Editorial) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/como-falar-ingles-com-personalidade.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://agoraeufalo.com.br/assets/images/cover-como-falar-ingles-com-personalidade.jpg</image:loc>
+      <image:title>Como Falar Inglês com Personalidade - Professor Leonardo Leite</image:title>
+    </image:image>
+  </url>
+
+  <!-- 14. Artigo: Expandindo Seu Vocabulário Em Inglês (Vídeo Oficial do Leo) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/expandindo-seu-vocabulario-em-ingles-sem-esquecer.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://img.youtube.com/vi/-elDznr0xoU/maxresdefault.jpg</image:loc>
+      <image:title>Expandindo Seu Vocabulário Em Inglês - Professor Leonardo Leite</image:title>
+    </image:image>
+  </url>
+
   <!-- 11. Página Oficial de Contato Direto -->
   <url>
     <loc>https://agoraeufalo.com.br/contato.html</loc>
