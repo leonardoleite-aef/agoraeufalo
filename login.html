@@ -299,13 +299,21 @@
       try {
         showToast("Conectando com o Google...", "info");
         await window.aefPortalAuth.signInWithGoogle();
-        showToast("Login com Google concluído!", "success");
+        showToast("Login com Google concluído! Entrando...", "success");
         setTimeout(() => {
           window.location.href = "portal/index.html";
         }, 1000);
       } catch (err) {
         console.error("Google Auth Error:", err);
-        showToast("Não foi possível conectar com o Google.", "error");
+        let msg = "Não foi possível conectar com o Google.";
+        if (err.code === 'auth/unauthorized-domain') {
+          msg = "O domínio agoraeufalo.com.br precisa ser autorizado na aba Settings do Firebase Auth.";
+        } else if (err.code === 'auth/popup-closed-by-user') {
+          msg = "A janela de login do Google foi fechada antes de concluir.";
+        } else if (err.message) {
+          msg = err.message;
+        }
+        showToast(msg, "error", 6000);
       }
     }
 
