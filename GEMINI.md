@@ -100,5 +100,17 @@ Sempre que um link de vídeo do YouTube for fornecido para criação de novo art
    - **Geração Obrigatória de Capa Editorial de Arte com IA:** O agente gera uma ilustração ou arte editorial cinematográfica 16:9 personalizada sobre o tema do artigo usando `generate_image`, salva em `assets/images/cover-[slug].jpg` e a insere no topo do artigo.
    - `hasVideoEmbed: false`.
 
+---
+
+## 8. Regra Fundamental de Áudio em Todos os Boxes Didáticos de Blog (Áudio por Botão)
+Sempre que um artigo for criado ou atualizado no Blog:
+1. **Botão de Áudio Obrigatório em Cada Box:**
+   - Todo box com história/diálogo de contexto, card do Chunks Grid ou pergunta do Listen & Answer DEVE conter um botão de áudio interativo (`playAefSnippet(this, audioUrl, fallbackText)`).
+2. **Síntese de Áudio com as Vozes do Gemini:**
+   - **Diálogos de Contexto:** Devem ser sintetizados no modo **Dual Speaker** (voz feminina + voz masculina, ex: `Aoede`/`Kore` + `Puck`/`Charon`).
+   - **Chunks e Frases:** Devem ser sintetizados com vozes de alta expressividade e ritmo conversacional natural.
+3. **Resiliência e Fallback Instantâneo:**
+   - O player (`assets/js/aef-snippet-player.js`) deve reproduzir o áudio instantaneamente ao toque do aluno, com animação visual de reprodução e fallback inteligente integrado.
+
 
 
