@@ -84,6 +84,12 @@
           </div>
         </div>
 
+        <!-- Admin Command Center Button (Only for Leo) -->
+        <a id="adminCommandCenterBtn" href="../admin.html" class="hidden px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm" title="Abrir Central Admin">
+          <span>👑</span>
+          <span class="hidden sm:inline">Admin Center</span>
+        </a>
+
         <!-- Auth / Logout Button -->
         <button id="authActionBtn" onclick="handleAuthAction()" class="p-2 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] border border-[#1E293B] text-slate-400 hover:text-rose-400 transition" title="Sair da Conta">
           <i data-lucide="log-out" class="w-4 h-4"></i>
@@ -322,14 +328,20 @@
 
         document.getElementById('headerUserName').innerText = name;
         document.getElementById('heroUserName').innerText = name;
-        document.getElementById('headerUserTier').innerText = tierLabels[tier] || 'Gratuito';
+        document.getElementById('headerUserTier').innerText = profile?.role === 'admin' ? '👑 Administrador' : (tierLabels[tier] || 'Gratuito');
+
+        // Admin fast access button
+        const adminBtn = document.getElementById('adminCommandCenterBtn');
+        if (adminBtn && (profile?.role === 'admin' || (user.email || '').toLowerCase().includes('selexenglish@gmail.com'))) {
+          adminBtn.classList.remove('hidden');
+        }
 
         // Avatar Initial
         const firstLetter = (name.charAt(0) || 'A').toUpperCase();
         document.getElementById('userAvatarPlaceholder').innerText = firstLetter;
 
-        // Hide upgrade banner if already VIP or Lifetime
-        if (tier === 'vip_mentorship' || tier === 'lifetime') {
+        // Hide upgrade banner if already VIP, Lifetime or Admin
+        if (tier === 'vip_mentorship' || tier === 'lifetime' || profile?.role === 'admin') {
           const banner = document.getElementById('upgradeBanner');
           if (banner) banner.classList.add('hidden');
         }

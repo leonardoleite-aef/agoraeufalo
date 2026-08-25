@@ -90,15 +90,18 @@
       const cred = await this.auth.createUserWithEmailAndPassword(email, password);
       const user = cred.user;
 
-      await user.updateProfile({ displayName: name });
+      const isAdminEmail = email.toLowerCase().includes('selexenglish@gmail.com') || email.toLowerCase().includes('leonardo');
+      const finalName = isAdminEmail ? (name || 'Prof. Leonardo Leite') : name;
+
+      await user.updateProfile({ displayName: finalName });
 
       const newProfile = {
         uid: user.uid,
-        name: name,
+        name: finalName,
         email: email,
-        tier: 'free', // 'free' | 'club_monthly' | 'club_annual' | 'lifetime' | 'vip_mentorship'
-        role: 'student',
-        enrolledProducts: ['free_starter_pack', 'magic_stories_demo'],
+        tier: isAdminEmail ? 'vip_mentorship' : 'free',
+        role: isAdminEmail ? 'admin' : 'student',
+        enrolledProducts: isAdminEmail ? ['all_access_master', 'mentoria_vip', 'magic_stories_club'] : ['free_starter_pack', 'magic_stories_demo'],
         stats: {
           streakDays: 1,
           totalListeningMinutes: 0,
@@ -116,14 +119,24 @@
     async signInWithEmail(email, password) {
       await this.ready();
       const cred = await this.auth.signInWithEmailAndPassword(email, password);
-      const profile = await this.getProfile(cred.user.uid);
+      let profile = await this.getProfile(cred.user.uid);
       
-      // Update last login
-      if (profile) {
+      const isAdminEmail = email.toLowerCase().includes('selexenglish@gmail.com') || email.toLowerCase().includes('leonardo');
+
+      if (profile && isAdminEmail && profile.role !== 'admin') {
+        profile.role = 'admin';
+        profile.tier = 'vip_mentorship';
+        await this.db.collection('users').doc(cred.user.uid).update({
+          role: 'admin',
+          tier: 'vip_mentorship',
+          lastLoginAt: new Date().toISOString()
+        });
+      } else if (profile) {
         await this.db.collection('users').doc(cred.user.uid).update({
           lastLoginAt: new Date().toISOString()
         });
       }
+      this.currentProfile = profile;
       return { user: cred.user, profile };
     }
 
@@ -133,16 +146,18 @@
       const cred = await this.auth.signInWithPopup(provider);
       const user = cred.user;
 
+      const isAdminEmail = (user.email || '').toLowerCase().includes('selexenglish@gmail.com') || (user.email || '').toLowerCase().includes('leonardo');
+
       let profile = await this.getProfile(user.uid);
       if (!profile) {
         profile = {
           uid: user.uid,
-          name: user.displayName || 'Aluno AEF',
+          name: isAdminEmail ? 'Prof. Leonardo Leite' : (user.displayName || 'Aluno AEF'),
           email: user.email,
           avatarUrl: user.photoURL || '',
-          tier: 'free',
-          role: 'student',
-          enrolledProducts: ['free_starter_pack', 'magic_stories_demo'],
+          tier: isAdminEmail ? 'vip_mentorship' : 'free',
+          role: isAdminEmail ? 'admin' : 'student',
+          enrolledProducts: isAdminEmail ? ['all_access_master', 'mentoria_vip', 'magic_stories_club'] : ['free_starter_pack', 'magic_stories_demo'],
           stats: {
             streakDays: 1,
             totalListeningMinutes: 0,
@@ -153,7 +168,13 @@
         };
         await this.db.collection('users').doc(user.uid).set(profile);
       } else {
+        if (isAdminEmail && profile.role !== 'admin') {
+          profile.role = 'admin';
+          profile.tier = 'vip_mentorship';
+        }
         await this.db.collection('users').doc(user.uid).update({
+          role: profile.role,
+          tier: profile.tier,
           lastLoginAt: new Date().toISOString()
         });
       }
