@@ -1,0 +1,786 @@
+[
+  {
+    "id": 1,
+    "start": 0.0,
+    "end": 1.19,
+    "text": "Good afternoon everyone.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 2,
+    "start": 1.19,
+    "end": 2.77,
+    "text": "My name is Estevão.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 3,
+    "start": 2.77,
+    "end": 4.35,
+    "text": "I am from Brazil.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 4,
+    "start": 4.35,
+    "end": 7.52,
+    "text": "This is my first time in the UK.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 5,
+    "start": 7.52,
+    "end": 11.08,
+    "text": "It's a pleasure to be here with you today.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 6,
+    "start": 11.08,
+    "end": 15.04,
+    "text": "So, let me tell you a little about my work.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 7,
+    "start": 15.04,
+    "end": 16.62,
+    "text": "I work at Motriz.",
+    "notes": "Organization emphasis: Motriz"
+  },
+  {
+    "id": 8,
+    "start": 16.62,
+    "end": 22.95,
+    "text": "We are an NGO that supports more than 40 municipalities and seven state governments across Brazil.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 9,
+    "start": 22.95,
+    "end": 26.91,
+    "text": "Together we reach around three million students and 200,000 teachers.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 10,
+    "start": 26.91,
+    "end": 35.22,
+    "text": "Basically, our mission is to support governments in strengthening the public education system to improve learning outcomes and reduce educational inequalities.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 11,
+    "start": 35.22,
+    "end": 39.18,
+    "text": "So let me tell you about the challenge in Brazil.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 12,
+    "start": 39.18,
+    "end": 47.89,
+    "text": "Brazil has a huge education system with 47 million students, 179,000 schools, and 2.4 million teachers, and with more than 5,500 municipalities.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 13,
+    "start": 47.89,
+    "end": 54.22,
+    "text": "So governments need to implement policies across very different contexts and at a very large scale.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 14,
+    "start": 54.22,
+    "end": 58.97,
+    "text": "Over the past few years, Brazil has made important progress in education.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 15,
+    "start": 58.97,
+    "end": 64.91,
+    "text": "For example, learning is advancing at every stage of education, but one challenge still remains.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 16,
+    "start": 64.91,
+    "end": 69.66,
+    "text": "A study by Olavano Gerafilio right here at Oxford shows something important.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 17,
+    "start": 69.66,
+    "end": 74.01,
+    "text": "Large education systems in Brazil improve more slowly than smaller ones.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 18,
+    "start": 74.01,
+    "end": 80.34,
+    "text": "So the question is: how can large public education systems turn policy into better learning outcomes?",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 19,
+    "start": 80.34,
+    "end": 91.42,
+    "text": "Well, over the past 10 years, we have learned that one of the biggest challenges in large education systems in Brazil is not policy design; it's policy implementation.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 20,
+    "start": 91.42,
+    "end": 95.77,
+    "text": "Implementation is the bridge between policy and what happens in schools.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 21,
+    "start": 95.77,
+    "end": 98.14,
+    "text": "And that's exactly where Motriz works.",
+    "notes": "Organization emphasis: Motriz"
+  },
+  {
+    "id": 22,
+    "start": 98.14,
+    "end": 101.31,
+    "text": "We support governments in building strong implementation infrastructure.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 23,
+    "start": 101.31,
+    "end": 108.43,
+    "text": "Today I will show our work and some lessons that we have learned over these past few years.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 24,
+    "start": 108.43,
+    "end": 115.55,
+    "text": "Let me start with the most common implementation we have seen in Brazil in large public education systems.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 25,
+    "start": 115.55,
+    "end": 122.28,
+    "text": "In Brazil, there's usually one central education department, some regional education departments (the middle tier), and schools.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 26,
+    "start": 122.28,
+    "end": 125.84,
+    "text": "At Motriz, we call this model the waterfall model.",
+    "notes": "Organization emphasis: Motriz"
+  },
+  {
+    "id": 27,
+    "start": 125.84,
+    "end": 129.4,
+    "text": "It's a top-down model focused on commands and control.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 28,
+    "start": 129.4,
+    "end": 136.52,
+    "text": "Decisions are made by a small group of leaders at the top and flow down to the system.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 29,
+    "start": 136.52,
+    "end": 145.62,
+    "text": "Schools and regional departments—the middle tier—have little voice in decision-making, and there's little room to listen, learn, or adapt policies to local needs.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 30,
+    "start": 145.62,
+    "end": 155.12,
+    "text": "From our experience over the past few years, we have learned that better implementation requires every level of the education system to work together.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 31,
+    "start": 155.12,
+    "end": 163.03,
+    "text": "We don't believe in only top-down or only bottom-up implementation; we believe the key is to keep every level connected.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 32,
+    "start": 163.03,
+    "end": 168.57,
+    "text": "At Motriz, we help governments build implementation systems based on feedback loops and collaboration.",
+    "notes": "Organization emphasis: Motriz"
+  },
+  {
+    "id": 33,
+    "start": 168.57,
+    "end": 170.94,
+    "text": "We call this the pororoca model.",
+    "notes": "Core metaphor: Pororoca model"
+  },
+  {
+    "id": 34,
+    "start": 170.94,
+    "end": 178.06,
+    "text": "The pororoca is a special wave in the Amazon that happens when the Amazon River meets the Atlantic.",
+    "notes": "Core metaphor: Pororoca model"
+  },
+  {
+    "id": 35,
+    "start": 178.06,
+    "end": 181.62,
+    "text": "It forms a long, continuous, tube-shaped wave like this.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 36,
+    "start": 181.62,
+    "end": 185.97,
+    "text": "For us, it's a perfect symbol of a strong implementation system.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 37,
+    "start": 185.97,
+    "end": 191.11,
+    "text": "We focus on creating a system where every level learns from the others.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 38,
+    "start": 191.11,
+    "end": 194.28,
+    "text": "The central education department learns from regional departments.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 39,
+    "start": 194.28,
+    "end": 196.26,
+    "text": "Regional departments learn from schools.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 40,
+    "start": 196.26,
+    "end": 198.63,
+    "text": "The schools learn from each other.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 41,
+    "start": 198.63,
+    "end": 203.38,
+    "text": "Support moves down, feedback moves up, and learning moves in every direction.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 42,
+    "start": 203.38,
+    "end": 209.32,
+    "text": "This helps governments adapt policy to local needs and creates alignment across the whole system.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 43,
+    "start": 209.32,
+    "end": 218.03,
+    "text": "And importantly, to make this work, the central education department and regional teams need to work together and share responsibility for implementation.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 44,
+    "start": 218.03,
+    "end": 223.17,
+    "text": "That's how you build better implementation across the public education systems in Brazil.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 45,
+    "start": 223.17,
+    "end": 228.31,
+    "text": "So how do you move from the waterfall model to the pororoca model?",
+    "notes": "Core metaphor: Pororoca model"
+  },
+  {
+    "id": 46,
+    "start": 228.31,
+    "end": 232.66,
+    "text": "Let me give you an example: the government's pedagogical support policy.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 47,
+    "start": 232.66,
+    "end": 240.97,
+    "text": "We help governments build a central team of experienced education coaches, many of them former regional leaders or former school principals.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 48,
+    "start": 240.97,
+    "end": 245.72,
+    "text": "They regularly visit regional departments to support them and understand their challenges.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 49,
+    "start": 245.72,
+    "end": 252.45,
+    "text": "Regional teams also have experienced education coaches, many of them former school principals, who regularly visit schools.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 50,
+    "start": 252.45,
+    "end": 260.76,
+    "text": "They support school leaders, listen to local challenges, help analyze data, and develop action plans to turn policy into classroom practice.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 51,
+    "start": 260.76,
+    "end": 265.51,
+    "text": "After each school visit, the feedback goes back to the regional team.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 52,
+    "start": 265.51,
+    "end": 273.03,
+    "text": "The regional team analyzes information, plans action to support schools, and shares the information with the central education department.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 53,
+    "start": 273.03,
+    "end": 278.97,
+    "text": "Together they identify local challenges, adapt policies, and improve support for regional departments and schools.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 54,
+    "start": 278.97,
+    "end": 281.74,
+    "text": "And this creates a continuous feedback loop.",
+    "notes": "Key concept: Continuous feedback loop"
+  },
+  {
+    "id": 55,
+    "start": 281.74,
+    "end": 286.88,
+    "text": "Support moves down, feedback moves up, and every level learns from the others.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 56,
+    "start": 286.88,
+    "end": 291.23,
+    "text": "Policies become stronger because they adapt to challenges on the ground.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 57,
+    "start": 291.23,
+    "end": 300.73,
+    "text": "From our experience in Brazil, frequent and consistent routines help strengthen the system and build trust, and importantly, it's not about inspection or punishment.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 58,
+    "start": 300.73,
+    "end": 304.29,
+    "text": "It's about continuous support and alignment at every level.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 59,
+    "start": 304.29,
+    "end": 310.23,
+    "text": "They help leaders collect and analyze data together, understand real challenges, and make better decisions.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 60,
+    "start": 310.23,
+    "end": 318.14,
+    "text": "At Motriz, we support governments in designing these feedback loops and continuously developing education coaches to carry out these visits.",
+    "notes": "Organization emphasis: Motriz"
+  },
+  {
+    "id": 61,
+    "start": 318.14,
+    "end": 322.49,
+    "text": "To help governments track implementation progress, we create predictors of learning.",
+    "notes": "Methodology: Predictors of learning"
+  },
+  {
+    "id": 62,
+    "start": 322.49,
+    "end": 329.22,
+    "text": "It's an evidence-based methodology developed by Motriz after years of studying how implementation can improve learning outcomes.",
+    "notes": "Organization emphasis: Motriz"
+  },
+  {
+    "id": 63,
+    "start": 329.22,
+    "end": 338.32,
+    "text": "This methodology helps governments understand how policies are reaching schools and regional departments based on the perceptions of school principals and regional leaders.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 64,
+    "start": 338.32,
+    "end": 340.3,
+    "text": "So, how does it work?",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 65,
+    "start": 340.3,
+    "end": 346.24,
+    "text": "We send a simple online survey to a sample of school principals and regional leaders.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 66,
+    "start": 346.24,
+    "end": 352.18,
+    "text": "We ask simple questions to understand how policies are working in schools and regional departments.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 67,
+    "start": 352.18,
+    "end": 360.09,
+    "text": "Based on the answers, we organize the results on a 0 to 10 scale and analyze them with education leaders.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 68,
+    "start": 360.09,
+    "end": 366.03,
+    "text": "This helps governments identify which policies need more attention and which ones are working well.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 69,
+    "start": 366.03,
+    "end": 373.94,
+    "text": "Leaders can see where more support is needed, identify outliers and positive deviants, and share good practices across the system.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 70,
+    "start": 373.94,
+    "end": 377.5,
+    "text": "This helps governments make better decisions and strengthen implementation.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 71,
+    "start": 377.5,
+    "end": 381.06,
+    "text": "The methodology also helps governments balance accountability and flexibility.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 72,
+    "start": 381.06,
+    "end": 390.16,
+    "text": "It creates accountability by helping leaders track implementation across the whole system but also gives them flexibility to adapt policies to local needs.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 73,
+    "start": 390.16,
+    "end": 394.91,
+    "text": "And importantly, we don't use data to compare municipalities or create rankings.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 74,
+    "start": 394.91,
+    "end": 403.62,
+    "text": "We only use it to help governments track progress, learn from the data, and adapt the policies to local needs over time.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 75,
+    "start": 403.62,
+    "end": 407.97,
+    "text": "We also create ways to directly listen to teachers and students.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 76,
+    "start": 407.97,
+    "end": 411.93,
+    "text": "Their voices are an important part of the feedback loop.",
+    "notes": "Key concept: Continuous feedback loop"
+  },
+  {
+    "id": 77,
+    "start": 411.93,
+    "end": 418.66,
+    "text": "Today in Ceará, we are running a large survey with more than 15,000 teachers and 260,000 students.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 78,
+    "start": 418.66,
+    "end": 426.97,
+    "text": "We ask simple questions to understand how policies are working in schools and how we can better support teaching and learning.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 79,
+    "start": 426.97,
+    "end": 434.49,
+    "text": "This helps education leaders understand challenges in the classroom, adapt policy to local needs, and improve teaching and learning.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 80,
+    "start": 434.49,
+    "end": 443.2,
+    "text": "Let me give you a concrete example: one municipality created chess clubs to teach mathematics in a more practical and engaging way.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 81,
+    "start": 443.2,
+    "end": 449.93,
+    "text": "After the survey, education leaders found that students didn't like chess; they preferred music and visual arts.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 82,
+    "start": 449.93,
+    "end": 455.47,
+    "text": "So they replaced the chess clubs with music and arts clubs using practical mathematics.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 83,
+    "start": 455.47,
+    "end": 459.03,
+    "text": "The activity changed, but the goal stayed the same.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 84,
+    "start": 459.03,
+    "end": 463.38,
+    "text": "Students became much more engaged, and this made a real difference.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 85,
+    "start": 463.38,
+    "end": 469.71,
+    "text": "What we have learned is simple: listening to people on the ground leads to better implementation.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 86,
+    "start": 469.71,
+    "end": 478.02,
+    "text": "To finish, I would like to share the case of Rio de Janeiro, the largest municipal education system in Latin America.",
+    "notes": "Case study: Rio de Janeiro"
+  },
+  {
+    "id": 87,
+    "start": 478.02,
+    "end": 484.35,
+    "text": "It has more than 600,000 students, 55,000 education staff, 1,500 schools, and 11 regional education departments.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 88,
+    "start": 484.35,
+    "end": 491.87,
+    "text": "It also faces major challenges: around 30% of its schools are in neighborhoods affected by violence and criminal groups.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 89,
+    "start": 491.87,
+    "end": 496.62,
+    "text": "Even so, learning outcomes have improved significantly over the last few years.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 90,
+    "start": 496.62,
+    "end": 504.93,
+    "text": "When you look at the predictors of learning data in Rio, we can see that results are improving year after year.",
+    "notes": "Methodology: Predictors of learning"
+  },
+  {
+    "id": 91,
+    "start": 504.93,
+    "end": 517.99,
+    "text": "This shows the growing maturity of the implementation process over time, and at the same time, when you look at learning outcomes, Rio de Janeiro also improves consistently across all stages over time.",
+    "notes": "Case study: Rio de Janeiro"
+  },
+  {
+    "id": 92,
+    "start": 517.99,
+    "end": 521.95,
+    "text": "In Rio, we see three key pillars behind this progress.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 93,
+    "start": 521.95,
+    "end": 524.32,
+    "text": "First, strong leadership at every level.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 94,
+    "start": 524.32,
+    "end": 529.86,
+    "text": "Leaders connect and engage teams, set clear goals, listen to people, and provide direction.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 95,
+    "start": 529.86,
+    "end": 531.44,
+    "text": "Second, strong pedagogical support.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 96,
+    "start": 531.44,
+    "end": 535.79,
+    "text": "The central team supports regional teams, and regional teams support schools.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 97,
+    "start": 535.79,
+    "end": 540.14,
+    "text": "They listen to challenges and bring feedback back to the system.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 98,
+    "start": 540.14,
+    "end": 543.7,
+    "text": "Some schools receive weekly visits from regional education departments.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 99,
+    "start": 543.7,
+    "end": 549.24,
+    "text": "This creates a continuous feedback loop and helps the system adapt to local needs.",
+    "notes": "Key concept: Continuous feedback loop"
+  },
+  {
+    "id": 100,
+    "start": 549.24,
+    "end": 550.43,
+    "text": "And third, data.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 101,
+    "start": 550.43,
+    "end": 557.16,
+    "text": "Rio collects a lot of both quantitative and qualitative data to track implementation processes and learning outcomes.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 102,
+    "start": 557.16,
+    "end": 566.66,
+    "text": "The government works with universities, NGOs, and civil society organizations to strengthen implementation and help leaders and staff collect, systematize, organize, and use data.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 103,
+    "start": 566.66,
+    "end": 571.01,
+    "text": "This helps leaders identify what's working and what needs to improve.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 104,
+    "start": 571.01,
+    "end": 574.97,
+    "text": "These partnerships build state capacity and make change more sustainable.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 105,
+    "start": 574.97,
+    "end": 583.68,
+    "text": "So to close, I want to highlight three key lessons we have learned from our work with large education systems in Brazil.",
+    "notes": "Key takeaways & conclusion"
+  },
+  {
+    "id": 106,
+    "start": 583.68,
+    "end": 588.03,
+    "text": "First, build an implementation infrastructure with continuous feedback across every level.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 107,
+    "start": 588.03,
+    "end": 591.99,
+    "text": "We need to keep all levels of the system connected.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 108,
+    "start": 591.99,
+    "end": 599.51,
+    "text": "Second, use data to track implementation progress over time and learn what is working and what needs to change.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 109,
+    "start": 599.51,
+    "end": 605.45,
+    "text": "We need to collect, organize, and analyze both quantitative and qualitative data all the time.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 110,
+    "start": 605.45,
+    "end": 612.97,
+    "text": "And third, have strong leaders at every level to create alignment, provide direction, and engage staff around shared goals.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 111,
+    "start": 612.97,
+    "end": 622.47,
+    "text": "For us, success means strengthening the government's ability to listen, learn, and adapt so policies can improve over time and reach schools in practice.",
+    "notes": "Clear keynote cadence"
+  },
+  {
+    "id": 112,
+    "start": 622.47,
+    "end": 624.05,
+    "text": "Thank you very much.",
+    "notes": "Clear keynote cadence"
+  }
+]
