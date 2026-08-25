@@ -41,6 +41,12 @@
   <!-- AgoraEuFalo Portal Auth SDK -->
   <script src="../assets/js/aef-portal-auth.js"></script>
 
+  <!-- Local Student Data Fallbacks -->
+  <script src="../treino/data/thomas.js"></script>
+  <script src="../treino/data/estevao.js"></script>
+  <script src="../treino/data/andre.js"></script>
+  <script src="../treino/data/matheus.js"></script>
+
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -139,6 +145,20 @@
       </div>
     </div>
 
+    <!-- Admin Switcher Pill Bar (Only shown for Admin Leo) -->
+    <div id="adminStudentSwitcher" class="hidden bg-[#0F172A] border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between gap-3 overflow-x-auto no-scrollbar">
+      <div class="flex items-center gap-2 text-xs font-bold text-amber-300 shrink-0">
+        <span>👑 Visão do Professor:</span>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button onclick="renderStudentWorkouts('all')" class="admin-pill-btn px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 shadow">Todos</button>
+        <button onclick="renderStudentWorkouts('estevao')" class="admin-pill-btn px-3 py-1 rounded-lg text-xs font-semibold bg-[#161F33] hover:bg-[#1F2B45] text-slate-300">Estevão</button>
+        <button onclick="renderStudentWorkouts('thomas')" class="admin-pill-btn px-3 py-1 rounded-lg text-xs font-semibold bg-[#161F33] hover:bg-[#1F2B45] text-slate-300">Thomas</button>
+        <button onclick="renderStudentWorkouts('andre')" class="admin-pill-btn px-3 py-1 rounded-lg text-xs font-semibold bg-[#161F33] hover:bg-[#1F2B45] text-slate-300">André</button>
+        <button onclick="renderStudentWorkouts('matheus')" class="admin-pill-btn px-3 py-1 rounded-lg text-xs font-semibold bg-[#161F33] hover:bg-[#1F2B45] text-slate-300">Matheus</button>
+      </div>
+    </div>
+
     <!-- Section 1: Meus Treinos de Reflexo Oral -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
@@ -148,67 +168,12 @@
           </h2>
           <p class="text-xs text-slate-400 mt-0.5">Áudios em alta fidelidade com Karaokê sincronizado e repetição em loop.</p>
         </div>
+        <span id="workoutCountBadge" class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">3 treinos disponíveis</span>
       </div>
 
+      <!-- Dynamic Workouts Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="workoutsGrid">
-        
-        <!-- Workout Card 1 (Thomas / Executive) -->
-        <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
-          <div class="flex items-start gap-3.5 mb-3">
-            <img src="../assets/images/cover-thomas-morning-person.jpg" alt="Morning Person" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
-            <div class="truncate">
-              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Treino 01</span>
-              <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">The Morning Person</h3>
-              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">Rotinas matinais, hábitos saudáveis e energia conversacional.</p>
-            </div>
-          </div>
-          <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
-            <span class="text-[11px] text-slate-400 font-mono">00:34</span>
-            <a href="../treino/player.html?aluno=thomas" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
-              <span>Abrir no Player</span>
-              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Workout Card 2 (Estevão / Oxford Solo Presentation) -->
-        <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
-          <div class="flex items-start gap-3.5 mb-3">
-            <img src="../assets/images/cover-estevao-session01.jpg" alt="Oxford Keynote" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
-            <div class="truncate">
-              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Treino 02</span>
-              <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">Oxford Keynote Presentation</h3>
-              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">Apresentação solo executiva: abertura, impacto da ONG Motriz e tese pública.</p>
-            </div>
-          </div>
-          <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
-            <span class="text-[11px] text-slate-400 font-mono">01:06</span>
-            <a href="../treino/player.html?aluno=estevao" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
-              <span>Abrir no Player</span>
-              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Workout Card 3 (Coffee Shop Real Talk) -->
-        <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
-          <div class="flex items-start gap-3.5 mb-3">
-            <img src="../assets/images/cover-thomas-coffee-shop-decisions.jpg" alt="Coffee Shop" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
-            <div class="truncate">
-              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Treino 03</span>
-              <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">Coffee Shop Decisions</h3>
-              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">Diálogo real e pedidos espontâneos em cafeteria.</p>
-            </div>
-          </div>
-          <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
-            <span class="text-[11px] text-slate-400 font-mono">00:35</span>
-            <a href="../treino/player.html?aluno=thomas" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
-              <span>Abrir no Player</span>
-              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-        </div>
-
+        <!-- Injetado dinamicamente via JS -->
       </div>
     </div>
 
@@ -286,17 +251,40 @@
 
   <script>
     let isUserLoggedIn = false;
+    let currentUserProfile = null;
+
+    const ALL_STUDENT_CATALOG = {
+      'thomas': {
+        name: 'Thomas',
+        data: window.AEF_DATA_THOMAS || { tracks: [] }
+      },
+      'estevao': {
+        name: 'Estevão',
+        data: window.AEF_DATA_ESTEVAO || { tracks: [] }
+      },
+      'andre': {
+        name: 'André',
+        data: window.AEF_DATA_ANDRE || { tracks: [] }
+      },
+      'matheus': {
+        name: 'Matheus',
+        data: window.AEF_DATA_MATHEUS || { tracks: [] }
+      }
+    };
 
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.lucide) lucide.createIcons();
+
+      // Default render
+      renderStudentWorkouts('all');
 
       // Listen for auth state
       window.addEventListener('aef:auth-changed', (e) => {
         const user = e.detail?.user;
         const profile = e.detail?.profile;
+        currentUserProfile = profile;
 
         if (!user) {
-          // If not logged in, show demo banner instead of aggressive redirect
           isUserLoggedIn = false;
           const demoBanner = document.getElementById('demoModeBanner');
           if (demoBanner) demoBanner.classList.remove('hidden');
@@ -307,6 +295,7 @@
             authBtn.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-amber-400"></i>`;
             if (window.lucide) lucide.createIcons();
           }
+          renderStudentWorkouts('all');
           return;
         }
 
@@ -317,6 +306,7 @@
         // Populate User Data
         const name = profile?.name || user.displayName || user.email.split('@')[0];
         const tier = profile?.tier || 'free';
+        const isAdmin = profile?.role === 'admin' || (user.email || '').toLowerCase().includes('selexenglish@gmail.com');
 
         const tierLabels = {
           'free': 'Gratuito',
@@ -328,12 +318,41 @@
 
         document.getElementById('headerUserName').innerText = name;
         document.getElementById('heroUserName').innerText = name;
-        document.getElementById('headerUserTier').innerText = profile?.role === 'admin' ? '👑 Administrador' : (tierLabels[tier] || 'Gratuito');
+        document.getElementById('headerUserTier').innerText = isAdmin ? '👑 Administrador' : (tierLabels[tier] || 'Gratuito');
 
-        // Admin fast access button
+        // Streak count
+        const streakDays = profile?.stats?.streakDays || 1;
+        document.getElementById('userStreakCounter').innerText = streakDays;
+
+        // Admin features
         const adminBtn = document.getElementById('adminCommandCenterBtn');
-        if (adminBtn && (profile?.role === 'admin' || (user.email || '').toLowerCase().includes('selexenglish@gmail.com'))) {
-          adminBtn.classList.remove('hidden');
+        const adminSwitcher = document.getElementById('adminStudentSwitcher');
+        
+        if (isAdmin) {
+          if (adminBtn) adminBtn.classList.remove('hidden');
+          if (adminSwitcher) adminSwitcher.classList.remove('hidden');
+          renderStudentWorkouts('all');
+        } else {
+          if (adminBtn) adminBtn.classList.add('hidden');
+          if (adminSwitcher) adminSwitcher.classList.add('hidden');
+
+          // Match student by email/name
+          const emailLower = (user.email || '').toLowerCase();
+          if (emailLower.includes('estevao')) {
+            renderStudentWorkouts('estevao');
+            document.getElementById('quickTrainLink').href = "../treino/player.html?aluno=estevao";
+          } else if (emailLower.includes('thomas')) {
+            renderStudentWorkouts('thomas');
+            document.getElementById('quickTrainLink').href = "../treino/player.html?aluno=thomas";
+          } else if (emailLower.includes('andre')) {
+            renderStudentWorkouts('andre');
+            document.getElementById('quickTrainLink').href = "../treino/player.html?aluno=andre";
+          } else if (emailLower.includes('matheus')) {
+            renderStudentWorkouts('matheus');
+            document.getElementById('quickTrainLink').href = "../treino/player.html?aluno=matheus";
+          } else {
+            renderStudentWorkouts('free_sample');
+          }
         }
 
         // Avatar Initial
@@ -341,12 +360,89 @@
         document.getElementById('userAvatarPlaceholder').innerText = firstLetter;
 
         // Hide upgrade banner if already VIP, Lifetime or Admin
-        if (tier === 'vip_mentorship' || tier === 'lifetime' || profile?.role === 'admin') {
+        if (tier === 'vip_mentorship' || tier === 'lifetime' || isAdmin) {
           const banner = document.getElementById('upgradeBanner');
           if (banner) banner.classList.add('hidden');
         }
       });
     });
+
+    function renderStudentWorkouts(studentKey) {
+      const grid = document.getElementById('workoutsGrid');
+      const badge = document.getElementById('workoutCountBadge');
+      if (!grid) return;
+
+      // Update pill styles if admin
+      document.querySelectorAll('.admin-pill-btn').forEach(btn => {
+        if (btn.innerText.toLowerCase().includes(studentKey) || (studentKey === 'all' && btn.innerText.includes('Todos'))) {
+          btn.className = "admin-pill-btn px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 shadow";
+        } else {
+          btn.className = "admin-pill-btn px-3 py-1 rounded-lg text-xs font-semibold bg-[#161F33] hover:bg-[#1F2B45] text-slate-300";
+        }
+      });
+
+      let trackCards = [];
+
+      if (studentKey === 'all') {
+        Object.keys(ALL_STUDENT_CATALOG).forEach(key => {
+          const st = ALL_STUDENT_CATALOG[key];
+          (st.data.tracks || []).forEach(tr => {
+            trackCards.push({
+              studentKey: key,
+              studentName: st.name,
+              ...tr
+            });
+          });
+        });
+      } else if (ALL_STUDENT_CATALOG[studentKey]) {
+        const st = ALL_STUDENT_CATALOG[studentKey];
+        (st.data.tracks || []).forEach(tr => {
+          trackCards.push({
+            studentKey: studentKey,
+            studentName: st.name,
+            ...tr
+          });
+        });
+      } else {
+        // Free sample
+        const st = ALL_STUDENT_CATALOG['thomas'];
+        if (st && st.data.tracks && st.data.tracks[0]) {
+          trackCards.push({ studentKey: 'thomas', studentName: 'Degustação Aberta', ...st.data.tracks[0] });
+        }
+      }
+
+      if (badge) badge.innerText = `${trackCards.length} treinos disponíveis`;
+
+      grid.innerHTML = trackCards.map((tr, idx) => {
+        const cover = tr.coverImage || '../assets/images/cover-thomas-morning-person.jpg';
+        const duration = tr.duration || '01:00';
+        const title = tr.title || `Treino ${idx + 1}`;
+        const desc = tr.summary || 'Treino de fala e reflexo auditivo em alta fidelidade.';
+        const cleanCover = cover.startsWith('../') ? cover : (cover.startsWith('assets/') ? `../${cover}` : cover);
+
+        return `
+          <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
+            <div class="flex items-start gap-3.5 mb-3">
+              <img src="${cleanCover}" alt="${title}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+              <div class="truncate">
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">${tr.studentName ? tr.studentName + ' • ' : ''}Treino 0${idx + 1}</span>
+                <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">${title}</h3>
+                <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${desc}</p>
+              </div>
+            </div>
+            <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 font-mono">${duration}</span>
+              <a href="../treino/player.html?aluno=${tr.studentKey}" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
+                <span>Abrir no Player</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
 
     async function handleAuthAction() {
       if (isUserLoggedIn) {
