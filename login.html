@@ -68,16 +68,16 @@
         <!-- Subtle Glow Effect -->
         <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <!-- Header Titles in English -->
+        <!-- Header Titles -->
         <div class="text-center mb-6">
           <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider mb-3">
-            <span>✨ Spoken English Member Hub</span>
+            <span>✨ Área de Membros AgoraEuFalo</span>
           </div>
           <h1 id="authCardTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Welcome Back!
+            Bem-vindo de volta!
           </h1>
           <p id="authCardSubtitle" class="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">
-            Access your personalized spoken workouts and study materials.
+            Acesse seus treinos diários e conteúdos exclusivos.
           </p>
         </div>
 
@@ -257,8 +257,8 @@
       if (mode === 'signup') {
         tabSignUp.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm";
         tabSignIn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white";
-        title.innerText = "Start Your Spoken Habit Today";
-        subtitle.innerText = "Create your free account to access starter workouts and practice.";
+        title.innerText = "Crie sua Conta Gratuita";
+        subtitle.innerText = "Acesse materiais de degustação e comece sua jornada hoje.";
         nameGroup.classList.remove('hidden');
         nameInput.required = true;
         forgotLink.classList.add('hidden');
@@ -266,8 +266,8 @@
       } else {
         tabSignIn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm";
         tabSignUp.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white";
-        title.innerText = "Welcome Back!";
-        subtitle.innerText = "Access your personalized spoken workouts and study materials.";
+        title.innerText = "Bem-vindo de volta!";
+        subtitle.innerText = "Acesse seus treinos diários e conteúdos exclusivos.";
         nameGroup.classList.add('hidden');
         nameInput.required = false;
         forgotLink.classList.remove('hidden');
