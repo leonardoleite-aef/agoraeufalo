@@ -104,13 +104,15 @@ Sempre que um link de vídeo do YouTube for fornecido para criação de novo art
 
 ## 8. Regra Fundamental de Áudio em Todos os Boxes Didáticos de Blog (Áudio por Botão)
 Sempre que um artigo for criado ou atualizado no Blog:
-1. **Botão de Áudio Obrigatório em Cada Box:**
-   - Todo box com história/diálogo de contexto, card do Chunks Grid ou pergunta do Listen & Answer DEVE conter um botão de áudio interativo (`playAefSnippet(this, audioUrl, fallbackText)`).
-2. **Síntese de Áudio com as Vozes do Gemini:**
-   - **Diálogos de Contexto:** Devem ser sintetizados no modo **Dual Speaker** (voz feminina + voz masculina, ex: `Aoede`/`Kore` + `Puck`/`Charon`).
-   - **Chunks e Frases:** Devem ser sintetizados com vozes de alta expressividade e ritmo conversacional natural.
-3. **Resiliência e Fallback Instantâneo:**
-   - O player (`assets/js/aef-snippet-player.js`) deve reproduzir o áudio instantaneamente ao toque do aluno, com animação visual de reprodução e fallback inteligente integrado.
+1. **PROIBIÇÃO ABSOLUTA de Vozes Robóticas de Navegador (Web Speech API):**
+   - É terminantemente proibido utilizar `speechSynthesis` ou vozes genéricas de navegador.
+   - Todo áudio do AgoraEuFalo DEVE ser um arquivo **MP3 puro (LAME 128kbps)** sintetizado exclusivamente com as vozes de estúdio do **Google Gemini TTS** (`Aoede`, `Kore`, `Charon`, `Puck`, `Fenrir`, etc.).
+2. **Padrão Obrigatório por Tipo de Conteúdo:**
+   - **Diálogos / Histórias de Contexto:** Devem ser gerados em **Dual Speaker** (exatamente 2 vozes: 1 feminina + 1 masculina, ex: `Aoede`/`Kore` + `Puck`/`Charon`).
+   - **Chunks Grid e Exercícios:** Devem ser gerados em **Single Speaker** com ritmo natural, musicalidade e entonação viva.
+3. **Armazenamento e Reprodução:**
+   - Os arquivos são salvos na pasta `assets/audio/blog/[slug]/[item].mp3`.
+   - Cada box possui um botão interativo apontando diretamente para o arquivo MP3 real (`playAefSnippet(this, '../assets/audio/blog/[slug]/[item].mp3')`).
 
 
 

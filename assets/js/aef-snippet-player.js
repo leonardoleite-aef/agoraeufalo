@@ -1,84 +1,50 @@
-/**
- * AgoraEuFalo Universal Snippet Audio Player
- * Handles instant playback of audio snippets across Blog boxes, Chunks, and Exercises.
- * Supports MP3 playback with automatic graceful Web Speech API fallback.
- */
-
 (function() {
   let currentAudio = null;
   let currentActiveButton = null;
 
-  window.playAefSnippet = function(buttonElement, audioUrl, fallbackText) {
-    if (!buttonElement) return;
+  window.playAefSnippet = function(buttonElement, audioUrl) {
+    if (!buttonElement || !audioUrl) return;
 
-    // If clicking the same playing button, pause it
+    // Se clicar no botão que já está tocando, pausa
     if (currentAudio && currentActiveButton === buttonElement && !currentAudio.paused) {
       currentAudio.pause();
       resetButtonUI(buttonElement);
       return;
     }
 
-    // Stop any previously playing audio
+    // Para qualquer outro áudio tocando
     if (currentAudio) {
       currentAudio.pause();
       currentAudio.currentTime = 0;
       if (currentActiveButton) resetButtonUI(currentActiveButton);
     }
 
-    // Update Button to Playing State
-    setButtonPlayingUI(buttonElement);
-
-    // Try HTML5 Audio with MP3
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
-      currentAudio = audio;
-      currentActiveButton = buttonElement;
-
-      audio.play().then(() => {
-        audio.onended = () => {
-          resetButtonUI(buttonElement);
-          currentAudio = null;
-          currentActiveButton = null;
-        };
-        audio.onerror = () => {
-          // If MP3 fails or 404s, use speech synthesis fallback
-          speakFallback(fallbackText, buttonElement);
-        };
-      }).catch(err => {
-        console.warn("Audio play error, using fallback synthesis:", err);
-        speakFallback(fallbackText, buttonElement);
-      });
-    } else if (fallbackText) {
-      speakFallback(fallbackText, buttonElement);
-    }
-  };
-
-  function speakFallback(text, buttonElement) {
-    if (!window.speechSynthesis || !text) {
-      resetButtonUI(buttonElement);
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const cleanText = text.replace(/<[^>]*>/g, '').replace(/\[.*?\]/g, '').trim();
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.92;
-
-    utterance.onend = () => {
-      resetButtonUI(buttonElement);
-      currentAudio = null;
-      currentActiveButton = null;
-    };
-    utterance.onerror = () => {
-      resetButtonUI(buttonElement);
-      currentAudio = null;
-      currentActiveButton = null;
-    };
-
-    setButtonPlayingUI(buttonElement);
+    // Toca o arquivo de áudio MP3 de estúdio
+    const audio = new Audio(audioUrl);
+    currentAudio = audio;
     currentActiveButton = buttonElement;
-    window.speechSynthesis.speak(utterance);
-  }
+
+    setButtonPlayingUI(buttonElement);
+
+    audio.play().then(() => {
+      audio.onended = () => {
+        resetButtonUI(buttonElement);
+        currentAudio = null;
+        currentActiveButton = null;
+      };
+      audio.onerror = () => {
+        console.error("Erro ao carregar arquivo de áudio de estúdio:", audioUrl);
+        resetButtonUI(buttonElement);
+        currentAudio = null;
+        currentActiveButton = null;
+      };
+    }).catch(err => {
+      console.error("Falha na reprodução do áudio:", err);
+      resetButtonUI(buttonElement);
+      currentAudio = null;
+      currentActiveButton = null;
+    });
+  };
 
   function setButtonPlayingUI(btn) {
     btn.dataset.originalHtml = btn.dataset.originalHtml || btn.innerHTML;

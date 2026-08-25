@@ -65,14 +65,26 @@ def create_wav_header(pcm_bytes, sample_rate=24000, channels=1, bits_per_sample=
     return header + pcm_bytes
 
 def convert_wav_to_mp3(wav_path, mp3_path):
-    """Converts WAV file to high quality MP3 using ffmpeg if available."""
+    """Converts WAV file to high quality MP3 using afconvert (macOS native) or ffmpeg."""
+    # 1. Try native macOS afconvert
     try:
-        cmd = ["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-qscale:a", "2", mp3_path]
-        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-        return True
+        cmd = ["afconvert", wav_path, "-o", mp3_path, "-f", "MPG3", "-d", ".mp3", "-b", "128000"]
+        res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if res.returncode == 0 and os.path.exists(mp3_path):
+            return True
     except Exception:
-        # If ffmpeg is not available, we keep the audio as is or notify user
-        return False
+        pass
+
+    # 2. Try ffmpeg
+    try:
+        cmd = ["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-b:a", "128k", mp3_path]
+        res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if res.returncode == 0 and os.path.exists(mp3_path):
+            return True
+    except Exception:
+        pass
+
+    return False
 
 def generate_tts(text, output_path, model=GEMINI_DEFAULT_MODEL, voice="Puck", speaker_a=None, speaker_b=None, api_key=None):
     if not api_key:
