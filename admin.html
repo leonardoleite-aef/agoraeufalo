@@ -374,18 +374,37 @@
         
         <input type="hidden" id="postIdInput" value="">
 
+        <!-- Primary Input: YouTube Link / ID -->
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-extrabold text-amber-900 flex items-center gap-1.5">
+              <span>▶️</span> <span>Link ou ID do Vídeo no YouTube</span>
+            </label>
+            <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Entrada Principal</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" id="postYoutubeInput" oninput="handleYoutubeAutoFill(this.value)" placeholder="Cole o link: https://youtu.be/... ou https://youtube.com/watch?v=..." class="w-full bg-white border border-amber-300 focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 outline-none font-medium">
+            <div id="ytThumbPreview" class="w-16 h-10 bg-slate-900 rounded-xl overflow-hidden shrink-0 border border-amber-300/60 flex items-center justify-center text-[10px] text-slate-400">
+              Vídeo
+            </div>
+          </div>
+          <p class="text-[10px] text-amber-800 leading-tight">
+            💡 <strong>Modo Rápido:</strong> Basta colar o link do YouTube! O sistema preenche automaticamente o slug, capa e apostila.
+          </p>
+        </div>
+
         <div>
-          <label class="text-xs font-bold text-slate-700 block mb-1">Título do Artigo *</label>
-          <input type="text" id="postTitleInput" required oninput="autoGenerateSlug(this.value)" placeholder="Ex: Magic Story 03: Como Destravar Perguntas Spontâneas" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+          <label class="text-xs font-bold text-slate-700 block mb-1">Título do Artigo</label>
+          <input type="text" id="postTitleInput" oninput="autoGenerateSlug(this.value)" placeholder="Ex: Magic Story: A História de Tom e o Present Perfect" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="text-xs font-bold text-slate-700 block mb-1">Slug / URL Amigável *</label>
-            <input type="text" id="postSlugInput" required placeholder="magic-story-03-destravar-perguntas" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+            <label class="text-xs font-bold text-slate-700 block mb-1">Slug / URL Amigável</label>
+            <input type="text" id="postSlugInput" placeholder="magic-story-tom-present-perfect" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
           </div>
           <div>
-            <label class="text-xs font-bold text-slate-700 block mb-1">Categoria *</label>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Categoria</label>
             <select id="postCategoryInput" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-semibold">
               <option value="Magic Stories">🪄 Magic Stories</option>
               <option value="Treino Auditivo">🎧 Treino Auditivo</option>
@@ -396,38 +415,31 @@
         </div>
 
         <div>
-          <label class="text-xs font-bold text-slate-700 block mb-1">Link ou ID do Vídeo no YouTube *</label>
-          <div class="flex items-center gap-2">
-            <input type="text" id="postYoutubeInput" onchange="previewYoutubeThumbnail(this.value)" placeholder="https://youtu.be/umjf4UyqgR4 ou ID umjf4UyqgR4" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
-            <div id="ytThumbPreview" class="w-14 h-9 bg-slate-900 rounded-lg overflow-hidden shrink-0 border border-slate-700 flex items-center justify-center text-[10px] text-slate-500">
-              Vídeo
-            </div>
-          </div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Subtítulo / Resumo Atraente</label>
+          <textarea id="postSubtitleInput" rows="2" placeholder="Resumo do episódio e do treino de reflexo..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none"></textarea>
         </div>
 
         <div>
-          <label class="text-xs font-bold text-slate-700 block mb-1">Subtítulo / Resumo Atraente *</label>
-          <textarea id="postSubtitleInput" rows="2" required placeholder="Explique em 2 linhas o benefício prático e a história deste artigo..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none"></textarea>
-        </div>
-
-        <div>
-          <label class="text-xs font-bold text-slate-700 block mb-1">Apostila em PDF (Opcional)</label>
-          <input type="text" id="postPdfUrlInput" placeholder="Material-PDF/magic-story-03.pdf" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+          <label class="text-xs font-bold text-slate-700 block mb-1">Apostila em PDF (Caminho Automático)</label>
+          <input type="text" id="postPdfUrlInput" placeholder="Material-PDF/magic-story-tom.pdf" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
         </div>
 
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">Sacada de Ouro do Leo</label>
-          <input type="text" id="postGoldenTipInput" placeholder="Ex: Não pare entre as palavras. O som final se conecta com a vogal seguinte." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+          <input type="text" id="postGoldenTipInput" placeholder="Dica de ouro fonética do Professor Leo..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
         </div>
 
         <div>
-          <label class="text-xs font-bold text-slate-700 block mb-1">Conteúdo do Artigo (Texto / HTML)</label>
-          <textarea id="postBodyInput" rows="5" placeholder="Insira o texto completo do artigo, blocos didáticos e transcrição da história..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl p-3 text-xs text-slate-900 outline-none font-sans"></textarea>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Conteúdo do Artigo (Texto / Transcrição)</label>
+          <textarea id="postBodyInput" rows="4" placeholder="Insira o texto da história, chunks ou deixe o agente compilar o artigo completo..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl p-3 text-xs text-slate-900 outline-none font-sans"></textarea>
         </div>
 
         <div class="pt-3 flex items-center justify-end gap-2 border-t border-stone-200">
           <button type="button" onclick="closeNewPostModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">Cancelar</button>
-          <button type="submit" id="savePostBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Publicar no Blog</button>
+          <button type="submit" id="savePostBtn" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition shadow-sm flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
+            <span>Publicar no Blog</span>
+          </button>
         </div>
 
       </form>
@@ -655,6 +667,34 @@
       }
     }
 
+    function handleYoutubeAutoFill(val) {
+      const ytId = extractYoutubeId(val);
+      previewYoutubeThumbnail(val);
+      if (ytId && ytId.length === 11) {
+        const slugInput = document.getElementById('postSlugInput');
+        const pdfInput = document.getElementById('postPdfUrlInput');
+        const titleInput = document.getElementById('postTitleInput');
+        const subtitleInput = document.getElementById('postSubtitleInput');
+        const tipInput = document.getElementById('postGoldenTipInput');
+
+        if (!slugInput.value) {
+          slugInput.value = `magic-story-${ytId.toLowerCase()}`;
+        }
+        if (!pdfInput.value) {
+          pdfInput.value = `Material-PDF/${slugInput.value}.pdf`;
+        }
+        if (!titleInput.value) {
+          titleInput.value = `Magic Story: Treino de Reflexo Oral (${ytId})`;
+        }
+        if (!subtitleInput.value) {
+          subtitleInput.value = "Treino prático de áudio, conexão sonora e reflexo de fala com o Professor Leonardo Leite.";
+        }
+        if (!tipInput.value) {
+          tipInput.value = "Conecte as palavras em blocos sonoros. Repita a mesma história até a fala virar reflexo.";
+        }
+      }
+    }
+
     function extractYoutubeId(urlOrId) {
       if (!urlOrId) return '';
       urlOrId = urlOrId.trim();
@@ -675,15 +715,33 @@
 
     async function handleSaveBlogPost(e) {
       e.preventDefault();
-      const title = document.getElementById('postTitleInput').value.trim();
-      const slug = document.getElementById('postSlugInput').value.trim();
-      const category = document.getElementById('postCategoryInput').value;
       const rawYt = document.getElementById('postYoutubeInput').value.trim();
       const ytId = extractYoutubeId(rawYt);
-      const subtitle = document.getElementById('postSubtitleInput').value.trim();
-      const pdfUrl = document.getElementById('postPdfUrlInput').value.trim();
-      const goldenTip = document.getElementById('postGoldenTipInput').value.trim();
+      
+      let title = document.getElementById('postTitleInput').value.trim();
+      let slug = document.getElementById('postSlugInput').value.trim();
+      const category = document.getElementById('postCategoryInput').value || 'Magic Stories';
+      let subtitle = document.getElementById('postSubtitleInput').value.trim();
+      let pdfUrl = document.getElementById('postPdfUrlInput').value.trim();
+      let goldenTip = document.getElementById('postGoldenTipInput').value.trim();
       const bodyHtml = document.getElementById('postBodyInput').value.trim();
+
+      // Smart Defaults if only YouTube was provided
+      if (!slug) {
+        slug = ytId ? `magic-story-${ytId.toLowerCase()}` : `post-${Date.now()}`;
+      }
+      if (!title) {
+        title = `Magic Story: Treino de Fala e Reflexo Oral`;
+      }
+      if (!subtitle) {
+        subtitle = "Treinamento intensivo de escuta ativa e pronúncia com o Professor Leonardo Leite.";
+      }
+      if (!pdfUrl) {
+        pdfUrl = `Material-PDF/${slug}.pdf`;
+      }
+      if (!goldenTip) {
+        goldenTip = "Repetir a experiência da mesma história até a fala virar reflexo.";
+      }
 
       const saveBtn = document.getElementById('savePostBtn');
       saveBtn.disabled = true;
@@ -698,7 +756,7 @@
           title: title,
           slug: slug,
           category: category,
-          youtubeId: ytId,
+          youtubeId: ytId || 'umjf4UyqgR4',
           imageUrl: ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : 'assets/images/og-magic-stories.jpg',
           subtitle: subtitle,
           pdfUrl: pdfUrl,
@@ -723,7 +781,7 @@
 
         closeNewPostModal();
         renderAdminBlogPosts();
-        showToast(`Artigo "${title}" publicado com sucesso no Firestore e no Blog!`, "success");
+        showToast(`✨ Artigo publicado no Firestore e no Blog com sucesso!`, "success");
       } catch (err) {
         console.error("Error saving blog post:", err);
         showToast("Erro ao publicar post no Firestore.", "error");
