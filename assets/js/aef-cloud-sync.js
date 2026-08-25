@@ -181,6 +181,44 @@
         return () => {};
       }
     }
+
+    /**
+     * Uploads any generic media file (Video MP4, Audio MP3, Image, PDF) directly to Cloud Storage.
+     * @param {File|Blob} file 
+     * @param {string} folder e.g. "videos/public", "courses/materials"
+     * @param {function} onProgress callback with percentage
+     * @returns {Promise<string>} Download URL from Google Cloud
+     */
+    async uploadFileToStorage(file, folder = "uploads", onProgress = null) {
+      const ready = await this.init();
+      if (!ready) throw new Error("Não foi possível inicializar conexão com o Google Cloud Storage.");
+
+      const filename = `${Date.now()}_${file.name ? file.name.replace(/[^a-zA-Z0-9._-]/g, "_") : "media.bin"}`;
+      const storageRef = this.storage.ref().child(`${folder}/${filename}`);
+      
+      const uploadTask = storageRef.put(file, {
+        contentType: file.type || "application/octet-stream",
+        customMetadata: {
+          uploadedBy: "Prof. Leo Leite - AgoraEuFalo Admin",
+          uploadedAt: new Date().toISOString()
+        }
+      });
+
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            if (onProgress) onProgress(progress);
+          },
+          (error) => reject(error),
+          async () => {
+            const downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
+            resolve(downloadUrl);
+          }
+        );
+      });
+    }
   }
 
   // Global Singleton

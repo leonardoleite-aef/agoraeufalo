@@ -41,6 +41,7 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="treino/data/public.js"></script>
 </head>
 <body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -246,13 +247,28 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-300 mb-1">URL do Áudio MP3 (Puro 128kbps)</label>
-            <input type="text" id="track-audio-input" required placeholder="/assets/audio/public/meu_audio.mp3" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-300">Áudio MP3 (Nuvem Google Storage)</label>
+            <div class="flex items-center gap-2">
+              <input type="text" id="track-audio-input" required placeholder="https://firebasestorage.googleapis.com/... ou /assets/audio/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+              <label class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold cursor-pointer shrink-0">
+                <span>📁 Subir MP3</span>
+                <input type="file" accept="audio/*" class="hidden" onchange="uploadMediaFile(this, 'track-audio-input', 'track-audio-upload-status', 'audio/public')">
+              </label>
+            </div>
+            <span id="track-audio-upload-status" class="text-[10px] text-amber-400 font-bold block"></span>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-300 mb-1">URL do Vídeo Próprio (Opcional - MP4)</label>
-            <input type="text" id="track-video-input" placeholder="/assets/videos/public/demonstracao.mp4" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-300">Vídeo Próprio (Opcional - MP4 na Nuvem)</label>
+            <div class="flex items-center gap-2">
+              <input type="text" id="track-video-input" placeholder="https://firebasestorage.googleapis.com/... ou /assets/videos/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+              <label class="px-3 py-2 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/40 text-xs font-bold cursor-pointer shrink-0">
+                <span>🎬 Subir MP4</span>
+                <input type="file" accept="video/*" class="hidden" onchange="uploadMediaFile(this, 'track-video-input', 'track-video-upload-status', 'videos/public')">
+              </label>
+            </div>
+            <span id="track-video-upload-status" class="text-[10px] text-sky-400 font-bold block"></span>
           </div>
         </div>
 
@@ -471,6 +487,32 @@
         btn.disabled = false;
         btn.innerHTML = `<span>Publicar no Player Público</span><i data-lucide="check" class="w-4 h-4"></i>`;
         lucide.createIcons();
+      }
+    }
+
+    async function uploadMediaFile(inputEl, targetInputId, statusId, folder) {
+      const file = inputEl.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById(statusId);
+      const targetInput = document.getElementById(targetInputId);
+      
+      if (statusEl) {
+        statusEl.classList.remove("hidden");
+        statusEl.innerText = `⏳ Enviando para a Nuvem Google (0%)...`;
+      }
+
+      try {
+        if (!window.aefCloudSync) throw new Error("Módulo aefCloudSync não carregado.");
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, folder, (pct) => {
+          if (statusEl) statusEl.innerText = `⏳ Enviando para a Nuvem Google (${pct}%)...`;
+        });
+
+        if (targetInput) targetInput.value = downloadUrl;
+        if (statusEl) statusEl.innerText = `✅ Enviado com sucesso para a Nuvem Google!`;
+      } catch (err) {
+        alert("Erro ao subir arquivo para a nuvem: " + err.message);
+        if (statusEl) statusEl.innerText = `❌ Falha no upload`;
       }
     }
 

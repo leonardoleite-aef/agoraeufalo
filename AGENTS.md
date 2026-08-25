@@ -102,17 +102,19 @@ Sempre que um link de vídeo do YouTube for fornecido para criação de novo art
 
 ---
 
-## 8. Regra Fundamental de Áudio em Todos os Boxes Didáticos de Blog (Áudio por Botão)
-Sempre que um artigo for criado ou atualizado no Blog:
-1. **PROIBIÇÃO ABSOLUTA de Vozes Robóticas de Navegador (Web Speech API):**
-   - É terminantemente proibido utilizar `speechSynthesis` ou vozes genéricas de navegador.
-   - Todo áudio do AgoraEuFalo DEVE ser um arquivo **MP3 puro (LAME 128kbps)** sintetizado exclusivamente com as vozes de estúdio do **Google Gemini TTS** (`Aoede`, `Kore`, `Charon`, `Puck`, `Fenrir`, etc.).
-2. **Padrão Obrigatório por Tipo de Conteúdo:**
-   - **Diálogos / Histórias de Contexto:** Devem ser gerados em **Dual Speaker** (exatamente 2 vozes: 1 feminina + 1 masculina, ex: `Aoede`/`Kore` + `Puck`/`Charon`).
-   - **Chunks Grid e Exercícios:** Devem ser gerados em **Single Speaker** com ritmo natural, musicalidade e entonação viva.
-3. **Armazenamento e Reprodução:**
-   - Os arquivos são salvos na pasta `assets/audio/blog/[slug]/[item].mp3`.
-   - Cada box possui um botão interativo apontando diretamente para o arquivo MP3 real (`playAefSnippet(this, '../assets/audio/blog/[slug]/[item].mp3')`).
+---
+
+## 9. Arquitetura Macro de Armazenamento, Nuvem & Segurança (Zero Mídia Pesada no Git)
+Para proteger o repositório contra inchaço (bloat), limites de banda do GitHub e pirataria de conteúdo proprietário/pago do ecossistema:
+1. **Separação Rígida de Camadas:**
+   - **Git / GitHub Pages:** Apenas código-fonte da aplicação (HTML, CSS, JS, regras e ícones leves <100KB).
+   - **Google Cloud Storage & Firebase Storage (`agoraeufalo-3463a.firebasestorage.app`):** Armazenamento seguro de TODOS os vídeos de alta definição (`.mp4`), áudios gerados pelo TTS Studio, masterclasses, gravações de alunos e apostilas/PDFs de produtos pagos.
+   - **Google Cloud Firestore:** Metadados, sessões de treino, permissões de acesso e leads.
+2. **Upload e Distribuição de Vídeos e Áudios:**
+   - Todo arquivo de vídeo e áudio do English Personal Training Player, cursos internos e áreas fechadas DEVE ser hospedado no **Firebase Storage / Google Cloud Storage**.
+   - As interfaces (`tts-studio.html`, `admin-publico.html`, portal de membros) devem realizar o upload direto para o bucket da nuvem (`aefCloudSync.uploadMediaToStorage`), obtendo a URL segura da nuvem em vez de salvar arquivos pesados na árvore do Git.
+3. **Proteção de Conteúdo Pago:**
+   - Qualquer conteúdo exclusivo de alunos da Mentoria VIP, Magic Stories Club ou Cursos é protegido por regras de autenticação do Firebase e nunca exposto em repositório público.
 
 
 
