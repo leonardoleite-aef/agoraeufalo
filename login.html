@@ -378,7 +378,7 @@
       try {
         showToast("Enviando Link Mágico para seu email...", "info");
         await window.aefPortalAuth.sendMagicLink(email);
-        showToast("✨ Link Mágico enviado! Verifique seu email para entrar com 1 clique.", "success", 7000);
+        showToast("✨ Link Mágico enviado! Verifique sua Caixa de Entrada (ou pasta de Spam/Promoções).", "success", 8000);
       } catch (err) {
         console.error("Magic link send error:", err);
         showToast("Erro ao enviar link mágico. Verifique o email informado.", "error");
