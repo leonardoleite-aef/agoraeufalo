@@ -116,5 +116,11 @@ Para proteger o repositório contra inchaço (bloat), limites de banda do GitHub
 3. **Proteção de Conteúdo Pago:**
    - Qualquer conteúdo exclusivo de alunos da Mentoria VIP, Magic Stories Club ou Cursos é protegido por regras de autenticação do Firebase e nunca exposto em repositório público.
 
+---
+
+## 10. Manutenção Obrigatória do Mapa de Interfaces (`INTERFACES.md`)
+Sempre que qualquer nova interface, landing page, artigo de blog, player de aluno ou painel administrativo for criado, editado em sua URL ou removido do projeto:
+- O agente DEVE atualizar imediatamente o arquivo **`INTERFACES.md`** na raiz do projeto com o nome da interface, URL de produção, link relativo local e uma breve descrição objetiva de sua função.
+
 
 
