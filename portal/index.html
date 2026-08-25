@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard do Aluno | AgoraEuFalo</title>
+  <meta name="description" content="Sua área exclusiva de treinos diários, Magic Stories e acompanhamento com o Professor Leonardo Leite.">
+  
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#F59E0B',
+              navy: '#0A192F',
+              dark: '#070B14',
+              card: '#0F172A',
+              border: '#1E293B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- AgoraEuFalo Portal Auth SDK -->
+  <script src="../assets/js/aef-portal-auth.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-serif { font-family: 'Lora', serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-[#070B14] text-slate-100 min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP NAVIGATION                                                         -->
+  <!-- ========================================================================= -->
+  <header class="w-full bg-[#0A192F]/80 backdrop-blur-md border-b border-[#1E293B] sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Logo & Area Badge -->
+      <div class="flex items-center gap-3">
+        <a href="../index.html" class="flex items-center gap-2 group">
+          <img src="../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
+        </a>
+        <div class="h-4 w-px bg-slate-700 hidden sm:block"></div>
+        <span class="text-xs font-bold text-slate-400 hidden sm:inline">Portal do Aluno</span>
+      </div>
+
+      <!-- User Profile & Action Bar -->
+      <div class="flex items-center gap-3">
+        
+        <!-- User Info Badge -->
+        <div id="userBadgeWrapper" class="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-[#0F172A] border border-[#1E293B]">
+          <div id="userAvatarPlaceholder" class="w-7 h-7 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs flex items-center justify-center">
+            A
+          </div>
+          <div class="flex flex-col text-left">
+            <span id="headerUserName" class="text-xs font-bold text-white truncate max-w-[100px] sm:max-w-[140px]">Carregando...</span>
+            <span id="headerUserTier" class="text-[10px] font-extrabold text-amber-400 uppercase tracking-wider">Gratuito</span>
+          </div>
+        </div>
+
+        <!-- Logout Button -->
+        <button onclick="handleLogout()" class="p-2 rounded-xl bg-[#0F172A] hover:bg-[#1E293B] border border-[#1E293B] text-slate-400 hover:text-rose-400 transition" title="Sair da Conta">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN DASHBOARD CONTENT                                                 -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+
+    <!-- Hero Welcome & Streak Card -->
+    <div class="bg-gradient-to-br from-[#0F172A] via-[#0D1B36] to-[#0A192F] border border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+        
+        <!-- Welcome Message -->
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-bold tracking-wide uppercase">
+            <span>🔥 Foco Diário de Fala Viva</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold font-serif text-white">
+            Olá, <span id="heroUserName" class="text-amber-400">Aluno</span>!
+          </h1>
+          <p class="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
+            "Inglês não é matéria de prova; é experiência e repetição sonora. Escolha seu treino de hoje e pratique em voz alta."
+          </p>
+        </div>
+
+        <!-- Quick Streak & Quick Action -->
+        <div class="flex items-center gap-4 bg-[#070B14]/70 border border-[#1E293B] rounded-2xl p-4 shrink-0">
+          <div class="text-center px-2">
+            <span class="text-2xl sm:text-3xl font-extrabold text-amber-400 block font-mono">1</span>
+            <span class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Dia Seguido</span>
+          </div>
+          <div class="h-8 w-px bg-slate-800"></div>
+          <a href="../treino/player.html" id="quickTrainLink" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition shadow-md shadow-amber-500/20">
+            <span>Iniciar Treino</span>
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 1: Meus Treinos de Reflexo Oral -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-white font-serif flex items-center gap-2">
+            <span>🎙️</span> <span>Meus Treinos de Reflexo Oral</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Áudios em alta fidelidade com Karaokê e Repetição em Loop.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="workoutsGrid">
+        
+        <!-- Workout Card 1 (Thomas / Executive) -->
+        <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
+          <div class="flex items-start gap-3.5 mb-3">
+            <img src="../assets/images/cover-thomas-morning-person.jpg" alt="Morning Person" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+            <div class="truncate">
+              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Treino 01</span>
+              <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">The Morning Person</h3>
+              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">Rotinas matinais, hábitos saudáveis e energia conversacional.</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-mono">00:34</span>
+            <a href="../treino/player.html?aluno=thomas" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
+              <span>Abrir no Player</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Workout Card 2 (Estevão / Oxford) -->
+        <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
+          <div class="flex items-start gap-3.5 mb-3">
+            <img src="../assets/images/cover-estevao-session01.jpg" alt="Oxford Keynote" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+            <div class="truncate">
+              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Treino 02</span>
+              <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">Oxford Keynote Presentation</h3>
+              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">Apresentação solo executiva e projeção internacional.</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-mono">01:06</span>
+            <a href="../treino/player.html?aluno=estevao" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
+              <span>Abrir no Player</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Workout Card 3 (Coffee Shop) -->
+        <div class="bg-[#0F172A] border border-[#1E293B] hover:border-amber-400/50 rounded-2xl p-4 transition shadow-sm flex flex-col justify-between group">
+          <div class="flex items-start gap-3.5 mb-3">
+            <img src="../assets/images/cover-thomas-coffee-shop-decisions.jpg" alt="Coffee Shop" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+            <div class="truncate">
+              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Treino 03</span>
+              <h3 class="text-sm font-bold text-white group-hover:text-amber-300 transition truncate">Coffee Shop Decisions</h3>
+              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">Diálogo real e pedidos espontâneos em cafeteria.</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-[#1E293B] flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 font-mono">00:35</span>
+            <a href="../treino/player.html?aluno=thomas" class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300">
+              <span>Abrir no Player</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 2: Apostilas & Materiais em PDF -->
+    <div class="space-y-4">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-white font-serif flex items-center gap-2">
+          <span>📘</span> <span>Apostilas & Guias de Estudo</span>
+        </h2>
+        <p class="text-xs text-slate-400 mt-0.5">Materiais editoriais diagramados para leitura e treino.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- PDF Card 1 -->
+        <div class="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">Guia Definitivo do Reflexo Oral</h4>
+              <p class="text-[11px] text-slate-400">Volume 1 — Método dos Chunks Sonoros</p>
+            </div>
+          </div>
+          <a href="../guia-definitivo.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">
+            Acessar
+          </a>
+        </div>
+
+        <!-- PDF Card 2 -->
+        <div class="bg-[#0F172A] border border-[#1E293B] rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold">
+              <i data-lucide="book-open" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">Magic Stories Collection</h4>
+              <p class="text-[11px] text-slate-400">Roteiros completos e perguntas de reflexo</p>
+            </div>
+          </div>
+          <a href="../blog/index.html" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition">
+            Explorar
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 3: Upgrade Banner (Para Usuários Gratuitos) -->
+    <div id="upgradeBanner" class="bg-gradient-to-r from-amber-500/10 via-[#0F172A] to-amber-500/10 border border-amber-500/40 rounded-3xl p-6 sm:p-8 text-center space-y-4">
+      <span class="px-3 py-1 rounded-full bg-amber-500 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider inline-block">
+        🚀 Eleve seu Nível
+      </span>
+      <h3 class="text-xl sm:text-2xl font-bold font-serif text-white">
+        Quer treinos individuais gravados pelo Professor Leo?
+      </h3>
+      <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+        Conheça os planos de Mentoria VIP Spoken English e o Magic Stories Club para acelerar seu reflexo de fala.
+      </p>
+      <div>
+        <a href="../projeto-aef.html" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition shadow-lg shadow-amber-500/20">
+          <span>Conhecer Planos & Mentoria VIP</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-6 text-center text-xs text-slate-600 border-t border-[#1E293B]/40">
+    <span>© 2026 AgoraEuFalo — Professor Leonardo Leite. Todos os direitos reservados.</span>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.lucide) lucide.createIcons();
+
+      // Listen for auth state
+      window.addEventListener('aef:auth-changed', (e) => {
+        const user = e.detail?.user;
+        const profile = e.detail?.profile;
+
+        if (!user) {
+          // If not logged in, redirect to login page
+          window.location.href = "../login.html";
+          return;
+        }
+
+        // Populate User Data
+        const name = profile?.name || user.displayName || user.email.split('@')[0];
+        const tier = profile?.tier || 'free';
+
+        const tierLabels = {
+          'free': 'Gratuito',
+          'club_monthly': 'Club Mensal',
+          'club_annual': 'Club Anual',
+          'lifetime': 'Vitalício',
+          'vip_mentorship': 'Mentorado VIP'
+        };
+
+        document.getElementById('headerUserName').innerText = name;
+        document.getElementById('heroUserName').innerText = name;
+        document.getElementById('headerUserTier').innerText = tierLabels[tier] || 'Gratuito';
+
+        // Avatar Initial
+        const firstLetter = (name.charAt(0) || 'A').toUpperCase();
+        document.getElementById('userAvatarPlaceholder').innerText = firstLetter;
+
+        // Hide upgrade banner if already VIP
+        if (tier === 'vip_mentorship' || tier === 'lifetime') {
+          const banner = document.getElementById('upgradeBanner');
+          if (banner) banner.classList.add('hidden');
+        }
+      });
+    });
+
+    async function handleLogout() {
+      if (confirm("Deseja realmente sair da sua conta?")) {
+        await window.aefPortalAuth.signOut();
+        window.location.href = "../login.html";
+      }
+    }
+  </script>
+</body>
+</html>
