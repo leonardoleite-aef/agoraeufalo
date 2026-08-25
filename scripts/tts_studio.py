@@ -64,27 +64,25 @@ def create_wav_header(pcm_bytes, sample_rate=24000, channels=1, bits_per_sample=
     )
     return header + pcm_bytes
 
-def convert_wav_to_mp3(wav_path, mp3_path):
-    """Converts WAV file to high quality MP3 using afconvert (macOS native) or ffmpeg."""
-    # 1. Try native macOS afconvert
+def convert_pcm_to_mp3(pcm_bytes, mp3_path, sample_rate=24000, bitrate=128):
+    """Encodes raw PCM bytes to pure LAME MP3 (128 kbps) with zero external CLI dependencies."""
     try:
-        cmd = ["afconvert", wav_path, "-o", mp3_path, "-f", "MPG3", "-d", ".mp3", "-b", "128000"]
-        res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if res.returncode == 0 and os.path.exists(mp3_path):
-            return True
-    except Exception:
-        pass
+        import lameenc
+        encoder = lameenc.Encoder()
+        encoder.set_bit_rate(bitrate)
+        encoder.set_in_sample_rate(sample_rate)
+        encoder.set_channels(1)
+        encoder.set_quality(2)
+        mp3_data = encoder.encode(pcm_bytes)
+        mp3_data += encoder.flush()
 
-    # 2. Try ffmpeg
-    try:
-        cmd = ["ffmpeg", "-y", "-i", wav_path, "-codec:a", "libmp3lame", "-b:a", "128k", mp3_path]
-        res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if res.returncode == 0 and os.path.exists(mp3_path):
-            return True
-    except Exception:
-        pass
-
-    return False
+        os.makedirs(os.path.dirname(os.path.abspath(mp3_path)), exist_ok=True)
+        with open(mp3_path, "wb") as f:
+            f.write(mp3_data)
+        return True
+    except Exception as e:
+        print("Erro no lameenc:", e)
+        return False
 
 def generate_tts(text, output_path, model=GEMINI_DEFAULT_MODEL, voice="Puck", speaker_a=None, speaker_b=None, api_key=None):
     if not api_key:
@@ -187,18 +185,14 @@ def generate_tts(text, output_path, model=GEMINI_DEFAULT_MODEL, voice="Puck", sp
 
         # Handle MP3 vs WAV output
         if output_path.lower().endswith(".mp3"):
-            temp_wav = output_path + ".temp.wav"
-            with open(temp_wav, "wb") as f:
-                f.write(wav_bytes)
-            
-            if convert_wav_to_mp3(temp_wav, output_path):
-                if os.path.exists(temp_wav):
-                    os.remove(temp_wav)
-                print(f"✅ Áudio MP3 exportado com sucesso: {output_path}")
+            if convert_pcm_to_mp3(raw_bytes, output_path):
+                print(f"✅ Áudio MP3 puro de estúdio exportado com sucesso: {output_path}")
             else:
-                # Fallback to WAV with user note
-                os.rename(temp_wav, output_path.replace(".mp3", ".wav"))
-                print(f"⚠️ ffmpeg não disponível no PATH. Áudio salvo em formato WAV: {output_path.replace('.mp3', '.wav')}")
+                # Fallback to WAV
+                wav_path = output_path.replace(".mp3", ".wav")
+                with open(wav_path, "wb") as f:
+                    f.write(wav_bytes)
+                print(f"⚠️ Áudio salvo em formato WAV: {wav_path}")
         else:
             with open(output_path, "wb") as f:
                 f.write(wav_bytes)
