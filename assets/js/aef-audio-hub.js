@@ -167,22 +167,25 @@ class AEFAudioHub {
   // 4. STUDENT PROFILES & MERGED TRACK PLAYLISTS
   // =========================================================================
   sanitizeCoverImage(currentCover, title = "") {
-    const titleLower = (title || "").toLowerCase();
-    
-    // Check if current cover is an old dark badge or empty
-    const isOldDarkCover = !currentCover || 
-      currentCover.includes("cover-carlos") || 
-      currentCover.includes("cover-marcos") || 
-      currentCover.includes("cover-patricia") ||
-      currentCover.includes("app-icon-final");
+    // If a valid custom cover is already defined, preserve it!
+    if (currentCover && 
+        !currentCover.includes("app-icon-final") && 
+        !currentCover.includes("cover-carlos") && 
+        !currentCover.includes("cover-marcos") && 
+        !currentCover.includes("cover-patricia")) {
+      return currentCover;
+    }
 
-    if (titleLower.includes("morning")) {
+    const titleLower = (title || "").toLowerCase();
+    if (titleLower.includes("oxford")) {
+      return "../assets/images/cover-estevao-oxford-presentation.jpg";
+    } else if (titleLower.includes("morning")) {
       return "../assets/images/cover-thomas-morning-person.jpg";
     } else if (titleLower.includes("coffee") || titleLower.includes("tea") || titleLower.includes("cafe")) {
       return "../assets/images/cover-thomas-coffee-shop-decisions.jpg";
     } else if (titleLower.includes("office") || titleLower.includes("logistics") || titleLower.includes("meeting")) {
       return "../assets/images/cover-thomas-office-logistics.jpg";
-    } else if (titleLower.includes("keynote") || titleLower.includes("presentation") || titleLower.includes("uk")) {
+    } else if (titleLower.includes("keynote") || titleLower.includes("uk")) {
       return "../assets/images/cover-estevao-session01.jpg";
     } else if (titleLower.includes("career") || titleLower.includes("pitch") || titleLower.includes("interview")) {
       return "../assets/images/cover-andre-session01.jpg";
@@ -190,11 +193,7 @@ class AEFAudioHub {
       return "../assets/images/cover-matheus-session01.jpg";
     }
 
-    if (isOldDarkCover) {
-      return "../assets/images/cover-thomas-office-logistics.jpg";
-    }
-
-    return currentCover;
+    return "../assets/images/cover-default-aef.jpg";
   }
 
   getStudents() {

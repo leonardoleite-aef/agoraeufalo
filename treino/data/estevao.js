@@ -1025,7 +1025,7 @@ window.AEF_STUDENT_ESTEVAO = {
       id: "estevao-02",
       title: "Oxford Presentation (Casual Delivery)",
       duration: "01:06",
-      coverImage: "../assets/images/cover-estevao-session01.jpg",
+      coverImage: "../assets/images/cover-estevao-oxford-presentation.jpg",
       audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.mp3",
       summary: "Estevão's solo keynote presentation: opening remarks, Motriz NGO public education impact across 40 municipalities in 7 states, Oxford academic study reference, and systemic implementation thesis.",
       goldenTip: "Maintain a steady, confident cadence. Connect sound chunks smoothly ('pleasure to be here', 'conducted right here at Oxford') without rushing.",

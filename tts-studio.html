@@ -2327,15 +2327,18 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
         const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
         const durationSec = Math.round((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
 
-        let coverImg = "../assets/images/cover-office-logistics.jpg";
-        const titleLower = (title || "").toLowerCase();
-        if (titleLower.includes('morning')) coverImg = "../assets/images/cover-thomas-morning-person.jpg";
-        else if (titleLower.includes('coffee') || titleLower.includes('tea') || titleLower.includes('cafe')) coverImg = "../assets/images/cover-thomas-coffee-shop-decisions.jpg";
-        else if (titleLower.includes('office') || titleLower.includes('logistics') || titleLower.includes('meeting')) coverImg = "../assets/images/cover-office-logistics.jpg";
-        else if (titleLower.includes('keynote') || titleLower.includes('presentation') || titleLower.includes('uk')) coverImg = "../assets/images/cover-estevao-session01.jpg";
-        else if (titleLower.includes('career') || titleLower.includes('pitch') || titleLower.includes('interview')) coverImg = "../assets/images/cover-andre-session01.jpg";
-        else if (titleLower.includes('travel') || titleLower.includes('airport') || titleLower.includes('flight')) coverImg = "../assets/images/cover-matheus-session01.jpg";
-        else coverImg = "../assets/images/cover-default-aef.jpg";
+        let coverImg = STATE.currentMeta?.coverImage || "";
+        if (!coverImg) {
+          const titleLower = (title || "").toLowerCase();
+          if (titleLower.includes('oxford')) coverImg = "../assets/images/cover-estevao-oxford-presentation.jpg";
+          else if (titleLower.includes('morning')) coverImg = "../assets/images/cover-thomas-morning-person.jpg";
+          else if (titleLower.includes('coffee') || titleLower.includes('tea') || titleLower.includes('cafe')) coverImg = "../assets/images/cover-thomas-coffee-shop-decisions.jpg";
+          else if (titleLower.includes('office') || titleLower.includes('logistics') || titleLower.includes('meeting')) coverImg = "../assets/images/cover-thomas-office-logistics.jpg";
+          else if (titleLower.includes('keynote') || titleLower.includes('uk')) coverImg = "../assets/images/cover-estevao-session01.jpg";
+          else if (titleLower.includes('career') || titleLower.includes('pitch') || titleLower.includes('interview')) coverImg = "../assets/images/cover-andre-session01.jpg";
+          else if (titleLower.includes('travel') || titleLower.includes('airport') || titleLower.includes('flight')) coverImg = "../assets/images/cover-matheus-session01.jpg";
+          else coverImg = "../assets/images/cover-default-aef.jpg";
+        }
 
         const trackData = {
           id: trackId,
