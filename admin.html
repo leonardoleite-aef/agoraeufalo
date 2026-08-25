@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel do Professor Leo Leite • Hub Central & CRM | AgoraEuFalo</title>
+  <title>Painel do Professor Leo Leite • Hub Central, CRM & Blog CMS | AgoraEuFalo</title>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
 
@@ -92,6 +92,13 @@
           <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
           <span>TTS Studio</span>
         </a>
+        <a href="blog-panel.html" class="hidden md:inline px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-semibold transition">
+          Blog Panel
+        </a>
+        <a href="blog/index.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 text-amber-300 hover:bg-white/20 font-bold flex items-center gap-1 transition">
+          <i data-lucide="newspaper" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Ver Blog ↗</span>
+        </a>
         <a href="portal/index.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 text-amber-300 hover:bg-white/20 font-bold flex items-center gap-1 transition">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline">Portal do Aluno ↗</span>
@@ -131,14 +138,14 @@
         </div>
       </div>
 
-      <!-- Metric 3: Total de Áudios -->
+      <!-- Metric 3: Total de Artigos Publicados -->
       <div class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-xs flex items-center justify-between">
         <div>
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Áudios & Treinos</span>
-          <h3 id="statTotalTracks" class="text-2xl font-extrabold text-slate-900 mt-0.5">7</h3>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Artigos no Blog</span>
+          <h3 id="statTotalBlogPosts" class="text-2xl font-extrabold text-slate-900 mt-0.5">Carregando...</h3>
         </div>
         <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
-          <i data-lucide="music" class="w-5 h-5"></i>
+          <i data-lucide="book-open" class="w-5 h-5"></i>
         </div>
       </div>
 
@@ -160,7 +167,6 @@
     <!-- ======================================================================= -->
     <div class="bg-white border border-stone-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
       
-      <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200">
         <div>
           <div class="flex items-center gap-2">
@@ -199,7 +205,7 @@
         </div>
       </div>
 
-      <!-- Students Table / List Container -->
+      <!-- Students Table -->
       <div class="overflow-x-auto rounded-2xl border border-stone-200">
         <table class="w-full text-left text-xs text-slate-700">
           <thead class="bg-[#0A192F] text-white uppercase text-[10px] tracking-wider font-extrabold">
@@ -222,7 +228,41 @@
     </div>
 
     <!-- ======================================================================= -->
-    <!-- SECTION 2: 📚 BIBLIOTECA CENTRAL DE ÁUDIOS & MATRIZ DE DISTRIBUIÇÃO       -->
+    <!-- SECTION 2: ✍️ GESTÃO DO BLOG & MAGIC STORIES (FIRESTORE CMS)           -->
+    <!-- ======================================================================= -->
+    <div class="bg-white border border-stone-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-900 text-xs font-extrabold uppercase tracking-wider border border-amber-400/50">
+              BLOG & MAGIC STORIES CMS
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-[#0A192F]">Artigos & Histórias Publicadas</h2>
+          </div>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">
+            Crie, edite e publique artigos no Blog com vídeo do YouTube e apostila PDF vinculados.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="openNewPostModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Novo Post / Magic Story</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Blog Posts Grid / Table -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="adminBlogPostsGrid">
+        <!-- Injetado dinamicamente via JS -->
+        <div class="col-span-full py-8 text-center text-slate-400 text-xs">Carregando artigos do Blog...</div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- SECTION 3: 📚 BIBLIOTECA CENTRAL DE ÁUDIOS & MATRIZ DE DISTRIBUIÇÃO       -->
     <!-- ======================================================================= -->
     <div class="bg-white border border-stone-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
       
@@ -275,22 +315,18 @@
       </div>
 
       <form id="newStudentForm" onsubmit="handleCreateStudent(event)" class="space-y-3.5">
-        
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">Nome Completo *</label>
           <input type="text" id="inputStudentName" required placeholder="Ex: Roberto Silva" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
         </div>
-
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">Email *</label>
           <input type="email" id="inputStudentEmail" required placeholder="roberto@email.com" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
         </div>
-
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">WhatsApp (com DDD) *</label>
           <input type="tel" id="inputStudentPhone" required placeholder="Ex: 11999998888" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
         </div>
-
         <div>
           <label class="text-xs font-bold text-slate-700 block mb-1">Plano / Acesso Inicial *</label>
           <select id="inputStudentTier" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-semibold">
@@ -301,17 +337,97 @@
             <option value="free">🌱 Acesso Gratuito (Degustação)</option>
           </select>
         </div>
-
         <div class="pt-2">
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="sendWelcomeMagicLink" checked class="rounded text-amber-500 focus:ring-amber-400">
             <span class="text-xs text-slate-600 font-medium">Enviar Link Mágico de acesso por email imediatamente</span>
           </label>
         </div>
-
         <div class="pt-3 flex items-center justify-end gap-2">
           <button type="button" onclick="closeNewStudentModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">Cancelar</button>
           <button type="submit" id="saveStudentBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Salvar e Matricular</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CRIAR / EDITAR POST NO BLOG CMS (FIRESTORE)                        -->
+  <!-- ========================================================================= -->
+  <div id="newPostModal" class="modal-backdrop fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white border border-stone-200 rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative space-y-4 my-8">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
+            <i data-lucide="file-plus" class="w-4 h-4"></i>
+          </div>
+          <h3 id="postModalHeaderTitle" class="font-bold text-base text-[#0A192F]">Novo Post de Blog / Magic Story</h3>
+        </div>
+        <button onclick="closeNewPostModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="newPostForm" onsubmit="handleSaveBlogPost(event)" class="space-y-3.5">
+        
+        <input type="hidden" id="postIdInput" value="">
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Título do Artigo *</label>
+          <input type="text" id="postTitleInput" required oninput="autoGenerateSlug(this.value)" placeholder="Ex: Magic Story 03: Como Destravar Perguntas Spontâneas" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Slug / URL Amigável *</label>
+            <input type="text" id="postSlugInput" required placeholder="magic-story-03-destravar-perguntas" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Categoria *</label>
+            <select id="postCategoryInput" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-semibold">
+              <option value="Magic Stories">🪄 Magic Stories</option>
+              <option value="Treino Auditivo">🎧 Treino Auditivo</option>
+              <option value="Reflexo de Fala">⚡ Reflexo de Fala</option>
+              <option value="Pronúncia">🎙️ Pronúncia</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Link ou ID do Vídeo no YouTube *</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="postYoutubeInput" onchange="previewYoutubeThumbnail(this.value)" placeholder="https://youtu.be/umjf4UyqgR4 ou ID umjf4UyqgR4" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+            <div id="ytThumbPreview" class="w-14 h-9 bg-slate-900 rounded-lg overflow-hidden shrink-0 border border-slate-700 flex items-center justify-center text-[10px] text-slate-500">
+              Vídeo
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Subtítulo / Resumo Atraente *</label>
+          <textarea id="postSubtitleInput" rows="2" required placeholder="Explique em 2 linhas o benefício prático e a história deste artigo..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Apostila em PDF (Opcional)</label>
+          <input type="text" id="postPdfUrlInput" placeholder="Material-PDF/magic-story-03.pdf" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Sacada de Ouro do Leo</label>
+          <input type="text" id="postGoldenTipInput" placeholder="Ex: Não pare entre as palavras. O som final se conecta com a vogal seguinte." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Conteúdo do Artigo (Texto / HTML)</label>
+          <textarea id="postBodyInput" rows="5" placeholder="Insira o texto completo do artigo, blocos didáticos e transcrição da história..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl p-3 text-xs text-slate-900 outline-none font-sans"></textarea>
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2 border-t border-stone-200">
+          <button type="button" onclick="closeNewPostModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">Cancelar</button>
+          <button type="submit" id="savePostBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Publicar no Blog</button>
         </div>
 
       </form>
@@ -335,6 +451,43 @@
     let rawStudentsList = [];
     let currentPlanFilter = 'all';
     let currentSearchTerm = '';
+    let rawBlogPostsList = [];
+
+    const DEFAULT_SEED_BLOG_POSTS = [
+      {
+        id: 'post-tom-02',
+        title: 'Magic Story 02: O Melhor Jeito de Treinar Inglês e o Segredo do Present Perfect Sem Regras Chatas',
+        subtitle: 'Como a história do Tom — o marido workaholic da Grazi — ensina a falar estruturas como "They\'ve been married for 18 years" no reflexo.',
+        category: 'Magic Stories',
+        date: '22 de Agosto, 2026',
+        youtubeId: 'umjf4UyqgR4',
+        slug: 'magic-story-02-historia-do-tom-present-perfect',
+        pdfUrl: 'Material-PDF/magic-story-02-historia-do-tom-present-perfect.pdf',
+        status: 'published'
+      },
+      {
+        id: 'post-grazi-01',
+        title: 'Magic Story 01: A História da Grazi e o Passo a Passo Para Destravar o Inglês no Reflexo',
+        subtitle: 'Como uma história real de 1 minuto em Brasília condiciona o cérebro a falar sem tradução mental.',
+        category: 'Magic Stories',
+        date: '22 de Agosto, 2026',
+        youtubeId: 'pQryEQO-FhA',
+        slug: 'magic-story-01-historia-da-grazi-treino-reflexo',
+        pdfUrl: 'Material-PDF/magic-story-01-historia-da-grazi-treino-reflexo.pdf',
+        status: 'published'
+      },
+      {
+        id: 'demo-post-1',
+        title: 'Como Treinar seu Ouvido para Entender Inglês Falado em Alta Velocidade',
+        subtitle: 'Pare de traduzir mentalmente. O segredo de 35 anos de sala de aula para condicionar o seu cérebro.',
+        category: 'Treino Auditivo',
+        date: '21 de Agosto, 2026',
+        youtubeId: '8DbXCHwZTL0',
+        slug: 'como-treinar-o-ouvido-para-entender-ingles-rapido',
+        pdfUrl: 'Material-PDF/como-treinar-o-ouvido-para-entender-ingles-rapido.pdf',
+        status: 'published'
+      }
+    ];
 
     const DEFAULT_SEED_STUDENTS = [
       {
@@ -382,11 +535,240 @@
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.lucide) lucide.createIcons();
       await fetchStudentsFromFirestore();
+      await fetchBlogPostsFromFirestore();
       renderCentralLibrary();
     });
 
     // =========================================================================
-    // 1. FIRESTORE STUDENT CRM METHODS
+    // 1. FIRESTORE BLOG CMS METHODS
+    // =========================================================================
+    async function fetchBlogPostsFromFirestore() {
+      try {
+        await window.aefPortalAuth.ready();
+        const db = window.aefPortalAuth.db;
+
+        if (db) {
+          const snap = await db.collection('blog_posts').get();
+          let list = [];
+          snap.forEach(doc => {
+            list.push({ id: doc.id, ...doc.data() });
+          });
+
+          if (list.length === 0) {
+            for (const p of DEFAULT_SEED_BLOG_POSTS) {
+              await db.collection('blog_posts').doc(p.slug).set(p);
+            }
+            list = [...DEFAULT_SEED_BLOG_POSTS];
+          }
+          rawBlogPostsList = list;
+        } else {
+          rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
+        }
+      } catch (err) {
+        console.warn("Could not fetch Firestore blog posts, using cache:", err);
+        rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
+      }
+
+      renderAdminBlogPosts();
+    }
+
+    function renderAdminBlogPosts() {
+      const grid = document.getElementById('adminBlogPostsGrid');
+      const countEl = document.getElementById('statTotalBlogPosts');
+      if (!grid) return;
+
+      if (countEl) countEl.innerText = rawBlogPostsList.length;
+
+      if (rawBlogPostsList.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs border border-dashed rounded-2xl">Nenhum artigo publicado no blog.</div>`;
+        return;
+      }
+
+      grid.innerHTML = rawBlogPostsList.map(p => {
+        const ytId = p.youtubeId || 'umjf4UyqgR4';
+        const thumb = p.imageUrl || `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+        const slug = p.slug || 'magic-story-01';
+
+        return `
+          <div class="bg-stone-50 border border-stone-200 hover:border-amber-400/80 rounded-2xl p-4 transition shadow-2xs flex flex-col justify-between group">
+            <div>
+              <div class="aspect-video w-full rounded-xl overflow-hidden mb-3 relative bg-slate-900 border border-stone-200">
+                <img src="${thumb}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-slate-950/80 text-amber-300 font-extrabold text-[9px] uppercase tracking-wider backdrop-blur-xs">
+                  ${p.category || 'Magic Stories'}
+                </span>
+                ${p.youtubeId ? `
+                  <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-red-600 text-white font-bold text-[9px] flex items-center gap-1">
+                    <i data-lucide="video" class="w-2.5 h-2.5"></i> Vídeo
+                  </span>
+                ` : ''}
+              </div>
+              <h4 class="font-bold text-xs text-slate-900 line-clamp-2 leading-snug group-hover:text-amber-700 transition">${p.title}</h4>
+              <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">${p.subtitle || ''}</p>
+            </div>
+
+            <div class="pt-3 border-t border-stone-200 mt-3 flex items-center justify-between gap-2">
+              <a href="blog/${slug}.html" target="_blank" class="px-2.5 py-1 rounded-lg bg-[#0A192F] text-amber-300 hover:bg-slate-900 text-[11px] font-bold transition flex items-center gap-1">
+                <span>Ver Post</span>
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+              </a>
+
+              <div class="flex items-center gap-1">
+                <button onclick="editBlogPost('${p.slug}')" class="p-1 rounded-lg hover:bg-stone-200 text-slate-600 transition" title="Editar Post">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="deleteBlogPost('${p.slug}')" class="p-1 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition" title="Excluir Post">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openNewPostModal() {
+      document.getElementById('postIdInput').value = '';
+      document.getElementById('postTitleInput').value = '';
+      document.getElementById('postSlugInput').value = '';
+      document.getElementById('postYoutubeInput').value = '';
+      document.getElementById('postSubtitleInput').value = '';
+      document.getElementById('postPdfUrlInput').value = '';
+      document.getElementById('postGoldenTipInput').value = '';
+      document.getElementById('postBodyInput').value = '';
+      document.getElementById('postModalHeaderTitle').innerText = "Novo Post de Blog / Magic Story";
+      document.getElementById('newPostModal').classList.add('active');
+    }
+
+    function closeNewPostModal() {
+      document.getElementById('newPostModal').classList.remove('active');
+    }
+
+    function autoGenerateSlug(title) {
+      if (!title) return;
+      const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      document.getElementById('postSlugInput').value = slug;
+      if (!document.getElementById('postPdfUrlInput').value) {
+        document.getElementById('postPdfUrlInput').value = `Material-PDF/${slug}.pdf`;
+      }
+    }
+
+    function extractYoutubeId(urlOrId) {
+      if (!urlOrId) return '';
+      urlOrId = urlOrId.trim();
+      if (urlOrId.length === 11 && !urlOrId.includes('/') && !urlOrId.includes('.')) return urlOrId;
+      const match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      return match ? match[1] : urlOrId;
+    }
+
+    function previewYoutubeThumbnail(val) {
+      const ytId = extractYoutubeId(val);
+      const container = document.getElementById('ytThumbPreview');
+      if (ytId && ytId.length === 11) {
+        container.innerHTML = `<img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" class="w-full h-full object-cover">`;
+      } else {
+        container.innerHTML = "Vídeo";
+      }
+    }
+
+    async function handleSaveBlogPost(e) {
+      e.preventDefault();
+      const title = document.getElementById('postTitleInput').value.trim();
+      const slug = document.getElementById('postSlugInput').value.trim();
+      const category = document.getElementById('postCategoryInput').value;
+      const rawYt = document.getElementById('postYoutubeInput').value.trim();
+      const ytId = extractYoutubeId(rawYt);
+      const subtitle = document.getElementById('postSubtitleInput').value.trim();
+      const pdfUrl = document.getElementById('postPdfUrlInput').value.trim();
+      const goldenTip = document.getElementById('postGoldenTipInput').value.trim();
+      const bodyHtml = document.getElementById('postBodyInput').value.trim();
+
+      const saveBtn = document.getElementById('savePostBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = "Publicando...";
+
+      try {
+        await window.aefPortalAuth.ready();
+        const db = window.aefPortalAuth.db;
+
+        const postDoc = {
+          id: `post-${slug}`,
+          title: title,
+          slug: slug,
+          category: category,
+          youtubeId: ytId,
+          imageUrl: ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : 'assets/images/og-magic-stories.jpg',
+          subtitle: subtitle,
+          pdfUrl: pdfUrl,
+          goldenTip: goldenTip,
+          bodyHtml: bodyHtml,
+          date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }),
+          readTime: '6 min de leitura',
+          status: 'published',
+          updatedAt: new Date().toISOString()
+        };
+
+        if (db) {
+          await db.collection('blog_posts').doc(slug).set(postDoc);
+        }
+
+        const existingIdx = rawBlogPostsList.findIndex(p => p.slug === slug);
+        if (existingIdx >= 0) {
+          rawBlogPostsList[existingIdx] = postDoc;
+        } else {
+          rawBlogPostsList.unshift(postDoc);
+        }
+
+        closeNewPostModal();
+        renderAdminBlogPosts();
+        showToast(`Artigo "${title}" publicado com sucesso no Firestore e no Blog!`, "success");
+      } catch (err) {
+        console.error("Error saving blog post:", err);
+        showToast("Erro ao publicar post no Firestore.", "error");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Publicar no Blog";
+      }
+    }
+
+    function editBlogPost(slug) {
+      const p = rawBlogPostsList.find(x => x.slug === slug);
+      if (!p) return;
+
+      document.getElementById('postTitleInput').value = p.title || '';
+      document.getElementById('postSlugInput').value = p.slug || '';
+      document.getElementById('postCategoryInput').value = p.category || 'Magic Stories';
+      document.getElementById('postYoutubeInput').value = p.youtubeId || '';
+      previewYoutubeThumbnail(p.youtubeId || '');
+      document.getElementById('postSubtitleInput').value = p.subtitle || '';
+      document.getElementById('postPdfUrlInput').value = p.pdfUrl || '';
+      document.getElementById('postGoldenTipInput').value = p.goldenTip || '';
+      document.getElementById('postBodyInput').value = p.bodyHtml || '';
+      document.getElementById('postModalHeaderTitle').innerText = "Editar Artigo do Blog";
+
+      document.getElementById('newPostModal').classList.add('active');
+    }
+
+    async function deleteBlogPost(slug) {
+      if (!confirm("Tem certeza que deseja excluir este artigo do Blog e do Firestore?")) return;
+      try {
+        await window.aefPortalAuth.ready();
+        const db = window.aefPortalAuth.db;
+        if (db) {
+          await db.collection('blog_posts').doc(slug).delete();
+        }
+        rawBlogPostsList = rawBlogPostsList.filter(p => p.slug !== slug);
+        renderAdminBlogPosts();
+        showToast("Artigo excluído do Blog e Firestore.", "info");
+      } catch (err) {
+        showToast("Erro ao excluir artigo.", "error");
+      }
+    }
+
+    // =========================================================================
+    // 2. FIRESTORE STUDENT CRM METHODS
     // =========================================================================
     async function fetchStudentsFromFirestore() {
       try {
@@ -400,14 +782,12 @@
             list.push({ uid: doc.id, ...doc.data() });
           });
 
-          // If firestore is empty, seed defaults
           if (list.length === 0) {
             for (const s of DEFAULT_SEED_STUDENTS) {
               await db.collection('users').doc(s.uid).set(s);
             }
             list = [...DEFAULT_SEED_STUDENTS];
           }
-
           rawStudentsList = list;
         } else {
           rawStudentsList = [...DEFAULT_SEED_STUDENTS];
@@ -426,10 +806,7 @@
       if (!tbody) return;
 
       let filtered = rawStudentsList.filter(s => {
-        // Plan filter
         if (currentPlanFilter !== 'all' && s.tier !== currentPlanFilter) return false;
-
-        // Search query
         if (currentSearchTerm) {
           const matchName = (s.name || '').toLowerCase().includes(currentSearchTerm);
           const matchEmail = (s.email || '').toLowerCase().includes(currentSearchTerm);
@@ -444,25 +821,15 @@
         return;
       }
 
-      const tierBadges = {
-        'vip_mentorship': '<span class="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 border border-amber-500/20 font-bold text-[10px]">👑 Mentoria VIP</span>',
-        'lifetime': '<span class="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-700 border border-purple-500/20 font-bold text-[10px]">💎 Vitalício</span>',
-        'club_annual': '<span class="px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-700 border border-sky-500/20 font-bold text-[10px]">⭐ Club Anual</span>',
-        'club_monthly': '<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/20 font-bold text-[10px]">☕ Club Mensal</span>',
-        'free': '<span class="px-2.5 py-1 rounded-full bg-stone-100 text-slate-600 border border-stone-200 font-bold text-[10px]">🌱 Gratuito</span>'
-      };
-
       tbody.innerHTML = filtered.map(s => {
         const cleanPhone = (s.phone || '').replace(/\D/g, '');
         const studentFirstName = (s.name || 'Aluno').split(' ')[0];
         const waMessage = encodeURIComponent(`Olá ${studentFirstName}! Aqui é o Professor Leo Leite do AgoraEuFalo. Estou entrando em contato para acompanhar sua evolução nos treinos de fala e reflexo oral.`);
         const waLink = cleanPhone ? `https://wa.me/55${cleanPhone}?text=${waMessage}` : '#';
-
         const firstLetter = (s.name || 'A').charAt(0).toUpperCase();
 
         return `
           <tr class="hover:bg-stone-50 transition">
-            <!-- Name & Avatar -->
             <td class="py-3.5 px-4 flex items-center gap-3">
               <div class="w-8 h-8 rounded-xl bg-[#0A192F] text-amber-400 font-extrabold text-xs flex items-center justify-center shrink-0">
                 ${firstLetter}
@@ -473,14 +840,10 @@
               </div>
             </td>
 
-            <!-- Phone / WhatsApp -->
             <td class="py-3.5 px-4">
-              <div class="flex items-center gap-1.5">
-                <span class="font-mono text-[11px] text-slate-700">${s.phone || 'Não inf.'}</span>
-              </div>
+              <span class="font-mono text-[11px] text-slate-700">${s.phone || 'Não inf.'}</span>
             </td>
 
-            <!-- Tier Dropdown Selector (Instant Firestore update) -->
             <td class="py-3.5 px-4">
               <select onchange="updateStudentTier('${s.uid}', this.value)" class="bg-stone-50 border border-stone-200 hover:border-amber-400 rounded-lg px-2 py-1 text-[11px] font-bold text-slate-800 outline-none cursor-pointer">
                 <option value="vip_mentorship" ${s.tier === 'vip_mentorship' ? 'selected' : ''}>👑 Mentoria VIP</option>
@@ -491,34 +854,27 @@
               </select>
             </td>
 
-            <!-- Streak -->
             <td class="py-3.5 px-4 text-center">
               <span class="font-mono font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                 🔥 ${s.stats?.streakDays || 1}d
               </span>
             </td>
 
-            <!-- Actions -->
             <td class="py-3.5 px-4 text-right">
               <div class="flex items-center justify-end gap-1.5">
-                
-                <!-- WhatsApp CRM Button -->
                 ${cleanPhone ? `
                   <a href="${waLink}" target="_blank" class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 transition" title="Conversar no WhatsApp">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
                   </a>
                 ` : ''}
 
-                <!-- Send Magic Link Email -->
                 <button onclick="sendAccessLinkToStudent('${s.email}')" class="p-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-300 transition" title="Enviar Link de Acesso por Email">
                   <i data-lucide="mail" class="w-4 h-4"></i>
                 </button>
 
-                <!-- Open Player as Student -->
                 <a href="treino/player.html?aluno=${s.uid}" target="_blank" class="p-1.5 rounded-lg bg-[#0A192F] hover:bg-slate-900 text-amber-300 transition" title="Abrir Player do Aluno">
                   <i data-lucide="headphones" class="w-4 h-4"></i>
                 </a>
-
               </div>
             </td>
           </tr>
@@ -641,14 +997,13 @@
     }
 
     // =========================================================================
-    // 2. CENTRAL AUDIO LIBRARY & DISTRIBUTION MATRIX
+    // 3. CENTRAL AUDIO LIBRARY & DISTRIBUTION MATRIX
     // =========================================================================
     function renderCentralLibrary() {
       const container = document.getElementById('centralLibraryContainer');
       if (!container) return;
 
       const tracks = window.aefAudioHub ? window.aefAudioHub.getLibraryTracks() : [];
-      document.getElementById('statTotalTracks').innerText = tracks.length;
 
       if (tracks.length === 0) {
         container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs border border-dashed rounded-2xl">Nenhum áudio produzido na biblioteca central.</div>`;

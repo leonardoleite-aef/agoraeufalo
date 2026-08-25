@@ -104,6 +104,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- AgoraEuFalo Portal & Firestore SDK -->
+  <script src="../assets/js/aef-portal-auth.js"></script>
+
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="../assets/css/styles.css">
 
@@ -477,21 +480,40 @@
       }
     ];
 
+    let livePublishedPosts = [...defaultPublishedSeed];
     let currentPublishedCategory = 'todos';
     let currentSearchQuery = '';
 
-    function getPublishedPosts() {
-      const stored = localStorage.getItem('aef_blog_posts');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) {
-            const pub = parsed.filter(p => p.status === 'Publicado');
-            if (pub.length > 0) return pub;
+    async function syncFirestoreBlogPosts() {
+      try {
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          const db = window.aefPortalAuth.db;
+          if (db) {
+            const snap = await db.collection('blog_posts').get();
+            let firestoreList = [];
+            snap.forEach(doc => {
+              const data = doc.data();
+              if (data.status === 'published' || data.status === 'Publicado') {
+                firestoreList.push({ id: doc.id, ...data });
+              }
+            });
+            if (firestoreList.length > 0) {
+              // Merge with seeds without duplicates
+              const slugs = new Set(firestoreList.map(p => p.slug));
+              const nonDuplicatedSeeds = defaultPublishedSeed.filter(s => !slugs.has(s.slug));
+              livePublishedPosts = [...firestoreList, ...nonDuplicatedSeeds];
+              renderBlogFeed();
+            }
           }
-        } catch(e){}
+        }
+      } catch (err) {
+        console.warn("Could not sync Firestore blog posts:", err);
       }
-      return defaultPublishedSeed;
+    }
+
+    function getPublishedPosts() {
+      return livePublishedPosts;
     }
 
     function resolvePostImage(post) {
@@ -668,8 +690,9 @@
       if (window.lucide) window.lucide.createIcons();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       renderBlogFeed();
+      await syncFirestoreBlogPosts();
     });
 
     // Filtro por Categoria
