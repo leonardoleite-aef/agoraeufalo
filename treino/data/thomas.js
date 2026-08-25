@@ -168,7 +168,7 @@ window.AEF_STUDENT_THOMAS = {
       title: "Dialogue 3: Office Logistics",
       duration: "00:28",
       coverImage: "../assets/images/cover-thomas-office-logistics.jpg",
-      audioUrl: "/assets/audio/alunos/thomas/Dialogue_3_Office_Logistics.m4a",
+      audioUrl: "/assets/audio/alunos/thomas/Dialogue_3_Office_Logistics.mp3",
       summary: "Workplace scheduling & coordination: asking about manager availability, meeting schedules, and confirming appointments.",
       goldenTip: "Observe how verbs connect with contractions ('she isn't', 'it's'). Keep a relaxed, polite rhythm.",
       sentences: [

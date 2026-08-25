@@ -1026,7 +1026,7 @@ window.AEF_STUDENT_ESTEVAO = {
       title: "Dialogue 2: Oxford Presentation Casual",
       duration: "00:20",
       coverImage: "../assets/images/cover-estevao-session01.jpg",
-      audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.m4a",
+      audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.mp3",
       summary: "Spontaneous conversational practice based on the Oxford presentation: opening remarks, Motriz NGO impact, and engaging questions.",
       goldenTip: "Keep your cadence relaxed and clear. Stress content words ('pleasure', 'Motriz', 'Oxford') and blend function words smoothly.",
       sentences: [
