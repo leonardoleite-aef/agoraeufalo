@@ -181,8 +181,12 @@
             <span class="font-bold text-fuchsia-300">🎙️ VIP Coaching (Leo & Mentorado)</span>
             <span class="text-[10px] text-slate-400">Ajuste de pronúncia e chunks práticos</span>
           </button>
+          <button onclick="loadTemplate('executive_keynote')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-amber-400">👔 Executive Keynote (Apresentação Solo)</span>
+            <span class="text-[10px] text-slate-400">Apresentação contínua de alto impacto (1 voz)</span>
+          </button>
           <button onclick="loadTemplate('story_narration')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-amber-400">📖 Single Speaker (Narração Didática)</span>
+            <span class="font-bold text-amber-300">📖 Single Speaker (Narração Didática)</span>
             <span class="text-[10px] text-slate-400">Texto contínuo com pausas sonoras</span>
           </button>
         </div>
@@ -1650,6 +1654,20 @@ Mentee: I've been working on it.
 Leo: Much better! Notice how "working on it" flows as a single chunk. Repeat three times with rhythm.
 Mentee: Working on it. Working on it. Working on it.
 Leo: Perfect. Now into automatic memory!`;
+        }
+      } else if (type === 'executive_keynote') {
+        setSpeakerMode('single');
+        document.getElementById('singleVoiceSelect').value = "Puck";
+        updateSingleVoiceInfo();
+        if (titleInput) titleInput.value = "executive_keynote_presentation";
+        if (scriptArea) {
+          scriptArea.value = 
+`Good afternoon, everyone. My name is Estevão. I am from Brazil and this is my first time in the UK.
+It is a real pleasure to be here with you at Oxford today.
+Let me tell you a little about our work at Motriz, where we support public education systems across forty municipalities in seven states.
+Now, a study conducted right here at Oxford revealed something crucial: larger systems tend to improve much more slowly than smaller ones.
+So the fundamental question we are addressing is: how can public policy turn into real, measurable learning in the classroom?
+Thank you very much.`;
         }
       } else if (type === 'story_narration') {
         setSpeakerMode('single');
