@@ -6,7 +6,7 @@
   <title>Portal do Aluno | AgoraEuFalo</title>
   <meta name="description" content="Acesse sua área exclusiva de treinos de reflexo oral, Magic Stories e materiais com o Professor Leonardo Leite.">
   
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -21,16 +21,19 @@
               card: '#0F172A',
               border: '#1E293B'
             }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
           }
         }
       }
     }
   </script>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Plus Jakarta Sans (Identical to Home) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -39,18 +42,17 @@
   <script src="assets/js/aef-portal-auth.js"></script>
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .font-serif { font-family: 'Lora', serif; }
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
   </style>
 </head>
-<body class="bg-[#070B14] text-slate-100 min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+<body class="bg-[#070B14] text-slate-100 min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 font-sans antialiased">
 
   <!-- Top Simple Header -->
   <header class="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
     <a href="index.html" class="flex items-center gap-2 group transition" title="Voltar ao início">
       <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 sm:h-9 object-contain group-hover:scale-[1.02] transition">
     </a>
-    <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-amber-400 transition">
+    <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-amber-400 transition">
       <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
       <span>Voltar ao Site</span>
     </a>
@@ -66,16 +68,16 @@
         <!-- Subtle Glow Effect -->
         <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <!-- Header Titles -->
+        <!-- Header Titles in English -->
         <div class="text-center mb-6">
           <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider mb-3">
-            <span>✨ Área de Membros AgoraEuFalo</span>
+            <span>✨ Spoken English Member Hub</span>
           </div>
-          <h1 id="authCardTitle" class="text-2xl sm:text-3xl font-bold font-serif text-white tracking-tight">
-            Bem-vindo de volta!
+          <h1 id="authCardTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Welcome Back!
           </h1>
           <p id="authCardSubtitle" class="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">
-            Acesse seus treinos diários e conteúdos exclusivos.
+            Access your personalized spoken workouts and study materials.
           </p>
         </div>
 
@@ -114,7 +116,7 @@
             <label class="text-xs font-semibold text-slate-300">Seu Nome Completo</label>
             <div class="relative">
               <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-              <input type="text" id="userNameInput" placeholder="Ex: Estevão Ribeiro" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition">
+              <input type="text" id="userNameInput" placeholder="Ex: Estevão Ribeiro" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
             </div>
           </div>
 
@@ -123,7 +125,7 @@
             <label class="text-xs font-semibold text-slate-300">Seu Email</label>
             <div class="relative">
               <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-              <input type="email" id="userEmailInput" required placeholder="seuemail@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition">
+              <input type="email" id="userEmailInput" required placeholder="seuemail@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
             </div>
           </div>
 
@@ -137,7 +139,7 @@
             </div>
             <div class="relative">
               <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-              <input type="password" id="userPasswordInput" required placeholder="••••••••" minlength="6" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-10 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition">
+              <input type="password" id="userPasswordInput" required placeholder="••••••••" minlength="6" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-10 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
               <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-3 text-slate-500 hover:text-slate-300 transition">
                 <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
               </button>
@@ -151,8 +153,15 @@
           </button>
         </form>
 
+        <!-- Direct Link to Preview Portal -->
+        <div class="text-center mt-4">
+          <a href="portal/index.html" class="text-[11px] text-slate-500 hover:text-amber-400 underline transition">
+            Visualizar demonstração da Área de Membros
+          </a>
+        </div>
+
         <!-- Terms & Privacy Note -->
-        <p class="text-[11px] text-center text-slate-500 mt-6 leading-relaxed">
+        <p class="text-[11px] text-center text-slate-500 mt-4 leading-relaxed">
           Ao continuar, você concorda com os termos pedagógicos e privacidade do AgoraEuFalo.
         </p>
 
@@ -173,7 +182,7 @@
       <p class="text-slate-400 text-xs leading-relaxed mb-4">
         Digite seu email cadastrado para receber o link seguro de redefinição de senha.
       </p>
-      <input type="email" id="forgotEmailInput" placeholder="seuemail@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none mb-4">
+      <input type="email" id="forgotEmailInput" placeholder="seuemail@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none mb-4 font-sans">
       <button onclick="handleSendPasswordReset()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
         Enviar Link de Recuperação
       </button>
@@ -193,12 +202,11 @@
   </footer>
 
   <script>
-    let currentMode = 'signin'; // 'signin' | 'signup'
+    let currentMode = 'signin';
 
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.lucide) lucide.createIcons();
 
-      // Check if user is already logged in -> redirect to portal
       window.addEventListener('aef:auth-changed', (e) => {
         if (e.detail && e.detail.user) {
           showToast("Sessão ativa detectada. Redirecionando...", "success");
@@ -223,8 +231,8 @@
       if (mode === 'signup') {
         tabSignUp.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm";
         tabSignIn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white";
-        title.innerText = "Crie sua Conta Gratuita";
-        subtitle.innerText = "Acesse materiais de degustação e comece sua jornada hoje.";
+        title.innerText = "Start Your Spoken Habit Today";
+        subtitle.innerText = "Create your free account to access starter workouts and practice.";
         nameGroup.classList.remove('hidden');
         nameInput.required = true;
         forgotLink.classList.add('hidden');
@@ -232,8 +240,8 @@
       } else {
         tabSignIn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm";
         tabSignUp.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white";
-        title.innerText = "Bem-vindo de volta!";
-        subtitle.innerText = "Acesse seus treinos diários e conteúdos exclusivos.";
+        title.innerText = "Welcome Back!";
+        subtitle.innerText = "Access your personalized spoken workouts and study materials.";
         nameGroup.classList.add('hidden');
         nameInput.required = false;
         forgotLink.classList.remove('hidden');
