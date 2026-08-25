@@ -145,6 +145,18 @@
     </image:image>
   </url>
 
+  <!-- 15. Artigo: Evite Esses 3 Erros Que Travam Seu Inglês (Vídeo Oficial do Leo) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/blog/evite-esses-3-erros-que-travam-seu-ingles.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://img.youtube.com/vi/sp1jbfjB3Nw/maxresdefault.jpg</image:loc>
+      <image:title>Evite Esses 3 Erros Que Travam Seu Inglês - Professor Leonardo Leite</image:title>
+    </image:image>
+  </url>
+
   <!-- 11. Página Oficial de Contato Direto -->
   <url>
     <loc>https://agoraeufalo.com.br/contato.html</loc>
