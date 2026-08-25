@@ -676,24 +676,32 @@
         const listEl = document.getElementById("drawer-tracks-list");
         const quickBar = document.getElementById("quick-track-selector-bar");
 
-        if (quickBar && tracks) {
-          if (tracks.length <= 1) {
+        const validTracks = (tracks || []).filter(t => t && typeof t === 'object' && t.title && t.title.trim().length > 0);
+
+        if (quickBar) {
+          if (validTracks.length <= 1) {
             quickBar.classList.add("hidden");
           } else {
             quickBar.classList.remove("hidden");
-            quickBar.innerHTML = tracks.map((t, idx) => `
-              <button onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx});" class="px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 border shadow-xs ${idx === activeIndex ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold scale-[1.02]' : 'bg-white dark:bg-[#112240] text-slate-700 dark:text-slate-200 border-amber-200/80 dark:border-slate-800 hover:border-amber-400'}">
-                <span class="w-2 h-2 rounded-full ${idx === activeIndex ? 'bg-slate-950 animate-pulse' : 'bg-amber-400'}"></span>
-                <span>Track ${idx + 1}: ${t.title}</span>
-                <span class="text-[10px] opacity-75 font-mono">(${t.duration || ''})</span>
-              </button>
-            `).join("");
+            quickBar.innerHTML = validTracks.map((t, idx) => {
+              let displayTitle = (t.title || `Track ${idx + 1}`).trim();
+              displayTitle = displayTitle.replace(/^(Dialogue \d+:|Session \d+:|Track \d+:)\s*/i, '').trim();
+
+              const isActive = idx === activeIndex;
+              return `
+                <button onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx});" class="flex-shrink-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border shadow-xs active:scale-95 cursor-pointer ${isActive ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm ring-2 ring-amber-400/40' : 'bg-white dark:bg-[#112240] text-slate-700 dark:text-slate-300 border-amber-200/80 dark:border-slate-800 hover:border-amber-400/70 hover:bg-amber-50/50 dark:hover:bg-slate-800/60'}">
+                  <span class="w-2 h-2 rounded-full ${isActive ? 'bg-slate-950 animate-pulse' : 'bg-amber-400'}"></span>
+                  <span class="truncate max-w-[140px] sm:max-w-[220px]">${displayTitle}</span>
+                  ${t.duration ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${isActive ? 'bg-black/20 text-slate-950' : 'bg-amber-500/10 text-amber-700 dark:text-amber-300'}">${t.duration}</span>` : ''}
+                </button>
+              `;
+            }).join("");
           }
         }
 
-        if (!tracks || !listEl) return;
+        if (!listEl) return;
 
-        listEl.innerHTML = tracks.map((t, idx) => `
+        listEl.innerHTML = validTracks.map((t, idx) => `
           <div onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx}); window.uiController.togglePlaylistDrawer();" class="p-3.5 rounded-2xl border ${idx === activeIndex ? 'bg-amber-500/20 border-amber-400' : 'bg-white/5 border-white/10 hover:border-amber-400/40'} cursor-pointer transition flex items-center gap-3">
             <img src="${t.coverImage || '../assets/images/cover-estevao-session01.jpg'}" class="w-12 h-12 rounded-xl object-cover border border-amber-400/30 shrink-0">
             <div class="flex-1 truncate">
