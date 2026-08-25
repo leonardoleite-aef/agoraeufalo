@@ -16,8 +16,27 @@
   <!-- 2. URL Atemporal do Programa AEF -->
   <url>
     <loc>https://agoraeufalo.com.br/projeto-aef.html</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-25</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- 2.1 English Personal Training Player (Showcase & Treinador Interativo) -->
+  <url>
+    <loc>https://agoraeufalo.com.br/personal-trainer.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://agoraeufalo.com.br/assets/images/cover-english-personal-trainer-og.jpg</image:loc>
+      <image:title>English Personal Training Player - AgoraEuFalo</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://agoraeufalo.com.br/treinador.html</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
 

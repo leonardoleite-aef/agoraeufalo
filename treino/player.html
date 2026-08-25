@@ -230,6 +230,33 @@
         <!-- Dynamically rendered via JS -->
       </div>
 
+      <!-- Self-Hosted Video Player (Dual Media) -->
+      <div id="track-video-container" class="hidden rounded-3xl overflow-hidden border-2 border-amber-400/40 bg-black shadow-lg">
+        <video id="track-video-el" controls class="w-full max-h-[380px] object-contain mx-auto bg-black" playsinline></video>
+      </div>
+
+      <!-- Public App Functional Tour (Only for Public Showcase Mode) -->
+      <div id="public-app-tour" class="hidden bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent border-2 border-amber-400/40 dark:border-amber-500/30 rounded-3xl p-4 sm:p-5 shadow-xs">
+        <div class="flex items-center gap-2 mb-2.5">
+          <span class="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">Showcase AEF</span>
+          <h3 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Como treinar sua fala e escuta com este aplicativo:</h3>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-medium text-slate-700 dark:text-slate-300">
+          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
+            <span>🔤</span> <span><strong>Toque na Frase:</strong> Salto instantâneo</span>
+          </div>
+          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
+            <span>🔁</span> <span><strong>Botão Loop:</strong> Repetição contínua</span>
+          </div>
+          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
+            <span>🚗</span> <span><strong>Modo Direção:</strong> Treino no trânsito</span>
+          </div>
+          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
+            <span>⚡</span> <span><strong>Velocidade:</strong> 0.75x a 1.5x</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Session Overview Card with Cover Artwork -->
       <div class="bg-white dark:bg-[#112240] border-2 border-amber-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-sm">
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-4">
@@ -329,6 +356,107 @@
       <!-- Sentences Container -->
       <div id="sentences-container" class="space-y-3 pt-2 text-lg">
         <!-- Injected via JS -->
+      </div>
+
+      <!-- Public Sharing & WhatsApp Direct Section -->
+      <div id="public-action-cards-container" class="space-y-4 pt-4">
+        
+        <!-- Social Sharing & Direct Leo Assistance -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- WhatsApp Share -->
+          <div class="bg-white dark:bg-[#112240] border-2 border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-xl">📲</span>
+                <h4 class="font-bold text-sm text-[#0A192F] dark:text-white">Gostou deste treino?</h4>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                Convide um amigo para praticar com este treinador interativo de inglês.
+              </p>
+            </div>
+            <button onclick="window.sharePublicPlayer()" class="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <span>Compartilhar no WhatsApp</span>
+              <span>💬</span>
+            </button>
+          </div>
+
+          <!-- Direct Leo Support -->
+          <div class="bg-white dark:bg-[#112240] border-2 border-amber-400/40 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-xl">👨‍🏫</span>
+                <h4 class="font-bold text-sm text-[#0A192F] dark:text-white">Dúvidas com o Prof. Leo</h4>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                Travou em alguma pronúncia ou ritmo? Mande sua mensagem direta no WhatsApp.
+              </p>
+            </div>
+            <a href="https://wa.me/5511999999999?text=Olá%20Prof.%20Leo!%20Estou%20praticando%20no%20English%20Personal%20Training%20Player%20e%20gostaria%20de%20tirar%20uma%20dúvida." target="_blank" class="w-full py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95 text-center">
+              <span>Conversar com o Leo</span>
+              <span>⚡</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Official Projeto 2026 Enrollment Card -->
+        <div class="bg-[#0A192F] border-2 border-amber-400/50 rounded-3xl p-6 sm:p-8 text-center text-white shadow-xl">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider mb-3">
+            <span>🏆</span> <span>Mentoria VIP & Projeto AEF 2026</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-bold font-serif mb-2">
+            Fale inglês no reflexo com acompanhamento do Leo Leite
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed mb-5">
+            Tenha seus próprios treinos de fala e discursos profissionais personalizados gravados pelo Professor Leo ao longo de 2026.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href="../projeto-aef.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+              Garantir Vaga no Projeto 2026
+            </a>
+            <a href="../personal-trainer.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition">
+              Conhecer o Aplicativo Completo
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Lead Gate Modal for Public Mode -->
+    <div id="public-lead-gate-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative animate-in fade-in zoom-in duration-300">
+        <div class="text-center mb-5">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto mb-3">
+            🎙️
+          </div>
+          <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Acesso Gratuito Aberto</span>
+          <h3 class="text-xl font-bold font-serif mt-1">English Personal Training Player</h3>
+          <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+            Cadastre-se rapidamente para destravar a reprodução interativa com karaokê e loop de frases:
+          </p>
+        </div>
+
+        <form id="modal-lead-form" onsubmit="window.handleModalLeadSubmit(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome</label>
+            <input type="text" id="modal-lead-name" required placeholder="Ex: Rodrigo Silva" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu E-mail</label>
+            <input type="email" id="modal-lead-email" required placeholder="rodrigo@empresa.com" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu WhatsApp</label>
+            <input type="tel" id="modal-lead-whatsapp" required placeholder="(11) 99999-9999" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+
+          <button type="submit" id="btn-modal-lead-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg mt-2 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
+            <span>Destravar Acesso Imediato</span>
+            <span>⚡</span>
+          </button>
+          
+          <p class="text-[10px] text-center text-slate-400">🔒 Acesso 100% gratuito e seguro.</p>
+        </form>
       </div>
     </div>
 
@@ -507,6 +635,7 @@
   <script src="data/thomas.js?v=3.0"></script>
   <script src="data/andre.js?v=3.0"></script>
   <script src="data/matheus.js?v=3.0"></script>
+  <script src="data/public.js?v=3.0"></script>
   <script src="../assets/js/aef-cloud-sync.js"></script>
   <script src="../assets/js/aef-audio-hub.js"></script>
   <script src="js/offline-manager.js?v=3.0"></script>
@@ -562,10 +691,24 @@
           document.getElementById("track-summary").innerText = track.summary || "";
           document.getElementById("track-golden-tip").innerText = track.goldenTip || "Breathe naturally and link chunks.";
           
-          const cover = track.coverImage || "../assets/images/cover-office-logistics.jpg";
+          const cover = track.coverImage || "../assets/images/cover-default-aef.jpg";
           document.getElementById("track-cover-img").src = cover;
           document.getElementById("driving-cover-img").src = cover;
           document.getElementById("player-bar-thumb").src = cover;
+
+          // Self-Hosted Video Player Display Toggle
+          const videoContainer = document.getElementById("track-video-container");
+          const videoEl = document.getElementById("track-video-el");
+          if (videoContainer && videoEl) {
+            if (track.videoUrl && track.videoUrl.trim().length > 0) {
+              videoEl.src = track.videoUrl;
+              videoContainer.classList.remove("hidden");
+            } else {
+              videoEl.pause();
+              videoEl.removeAttribute("src");
+              videoContainer.classList.add("hidden");
+            }
+          }
 
           renderSentencesList(sentences);
           renderPlaylistDrawer(window.currentLoadedStudent.tracks, trackIndex);
@@ -583,9 +726,70 @@
       let studentId = urlParams.get("aluno") || localStorage.getItem("aef_active_student") || "estevao";
       studentId = studentId.toLowerCase().trim();
 
+      // Lead Gate & Sharing Handlers for Public Showcase Mode
+      window.sharePublicPlayer = () => {
+        const shareUrl = encodeURIComponent("https://agoraeufalo.com.br/personal-trainer.html");
+        const shareText = encodeURIComponent("Dá uma olhada nesse treinador interativo de inglês do Prof. Leo Leite. Tem karaokê em tempo real e loop de frases para destravar a fala:");
+        window.open(`https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}`, "_blank");
+      };
+
+      window.handleModalLeadSubmit = (e) => {
+        e.preventDefault();
+        const name = document.getElementById("modal-lead-name").value.trim();
+        const email = document.getElementById("modal-lead-email").value.trim();
+        const whatsapp = document.getElementById("modal-lead-whatsapp").value.trim();
+        if (!name || !email || !whatsapp) return;
+
+        const leadData = {
+          name: name,
+          email: email,
+          whatsapp: whatsapp,
+          source: "player-gate-modal",
+          createdAt: new Date().toISOString()
+        };
+
+        localStorage.setItem("aef_public_lead", JSON.stringify(leadData));
+        document.getElementById("public-lead-gate-modal").classList.add("hidden");
+
+        // Sync asynchronously with Firestore leads collection
+        try {
+          const payload = JSON.stringify({
+            fields: {
+              name: { stringValue: name },
+              email: { stringValue: email },
+              whatsapp: { stringValue: whatsapp },
+              source: { stringValue: "player-gate-modal" },
+              createdAt: { stringValue: leadData.createdAt }
+            }
+          });
+          fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload
+          }).catch(() => {});
+        } catch (err) {}
+
+        showSyncToast("🎉 Acesso destravado com sucesso! Bom treino!");
+      };
+
       async function bootPlayer() {
         let studentData = getBaseStudentData(studentId);
         
+        // Show/Hide Public Mode Features
+        const publicTour = document.getElementById("public-app-tour");
+        if (publicTour) {
+          if (studentId === "public" || studentId === "publico") {
+            publicTour.classList.remove("hidden");
+            
+            // Check Lead Gate
+            if (!localStorage.getItem("aef_public_lead")) {
+              document.getElementById("public-lead-gate-modal").classList.remove("hidden");
+            }
+          } else {
+            publicTour.classList.add("hidden");
+          }
+        }
+
         if (window.aefAudioHub) {
           try {
             const mergedTracks = await window.aefAudioHub.getMergedTracksForStudent(studentId);

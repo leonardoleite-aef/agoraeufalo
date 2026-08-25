@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão do Player Público & Leads • AgoraEuFalo Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Master Access Auth Gate -->
+  <script src="assets/js/aef-auth-gate.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              slate: '#1E293B',
+              gold: '#F59E0B',
+              goldDark: '#D97706',
+              bgLight: '#FAF8F5'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="treino/data/public.js"></script>
+</head>
+<body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ========================================== -->
+  <!-- 1. HEADER                                  -->
+  <!-- ========================================== -->
+  <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="admin.html" class="flex items-center gap-2">
+          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
+        </a>
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
+          PUBLIC PLAYER STUDIO
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs">
+        <a href="personal-trainer.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold flex items-center gap-1.5 transition">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Ver Landing Page ↗</span>
+        </a>
+        <a href="treino/player.html?aluno=public" target="_blank" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black flex items-center gap-1.5 transition shadow-sm">
+          <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+          <span>Abrir Player Público ↗</span>
+        </a>
+        <a href="admin.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-semibold transition">
+          Voltar ao Admin
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. STATS & OVERVIEW                        -->
+  <!-- ========================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full space-y-6 flex-1">
+    
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-[#112240] border border-amber-400/30 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total de Leads Capturados</p>
+          <h3 id="stat-total-leads" class="text-3xl font-extrabold text-white mt-1">Carregando...</h3>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
+          👥
+        </div>
+      </div>
+
+      <div class="bg-[#112240] border border-amber-400/30 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Episódios Públicos Ativos</p>
+          <h3 id="stat-total-tracks" class="text-3xl font-extrabold text-white mt-1">1</h3>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+          🎧
+        </div>
+      </div>
+
+      <div class="bg-[#112240] border border-amber-400/30 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Status do Lead Gate</p>
+          <h3 class="text-lg font-bold text-emerald-400 mt-1 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Ativo & Protegido
+          </h3>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+          🔒
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. TABS: LEADS vs EPISÓDIOS               -->
+    <!-- ========================================== -->
+    <div class="flex items-center gap-2 border-b border-white/10 pb-3">
+      <button onclick="switchTab('leads')" id="tab-btn-leads" class="px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-slate-950 transition flex items-center gap-1.5">
+        <i data-lucide="users" class="w-4 h-4"></i>
+        <span>Leads do Lead Gate</span>
+      </button>
+      <button onclick="switchTab('episodes')" id="tab-btn-episodes" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+        <i data-lucide="music" class="w-4 h-4"></i>
+        <span>Episódios Públicos</span>
+      </button>
+      <button onclick="switchTab('new')" id="tab-btn-new" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+        <span>Novo Episódio Público</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: LEADS TABLE -->
+    <section id="panel-leads" class="bg-[#112240] border border-white/10 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h3 class="text-base font-bold text-white">Leads Capturados no English Personal Training Player</h3>
+          <p class="text-xs text-slate-400">Usuários que liberaram o acesso informando Nome, E-mail e WhatsApp.</p>
+        </div>
+        <button onclick="exportLeadsCSV()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Exportar CSV</span>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-white/10 text-slate-400 uppercase text-[10px] tracking-wider">
+              <th class="py-3 px-3">Nome</th>
+              <th class="py-3 px-3">E-mail</th>
+              <th class="py-3 px-3">WhatsApp</th>
+              <th class="py-3 px-3">Origem</th>
+              <th class="py-3 px-3">Data</th>
+              <th class="py-3 px-3 text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="leads-table-body" class="divide-y divide-white/5 font-medium">
+            <tr>
+              <td colspan="6" class="py-6 text-center text-slate-500">Carregando leads do Firestore...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: ACTIVE PUBLIC EPISODES -->
+    <section id="panel-episodes" class="hidden bg-[#112240] border border-white/10 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-white">Episódios Públicos Disponíveis</h3>
+          <p class="text-xs text-slate-400">Treinos demonstrativos exibidos para qualquer usuário cadastrado.</p>
+        </div>
+      </div>
+
+      <div id="public-tracks-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 3: CREATE NEW PUBLIC EPISODE -->
+    <section id="panel-new" class="hidden bg-[#112240] border border-white/10 rounded-2xl p-6 shadow-sm space-y-5">
+      <div>
+        <h3 class="text-base font-bold text-white">Publicar Novo Treino no Player Público</h3>
+        <p class="text-xs text-slate-400">Grave áudios de alta fidelidade com vídeo próprio hospedado ou gere no TTS Studio.</p>
+      </div>
+
+      <form id="new-public-track-form" onsubmit="handleNewPublicTrack(event)" class="space-y-4 max-w-3xl">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Título do Treino</label>
+            <input type="text" id="track-title-input" required placeholder="Ex: Master Speech: Executive Storytelling" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Duração (mm:ss)</label>
+            <input type="text" id="track-duration-input" required placeholder="01:20" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">URL do Áudio MP3 (Puro 128kbps)</label>
+            <input type="text" id="track-audio-input" required placeholder="/assets/audio/public/nome_do_audio.mp3" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">URL do Vídeo Próprio (Opcional)</label>
+            <input type="text" id="track-video-input" placeholder="/assets/videos/public/demonstracao.mp4" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Capa 1:1 (coverImage)</label>
+          <input type="text" id="track-cover-input" required placeholder="../assets/images/cover-public-spoken-reflex.jpg" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Sacada de Ouro do Professor Leo (Golden Tip)</label>
+          <textarea id="track-goldentip-input" rows="2" placeholder="Respire nas pausas naturais e conecte os blocos sonoros..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Frases e Timestamps (Array JSON ou Script Simples)</label>
+          <textarea id="track-sentences-input" rows="6" placeholder='[{"id": 1, "start": 0, "end": 3.5, "text": "Hello world!", "notes": "Speaker: Leo"}]' class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono"></textarea>
+        </div>
+
+        <button type="submit" id="btn-save-public-track" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2">
+          <span>Publicar no Player Público</span>
+          <i data-lucide="check" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </section>
+
+  </main>
+
+  <script>
+    let currentLeads = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      fetchLeads();
+      renderPublicTracks();
+    });
+
+    function switchTab(tab) {
+      document.getElementById("panel-leads").classList.toggle("hidden", tab !== "leads");
+      document.getElementById("panel-episodes").classList.toggle("hidden", tab !== "episodes");
+      document.getElementById("panel-new").classList.toggle("hidden", tab !== "new");
+
+      document.getElementById("tab-btn-leads").className = tab === "leads" ? "px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-slate-950 transition flex items-center gap-1.5" : "px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5";
+      document.getElementById("tab-btn-episodes").className = tab === "episodes" ? "px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-slate-950 transition flex items-center gap-1.5" : "px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5";
+      document.getElementById("tab-btn-new").className = tab === "new" ? "px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-slate-950 transition flex items-center gap-1.5" : "px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5";
+      lucide.createIcons();
+    }
+
+    async function fetchLeads() {
+      try {
+        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads");
+        const data = await res.json();
+        
+        const tbody = document.getElementById("leads-table-body");
+        if (!data.documents || data.documents.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500">Nenhum lead capturado ainda. Divulgue a página <a href="personal-trainer.html" target="_blank" class="text-amber-400 underline font-bold">personal-trainer.html</a>!</td></tr>`;
+          document.getElementById("stat-total-leads").innerText = "0";
+          return;
+        }
+
+        currentLeads = data.documents.map(d => {
+          const f = d.fields || {};
+          return {
+            id: d.name.split("/").pop(),
+            name: f.name?.stringValue || "Sem Nome",
+            email: f.email?.stringValue || "Sem E-mail",
+            whatsapp: f.whatsapp?.stringValue || "Sem Telefone",
+            source: f.source?.stringValue || "Direto",
+            createdAt: f.createdAt?.stringValue || ""
+          };
+        });
+
+        document.getElementById("stat-total-leads").innerText = currentLeads.length;
+
+        tbody.innerHTML = currentLeads.map(lead => {
+          const cleanPhone = lead.whatsapp.replace(/\D/g, "");
+          const dateStr = lead.createdAt ? new Date(lead.createdAt).toLocaleDateString("pt-BR") : "-";
+
+          return `
+            <tr class="hover:bg-white/5 transition">
+              <td class="py-3 px-3 font-bold text-white">${lead.name}</td>
+              <td class="py-3 px-3 text-slate-300">${lead.email}</td>
+              <td class="py-3 px-3 text-amber-300 font-mono">${lead.whatsapp}</td>
+              <td class="py-3 px-3 text-slate-400 text-[10px]">${lead.source}</td>
+              <td class="py-3 px-3 text-slate-400">${dateStr}</td>
+              <td class="py-3 px-3 text-right">
+                <a href="https://wa.me/55${cleanPhone}?text=Olá%20${encodeURIComponent(lead.name)}!%20Aqui%20é%20o%20Prof.%20Leo%20Leite%20do%20AgoraEuFalo." target="_blank" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] inline-flex items-center gap-1">
+                  <span>WhatsApp</span>
+                  <i data-lucide="message-circle" class="w-3 h-3"></i>
+                </a>
+              </td>
+            </tr>
+          `;
+        }).join("");
+        lucide.createIcons();
+      } catch (e) {
+        console.warn("Could not load leads:", e);
+      }
+    }
+
+    function renderPublicTracks() {
+      const container = document.getElementById("public-tracks-list");
+      const baseTracks = window.AEF_STUDENT_PUBLIC?.tracks || [];
+      document.getElementById("stat-total-tracks").innerText = baseTracks.length;
+
+      container.innerHTML = baseTracks.map((t, idx) => `
+        <div class="bg-[#0A192F] border border-amber-400/40 rounded-2xl p-4 flex items-center gap-4">
+          <img src="${t.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+          <div class="flex-1 truncate">
+            <div class="flex items-center justify-between mb-1">
+              <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
+              <span class="text-xs font-mono font-bold text-amber-300">${t.duration}</span>
+            </div>
+            <h4 class="font-bold text-sm text-white truncate">${t.title}</h4>
+            <p class="text-xs text-slate-400 truncate mt-0.5">${t.summary || ''}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function exportLeadsCSV() {
+      if (!currentLeads.length) return alert("Nenhum lead para exportar.");
+      let csv = "Nome,Email,WhatsApp,Origem,Data\n";
+      currentLeads.forEach(l => {
+        csv += `"${l.name}","${l.email}","${l.whatsapp}","${l.source}","${l.createdAt}"\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `leads_agoraeufalo_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+  </script>
+</body>
+</html>
