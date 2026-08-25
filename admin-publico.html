@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão do Player Público & Leads • AgoraEuFalo Admin</title>
+  <title>Gestão do Player Público, Vídeos & Leads • AgoraEuFalo Admin</title>
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Master Access Auth Gate -->
@@ -68,23 +68,28 @@
           <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
           <span>Abrir Player Público ↗</span>
         </a>
+        <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold flex items-center gap-1 transition shadow-sm">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
+          <span>TTS Studio</span>
+        </a>
         <a href="admin.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-semibold transition">
-          Voltar ao Admin
+          Admin Geral
         </a>
       </div>
     </div>
   </header>
 
   <!-- ========================================== -->
-  <!-- 2. STATS & OVERVIEW                        -->
+  <!-- 2. STATS & VISUAL GUIDE                    -->
   <!-- ========================================== -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full space-y-6 flex-1">
     
+    <!-- Top Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-[#112240] border border-amber-400/30 rounded-2xl p-5 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total de Leads Capturados</p>
-          <h3 id="stat-total-leads" class="text-3xl font-extrabold text-white mt-1">Carregando...</h3>
+          <h3 id="stat-total-leads" class="text-3xl font-extrabold text-white mt-1">0</h3>
         </div>
         <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
           👥
@@ -115,6 +120,46 @@
       </div>
     </div>
 
+    <!-- 📘 GUIA VISUAL: ONDE E COMO CRIAR / SUBIR VÍDEOS -->
+    <div class="bg-gradient-to-r from-amber-500/15 via-[#112240] to-[#112240] border-2 border-amber-400/40 rounded-2xl p-5 shadow-lg space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">Central de Ajuda</span>
+        <h4 class="font-bold text-sm text-white">Onde você cria, edita e publica vídeos no Player Público:</h4>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        
+        <!-- Método 1: TTS Studio -->
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
+          <div class="flex items-center gap-2 text-amber-300 font-bold">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs">1</span>
+            <span class="text-sm">Via TTS Studio (Áudio com Vozes IA + Vídeo)</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            1. Abra o <a href="tts-studio.html" class="text-amber-400 underline font-bold">TTS Studio</a> e sintetize seu áudio com vozes do Gemini.<br>
+            2. Clique em <strong>"Publicar no Player do Aluno"</strong>.<br>
+            3. Marque a caixa <strong>"Público"</strong> como destinatário.<br>
+            4. No campo <strong>"Vídeo Próprio Hospedado"</strong>, insira a URL do vídeo (<code class="text-amber-300 font-mono">/assets/videos/public/nome.mp4</code> ou link da nuvem).
+          </p>
+        </div>
+
+        <!-- Método 2: Painel Público Direto -->
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
+          <div class="flex items-center gap-2 text-amber-300 font-bold">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs">2</span>
+            <span class="text-sm">Diretamente neste Painel (Aba "Novo Treino")</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed">
+            1. Clique na aba <strong>"Novo Episódio Público"</strong> abaixo.<br>
+            2. Cole o link do áudio MP3 e o link do vídeo MP4 hospedado.<br>
+            3. Digite ou cole a transcrição das frases com os tempos.<br>
+            4. Clique em <strong>"Publicar no Player Público"</strong> e ele entrará no ar em tempo real no mundo inteiro!
+          </p>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ========================================== -->
     <!-- 3. TABS: LEADS vs EPISÓDIOS               -->
     <!-- ========================================== -->
@@ -125,7 +170,7 @@
       </button>
       <button onclick="switchTab('episodes')" id="tab-btn-episodes" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
         <i data-lucide="music" class="w-4 h-4"></i>
-        <span>Episódios Públicos</span>
+        <span>Episódios Públicos Ativos</span>
       </button>
       <button onclick="switchTab('new')" id="tab-btn-new" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
         <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -140,7 +185,7 @@
           <h3 class="text-base font-bold text-white">Leads Capturados no English Personal Training Player</h3>
           <p class="text-xs text-slate-400">Usuários que liberaram o acesso informando Nome, E-mail e WhatsApp.</p>
         </div>
-        <button onclick="exportLeadsCSV()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition">
+        <button onclick="exportLeadsCSV()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
           <i data-lucide="download" class="w-3.5 h-3.5"></i>
           <span>Exportar CSV</span>
         </button>
@@ -172,7 +217,7 @@
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-base font-bold text-white">Episódios Públicos Disponíveis</h3>
-          <p class="text-xs text-slate-400">Treinos demonstrativos exibidos para qualquer usuário cadastrado.</p>
+          <p class="text-xs text-slate-400">Treinos demonstrativos exibidos no player público.</p>
         </div>
       </div>
 
@@ -184,49 +229,54 @@
     <!-- TAB 3: CREATE NEW PUBLIC EPISODE -->
     <section id="panel-new" class="hidden bg-[#112240] border border-white/10 rounded-2xl p-6 shadow-sm space-y-5">
       <div>
-        <h3 class="text-base font-bold text-white">Publicar Novo Treino no Player Público</h3>
-        <p class="text-xs text-slate-400">Grave áudios de alta fidelidade com vídeo próprio hospedado ou gere no TTS Studio.</p>
+        <h3 class="text-base font-bold text-white">Cadastrar / Publicar Treino Público com Vídeo</h3>
+        <p class="text-xs text-slate-400">Insira os links de áudio e vídeo próprio hospedado e sincronize na nuvem.</p>
       </div>
 
       <form id="new-public-track-form" onsubmit="handleNewPublicTrack(event)" class="space-y-4 max-w-3xl">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1">Título do Treino</label>
-            <input type="text" id="track-title-input" required placeholder="Ex: Master Speech: Executive Storytelling" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <input type="text" id="track-title-input" required placeholder="Ex: Master Speech: Executive Clarity" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1">Duração (mm:ss)</label>
-            <input type="text" id="track-duration-input" required placeholder="01:20" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <input type="text" id="track-duration-input" required placeholder="00:45" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1">URL do Áudio MP3 (Puro 128kbps)</label>
-            <input type="text" id="track-audio-input" required placeholder="/assets/audio/public/nome_do_audio.mp3" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <input type="text" id="track-audio-input" required placeholder="/assets/audio/public/meu_audio.mp3" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-300 mb-1">URL do Vídeo Próprio (Opcional)</label>
+            <label class="block text-xs font-bold text-slate-300 mb-1">URL do Vídeo Próprio (Opcional - MP4)</label>
             <input type="text" id="track-video-input" placeholder="/assets/videos/public/demonstracao.mp4" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">Capa 1:1 (coverImage)</label>
-          <input type="text" id="track-cover-input" required placeholder="../assets/images/cover-public-spoken-reflex.jpg" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          <input type="text" id="track-cover-input" required value="../assets/images/cover-public-spoken-reflex.jpg" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">Sacada de Ouro do Professor Leo (Golden Tip)</label>
-          <textarea id="track-goldentip-input" rows="2" placeholder="Respire nas pausas naturais e conecte os blocos sonoros..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs"></textarea>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Resumo Pedagógico</label>
+          <input type="text" id="track-summary-input" placeholder="Treino de reflexo rápido sobre conversação cotidiana e chunks." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">Frases e Timestamps (Array JSON ou Script Simples)</label>
-          <textarea id="track-sentences-input" rows="6" placeholder='[{"id": 1, "start": 0, "end": 3.5, "text": "Hello world!", "notes": "Speaker: Leo"}]' class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono"></textarea>
+          <label class="block text-xs font-bold text-amber-400 mb-1">✨ Sacada de Ouro do Professor Leo (Golden Tip)</label>
+          <input type="text" id="track-goldentip-input" value="Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem traduzir palavra por palavra." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-amber-500/40 text-white text-xs">
         </div>
 
-        <button type="submit" id="btn-save-public-track" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Frases e Timestamps (Array JSON)</label>
+          <textarea id="track-sentences-input" rows="6" placeholder='[{"id": 1, "start": 0.0, "end": 3.2, "text": "Good morning! How are you?", "notes": "Speaker: Sarah"}]' class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono"></textarea>
+        </div>
+
+        <button type="submit" id="btn-save-public-track" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2 cursor-pointer">
           <span>Publicar no Player Público</span>
           <i data-lucide="check" class="w-4 h-4"></i>
         </button>
@@ -307,14 +357,38 @@
       }
     }
 
-    function renderPublicTracks() {
+    async function renderPublicTracks() {
       const container = document.getElementById("public-tracks-list");
-      const baseTracks = window.AEF_STUDENT_PUBLIC?.tracks || [];
+      let baseTracks = window.AEF_STUDENT_PUBLIC?.tracks || [];
+
+      // Fetch from Firestore
+      try {
+        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/public/tracks");
+        const data = await res.json();
+        if (data.documents && data.documents.length > 0) {
+          const cloudTracks = data.documents.map(d => {
+            const f = d.fields || {};
+            return {
+              id: f.id?.stringValue || d.name.split("/").pop(),
+              title: f.title?.stringValue || "Sem Título",
+              duration: f.duration?.stringValue || "00:00",
+              coverImage: f.coverImage?.stringValue || "../assets/images/cover-public-spoken-reflex.jpg",
+              videoUrl: f.videoUrl?.stringValue || "",
+              summary: f.summary?.stringValue || "",
+              goldenTip: f.goldenTip?.stringValue || ""
+            };
+          });
+          baseTracks = cloudTracks;
+        }
+      } catch (e) {
+        console.warn("Could not fetch cloud tracks:", e);
+      }
+
       document.getElementById("stat-total-tracks").innerText = baseTracks.length;
 
       container.innerHTML = baseTracks.map((t, idx) => `
         <div class="bg-[#0A192F] border border-amber-400/40 rounded-2xl p-4 flex items-center gap-4">
-          <img src="${t.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+          <img src="${t.coverImage || 'assets/images/cover-public-spoken-reflex.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
           <div class="flex-1 truncate">
             <div class="flex items-center justify-between mb-1">
               <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
@@ -322,9 +396,82 @@
             </div>
             <h4 class="font-bold text-sm text-white truncate">${t.title}</h4>
             <p class="text-xs text-slate-400 truncate mt-0.5">${t.summary || ''}</p>
+            ${t.videoUrl ? '<span class="inline-block mt-1 px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-bold">🎬 Possui Vídeo</span>' : ''}
           </div>
         </div>
       `).join("");
+      lucide.createIcons();
+    }
+
+    async function handleNewPublicTrack(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btn-save-public-track");
+      const title = document.getElementById("track-title-input").value.trim();
+      const duration = document.getElementById("track-duration-input").value.trim();
+      const audioUrl = document.getElementById("track-audio-input").value.trim();
+      const videoUrl = document.getElementById("track-video-input").value.trim();
+      const coverImage = document.getElementById("track-cover-input").value.trim();
+      const summary = document.getElementById("track-summary-input").value.trim();
+      const goldenTip = document.getElementById("track-goldentip-input").value.trim();
+      const sentencesRaw = document.getElementById("track-sentences-input").value.trim();
+
+      let sentences = [];
+      try {
+        sentences = sentencesRaw ? JSON.parse(sentencesRaw) : [];
+      } catch (err) {
+        return alert("O campo de frases precisa ser um JSON válido. Ex: [{\"id\": 1, \"start\": 0, \"end\": 3, \"text\": \"Frase\"}]");
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando na Nuvem...</span>`;
+
+      const trackId = `public-${Date.now().toString().slice(-4)}`;
+      const payload = JSON.stringify({
+        fields: {
+          id: { stringValue: trackId },
+          title: { stringValue: title },
+          duration: { stringValue: duration },
+          audioUrl: { stringValue: audioUrl },
+          videoUrl: { stringValue: videoUrl },
+          coverImage: { stringValue: coverImage },
+          summary: { stringValue: summary },
+          goldenTip: { stringValue: goldenTip },
+          assignedTo: { arrayValue: { values: [{ stringValue: "public" }] } },
+          sentences: {
+            arrayValue: {
+              values: sentences.map(s => ({
+                mapValue: {
+                  fields: {
+                    id: { integerValue: s.id || 1 },
+                    start: { doubleValue: parseFloat(s.start) || 0.0 },
+                    end: { doubleValue: parseFloat(s.end) || 0.0 },
+                    text: { stringValue: s.text || "" },
+                    notes: { stringValue: s.notes || "" }
+                  }
+                }
+              }))
+            }
+          },
+          updatedAt: { stringValue: new Date().toISOString() }
+        }
+      });
+
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/public/tracks/${trackId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: payload
+        });
+        alert("🎉 Episódio público publicado na Nuvem Google com sucesso!");
+        switchTab("episodes");
+        renderPublicTracks();
+      } catch (err) {
+        alert("Erro ao publicar: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Publicar no Player Público</span><i data-lucide="check" class="w-4 h-4"></i>`;
+        lucide.createIcons();
+      }
     }
 
     function exportLeadsCSV() {

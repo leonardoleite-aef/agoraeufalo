@@ -717,6 +717,15 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
           <input type="text" id="publishGoldenTipInput" value="Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra." class="w-full bg-[#0B0F17] border border-amber-500/40 focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
         </div>
 
+        <!-- Video URL (Optional) -->
+        <div class="space-y-1">
+          <label for="publishVideoUrlInput" class="font-semibold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="video" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Vídeo Próprio Hospedado (Opcional - MP4 / WebM / Nuvem)</span>
+          </label>
+          <input type="text" id="publishVideoUrlInput" placeholder="Ex: /assets/videos/public/demonstracao.mp4 ou URL de vídeo na nuvem" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
+        </div>
+
         <!-- Sound Chunks Preview -->
         <div class="space-y-1.5 p-3 rounded-xl bg-[#0B0F17] border border-[#1F2B45]">
           <div class="flex items-center justify-between text-[11px]">
@@ -2348,6 +2357,7 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
           durationSec: durationSec,
           summary: summary,
           goldenTip: goldenTip,
+          videoUrl: document.getElementById("publishVideoUrlInput")?.value.trim() || "",
           speakers: STATE.currentMeta?.speakers || "Gemini HD",
           scriptRaw: STATE.currentMeta?.script || "",
           sentences: currentParsedSentences,
