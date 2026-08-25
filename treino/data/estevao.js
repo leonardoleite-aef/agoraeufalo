@@ -1024,39 +1024,88 @@ window.AEF_STUDENT_ESTEVAO = {
     {
       id: "estevao-02",
       title: "Dialogue 2: Oxford Presentation Casual",
-      duration: "00:20",
+      duration: "01:15",
       coverImage: "../assets/images/cover-estevao-session01.jpg",
       audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.mp3",
-      summary: "Spontaneous conversational practice based on the Oxford presentation: opening remarks, Motriz NGO impact, and engaging questions.",
-      goldenTip: "Keep your cadence relaxed and clear. Stress content words ('pleasure', 'Motriz', 'Oxford') and blend function words smoothly.",
+      summary: "High-level coaching rehearsal between Professor Leo and Estevão for the Oxford Keynote: opening remarks, Motriz NGO impact across 40 municipalities, and systemic learning questions.",
+      goldenTip: "Give each idea room to breathe. Link thought chunks smoothly without rushing the tempo.",
       sentences: [
         {
           "id": 1,
           "start": 0.0,
-          "end": 5.8,
-          "text": "Good afternoon everyone. My name is Estevão. I am from Brazil and this is my first time in the UK.",
-          "notes": "Warm opening & steady projection"
+          "end": 4.8,
+          "text": "Good afternoon Estevão! Are you ready to rehearse the opening of your Oxford keynote?",
+          "notes": "Warm opening & coaching tone"
         },
         {
           "id": 2,
-          "start": 6.0,
-          "end": 10.4,
-          "text": "It is a pleasure to meet you Estevão! Tell us about your research at Oxford.",
-          "notes": "Rhythm chunk: 'pleasure to meet you' | 'research at Oxford'"
+          "start": 5.0,
+          "end": 10.8,
+          "text": "Good afternoon Professor Leo. Yes, I want to make sure my opening sounds natural and engaging.",
+          "notes": "Assertive response chunk: 'natural and engaging'"
         },
         {
           "id": 3,
-          "start": 10.7,
-          "end": 15.2,
-          "text": "We analyzed large public education systems across forty municipalities.",
-          "notes": "Natural pauses on numbers: 'forty municipalities'"
+          "start": 11.2,
+          "end": 18.5,
+          "text": "Perfect. Remember: don't rush through the introduction. Give each idea room to breathe. Let's start with your background.",
+          "notes": "Pedagogical cue: 'room to breathe'"
         },
         {
           "id": 4,
-          "start": 15.5,
-          "end": 19.6,
-          "text": "The big question is: how can policy turn into real learning?",
-          "notes": "Key presentation thesis question with downward cadence"
+          "start": 18.8,
+          "end": 25.2,
+          "text": "Good afternoon everyone. My name is Estevão. I am from Brazil and this is my first time in the UK.",
+          "notes": "Steady delivery & projection"
+        },
+        {
+          "id": 5,
+          "start": 25.5,
+          "end": 29.8,
+          "text": "Excellent tone. Now connect smoothly to your work at Motriz.",
+          "notes": "Transition cue"
+        },
+        {
+          "id": 6,
+          "start": 30.2,
+          "end": 42.0,
+          "text": "It is a pleasure to be here with you today. Let me tell you about our work at Motriz, where we support public education systems across forty municipalities in seven Brazilian states.",
+          "notes": "Key organizational metrics: 'forty municipalities' | 'seven Brazilian states'"
+        },
+        {
+          "id": 7,
+          "start": 42.4,
+          "end": 47.0,
+          "text": "Great projection! Now introduce the study from Oxford with confidence.",
+          "notes": "Confidence reinforcement"
+        },
+        {
+          "id": 8,
+          "start": 47.4,
+          "end": 57.5,
+          "text": "A study conducted right here at Oxford shows something striking: larger public education systems tend to improve much more slowly than smaller ones.",
+          "notes": "Academic citation: 'study conducted right here at Oxford'"
+        },
+        {
+          "id": 9,
+          "start": 57.8,
+          "end": 63.2,
+          "text": "That is the core paradox. Now deliver the central question of your presentation.",
+          "notes": "Thesis framing"
+        },
+        {
+          "id": 10,
+          "start": 63.6,
+          "end": 70.2,
+          "text": "So the big question we must answer is: how can policy turn into real, measurable learning in the classroom?",
+          "notes": "Downward keynote cadence: 'measurable learning in the classroom'"
+        },
+        {
+          "id": 11,
+          "start": 70.6,
+          "end": 74.6,
+          "text": "Brilliant. You linked the chunks naturally without hesitation. That is how speech reflex works.",
+          "notes": "Golden reinforcement from Leo"
         }
       ]
     }
