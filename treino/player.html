@@ -199,6 +199,11 @@
     <!-- Reading View -->
     <div id="reading-view" class="w-full flex flex-col space-y-4">
       
+      <!-- Quick Track Selector Bar (Instant 1-Click Track Switching) -->
+      <div id="quick-track-selector-bar" class="w-full flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar hidden">
+        <!-- Dynamically rendered via JS -->
+      </div>
+
       <!-- Session Overview Card with Cover Artwork -->
       <div class="bg-white dark:bg-[#112240] border-2 border-amber-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-sm">
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-4">
@@ -669,7 +674,24 @@
 
       function renderPlaylistDrawer(tracks, activeIndex) {
         const listEl = document.getElementById("drawer-tracks-list");
-        if (!tracks) return;
+        const quickBar = document.getElementById("quick-track-selector-bar");
+
+        if (quickBar && tracks) {
+          if (tracks.length <= 1) {
+            quickBar.classList.add("hidden");
+          } else {
+            quickBar.classList.remove("hidden");
+            quickBar.innerHTML = tracks.map((t, idx) => `
+              <button onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx});" class="px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 border shadow-xs ${idx === activeIndex ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold scale-[1.02]' : 'bg-white dark:bg-[#112240] text-slate-700 dark:text-slate-200 border-amber-200/80 dark:border-slate-800 hover:border-amber-400'}">
+                <span class="w-2 h-2 rounded-full ${idx === activeIndex ? 'bg-slate-950 animate-pulse' : 'bg-amber-400'}"></span>
+                <span>Track ${idx + 1}: ${t.title}</span>
+                <span class="text-[10px] opacity-75 font-mono">(${t.duration || ''})</span>
+              </button>
+            `).join("");
+          }
+        }
+
+        if (!tracks || !listEl) return;
 
         listEl.innerHTML = tracks.map((t, idx) => `
           <div onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx}); window.uiController.togglePlaylistDrawer();" class="p-3.5 rounded-2xl border ${idx === activeIndex ? 'bg-amber-500/20 border-amber-400' : 'bg-white/5 border-white/10 hover:border-amber-400/40'} cursor-pointer transition flex items-center gap-3">
