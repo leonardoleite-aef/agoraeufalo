@@ -154,7 +154,7 @@
         <div class="h-5 w-px bg-white/20 hidden sm:block"></div>
         <div class="flex items-center gap-1.5">
           <span id="header-student-name" class="font-bold text-sm text-amber-400">Mentee Session</span>
-          <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold tracking-wider uppercase border border-amber-500/30">VIP</span>
+          <span id="header-student-badge" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold tracking-wider uppercase border border-amber-500/30">VIP</span>
         </div>
       </div>
 
@@ -599,8 +599,10 @@
         
         window.currentLoadedStudent = studentData;
         document.getElementById("header-student-name").innerText = studentData.name;
-        
-        engine.loadStudentData(studentData, 0);
+        const badgeEl = document.getElementById("header-student-badge");
+        if (badgeEl) {
+          badgeEl.innerText = studentData.badge === "Acesso Aberto" ? "ABERTO" : (studentData.badge ? studentData.badge.replace(" Mentee", "") : "VIP");
+        }
 
         // Real-time Cloud Sync Listener
         if (window.aefCloudSync) {
@@ -694,13 +696,15 @@
         if (id === "thomas" && window.AEF_STUDENT_THOMAS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_THOMAS));
         if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ANDRE));
         if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_MATHEUS));
-        if (id === "public" || id === "publico") return { id: "public", name: "Player Público AgoraEuFalo", badge: "Acesso Aberto", tracks: [] };
+        if (id === "public" || id === "publico") return { id: "public", name: "Player Público (Demonstração)", badge: "Acesso Aberto", tracks: [] };
         
         const registered = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === id) : null;
         if (registered) {
           return { id: registered.id, name: registered.name, badge: registered.badge || "VIP Mentee", tracks: [] };
         }
-        return window.AEF_STUDENT_ESTEVAO || { id: "estevao", name: "Estevao", tracks: [] };
+
+        const formattedName = id.charAt(0).toUpperCase() + id.slice(1);
+        return { id: id, name: formattedName, badge: (id === "public" ? "Acesso Aberto" : "VIP Mentee"), tracks: [] };
       }
 
       function renderSentencesList(sentences) {
