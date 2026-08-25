@@ -222,6 +222,61 @@ window.AEF_STUDENT_THOMAS = {
           "notes": "Final confirmation: 'wait in the main lobby'"
         }
       ]
+    },
+    {
+      id: "dialogue_4__weekend_hobbies",
+      title: "Dialogue 4: Weekend Hobbies",
+      duration: "00:31",
+      coverImage: "../assets/images/cover-thomas-weekend-hobbies.jpg",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fthomas%2Fdialogue_4__weekend_hobbies_1787670455695.mp3?alt=media&token=3d078cc8-5ef0-4eb1-90ff-b9248d237e32",
+      summary: "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      goldenTip: "Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra.",
+      sentences: [
+        { "id": 1, "start": 0, "end": 3.13, "text": "So, Mike, what do you do for fun on the weekends?", "notes": "Speaker: A" },
+        { "id": 2, "start": 3.13, "end": 8.91, "text": "Well, I’m a huge fan of outdoor activities. I often go hiking in the mountains near the city.", "notes": "Speaker: B" },
+        { "id": 3, "start": 8.91, "end": 13.67, "text": "Really? That’s impressive! Is it a difficult hike, or is it relatively easy?", "notes": "Speaker: A" },
+        { "id": 4, "start": 13.67, "end": 18.61, "text": "It depends on the trail, but the views are always breathtaking. What about you?", "notes": "Speaker: B" },
+        { "id": 5, "start": 18.61, "end": 23.85, "text": "I’m not very athletic, to be honest. I usually stay home and read historical novels.", "notes": "Speaker: A" },
+        { "id": 6, "start": 23.85, "end": 27.4, "text": "That’s interesting. Is your house a quiet place to read?", "notes": "Speaker: B" },
+        { "id": 7, "start": 27.4, "end": 31.73, "text": "Yes, it is. My roommates are usually out playing soccer on Saturdays.", "notes": "Speaker: A" }
+      ]
+    },
+    {
+      id: "dialogue_5__local_weather",
+      title: "Dialogue 5: Local Weather",
+      duration: "00:29",
+      coverImage: "../assets/images/cover-thomas-local-weather.jpg",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fthomas%2Fdialogue_5__local_weather_1787670837719.mp3?alt=media&token=cbf34a72-0c51-448f-9625-490cb5fb6d82",
+      summary: "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      goldenTip: "Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra.",
+      sentences: [
+        { "id": 1, "start": 0, "end": 3.98, "text": "Wow, look at those dark clouds! Is it rainy season already?", "notes": "Speaker: A" },
+        { "id": 2, "start": 3.98, "end": 8.28, "text": "I think so. The weather is so unpredictable in this city lately.", "notes": "Speaker: B" },
+        { "id": 3, "start": 8.28, "end": 13.22, "text": "You’re right. It’s very humid today, isn't it? I feel quite uncomfortable.", "notes": "Speaker: A" },
+        { "id": 4, "start": 13.22, "end": 16.17, "text": "I agree. Is your apartment air-conditioned?", "notes": "Speaker: B" },
+        { "id": 5, "start": 16.17, "end": 21.88, "text": "No, it isn't. I just have a small fan, but it’s not very effective when it’s this hot.", "notes": "Speaker: A" },
+        { "id": 6, "start": 21.88, "end": 27.27, "text": "Oh, that’s terrible. I have a large AC unit, so my place is always nice and cool.", "notes": "Speaker: B" },
+        { "id": 7, "start": 27.27, "end": 29.45, "text": "You’re very lucky! I’m jealous.", "notes": "Speaker: A" }
+      ]
+    },
+    {
+      id: "dialogue_6__family_traditions",
+      title: "Dialogue 6: Family Traditions",
+      duration: "00:37",
+      coverImage: "../assets/images/cover-thomas-family-traditions.jpg",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fthomas%2Fdialogue_6__family_traditions_1787672371904.mp3?alt=media&token=5aaa6a6c-8402-402d-85c9-2c2c0ff6ee83",
+      summary: "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      goldenTip: "Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra.",
+      sentences: [
+        { "id": 1, "start": 0, "end": 5.31, "text": "[pausa emocional] Is your family from this area, or are you a newcomer to the city?", "notes": "Speaker: A" },
+        { "id": 2, "start": 5.31, "end": 10.93, "text": "My parents are from a very small, traditional village in the south, but I live here now.", "notes": "Speaker: B" },
+        { "id": 3, "start": 10.93, "end": 14.26, "text": "I see. Do they visit you often during the holidays?", "notes": "Speaker: A" },
+        { "id": 4, "start": 14.26, "end": 19.81, "text": "Yes, they do. They usually bring a lot of homemade food. It’s always a big celebration.", "notes": "Speaker: B" },
+        { "id": 5, "start": 19.81, "end": 24.19, "text": "That sounds lovely. Are you the only child, or do you have siblings?", "notes": "Speaker: A" },
+        { "id": 6, "start": 24.19, "end": 29.31, "text": "I have two older brothers. They are both engineers and they live quite far away.", "notes": "Speaker: B" },
+        { "id": 7, "start": 29.31, "end": 33.32, "text": "Oh, wow. So, is it a very quiet house when they aren't around?", "notes": "Speaker: A" },
+        { "id": 8, "start": 33.32, "end": 37.89, "text": "Yes, it’s much more peaceful, [suspiro] but I sometimes miss the noise.", "notes": "Speaker: B" }
+      ]
     }
   ]
 };
