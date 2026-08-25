@@ -13,7 +13,7 @@ window.AEF_STUDENT_THOMAS = {
       title: "Dialogue 1 - The morning Person",
       duration: "00:34",
       coverImage: "../assets/images/cover-thomas-morning-person.jpg",
-      audioUrl: "/assets/audio/alunos/thomas/Dialogue_1_morning_person.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Fthomas%2FDialogue_1_morning_person.mp3?alt=media",
       summary: "Dialogue workout focusing on everyday conversational rhythm, natural sound reduction, and spontaneous phrase cadence.",
       goldenTip: "Notice how native speakers link 'not at all' (/nɒtətɔːl/) and blend 'cup of' (/kʌpəv/). Do not pause between individual words.",
       sentences: [
@@ -73,7 +73,7 @@ window.AEF_STUDENT_THOMAS = {
       title: "Dialogue 2: Coffee Shop Decisions",
       duration: "00:32",
       coverImage: "../assets/images/cover-thomas-coffee-shop-decisions.jpg",
-      audioUrl: "/assets/audio/alunos/thomas/Dialogue_2_Coffee_Shop_Decisions.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Fthomas%2FDialogue_2_Coffee_Shop_Decisions.mp3?alt=media",
       summary: "Everyday conversation at a busy cafe: ordering drinks, asking for recommendations, and natural politeness phrasing.",
       goldenTip: "Pay attention to polite conversational chunks like 'feel free to' (/fiːl friː tə/) and 'kind of you' (/kaɪnd əv juː/). Link words smoothly.",
       sentences: [
@@ -168,7 +168,7 @@ window.AEF_STUDENT_THOMAS = {
       title: "Dialogue 3: Office Logistics",
       duration: "00:28",
       coverImage: "../assets/images/cover-thomas-office-logistics.jpg",
-      audioUrl: "/assets/audio/alunos/thomas/Dialogue_3_Office_Logistics.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Fthomas%2FDialogue_3_Office_Logistics.mp3?alt=media",
       summary: "Workplace scheduling & coordination: asking about manager availability, meeting schedules, and confirming appointments.",
       goldenTip: "Observe how verbs connect with contractions ('she isn't', 'it's'). Keep a relaxed, polite rhythm.",
       sentences: [

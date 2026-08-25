@@ -13,11 +13,26 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
-# Environment variables
+# Environment variables & API keys
 .env
 .env.local
+scripts/synthesize_*.py
 
-# Temporary Chrome Profiles
+# Temporary Profiles
 .tmp_chrome_profile/
 .chrome-profile/
 Material-PDF/.chrome-profile/
+
+# 🏛️ CLOUD-PROTECTED MEDIA (REGRA 9: Zero Mídia Pesada no Git / 100% Firebase & GCP Storage)
+*.wav
+*.m4a
+*.mov
+*.mp4
+*.m4v
+*.flac
+*.aac
+assets/videos/
+assets/audio/alunos/
+assets/audio/public/*.mp3
+Material-PDF/Agora_Eu_Falo_Ingles_Leo_Leite_2026.pdf
+Material-PDF/magic-story-*.pdf

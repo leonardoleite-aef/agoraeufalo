@@ -14,7 +14,7 @@ window.AEF_STUDENT_ESTEVAO = {
       title: "Session 01: UK International Keynote Presentation",
       duration: "16:29",
       coverImage: "../assets/images/cover-estevao-session01.jpg",
-      audioUrl: "/assets/audio/alunos/estevao/Estevao_presentation_leo.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FEstevao_presentation_leo.mp3?alt=media",
       summary: "High-impact keynote speech coaching by Prof. Leo Leite focusing on public education policy, the Pororoca implementation model, and systemic feedback loops.",
       goldenTip: "Breathe naturally at comma pauses. Speech clarity comes from linking sound chunks together, not from rushing speed.",
       sentences: [
@@ -1026,7 +1026,7 @@ window.AEF_STUDENT_ESTEVAO = {
       title: "Oxford Presentation (Casual Delivery)",
       duration: "01:06",
       coverImage: "../assets/images/cover-estevao-oxford-presentation.jpg",
-      audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FOxford_Presentation_Casual.mp3?alt=media",
       summary: "Estevão's solo keynote presentation: opening remarks, Motriz NGO public education impact across 40 municipalities in 7 states, Oxford academic study reference, and systemic implementation thesis.",
       goldenTip: "Maintain a steady, confident cadence. Connect sound chunks smoothly ('pleasure to be here', 'conducted right here at Oxford') without rushing.",
       sentences: [
@@ -1107,7 +1107,7 @@ window.AEF_STUDENT_ESTEVAO = {
         "title": "Estevão Agora Fala - Oxford",
         "duration": "10:24",
         "coverImage": "../assets/images/cover-estevao-agora-fala-oxford.jpg",
-        "audioUrl": "/assets/audio/alunos/estevao/estevao_agora_fala_oxford.mp3",
+        "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2Festevao_agora_fala_oxford.mp3?alt=media",
         "summary": "Full Oxford Keynote Speech: Motriz NGO, Brazilian public education challenges, Waterfall vs. Pororoca implementation model, predictors of learning, and Rio de Janeiro case study.",
         "goldenTip": "Speak with steady confidence. Emphasize key concept chunks like \"implementation infrastructure\", \"continuous feedback loop\", and \"predictors of learning\".",
         "sentences": [

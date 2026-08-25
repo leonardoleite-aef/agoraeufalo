@@ -13,7 +13,7 @@ window.AEF_STUDENT_PUBLIC = {
       title: "Daily Spoken Reflex: Conversational Clarity & Small Talk",
       duration: "00:36",
       coverImage: "../assets/images/cover-public-spoken-reflex.jpg",
-      audioUrl: "/assets/audio/public/public_spoken_reflex_session01.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_spoken_reflex_session01.mp3?alt=media",
       videoUrl: "",
       summary: "Treino demonstrativo prático de conversação natural, conexões sonoras (chunks) e reflexo oral coached por Prof. Leonardo Leite.",
       goldenTip: "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta.",
