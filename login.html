@@ -151,6 +151,14 @@
             <span id="submitBtnText">Acessar Meu Portal</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
+
+          <!-- Passwordless Magic Link Option -->
+          <div id="magicLinkOptionWrapper" class="text-center pt-2">
+            <button type="button" onclick="handleSendMagicLink()" class="text-[11px] font-bold text-sky-400 hover:text-sky-300 transition inline-flex items-center justify-center gap-1.5 mx-auto">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>Ou receba um Link Mágico no Email (Sem Senha)</span>
+            </button>
+          </div>
         </form>
 
         <!-- Direct Link to Preview Portal -->
@@ -206,6 +214,24 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.lucide) lucide.createIcons();
+
+      // Check if arriving from a Magic Link in email
+      if (window.location.search.includes('apiKey=') || window.location.search.includes('magicLink=')) {
+        showToast("Validando Link Mágico de acesso...", "info");
+        try {
+          const magicUser = await window.aefPortalAuth.checkAndCompleteMagicLink();
+          if (magicUser) {
+            showToast("Acesso autorizado com sucesso via Link Mágico!", "success");
+            setTimeout(() => {
+              window.location.href = "portal/index.html";
+            }, 1000);
+            return;
+          }
+        } catch (err) {
+          console.error("Magic Link Error:", err);
+          showToast("Link Mágico expirado ou inválido.", "error");
+        }
+      }
 
       window.addEventListener('aef:auth-changed', (e) => {
         if (e.detail && e.detail.user) {
@@ -339,6 +365,23 @@
         showToast("Email de recuperação enviado! Verifique sua caixa de entrada.", "success", 6000);
       } catch (err) {
         showToast("Erro ao enviar email de recuperação.", "error");
+      }
+    }
+
+    async function handleSendMagicLink() {
+      const email = document.getElementById('userEmailInput').value.trim();
+      if (!email) {
+        showToast("Digite seu email no campo acima para receber o Link Mágico.", "warning");
+        document.getElementById('userEmailInput').focus();
+        return;
+      }
+      try {
+        showToast("Enviando Link Mágico para seu email...", "info");
+        await window.aefPortalAuth.sendMagicLink(email);
+        showToast("✨ Link Mágico enviado! Verifique seu email para entrar com 1 clique.", "success", 7000);
+      } catch (err) {
+        console.error("Magic link send error:", err);
+        showToast("Erro ao enviar link mágico. Verifique o email informado.", "error");
       }
     }
 

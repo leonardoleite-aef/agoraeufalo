@@ -188,6 +188,66 @@
       await this.auth.sendPasswordResetEmail(email);
     }
 
+    async sendMagicLink(email) {
+      await this.ready();
+      const actionCodeSettings = {
+        url: window.location.origin + '/login.html?magicLink=true',
+        handleCodeInApp: true
+      };
+      await this.auth.sendSignInLinkToEmail(email, actionCodeSettings);
+      window.localStorage.setItem('aef_email_for_magic_link', email);
+    }
+
+    async checkAndCompleteMagicLink() {
+      await this.ready();
+      if (this.auth.isSignInWithEmailLink(window.location.href)) {
+        let email = window.localStorage.getItem('aef_email_for_magic_link');
+        if (!email) {
+          email = window.prompt('Por favor, confirme seu email para entrar com o Link Mágico:');
+        }
+        if (email) {
+          const cred = await this.auth.signInWithEmailLink(email, window.location.href);
+          window.localStorage.removeItem('aef_email_for_magic_link');
+          const user = cred.user;
+          const isAdminEmail = (user.email || '').toLowerCase().includes('selexenglish@gmail.com') || (user.email || '').toLowerCase().includes('leonardo');
+
+          let profile = await this.getProfile(user.uid);
+          if (!profile) {
+            profile = {
+              uid: user.uid,
+              name: isAdminEmail ? 'Prof. Leonardo Leite' : (user.displayName || user.email.split('@')[0]),
+              email: user.email,
+              avatarUrl: user.photoURL || '',
+              tier: isAdminEmail ? 'vip_mentorship' : 'free',
+              role: isAdminEmail ? 'admin' : 'student',
+              enrolledProducts: isAdminEmail ? ['all_access_master', 'mentoria_vip', 'magic_stories_club'] : ['free_starter_pack', 'magic_stories_demo'],
+              stats: {
+                streakDays: 1,
+                totalListeningMinutes: 0,
+                lastTrainedAt: new Date().toISOString()
+              },
+              createdAt: new Date().toISOString(),
+              lastLoginAt: new Date().toISOString()
+            };
+            await this.db.collection('users').doc(user.uid).set(profile);
+          } else {
+            if (isAdminEmail && profile.role !== 'admin') {
+              profile.role = 'admin';
+              profile.tier = 'vip_mentorship';
+            }
+            await this.db.collection('users').doc(user.uid).update({
+              role: profile.role,
+              tier: profile.tier,
+              lastLoginAt: new Date().toISOString()
+            });
+          }
+          this.currentProfile = profile;
+          return { user, profile };
+        }
+      }
+      return null;
+    }
+
     async signOut() {
       await this.ready();
       await this.auth.signOut();
