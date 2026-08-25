@@ -195,18 +195,20 @@
         handleCodeInApp: true
       };
       await this.auth.sendSignInLinkToEmail(email, actionCodeSettings);
+      window.localStorage.setItem('emailForSignIn', email);
       window.localStorage.setItem('aef_email_for_magic_link', email);
     }
 
     async checkAndCompleteMagicLink() {
       await this.ready();
       if (this.auth.isSignInWithEmailLink(window.location.href)) {
-        let email = window.localStorage.getItem('aef_email_for_magic_link');
+        let email = window.localStorage.getItem('emailForSignIn') || window.localStorage.getItem('aef_email_for_magic_link');
         if (!email) {
           email = window.prompt('Por favor, confirme seu email para entrar com o Link Mágico:');
         }
         if (email) {
           const cred = await this.auth.signInWithEmailLink(email, window.location.href);
+          window.localStorage.removeItem('emailForSignIn');
           window.localStorage.removeItem('aef_email_for_magic_link');
           const user = cred.user;
           const isAdminEmail = (user.email || '').toLowerCase().includes('selexenglish@gmail.com') || (user.email || '').toLowerCase().includes('leonardo');
