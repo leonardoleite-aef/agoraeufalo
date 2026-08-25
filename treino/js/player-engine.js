@@ -149,7 +149,12 @@ class AEFPlayerEngine {
 
   seek(seconds) {
     if (Number.isFinite(seconds)) {
-      this.audio.currentTime = Math.max(0, Math.min(seconds, this.audio.duration || 999999));
+      try {
+        const targetTime = Math.max(0, Math.min(seconds, this.audio.duration || 999999));
+        this.audio.currentTime = targetTime;
+      } catch (e) {
+        console.warn("Seek error:", e);
+      }
     }
   }
 
@@ -173,14 +178,14 @@ class AEFPlayerEngine {
         this.loopSentenceIndex = index;
       }
       this.onSentenceChange(index, sentence);
-      if (autoPlay && this.audio.paused) {
+      if (autoPlay) {
         this.play();
       }
     }
   }
 
   toggleSentenceLoop(index = null) {
-    if (this.isLoopSentenceEnabled) {
+    if (this.isLoopSentenceEnabled && (index === null || index === this.loopSentenceIndex)) {
       this.isLoopSentenceEnabled = false;
       this.loopSentenceIndex = -1;
     } else {
@@ -202,16 +207,18 @@ class AEFPlayerEngine {
   }
 
   _checkSentenceSync(curTime) {
-    if (!this.isKaraokeEnabled || !this.sentences || this.sentences.length === 0) return;
+    if (!this.sentences || this.sentences.length === 0) return;
 
     // Se estiver em modo Loop de Frase
     if (this.isLoopSentenceEnabled && this.loopSentenceIndex >= 0 && this.sentences[this.loopSentenceIndex]) {
       const target = this.sentences[this.loopSentenceIndex];
-      if (curTime >= target.end + 0.05) {
+      if (curTime >= target.end || curTime < target.start - 0.2) {
         this.audio.currentTime = target.start;
         return;
       }
     }
+
+    if (!this.isKaraokeEnabled) return;
 
     // Busca milimétrica da frase correspondente ao tempo atual
     let foundIndex = -1;

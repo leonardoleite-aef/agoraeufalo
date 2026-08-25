@@ -616,13 +616,13 @@
         }
 
         container.innerHTML = sentences.map((s, idx) => `
-          <div id="sentence-${idx}" onclick="if(!window.isEditModeActive) window.playerEngine.jumpToSentence(${idx})" class="sentence-card bg-white dark:bg-[#112240] border-2 border-stone-200/90 dark:border-slate-800/80 hover:border-amber-400 rounded-2xl p-4 sm:p-5 cursor-pointer shadow-xs">
+          <div id="sentence-${idx}" onclick="if(!window.isEditModeActive) window.playerEngine.jumpToSentence(${idx})" class="sentence-card group bg-white dark:bg-[#112240] border-2 border-stone-200/90 dark:border-slate-800/80 hover:border-amber-400 rounded-2xl p-4 sm:p-5 cursor-pointer shadow-xs transition-all active:scale-[0.99]">
             <div class="flex items-start justify-between gap-3 mb-2">
               <span class="time-pill px-2.5 py-0.5 rounded-lg bg-amber-50 dark:bg-slate-800 text-amber-900 dark:text-amber-300 text-[11px] font-bold font-mono tracking-tight border border-amber-200/60 dark:border-slate-700">
                 ${uiController.formatTime(s.start)}
               </span>
-              <button onclick="event.stopPropagation(); window.toggleSingleLoop(${idx})" class="text-xs px-2.5 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-700 dark:text-slate-300 font-bold transition cursor-pointer" title="Loop this sentence">
-                🔁 Loop
+              <button id="loop-btn-${idx}" onclick="event.stopPropagation(); window.toggleSingleLoop(${idx})" class="card-loop-btn text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-700 dark:text-slate-300 font-bold transition-all cursor-pointer border border-transparent flex items-center gap-1" title="Loop this sentence">
+                <span>🔁</span> <span id="loop-text-${idx}">Loop</span>
               </button>
             </div>
             
@@ -746,19 +746,35 @@
 
       window.toggleSingleLoop = (idx) => {
         const loopState = engine.toggleSentenceLoop(idx);
-        updateLoopUI(loopState.enabled);
+        updateLoopUI(loopState);
       };
 
       document.getElementById("btn-toggle-loop").addEventListener("click", () => {
         const loopState = engine.toggleSentenceLoop();
-        updateLoopUI(loopState.enabled);
+        updateLoopUI(loopState);
       });
 
-      function updateLoopUI(isEnabled) {
-        const btn = document.getElementById("btn-toggle-loop");
-        document.getElementById("loop-status-text").innerText = isEnabled ? "Loop Active" : "Loop Phrase";
-        btn.classList.toggle("bg-amber-600", isEnabled);
-        btn.classList.toggle("text-white", isEnabled);
+      function updateLoopUI(loopState) {
+        const isEnabled = loopState ? loopState.enabled : engine.isLoopSentenceEnabled;
+        const activeIdx = loopState ? loopState.index : engine.loopSentenceIndex;
+
+        const topBtn = document.getElementById("btn-toggle-loop");
+        if (topBtn) {
+          document.getElementById("loop-status-text").innerText = isEnabled ? "Loop Active" : "Loop Phrase";
+          topBtn.classList.toggle("bg-amber-600", isEnabled);
+          topBtn.classList.toggle("text-white", isEnabled);
+        }
+
+        document.querySelectorAll(".card-loop-btn").forEach((btn, idx) => {
+          const textEl = document.getElementById(`loop-text-${idx}`);
+          if (isEnabled && idx === activeIdx) {
+            btn.className = "card-loop-btn text-xs px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-extrabold border border-amber-400 shadow-md transition-all cursor-pointer flex items-center gap-1 scale-105";
+            if (textEl) textEl.innerText = "Looping";
+          } else {
+            btn.className = "card-loop-btn text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-700 dark:text-slate-300 font-bold transition-all cursor-pointer border border-transparent flex items-center gap-1";
+            if (textEl) textEl.innerText = "Loop";
+          }
+        });
       }
 
       window.setSpeed = (speed) => {
