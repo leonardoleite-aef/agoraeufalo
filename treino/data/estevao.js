@@ -1023,89 +1023,82 @@ window.AEF_STUDENT_ESTEVAO = {
     },
     {
       id: "estevao-02",
-      title: "Dialogue 2: Oxford Presentation Casual",
-      duration: "01:15",
+      title: "Oxford Presentation (Casual Delivery)",
+      duration: "01:06",
       coverImage: "../assets/images/cover-estevao-session01.jpg",
       audioUrl: "/assets/audio/alunos/estevao/Oxford_Presentation_Casual.mp3",
-      summary: "High-level coaching rehearsal between Professor Leo and Estevão for the Oxford Keynote: opening remarks, Motriz NGO impact across 40 municipalities, and systemic learning questions.",
-      goldenTip: "Give each idea room to breathe. Link thought chunks smoothly without rushing the tempo.",
+      summary: "Estevão's solo keynote presentation: opening remarks, Motriz NGO public education impact across 40 municipalities in 7 states, Oxford academic study reference, and systemic implementation thesis.",
+      goldenTip: "Maintain a steady, confident cadence. Connect sound chunks smoothly ('pleasure to be here', 'conducted right here at Oxford') without rushing.",
       sentences: [
         {
           "id": 1,
           "start": 0.0,
-          "end": 4.8,
-          "text": "Good afternoon Estevão! Are you ready to rehearse the opening of your Oxford keynote?",
-          "notes": "Warm opening & coaching tone"
+          "end": 6.2,
+          "text": "Good afternoon, everyone. My name is Estevão. I am from Brazil and this is my first time in the UK.",
+          "notes": "Warm opening & steady executive projection"
         },
         {
           "id": 2,
-          "start": 5.0,
-          "end": 10.8,
-          "text": "Good afternoon Professor Leo. Yes, I want to make sure my opening sounds natural and engaging.",
-          "notes": "Assertive response chunk: 'natural and engaging'"
+          "start": 6.5,
+          "end": 10.2,
+          "text": "It is a real pleasure to be here with you at Oxford today.",
+          "notes": "Rhythm chunk: 'real pleasure to be here with you'"
         },
         {
           "id": 3,
-          "start": 11.2,
-          "end": 18.5,
-          "text": "Perfect. Remember: don't rush through the introduction. Give each idea room to breathe. Let's start with your background.",
-          "notes": "Pedagogical cue: 'room to breathe'"
+          "start": 10.5,
+          "end": 13.8,
+          "text": "Let me tell you a little about our work at Motriz.",
+          "notes": "Clear transition chunk: 'work at Motriz'"
         },
         {
           "id": 4,
-          "start": 18.8,
-          "end": 25.2,
-          "text": "Good afternoon everyone. My name is Estevão. I am from Brazil and this is my first time in the UK.",
-          "notes": "Steady delivery & projection"
+          "start": 14.1,
+          "end": 22.0,
+          "text": "We are an organization that supports public education systems across forty municipalities in seven Brazilian states.",
+          "notes": "Key metrics: 'forty municipalities in seven Brazilian states'"
         },
         {
           "id": 5,
-          "start": 25.5,
-          "end": 29.8,
-          "text": "Excellent tone. Now connect smoothly to your work at Motriz.",
-          "notes": "Transition cue"
+          "start": 22.3,
+          "end": 28.5,
+          "text": "Together, we reach approximately three million students and two hundred thousand teachers.",
+          "notes": "Scope emphasis: 'three million students' | 'two hundred thousand teachers'"
         },
         {
           "id": 6,
-          "start": 30.2,
-          "end": 42.0,
-          "text": "It is a pleasure to be here with you today. Let me tell you about our work at Motriz, where we support public education systems across forty municipalities in seven Brazilian states.",
-          "notes": "Key organizational metrics: 'forty municipalities' | 'seven Brazilian states'"
+          "start": 28.8,
+          "end": 35.8,
+          "text": "Now, a study conducted by Olavo Nogueira Filho right here at Oxford revealed something very important:",
+          "notes": "Academic reference: 'conducted by Olavo Nogueira Filho right here at Oxford'"
         },
         {
           "id": 7,
-          "start": 42.4,
-          "end": 47.0,
-          "text": "Great projection! Now introduce the study from Oxford with confidence.",
-          "notes": "Confidence reinforcement"
+          "start": 36.1,
+          "end": 42.0,
+          "text": "Larger public education systems tend to improve much more slowly than smaller ones.",
+          "notes": "Core paradox contrast: 'Larger systems' vs 'smaller ones'"
         },
         {
           "id": 8,
-          "start": 47.4,
-          "end": 57.5,
-          "text": "A study conducted right here at Oxford shows something striking: larger public education systems tend to improve much more slowly than smaller ones.",
-          "notes": "Academic citation: 'study conducted right here at Oxford'"
+          "start": 42.3,
+          "end": 50.8,
+          "text": "So the fundamental question we are addressing is: how can public policy turn into real, measurable learning in the classroom?",
+          "notes": "Key presentation thesis with downward resolve"
         },
         {
           "id": 9,
-          "start": 57.8,
-          "end": 63.2,
-          "text": "That is the core paradox. Now deliver the central question of your presentation.",
-          "notes": "Thesis framing"
+          "start": 51.1,
+          "end": 58.0,
+          "text": "Our experience shows that true transformation requires an implementation infrastructure that connects every level of the system.",
+          "notes": "Systemic concept: 'implementation infrastructure'"
         },
         {
           "id": 10,
-          "start": 63.6,
-          "end": 70.2,
-          "text": "So the big question we must answer is: how can policy turn into real, measurable learning in the classroom?",
-          "notes": "Downward keynote cadence: 'measurable learning in the classroom'"
-        },
-        {
-          "id": 11,
-          "start": 70.6,
-          "end": 74.6,
-          "text": "Brilliant. You linked the chunks naturally without hesitation. That is how speech reflex works.",
-          "notes": "Golden reinforcement from Leo"
+          "start": 58.3,
+          "end": 65.7,
+          "text": "We need continuous data to track what is working, strong leadership to maintain alignment, and the humility to listen, adapt, and support our teachers on the ground. Thank you very much.",
+          "notes": "Closing cadence: confident, inspiring and resolute"
         }
       ]
     }
