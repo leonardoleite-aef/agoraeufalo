@@ -86,5 +86,19 @@ Qualquer episódio criado ou modificado deve seguir rigorosamente estas 5 leis p
 5. **Barra de Episódios Mobile-First:**
    - Manter as pílulas de seleção de faixas ultracompactas, com nomes limpos (sem prefixos repetitivos), scroll horizontal suave e zero artefatos vazios.
 
+---
+
+## 7. Diretriz de Criação de Posts a partir de Vídeos do YouTube (Vídeo Oficial vs. Inspiração Editorial com Capa IA)
+Sempre que um link de vídeo do YouTube for fornecido para criação de novo artigo no Blog:
+1. **Modo Vídeo Oficial do Professor Leo (Com Embed):**
+   - Utilizar fachada interativa do player do YouTube (`playPostVideo`).
+   - Usar a thumbnail em alta definição do YouTube (`maxresdefault.jpg` ou `hqdefault.jpg`).
+   - `hasVideoEmbed: true`.
+2. **Modo Inspiração Editorial / Vídeo de Terceiros (Sem Embed de Vídeo):**
+   - O agente estuda o vídeo/transcrição de referência, extrai as sacadas didáticas e recria o artigo completo (+5.000 caracteres) sob a ótica e metodologia única do Professor Leonardo Leite.
+   - **PROIBIDO embedar o player de vídeo de terceiros** no artigo.
+   - **Geração Obrigatória de Capa Editorial de Arte com IA:** O agente gera uma ilustração ou arte editorial cinematográfica 16:9 personalizada sobre o tema do artigo usando `generate_image`, salva em `assets/images/cover-[slug].jpg` e a insere no topo do artigo.
+   - `hasVideoEmbed: false`.
+
 
 

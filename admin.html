@@ -374,8 +374,8 @@
         
         <input type="hidden" id="postIdInput" value="">
 
-        <!-- Primary Input: YouTube Link / ID -->
-        <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 space-y-2">
+        <!-- Primary Input: YouTube Link & Post Type -->
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 space-y-3">
           <div class="flex items-center justify-between">
             <label class="text-xs font-extrabold text-amber-900 flex items-center gap-1.5">
               <span>▶️</span> <span>Link ou ID do Vídeo no YouTube</span>
@@ -388,8 +388,28 @@
               Vídeo
             </div>
           </div>
+
+          <!-- Video Mode Selection -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-300/80 bg-white cursor-pointer hover:border-amber-500 transition">
+              <input type="radio" name="videoEmbedMode" value="embed" checked class="text-amber-500 focus:ring-amber-400">
+              <div class="truncate">
+                <span class="text-xs font-bold text-slate-900 block">🎬 Vídeo Próprio do Leo</span>
+                <span class="text-[10px] text-slate-500 block -mt-0.5">Embedar Player no topo do artigo</span>
+              </div>
+            </label>
+
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-300/80 bg-white cursor-pointer hover:border-amber-500 transition">
+              <input type="radio" name="videoEmbedMode" value="no_embed_ai_art" class="text-amber-500 focus:ring-amber-400">
+              <div class="truncate">
+                <span class="text-xs font-bold text-slate-900 block">🎨 Inspiração Editorial</span>
+                <span class="text-[10px] text-slate-500 block -mt-0.5">Sem vídeo • Capa de Arte com IA</span>
+              </div>
+            </label>
+          </div>
+
           <p class="text-[10px] text-amber-800 leading-tight">
-            💡 <strong>Modo Rápido:</strong> Basta colar o link do YouTube! O sistema preenche automaticamente o slug, capa e apostila.
+            💡 <strong>Dica:</strong> Se o vídeo for de um colega/terceiros, selecione <em>"Inspiração Editorial"</em>. O sistema estuda o conteúdo e cria um artigo original com arte própria sem embedar o player externo.
           </p>
         </div>
 
@@ -747,6 +767,9 @@
       saveBtn.disabled = true;
       saveBtn.innerText = "Publicando...";
 
+      const videoMode = document.querySelector('input[name="videoEmbedMode"]:checked')?.value || 'embed';
+      const hasVideoEmbed = videoMode === 'embed';
+
       try {
         await window.aefPortalAuth.ready();
         const db = window.aefPortalAuth.db;
@@ -757,6 +780,7 @@
           slug: slug,
           category: category,
           youtubeId: ytId || 'umjf4UyqgR4',
+          hasVideoEmbed: hasVideoEmbed,
           imageUrl: ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : 'assets/images/og-magic-stories.jpg',
           subtitle: subtitle,
           pdfUrl: pdfUrl,
