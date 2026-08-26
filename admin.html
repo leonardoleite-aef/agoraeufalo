@@ -45,6 +45,7 @@
   <script src="assets/js/aef-portal-auth.js"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-filepicker.js"></script>
+  <script src="assets/js/aef-hotmart-send.js"></script>
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
 
@@ -1464,7 +1465,13 @@
           await db.collection('users').doc(uid).update({ tier: newTier });
         }
         const student = rawStudentsList.find(s => s.uid === uid);
-        if (student) student.tier = newTier;
+        if (student) {
+          student.tier = newTier;
+          // Se mudou para gratuito, dispara para o Hotmart Send (tag: portal_aef)
+          if (newTier === 'free' && window.AEFHotmartSend) {
+            window.AEFHotmartSend.submitFreeLead(student.name, student.email, student.phone, 'admin_tier_change');
+          }
+        }
         showToast("Plano do aluno atualizado no Firestore com sucesso!", "success");
         updateCRMStats();
       } catch (err) {
@@ -1515,6 +1522,12 @@
           student.phone = phone;
           student.tier = tier;
         }
+
+        // Se aluno for gratuito, garante disparo para a tag portal_aef no Hotmart Send
+        if (tier === 'free' && window.AEFHotmartSend) {
+          window.AEFHotmartSend.submitFreeLead(name, email, phone, 'admin_manual_edit');
+        }
+
         closeEditStudentModal();
         renderStudentsTable();
         updateCRMStats();
@@ -1584,6 +1597,8 @@
           phone: phone,
           tier: tier,
           role: 'student',
+          tag: tier === 'free' ? 'portal_aef' : 'mentoria_vip',
+          source: 'admin_manual',
           enrolledProducts: tier === 'vip_mentorship' ? ['mentoria_vip', 'magic_stories_club'] : ['free_starter_pack'],
           stats: { streakDays: 1, totalListeningMinutes: 0 },
           createdAt: new Date().toISOString(),
@@ -1592,6 +1607,11 @@
 
         if (db) {
           await db.collection('users').doc(uid).set(newStudentDoc);
+        }
+
+        // INTEGRAÇÃO HOTMART SEND: Se cadastrado como gratuito, dispara para o Hotmart Send (tag: portal_aef)
+        if (tier === 'free' && window.AEFHotmartSend) {
+          window.AEFHotmartSend.submitFreeLead(name, email, phone, 'admin_manual');
         }
 
         rawStudentsList.unshift(newStudentDoc);
@@ -1603,7 +1623,7 @@
         closeNewStudentModal();
         renderStudentsTable();
         updateCRMStats();
-        showToast(`Aluno ${name} matriculado e salvo no Firestore!`, "success");
+        showToast(tier === 'free' ? `Aluno gratuito ${name} matriculado e integrado ao Hotmart Send (portal_aef)!` : `Aluno ${name} matriculado no Firestore!`, "success");
       } catch (err) {
         console.error("Error creating student:", err);
         showToast("Erro ao salvar aluno no banco de dados.", "error");
