@@ -292,26 +292,28 @@ class AEFPlayerEngine {
   _updateMediaSessionMetadata() {
     if (!("mediaSession" in navigator) || !this.currentTrack) return;
 
-    const studentName = this.currentStudent ? this.currentStudent.name : "Mentee";
-    const coverRel = this.currentTrack.coverImage || "../assets/images/cover-office-logistics.jpg";
+    const studentName = this.currentStudent ? this.currentStudent.name : "VIP Mentee";
+    const coverRaw = this.currentTrack.coverImage || "assets/images/cover-default-aef.jpg";
     
-    // Resolve absolute URL for lock screen compatibility on iOS / Android
+    // Resolve absolute HTTPS URL for lock screen compatibility on iOS / Android
     let coverAbs = "";
-    try {
-      coverAbs = new URL(coverRel, window.location.href).href;
-    } catch (e) {
-      coverAbs = coverRel;
+    if (coverRaw.startsWith("http://") || coverRaw.startsWith("https://")) {
+      coverAbs = coverRaw;
+    } else {
+      const cleanPath = coverRaw.replace(/^(\.\.\/|\.\/)+/, '').replace(/^\//, '');
+      coverAbs = `${window.location.origin}/${cleanPath}`;
     }
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title: this.currentTrack.title || "Spoken Reflex Training",
-      artist: `Prof. Leonardo Leite | VIP Mentee ${studentName}`,
-      album: "AgoraEuFalo - VIP Spoken Reflex Suite",
+      artist: `Prof. Leonardo Leite • AgoraEuFalo (${studentName})`,
+      album: "English Personal Training Suite",
       artwork: [
         { src: coverAbs, sizes: "512x512", type: "image/jpeg" },
         { src: coverAbs, sizes: "384x384", type: "image/jpeg" },
         { src: coverAbs, sizes: "256x256", type: "image/jpeg" },
         { src: coverAbs, sizes: "192x192", type: "image/jpeg" },
+        { src: coverAbs, sizes: "128x128", type: "image/jpeg" },
         { src: coverAbs, sizes: "96x96", type: "image/jpeg" }
       ]
     });

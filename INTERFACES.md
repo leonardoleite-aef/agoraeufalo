@@ -14,6 +14,7 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 | **Projeto AEF 2026** | [agoraeufalo.com.br/projeto-aef.html](https://agoraeufalo.com.br/projeto-aef.html) | [`projeto-aef.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto-aef.html) | Página oficial de vendas e matrícula da turma 2026. |
 | **Mentoria VIP** | [agoraeufalo.com.br/mentoria.html](https://agoraeufalo.com.br/mentoria.html) | [`mentoria.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/mentoria.html) | Página do programa de Mentoria Individual e Acompanhamento Direto com o Prof. Leo. |
 | **Guia Definitivo Magic Stories** | [agoraeufalo.com.br/guia-magic-stories.html](https://agoraeufalo.com.br/guia-magic-stories.html) | [`guia-magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/guia-magic-stories.html) | Masterclass e guia completo com Diagrama Hexagonal e treino prático com o Leo Gringo. |
+| **Portal de Membros (Área do Aluno)** | [agoraeufalo.com.br/portal.html](https://agoraeufalo.com.br/portal.html) | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | Área autenticada de cursos, masterclasses, download de PDFs e envio direto para o Player. |
 | **Canal de Contato** | [agoraeufalo.com.br/contato.html](https://agoraeufalo.com.br/contato.html) | [`contato.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/contato.html) | Formulário de contato direto e link para o WhatsApp do Professor Leo. |
 
 ---
