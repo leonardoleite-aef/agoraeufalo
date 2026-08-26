@@ -301,7 +301,7 @@
         }
 
         setTimeout(() => {
-          window.location.href = "portal/index.html";
+          window.location.href = "portal.html";
         }, 1000);
 
       } catch (err) {
@@ -327,7 +327,7 @@
         await window.aefPortalAuth.signInWithGoogle();
         showToast("Login com Google concluído! Entrando...", "success");
         setTimeout(() => {
-          window.location.href = "portal/index.html";
+          window.location.href = "portal.html";
         }, 1000);
       } catch (err) {
         console.error("Google Auth Error:", err);

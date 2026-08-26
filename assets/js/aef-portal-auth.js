@@ -188,21 +188,26 @@
       await this.auth.sendPasswordResetEmail(email);
     }
 
-    async sendMagicLink(email) {
+    async sendMagicLink(email, customRedirectUrl = null) {
       await this.ready();
+      const targetUrl = customRedirectUrl || (window.location.origin + '/portal.html?magicLink=true');
       const actionCodeSettings = {
-        url: window.location.origin + '/login.html?magicLink=true',
+        url: targetUrl,
         handleCodeInApp: true
       };
       await this.auth.sendSignInLinkToEmail(email, actionCodeSettings);
       window.localStorage.setItem('emailForSignIn', email);
       window.localStorage.setItem('aef_email_for_magic_link', email);
+      window.localStorage.setItem('aef_pending_email', email);
     }
 
     async checkAndCompleteMagicLink() {
       await this.ready();
-      if (this.auth.isSignInWithEmailLink(window.location.href)) {
-        let email = window.localStorage.getItem('emailForSignIn') || window.localStorage.getItem('aef_email_for_magic_link');
+      if (this.auth && this.auth.isSignInWithEmailLink(window.location.href)) {
+        let email = window.localStorage.getItem('emailForSignIn') || 
+                    window.localStorage.getItem('aef_email_for_magic_link') || 
+                    window.localStorage.getItem('aef_pending_email') ||
+                    window.localStorage.getItem('aef_user_email');
         if (!email) {
           email = window.prompt('Por favor, confirme seu email para entrar com o Link Mágico:');
         }

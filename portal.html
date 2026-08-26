@@ -315,59 +315,117 @@
       </div>
     </div>
 
-    <!-- Auth & Lead Gate Modal (Hotmart Send: portal_aef) -->
-    <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <!-- Auth & Lead Gate Modal (Hotmart Send + Firebase Magic Link) -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
       <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative">
-        <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm">✕</button>
+        <button onclick="closeAuthModal()" id="btn-close-auth-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition" title="Fechar">✕</button>
 
-        <div class="text-center mb-5">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto mb-3">
-            🎓
-          </div>
-          <h3 class="text-xl font-bold font-serif">Acesso ao Portal do Aluno</h3>
-          <p class="text-xs text-slate-300 mt-1">
-            Cadastre-se gratuitamente para liberar as masterclasses, apostilas em PDF e o Training Player de bolso.
-          </p>
-        </div>
-
-        <form id="portal-login-form" onsubmit="handleMagicLinkLogin(event)" class="space-y-3.5">
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome Completo *</label>
-            <input type="text" id="login-name-input" required placeholder="Digite seu primeiro nome" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Melhor E-mail *</label>
-            <input type="email" id="login-email-input" required placeholder="seu.melhor.email@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-          </div>
-
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">WhatsApp (com DDD)</label>
-              <span class="text-[9px] font-extrabold uppercase px-2 py-0.2 rounded-full bg-white/10 text-amber-300">Opcional</span>
+        <!-- STATE 1: FORMULÁRIO DE ACESSO -->
+        <div id="auth-form-container">
+          <div class="text-center mb-5">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto mb-3">
+              🎓
             </div>
-            <input type="tel" id="login-phone-input" placeholder="(DDD) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-          </div>
-
-          <!-- Mensagem Oficial do Professor Leo -->
-          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-2.5 text-xs text-amber-200">
-            <span class="text-base shrink-0">💬</span>
-            <p class="leading-relaxed text-[11px]">
-              "O seu whatsapp é importante para conversar diretamente com o professor Leo para tirar suas dúvidas. Mas se preferir nao colocar, tudo bem. Enjoy your English practice!"
+            <h3 class="text-xl font-bold font-serif">Acesso ao Portal do Aluno</h3>
+            <p class="text-xs text-slate-300 mt-1">
+              Cadastre-se gratuitamente para receber seu link de acesso e liberar as masterclasses, apostilas e treinos.
             </p>
           </div>
 
-          <button type="submit" id="btn-login-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
-            <span>Liberar Meu Acesso Gratuito</span>
-            <span>🚀</span>
-          </button>
-        </form>
+          <form id="portal-login-form" onsubmit="handleMagicLinkLogin(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome Completo *</label>
+              <input type="text" id="login-name-input" required placeholder="Digite seu primeiro nome" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            </div>
 
-        <div class="mt-4 pt-4 border-t border-white/10 text-center">
-          <p class="text-[11px] text-slate-400">
-            Dúvidas com seu acesso? <a href="https://wa.me/5531999817975?text=Olá%20Prof.%20Leo!%20Preciso%20de%20ajuda%20para%20acessar%20a%20Área%20de%20Membros." target="_blank" class="text-amber-400 font-bold underline">Chame no WhatsApp</a>.
-          </p>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Melhor E-mail *</label>
+              <input type="email" id="login-email-input" required placeholder="seu.melhor.email@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">WhatsApp (com DDD)</label>
+                <span class="text-[9px] font-extrabold uppercase px-2 py-0.2 rounded-full bg-white/10 text-amber-300">Opcional</span>
+              </div>
+              <input type="tel" id="login-phone-input" placeholder="(DDD) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            </div>
+
+            <!-- Mensagem Oficial do Professor Leo -->
+            <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-2.5 text-xs text-amber-200">
+              <span class="text-base shrink-0">💬</span>
+              <p class="leading-relaxed text-[11px]">
+                "O seu whatsapp é importante para conversar diretamente com o professor Leo para tirar suas dúvidas. Mas se preferir nao colocar, tudo bem. Enjoy your English practice!"
+              </p>
+            </div>
+
+            <button type="submit" id="btn-login-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
+              <span>Receber Link de Acesso por E-mail</span>
+              <span>✉️</span>
+            </button>
+          </form>
+
+          <div class="relative flex items-center justify-center my-4">
+            <div class="border-t border-white/10 w-full"></div>
+            <span class="bg-[#0A192F] px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">ou</span>
+          </div>
+
+          <button onclick="handleGoogleSignIn()" type="button" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2.5 transition shadow-sm border border-slate-200 cursor-pointer active:scale-95">
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Entrar com Conta Google</span>
+          </button>
+
+          <div class="mt-4 pt-3 border-t border-white/10 text-center">
+            <p class="text-[11px] text-slate-400">
+              Dúvidas com seu acesso? <a href="https://wa.me/5531999817975?text=Olá%20Prof.%20Leo!%20Preciso%20de%20ajuda%20para%20acessar%20a%20Área%20de%20Membros." target="_blank" class="text-amber-400 font-bold underline">Chame no WhatsApp</a>.
+            </p>
+          </div>
         </div>
+
+        <!-- STATE 2: CONFIRMAÇÃO DE ENVIO DO LINK (VERIFIQUE SEU EMAIL) -->
+        <div id="auth-sent-container" class="hidden text-center py-4 space-y-4">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/40 flex items-center justify-center text-3xl mx-auto shadow-lg">
+            ✉️
+          </div>
+          
+          <div>
+            <h3 class="text-2xl font-bold font-serif text-white">Verifique seu E-mail!</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Enviamos um <b>Link de Acesso Direto</b> para o endereço:
+            </p>
+            <p id="sent-email-display" class="font-mono font-bold text-amber-300 text-xs bg-black/40 px-3.5 py-2 rounded-xl my-2 border border-amber-400/30 break-all inline-block"></p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-left text-xs text-amber-200 space-y-1.5">
+            <p class="font-bold flex items-center gap-1.5 text-amber-300">
+              <span>💡 Como concluir seu acesso:</span>
+            </p>
+            <ol class="list-decimal pl-4 space-y-1 text-[11px] text-slate-300 leading-relaxed">
+              <li>Abra a sua caixa de entrada no e-mail informado.</li>
+              <li>Clique no link <b>"Fazer Login no AgoraEuFalo"</b> que enviamos.</li>
+              <li>O seu navegador abrirá diretamente a Área de Membros autenticada!</li>
+            </ol>
+            <p class="text-[10px] text-amber-300/80 pt-1">
+              ⚠️ Caso não localize em 1 minuto, verifique a sua pasta de <b>Spam</b> ou <b>Promoções</b>.
+            </p>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button onclick="resendMagicLink()" type="button" class="text-xs font-bold text-amber-400 hover:text-amber-300 underline cursor-pointer">
+              Reenviar Link de Acesso
+            </button>
+            <span class="text-slate-600 hidden sm:inline">•</span>
+            <button onclick="backToAuthForm()" type="button" class="text-xs font-bold text-slate-400 hover:text-white underline cursor-pointer">
+              Digitar outro e-mail
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -454,14 +512,6 @@
       }
     };
 
-    let activeCourse = null;
-    let activeLesson = null;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      fetchCloudCourses();
-      checkAuthStatus();
-    });
-
     async function fetchCloudCourses() {
       try {
         const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
@@ -532,24 +582,79 @@
       lucide.createIcons();
     }
 
+    let activeCourse = null;
+    let activeLesson = null;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      fetchCloudCourses();
+      // 1. Executa bloqueio imediato se o usuário não estiver logado
+      checkAuthStatus();
+
+      // 2. Se estiver retornando de um Magic Link enviado por e-mail, completa login
+      try {
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          const magicResult = await window.aefPortalAuth.checkAndCompleteMagicLink();
+          if (magicResult && magicResult.user) {
+            const user = magicResult.user;
+            const profile = magicResult.profile;
+            localStorage.setItem("aef_user_email", user.email);
+            localStorage.setItem("aef_user_name", profile?.name || user.displayName || user.email.split('@')[0]);
+            localStorage.setItem("aef_user_tier", profile?.tier || 'free');
+            showToast("🎉 Autenticação confirmada! Bem-vindo de volta ao Portal.");
+            window.history.replaceState({}, document.title, window.location.pathname);
+            checkAuthStatus();
+          }
+        }
+      } catch (e) {
+        console.warn("Magic link listener:", e);
+      }
+    });
+
+    function isUserAuthenticated() {
+      const email = localStorage.getItem("aef_user_email");
+      const fbUser = window.aefPortalAuth && window.aefPortalAuth.currentUser;
+      return !!(email || fbUser);
+    }
+
     function checkAuthStatus() {
-      const userEmail = localStorage.getItem("aef_user_email");
+      const userEmail = localStorage.getItem("aef_user_email") || (window.aefPortalAuth?.currentUser?.email);
+      const userName = localStorage.getItem("aef_user_name");
+
       if (userEmail) {
         document.getElementById("btn-login-trigger").classList.add("hidden");
         document.getElementById("user-profile-menu").classList.remove("hidden");
-        document.getElementById("user-display-name").innerText = userEmail.split("@")[0];
-        document.getElementById("user-avatar-initials").innerText = userEmail.substring(0, 2).toUpperCase();
+        document.getElementById("user-display-name").innerText = userName || userEmail.split("@")[0];
+        document.getElementById("user-avatar-initials").innerText = (userName || userEmail).substring(0, 2).toUpperCase();
         document.getElementById("user-streak-badge").classList.remove("hidden");
-        document.getElementById("streak-days-count").innerText = "3 Dias 🔥";
+        document.getElementById("streak-days-count").innerText = "1 Dia 🔥";
+        closeAuthModal(true);
+      } else {
+        document.getElementById("btn-login-trigger").classList.remove("hidden");
+        document.getElementById("user-profile-menu").classList.add("hidden");
+        document.getElementById("user-streak-badge").classList.add("hidden");
+        openAuthModal();
       }
     }
 
     function openAuthModal() {
-      document.getElementById("auth-modal").classList.remove("hidden");
+      const modal = document.getElementById("auth-modal");
+      if (!modal) return;
+      modal.classList.remove("hidden");
+      
+      const closeBtn = document.getElementById("btn-close-auth-modal");
+      if (closeBtn) {
+        closeBtn.style.display = isUserAuthenticated() ? 'block' : 'none';
+      }
     }
 
-    function closeAuthModal() {
-      document.getElementById("auth-modal").classList.add("hidden");
+    function closeAuthModal(force = false) {
+      if (!force && !isUserAuthenticated()) {
+        showToast("⚠️ Por favor, acesse com seu e-mail para desbloquear o Portal.");
+        return;
+      }
+      const modal = document.getElementById("auth-modal");
+      if (modal) modal.classList.add("hidden");
     }
 
     async function handleMagicLinkLogin(e) {
@@ -559,26 +664,95 @@
       const phone = document.getElementById("login-phone-input").value.trim();
 
       const btn = document.getElementById("btn-login-submit");
-      if (btn) btn.innerHTML = "<span>Validando acesso...</span> <span>⏳</span>";
+      if (!email) return;
 
-      if (window.AEFHotmartSend) {
-        await window.AEFHotmartSend.submitFreeLead(name, email, phone, "portal_aef");
-      } else {
-        localStorage.setItem("aef_user_email", email);
+      btn.disabled = true;
+      btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Enviando link de acesso...</span>`;
+
+      try {
+        // 1. Registra Lead no Hotmart Send (tag portal_aef) e no Firestore
+        if (window.AEFHotmartSend) {
+          await window.AEFHotmartSend.submitFreeLead(name, email, phone, "portal_aef");
+        }
+
+        // 2. Dispara o Link Mágico oficial de autenticação para o e-mail do aluno
+        await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
+
+        // 3. Salva rascunho de e-mail e nome
+        localStorage.setItem("aef_pending_email", email);
+        localStorage.setItem("aef_user_name", name);
+
+        // 4. Alterna modal para a tela de confirmação ("Verifique seu E-mail")
+        document.getElementById("auth-form-container").classList.add("hidden");
+        document.getElementById("auth-sent-container").classList.remove("hidden");
+        document.getElementById("sent-email-display").innerText = email;
+
+        showToast("✉️ Link de acesso enviado! Verifique seu e-mail.");
+      } catch (err) {
+        console.error("Magic link error:", err);
+        showToast("Erro ao enviar link de acesso. Verifique o e-mail digitado.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Receber Link de Acesso por E-mail</span> <span>✉️</span>`;
       }
+    }
 
-      closeAuthModal();
-      checkAuthStatus();
-      showToast("🎉 Acesso Liberado! Bem-vindo ao Portal AgoraEuFalo.");
+    async function resendMagicLink() {
+      const email = localStorage.getItem("aef_pending_email") || document.getElementById("login-email-input").value.trim();
+      if (!email) return;
+      try {
+        showToast("Reenviando link de acesso...");
+        await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
+        showToast("✨ Novo link de acesso enviado para " + email);
+      } catch (err) {
+        showToast("Erro ao reenviar link.");
+      }
+    }
+
+    function backToAuthForm() {
+      document.getElementById("auth-sent-container").classList.add("hidden");
+      document.getElementById("auth-form-container").classList.remove("hidden");
+    }
+
+    async function handleGoogleSignIn() {
+      try {
+        showToast("Conectando com o Google...");
+        const result = await window.aefPortalAuth.signInWithGoogle();
+        if (result && result.user) {
+          localStorage.setItem("aef_user_email", result.user.email);
+          localStorage.setItem("aef_user_name", result.profile?.name || result.user.displayName || result.user.email.split('@')[0]);
+          localStorage.setItem("aef_user_tier", result.profile?.tier || 'free');
+          
+          if (window.AEFHotmartSend) {
+            await window.AEFHotmartSend.submitFreeLead(result.user.displayName || "Aluno Google", result.user.email, "", "portal_google");
+          }
+          
+          closeAuthModal(true);
+          checkAuthStatus();
+          showToast("🎉 Bem-vindo ao Portal AgoraEuFalo!");
+        }
+      } catch (err) {
+        console.error("Google Auth error:", err);
+        showToast("Não foi possível conectar com o Google.");
+      }
     }
 
     function handleLogout() {
       localStorage.removeItem("aef_user_email");
+      localStorage.removeItem("aef_user_name");
+      localStorage.removeItem("aef_user_tier");
+      localStorage.removeItem("aef_pending_email");
       localStorage.removeItem("aef_free_lead_unlocked");
+      if (window.aefPortalAuth) window.aefPortalAuth.signOut();
       window.location.reload();
     }
 
     function loadCourseView(courseId) {
+      if (!isUserAuthenticated()) {
+        openAuthModal();
+        showToast("⚠️ Por favor, acesse com seu e-mail para abrir as aulas deste curso.");
+        return;
+      }
       const course = PORTAL_COURSES[courseId];
       if (!course) return;
 
