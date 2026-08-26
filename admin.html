@@ -723,11 +723,21 @@
       }
     ];
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (window.lucide) lucide.createIcons();
-      await fetchStudentsFromFirestore();
-      await fetchBlogPostsFromFirestore();
+    // Inicialização Instantânea + Sincronização em Segundo Plano
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Renderização Instantânea (Zero Flash / Sem Espera)
+      rawStudentsList = [...DEFAULT_SEED_STUDENTS];
+      rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
+      
+      renderStudentsTable();
+      updateCRMStats();
+      renderAdminBlogPosts();
       renderCentralLibrary();
+      if (window.lucide) lucide.createIcons();
+
+      // 2. Busca e Atualização Assíncrona com Firestore
+      fetchStudentsFromFirestore();
+      fetchBlogPostsFromFirestore();
     });
 
     // =========================================================================
