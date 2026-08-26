@@ -122,5 +122,13 @@ Para proteger o repositório contra inchaço (bloat), limites de banda do GitHub
 Sempre que qualquer nova interface, landing page, artigo de blog, player de aluno ou painel administrativo for criado, editado em sua URL ou removido do projeto:
 - O agente DEVE atualizar imediatamente o arquivo **`INTERFACES.md`** na raiz do projeto com o nome da interface, URL de produção, link relativo local e uma breve descrição objetiva de sua função.
 
+---
+
+## 11. Fidelidade Rigorosa a Schemas e Proibição Absoluta de Condensação (Zero Dumb Down)
+Sempre que um documento de especificação técnica, modelo de dados ou arquitetura TypeScript/Firestore for fornecido pelo usuário:
+1. **Proibição Total de Achatamento (No Flattening):** O agente é expressamente PROIBIDO de condensar ou omitir camadas hierárquicas (ex: transformar uma arquitetura de 3 níveis `Cursos ➔ Módulos ➔ Aulas` em apenas 2 níveis `Cursos ➔ Aulas`). Toda hierarquia descrita deve existir integralmente nas interfaces de gestão e no banco de dados.
+2. **Conformidade Campo a Campo (1:1):** Todos os campos especificados nas interfaces (`videoUrl`, `audioUrl`, `pdfUrl`, `artworkUrl`, `hasTrainingTrack`, `order`, `durationSeconds`, `goldenTip`, etc.) devem ser implementados sem omissões arbitrárias.
+3. **Auditoria Pré-Execução:** Antes de gerar código sobre um schema complexo, o agente deve validar mentalmente o mapeamento completo dos níveis para garantir que nenhuma estrutura seja deixada de fora.
+
 
 
