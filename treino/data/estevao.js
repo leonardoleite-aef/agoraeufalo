@@ -14,7 +14,7 @@ window.AEF_STUDENT_ESTEVAO = {
         "title": "Sreehari Letter to Ashna",
         "duration": "03:50",
         "coverImage": "../assets/images/cover-estevao-sreehari-letter-to-ashna.jpg",
-        "audioUrl": "/assets/audio/alunos/estevao/Sreehari.mp3",
+        "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FSreehari.mp3?alt=media",
         "summary": "Carta reflexiva e estratégica sobre políticas públicas, gap de implementação e ecossistemas relacionais de aprendizagem.",
         "goldenTip": "Observe como os conceitos complexos são encadeados com calma e precisão. Mantenha pausas conscientes entre as orações.",
         "sentences": [
