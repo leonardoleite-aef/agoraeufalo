@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sala de Aula • Imersão & Reflexo Oral | AgoraEuFalo</title>
+  <meta name="description" content="Área de estudo imersiva do aluno: assista às masterclasses, ouça os áudios e envie exercícios para o English Personal Training Player.">
+  
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#0A192F">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            brand: {
+              gold: '#F59E0B',
+              navy: '#0A192F',
+              dark: '#070B14',
+              card: '#0F172A',
+              border: '#1E293B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & AgoraEuFalo SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+  </style>
+</head>
+<body class="bg-[#070B14] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ========================================== -->
+  <!-- 1. TOP CLASSROOM NAV BAR                   -->
+  <!-- ========================================== -->
+  <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Left: Back & Course Breadcrumbs -->
+      <div class="flex items-center gap-3 truncate">
+        <a href="portal.html" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-amber-400 font-bold text-xs transition flex items-center gap-1.5 shrink-0" title="Voltar ao Portal">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span class="hidden md:inline">Portal</span>
+        </a>
+
+        <div class="h-4 w-px bg-white/10 hidden md:block"></div>
+
+        <div class="truncate">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider shrink-0" id="classroomCourseBadge">
+              CURSO
+            </span>
+            <h1 class="font-bold text-xs sm:text-sm text-white truncate" id="classroomCourseTitle">
+              Carregando Curso...
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Progress Indicator -->
+      <div class="hidden xl:flex items-center gap-3">
+        <div class="w-48 bg-white/10 rounded-full h-2 overflow-hidden">
+          <div id="classroomProgressBar" class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-500" style="width: 25%;"></div>
+        </div>
+        <span class="text-[11px] font-bold text-slate-300 font-mono" id="classroomProgressText">25% Concluído</span>
+      </div>
+
+      <!-- Right: Cinema Toggle & User Menu -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="toggleCinemaMode()" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold text-xs transition flex items-center gap-1.5 cursor-pointer" title="Expandir/Recolher Sidebar">
+          <i data-lucide="layout" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span class="hidden sm:inline" id="cinemaToggleText">Modo Cinema</span>
+        </button>
+
+        <!-- User Profile Dropdown -->
+        <div class="flex items-center gap-2 pl-2 border-l border-white/10">
+          <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shadow" id="userAvatar">
+            AL
+          </div>
+          <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-rose-400 p-1 font-semibold" title="Sair da Conta">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN CLASSROOM WORKSPACE                -->
+  <!-- ========================================== -->
+  <main class="max-w-[98vw] 2xl:max-w-[1920px] w-full mx-auto p-3 sm:p-4 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4">
+    
+    <!-- ======================================================== -->
+    <!-- LEFT / MAIN STAGE: PLAYER & PEDAGOGICAL CONTENT (8 cols)-->
+    <!-- ======================================================== -->
+    <section id="mainStageContainer" class="lg:col-span-8 flex flex-col space-y-4 transition-all duration-300">
+      
+      <!-- Video / Cinema Player Card -->
+      <div class="bg-[#0A192F] border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative group">
+        
+        <!-- Video Container -->
+        <div class="aspect-video bg-slate-950 relative flex items-center justify-center overflow-hidden" id="videoStage">
+          <video id="mainVideoPlayer" controls playsinline class="w-full h-full object-contain bg-black">
+            <!-- Video src injected via JS -->
+          </video>
+          
+          <!-- Audio-Only Placeholder if no video -->
+          <div id="audioOnlyPlaceholder" class="hidden absolute inset-0 bg-gradient-to-b from-[#0A192F] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <div class="w-20 h-20 rounded-3xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-4xl shadow-xl">
+              🎧
+            </div>
+            <h3 class="text-lg font-bold text-white font-serif" id="audioStageTitle">Treino de Reflexo & Áudio</h3>
+            <p class="text-xs text-slate-400 max-w-md">Esta aula possui foco no listening reativo e reflexo falado sem interferência de tela.</p>
+          </div>
+        </div>
+
+        <!-- Lesson Meta & Action Bar -->
+        <div class="p-4 sm:p-5 bg-[#0A192F] border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider font-mono" id="currentLessonOrderBadge">AULA 01</span>
+              <span class="text-slate-500">•</span>
+              <span class="text-[10px] text-slate-400" id="currentModuleLabel">Módulo 01</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold font-serif text-white tracking-tight" id="currentLessonTitle">
+              Carregando aula...
+            </h2>
+          </div>
+
+          <!-- Tactical Training Button -->
+          <div class="flex items-center gap-2.5 shrink-0">
+            <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
+              <span>📌 Enviar para Training Player</span>
+            </button>
+            <button onclick="toggleLessonCompletion()" id="btnMarkComplete" class="p-2.5 rounded-2xl bg-white/10 hover:bg-emerald-500 hover:text-slate-950 text-slate-300 font-bold transition flex items-center gap-1.5 text-xs cursor-pointer" title="Marcar como Concluída">
+              <i data-lucide="check" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pedagogical Content & Tabs -->
+      <div class="bg-[#0A192F] border border-white/10 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+        
+        <!-- Tab Navigation -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex rounded-2xl bg-white/5 p-1 border border-white/10 text-xs">
+            <button onclick="switchPedagogicalTab('content')" id="tabBtnContent" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black transition">
+              📖 Conteúdo & Chunks
+            </button>
+            <button onclick="switchPedagogicalTab('golden')" id="tabBtnGolden" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition">
+              💡 Sacada de Ouro
+            </button>
+            <button onclick="switchPedagogicalTab('materials')" id="tabBtnMaterials" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition">
+              📄 Material em PDF
+            </button>
+          </div>
+
+          <!-- Media Quick Controls -->
+          <div class="hidden sm:flex items-center gap-2 text-xs text-slate-400 font-mono">
+            <span id="audioTrackStatus">Áudio 128k Pronto</span>
+          </div>
+        </div>
+
+        <!-- TAB 1: CONTEÚDO DA AULA & CHUNKS (HIGH CONTRAST CLARA CONFORME AGENTS.MD) -->
+        <div id="tabContentSection" class="space-y-4">
+          <!-- Pedagogical Container -->
+          <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/95 border-2 border-amber-200 text-slate-900 shadow-md space-y-4" id="pedagogicalRenderContainer">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- TAB 2: SACADA DE OURO DO PROFESSOR LEO -->
+        <div id="tabGoldenSection" class="hidden space-y-3">
+          <div class="p-6 rounded-2xl bg-amber-500/10 border-2 border-amber-400/40 text-amber-200 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">💡</span>
+              <h3 class="font-bold text-sm text-amber-300 font-serif">A Sacada de Ouro do Professor Leonardo Leite</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-amber-100 leading-relaxed italic" id="goldenTipDisplay">
+              "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia."
+            </p>
+          </div>
+        </div>
+
+        <!-- TAB 3: MATERIAIS & APOSTILA EM PDF -->
+        <div id="tabMaterialsSection" class="hidden space-y-3">
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold">
+                📄
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-white font-serif" id="pdfMaterialTitle">Apostila Diagramada da Aula</h4>
+                <p class="text-xs text-slate-400">Guia em PDF para revisão offline e exercícios práticos.</p>
+              </div>
+            </div>
+            <a id="pdfDownloadLink" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-2">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Baixar Apostila (PDF)</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- RIGHT: SIDEBAR DE MÓDULOS & AULAS (4 cols)              -->
+    <!-- ======================================================== -->
+    <aside id="sidebarOutline" class="lg:col-span-4 bg-[#0A192F] border border-white/10 rounded-3xl p-4 sm:p-5 flex flex-col h-[calc(100vh-90px)] sticky top-[75px] shadow-2xl overflow-hidden">
+      
+      <!-- Sidebar Header -->
+      <div class="pb-3 border-b border-white/10 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm text-white flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i>
+            <span>Conteúdo do Curso</span>
+          </h3>
+          <p class="text-[11px] text-slate-400" id="sidebarTotalLessonsCount">Carregando aulas...</p>
+        </div>
+      </div>
+
+      <!-- Modules Accordion Outline -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar space-y-3 pt-3 pr-1" id="modulesOutlineContainer">
+        <!-- Injected via JS -->
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="classroomToast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5">
+    <span class="text-base" id="classroomToastIcon">✅</span>
+    <span id="classroomToastText">Ação concluída com sucesso!</span>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT CLASSROOM CONTROLLER            -->
+  <!-- ========================================== -->
+  <script>
+    let activeCourse = null;
+    let activeLesson = null;
+    let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
+    let isCinemaMode = false;
+
+    // Default Seed Fallback
+    const DEFAULT_COURSES = {
+      "projeto-aef-2026": {
+        id: "projeto-aef-2026",
+        title: "Projeto AgoraEuFalo 2026",
+        badge: "FLAGSHIP 2026",
+        modules: [
+          {
+            id: "ciclo-01-fundamentos",
+            title: "Ciclo 01 • Fundamentos do Reflexo Oral",
+            lessons: [
+              {
+                id: "aef-01",
+                title: "Aula 01 • O Reflexo da Conexão Sonora",
+                desc: "Como conectar consoantes finais com vogais sem pausas artificiais.",
+                videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+                goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia.",
+                pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media",
+                processedContentHtml: `
+                  <h3 class="text-base font-bold text-amber-900 border-b border-amber-300 pb-1">Key Takeaways da Aula</h3>
+                  <p class="text-xs text-slate-800 leading-relaxed">O inglês falado não é pronunciado palavra por palavra. Quando uma palavra termina com som de consoante e a seguinte inicia com som de vogal, elas se fundem em um bloco contínuo de som.</p>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                    <div class="p-2.5 bg-white rounded-xl border border-amber-200 text-xs">
+                      <b class="text-amber-950">Chunk 01:</b> "Hold on a second" ➔ /həʊld-ɒn-ə-sɛkənd/
+                    </div>
+                    <div class="p-2.5 bg-white rounded-xl border border-amber-200 text-xs">
+                      <b class="text-amber-950">Chunk 02:</b> "Not at all" ➔ /nɒ-tə-tɔːl/
+                    </div>
+                  </div>
+                `
+              },
+              {
+                id: "aef-02",
+                title: "Aula 02 • Desbloqueio do Present Perfect",
+                desc: "Treino prático de reflexo com casos reais do cotidiano.",
+                videoUrl: "",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_02.mp3?alt=media",
+                goldenTip: "Use o Present Perfect para conectar experiências passadas com o momento presente de forma automática.",
+                pdfUrl: "",
+                processedContentHtml: `
+                  <h3 class="text-base font-bold text-amber-900 border-b border-amber-300 pb-1">Present Perfect sem Tradução</h3>
+                  <p class="text-xs text-slate-800 leading-relaxed">Foque na experiência e no resultado imediato: <i>"I've already done it"</i>.</p>
+                `
+              }
+            ]
+          }
+        ]
+      },
+      "magic-stories-club": {
+        id: "magic-stories-club",
+        title: "Magic Stories Club • 30 Ciclos",
+        badge: "30 CICLOS",
+        modules: [
+          {
+            id: "ciclo-01-historia-grazi",
+            title: "Ciclo 01 • A História da Grazi",
+            lessons: [
+              {
+                id: "ms-01",
+                title: "Treino 01 • Listen & Answer da Grazi",
+                desc: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
+                videoUrl: "",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+                goldenTip: "Responda às perguntas em voz alta antes que o áudio termine de perguntar.",
+                pdfUrl: "Material-PDF/magic-story-grazi.pdf",
+                processedContentHtml: `
+                  <h3 class="text-base font-bold text-amber-900 border-b border-amber-300 pb-1">Listen & Answer Practice</h3>
+                  <p class="text-xs text-slate-800 leading-relaxed">Ouça a pergunta e responda imediatamente em voz alta sem traduzir mentalmente para o português.</p>
+                `
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (window.lucide) lucide.createIcons();
+      
+      // 1. Auth & Enrollment Protection
+      checkClassroomAuth();
+
+      // 2. Load Course Data from URL param
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get("curso") || "projeto-aef-2026";
+      const lessonId = urlParams.get("aula");
+
+      await loadCourseData(courseId, lessonId);
+    });
+
+    function checkClassroomAuth() {
+      const email = localStorage.getItem("aef_user_email");
+      const name = localStorage.getItem("aef_user_name");
+
+      if (!email) {
+        // Redireciona para login no portal se não estiver autenticado
+        window.location.href = "portal.html";
+        return;
+      }
+
+      // Display User Info
+      const avatar = document.getElementById("userAvatar");
+      if (avatar) avatar.innerText = (name || email).substring(0, 2).toUpperCase();
+    }
+
+    async function loadCourseData(courseId, targetLessonId) {
+      activeCourse = DEFAULT_COURSES[courseId] || DEFAULT_COURSES["projeto-aef-2026"];
+
+      // Try Fetching from Firestore
+      try {
+        const res = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${courseId}`);
+        const data = await res.json();
+        if (data.fields) {
+          activeCourse.title = data.fields.title?.stringValue || activeCourse.title;
+          activeCourse.badge = data.fields.tierRequired?.stringValue === 'vip' ? 'MENTORIA VIP' : 'CURSO LIBERADO';
+        }
+      } catch (err) {
+        console.warn("Using local course fallback:", err);
+      }
+
+      // Update Header
+      document.getElementById("classroomCourseTitle").innerText = activeCourse.title;
+      document.getElementById("classroomCourseBadge").innerText = activeCourse.badge;
+
+      // Render Outline
+      renderSidebarOutline(targetLessonId);
+    }
+
+    function renderSidebarOutline(initialLessonId) {
+      const container = document.getElementById("modulesOutlineContainer");
+      const modules = activeCourse.modules || [];
+
+      let allLessons = [];
+      modules.forEach(m => (m.lessons || []).forEach(l => allLessons.push(l)));
+
+      document.getElementById("sidebarTotalLessonsCount").innerText = `${modules.length} Módulos • ${allLessons.length} Aulas`;
+
+      // Select initial lesson
+      let firstLesson = allLessons[0];
+      if (initialLessonId) {
+        const found = allLessons.find(l => l.id === initialLessonId);
+        if (found) firstLesson = found;
+      }
+
+      container.innerHTML = modules.map((mod, mIdx) => {
+        const modLessons = mod.lessons || [];
+        return `
+          <div class="border border-white/10 rounded-2xl bg-white/5 overflow-hidden">
+            <!-- Module Title Header -->
+            <div class="p-3 bg-white/5 flex items-center justify-between border-b border-white/5 text-xs font-bold text-amber-300">
+              <span class="truncate">${mod.title}</span>
+              <span class="text-[10px] font-mono text-slate-400">${modLessons.length} Aulas</span>
+            </div>
+
+            <!-- Lessons List -->
+            <div class="p-1.5 space-y-1">
+              ${modLessons.map((les, lIdx) => {
+                const isCurrent = activeLesson && activeLesson.id === les.id;
+                const isCompleted = completedLessonIds.includes(les.id);
+                return `
+                  <div onclick="selectLesson('${les.id}')" class="p-2.5 rounded-xl ${isCurrent ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'hover:bg-white/10 text-slate-200'} transition cursor-pointer flex items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2 truncate">
+                      <span class="w-4 h-4 rounded-full ${isCompleted ? 'bg-emerald-500 text-slate-950' : 'border border-white/30'} flex items-center justify-center text-[10px] shrink-0">
+                        ${isCompleted ? '✓' : (lIdx + 1)}
+                      </span>
+                      <span class="truncate text-[11px]">${les.title}</span>
+                    </div>
+                    <i data-lucide="${les.videoUrl ? 'play' : 'volume-2'}" class="w-3.5 h-3.5 shrink-0 ${isCurrent ? 'text-slate-950' : 'text-amber-400'}"></i>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      if (window.lucide) lucide.createIcons();
+
+      if (firstLesson) selectLesson(firstLesson.id);
+      updateCourseProgress();
+    }
+
+    function selectLesson(lessonId) {
+      let found = null;
+      let foundModule = null;
+
+      for (const m of (activeCourse.modules || [])) {
+        const l = (m.lessons || []).find(x => x.id === lessonId);
+        if (l) { found = l; foundModule = m; break; }
+      }
+
+      if (!found) return;
+      activeLesson = found;
+
+      // Update Main Stage
+      document.getElementById("currentLessonTitle").innerText = found.title;
+      document.getElementById("currentLessonOrderBadge").innerText = `AULA ${found.order || 1}`;
+      document.getElementById("currentModuleLabel").innerText = foundModule?.title || "";
+
+      // Video / Audio Player
+      const videoEl = document.getElementById("mainVideoPlayer");
+      const audioPlaceholder = document.getElementById("audioOnlyPlaceholder");
+
+      if (found.videoUrl) {
+        videoEl.src = found.videoUrl;
+        videoEl.classList.remove("hidden");
+        audioPlaceholder.classList.add("hidden");
+      } else {
+        videoEl.pause();
+        videoEl.src = "";
+        videoEl.classList.add("hidden");
+        audioPlaceholder.classList.remove("hidden");
+        document.getElementById("audioStageTitle").innerText = found.title;
+      }
+
+      // Configure MediaSession for Background Audio Playback
+      if ('mediaSession' in navigator && found.audioUrl) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: found.title,
+          artist: "Prof. Leonardo Leite • AgoraEuFalo",
+          album: activeCourse.title,
+          artwork: [
+            { src: found.artworkUrl || 'assets/images/cover-default-aef.jpg', sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+      }
+
+      // Pedagogical Content
+      document.getElementById("pedagogicalRenderContainer").innerHTML = found.processedContentHtml || `
+        <h3 class="text-base font-bold text-amber-900 border-b border-amber-300 pb-1">Estrutura Didática da Aula</h3>
+        <p class="text-xs text-slate-800 leading-relaxed">${found.desc || 'Acompanhe a masterclass em vídeo e pratique a repetição ativa em voz alta com os áudios disponibilizados.'}</p>
+      `;
+
+      // Golden Tip
+      document.getElementById("goldenTipDisplay").innerText = `"${found.goldenTip || 'Foque no ritmo e na melodia natural do bloco sonoro sem tradução mental.'}"`;
+
+      // PDF Material
+      const pdfBtn = document.getElementById("pdfDownloadLink");
+      if (found.pdfUrl) {
+        pdfBtn.href = found.pdfUrl;
+        pdfBtn.classList.remove("hidden");
+      } else {
+        pdfBtn.classList.add("hidden");
+      }
+
+      // Completion Button State
+      const isCompleted = completedLessonIds.includes(found.id);
+      const completeBtn = document.getElementById("btnMarkComplete");
+      if (completeBtn) {
+        completeBtn.className = isCompleted 
+          ? "p-2.5 rounded-2xl bg-emerald-500 text-slate-950 font-bold transition flex items-center gap-1.5 text-xs cursor-pointer"
+          : "p-2.5 rounded-2xl bg-white/10 hover:bg-emerald-500 hover:text-slate-950 text-slate-300 font-bold transition flex items-center gap-1.5 text-xs cursor-pointer";
+      }
+
+      // Re-render outline to update active highlights
+      const modules = activeCourse.modules || [];
+      let allLessons = [];
+      modules.forEach(m => (m.lessons || []).forEach(l => allLessons.push(l)));
+      
+      const container = document.getElementById("modulesOutlineContainer");
+      container.innerHTML = modules.map((mod) => {
+        const modLessons = mod.lessons || [];
+        return `
+          <div class="border border-white/10 rounded-2xl bg-white/5 overflow-hidden">
+            <div class="p-3 bg-white/5 flex items-center justify-between border-b border-white/5 text-xs font-bold text-amber-300">
+              <span class="truncate">${mod.title}</span>
+              <span class="text-[10px] font-mono text-slate-400">${modLessons.length} Aulas</span>
+            </div>
+            <div class="p-1.5 space-y-1">
+              ${modLessons.map((les, lIdx) => {
+                const isCurrent = les.id === found.id;
+                const isComp = completedLessonIds.includes(les.id);
+                return `
+                  <div onclick="selectLesson('${les.id}')" class="p-2.5 rounded-xl ${isCurrent ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'hover:bg-white/10 text-slate-200'} transition cursor-pointer flex items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2 truncate">
+                      <span class="w-4 h-4 rounded-full ${isComp ? 'bg-emerald-500 text-slate-950' : 'border border-white/30'} flex items-center justify-center text-[10px] shrink-0">
+                        ${isComp ? '✓' : (lIdx + 1)}
+                      </span>
+                      <span class="truncate text-[11px]">${les.title}</span>
+                    </div>
+                    <i data-lucide="${les.videoUrl ? 'play' : 'volume-2'}" class="w-3.5 h-3.5 shrink-0 ${isCurrent ? 'text-slate-950' : 'text-amber-400'}"></i>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleLessonCompletion() {
+      if (!activeLesson) return;
+      const idx = completedLessonIds.indexOf(activeLesson.id);
+      if (idx > -1) {
+        completedLessonIds.splice(idx, 1);
+        showToast("Aula desmarcada como concluída.");
+      } else {
+        completedLessonIds.push(activeLesson.id);
+        showToast("🎉 Parabéns! Aula marcada como concluída.");
+      }
+      localStorage.setItem("aef_completed_lessons", JSON.stringify(completedLessonIds));
+      selectLesson(activeLesson.id);
+      updateCourseProgress();
+    }
+
+    function updateCourseProgress() {
+      const modules = activeCourse?.modules || [];
+      let totalLessons = 0;
+      modules.forEach(m => totalLessons += (m.lessons || []).length);
+      if (totalLessons === 0) return;
+
+      const completedCount = completedLessonIds.filter(id => {
+        return modules.some(m => (m.lessons || []).some(l => l.id === id));
+      }).length;
+
+      const pct = Math.round((completedCount / totalLessons) * 100);
+      document.getElementById("classroomProgressBar").style.width = `${pct}%`;
+      document.getElementById("classroomProgressText").innerText = `${pct}% Concluído`;
+    }
+
+    function sendCurrentLessonToTrainingPlayer() {
+      if (!activeLesson) return;
+
+      const currentLab = JSON.parse(localStorage.getItem("aef_mylab_tracks_public") || "[]");
+      const exists = currentLab.some(t => t.id === activeLesson.id);
+
+      if (!exists) {
+        currentLab.push({
+          id: activeLesson.id,
+          title: activeLesson.title,
+          duration: "05:00",
+          coverImage: activeLesson.artworkUrl || "assets/images/cover-default-aef.jpg",
+          audioUrl: activeLesson.audioUrl || "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+          videoUrl: activeLesson.videoUrl || "",
+          summary: activeLesson.desc || "",
+          goldenTip: activeLesson.goldenTip || "",
+          sentences: [
+            { id: 1, start: 0, end: 4, text: activeLesson.title, notes: "Enviado da Sala de Aula" }
+          ]
+        });
+        localStorage.setItem("aef_mylab_tracks_public", JSON.stringify(currentLab));
+      }
+
+      showToast("📌 Aula enviada com sucesso para o seu Training Player de Bolso!");
+    }
+
+    function toggleCinemaMode() {
+      isCinemaMode = !isCinemaMode;
+      const stage = document.getElementById("mainStageContainer");
+      const sidebar = document.getElementById("sidebarOutline");
+      const text = document.getElementById("cinemaToggleText");
+
+      if (isCinemaMode) {
+        stage.className = "lg:col-span-12 flex flex-col space-y-4 transition-all duration-300";
+        sidebar.classList.add("hidden");
+        text.innerText = "Sair do Cinema";
+      } else {
+        stage.className = "lg:col-span-8 flex flex-col space-y-4 transition-all duration-300";
+        sidebar.classList.remove("hidden");
+        text.innerText = "Modo Cinema";
+      }
+    }
+
+    function switchPedagogicalTab(tab) {
+      document.getElementById("tabContentSection").classList.toggle("hidden", tab !== 'content');
+      document.getElementById("tabGoldenSection").classList.toggle("hidden", tab !== 'golden');
+      document.getElementById("tabMaterialsSection").classList.toggle("hidden", tab !== 'materials');
+
+      document.getElementById("tabBtnContent").className = tab === 'content' ? "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black transition" : "px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition";
+      document.getElementById("tabBtnGolden").className = tab === 'golden' ? "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black transition" : "px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition";
+      document.getElementById("tabBtnMaterials").className = tab === 'materials' ? "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black transition" : "px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition";
+    }
+
+    function handleLogout() {
+      if (window.aefPortalAuth) window.aefPortalAuth.signOut();
+      localStorage.removeItem("aef_user_email");
+      localStorage.removeItem("aef_user_name");
+      window.location.href = "portal.html";
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("classroomToast");
+      const text = document.getElementById("classroomToastText");
+      if (!toast || !text) return;
+      text.innerText = msg;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 4000);
+    }
+  </script>
+</body>
+</html>
