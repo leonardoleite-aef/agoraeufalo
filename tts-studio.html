@@ -802,7 +802,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
           <label for="modelSelect" class="font-semibold text-slate-300 block mb-1">Modelo Gemini para TTS</label>
           <select id="modelSelect" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-200 outline-none cursor-pointer">
             <option value="gemini-2.5-flash-preview-tts">gemini-2.5-flash-preview-tts (Google AI Studio TTS Oficial)</option>
-            <option value="gemini-2.0-flash">gemini-2.0-flash (Gemini 2.0 Flash Audio)</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash (Gemini 2.5 Flash Audio & Transcrição)</option>
             <option value="gemini-3.1-flash-tts-preview">gemini-3.1-flash-tts-preview (Gemini 3.1 Flash TTS)</option>
           </select>
         </div>
@@ -1162,7 +1162,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       const modelsToTry = [
         preferredModel,
         'gemini-2.5-flash-preview-tts',
-        'gemini-2.0-flash',
+        'gemini-2.5-flash',
         'gemini-3.1-flash-tts-preview'
       ].filter((v, i, a) => v && a.indexOf(v) === i);
 

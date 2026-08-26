@@ -334,7 +334,7 @@ class AEFAudioHub {
   }
 
   // =========================================================================
-  // 6. MULTIMODAL AUDIO TRANSCRIPTION (GEMINI 2.0 FLASH)
+  // 6. MULTIMODAL AUDIO TRANSCRIPTION (GEMINI 2.5 FLASH)
   // =========================================================================
   async transcribeAudioWithGemini(audioBlob, apiKey, mimeType = "audio/mp3") {
     if (!apiKey) throw new Error("Chave da Gemini API não informada.");
@@ -350,53 +350,74 @@ class AEFAudioHub {
       reader.readAsDataURL(audioBlob);
     });
 
-    const promptText = `You are an expert English phonetics coach and audio transcriber for Professor Leonardo Leite's AgoraEuFalo training program.
+    const promptText = `You are an expert English coach and audio transcriber for Professor Leonardo Leite's AgoraEuFalo training program.
 Transcribe this spoken English audio recording. Break it down into clear, natural conversational sentences or sound chunks.
 For each sentence, identify:
 1. start: Approximate start time in seconds (float, e.g. 0.0)
 2. end: Approximate end time in seconds (float, e.g. 4.2)
 3. text: The exact English spoken words.
-4. notes: Key phonetic chunks, rhythm links, contractions, or speaker names if identifiable.
+4. spokenTranslation: Natural, authentic Brazilian spoken Portuguese translation of the sentence (colloquial, lively, spoken phrasing).
 
 Return ONLY a valid JSON array of objects:
 [
-  { "id": 1, "start": 0.0, "end": 3.5, "text": "Good morning everyone.", "notes": "Warm opening" }
+  { "id": 1, "start": 0.0, "end": 3.5, "text": "Good morning everyone.", "spokenTranslation": "Bom dia a todos!" }
 ]`;
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const modelsToTry = [
+      "gemini-2.5-flash",
+      "gemini-1.5-flash",
+      "gemini-2.5-flash-preview-tts"
+    ];
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [
-            {
-              inline_data: {
-                mime_type: mimeType || "audio/mp3",
-                data: base64Data
-              }
-            },
-            {
-              text: promptText
+    let lastError = null;
+    let resJson = null;
+
+    for (const model of modelsToTry) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                {
+                  inline_data: {
+                    mime_type: mimeType || "audio/mp3",
+                    data: base64Data
+                  }
+                },
+                {
+                  text: promptText
+                }
+              ]
+            }],
+            generationConfig: {
+              temperature: 0.2,
+              responseMimeType: "application/json"
             }
-          ]
-        }],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: "application/json"
-        }
-      })
-    });
+          })
+        });
 
-    if (!response.ok) {
-      const errJson = await response.json().catch(() => ({}));
-      throw new Error(errJson.error?.message || `Erro na API Gemini (${response.status})`);
+        if (response.ok) {
+          resJson = await response.json();
+          break;
+        } else {
+          const errJson = await response.json().catch(() => ({}));
+          lastError = new Error(errJson.error?.message || `Erro na API Gemini modelo ${model} (${response.status})`);
+        }
+      } catch (err) {
+        lastError = err;
+      }
     }
 
-    const resJson = await response.json();
+    if (!resJson) {
+      throw lastError || new Error("Não foi possível transcrever o áudio com os modelos Gemini disponíveis.");
+    }
+
     const rawText = resJson.candidates?.[0]?.content?.parts?.[0]?.text || "";
     
     // Parse JSON
@@ -409,6 +430,7 @@ Return ONLY a valid JSON array of objects:
           start: typeof item.start === 'number' ? item.start : parseFloat(item.start) || 0.0,
           end: typeof item.end === 'number' ? item.end : parseFloat(item.end) || 0.0,
           text: (item.text || "").trim(),
+          spokenTranslation: (item.spokenTranslation || item.translation || "").trim(),
           notes: (item.notes || "").trim()
         }));
       }
