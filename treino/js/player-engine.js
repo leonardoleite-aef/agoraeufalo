@@ -84,6 +84,21 @@ class AEFPlayerEngine {
     this.audio.addEventListener("ratechange", () => {
       this.onSpeedChange(this.audio.playbackRate);
     });
+
+    this.audio.addEventListener("error", (e) => {
+      const err = this.audio.error;
+      console.warn("⚠️ Audio load error:", err ? `code=${err.code} message=${err.message}` : e);
+      // Auto fallback para caminho local se estiver no protocolo file: ou se URL falhar
+      if (this.currentTrack) {
+        const studentId = this.currentStudent?.id || "estevao";
+        const fallbackPath = `../assets/audio/alunos/${studentId}/Sreehari.mp3`;
+        if (this.audio.src !== fallbackPath && !this.audio.src.endsWith("Sreehari.mp3")) {
+          console.log("🔄 Tentando fallback para caminho local:", fallbackPath);
+          this.audio.src = fallbackPath;
+          this.audio.load();
+        }
+      }
+    });
   }
 
   loadStudentData(student, trackIndex = 0) {
