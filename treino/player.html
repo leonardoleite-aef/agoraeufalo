@@ -253,11 +253,6 @@
         </button>
       </div>
 
-      <!-- Quick Track Selector Bar (Highlighting the Active Track) -->
-      <div id="quick-track-selector-bar" class="w-full hidden">
-        <!-- Dynamically rendered via JS -->
-      </div>
-
       <!-- My Lab Empty / Add Track Banner -->
       <div id="mylab-header-banner" class="hidden p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5">
@@ -1691,68 +1686,12 @@
 
       function renderPlaylistDrawer(tracks, activeIndex) {
         const listEl = document.getElementById("drawer-tracks-list");
-        const quickBar = document.getElementById("quick-track-selector-bar");
-
         const validTracks = (tracks || []).filter(t => t && typeof t === 'object' && t.title && t.title.trim().length > 0);
 
-        // 1. TOP BAR: Highlight exclusively the latest episode + "Todos os Episódios" button
-        if (quickBar) {
-          if (validTracks.length <= 1) {
-            quickBar.classList.add("hidden");
-          } else {
-            quickBar.classList.remove("hidden");
-            const latestIdx = validTracks.length - 1;
-            const latestTrack = validTracks[latestIdx];
-            const isLatestActive = activeIndex === latestIdx;
-
-            quickBar.innerHTML = `
-              <div class="w-full bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent border-2 border-amber-400/50 dark:border-amber-500/40 rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-3 shadow-xs">
-                
-                <!-- Latest Track Highlight Pill -->
-                <div class="flex items-center gap-2.5 truncate cursor-pointer group" onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${latestIdx});">
-                  <span class="flex h-2.5 w-2.5 relative shrink-0">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-                  </span>
-                  <span class="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider shrink-0 shadow-xs">
-                    🔥 Mais Recente
-                  </span>
-                  <div class="truncate">
-                    <span class="font-bold text-xs sm:text-sm text-slate-900 dark:text-amber-200 group-hover:text-amber-600 dark:group-hover:text-amber-300 transition truncate">
-                      ${latestTrack.title}
-                    </span>
-                    ${latestTrack.duration ? `<span class="ml-1.5 text-[11px] font-mono font-bold text-amber-800 dark:text-amber-400">(${latestTrack.duration})</span>` : ''}
-                  </div>
-                </div>
-
-                <!-- Actions: Current Playing Indicator / Quick Play + View All Drawer Button -->
-                <div class="flex items-center gap-2 shrink-0">
-                  ${isLatestActive ? `
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/70 px-2.5 py-1 rounded-xl border border-emerald-300/50">
-                      <span>🎧</span> <span class="hidden sm:inline">Em Reprodução</span>
-                    </span>
-                  ` : `
-                    <button onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${latestIdx});" class="px-2.5 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition cursor-pointer shadow-xs active:scale-95 flex items-center gap-1">
-                      <span>▶️</span> <span class="hidden sm:inline">Ouvir</span>
-                    </button>
-                  `}
-
-                  <button onclick="window.uiController.togglePlaylistDrawer();" class="px-2.5 py-1 rounded-xl bg-white dark:bg-[#112240] hover:bg-amber-50 dark:hover:bg-slate-800 border border-amber-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5" title="Ver todos os episódios">
-                    <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path></svg>
-                    <span>Todos (${validTracks.length})</span>
-                  </button>
-                </div>
-              </div>
-            `;
-          }
-        }
-
-        // 2. SIDEBAR DRAWER: Ascending list (Track 1, 2, 3...) with glowing "✨ NOVO" on the latest track
+        // SIDEBAR DRAWER: Lista de episódios com indicador do ativo
         if (!listEl) return;
 
-        const latestIndex = validTracks.length - 1;
         listEl.innerHTML = validTracks.map((t, idx) => {
-          const isLatest = idx === latestIndex && validTracks.length > 1;
           const isActive = idx === activeIndex;
 
           return `
