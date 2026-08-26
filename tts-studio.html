@@ -53,9 +53,10 @@
   <!-- LameJS (MP3 Encoder) -->
   <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 
-  <!-- AgoraEuFalo Central Audio Hub, Cloud Sync & Registry -->
+  <!-- AgoraEuFalo Central Audio Hub, Cloud Sync, FilePicker & Registry -->
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-filepicker.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -721,9 +722,14 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         <div class="space-y-1">
           <label for="publishVideoUrlInput" class="font-semibold text-slate-300 flex items-center gap-1.5">
             <i data-lucide="video" class="w-3.5 h-3.5 text-amber-400"></i>
-            <span>Vídeo Próprio Hospedado (Opcional - MP4 / WebM / Nuvem)</span>
+            <span>Vídeo Próprio Hospedado (Opcional - MP4 / WebM na Nuvem)</span>
           </label>
-          <input type="text" id="publishVideoUrlInput" placeholder="Ex: /assets/videos/public/demonstracao.mp4 ou URL de vídeo na nuvem" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
+          <div class="flex items-center gap-2">
+            <input type="text" id="publishVideoUrlInput" placeholder="https://firebasestorage.googleapis.com/..." class="flex-1 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
+            <button type="button" onclick="window.AEFFilePicker.open({ accept: 'video/*', folder: 'videos/students', title: 'Upload de Vídeo MP4 para a Nuvem', onComplete: (url) => { document.getElementById('publishVideoUrlInput').value = url; } })" class="px-3 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs shrink-0 flex items-center gap-1 cursor-pointer">
+              <span>🎬 FilePicker</span>
+            </button>
+          </div>
         </div>
 
         <!-- Sound Chunks Preview -->

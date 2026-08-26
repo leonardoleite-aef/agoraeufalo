@@ -43,6 +43,8 @@
 
   <!-- Firebase & AEF Portal SDKs -->
   <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-filepicker.js"></script>
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
 
@@ -51,6 +53,7 @@
   <script src="treino/data/estevao.js"></script>
   <script src="treino/data/andre.js"></script>
   <script src="treino/data/matheus.js"></script>
+  <script src="treino/data/public.js"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -350,6 +353,147 @@
         <div class="pt-3 flex items-center justify-end gap-2">
           <button type="button" onclick="closeNewStudentModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">Cancelar</button>
           <button type="submit" id="saveStudentBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Salvar e Matricular</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: EDITAR ALUNO (CRM)                                                 -->
+  <!-- ========================================================================= -->
+  <div id="editStudentModal" class="modal-backdrop fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-stone-200 rounded-3xl max-w-md w-full p-6 shadow-2xl relative space-y-4">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
+            <i data-lucide="edit-3" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-base text-[#0A192F]">Editar Dados do Aluno</h3>
+        </div>
+        <button onclick="closeEditStudentModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="editStudentForm" onsubmit="handleSaveEditedStudent(event)" class="space-y-3.5">
+        <input type="hidden" id="editStudentUid">
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Nome Completo *</label>
+          <input type="text" id="editInputStudentName" required class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Email *</label>
+          <input type="email" id="editInputStudentEmail" required class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">WhatsApp (com DDD) *</label>
+          <input type="tel" id="editInputStudentPhone" required class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Plano / Acesso *</label>
+          <select id="editInputStudentTier" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-semibold">
+            <option value="vip_mentorship">👑 Mentoria VIP Individual</option>
+            <option value="lifetime">💎 Acesso Vitalício Master</option>
+            <option value="club_annual">⭐ Magic Stories Club (Anual)</option>
+            <option value="club_monthly">☕ Magic Stories Club (Mensal)</option>
+            <option value="free">🌱 Acesso Gratuito (Degustação)</option>
+          </select>
+        </div>
+        <div class="pt-3 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEditStudentModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">Cancelar</button>
+          <button type="submit" id="saveEditedStudentBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Salvar Alterações</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: EDITAR & REDISTRIBUIR FAIXA DE ÁUDIO / VÍDEO (FIRESTORE)           -->
+  <!-- ========================================================================= -->
+  <div id="editCentralTrackModal" class="modal-backdrop fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-stone-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-stone-200">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold">
+            <i data-lucide="music" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-base text-[#0A192F]">Editar & Redistribuir Faixa</h3>
+        </div>
+        <button onclick="closeEditCentralTrackModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="editCentralTrackForm" onsubmit="handleSaveEditedTrack(event)" class="space-y-3.5">
+        <input type="hidden" id="editCentralTrackId">
+        <input type="hidden" id="editCentralOriginalStudentId">
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Título do Treino *</label>
+          <input type="text" id="editCentralTrackTitle" required class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Duração *</label>
+            <input type="text" id="editCentralTrackDuration" required class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-700 block mb-1">Aluno Atribuído *</label>
+            <select id="editCentralTrackStudentId" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-semibold">
+              <option value="public">🌐 Player Público (Aberto)</option>
+              <option value="estevao">👑 Estêvão (VIP)</option>
+              <option value="thomas">👑 Thomas (VIP)</option>
+              <option value="andre">👑 André (VIP)</option>
+              <option value="matheus">👑 Matheus (VIP)</option>
+              <option value="carlos">👑 Carlos (VIP)</option>
+              <option value="marcos">👑 Marcos (VIP)</option>
+              <option value="patricia">👑 Patrícia (VIP)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Áudio MP3 na Nuvem *</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="editCentralTrackAudio" required class="flex-1 bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+            <button type="button" onclick="openFilePickerForCentral('editCentralTrackAudio', 'audio/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Vídeo Próprio MP4 na Nuvem (Opcional)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="editCentralTrackVideo" class="flex-1 bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none font-mono">
+            <button type="button" onclick="openFilePickerForCentral('editCentralTrackVideo', 'video/*')" class="px-3 py-2 rounded-xl bg-sky-500 text-white text-xs font-bold shrink-0">🎬 FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Capa 1:1 (coverImage)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="editCentralTrackCover" required class="flex-1 bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+            <button type="button" onclick="openFilePickerForCentral('editCentralTrackCover', 'image/*')" class="px-3 py-2 rounded-xl bg-stone-200 text-slate-800 text-xs font-bold shrink-0">🖼️ FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-700 block mb-1">Resumo Pedagógico</label>
+          <textarea id="editCentralTrackSummary" rows="2" class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-amber-800 block mb-1">✨ Sacada de Ouro do Leo</label>
+          <input type="text" id="editCentralTrackGoldenTip" class="w-full bg-amber-50 border border-amber-200 focus:border-amber-500 rounded-xl px-3.5 py-2 text-xs text-slate-900 outline-none">
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2 border-t border-stone-200">
+          <button type="button" onclick="closeEditCentralTrackModal()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-700 text-xs font-bold transition">Cancelar</button>
+          <button type="submit" id="saveEditedCentralTrackBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold transition">Salvar na Nuvem</button>
         </div>
       </form>
 
@@ -961,6 +1105,14 @@
                 <a href="treino/player.html?aluno=${s.uid}" target="_blank" class="p-1.5 rounded-lg bg-[#0A192F] hover:bg-slate-900 text-amber-300 transition" title="Abrir Player do Aluno">
                   <i data-lucide="headphones" class="w-4 h-4"></i>
                 </a>
+
+                <button onclick="openEditStudentModal('${s.uid}')" class="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 transition" title="Editar Dados do Aluno">
+                  <i data-lucide="edit-3" class="w-4 h-4"></i>
+                </button>
+
+                <button onclick="deleteStudent('${s.uid}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 transition" title="Excluir Aluno">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
               </div>
             </td>
           </tr>
@@ -1007,6 +1159,74 @@
       } catch (err) {
         console.error("Error updating tier:", err);
         showToast("Erro ao atualizar plano no Firestore.", "error");
+      }
+    }
+
+    function openEditStudentModal(uid) {
+      const student = rawStudentsList.find(s => s.uid === uid);
+      if (!student) return;
+      document.getElementById('editStudentUid').value = student.uid;
+      document.getElementById('editInputStudentName').value = student.name || '';
+      document.getElementById('editInputStudentEmail').value = student.email || '';
+      document.getElementById('editInputStudentPhone').value = student.phone || '';
+      document.getElementById('editInputStudentTier').value = student.tier || 'free';
+      document.getElementById('editStudentModal').classList.add('active');
+    }
+
+    function closeEditStudentModal() {
+      document.getElementById('editStudentModal').classList.remove('active');
+    }
+
+    async function handleSaveEditedStudent(e) {
+      e.preventDefault();
+      const uid = document.getElementById('editStudentUid').value;
+      const name = document.getElementById('editInputStudentName').value.trim();
+      const email = document.getElementById('editInputStudentEmail').value.trim();
+      const phone = document.getElementById('editInputStudentPhone').value.trim();
+      const tier = document.getElementById('editInputStudentTier').value;
+
+      try {
+        await window.aefPortalAuth.ready();
+        const db = window.aefPortalAuth.db;
+        if (db) {
+          await db.collection('users').doc(uid).update({
+            name: name,
+            email: email,
+            phone: phone,
+            tier: tier,
+            updatedAt: new Date().toISOString()
+          });
+        }
+        const student = rawStudentsList.find(s => s.uid === uid);
+        if (student) {
+          student.name = name;
+          student.email = email;
+          student.phone = phone;
+          student.tier = tier;
+        }
+        closeEditStudentModal();
+        renderStudentsTable();
+        updateCRMStats();
+        showToast("Dados do aluno atualizados no Firestore!", "success");
+      } catch (err) {
+        showToast("Erro ao atualizar aluno: " + err.message, "error");
+      }
+    }
+
+    async function deleteStudent(uid) {
+      if (!confirm("Tem certeza que deseja remover este aluno do sistema e do Firestore?")) return;
+      try {
+        await window.aefPortalAuth.ready();
+        const db = window.aefPortalAuth.db;
+        if (db) {
+          await db.collection('users').doc(uid).delete();
+        }
+        rawStudentsList = rawStudentsList.filter(s => s.uid !== uid);
+        renderStudentsTable();
+        updateCRMStats();
+        showToast("Aluno excluído do Firestore com sucesso.", "info");
+      } catch (err) {
+        showToast("Erro ao excluir aluno: " + err.message, "error");
       }
     }
 
@@ -1083,38 +1303,229 @@
     }
 
     // =========================================================================
-    // 3. CENTRAL AUDIO LIBRARY & DISTRIBUTION MATRIX
+    // 3. CENTRAL AUDIO LIBRARY & DISTRIBUTION MATRIX (FIRESTORE + CLOUD)
     // =========================================================================
-    function renderCentralLibrary() {
+    let allAggregatedTracks = [];
+
+    async function renderCentralLibrary() {
       const container = document.getElementById('centralLibraryContainer');
       if (!container) return;
 
-      const tracks = window.aefAudioHub ? window.aefAudioHub.getLibraryTracks() : [];
+      container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Carregando todas as faixas da Nuvem e do Firestore...</div>`;
+
+      let tracks = [];
+
+      // 1. Gather all local registered datasets
+      const localSources = [
+        { id: "estevao", name: "Estêvão", data: window.AEF_STUDENT_ESTEVAO },
+        { id: "thomas", name: "Thomas", data: window.AEF_STUDENT_THOMAS },
+        { id: "public", name: "Público (Aberto)", data: window.AEF_STUDENT_PUBLIC },
+        { id: "andre", name: "André", data: window.AEF_STUDENT_ANDRE },
+        { id: "matheus", name: "Matheus", data: window.AEF_STUDENT_MATHEUS }
+      ];
+
+      localSources.forEach(src => {
+        if (src.data && src.data.tracks) {
+          src.data.tracks.forEach(tr => {
+            tracks.push({
+              ...tr,
+              studentId: src.id,
+              studentName: src.name
+            });
+          });
+        }
+      });
+
+      // 2. Fetch all tracks from Firestore across known students
+      const studentIds = ["estevao", "thomas", "public", "andre", "matheus", "carlos", "marcos", "patricia"];
+      for (const sid of studentIds) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${sid}/tracks`);
+          const data = await res.json();
+          if (data.documents && data.documents.length > 0) {
+            data.documents.forEach(d => {
+              const f = d.fields || {};
+              const trId = f.id?.stringValue || d.name.split("/").pop();
+              const existingIdx = tracks.findIndex(t => t.id === trId && t.studentId === sid);
+              const trackObj = {
+                id: trId,
+                title: f.title?.stringValue || "Sem Título",
+                duration: f.duration?.stringValue || "00:30",
+                coverImage: f.coverImage?.stringValue || "assets/images/cover-default-aef.jpg",
+                audioUrl: f.audioUrl?.stringValue || "",
+                videoUrl: f.videoUrl?.stringValue || "",
+                summary: f.summary?.stringValue || "",
+                goldenTip: f.goldenTip?.stringValue || "",
+                studentId: sid,
+                studentName: sid === "public" ? "Público (Aberto)" : sid.charAt(0).toUpperCase() + sid.slice(1)
+              };
+
+              if (existingIdx >= 0) {
+                tracks[existingIdx] = trackObj;
+              } else {
+                tracks.unshift(trackObj);
+              }
+            });
+          }
+        } catch (e) {
+          // ignore individual fetch errors
+        }
+      }
+
+      allAggregatedTracks = tracks;
 
       if (tracks.length === 0) {
         container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs border border-dashed rounded-2xl">Nenhum áudio produzido na biblioteca central.</div>`;
         return;
       }
 
-      container.innerHTML = tracks.map(tr => `
-        <div class="p-4 rounded-2xl border border-stone-200 hover:border-amber-300 bg-stone-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <img src="${tr.coverImage || 'assets/images/cover-thomas-morning-person.jpg'}" class="w-12 h-12 rounded-xl object-cover border shrink-0">
-            <div>
-              <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider">${tr.category || 'Treino AEF'}</span>
-              <h4 class="font-bold text-sm text-slate-900">${tr.title}</h4>
-              <span class="text-[11px] text-slate-500 font-mono">${tr.duration} • ${tr.speakers || 'Gemini HD'}</span>
+      container.innerHTML = tracks.map(tr => {
+        const isPublic = tr.studentId === "public";
+        const badgeColor = isPublic ? "bg-emerald-500 text-slate-950" : "bg-[#0A192F] text-amber-300";
+        const playerUrl = isPublic ? "treino/player.html?aluno=public" : `treino/player.html?aluno=${tr.studentId}`;
+
+        return `
+          <div class="p-4 rounded-2xl border border-stone-200 hover:border-amber-400 bg-stone-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3 truncate">
+              <img src="${tr.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-14 h-14 rounded-xl object-cover border border-stone-300 shrink-0">
+              <div class="truncate">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${badgeColor}">
+                    ${tr.studentName}
+                  </span>
+                  <span class="text-[11px] text-slate-500 font-mono font-bold">${tr.duration}</span>
+                  ${tr.videoUrl ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800">🎬 Vídeo</span>' : ''}
+                </div>
+                <h4 class="font-bold text-sm text-slate-900 truncate">${tr.title}</h4>
+                <p class="text-xs text-slate-500 truncate">${tr.summary || ''}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <a href="${playerUrl}" target="_blank" class="px-3 py-1.5 rounded-xl bg-white border border-stone-300 hover:border-amber-500 text-slate-800 text-xs font-bold transition flex items-center gap-1">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                <span>Player</span>
+              </a>
+              <button onclick="openEditCentralTrackModal('${tr.id}', '${tr.studentId}')" class="p-2 rounded-xl bg-white border border-stone-300 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition" title="Editar / Redistribuir">
+                <i data-lucide="edit-3" class="w-4 h-4"></i>
+              </button>
+              <button onclick="deleteCentralTrack('${tr.id}', '${tr.studentId}')" class="p-2 rounded-xl bg-white border border-stone-300 hover:bg-rose-600 hover:text-white text-rose-600 transition" title="Excluir da Nuvem">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <a href="treino/player.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white border border-stone-300 hover:border-amber-500 text-slate-800 text-xs font-bold transition">
-              Testar no Player
-            </a>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
       if (window.lucide) lucide.createIcons();
+    }
+
+    function openFilePickerForCentral(targetInputId, acceptType) {
+      let folder = "uploads";
+      let title = "Upload de Arquivo para Google Cloud Storage";
+      if (acceptType.startsWith("audio/")) { folder = "audio/students"; title = "Upload de Áudio MP3 para Nuvem"; }
+      else if (acceptType.startsWith("video/")) { folder = "videos/students"; title = "Upload de Vídeo MP4 para Nuvem"; }
+      else if (acceptType.startsWith("image/")) { folder = "covers/students"; title = "Upload de Capa 1:1 para Nuvem"; }
+
+      window.AEFFilePicker.open({
+        accept: acceptType,
+        folder: folder,
+        title: title,
+        onComplete: (url) => {
+          document.getElementById(targetInputId).value = url;
+        }
+      });
+    }
+
+    function openEditCentralTrackModal(trackId, studentId) {
+      const track = allAggregatedTracks.find(t => t.id === trackId && t.studentId === studentId) || {};
+      document.getElementById('editCentralTrackId').value = track.id || trackId;
+      document.getElementById('editCentralOriginalStudentId').value = studentId;
+      document.getElementById('editCentralTrackTitle').value = track.title || '';
+      document.getElementById('editCentralTrackDuration').value = track.duration || '00:30';
+      document.getElementById('editCentralTrackStudentId').value = studentId || 'public';
+      document.getElementById('editCentralTrackAudio').value = track.audioUrl || '';
+      document.getElementById('editCentralTrackVideo').value = track.videoUrl || '';
+      document.getElementById('editCentralTrackCover').value = track.coverImage || '';
+      document.getElementById('editCentralTrackSummary').value = track.summary || '';
+      document.getElementById('editCentralTrackGoldenTip').value = track.goldenTip || '';
+
+      document.getElementById('editCentralTrackModal').classList.add('active');
+    }
+
+    function closeEditCentralTrackModal() {
+      document.getElementById('editCentralTrackModal').classList.remove('active');
+    }
+
+    async function handleSaveEditedTrack(e) {
+      e.preventDefault();
+      const trackId = document.getElementById('editCentralTrackId').value;
+      const originalStudentId = document.getElementById('editCentralOriginalStudentId').value;
+      const newStudentId = document.getElementById('editCentralTrackStudentId').value;
+      const title = document.getElementById('editCentralTrackTitle').value.trim();
+      const duration = document.getElementById('editCentralTrackDuration').value.trim();
+      const audioUrl = document.getElementById('editCentralTrackAudio').value.trim();
+      const videoUrl = document.getElementById('editCentralTrackVideo').value.trim();
+      const coverImage = document.getElementById('editCentralTrackCover').value.trim();
+      const summary = document.getElementById('editCentralTrackSummary').value.trim();
+      const goldenTip = document.getElementById('editCentralTrackGoldenTip').value.trim();
+
+      const saveBtn = document.getElementById('saveEditedCentralTrackBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = "Salvando na Nuvem...";
+
+      const payload = JSON.stringify({
+        fields: {
+          id: { stringValue: trackId },
+          title: { stringValue: title },
+          duration: { stringValue: duration },
+          audioUrl: { stringValue: audioUrl },
+          videoUrl: { stringValue: videoUrl },
+          coverImage: { stringValue: coverImage },
+          summary: { stringValue: summary },
+          goldenTip: { stringValue: goldenTip },
+          assignedTo: { arrayValue: { values: [{ stringValue: newStudentId }] } },
+          updatedAt: { stringValue: new Date().toISOString() }
+        }
+      });
+
+      try {
+        // Save in new student track path
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${newStudentId}/tracks/${trackId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: payload
+        });
+
+        // If student changed, delete from old student path
+        if (originalStudentId && originalStudentId !== newStudentId) {
+          await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${originalStudentId}/tracks/${trackId}`, {
+            method: "DELETE"
+          });
+        }
+
+        closeEditCentralTrackModal();
+        renderCentralLibrary();
+        showToast("Faixa atualizada e redistribuída na Nuvem Google!", "success");
+      } catch (err) {
+        showToast("Erro ao salvar faixa: " + err.message, "error");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Salvar na Nuvem";
+      }
+    }
+
+    async function deleteCentralTrack(trackId, studentId) {
+      if (!confirm(`Tem certeza que deseja excluir a faixa "${trackId}" do Firestore?`)) return;
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${studentId}/tracks/${trackId}`, {
+          method: "DELETE"
+        });
+        renderCentralLibrary();
+        showToast("Faixa removida da Nuvem Google.", "info");
+      } catch (err) {
+        showToast("Erro ao remover faixa: " + err.message, "error");
+      }
     }
 
     function showToast(message, type = "info", duration = 4000) {

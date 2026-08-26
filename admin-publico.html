@@ -39,9 +39,10 @@
     }
   </script>
 
-  <!-- Lucide Icons -->
+  <!-- Lucide Icons & Core Cloud SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-filepicker.js"></script>
   <script src="treino/data/public.js"></script>
 </head>
 <body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -121,46 +122,6 @@
       </div>
     </div>
 
-    <!-- 📘 GUIA VISUAL: ONDE E COMO CRIAR / SUBIR VÍDEOS -->
-    <div class="bg-gradient-to-r from-amber-500/15 via-[#112240] to-[#112240] border-2 border-amber-400/40 rounded-2xl p-5 shadow-lg space-y-3">
-      <div class="flex items-center gap-2">
-        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">Central de Ajuda</span>
-        <h4 class="font-bold text-sm text-white">Onde você cria, edita e publica vídeos no Player Público:</h4>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        
-        <!-- Método 1: TTS Studio -->
-        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
-          <div class="flex items-center gap-2 text-amber-300 font-bold">
-            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs">1</span>
-            <span class="text-sm">Via TTS Studio (Áudio com Vozes IA + Vídeo)</span>
-          </div>
-          <p class="text-slate-300 leading-relaxed">
-            1. Abra o <a href="tts-studio.html" class="text-amber-400 underline font-bold">TTS Studio</a> e sintetize seu áudio com vozes do Gemini.<br>
-            2. Clique em <strong>"Publicar no Player do Aluno"</strong>.<br>
-            3. Marque a caixa <strong>"Público"</strong> como destinatário.<br>
-            4. No campo <strong>"Vídeo Próprio Hospedado"</strong>, insira a URL do vídeo (<code class="text-amber-300 font-mono">/assets/videos/public/nome.mp4</code> ou link da nuvem).
-          </p>
-        </div>
-
-        <!-- Método 2: Painel Público Direto -->
-        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
-          <div class="flex items-center gap-2 text-amber-300 font-bold">
-            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs">2</span>
-            <span class="text-sm">Diretamente neste Painel (Aba "Novo Treino")</span>
-          </div>
-          <p class="text-slate-300 leading-relaxed">
-            1. Clique na aba <strong>"Novo Episódio Público"</strong> abaixo.<br>
-            2. Cole o link do áudio MP3 e o link do vídeo MP4 hospedado.<br>
-            3. Digite ou cole a transcrição das frases com os tempos.<br>
-            4. Clique em <strong>"Publicar no Player Público"</strong> e ele entrará no ar em tempo real no mundo inteiro!
-          </p>
-        </div>
-
-      </div>
-    </div>
-
     <!-- ========================================== -->
     <!-- 3. TABS: LEADS vs EPISÓDIOS               -->
     <!-- ========================================== -->
@@ -175,7 +136,7 @@
       </button>
       <button onclick="switchTab('new')" id="tab-btn-new" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
         <i data-lucide="plus-circle" class="w-4 h-4"></i>
-        <span>Novo Episódio Público</span>
+        <span>Novo Treino (Com FilePicker)</span>
       </button>
     </div>
 
@@ -201,7 +162,7 @@
               <th class="py-3 px-3">WhatsApp</th>
               <th class="py-3 px-3">Origem</th>
               <th class="py-3 px-3">Data</th>
-              <th class="py-3 px-3 text-right">Ação</th>
+              <th class="py-3 px-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody id="leads-table-body" class="divide-y divide-white/5 font-medium">
@@ -231,50 +192,51 @@
     <section id="panel-new" class="hidden bg-[#112240] border border-white/10 rounded-2xl p-6 shadow-sm space-y-5">
       <div>
         <h3 class="text-base font-bold text-white">Cadastrar / Publicar Treino Público com Vídeo</h3>
-        <p class="text-xs text-slate-400">Insira os links de áudio e vídeo próprio hospedado e sincronize na nuvem.</p>
+        <p class="text-xs text-slate-400">Use o <strong>Google Cloud FilePicker</strong> para subir áudios e vídeos diretamente para o bucket da nuvem sem passar pelo Git.</p>
       </div>
 
       <form id="new-public-track-form" onsubmit="handleNewPublicTrack(event)" class="space-y-4 max-w-3xl">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1">Título do Treino</label>
-            <input type="text" id="track-title-input" required placeholder="Ex: Master Speech: Executive Clarity" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <input type="text" id="track-title-input" required placeholder="Ex: Master Speech: Executive Clarity" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1">Duração (mm:ss)</label>
-            <input type="text" id="track-duration-input" required placeholder="00:45" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <input type="text" id="track-duration-input" required placeholder="00:45" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="block text-xs font-bold text-slate-300">Áudio MP3 (Nuvem Google Storage)</label>
+            <label class="block text-xs font-bold text-slate-300">Áudio MP3 (Google Cloud Storage)</label>
             <div class="flex items-center gap-2">
-              <input type="text" id="track-audio-input" required placeholder="https://firebasestorage.googleapis.com/... ou /assets/audio/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
-              <label class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold cursor-pointer shrink-0">
-                <span>📁 Subir MP3</span>
-                <input type="file" accept="audio/*" class="hidden" onchange="uploadMediaFile(this, 'track-audio-input', 'track-audio-upload-status', 'audio/public')">
-              </label>
+              <input type="text" id="track-audio-input" required placeholder="https://firebasestorage.googleapis.com/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+              <button type="button" onclick="openAudioFilePicker('track-audio-input')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shrink-0 flex items-center gap-1 cursor-pointer">
+                <span>📁 FilePicker</span>
+              </button>
             </div>
-            <span id="track-audio-upload-status" class="text-[10px] text-amber-400 font-bold block"></span>
           </div>
           
           <div class="space-y-1">
             <label class="block text-xs font-bold text-slate-300">Vídeo Próprio (Opcional - MP4 na Nuvem)</label>
             <div class="flex items-center gap-2">
-              <input type="text" id="track-video-input" placeholder="https://firebasestorage.googleapis.com/... ou /assets/videos/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
-              <label class="px-3 py-2 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/40 text-xs font-bold cursor-pointer shrink-0">
-                <span>🎬 Subir MP4</span>
-                <input type="file" accept="video/*" class="hidden" onchange="uploadMediaFile(this, 'track-video-input', 'track-video-upload-status', 'videos/public')">
-              </label>
+              <input type="text" id="track-video-input" placeholder="https://firebasestorage.googleapis.com/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+              <button type="button" onclick="openVideoFilePicker('track-video-input')" class="px-3.5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-black shrink-0 flex items-center gap-1 cursor-pointer">
+                <span>🎬 FilePicker</span>
+              </button>
             </div>
-            <span id="track-video-upload-status" class="text-[10px] text-sky-400 font-bold block"></span>
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">Capa 1:1 (coverImage)</label>
-          <input type="text" id="track-cover-input" required value="../assets/images/cover-public-spoken-reflex.jpg" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          <div class="flex items-center gap-2">
+            <input type="text" id="track-cover-input" required value="../assets/images/cover-public-spoken-reflex.jpg" class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <button type="button" onclick="openImageFilePicker('track-cover-input')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold shrink-0 flex items-center gap-1 cursor-pointer">
+              <span>🖼️ Trocar Capa</span>
+            </button>
+          </div>
         </div>
 
         <div>
@@ -301,14 +263,149 @@
 
   </main>
 
+  <!-- ========================================== -->
+  <!-- 4. MODALS: EDIT LEAD & EDIT TRACK          -->
+  <!-- ========================================== -->
+  
+  <!-- Edit Lead Modal -->
+  <div id="editLeadModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#112240] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h3 class="font-bold text-sm text-white">Editar Dados do Lead</h3>
+        <button onclick="closeEditLeadModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form id="editLeadForm" onsubmit="saveEditedLead(event)" class="space-y-3">
+        <input type="hidden" id="editLeadId">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">Nome Completo</label>
+          <input type="text" id="editLeadName" required class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">E-mail</label>
+          <input type="email" id="editLeadEmail" required class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">WhatsApp</label>
+          <input type="tel" id="editLeadWhatsapp" required class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeEditLeadModal()" class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300">Cancelar</button>
+          <button type="submit" class="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Track Modal (Public or Student) -->
+  <div id="editTrackModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#112240] border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h3 class="font-bold text-sm text-white">Editar & Redistribuir Faixa de Treino</h3>
+        <button onclick="closeEditTrackModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form id="editTrackForm" onsubmit="saveEditedTrack(event)" class="space-y-3.5">
+        <input type="hidden" id="editTrackId">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">Título da Faixa</label>
+          <input type="text" id="editTrackTitle" required class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">Duração</label>
+            <input type="text" id="editTrackDuration" required class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">Destinatário Principal</label>
+            <select id="editTrackStudentId" class="w-full px-3 py-2 rounded-xl bg-[#0A192F] border border-white/20 text-white text-xs">
+              <option value="public">🌐 Player Público (Aberto)</option>
+              <option value="estevao">👑 Estêvão (VIP)</option>
+              <option value="thomas">👑 Thomas (VIP)</option>
+              <option value="andre">👑 André (VIP)</option>
+              <option value="matheus">👑 Matheus (VIP)</option>
+              <option value="carlos">👑 Carlos (VIP)</option>
+              <option value="marcos">👑 Marcos (VIP)</option>
+              <option value="patricia">👑 Patrícia (VIP)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">Áudio MP3 (Nuvem)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="editTrackAudio" required class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <button type="button" onclick="openAudioFilePicker('editTrackAudio')" class="px-2.5 py-2 rounded-xl bg-amber-500 text-slate-950 text-[10px] font-black">📁 Trocar</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">Vídeo Próprio (Nuvem - Opcional)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="editTrackVideo" class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <button type="button" onclick="openVideoFilePicker('editTrackVideo')" class="px-2.5 py-2 rounded-xl bg-sky-500 text-slate-950 text-[10px] font-black">🎬 Trocar</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1">Capa 1:1</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="editTrackCover" required class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <button type="button" onclick="openImageFilePicker('editTrackCover')" class="px-2.5 py-2 rounded-xl bg-white/20 text-white text-[10px] font-bold">🖼️ Trocar</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-amber-400 mb-1">✨ Sacada de Ouro do Leo</label>
+          <input type="text" id="editTrackGoldenTip" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-amber-500/30 text-white text-xs">
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
+          <button type="button" onclick="closeEditTrackModal()" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     let currentLeads = [];
+    let currentPublicTracks = [];
 
     document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
       fetchLeads();
       renderPublicTracks();
     });
+
+    function openAudioFilePicker(targetInputId) {
+      window.AEFFilePicker.open({
+        accept: "audio/*",
+        folder: "audio/public",
+        title: "Upload de Áudio MP3 para Google Cloud Storage",
+        subtitle: "Envie áudios gravados ou masterizados diretamente para o bucket seguro",
+        onComplete: (url) => {
+          document.getElementById(targetInputId).value = url;
+        }
+      });
+    }
+
+    function openVideoFilePicker(targetInputId) {
+      window.AEFFilePicker.open({
+        accept: "video/*",
+        folder: "videos/public",
+        title: "Upload de Vídeo MP4 para Google Cloud Storage",
+        subtitle: "Envie vídeos de aulas e apresentações com CDN global de alta velocidade",
+        onComplete: (url) => {
+          document.getElementById(targetInputId).value = url;
+        }
+      });
+    }
+
+    function openImageFilePicker(targetInputId) {
+      window.AEFFilePicker.open({
+        accept: "image/*",
+        folder: "covers/public",
+        title: "Upload de Capa 1:1 para Google Cloud Storage",
+        subtitle: "Selecione a arte quadrada personalizada do treino",
+        onComplete: (url) => {
+          document.getElementById(targetInputId).value = url;
+        }
+      });
+    }
 
     function switchTab(tab) {
       document.getElementById("panel-leads").classList.toggle("hidden", tab !== "leads");
@@ -321,6 +418,9 @@
       lucide.createIcons();
     }
 
+    // ==========================================
+    // LEADS CRUD
+    // ==========================================
     async function fetchLeads() {
       try {
         const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads");
@@ -358,11 +458,16 @@
               <td class="py-3 px-3 text-amber-300 font-mono">${lead.whatsapp}</td>
               <td class="py-3 px-3 text-slate-400 text-[10px]">${lead.source}</td>
               <td class="py-3 px-3 text-slate-400">${dateStr}</td>
-              <td class="py-3 px-3 text-right">
-                <a href="https://wa.me/55${cleanPhone}?text=Olá%20${encodeURIComponent(lead.name)}!%20Aqui%20é%20o%20Prof.%20Leo%20Leite%20do%20AgoraEuFalo." target="_blank" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] inline-flex items-center gap-1">
-                  <span>WhatsApp</span>
-                  <i data-lucide="message-circle" class="w-3 h-3"></i>
+              <td class="py-3 px-3 text-right flex items-center justify-end gap-1.5">
+                <a href="https://wa.me/55${cleanPhone}?text=Olá%20${encodeURIComponent(lead.name)}!%20Aqui%20é%20o%20Prof.%20Leo%20Leite%20do%20AgoraEuFalo." target="_blank" class="p-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px]" title="Chamar no WhatsApp">
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                 </a>
+                <button onclick="openEditLeadModal('${lead.id}')" class="p-1.5 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar Lead">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="deleteLead('${lead.id}')" class="p-1.5 rounded-lg bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Lead">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
               </td>
             </tr>
           `;
@@ -373,6 +478,65 @@
       }
     }
 
+    function openEditLeadModal(leadId) {
+      const lead = currentLeads.find(l => l.id === leadId);
+      if (!lead) return;
+      document.getElementById("editLeadId").value = lead.id;
+      document.getElementById("editLeadName").value = lead.name;
+      document.getElementById("editLeadEmail").value = lead.email;
+      document.getElementById("editLeadWhatsapp").value = lead.whatsapp;
+      document.getElementById("editLeadModal").classList.remove("hidden");
+    }
+
+    function closeEditLeadModal() {
+      document.getElementById("editLeadModal").classList.add("hidden");
+    }
+
+    async function saveEditedLead(e) {
+      e.preventDefault();
+      const leadId = document.getElementById("editLeadId").value;
+      const name = document.getElementById("editLeadName").value.trim();
+      const email = document.getElementById("editLeadEmail").value.trim();
+      const whatsapp = document.getElementById("editLeadWhatsapp").value.trim();
+
+      const payload = JSON.stringify({
+        fields: {
+          name: { stringValue: name },
+          email: { stringValue: email },
+          whatsapp: { stringValue: whatsapp },
+          source: { stringValue: "admin-edit" },
+          updatedAt: { stringValue: new Date().toISOString() }
+        }
+      });
+
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads/${leadId}?updateMask.fieldPaths=name&updateMask.fieldPaths=email&updateMask.fieldPaths=whatsapp&updateMask.fieldPaths=updatedAt`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: payload
+        });
+        closeEditLeadModal();
+        fetchLeads();
+      } catch (err) {
+        alert("Erro ao salvar lead: " + err.message);
+      }
+    }
+
+    async function deleteLead(leadId) {
+      if (!confirm("Tem certeza que deseja excluir este lead do banco de dados?")) return;
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads/${leadId}`, {
+          method: "DELETE"
+        });
+        fetchLeads();
+      } catch (err) {
+        alert("Erro ao excluir lead: " + err.message);
+      }
+    }
+
+    // ==========================================
+    // PUBLIC TRACKS CRUD
+    // ==========================================
     async function renderPublicTracks() {
       const container = document.getElementById("public-tracks-list");
       let baseTracks = window.AEF_STUDENT_PUBLIC?.tracks || [];
@@ -389,9 +553,11 @@
               title: f.title?.stringValue || "Sem Título",
               duration: f.duration?.stringValue || "00:00",
               coverImage: f.coverImage?.stringValue || "../assets/images/cover-public-spoken-reflex.jpg",
+              audioUrl: f.audioUrl?.stringValue || "",
               videoUrl: f.videoUrl?.stringValue || "",
               summary: f.summary?.stringValue || "",
-              goldenTip: f.goldenTip?.stringValue || ""
+              goldenTip: f.goldenTip?.stringValue || "",
+              studentId: "public"
             };
           });
           baseTracks = cloudTracks;
@@ -400,23 +566,102 @@
         console.warn("Could not fetch cloud tracks:", e);
       }
 
+      currentPublicTracks = baseTracks;
       document.getElementById("stat-total-tracks").innerText = baseTracks.length;
 
       container.innerHTML = baseTracks.map((t, idx) => `
-        <div class="bg-[#0A192F] border border-amber-400/40 rounded-2xl p-4 flex items-center gap-4">
-          <img src="${t.coverImage || 'assets/images/cover-public-spoken-reflex.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
-          <div class="flex-1 truncate">
-            <div class="flex items-center justify-between mb-1">
-              <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
-              <span class="text-xs font-mono font-bold text-amber-300">${t.duration}</span>
+        <div class="bg-[#0A192F] border border-amber-400/40 rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 truncate">
+            <img src="${t.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
+            <div class="truncate">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
+                <span class="text-xs font-mono font-bold text-amber-300">${t.duration}</span>
+              </div>
+              <h4 class="font-bold text-sm text-white truncate">${t.title}</h4>
+              <p class="text-xs text-slate-400 truncate mt-0.5">${t.summary || ''}</p>
+              ${t.videoUrl ? '<span class="inline-block mt-1 px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-bold">🎬 Possui Vídeo</span>' : ''}
             </div>
-            <h4 class="font-bold text-sm text-white truncate">${t.title}</h4>
-            <p class="text-xs text-slate-400 truncate mt-0.5">${t.summary || ''}</p>
-            ${t.videoUrl ? '<span class="inline-block mt-1 px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-bold">🎬 Possui Vídeo</span>' : ''}
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="openEditTrackModal('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar / Redistribuir Faixa">
+              <i data-lucide="edit-2" class="w-4 h-4"></i>
+            </button>
+            <button onclick="deleteTrack('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Faixa">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
           </div>
         </div>
       `).join("");
       lucide.createIcons();
+    }
+
+    function openEditTrackModal(trackId, studentId) {
+      const track = currentPublicTracks.find(t => t.id === trackId) || {};
+      document.getElementById("editTrackId").value = track.id || trackId;
+      document.getElementById("editTrackTitle").value = track.title || "";
+      document.getElementById("editTrackDuration").value = track.duration || "00:30";
+      document.getElementById("editTrackAudio").value = track.audioUrl || "";
+      document.getElementById("editTrackVideo").value = track.videoUrl || "";
+      document.getElementById("editTrackCover").value = track.coverImage || "";
+      document.getElementById("editTrackGoldenTip").value = track.goldenTip || "";
+      document.getElementById("editTrackStudentId").value = studentId || "public";
+      document.getElementById("editTrackModal").classList.remove("hidden");
+    }
+
+    function closeEditTrackModal() {
+      document.getElementById("editTrackModal").classList.add("hidden");
+    }
+
+    async function saveEditedTrack(e) {
+      e.preventDefault();
+      const trackId = document.getElementById("editTrackId").value;
+      const studentId = document.getElementById("editTrackStudentId").value;
+      const title = document.getElementById("editTrackTitle").value.trim();
+      const duration = document.getElementById("editTrackDuration").value.trim();
+      const audioUrl = document.getElementById("editTrackAudio").value.trim();
+      const videoUrl = document.getElementById("editTrackVideo").value.trim();
+      const coverImage = document.getElementById("editTrackCover").value.trim();
+      const goldenTip = document.getElementById("editTrackGoldenTip").value.trim();
+
+      const payload = JSON.stringify({
+        fields: {
+          id: { stringValue: trackId },
+          title: { stringValue: title },
+          duration: { stringValue: duration },
+          audioUrl: { stringValue: audioUrl },
+          videoUrl: { stringValue: videoUrl },
+          coverImage: { stringValue: coverImage },
+          goldenTip: { stringValue: goldenTip },
+          assignedTo: { arrayValue: { values: [{ stringValue: studentId }] } },
+          updatedAt: { stringValue: new Date().toISOString() }
+        }
+      });
+
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${studentId}/tracks/${trackId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: payload
+        });
+        alert("🎉 Faixa atualizada e redistribuída com sucesso na Nuvem Google!");
+        closeEditTrackModal();
+        renderPublicTracks();
+      } catch (err) {
+        alert("Erro ao salvar faixa: " + err.message);
+      }
+    }
+
+    async function deleteTrack(trackId, studentId) {
+      if (!confirm("Tem certeza que deseja excluir esta faixa da nuvem?")) return;
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${studentId}/tracks/${trackId}`, {
+          method: "DELETE"
+        });
+        renderPublicTracks();
+      } catch (err) {
+        alert("Erro ao excluir faixa: " + err.message);
+      }
     }
 
     async function handleNewPublicTrack(e) {
@@ -435,7 +680,7 @@
       try {
         sentences = sentencesRaw ? JSON.parse(sentencesRaw) : [];
       } catch (err) {
-        return alert("O campo de frases precisa ser um JSON válido. Ex: [{\"id\": 1, \"start\": 0, \"end\": 3, \"text\": \"Frase\"}]");
+        return alert("O campo de frases precisa ser um JSON válido.");
       }
 
       btn.disabled = true;
@@ -487,32 +732,6 @@
         btn.disabled = false;
         btn.innerHTML = `<span>Publicar no Player Público</span><i data-lucide="check" class="w-4 h-4"></i>`;
         lucide.createIcons();
-      }
-    }
-
-    async function uploadMediaFile(inputEl, targetInputId, statusId, folder) {
-      const file = inputEl.files[0];
-      if (!file) return;
-
-      const statusEl = document.getElementById(statusId);
-      const targetInput = document.getElementById(targetInputId);
-      
-      if (statusEl) {
-        statusEl.classList.remove("hidden");
-        statusEl.innerText = `⏳ Enviando para a Nuvem Google (0%)...`;
-      }
-
-      try {
-        if (!window.aefCloudSync) throw new Error("Módulo aefCloudSync não carregado.");
-        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, folder, (pct) => {
-          if (statusEl) statusEl.innerText = `⏳ Enviando para a Nuvem Google (${pct}%)...`;
-        });
-
-        if (targetInput) targetInput.value = downloadUrl;
-        if (statusEl) statusEl.innerText = `✅ Enviado com sucesso para a Nuvem Google!`;
-      } catch (err) {
-        alert("Erro ao subir arquivo para a nuvem: " + err.message);
-        if (statusEl) statusEl.innerText = `❌ Falha no upload`;
       }
     }
 
