@@ -723,22 +723,31 @@
       }
     ];
 
-    // Inicialização Instantânea + Sincronização em Segundo Plano
-    document.addEventListener('DOMContentLoaded', () => {
-      // 1. Renderização Instantânea (Zero Flash / Sem Espera)
-      rawStudentsList = [...DEFAULT_SEED_STUDENTS];
-      rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
-      
-      renderStudentsTable();
-      updateCRMStats();
-      renderAdminBlogPosts();
-      renderCentralLibrary();
-      if (window.lucide) lucide.createIcons();
+    // Inicialização Instantânea à Prova de Falhas
+    function initAdminPanel() {
+      try {
+        rawStudentsList = [...DEFAULT_SEED_STUDENTS];
+        rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
+        
+        renderStudentsTable();
+        updateCRMStats();
+        renderAdminBlogPosts();
+        renderCentralLibrary();
+        if (window.lucide) lucide.createIcons();
 
-      // 2. Busca e Atualização Assíncrona com Firestore
-      fetchStudentsFromFirestore();
-      fetchBlogPostsFromFirestore();
-    });
+        // Sincronização Assíncrona com Firestore
+        fetchStudentsFromFirestore();
+        fetchBlogPostsFromFirestore();
+      } catch (err) {
+        console.error("Admin init error:", err);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAdminPanel);
+    } else {
+      initAdminPanel();
+    }
 
     // =========================================================================
     // 1. FIRESTORE BLOG POSTS METHODS
@@ -1401,75 +1410,11 @@
     // =========================================================================
     let allAggregatedTracks = [];
 
-    async function renderCentralLibrary() {
+    function renderCentralLibraryTracksHTML(tracks) {
       const container = document.getElementById('centralLibraryContainer');
       if (!container) return;
 
-      container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">Carregando todas as faixas da Nuvem e do Firestore...</div>`;
-
-      let tracks = [];
-
-      // 1. Gather all local registered datasets
-      const localSources = [
-        { id: "estevao", name: "Estêvão", data: window.AEF_STUDENT_ESTEVAO },
-        { id: "thomas", name: "Thomas", data: window.AEF_STUDENT_THOMAS },
-        { id: "public", name: "Público (Aberto)", data: window.AEF_STUDENT_PUBLIC },
-        { id: "andre", name: "André", data: window.AEF_STUDENT_ANDRE },
-        { id: "matheus", name: "Matheus", data: window.AEF_STUDENT_MATHEUS }
-      ];
-
-      localSources.forEach(src => {
-        if (src.data && src.data.tracks) {
-          src.data.tracks.forEach(tr => {
-            tracks.push({
-              ...tr,
-              studentId: src.id,
-              studentName: src.name
-            });
-          });
-        }
-      });
-
-      // 2. Fetch all tracks from Firestore across known students
-      const studentIds = ["estevao", "thomas", "public", "andre", "matheus", "carlos", "marcos", "patricia"];
-      for (const sid of studentIds) {
-        try {
-          const res = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${sid}/tracks`);
-          const data = await res.json();
-          if (data.documents && data.documents.length > 0) {
-            data.documents.forEach(d => {
-              const f = d.fields || {};
-              const trId = f.id?.stringValue || d.name.split("/").pop();
-              const existingIdx = tracks.findIndex(t => t.id === trId && t.studentId === sid);
-              const trackObj = {
-                id: trId,
-                title: f.title?.stringValue || "Sem Título",
-                duration: f.duration?.stringValue || "00:30",
-                coverImage: f.coverImage?.stringValue || "assets/images/cover-default-aef.jpg",
-                audioUrl: f.audioUrl?.stringValue || "",
-                videoUrl: f.videoUrl?.stringValue || "",
-                summary: f.summary?.stringValue || "",
-                goldenTip: f.goldenTip?.stringValue || "",
-                status: f.status?.stringValue || "active",
-                studentId: sid,
-                studentName: sid === "public" ? "Público (Aberto)" : sid.charAt(0).toUpperCase() + sid.slice(1)
-              };
-
-              if (existingIdx >= 0) {
-                tracks[existingIdx] = trackObj;
-              } else {
-                tracks.unshift(trackObj);
-              }
-            });
-          }
-        } catch (e) {
-          // ignore individual fetch errors
-        }
-      }
-
-      allAggregatedTracks = tracks;
-
-      if (tracks.length === 0) {
+      if (!tracks || tracks.length === 0) {
         container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs border border-dashed rounded-2xl">Nenhum áudio produzido na biblioteca central.</div>`;
         return;
       }
@@ -1517,6 +1462,71 @@
       }).join('');
 
       if (window.lucide) lucide.createIcons();
+    }
+
+    async function renderCentralLibrary() {
+      let tracks = [];
+
+      // 1. Coleta instantânea de todos os datasets locais registrados
+      const localSources = [
+        { id: "estevao", name: "Estêvão", data: window.AEF_STUDENT_ESTEVAO },
+        { id: "thomas", name: "Thomas", data: window.AEF_STUDENT_THOMAS },
+        { id: "public", name: "Público (Aberto)", data: window.AEF_STUDENT_PUBLIC },
+        { id: "andre", name: "André", data: window.AEF_STUDENT_ANDRE },
+        { id: "matheus", name: "Matheus", data: window.AEF_STUDENT_MATHEUS }
+      ];
+
+      localSources.forEach(src => {
+        if (src.data && src.data.tracks) {
+          src.data.tracks.forEach(tr => {
+            tracks.push({
+              ...tr,
+              studentId: src.id,
+              studentName: src.name
+            });
+          });
+        }
+      });
+
+      allAggregatedTracks = tracks;
+      renderCentralLibraryTracksHTML(tracks);
+
+      // 2. Busca e Atualização Assíncrona com Firestore
+      const studentIds = ["estevao", "thomas", "public", "andre", "matheus", "carlos", "marcos", "patricia"];
+      for (const sid of studentIds) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${sid}/tracks`);
+          const data = await res.json();
+          if (data.documents && data.documents.length > 0) {
+            data.documents.forEach(d => {
+              const f = d.fields || {};
+              const trId = f.id?.stringValue || d.name.split("/").pop();
+              const existingIdx = tracks.findIndex(t => t.id === trId && t.studentId === sid);
+              const trackObj = {
+                id: trId,
+                title: f.title?.stringValue || "Sem Título",
+                duration: f.duration?.stringValue || "00:30",
+                coverImage: f.coverImage?.stringValue || "assets/images/cover-default-aef.jpg",
+                audioUrl: f.audioUrl?.stringValue || "",
+                videoUrl: f.videoUrl?.stringValue || "",
+                summary: f.summary?.stringValue || "",
+                goldenTip: f.goldenTip?.stringValue || "",
+                status: f.status?.stringValue || "active",
+                studentId: sid,
+                studentName: sid === "public" ? "Público (Aberto)" : sid.charAt(0).toUpperCase() + sid.slice(1)
+              };
+
+              if (existingIdx >= 0) {
+                tracks[existingIdx] = trackObj;
+              } else {
+                tracks.unshift(trackObj);
+              }
+            });
+            allAggregatedTracks = tracks;
+            renderCentralLibraryTracksHTML(tracks);
+          }
+        } catch (e) {}
+      }
     }
 
     function openFilePickerForCentral(targetInputId, acceptType) {
