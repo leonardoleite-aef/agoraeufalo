@@ -29,8 +29,21 @@ class AEFPlayerEngine {
     this.onTrackEnded = options.onTrackEnded || (() => {});
 
     this._rafId = null;
+    this._lastPlaybackTimestamp = 0;
+    this._accumulatedSessionSeconds = 0;
     this._bindAudioEvents();
     this._setupMediaSession();
+  }
+
+  _flushListeningTelemetry() {
+    if (this._accumulatedSessionSeconds > 0) {
+      const studentId = this.currentStudent?.id || "public";
+      const secondsToAdd = Math.round(this._accumulatedSessionSeconds);
+      if (window.aefCloudSync && secondsToAdd > 0) {
+        window.aefCloudSync.recordListeningSession(studentId, secondsToAdd);
+      }
+      this._accumulatedSessionSeconds = 0;
+    }
   }
 
   _bindAudioEvents() {
@@ -40,11 +53,26 @@ class AEFPlayerEngine {
         const duration = this.audio.duration || 0;
         this.onTimeUpdate(curTime, duration);
         this._checkSentenceSync(curTime);
+
+        // Telemetria em tempo real
+        if (this._lastPlaybackTimestamp > 0) {
+          const now = Date.now();
+          const elapsed = (now - this._lastPlaybackTimestamp) / 1000;
+          if (elapsed > 0 && elapsed < 5) {
+            this._accumulatedSessionSeconds += elapsed;
+            if (this._accumulatedSessionSeconds >= 10) {
+              this._flushListeningTelemetry();
+            }
+          }
+          this._lastPlaybackTimestamp = now;
+        }
+
         this._rafId = requestAnimationFrame(tick);
       }
     };
 
     this.audio.addEventListener("play", () => {
+      this._lastPlaybackTimestamp = Date.now();
       this.onPlayStateChange(true);
       this._updateMediaSessionPlaybackState("playing");
       this._updateMediaSessionMetadata();
@@ -53,12 +81,15 @@ class AEFPlayerEngine {
     });
 
     this.audio.addEventListener("pause", () => {
+      this._flushListeningTelemetry();
+      this._lastPlaybackTimestamp = 0;
       this.onPlayStateChange(false);
       this._updateMediaSessionPlaybackState("paused");
       cancelAnimationFrame(this._rafId);
     });
 
     this.audio.addEventListener("seeked", () => {
+      this._lastPlaybackTimestamp = Date.now();
       const curTime = this.audio.currentTime;
       const duration = this.audio.duration || 0;
       this.onTimeUpdate(curTime, duration);
@@ -76,6 +107,8 @@ class AEFPlayerEngine {
     });
 
     this.audio.addEventListener("ended", () => {
+      this._flushListeningTelemetry();
+      this._lastPlaybackTimestamp = 0;
       this.onPlayStateChange(false);
       cancelAnimationFrame(this._rafId);
       this.onTrackEnded();
@@ -265,7 +298,20 @@ class AEFPlayerEngine {
 
     if (foundIndex !== -1 && foundIndex !== this.activeSentenceIndex) {
       this.activeSentenceIndex = foundIndex;
-      this.onSentenceChange(foundIndex, this.sentences[foundIndex]);
+      const activeSentence = this.sentences[foundIndex];
+      this.onSentenceChange(foundIndex, activeSentence);
+
+      // Sincroniza com o banco de repertório ativo do aluno
+      if (activeSentence && window.aefCloudSync) {
+        const studentId = this.currentStudent?.id || "public";
+        window.aefCloudSync.recordRepertoirePhrase(studentId, {
+          id: activeSentence.id,
+          text: activeSentence.text,
+          spokenTranslation: activeSentence.spokenTranslation,
+          trackTitle: this.currentTrack?.title,
+          audioUrl: this.currentTrack?.audioUrl
+        });
+      }
     }
   }
 

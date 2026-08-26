@@ -152,16 +152,14 @@
           <img src="../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
         </a>
         <div class="h-5 w-px bg-white/20 hidden sm:block"></div>
-        <div class="flex items-center gap-2">
-          <!-- Seletor Interativo de Aluno / Mentorado -->
-          <select id="header-student-select" onchange="window.switchActiveStudent(this.value)" class="bg-[#0D2040] hover:bg-[#112a55] text-amber-300 border border-amber-500/40 rounded-xl px-2.5 py-1 text-xs font-bold focus:outline-none cursor-pointer shadow-xs transition" title="Alternar entre sessões de alunos">
-            <option value="thomas">👔 Thomas (VIP)</option>
-            <option value="estevao">👨‍💻 Estêvão (VIP)</option>
-            <option value="andre">💼 André (VIP)</option>
-            <option value="matheus">🎯 Matheus (VIP)</option>
-            <option value="public">🌐 Acesso Aberto (Degustação)</option>
-          </select>
-          <span id="header-student-badge" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold tracking-wider uppercase border border-amber-500/30">VIP</span>
+        <div id="student-identity-badge" class="flex items-center gap-2">
+          <div id="header-student-avatar" class="w-7 h-7 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-xs">
+            EP
+          </div>
+          <div class="flex flex-col">
+            <span id="header-student-name" class="font-bold text-xs text-white leading-tight">Estêvão Pinheiro</span>
+            <span id="header-student-badge" class="text-[10px] text-amber-400 font-extrabold tracking-wider uppercase">MENTORADO VIP</span>
+          </div>
         </div>
       </div>
 
@@ -1072,10 +1070,18 @@
       async function bootPlayer() {
         let studentData = getBaseStudentData(studentId);
         
-        // Sincroniza seletor do header
-        const selectEl = document.getElementById("header-student-select");
-        if (selectEl) {
-          selectEl.value = ["thomas", "estevao", "andre", "matheus", "public"].includes(studentId) ? studentId : "estevao";
+        // Sincroniza badge de identidade do aluno no header
+        const nameEl = document.getElementById("header-student-name");
+        const avatarEl = document.getElementById("header-student-avatar");
+        const badgeEl = document.getElementById("header-student-badge");
+
+        if (nameEl) nameEl.innerText = studentData.name || "Estêvão Pinheiro";
+        if (avatarEl) {
+          const initials = (studentData.name || "EP").split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+          avatarEl.innerText = initials;
+        }
+        if (badgeEl) {
+          badgeEl.innerText = (studentData.badge || "MENTORADO VIP").toUpperCase();
         }
 
         // Show/Hide Public Mode Features
@@ -1493,7 +1499,7 @@
           // 3. Determine which track index to load
           let targetIndex = engine.currentTrackIndex || 0;
           if (selectLatest && baseData.tracks.length > 0) {
-            targetIndex = baseData.tracks.length - 1; // latest episode
+            targetIndex = 0; // Faixa 1 (mais recente)
           } else if (targetIndex >= baseData.tracks.length) {
             targetIndex = 0;
           }
