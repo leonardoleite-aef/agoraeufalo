@@ -464,21 +464,32 @@
 
         <form id="modal-lead-form" onsubmit="window.handleModalLeadSubmit(event)" class="space-y-3.5">
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome</label>
-            <input type="text" id="modal-lead-name" required placeholder="Ex: Rodrigo Silva" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome *</label>
+            <input type="text" id="modal-lead-name" required placeholder="Digite seu primeiro nome" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
           </div>
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu E-mail</label>
-            <input type="email" id="modal-lead-email" required placeholder="rodrigo@empresa.com" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu E-mail *</label>
+            <input type="email" id="modal-lead-email" required placeholder="seu.melhor.email@exemplo.com" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
           </div>
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu WhatsApp</label>
-            <input type="tel" id="modal-lead-whatsapp" required placeholder="(11) 99999-9999" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">Seu WhatsApp</label>
+              <span class="text-[9px] font-extrabold uppercase px-2 py-0.2 rounded-full bg-white/10 text-amber-300">Opcional</span>
+            </div>
+            <input type="tel" id="modal-lead-whatsapp" placeholder="(DDD) 99999-9999" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+
+          <!-- Mensagem Oficial do Professor Leo -->
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-2.5 text-xs text-amber-200">
+            <span class="text-base shrink-0">💬</span>
+            <p class="leading-relaxed text-[11px]">
+              "O seu whatsapp é importante para conversar diretamente com o professor Leo para tirar suas dúvidas. Mas se preferir nao colocar, tudo bem. Enjoy your English practice!"
+            </p>
           </div>
 
           <button type="submit" id="btn-modal-lead-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg mt-2 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
             <span>Destravar Acesso Imediato</span>
-            <span>⚡</span>
+            <span>🚀</span>
           </button>
           
           <p class="text-[10px] text-center text-slate-400">🔒 Acesso 100% gratuito e seguro.</p>
@@ -707,6 +718,7 @@
   <script src="data/public.js?v=3.0"></script>
   <script src="../assets/js/aef-cloud-sync.js"></script>
   <script src="../assets/js/aef-filepicker.js"></script>
+  <script src="../assets/js/aef-hotmart-send.js"></script>
   <script src="../assets/js/aef-audio-hub.js"></script>
   <script src="js/offline-manager.js?v=3.0"></script>
   <script src="js/player-engine.js?v=3.0"></script>
@@ -803,42 +815,24 @@
         window.open(`https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}`, "_blank");
       };
 
-      window.handleModalLeadSubmit = (e) => {
+      window.handleModalLeadSubmit = async (e) => {
         e.preventDefault();
         const name = document.getElementById("modal-lead-name").value.trim();
         const email = document.getElementById("modal-lead-email").value.trim();
         const whatsapp = document.getElementById("modal-lead-whatsapp").value.trim();
-        if (!name || !email || !whatsapp) return;
+        if (!name || !email) return;
 
-        const leadData = {
-          name: name,
-          email: email,
-          whatsapp: whatsapp,
-          source: "player-gate-modal",
-          createdAt: new Date().toISOString()
-        };
+        const btn = document.getElementById("btn-modal-lead-submit");
+        if (btn) btn.innerHTML = "<span>Destravando...</span> <span>⏳</span>";
 
-        localStorage.setItem("aef_public_lead", JSON.stringify(leadData));
+        if (window.AEFHotmartSend) {
+          await window.AEFHotmartSend.submitFreeLead(name, email, whatsapp, "player_publico");
+        } else {
+          const leadData = { name, email, whatsapp: whatsapp || "Não informado", source: "player_publico", createdAt: new Date().toISOString() };
+          localStorage.setItem("aef_public_lead", JSON.stringify(leadData));
+        }
+
         document.getElementById("public-lead-gate-modal").classList.add("hidden");
-
-        // Sync asynchronously with Firestore leads collection
-        try {
-          const payload = JSON.stringify({
-            fields: {
-              name: { stringValue: name },
-              email: { stringValue: email },
-              whatsapp: { stringValue: whatsapp },
-              source: { stringValue: "player-gate-modal" },
-              createdAt: { stringValue: leadData.createdAt }
-            }
-          });
-          fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: payload
-          }).catch(() => {});
-        } catch (err) {}
-
         showSyncToast("🎉 Acesso destravado com sucesso! Bom treino!");
       };
 

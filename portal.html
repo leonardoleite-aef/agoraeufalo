@@ -47,6 +47,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-filepicker.js"></script>
+  <script src="assets/js/aef-hotmart-send.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
 </head>
 <body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -314,28 +315,51 @@
       </div>
     </div>
 
-    <!-- Auth Modal (Zero Friction Magic Link / Google Sign-in) -->
+    <!-- Auth & Lead Gate Modal (Hotmart Send: portal_aef) -->
     <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative">
+        <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm">✕</button>
+
         <div class="text-center mb-5">
           <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto mb-3">
-            🔐
+            🎓
           </div>
           <h3 class="text-xl font-bold font-serif">Acesso ao Portal do Aluno</h3>
           <p class="text-xs text-slate-300 mt-1">
-            Digite seu e-mail cadastrado para entrar instantaneamente sem necessidade de memorizar senhas.
+            Cadastre-se gratuitamente para liberar as masterclasses, apostilas em PDF e o Training Player de bolso.
           </p>
         </div>
 
         <form id="portal-login-form" onsubmit="handleMagicLinkLogin(event)" class="space-y-3.5">
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu E-mail *</label>
-            <input type="email" id="login-email-input" required placeholder="seuemail@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome Completo *</label>
+            <input type="text" id="login-name-input" required placeholder="Digite seu primeiro nome" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
           </div>
 
-          <button type="submit" id="btn-login-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5">
-            <span>Receber Link de Acesso com 1 Toque</span>
-            <span>⚡</span>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Melhor E-mail *</label>
+            <input type="email" id="login-email-input" required placeholder="seu.melhor.email@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">WhatsApp (com DDD)</label>
+              <span class="text-[9px] font-extrabold uppercase px-2 py-0.2 rounded-full bg-white/10 text-amber-300">Opcional</span>
+            </div>
+            <input type="tel" id="login-phone-input" placeholder="(DDD) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+
+          <!-- Mensagem Oficial do Professor Leo -->
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-2.5 text-xs text-amber-200">
+            <span class="text-base shrink-0">💬</span>
+            <p class="leading-relaxed text-[11px]">
+              "O seu whatsapp é importante para conversar diretamente com o professor Leo para tirar suas dúvidas. Mas se preferir nao colocar, tudo bem. Enjoy your English practice!"
+            </p>
+          </div>
+
+          <button type="submit" id="btn-login-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
+            <span>Liberar Meu Acesso Gratuito</span>
+            <span>🚀</span>
           </button>
         </form>
 
@@ -528,17 +552,29 @@
       document.getElementById("auth-modal").classList.add("hidden");
     }
 
-    function handleMagicLinkLogin(e) {
+    async function handleMagicLinkLogin(e) {
       e.preventDefault();
+      const name = document.getElementById("login-name-input").value.trim();
       const email = document.getElementById("login-email-input").value.trim();
-      localStorage.setItem("aef_user_email", email);
+      const phone = document.getElementById("login-phone-input").value.trim();
+
+      const btn = document.getElementById("btn-login-submit");
+      if (btn) btn.innerHTML = "<span>Validando acesso...</span> <span>⏳</span>";
+
+      if (window.AEFHotmartSend) {
+        await window.AEFHotmartSend.submitFreeLead(name, email, phone, "portal_aef");
+      } else {
+        localStorage.setItem("aef_user_email", email);
+      }
+
       closeAuthModal();
       checkAuthStatus();
-      showToast("Link de acesso verificado! Bem-vindo ao Portal.");
+      showToast("🎉 Acesso Liberado! Bem-vindo ao Portal AgoraEuFalo.");
     }
 
     function handleLogout() {
       localStorage.removeItem("aef_user_email");
+      localStorage.removeItem("aef_free_lead_unlocked");
       window.location.reload();
     }
 
