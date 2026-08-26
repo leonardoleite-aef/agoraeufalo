@@ -254,10 +254,11 @@ class AEFAudioHub {
       return assigned.includes(studentId) || assigned.includes("all") || (studentId === "public" && assigned.includes("public"));
     });
 
-    // 4. Resolve audio blobs & sanitize covers for all tracks
+    // 4. Resolve audio blobs & sanitize covers for all tracks (and filter out archived/drafts for players)
     const resolveAndSanitize = async (trackList) => {
       const result = [];
       for (const t of trackList) {
+        if (t.status === 'archived' || t.status === 'draft') continue;
         const trackCopy = { ...t };
         if (t.hasBlob || !t.audioUrl) {
           const blob = await this.getAudioBlob(t.id);

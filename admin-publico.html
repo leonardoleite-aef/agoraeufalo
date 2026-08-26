@@ -557,6 +557,7 @@
               videoUrl: f.videoUrl?.stringValue || "",
               summary: f.summary?.stringValue || "",
               goldenTip: f.goldenTip?.stringValue || "",
+              status: f.status?.stringValue || "active",
               studentId: "public"
             };
           });
@@ -569,31 +570,61 @@
       currentPublicTracks = baseTracks;
       document.getElementById("stat-total-tracks").innerText = baseTracks.length;
 
-      container.innerHTML = baseTracks.map((t, idx) => `
-        <div class="bg-[#0A192F] border border-amber-400/40 rounded-2xl p-4 flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3 truncate">
-            <img src="${t.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0">
-            <div class="truncate">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
-                <span class="text-xs font-mono font-bold text-amber-300">${t.duration}</span>
+      container.innerHTML = baseTracks.map((t, idx) => {
+        const isArchived = t.status === 'archived';
+        return `
+          <div class="bg-[#0A192F] border ${isArchived ? 'border-dashed border-white/20 opacity-70' : 'border-amber-400/40'} rounded-2xl p-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 truncate">
+              <img src="${t.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0 ${isArchived ? 'grayscale' : ''}">
+              <div class="truncate">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
+                  <span class="text-xs font-mono font-bold text-amber-300">${t.duration}</span>
+                  <button onclick="togglePublicTrackStatus('${t.id}')" class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded transition ${isArchived ? 'bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 hover:bg-amber-500/20 hover:text-amber-300'}" title="${isArchived ? 'Clique para colocar no Player' : 'Clique para tirar de circulação do Player (preservando na nuvem)'}">
+                    ${isArchived ? '📦 Fora do Player' : '⚡ No Player (Ativo)'}
+                  </button>
+                </div>
+                <h4 class="font-bold text-sm text-white truncate">${t.title}</h4>
+                <p class="text-xs text-slate-400 truncate mt-0.5">${t.summary || ''}</p>
+                ${t.videoUrl ? '<span class="inline-block mt-1 px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-bold">🎬 Possui Vídeo</span>' : ''}
               </div>
-              <h4 class="font-bold text-sm text-white truncate">${t.title}</h4>
-              <p class="text-xs text-slate-400 truncate mt-0.5">${t.summary || ''}</p>
-              ${t.videoUrl ? '<span class="inline-block mt-1 px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[10px] font-bold">🎬 Possui Vídeo</span>' : ''}
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="openEditTrackModal('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar / Redistribuir Faixa">
+                <i data-lucide="edit-2" class="w-4 h-4"></i>
+              </button>
+              <button onclick="deleteTrack('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Faixa">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
             </div>
           </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <button onclick="openEditTrackModal('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar / Redistribuir Faixa">
-              <i data-lucide="edit-2" class="w-4 h-4"></i>
-            </button>
-            <button onclick="deleteTrack('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Faixa">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
       lucide.createIcons();
+    }
+
+    async function togglePublicTrackStatus(trackId) {
+      const track = currentPublicTracks.find(t => t.id === trackId);
+      if (!track) return;
+      const newStatus = track.status === 'archived' ? 'active' : 'archived';
+
+      try {
+        const payload = JSON.stringify({
+          fields: {
+            status: { stringValue: newStatus },
+            updatedAt: { stringValue: new Date().toISOString() }
+          }
+        });
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/public/tracks/${trackId}?updateMask.fieldPaths=status&updateMask.fieldPaths=updatedAt`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: payload
+        });
+        track.status = newStatus;
+        renderPublicTracks();
+      } catch (err) {
+        alert("Erro ao alterar status da faixa: " + err.message);
+      }
     }
 
     function openEditTrackModal(trackId, studentId) {
