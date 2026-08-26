@@ -290,10 +290,36 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="openNewPostModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition">
+          <button onclick="openNewPostModal()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>Novo Post / Magic Story</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search for Blog -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-1.5 flex-wrap" id="blogFilterContainer">
+          <button onclick="filterBlogByStatus('all')" class="blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0A192F] text-amber-300 shadow-xs" data-filter="all">
+            Todos <span id="countBlogAll" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterBlogByStatus('published')" class="blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="published">
+            🌐 Publicados <span id="countBlogPublished" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterBlogByStatus('draft')" class="blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="draft">
+            📄 Rascunhos <span id="countBlogDraft" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterBlogByCategory('Magic Stories')" class="blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="Magic Stories">
+            ✨ Magic Stories <span id="countBlogMagicStories" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterBlogByCategory('Treino Auditivo')" class="blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="Treino Auditivo">
+            🎧 Treino Auditivo <span id="countBlogAudio" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+        </div>
+
+        <div class="relative w-full sm:w-80">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+          <input type="text" id="blogSearchInput" oninput="handleBlogSearchDebounced(this.value)" placeholder="Buscar por título, slug ou categoria..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 outline-none transition shadow-2xs">
         </div>
       </div>
 
@@ -301,6 +327,27 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="adminBlogPostsGrid">
         <!-- Injetado dinamicamente via JS -->
         <div class="col-span-full py-8 text-center text-slate-400 text-xs">Carregando artigos do Blog...</div>
+      </div>
+
+      <!-- Pagination for Blog Posts -->
+      <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <span id="blogPaginationInfo">Exibindo 0 artigos</span>
+          <span class="text-stone-300">|</span>
+          <label class="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <span>Posts por página:</span>
+            <select id="blogPerPageSelect" onchange="changeBlogPerPage(this.value)" class="bg-stone-50 border border-stone-300 rounded-lg px-2 py-0.5 text-xs font-bold text-slate-800 outline-none">
+              <option value="8" selected>8</option>
+              <option value="16">16</option>
+              <option value="32">32</option>
+              <option value="64">64</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="flex items-center gap-1.5" id="blogPaginationControls">
+          <!-- Injetado dinamicamente via JS -->
+        </div>
       </div>
 
     </div>
@@ -324,16 +371,72 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <a href="tts-studio.html" class="px-4 py-2 rounded-xl bg-[#0A192F] hover:bg-slate-900 text-amber-300 text-xs font-extrabold flex items-center gap-1.5 transition">
+          <a href="tts-studio.html" class="px-4 py-2.5 rounded-xl bg-[#0A192F] hover:bg-slate-900 text-amber-300 text-xs font-extrabold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
             <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>Produzir Novo Áudio</span>
+            <span>Produzir Novo Áudio no TTS Studio</span>
           </a>
+        </div>
+      </div>
+
+      <!-- Filters & Search for Audio Tracks -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-1.5 flex-wrap" id="tracksFilterContainer">
+          <button onclick="filterTracksByStudent('all')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0A192F] text-amber-300 shadow-xs" data-filter="all">
+            Todas as Faixas <span id="countTrackAll" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStudent('public')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="public">
+            🌐 Público (Aberto) <span id="countTrackPublic" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStudent('estevao')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="estevao">
+            Estêvão <span id="countTrackEstevao" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStudent('thomas')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="thomas">
+            Thomas <span id="countTrackThomas" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStudent('andre')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="andre">
+            André <span id="countTrackAndre" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStudent('matheus')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="matheus">
+            Matheus <span id="countTrackMatheus" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStatus('active')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="active">
+            ⚡ No Player <span id="countTrackActive" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+          <button onclick="filterTracksByStatus('archived')" class="track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700" data-filter="archived">
+            📦 Arquivados <span id="countTrackArchived" class="opacity-75 text-[11px] font-mono">(0)</span>
+          </button>
+        </div>
+
+        <div class="relative w-full sm:w-80">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+          <input type="text" id="tracksSearchInput" oninput="handleTracksSearchDebounced(this.value)" placeholder="Buscar por título, resumo ou aluno..." class="w-full bg-stone-50 border border-stone-300 focus:border-amber-500 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 outline-none transition shadow-2xs">
         </div>
       </div>
 
       <!-- Central Tracks Grid -->
       <div id="centralLibraryContainer" class="space-y-3.5">
         <!-- Injetado dinamicamente via JS -->
+      </div>
+
+      <!-- Pagination for Central Tracks -->
+      <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <span id="tracksPaginationInfo">Exibindo 0 faixas</span>
+          <span class="text-stone-300">|</span>
+          <label class="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <span>Faixas por página:</span>
+            <select id="tracksPerPageSelect" onchange="changeTracksPerPage(this.value)" class="bg-stone-50 border border-stone-300 rounded-lg px-2 py-0.5 text-xs font-bold text-slate-800 outline-none">
+              <option value="10" selected>10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="flex items-center gap-1.5" id="tracksPaginationControls">
+          <!-- Injetado dinamicamente via JS -->
+        </div>
       </div>
 
     </div>
@@ -825,19 +928,59 @@
       renderAdminBlogPosts();
     }
 
+    let currentBlogFilter = 'all';
+    let currentBlogSearchTerm = '';
+    let currentBlogPage = 1;
+    let blogPostsPerPage = 8;
+    let blogSearchDebounceTimer = null;
+
     function renderAdminBlogPosts() {
       const grid = document.getElementById('adminBlogPostsGrid');
       const countEl = document.getElementById('statTotalBlogPosts');
+      const infoText = document.getElementById('blogPaginationInfo');
+      const controls = document.getElementById('blogPaginationControls');
       if (!grid) return;
 
       if (countEl) countEl.innerText = rawBlogPostsList.length;
 
-      if (rawBlogPostsList.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs border border-dashed rounded-2xl">Nenhum artigo publicado no blog.</div>`;
+      // 1. Filtragem global de posts
+      let filtered = rawBlogPostsList.filter(p => {
+        if (currentBlogFilter === 'published' && p.status === 'draft') return false;
+        if (currentBlogFilter === 'draft' && p.status !== 'draft') return false;
+        if (currentBlogFilter === 'Magic Stories' && (p.category || 'Magic Stories') !== 'Magic Stories') return false;
+        if (currentBlogFilter === 'Treino Auditivo' && (p.category || '') !== 'Treino Auditivo') return false;
+
+        if (currentBlogSearchTerm) {
+          const matchTitle = (p.title || '').toLowerCase().includes(currentBlogSearchTerm);
+          const matchSubtitle = (p.subtitle || '').toLowerCase().includes(currentBlogSearchTerm);
+          const matchSlug = (p.slug || '').toLowerCase().includes(currentBlogSearchTerm);
+          const matchCat = (p.category || '').toLowerCase().includes(currentBlogSearchTerm);
+          if (!matchTitle && !matchSubtitle && !matchSlug && !matchCat) return false;
+        }
+        return true;
+      });
+
+      // 2. Atualizar contadores das pílulas de filtro do Blog
+      updateBlogFilterCounters();
+
+      const totalFiltered = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(totalFiltered / blogPostsPerPage));
+      if (currentBlogPage > totalPages) currentBlogPage = totalPages;
+      if (currentBlogPage < 1) currentBlogPage = 1;
+
+      // 3. Paginação de Alta Performance
+      const startIndex = (currentBlogPage - 1) * blogPostsPerPage;
+      const endIndex = Math.min(startIndex + blogPostsPerPage, totalFiltered);
+      const pagedPosts = filtered.slice(startIndex, endIndex);
+
+      if (totalFiltered === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400 text-sm border border-dashed rounded-2xl">Nenhum artigo encontrado para os filtros selecionados.</div>`;
+        if (infoText) infoText.innerHTML = `Exibindo <b>0</b> artigos`;
+        if (controls) controls.innerHTML = ``;
         return;
       }
 
-      grid.innerHTML = rawBlogPostsList.map(p => {
+      grid.innerHTML = pagedPosts.map(p => {
         const ytId = p.youtubeId || 'umjf4UyqgR4';
         const thumb = p.imageUrl || `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
         const slug = p.slug || 'magic-story-01';
@@ -872,10 +1015,10 @@
               </div>
 
               <div class="flex items-center gap-1">
-                <button onclick="editBlogPost('${p.slug}')" class="p-1 rounded-lg hover:bg-stone-200 text-slate-600 transition" title="Editar Post">
+                <button onclick="editBlogPost('${p.slug}')" class="p-1.5 rounded-lg hover:bg-stone-200 text-slate-600 transition" title="Editar Post">
                   <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                 </button>
-                <button onclick="deleteBlogPost('${p.slug}')" class="p-1 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition" title="Excluir Post">
+                <button onclick="deleteBlogPost('${p.slug}')" class="p-1.5 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition" title="Excluir Post">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
@@ -884,7 +1027,96 @@
         `;
       }).join('');
 
+      // 4. Atualizar Barra de Paginação do Blog
+      if (infoText) {
+        infoText.innerHTML = `Exibindo <b>${startIndex + 1}–${endIndex}</b> de <b>${totalFiltered.toLocaleString('pt-BR')}</b> artigos`;
+      }
+
+      if (controls) {
+        let buttonsHtml = `
+          <button onclick="goToBlogPage(${currentBlogPage - 1})" ${currentBlogPage === 1 ? 'disabled' : ''} class="px-3 py-1 rounded-lg border border-stone-300 bg-white hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed font-bold text-xs transition">
+            ◀ Anterior
+          </button>
+        `;
+
+        for (let i = 1; i <= totalPages; i++) {
+          const isActive = i === currentBlogPage;
+          buttonsHtml += `
+            <button onclick="goToBlogPage(${i})" class="px-3 py-1 rounded-lg text-xs font-bold transition ${isActive ? 'bg-[#0A192F] text-amber-400 shadow-xs' : 'bg-white border border-stone-300 hover:bg-stone-100 text-slate-700'}">
+              ${i}
+            </button>
+          `;
+        }
+
+        buttonsHtml += `
+          <button onclick="goToBlogPage(${currentBlogPage + 1})" ${currentBlogPage === totalPages ? 'disabled' : ''} class="px-3 py-1 rounded-lg border border-stone-300 bg-white hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed font-bold text-xs transition">
+            Próxima ▶
+          </button>
+        `;
+
+        controls.innerHTML = buttonsHtml;
+      }
+
       if (window.lucide) lucide.createIcons();
+    }
+
+    function goToBlogPage(pageNum) {
+      currentBlogPage = pageNum;
+      renderAdminBlogPosts();
+    }
+
+    function changeBlogPerPage(newLimit) {
+      blogPostsPerPage = parseInt(newLimit, 10) || 8;
+      currentBlogPage = 1;
+      renderAdminBlogPosts();
+    }
+
+    function handleBlogSearchDebounced(val) {
+      clearTimeout(blogSearchDebounceTimer);
+      blogSearchDebounceTimer = setTimeout(() => {
+        currentBlogSearchTerm = (val || '').toLowerCase().trim();
+        currentBlogPage = 1;
+        renderAdminBlogPosts();
+      }, 250);
+    }
+
+    function filterBlogByStatus(status) {
+      currentBlogFilter = status;
+      currentBlogPage = 1;
+      updateBlogFilterButtons();
+      renderAdminBlogPosts();
+    }
+
+    function filterBlogByCategory(cat) {
+      currentBlogFilter = cat;
+      currentBlogPage = 1;
+      updateBlogFilterButtons();
+      renderAdminBlogPosts();
+    }
+
+    function updateBlogFilterButtons() {
+      document.querySelectorAll('.blog-filter-btn').forEach(btn => {
+        if (btn.dataset.filter === currentBlogFilter) {
+          btn.className = "blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0A192F] text-amber-300 shadow-xs";
+        } else {
+          btn.className = "blog-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700";
+        }
+      });
+    }
+
+    function updateBlogFilterCounters() {
+      const all = rawBlogPostsList.length;
+      const published = rawBlogPostsList.filter(p => p.status !== 'draft').length;
+      const draft = rawBlogPostsList.filter(p => p.status === 'draft').length;
+      const magicStories = rawBlogPostsList.filter(p => (p.category || 'Magic Stories') === 'Magic Stories').length;
+      const audio = rawBlogPostsList.filter(p => (p.category || '') === 'Treino Auditivo').length;
+
+      const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = `(${val.toLocaleString('pt-BR')})`; };
+      setVal('countBlogAll', all);
+      setVal('countBlogPublished', published);
+      setVal('countBlogDraft', draft);
+      setVal('countBlogMagicStories', magicStories);
+      setVal('countBlogAudio', audio);
     }
 
     function openNewPostModal() {
@@ -1637,51 +1869,89 @@
     // 3. CENTRAL AUDIO LIBRARY & DISTRIBUTION MATRIX (FIRESTORE + CLOUD)
     // =========================================================================
     let allAggregatedTracks = [];
+    let currentTrackStudentFilter = 'all';
+    let currentTrackStatusFilter = 'all';
+    let currentTrackSearchTerm = '';
+    let currentTracksPage = 1;
+    let tracksPerPage = 10;
+    let tracksSearchDebounceTimer = null;
 
-    function renderCentralLibraryTracksHTML(tracks) {
+    function renderCentralLibraryTracksHTML() {
       const container = document.getElementById('centralLibraryContainer');
+      const infoText = document.getElementById('tracksPaginationInfo');
+      const controls = document.getElementById('tracksPaginationControls');
       if (!container) return;
 
-      if (!tracks || tracks.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs border border-dashed rounded-2xl">Nenhum áudio produzido na biblioteca central.</div>`;
+      // 1. Filtragem global de faixas
+      let filtered = allAggregatedTracks.filter(tr => {
+        if (currentTrackStudentFilter !== 'all' && tr.studentId !== currentTrackStudentFilter) return false;
+        if (currentTrackStatusFilter === 'active' && tr.status === 'archived') return false;
+        if (currentTrackStatusFilter === 'archived' && tr.status !== 'archived') return false;
+
+        if (currentTrackSearchTerm) {
+          const matchTitle = (tr.title || '').toLowerCase().includes(currentTrackSearchTerm);
+          const matchSummary = (tr.summary || '').toLowerCase().includes(currentTrackSearchTerm);
+          const matchStudent = (tr.studentName || '').toLowerCase().includes(currentTrackSearchTerm);
+          if (!matchTitle && !matchSummary && !matchStudent) return false;
+        }
+        return true;
+      });
+
+      // 2. Atualizar contadores das pílulas de filtro de áudios
+      updateTracksFilterCounters();
+
+      const totalFiltered = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(totalFiltered / tracksPerPage));
+      if (currentTracksPage > totalPages) currentTracksPage = totalPages;
+      if (currentTracksPage < 1) currentTracksPage = 1;
+
+      // 3. Paginação de Alta Performance
+      const startIndex = (currentTracksPage - 1) * tracksPerPage;
+      const endIndex = Math.min(startIndex + tracksPerPage, totalFiltered);
+      const pagedTracks = filtered.slice(startIndex, endIndex);
+
+      if (totalFiltered === 0) {
+        container.innerHTML = `<div class="p-12 text-center text-slate-400 text-sm border border-dashed rounded-2xl">Nenhuma faixa de áudio encontrada para os filtros selecionados.</div>`;
+        if (infoText) infoText.innerHTML = `Exibindo <b>0</b> faixas`;
+        if (controls) controls.innerHTML = ``;
         return;
       }
 
-      container.innerHTML = tracks.map(tr => {
+      container.innerHTML = pagedTracks.map(tr => {
         const isPublic = tr.studentId === "public";
         const isArchived = tr.status === 'archived';
         const badgeColor = isPublic ? "bg-emerald-500 text-slate-950" : "bg-[#0A192F] text-amber-300";
         const playerUrl = isPublic ? "treino/player.html?aluno=public" : `treino/player.html?aluno=${tr.studentId}`;
 
         return `
-          <div class="p-4 rounded-2xl border ${isArchived ? 'border-dashed border-stone-300 bg-stone-100/70 opacity-75' : 'border-stone-200 hover:border-amber-400 bg-stone-50'} transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-3 truncate">
-              <img src="${tr.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-14 h-14 rounded-xl object-cover border border-stone-300 shrink-0 ${isArchived ? 'grayscale' : ''}">
+          <div class="p-4 rounded-2xl border ${isArchived ? 'border-dashed border-stone-300 bg-stone-100/70 opacity-75' : 'border-stone-200 hover:border-amber-400 bg-stone-50'} transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 group">
+            <div class="flex items-center gap-3.5 truncate">
+              <img src="${tr.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-14 h-14 rounded-xl object-cover border border-stone-300 shrink-0 shadow-2xs ${isArchived ? 'grayscale' : ''}">
               <div class="truncate">
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
-                  <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${badgeColor}">
+                  <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full ${badgeColor}">
                     ${tr.studentName}
                   </span>
-                  <span class="text-[11px] text-slate-500 font-mono font-bold">${tr.duration}</span>
+                  <span class="text-[11px] text-slate-500 font-mono font-bold">${tr.duration || '01:30'}</span>
                   ${tr.videoUrl ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800">🎬 Vídeo</span>' : ''}
                   <button onclick="toggleCentralTrackStatus('${tr.id}', '${tr.studentId}')" class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded transition ${isArchived ? 'bg-slate-200 text-slate-700 hover:bg-emerald-100 hover:text-emerald-800' : 'bg-emerald-100 text-emerald-800 hover:bg-amber-100 hover:text-amber-900'}" title="${isArchived ? 'Clique para colocar no Player' : 'Clique para tirar de circulação do Player (preservando na nuvem)'}">
                     ${isArchived ? '📦 Arquivado (Fora do Player)' : '⚡ No Player (Ativo)'}
                   </button>
                 </div>
-                <h4 class="font-bold text-sm text-slate-900 truncate">${tr.title}</h4>
+                <h4 class="font-bold text-sm text-slate-900 truncate group-hover:text-amber-700 transition">${tr.title}</h4>
                 <p class="text-xs text-slate-500 truncate">${tr.summary || ''}</p>
               </div>
             </div>
 
             <div class="flex items-center gap-2 shrink-0">
-              <a href="${playerUrl}" target="_blank" class="px-3 py-1.5 rounded-xl bg-white border border-stone-300 hover:border-amber-500 text-slate-800 text-xs font-bold transition flex items-center gap-1">
-                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+              <a href="${playerUrl}" target="_blank" class="px-3.5 py-2 rounded-xl bg-white border border-stone-300 hover:border-amber-500 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-current text-amber-500"></i>
                 <span>Player</span>
               </a>
-              <button onclick="openEditCentralTrackModal('${tr.id}', '${tr.studentId}')" class="p-2 rounded-xl bg-white border border-stone-300 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition" title="Editar / Redistribuir">
+              <button onclick="openEditCentralTrackModal('${tr.id}', '${tr.studentId}')" class="p-2 rounded-xl bg-white border border-stone-300 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition shadow-2xs" title="Editar / Redistribuir">
                 <i data-lucide="edit-3" class="w-4 h-4"></i>
               </button>
-              <button onclick="deleteCentralTrack('${tr.id}', '${tr.studentId}')" class="p-2 rounded-xl bg-white border border-stone-300 hover:bg-rose-600 hover:text-white text-rose-600 transition" title="Excluir da Nuvem">
+              <button onclick="deleteCentralTrack('${tr.id}', '${tr.studentId}')" class="p-2 rounded-xl bg-white border border-stone-300 hover:bg-rose-600 hover:text-white text-rose-600 transition shadow-2xs" title="Excluir da Nuvem">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
               </button>
             </div>
@@ -1689,7 +1959,107 @@
         `;
       }).join('');
 
+      // 4. Atualizar Barra de Paginação da Biblioteca de Áudios
+      if (infoText) {
+        infoText.innerHTML = `Exibindo <b>${startIndex + 1}–${endIndex}</b> de <b>${totalFiltered.toLocaleString('pt-BR')}</b> faixas`;
+      }
+
+      if (controls) {
+        let buttonsHtml = `
+          <button onclick="goToTracksPage(${currentTracksPage - 1})" ${currentTracksPage === 1 ? 'disabled' : ''} class="px-3 py-1 rounded-lg border border-stone-300 bg-white hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed font-bold text-xs transition">
+            ◀ Anterior
+          </button>
+        `;
+
+        for (let i = 1; i <= totalPages; i++) {
+          const isActive = i === currentTracksPage;
+          buttonsHtml += `
+            <button onclick="goToTracksPage(${i})" class="px-3 py-1 rounded-lg text-xs font-bold transition ${isActive ? 'bg-[#0A192F] text-amber-400 shadow-xs' : 'bg-white border border-stone-300 hover:bg-stone-100 text-slate-700'}">
+              ${i}
+            </button>
+          `;
+        }
+
+        buttonsHtml += `
+          <button onclick="goToTracksPage(${currentTracksPage + 1})" ${currentTracksPage === totalPages ? 'disabled' : ''} class="px-3 py-1 rounded-lg border border-stone-300 bg-white hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed font-bold text-xs transition">
+            Próxima ▶
+          </button>
+        `;
+
+        controls.innerHTML = buttonsHtml;
+      }
+
       if (window.lucide) lucide.createIcons();
+    }
+
+    function goToTracksPage(pageNum) {
+      currentTracksPage = pageNum;
+      renderCentralLibraryTracksHTML();
+    }
+
+    function changeTracksPerPage(newLimit) {
+      tracksPerPage = parseInt(newLimit, 10) || 10;
+      currentTracksPage = 1;
+      renderCentralLibraryTracksHTML();
+    }
+
+    function handleTracksSearchDebounced(val) {
+      clearTimeout(tracksSearchDebounceTimer);
+      tracksSearchDebounceTimer = setTimeout(() => {
+        currentTrackSearchTerm = (val || '').toLowerCase().trim();
+        currentTracksPage = 1;
+        renderCentralLibraryTracksHTML();
+      }, 250);
+    }
+
+    function filterTracksByStudent(studentId) {
+      currentTrackStudentFilter = studentId;
+      currentTrackStatusFilter = 'all';
+      currentTracksPage = 1;
+      updateTrackFilterButtons();
+      renderCentralLibraryTracksHTML();
+    }
+
+    function filterTracksByStatus(status) {
+      currentTrackStatusFilter = status;
+      currentTrackStudentFilter = 'all';
+      currentTracksPage = 1;
+      updateTrackFilterButtons();
+      renderCentralLibraryTracksHTML();
+    }
+
+    function updateTrackFilterButtons() {
+      document.querySelectorAll('.track-filter-btn').forEach(btn => {
+        const isMatch = (currentTrackStudentFilter !== 'all' && btn.dataset.filter === currentTrackStudentFilter) ||
+                        (currentTrackStatusFilter !== 'all' && btn.dataset.filter === currentTrackStatusFilter) ||
+                        (currentTrackStudentFilter === 'all' && currentTrackStatusFilter === 'all' && btn.dataset.filter === 'all');
+        if (isMatch) {
+          btn.className = "track-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0A192F] text-amber-300 shadow-xs";
+        } else {
+          btn.className = "track-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-slate-700";
+        }
+      });
+    }
+
+    function updateTracksFilterCounters() {
+      const all = allAggregatedTracks.length;
+      const pub = allAggregatedTracks.filter(t => t.studentId === 'public').length;
+      const estevao = allAggregatedTracks.filter(t => t.studentId === 'estevao').length;
+      const thomas = allAggregatedTracks.filter(t => t.studentId === 'thomas').length;
+      const andre = allAggregatedTracks.filter(t => t.studentId === 'andre').length;
+      const matheus = allAggregatedTracks.filter(t => t.studentId === 'matheus').length;
+      const active = allAggregatedTracks.filter(t => t.status !== 'archived').length;
+      const archived = allAggregatedTracks.filter(t => t.status === 'archived').length;
+
+      const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = `(${val.toLocaleString('pt-BR')})`; };
+      setVal('countTrackAll', all);
+      setVal('countTrackPublic', pub);
+      setVal('countTrackEstevao', estevao);
+      setVal('countTrackThomas', thomas);
+      setVal('countTrackAndre', andre);
+      setVal('countTrackMatheus', matheus);
+      setVal('countTrackActive', active);
+      setVal('countTrackArchived', archived);
     }
 
     async function renderCentralLibrary() {
@@ -1717,7 +2087,7 @@
       });
 
       allAggregatedTracks = tracks;
-      renderCentralLibraryTracksHTML(tracks);
+      renderCentralLibraryTracksHTML();
 
       // 2. Busca e Atualização Assíncrona com Firestore
       const studentIds = ["estevao", "thomas", "public", "andre", "matheus", "carlos", "marcos", "patricia"];
@@ -1751,7 +2121,7 @@
               }
             });
             allAggregatedTracks = tracks;
-            renderCentralLibraryTracksHTML(tracks);
+            renderCentralLibraryTracksHTML();
           }
         } catch (e) {}
       }
