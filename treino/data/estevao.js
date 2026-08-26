@@ -10,6 +10,367 @@ window.AEF_STUDENT_ESTEVAO = {
   badge: "VIP Mentee",
   tracks: [
     {
+        "id": "estevao-sreehari-letter-to-ashna",
+        "title": "Sreehari Letter to Ashna",
+        "duration": "03:50",
+        "coverImage": "../assets/images/cover-estevao-sreehari-letter-to-ashna.jpg",
+        "audioUrl": "/assets/audio/alunos/estevao/Sreehari.mp3",
+        "summary": "Carta reflexiva e estratégica sobre políticas públicas, gap de implementação e ecossistemas relacionais de aprendizagem.",
+        "goldenTip": "Observe como os conceitos complexos são encadeados com calma e precisão. Mantenha pausas conscientes entre as orações.",
+        "sentences": [
+            {
+                "id": 1,
+                "start": 0.0,
+                "end": 3.84,
+                "text": "Dear Ashna, thank you for sharing the session plan.",
+                "spokenTranslation": "Querida Ashna, obrigado por compartilhar o planejamento da sessão."
+            },
+            {
+                "id": 2,
+                "start": 3.84,
+                "end": 8.08,
+                "text": "I went through it again in relation to how I am shaping my presentation.",
+                "spokenTranslation": "Eu revisei o documento pensando em como estou estruturando a minha apresentação."
+            },
+            {
+                "id": 3,
+                "start": 8.08,
+                "end": 12.08,
+                "text": "And I think the overall narrative and the two themes work very well.",
+                "spokenTranslation": "E achei que a narrativa geral e os dois temas funcionam super bem."
+            },
+            {
+                "id": 4,
+                "start": 12.08,
+                "end": 17.32,
+                "text": "I particularly like organising the session around the policy intent implementation gap",
+                "spokenTranslation": "Gostei especialmente de organizar a sessão em torno do abismo entre a intenção da política e a sua implementação,"
+            },
+            {
+                "id": 5,
+                "start": 17.32,
+                "end": 22.32,
+                "text": "and balancing accountability with adaptability rather than treating the three presentations",
+                "spokenTranslation": "e de equilibrar prestação de contas com adaptabilidade, em vez de tratar as três apresentações"
+            },
+            {
+                "id": 6,
+                "start": 22.32,
+                "end": 25.8,
+                "text": "as separate organizational case studies.",
+                "spokenTranslation": "como estudos de caso isolados de cada organização."
+            },
+            {
+                "id": 7,
+                "start": 25.8,
+                "end": 31.2,
+                "text": "It seems to be strong complementarity across the contributions, particularly around feedback",
+                "spokenTranslation": "Parece haver uma forte complementaridade entre as contribuições, principalmente sobre ciclos de feedback,"
+            },
+            {
+                "id": 8,
+                "start": 31.2,
+                "end": 38.08,
+                "text": "loops, implementation infrastructure and how complex public systems learn and adapt.",
+                "spokenTranslation": "infraestrutura de implementação e como sistemas públicos complexos aprendem e se adaptam."
+            },
+            {
+                "id": 9,
+                "start": 38.08,
+                "end": 43.48,
+                "text": "One small thought is whether we could make system learning slightly more explicit as a thread",
+                "spokenTranslation": "Uma pequena reflexão é se poderíamos deixar o aprendizado do sistema um pouco mais explícito como um fio condutor"
+            },
+            {
+                "id": 10,
+                "start": 43.48,
+                "end": 45.84,
+                "text": "connecting the two themes.",
+                "spokenTranslation": "conectando os dois temas."
+            },
+            {
+                "id": 11,
+                "start": 45.84,
+                "end": 51.44,
+                "text": "In shaping my presentation, I have been thinking about the policy implementation gap not only",
+                "spokenTranslation": "Ao montar minha apresentação, tenho pensado no abismo de implementação das políticas não apenas"
+            },
+            {
+                "id": 12,
+                "start": 51.44,
+                "end": 57.68,
+                "text": "as an implementation or evidence gap but also as a learning and sense making gap.",
+                "spokenTranslation": "como uma lacuna de execução ou de evidências, mas também como um déficit de aprendizado e interpretação coletiva."
+            },
+            {
+                "id": 13,
+                "start": 57.68,
+                "end": 63.72,
+                "text": "Systems may have considerable data, evidence and multiple actors, but often lag the institutional",
+                "spokenTranslation": "Os sistemas podem até ter muitos dados, evidências e múltiplos atores, mas muitas vezes carecem da infraestrutura institucional"
+            },
+            {
+                "id": 14,
+                "start": 63.72,
+                "end": 68.32,
+                "text": "and relational infrastructure through which these different forms of knowledge can be interpreted",
+                "spokenTranslation": "e relacional por meio da qual essas diferentes formas de conhecimento possam ser interpretadas"
+            },
+            {
+                "id": 15,
+                "start": 68.32,
+                "end": 73.32,
+                "text": "together and translated into decisions and adaptation.",
+                "spokenTranslation": "em conjunto e transformadas em decisões e adaptações práticas."
+            },
+            {
+                "id": 16,
+                "start": 73.32,
+                "end": 78.4,
+                "text": "Delivery mechanism and more as an emerging learning and decision support infrastructure",
+                "spokenTranslation": "Mecanismo de entrega e mais como uma infraestrutura emergente de aprendizado e apoio à tomada de decisão"
+            },
+            {
+                "id": 17,
+                "start": 78.4,
+                "end": 81.32,
+                "text": "embedded within government.",
+                "spokenTranslation": "integrada diretamente dentro do governo."
+            },
+            {
+                "id": 18,
+                "start": 81.32,
+                "end": 87.0,
+                "text": "Learning administrative data, classroom experience, research and policy leadership through feedback",
+                "spokenTranslation": "Conectando dados administrativos, vivência de sala de aula, pesquisas e liderança política por meio de ciclos de feedback,"
+            },
+            {
+                "id": 19,
+                "start": 87.0,
+                "end": 92.2,
+                "text": "loops, collective sense making and adaptive decision making.",
+                "spokenTranslation": "interpretação coletiva e tomada de decisão adaptativa."
+            },
+            {
+                "id": 20,
+                "start": 92.2,
+                "end": 97.16,
+                "text": "This feels closely aligned with the framing already proposed for my contribution.",
+                "spokenTranslation": "Isso me parece muito alinhado com o enquadramento que já foi proposto para a minha contribuição."
+            },
+            {
+                "id": 21,
+                "start": 97.16,
+                "end": 102.72,
+                "text": "For the second theme, I would reflect on how accountability and adaptability need not",
+                "spokenTranslation": "Para o segundo tema, eu gostaria de refletir sobre como cobrança de resultados e adaptabilidade não precisam"
+            },
+            {
+                "id": 22,
+                "start": 102.72,
+                "end": 105.04,
+                "text": "be opposites.",
+                "spokenTranslation": "ser polos opostos."
+            },
+            {
+                "id": 23,
+                "start": 105.04,
+                "end": 111.36,
+                "text": "Social structures, data, monitoring, roles and review mechanisms remain important, but",
+                "spokenTranslation": "Estruturas formais, dados, monitoramento, papéis claros e mecanismos de revisão continuam essenciais, mas"
+            },
+            {
+                "id": 24,
+                "start": 111.36,
+                "end": 116.64,
+                "text": "they need to operate alongside relational practices such as dialogue, go interpretation",
+                "spokenTranslation": "precisam caminhar lado a lado com práticas relacionais, como diálogo, co-interpretação"
+            },
+            {
+                "id": 25,
+                "start": 116.64,
+                "end": 122.12,
+                "text": "of evidence, trust, constructive challenge and shared ownership.",
+                "spokenTranslation": "de evidências, confiança, questionamentos construtivos e senso de corresponsabilidade."
+            },
+            {
+                "id": 26,
+                "start": 122.12,
+                "end": 127.04,
+                "text": "I think this connects naturally with GoLab's formal relational thinking and the broader",
+                "spokenTranslation": "Acho que isso se conecta naturalmente com a abordagem relacional do GoLab e com a visão mais ampla"
+            },
+            {
+                "id": 27,
+                "start": 127.04,
+                "end": 132.64,
+                "text": "idea of moving from transactional partnerships towards relational ecosystems that enable",
+                "spokenTranslation": "de avançar de parcerias transacionais para ecossistemas relacionais que promovam"
+            },
+            {
+                "id": 28,
+                "start": 132.64,
+                "end": 134.8,
+                "text": "continuous learning.",
+                "spokenTranslation": "um aprendizado contínuo."
+            },
+            {
+                "id": 29,
+                "start": 134.8,
+                "end": 139.6,
+                "text": "One proposition I am considering leaving the audience with is perhaps the success of",
+                "spokenTranslation": "Uma provocação que pretendo deixar para o público é que talvez o sucesso de"
+            },
+            {
+                "id": 30,
+                "start": 139.6,
+                "end": 144.88,
+                "text": "an ecosystem partnership should not only be judged by what the partnership delivered,",
+                "spokenTranslation": "uma parceria de ecossistema não deva ser medido apenas pelo que ela entregou,"
+            },
+            {
+                "id": 31,
+                "start": 144.88,
+                "end": 150.6,
+                "text": "but by what the system becomes more capable of doing because the partnership existed.",
+                "spokenTranslation": "mas sim pelo que o sistema público se tornou capaz de realizar pelo simples fato de a parceria ter existido."
+            },
+            {
+                "id": 32,
+                "start": 150.6,
+                "end": 155.96,
+                "text": "There is also one point I wanted to clarify, planning to invite Mr. BP Mandoli, a senior",
+                "spokenTranslation": "Há também um ponto que eu gostaria de alinhar: planejo convidar o Sr. B.P. Mandoli, um gestor sênior"
+            },
+            {
+                "id": 33,
+                "start": 155.96,
+                "end": 161.16,
+                "text": "education policy maker from India, with extensive experience within the government of Uttarakhand's",
+                "spokenTranslation": "de políticas educacionais da Índia, com vasta experiência no governo de Uttarakhand,"
+            },
+            {
+                "id": 34,
+                "start": 161.16,
+                "end": 167.28,
+                "text": "public education system to join me for a short reflection from inside government.",
+                "spokenTranslation": "para participar comigo trazendo uma breve reflexão da perspectiva de dentro do governo."
+            },
+            {
+                "id": 35,
+                "start": 167.28,
+                "end": 171.88,
+                "text": "Drawing particularly on the experience of Anandam Patya Charya, he would reflect on what",
+                "spokenTranslation": "Com base especialmente na experiência do currículo Anandam, ele refletiria sobre o que"
+            },
+            {
+                "id": 36,
+                "start": 171.88,
+                "end": 177.68,
+                "text": "it means to translate policy intent into practice at scale, work with evidence and feedback",
+                "spokenTranslation": "significa traduzir intenções de políticas públicas em prática em larga escala, trabalhar com evidências e feedbacks"
+            },
+            {
+                "id": 37,
+                "start": 177.68,
+                "end": 184.64,
+                "text": "from schools and create space for learning and adaptation within a public education system.",
+                "spokenTranslation": "vindos das escolas e abrir espaço para aprendizado e adaptação dentro de uma rede pública de ensino."
+            },
+            {
+                "id": 38,
+                "start": 184.64,
+                "end": 189.04,
+                "text": "Rather than treating this as an additional presentation, I am proposing to integrate his",
+                "spokenTranslation": "Em vez de fazer disso uma apresentação extra, proponho integrar a fala dele"
+            },
+            {
+                "id": 39,
+                "start": 189.04,
+                "end": 195.4,
+                "text": "reflection within my allocated 15 minutes slot, approximately 9 to 10 minutes from me,",
+                "spokenTranslation": "dentro dos meus 15 minutos de fala: cerca de 9 a 10 minutos para mim,"
+            },
+            {
+                "id": 40,
+                "start": 195.4,
+                "end": 198.44,
+                "text": "followed by 4 to 5 minutes from Mr. Mandoli.",
+                "spokenTranslation": "seguidos de 4 a 5 minutos para o Sr. Mandoli."
+            },
+            {
+                "id": 41,
+                "start": 198.44,
+                "end": 201.52,
+                "text": "So we remain within the existing running order.",
+                "spokenTranslation": "Assim, nos mantemos rigorosamente dentro do cronograma previsto."
+            },
+            {
+                "id": 42,
+                "start": 201.52,
+                "end": 205.12,
+                "text": "I think this could add an important dimension to the session.",
+                "spokenTranslation": "Acredito que isso possa agregar uma dimensão muito rica para a sessão."
+            },
+            {
+                "id": 43,
+                "start": 205.12,
+                "end": 209.96,
+                "text": "I would offer the partnership and systems perspective while Mr. Mandoli would bring the policy",
+                "spokenTranslation": "Eu traria a visão de ecossistema e parcerias, enquanto o Sr. Mandoli traria a perspectiva real do formulador de políticas"
+            },
+            {
+                "id": 44,
+                "start": 209.96,
+                "end": 212.68,
+                "text": "maker perspective from inside.",
+                "spokenTranslation": "de dentro da máquina pública."
+            },
+            {
+                "id": 45,
+                "start": 212.68,
+                "end": 215.52,
+                "text": "Please let me know if you are comfortable with this arrangement.",
+                "spokenTranslation": "Por favor, me avise se você concorda com esse formato."
+            },
+            {
+                "id": 46,
+                "start": 215.52,
+                "end": 220.76,
+                "text": "I am of course happy to adapt it based on what works best for the overall session.",
+                "spokenTranslation": "Fico totalmente à disposição para ajustar o que for melhor para o sucesso da sessão."
+            },
+            {
+                "id": 47,
+                "start": 220.76,
+                "end": 225.52,
+                "text": "Overall I think the proposed structure is strong and I would be very comfortable proceeding",
+                "spokenTranslation": "No geral, achei a estrutura proposta excelente e estou super seguro em seguir em frente"
+            },
+            {
+                "id": 48,
+                "start": 225.52,
+                "end": 226.52,
+                "text": "with it.",
+                "spokenTranslation": "com ela."
+            },
+            {
+                "id": 49,
+                "start": 226.52,
+                "end": 229.08,
+                "text": "Thank you again for bringing this together.",
+                "spokenTranslation": "Muito obrigado mais uma vez por organizar tudo isso."
+            },
+            {
+                "id": 50,
+                "start": 229.08,
+                "end": 229.76,
+                "text": "Have a great day.",
+                "spokenTranslation": "Tenha um ótimo dia!"
+            }
+        ]
+    },
+    {
       id: "estevao-01",
       title: "Session 01: UK International Keynote Presentation",
       duration: "16:29",
