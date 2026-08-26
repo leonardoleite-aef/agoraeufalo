@@ -320,7 +320,7 @@
       <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative">
         <button onclick="closeAuthModal()" id="btn-close-auth-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition" title="Fechar">✕</button>
 
-        <!-- STATE 1: FORMULÁRIO DE ACESSO -->
+        <!-- STATE 1: FORMULÁRIO DE LOGIN (APENAS ALUNOS CADASTRADOS) -->
         <div id="auth-form-container">
           <div class="text-center mb-5">
             <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto mb-3">
@@ -328,35 +328,14 @@
             </div>
             <h3 class="text-xl font-bold font-serif">Acesso ao Portal do Aluno</h3>
             <p class="text-xs text-slate-300 mt-1">
-              Cadastre-se gratuitamente para receber seu link de acesso e liberar as masterclasses, apostilas e treinos.
+              Digite seu e-mail cadastrado para receber seu link de acesso instantâneo sem precisar de senha.
             </p>
           </div>
 
           <form id="portal-login-form" onsubmit="handleMagicLinkLogin(event)" class="space-y-3.5">
             <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome Completo *</label>
-              <input type="text" id="login-name-input" required placeholder="Digite seu primeiro nome" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-            </div>
-
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Melhor E-mail *</label>
-              <input type="email" id="login-email-input" required placeholder="seu.melhor.email@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between mb-1">
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">WhatsApp (com DDD)</label>
-                <span class="text-[9px] font-extrabold uppercase px-2 py-0.2 rounded-full bg-white/10 text-amber-300">Opcional</span>
-              </div>
-              <input type="tel" id="login-phone-input" placeholder="(DDD) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-            </div>
-
-            <!-- Mensagem Oficial do Professor Leo -->
-            <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-2.5 text-xs text-amber-200">
-              <span class="text-base shrink-0">💬</span>
-              <p class="leading-relaxed text-[11px]">
-                "O seu whatsapp é importante para conversar diretamente com o professor Leo para tirar suas dúvidas. Mas se preferir nao colocar, tudo bem. Enjoy your English practice!"
-              </p>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu E-mail Cadastrado *</label>
+              <input type="email" id="login-email-input" required placeholder="seu.email@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
             </div>
 
             <button type="submit" id="btn-login-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
@@ -380,7 +359,17 @@
             <span>Entrar com Conta Google</span>
           </button>
 
-          <div class="mt-4 pt-3 border-t border-white/10 text-center">
+          <!-- Chamada para Novos Alunos -->
+          <div class="mt-5 pt-3.5 border-t border-white/10 text-center bg-white/5 rounded-2xl p-3 border border-white/5">
+            <p class="text-xs text-slate-300">
+              Ainda não é aluno?
+              <a href="cadastro.html" class="text-amber-400 font-extrabold hover:text-amber-300 underline ml-1 block sm:inline mt-1 sm:mt-0">
+                Crie sua conta gratuitamente ↗
+              </a>
+            </p>
+          </div>
+
+          <div class="mt-3 text-center">
             <p class="text-[11px] text-slate-400">
               Dúvidas com seu acesso? <a href="https://wa.me/5531999817975?text=Olá%20Prof.%20Leo!%20Preciso%20de%20ajuda%20para%20acessar%20a%20Área%20de%20Membros." target="_blank" class="text-amber-400 font-bold underline">Chame no WhatsApp</a>.
             </p>
@@ -579,7 +568,7 @@
         `;
       }).join("");
 
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     }
 
     let activeCourse = null;
@@ -659,30 +648,22 @@
 
     async function handleMagicLinkLogin(e) {
       e.preventDefault();
-      const name = document.getElementById("login-name-input").value.trim();
       const email = document.getElementById("login-email-input").value.trim();
-      const phone = document.getElementById("login-phone-input").value.trim();
 
       const btn = document.getElementById("btn-login-submit");
       if (!email) return;
 
       btn.disabled = true;
-      btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Enviando link de acesso...</span>`;
+      btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Enviando link...</span>`;
 
       try {
-        // 1. Registra Lead no Hotmart Send (tag portal_aef) e no Firestore
-        if (window.AEFHotmartSend) {
-          await window.AEFHotmartSend.submitFreeLead(name, email, phone, "portal_aef");
-        }
-
-        // 2. Dispara o Link Mágico oficial de autenticação para o e-mail do aluno
+        // Dispara o Link Mágico oficial de autenticação para o e-mail do aluno
         await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
 
-        // 3. Salva rascunho de e-mail e nome
+        // Salva rascunho de e-mail
         localStorage.setItem("aef_pending_email", email);
-        localStorage.setItem("aef_user_name", name);
 
-        // 4. Alterna modal para a tela de confirmação ("Verifique seu E-mail")
+        // Alterna modal para a tela de confirmação ("Verifique seu E-mail")
         document.getElementById("auth-form-container").classList.add("hidden");
         document.getElementById("auth-sent-container").classList.remove("hidden");
         document.getElementById("sent-email-display").innerText = email;
@@ -790,7 +771,7 @@
         `;
       }).join("");
 
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
       if (firstLesson) selectLesson(firstLesson.id);
       document.getElementById("course-viewer-modal").classList.remove("hidden");
     }

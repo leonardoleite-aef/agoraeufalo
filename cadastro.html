@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Conta Gratuita | Portal AgoraEuFalo</title>
+  <meta name="description" content="Crie sua conta gratuita no Portal AgoraEuFalo e libere masterclasses, apostilas em PDF e o Training Player com o Professor Leonardo Leite.">
+  
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#F59E0B',
+              navy: '#0A192F',
+              dark: '#070B14',
+              card: '#0F172A',
+              border: '#1E293B'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- AgoraEuFalo SDKs -->
+  <script src="assets/js/aef-hotmart-send.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  </style>
+</head>
+<body class="bg-[#070B14] text-slate-100 min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 font-sans antialiased">
+
+  <!-- Top Simple Header -->
+  <header class="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2 group transition" title="Voltar ao início">
+      <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 sm:h-9 object-contain group-hover:scale-[1.02] transition">
+    </a>
+    <a href="portal.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-amber-400 transition">
+      <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+      <span>Já sou Aluno • Entrar</span>
+    </a>
+  </header>
+
+  <!-- Main Register Container -->
+  <main class="flex-1 flex items-center justify-center px-4 py-6 sm:py-10">
+    <div class="w-full max-w-md">
+      
+      <!-- Card Principal -->
+      <div class="bg-[#0F172A] border border-[#1E293B] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <!-- Subtle Glow Effect -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- STATE 1: FORMULÁRIO DE CADASTRO -->
+        <div id="signup-form-container">
+          
+          <div class="text-center mb-6">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider mb-3">
+              <span>✨ Cadastro Gratuito • Área de Membros</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-serif">
+              Crie sua Conta Gratuita
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">
+              Libere as masterclasses, apostilas em PDF e o Training Player de reflexo oral.
+            </p>
+          </div>
+
+          <!-- Google One-Click Cadastro -->
+          <button onclick="handleGoogleSignUp()" type="button" class="w-full py-3 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm border border-slate-200 cursor-pointer active:scale-[0.99] mb-5">
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Cadastrar com Conta Google</span>
+          </button>
+
+          <!-- Divider -->
+          <div class="relative flex items-center justify-center mb-5">
+            <div class="border-t border-[#1E293B] w-full"></div>
+            <span class="bg-[#0F172A] px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">ou com seu e-mail</span>
+          </div>
+
+          <!-- Registration Form -->
+          <form id="signupForm" onsubmit="handleEmailSignUp(event)" class="space-y-4">
+            
+            <!-- Nome Completo -->
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-slate-300">Seu Nome Completo *</label>
+              <div class="relative">
+                <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+                <input type="text" id="signup-name-input" required placeholder="Ex: Rodrigo Mendes" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition">
+              </div>
+            </div>
+
+            <!-- E-mail -->
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-slate-300">Seu Melhor E-mail *</label>
+              <div class="relative">
+                <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+                <input type="email" id="signup-email-input" required placeholder="seu.melhor.email@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition">
+              </div>
+            </div>
+
+            <!-- WhatsApp (Opcional) -->
+            <div class="space-y-1">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-semibold text-slate-300">WhatsApp (com DDD)</label>
+                <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-white/10 text-amber-300">Opcional</span>
+              </div>
+              <div class="relative">
+                <i data-lucide="phone" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+                <input type="tel" id="signup-phone-input" placeholder="(DDD) 99999-9999" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition">
+              </div>
+            </div>
+
+            <!-- Mensagem Oficial do Professor Leo -->
+            <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-2.5 text-xs text-amber-200">
+              <span class="text-base shrink-0">💬</span>
+              <p class="leading-relaxed text-[11px]">
+                "O seu whatsapp é importante para conversar diretamente com o professor Leo para tirar suas dúvidas. Mas se preferir nao colocar, tudo bem. Enjoy your English practice!"
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-signup-submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <span>Criar Conta Gratuita & Receber Acesso</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </form>
+
+          <!-- Já é aluno link -->
+          <div class="mt-6 pt-4 border-t border-[#1E293B] text-center">
+            <p class="text-xs text-slate-400">
+              Já possui cadastro no AgoraEuFalo? 
+              <a href="portal.html" class="text-amber-400 hover:text-amber-300 font-bold underline ml-1">
+                Fazer Login no Portal
+              </a>
+            </p>
+          </div>
+
+        </div>
+
+        <!-- STATE 2: CONFIRMAÇÃO DE ENVIO DO LINK MÁGICO -->
+        <div id="signup-sent-container" class="hidden text-center py-4 space-y-4">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/40 flex items-center justify-center text-3xl mx-auto shadow-lg">
+            ✉️
+          </div>
+          
+          <div>
+            <h2 class="text-2xl font-bold font-serif text-white">Verifique seu E-mail!</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+              Enviamos um <b>Link de Acesso Direto</b> para o endereço:
+            </p>
+            <p id="signup-sent-email-display" class="font-mono font-bold text-amber-300 text-xs sm:text-sm bg-black/40 px-4 py-2.5 rounded-xl my-2 border border-amber-400/30 break-all inline-block"></p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-left text-xs text-amber-200 space-y-2">
+            <p class="font-bold flex items-center gap-1.5 text-amber-300">
+              <span>💡 Como ativar seu acesso agora:</span>
+            </p>
+            <ol class="list-decimal pl-4 space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+              <li>Abra o aplicativo ou site do seu e-mail informado.</li>
+              <li>Procure pelo e-mail com o link de confirmação do <b>AgoraEuFalo</b>.</li>
+              <li>Clique no link recebido para entrar imediatamente na sua <b>Área de Membros</b>!</li>
+            </ol>
+            <p class="text-[10px] text-amber-300/80 pt-1">
+              ⚠️ Caso não localize em instantes, confira a sua pasta de <b>Spam</b> ou <b>Promoções</b>.
+            </p>
+          </div>
+
+          <div class="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button onclick="resendSignupMagicLink()" type="button" class="text-xs font-bold text-amber-400 hover:text-amber-300 underline cursor-pointer">
+              Reenviar Link de Acesso
+            </button>
+            <span class="text-slate-600 hidden sm:inline">•</span>
+            <button onclick="backToSignupForm()" type="button" class="text-xs font-bold text-slate-400 hover:text-white underline cursor-pointer">
+              Corrigir e-mail digitado
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Simple Footer -->
+  <footer class="w-full max-w-6xl mx-auto px-4 py-6 text-center text-xs text-slate-500 border-t border-[#1E293B]">
+    <p>© 2026 AgoraEuFalo • Professor Leonardo Leite. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="signup-toast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5">
+    <span class="text-base" id="signup-toast-icon">ℹ️</span>
+    <span id="signup-toast-text">Notificação</span>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) lucide.createIcons();
+    });
+
+    async function handleGoogleSignUp() {
+      try {
+        showToast("Conectando com a Conta Google...", "info");
+        await window.aefPortalAuth.ready();
+        const result = await window.aefPortalAuth.signInWithGoogle();
+        
+        if (result && result.user) {
+          const user = result.user;
+          localStorage.setItem("aef_user_email", user.email);
+          localStorage.setItem("aef_user_name", result.profile?.name || user.displayName || user.email.split('@')[0]);
+          localStorage.setItem("aef_user_tier", result.profile?.tier || 'free');
+
+          // Dispara Lead para o Hotmart Send (tag portal_aef)
+          if (window.AEFHotmartSend) {
+            await window.AEFHotmartSend.submitFreeLead(user.displayName || "Aluno Google", user.email, "", "portal_google");
+          }
+
+          showToast("🎉 Conta criada com sucesso! Entrando no Portal...", "success");
+          setTimeout(() => {
+            window.location.href = "portal.html";
+          }, 1000);
+        }
+      } catch (err) {
+        console.error("Google SignUp error:", err);
+        showToast("Não foi possível conectar com o Google. Tente com seu e-mail.", "error");
+      }
+    }
+
+    async function handleEmailSignUp(e) {
+      e.preventDefault();
+      const name = document.getElementById("signup-name-input").value.trim();
+      const email = document.getElementById("signup-email-input").value.trim();
+      const phone = document.getElementById("signup-phone-input").value.trim();
+      const btn = document.getElementById("btn-signup-submit");
+
+      if (!name || !email) {
+        showToast("Por favor, preencha nome e e-mail.", "error");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Enviando link de acesso...</span>`;
+
+      try {
+        // 1. Registra Lead no Hotmart Send (tag portal_aef) e Firestore
+        if (window.AEFHotmartSend) {
+          await window.AEFHotmartSend.submitFreeLead(name, email, phone, "portal_aef");
+        }
+
+        // 2. Dispara o Magic Link do Firebase Auth para o e-mail
+        await window.aefPortalAuth.ready();
+        await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
+
+        // 3. Salva rascunho de identificação
+        localStorage.setItem("aef_pending_email", email);
+        localStorage.setItem("aef_user_name", name);
+
+        // 4. Alterna para a tela de confirmação (Verifique seu E-mail)
+        document.getElementById("signup-form-container").classList.add("hidden");
+        document.getElementById("signup-sent-container").classList.remove("hidden");
+        document.getElementById("signup-sent-email-display").innerText = email;
+
+        showToast("✉️ Link de confirmação enviado para seu e-mail!", "success");
+      } catch (err) {
+        console.error("SignUp error:", err);
+        showToast("Erro ao processar cadastro. Verifique os dados informados.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Criar Conta Gratuita & Receber Acesso</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    async function resendSignupMagicLink() {
+      const email = localStorage.getItem("aef_pending_email") || document.getElementById("signup-email-input").value.trim();
+      if (!email) return;
+      try {
+        showToast("Reenviando link de acesso...", "info");
+        await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
+        showToast("✨ Novo link enviado para " + email, "success");
+      } catch (err) {
+        showToast("Erro ao reenviar link.", "error");
+      }
+    }
+
+    function backToSignupForm() {
+      document.getElementById("signup-sent-container").classList.add("hidden");
+      document.getElementById("signup-form-container").classList.remove("hidden");
+    }
+
+    function showToast(msg, type = "info") {
+      const toast = document.getElementById("signup-toast");
+      const text = document.getElementById("signup-toast-text");
+      const icon = document.getElementById("signup-toast-icon");
+      if (!toast || !text) return;
+      text.innerText = msg;
+      icon.innerText = type === "success" ? "✅" : (type === "error" ? "❌" : "ℹ️");
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 5000);
+    }
+  </script>
+</body>
+</html>

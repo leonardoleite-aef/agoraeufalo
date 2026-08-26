@@ -76,7 +76,8 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 
 | Interface | URL Produção | Arquivo Local | Descrição |
 | :--- | :--- | :--- | :--- |
-| **Portal do Aluno (Membros)** | [agoraeufalo.com.br/portal/index.html](https://agoraeufalo.com.br/portal/index.html) | [`portal/index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal/index.html) | Área de membros dos alunos VIP com trilhas de estudo e gravações. |
+| **Portal do Aluno (Membros)** | [agoraeufalo.com.br/portal.html](https://agoraeufalo.com.br/portal.html) | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | Área de membros dos alunos com trilhas de estudo, gravações e acesso rápido. |
+| **Cadastro Gratuito (Novo Aluno)** | [agoraeufalo.com.br/cadastro.html](https://agoraeufalo.com.br/cadastro.html) | [`cadastro.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/cadastro.html) | Página dedicada de cadastro gratuito com Magic Link e Google Auth. |
 | **Login do Portal** | [agoraeufalo.com.br/login.html](https://agoraeufalo.com.br/login.html) | [`login.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/login.html) | Tela de autenticação e acesso às áreas fechadas. |
 | **Página de Confirmação (Obrigado)** | [agoraeufalo.com.br/obrigado.html](https://agoraeufalo.com.br/obrigado.html) | [`obrigado.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/obrigado.html) | Página de confirmação de cadastro de lead e entrega de material. |
 | **Política de Privacidade** | [agoraeufalo.com.br/politica-de-privacidade.html](https://agoraeufalo.com.br/politica-de-privacidade.html) | [`politica-de-privacidade.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/politica-de-privacidade.html) | Termos de conformidade com a LGPD e privacidade de dados. |
