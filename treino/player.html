@@ -1153,7 +1153,6 @@
         }
 
         window.currentLoadedStudent = studentData;
-        const badgeEl = document.getElementById("header-student-badge");
         if (badgeEl) {
           badgeEl.innerText = window.isVipUser ? "MENTORADO VIP" : (studentData.badge === "Acesso Aberto" ? "ABERTO" : "ALUNO");
         }
