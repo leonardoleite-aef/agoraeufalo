@@ -22,49 +22,49 @@ window.AEF_STUDENT_THOMAS = {
           "start": 0.0,
           "end": 4.06,
           "text": "Good morning, Sarah. You look incredibly energetic today. Are you usually a morning person?",
-          "notes": "Intonation rises gently on 'today' and drops on 'morning person'"
+          "spokenTranslation": "Bom dia, Sarah! Você tá com uma energia incrível hoje. Você costuma acordar cedo?"
         },
         {
           "id": 2,
           "start": 4.48,
           "end": 10.02,
           "text": "Oh, not at all. Actually, I'm usually quite grumpy until I have my first cup of strong black coffee.",
-          "notes": "Sound links: 'not_at_all' | 'cup_of' | 'strong_black'"
+          "spokenTranslation": "Ah, que nada! Na real, eu costumo ficar bem rabugenta até tomar a minha primeira xícara de café preto forte."
         },
         {
           "id": 3,
           "start": 10.54,
           "end": 14.9,
           "text": "Really? Is that so? You seem so bright-eyed. I'm the opposite. I'm a total night owl.",
-          "notes": "Contrast stress: 'opposite' vs. idiom 'night owl'"
+          "spokenTranslation": "Sério? Jura? Você parece tão disposta! Eu sou o oposto... sou daqueles que funciona de madrugada."
         },
         {
           "id": 4,
           "start": 15.72,
           "end": 19.68,
           "text": "That's interesting. So, do you stay up late working every single night?",
-          "notes": "Connected chunk: 'stay_up_late' | Emphasis on 'every single night'"
+          "spokenTranslation": "Que curioso! E você fica até tarde trabalhando toda santa noite?"
         },
         {
           "id": 5,
           "start": 20.0,
           "end": 23.78,
           "text": "Yes, I do. The house is very quiet at midnight, so it's the perfect time for me to focus.",
-          "notes": "Downward cadence on 'midnight' and 'focus'"
+          "spokenTranslation": "Fico sim. A casa fica super silenciosa à meia-noite, então é a hora perfeita pra eu me concentrar."
         },
         {
           "id": 6,
           "start": 24.38,
           "end": 28.44,
           "text": "I see. Well, I prefer the early sun. It's a beautiful morning, isn't it?",
-          "notes": "Friendly conversational tag question: 'isn't it?'"
+          "spokenTranslation": "Entendi. Bom, eu prefiro o sol da manhã. Tá uma manhã linda, né?"
         },
         {
           "id": 7,
           "start": 28.44,
           "end": 31.5,
           "text": "It definitely is. The sky is so clear and blue today.",
-          "notes": "Assertive agreement with stress on 'definitely'"
+          "spokenTranslation": "Com certeza tá! O céu tá tão limpo e azul hoje."
         }
       ]
     },
@@ -82,84 +82,84 @@ window.AEF_STUDENT_THOMAS = {
           "start": 0.0,
           "end": 1.92,
           "text": "Excuse me, is this seat taken?",
-          "notes": "Polite inquiry with gentle rising intonation at the end"
+          "spokenTranslation": "Com licença, esse lugar tá ocupado?"
         },
         {
           "id": 2,
           "start": 2.28,
           "end": 4.2,
           "text": "It's a very busy afternoon in here.",
-          "notes": "Natural cadence: blend 'afternoon_in_here'"
+          "spokenTranslation": "Tá super movimentado aqui esta tarde."
         },
         {
           "id": 3,
           "start": 4.66,
           "end": 6.78,
           "text": "No it isn't. Please feel free to sit down.",
-          "notes": "Warm hospitality chunk: 'feel_free_to_sit_down'"
+          "spokenTranslation": "Não, tá livre! Pode sentar, fica à vontade."
         },
         {
           "id": 4,
           "start": 7.16,
           "end": 9.1,
           "text": "Oh, thank you. That's very kind of you.",
-          "notes": "Polite fixed expression: 'kind_of_you'"
+          "spokenTranslation": "Ah, obrigado! Muito gentil da sua parte."
         },
         {
           "id": 5,
           "start": 9.52,
           "end": 11.74,
           "text": "What is that drink you have there? It looks delicious.",
-          "notes": "Casual curiosity: stress on 'delicious'"
+          "spokenTranslation": "Que bebida é essa que você pediu? Parece uma delícia!"
         },
         {
           "id": 6,
           "start": 12.28,
           "end": 15.24,
           "text": "This? It's an iced matcha latte with almond milk.",
-          "notes": "Food & drink chunk: 'iced_matcha_latte_with_almond_milk'"
+          "spokenTranslation": "Essa aqui? É um matcha latte gelado com leite de amêndoas."
         },
         {
           "id": 7,
           "start": 15.56,
           "end": 17.28,
           "text": "It's actually my favorite drink in this cafe.",
-          "notes": "Affirmative emphasis on 'favorite drink'"
+          "spokenTranslation": "Na verdade é a minha bebida favorita aqui da cafeteria."
         },
         {
           "id": 8,
           "start": 17.72,
           "end": 22.04,
           "text": "Oh wow. I don't usually like green tea, but that looks very refreshing.",
-          "notes": "Contrast transition: 'but that looks very refreshing'"
+          "spokenTranslation": "Nossa! Eu não costumo gostar de chá verde, mas isso parece super refrescante."
         },
         {
           "id": 9,
           "start": 22.6,
           "end": 23.04,
           "text": "Is it sweet?",
-          "notes": "Quick conversational check: rising pitch"
+          "spokenTranslation": "É docinho?"
         },
         {
           "id": 10,
           "start": 23.4,
           "end": 25.28,
           "text": "It's a little bit sweet, but not too much.",
-          "notes": "Nuanced modifier: 'a_little_bit_sweet'"
+          "spokenTranslation": "É um pouquinho doce, mas nada exagerado."
         },
         {
           "id": 11,
           "start": 25.62,
           "end": 26.84,
           "text": "Do you want to try something similar?",
-          "notes": "Friendly suggestion: blend 'try_something'"
+          "spokenTranslation": "Quer experimentar algo parecido?"
         },
         {
           "id": 12,
           "start": 26.84,
           "end": 31.86,
           "text": "Maybe. I usually just order a plain espresso, but today I feel like something different.",
-          "notes": "Spontaneous decision expression: 'feel_like_something_different'"
+          "spokenTranslation": "Talvez! Eu geralmente só peço um cafezinho expresso puro, mas hoje tô com vontade de provar algo diferente."
         }
       ]
     },
@@ -177,49 +177,49 @@ window.AEF_STUDENT_THOMAS = {
           "start": 0.0,
           "end": 3.2,
           "text": "Hi there. Is the marketing manager in her office right now?",
-          "notes": "Polite office greeting with rising pitch"
+          "spokenTranslation": "Olá! A gerente de marketing tá na sala dela agora?"
         },
         {
           "id": 2,
           "start": 3.4,
           "end": 7.6,
           "text": "I am afraid she isn't. She is in a very important meeting with the regional directors.",
-          "notes": "Polite hesitation chunk: 'I am afraid she isn't'"
+          "spokenTranslation": "Infelizmente não... ela tá numa reunião super importante com os diretores regionais."
         },
         {
           "id": 3,
           "start": 7.8,
           "end": 12.5,
           "text": "Oh, I see. That's a shame. Is the meeting usually this long on Mondays?",
-          "notes": "Sympathetic conversational cadence: 'That's a shame'"
+          "spokenTranslation": "Ah, entendi. Que pena! As reuniões de segunda-feira costumam demorar tanto assim?"
         },
         {
           "id": 4,
           "start": 12.8,
           "end": 17.6,
           "text": "Yes, it is. They always discuss the weekly targets and the new campaign strategy.",
-          "notes": "Business rhythm: 'weekly targets' and 'campaign strategy'"
+          "spokenTranslation": "Costumam sim. Eles sempre discutem as metas da semana e as estratégias das novas campanhas."
         },
         {
           "id": 5,
           "start": 17.9,
           "end": 21.6,
           "text": "That sounds quite stressful. Does she have any free time later today?",
-          "notes": "Natural check: 'free time later today'"
+          "spokenTranslation": "Parece bem puxado! Ela tem algum tempinho livre mais tarde hoje?"
         },
         {
           "id": 6,
           "start": 21.9,
           "end": 25.4,
           "text": "Let me check her digital calendar... it looks like she is free around four thirty.",
-          "notes": "Helpful tone: 'it looks like she is free'"
+          "spokenTranslation": "Deixa eu dar uma olhada na agenda dela... parece que ela tem um horário por volta das quatro e meia."
         },
         {
           "id": 7,
           "start": 25.6,
           "end": 27.9,
           "text": "Perfect. I am in the building until five, so I can wait in the main lobby.",
-          "notes": "Final confirmation: 'wait in the main lobby'"
+          "spokenTranslation": "Perfeito! Eu fico aqui no prédio até as cinco, então posso esperar no saguão principal."
         }
       ]
     },
@@ -232,13 +232,13 @@ window.AEF_STUDENT_THOMAS = {
       summary: "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
       goldenTip: "Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra.",
       sentences: [
-        { "id": 1, "start": 0, "end": 3.13, "text": "So, Mike, what do you do for fun on the weekends?", "notes": "Speaker: A" },
-        { "id": 2, "start": 3.13, "end": 8.91, "text": "Well, I’m a huge fan of outdoor activities. I often go hiking in the mountains near the city.", "notes": "Speaker: B" },
-        { "id": 3, "start": 8.91, "end": 13.67, "text": "Really? That’s impressive! Is it a difficult hike, or is it relatively easy?", "notes": "Speaker: A" },
-        { "id": 4, "start": 13.67, "end": 18.61, "text": "It depends on the trail, but the views are always breathtaking. What about you?", "notes": "Speaker: B" },
-        { "id": 5, "start": 18.61, "end": 23.85, "text": "I’m not very athletic, to be honest. I usually stay home and read historical novels.", "notes": "Speaker: A" },
-        { "id": 6, "start": 23.85, "end": 27.4, "text": "That’s interesting. Is your house a quiet place to read?", "notes": "Speaker: B" },
-        { "id": 7, "start": 27.4, "end": 31.73, "text": "Yes, it is. My roommates are usually out playing soccer on Saturdays.", "notes": "Speaker: A" }
+        { "id": 1, "start": 0, "end": 3.13, "text": "So, Mike, what do you do for fun on the weekends?", "spokenTranslation": "E aí, Mike, o que você curte fazer pra se divertir nos fins de semana?" },
+        { "id": 2, "start": 3.13, "end": 8.91, "text": "Well, I’m a huge fan of outdoor activities. I often go hiking in the mountains near the city.", "spokenTranslation": "Bom, eu me amarro em atividades ao ar livre. Costumo fazer trilha nas montanhas aqui perto da cidade." },
+        { "id": 3, "start": 8.91, "end": 13.67, "text": "Really? That’s impressive! Is it a difficult hike, or is it relatively easy?", "spokenTranslation": "Sério? Que massa! É uma trilha pesada ou é relativamente tranquila?" },
+        { "id": 4, "start": 13.67, "end": 18.61, "text": "It depends on the trail, but the views are always breathtaking. What about you?", "spokenTranslation": "Depende da trilha, mas o visual é sempre de tirar o fôlego! E você?" },
+        { "id": 5, "start": 18.61, "end": 23.85, "text": "I’m not very athletic, to be honest. I usually stay home and read historical novels.", "spokenTranslation": "Pra ser sincero, eu não sou muito de esportes. Costumo ficar em casa lendo romances históricos." },
+        { "id": 6, "start": 23.85, "end": 27.4, "text": "That’s interesting. Is your house a quiet place to read?", "spokenTranslation": "Que legal! A sua casa é um lugar tranquilo pra ler?" },
+        { "id": 7, "start": 27.4, "end": 31.73, "text": "Yes, it is. My roommates are usually out playing soccer on Saturdays.", "spokenTranslation": "É sim! Meus colegas de quarto geralmente saem pra jogar futebol aos sábados." }
       ]
     },
     {
@@ -250,13 +250,13 @@ window.AEF_STUDENT_THOMAS = {
       summary: "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
       goldenTip: "Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra.",
       sentences: [
-        { "id": 1, "start": 0, "end": 3.98, "text": "Wow, look at those dark clouds! Is it rainy season already?", "notes": "Speaker: A" },
-        { "id": 2, "start": 3.98, "end": 8.28, "text": "I think so. The weather is so unpredictable in this city lately.", "notes": "Speaker: B" },
-        { "id": 3, "start": 8.28, "end": 13.22, "text": "You’re right. It’s very humid today, isn't it? I feel quite uncomfortable.", "notes": "Speaker: A" },
-        { "id": 4, "start": 13.22, "end": 16.17, "text": "I agree. Is your apartment air-conditioned?", "notes": "Speaker: B" },
-        { "id": 5, "start": 16.17, "end": 21.88, "text": "No, it isn't. I just have a small fan, but it’s not very effective when it’s this hot.", "notes": "Speaker: A" },
-        { "id": 6, "start": 21.88, "end": 27.27, "text": "Oh, that’s terrible. I have a large AC unit, so my place is always nice and cool.", "notes": "Speaker: B" },
-        { "id": 7, "start": 27.27, "end": 29.45, "text": "You’re very lucky! I’m jealous.", "notes": "Speaker: A" }
+        { "id": 1, "start": 0, "end": 3.98, "text": "Wow, look at those dark clouds! Is it rainy season already?", "spokenTranslation": "Nossa, olha o tamanho daquelas nuvens escuras! Já começou a época de chuva?" },
+        { "id": 2, "start": 3.98, "end": 8.28, "text": "I think so. The weather is so unpredictable in this city lately.", "spokenTranslation": "Acho que sim. O clima tá tão doido nessa cidade ultimamente!" },
+        { "id": 3, "start": 8.28, "end": 13.22, "text": "You’re right. It’s very humid today, isn't it? I feel quite uncomfortable.", "spokenTranslation": "Você tem razão. Tá super abafado hoje, né? Tô me sentindo bem desconfortável." },
+        { "id": 4, "start": 13.22, "end": 16.17, "text": "I agree. Is your apartment air-conditioned?", "spokenTranslation": "Concordo! Seu apartamento tem ar-condicionado?" },
+        { "id": 5, "start": 16.17, "end": 21.88, "text": "No, it isn't. I just have a small fan, but it’s not very effective when it’s this hot.", "spokenTranslation": "Não tem... eu só tenho um ventiladorzinho, mas não dá conta quando tá esse calorão." },
+        { "id": 6, "start": 21.88, "end": 27.27, "text": "Oh, that’s terrible. I have a large AC unit, so my place is always nice and cool.", "spokenTranslation": "Putz, que perrengue! O meu tem um ar-condicionado potente, então meu apê fica sempre fresquinho." },
+        { "id": 7, "start": 27.27, "end": 29.45, "text": "You’re very lucky! I’m jealous.", "spokenTranslation": "Você é um sortudo! Que inveja branca!" }
       ]
     },
     {
@@ -268,14 +268,14 @@ window.AEF_STUDENT_THOMAS = {
       summary: "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
       goldenTip: "Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra.",
       sentences: [
-        { "id": 1, "start": 0, "end": 5.31, "text": "[pausa emocional] Is your family from this area, or are you a newcomer to the city?", "notes": "Speaker: A" },
-        { "id": 2, "start": 5.31, "end": 10.93, "text": "My parents are from a very small, traditional village in the south, but I live here now.", "notes": "Speaker: B" },
-        { "id": 3, "start": 10.93, "end": 14.26, "text": "I see. Do they visit you often during the holidays?", "notes": "Speaker: A" },
-        { "id": 4, "start": 14.26, "end": 19.81, "text": "Yes, they do. They usually bring a lot of homemade food. It’s always a big celebration.", "notes": "Speaker: B" },
-        { "id": 5, "start": 19.81, "end": 24.19, "text": "That sounds lovely. Are you the only child, or do you have siblings?", "notes": "Speaker: A" },
-        { "id": 6, "start": 24.19, "end": 29.31, "text": "I have two older brothers. They are both engineers and they live quite far away.", "notes": "Speaker: B" },
-        { "id": 7, "start": 29.31, "end": 33.32, "text": "Oh, wow. So, is it a very quiet house when they aren't around?", "notes": "Speaker: A" },
-        { "id": 8, "start": 33.32, "end": 37.89, "text": "Yes, it’s much more peaceful, [suspiro] but I sometimes miss the noise.", "notes": "Speaker: B" }
+        { "id": 1, "start": 0, "end": 5.31, "text": "[pausa emocional] Is your family from this area, or are you a newcomer to the city?", "spokenTranslation": "A sua família é daqui da região mesmo ou você acabou de se mudar pra cidade?" },
+        { "id": 2, "start": 5.31, "end": 10.93, "text": "My parents are from a very small, traditional village in the south, but I live here now.", "spokenTranslation": "Meus pais são de um vilarejo bem pequeno e tradicional lá no sul, mas eu moro aqui agora." },
+        { "id": 3, "start": 10.93, "end": 14.26, "text": "I see. Do they visit you often during the holidays?", "spokenTranslation": "Entendi. E eles costumam te visitar nas férias e feriados?" },
+        { "id": 4, "start": 14.26, "end": 19.81, "text": "Yes, they do. They usually bring a lot of homemade food. It’s always a big celebration.", "spokenTranslation": "Visitam sim! Eles sempre trazem um monte de comida caseira... é sempre uma baita festa!" },
+        { "id": 5, "start": 19.81, "end": 24.19, "text": "That sounds lovely. Are you the only child, or do you have siblings?", "spokenTranslation": "Que delícia! Você é filho único ou tem irmãos?" },
+        { "id": 6, "start": 24.19, "end": 29.31, "text": "I have two older brothers. They are both engineers and they live quite far away.", "spokenTranslation": "Tenho dois irmãos mais velhos. Os dois são engenheiros e moram bem longe." },
+        { "id": 7, "start": 29.31, "end": 33.32, "text": "Oh, wow. So, is it a very quiet house when they aren't around?", "spokenTranslation": "Nossa! Então a casa fica bem silenciosa quando eles não tão por perto?" },
+        { "id": 8, "start": 33.32, "end": 37.89, "text": "Yes, it’s much more peaceful, [suspiro] but I sometimes miss the noise.", "spokenTranslation": "É sim, fica bem mais em paz... mas às vezes eu sinto falta daquela bagunça." }
       ]
     }
   ]

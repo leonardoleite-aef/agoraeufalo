@@ -21,14 +21,14 @@ window.AEF_STUDENT_ANDRE = {
           "start": 0.0,
           "end": 7.2,
           "text": "Throughout my career in technical leadership, I've focused on building resilient high-performing teams.",
-          "notes": "Project confidence with downward pitch on 'teams'"
+          "spokenTranslation": "Ao longo de toda a minha carreira em liderança técnica, meu foco sempre foi construir equipes resilientes e de alta performance."
         },
         {
           "id": 2,
           "start": 7.5,
           "end": 15.0,
           "text": "In my previous role, I spearheaded the transition toward cloud infrastructure, reducing latency by 40%.",
-          "notes": "Clean rhythm on past tense 'spearheaded'"
+          "spokenTranslation": "No meu cargo anterior, eu liderei toda a transição para a infraestrutura em nuvem, reduzindo a latência em 40%."
         }
       ]
     }

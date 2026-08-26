@@ -79,8 +79,9 @@ Qualquer episódio criado ou modificado deve seguir rigorosamente estas 5 leis p
    - Todo áudio sintetizado ou gravado DEVE ser codificado em **MP3 puro (LAME 128 kbps / 24kHz ou 44.1kHz)**.
    - **Proibido usar AAC/M4A sem tabela de frames**, pois quebra o seek no navegador e impede o loop de frases.
 3. **Interatividades do Player (`treino/player.html`):**
-   - **Seek Instantâneo:** Tocar em qualquer frase do texto DEVE mover o áudio para `sentence.start` e iniciar o play imediatamente.
-   - **Loop Contínuo:** O botão `🔁 Loop` em cada card DEVE repetir a frase selecionada infinitamente entre `sentence.start` e `sentence.end`.
+   - **Seek & Play/Pause no Toque:** Tocar em qualquer frase do texto move o áudio para `sentence.start` e inicia o play imediatamente. Um segundo toque no mesmo card pausa a reprodução.
+   - **Repetição Contínua de Frase (`🔂`):** O botão minimalista `🔂` em cada card trava a frase selecionada em repetição contínua entre `sentence.start` e `sentence.end` (100% sem a palavra "loop"). Tocar novamente no `🔂` destrava e libera o áudio contínuo.
+   - **Linha Secundária de Tradução Falada Real:** A linha secundária de cada frase exibe exclusivamente a tradução em **Português Falado Brasileiro Real** (`spokenTranslation`). É terminantemente **proibido exibir comentários de entonação, anotações fonéticas ou regras gramaticais (`notes`)** abaixo das frases.
 4. **Sincronização Obrigatória com Google Cloud Firestore:**
    - Ao publicar ou atualizar faixas, sincronizar imediatamente o documento em `students/{studentId}/tracks/{trackId}` no Firestore.
 5. **Barra de Episódios Mobile-First:**

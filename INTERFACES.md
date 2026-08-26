@@ -19,17 +19,17 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 
 ---
 
-## 🎙️ 2. English Personal Training Player & Treinadores Interativos
+## 🎙️ 2. English Personal Training Player & Treinadores Interativos (SaaS 4 Abas)
 
 | Interface | URL Produção | Arquivo Local | Descrição |
 | :--- | :--- | :--- | :--- |
+| **Personal Training Player Unificado** | [agoraeufalo.com.br/treino/player.html](https://agoraeufalo.com.br/treino/player.html) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player SaaS com 4 abas (*Mentoria VIP*, *Sugestões do Leo*, *Meus Cursos*, *Minhas Coisas*), Play/Pause no toque, tradução falada real e dual-media (Vídeo + Áudio). |
 | **Landing Page do Player** | [agoraeufalo.com.br/personal-trainer.html](https://agoraeufalo.com.br/personal-trainer.html) | [`personal-trainer.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/personal-trainer.html) | Landing page de alta conversão do aplicativo de treino de reflexo com Lead Gate. |
 | **Treinador (Alias)** | [agoraeufalo.com.br/treinador.html](https://agoraeufalo.com.br/treinador.html) | [`treinador.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treinador.html) | Link alternativo curto para compartilhamento nas redes sociais e WhatsApp. |
-| **Player Público Aberto** | [agoraeufalo.com.br/treino/player.html?aluno=public](https://agoraeufalo.com.br/treino/player.html?aluno=public) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player interativo demonstrativo com karaokê, loop de frases e captura de leads. |
-| **Player VIP: Estêvão** | [agoraeufalo.com.br/treino/player.html?aluno=estevao](https://agoraeufalo.com.br/treino/player.html?aluno=estevao) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado Estêvão (Discurso de Oxford de 10 min). |
-| **Player VIP: Thomas** | [agoraeufalo.com.br/treino/player.html?aluno=thomas](https://agoraeufalo.com.br/treino/player.html?aluno=thomas) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado Thomas (6 diálogos com capas distintas). |
-| **Player VIP: André** | [agoraeufalo.com.br/treino/player.html?aluno=andre](https://agoraeufalo.com.br/treino/player.html?aluno=andre) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado de treinos profissionais do mentorado André. |
-| **Player VIP: Matheus** | [agoraeufalo.com.br/treino/player.html?aluno=matheus](https://agoraeufalo.com.br/treino/player.html?aluno=matheus) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado de ritmo e connected speech do mentorado Matheus. |
+| **Player VIP: Estêvão** | [agoraeufalo.com.br/treino/player.html?aluno=estevao](https://agoraeufalo.com.br/treino/player.html?aluno=estevao) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP Estêvão com prescrições 1 a 1 e badge VIP. |
+| **Player VIP: Thomas** | [agoraeufalo.com.br/treino/player.html?aluno=thomas](https://agoraeufalo.com.br/treino/player.html?aluno=thomas) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP Thomas com diálogos executivos e badge VIP. |
+| **Player VIP: André** | [agoraeufalo.com.br/treino/player.html?aluno=andre](https://agoraeufalo.com.br/treino/player.html?aluno=andre) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP André com treinos de entrevistas e badge VIP. |
+| **Player VIP: Matheus** | [agoraeufalo.com.br/treino/player.html?aluno=matheus](https://agoraeufalo.com.br/treino/player.html?aluno=matheus) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP Matheus com connected speech e badge VIP. |
 | **Portal de Treinos** | [agoraeufalo.com.br/treino/index.html](https://agoraeufalo.com.br/treino/index.html) | [`treino/index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/index.html) | Seletor e portal de sessões de treino para alunos. |
 
 ---

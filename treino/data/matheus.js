@@ -21,14 +21,14 @@ window.AEF_STUDENT_MATHEUS = {
           "start": 0.0,
           "end": 6.8,
           "text": "Excuse me, I have a connecting flight to Chicago departing in 45 minutes from terminal two.",
-          "notes": "Natural sound reduction on 'have_a' and 'to'"
+          "spokenTranslation": "Com licença! Eu tenho um voo de conexão pra Chicago saindo em 45 minutos lá no terminal dois."
         },
         {
           "id": 2,
           "start": 7.1,
           "end": 13.9,
           "text": "Could you point me toward the express transit shuttle so I don't miss the final boarding call?",
-          "notes": "Smooth sound link: 'point_me_toward'"
+          "spokenTranslation": "Você poderia me indicar onde pego o ônibus expresso pra eu não perder a última chamada de embarque?"
         }
       ]
     }

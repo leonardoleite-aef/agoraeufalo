@@ -152,8 +152,15 @@
           <img src="../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
         </a>
         <div class="h-5 w-px bg-white/20 hidden sm:block"></div>
-        <div class="flex items-center gap-1.5">
-          <span id="header-student-name" class="font-bold text-sm text-amber-400">Mentee Session</span>
+        <div class="flex items-center gap-2">
+          <!-- Seletor Interativo de Aluno / Mentorado -->
+          <select id="header-student-select" onchange="window.switchActiveStudent(this.value)" class="bg-[#0D2040] hover:bg-[#112a55] text-amber-300 border border-amber-500/40 rounded-xl px-2.5 py-1 text-xs font-bold focus:outline-none cursor-pointer shadow-xs transition" title="Alternar entre sessões de alunos">
+            <option value="thomas">👔 Thomas (VIP)</option>
+            <option value="estevao">👨‍💻 Estêvão (VIP)</option>
+            <option value="andre">💼 André (VIP)</option>
+            <option value="matheus">🎯 Matheus (VIP)</option>
+            <option value="public">🌐 Acesso Aberto (Degustação)</option>
+          </select>
           <span id="header-student-badge" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold tracking-wider uppercase border border-amber-500/30">VIP</span>
         </div>
       </div>
@@ -225,15 +232,24 @@
     <!-- Reading View -->
     <div id="reading-view" class="w-full flex flex-col space-y-4 pb-24 sm:pb-8">
       
-      <!-- Dual-Playlist Navigation Tabs -->
-      <div class="flex items-center gap-2 p-1 bg-stone-200/80 dark:bg-slate-900 rounded-2xl border border-stone-300/80 dark:border-slate-800 shadow-inner">
-        <button id="tab-btn-prescribed" onclick="window.switchPlayerTab('prescribed')" class="flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer">
-          <span>🎯 Prescrição do Leo</span>
-          <span id="badge-count-prescribed" class="px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-mono font-bold">0</span>
+      <!-- Unified SaaS 4-Tab Navigation Bar -->
+      <div class="flex items-center gap-1.5 p-1.5 bg-stone-200/80 dark:bg-slate-900 rounded-2xl border border-stone-300/80 dark:border-slate-800 shadow-inner overflow-x-auto custom-scrollbar">
+        <button id="tab-btn-vip" onclick="window.switchPlayerTab('vip')" class="flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
+          <span id="tab-vip-icon">👑</span>
+          <span id="tab-vip-label">Mentoria VIP</span>
+          <span id="badge-count-vip" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
         </button>
-        <button id="tab-btn-mylab" onclick="window.switchPlayerTab('mylab')" class="flex-1 py-2.5 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer">
-          <span>⚡ Meu Laboratório</span>
-          <span id="badge-count-mylab" class="px-1.5 py-0.5 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
+        <button id="tab-btn-suggestions" onclick="window.switchPlayerTab('suggestions')" class="flex-1 min-w-[140px] py-2 px-2.5 rounded-xl font-black text-[11px] sm:text-xs transition flex items-center justify-center gap-1 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer shrink-0">
+          <span>💡 Sugestões do Leo</span>
+          <span id="badge-count-suggestions" class="px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[10px] font-mono font-bold">0</span>
+        </button>
+        <button id="tab-btn-courses" onclick="window.switchPlayerTab('courses')" class="flex-1 min-w-[125px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
+          <span>🎓 Meus Cursos</span>
+          <span id="badge-count-courses" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
+        </button>
+        <button id="tab-btn-my-stuff" onclick="window.switchPlayerTab('my-stuff')" class="flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
+          <span>🧪 Minhas Coisas</span>
+          <span id="badge-count-my-stuff" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
         </button>
       </div>
 
@@ -315,6 +331,14 @@
               <span id="track-golden-tip" class="text-slate-800 dark:text-slate-200 leading-relaxed font-medium">Breathe naturally during pause markers. Speech clarity comes from linking sound chunks together, not from rushing speed.</span>
             </div>
           </div>
+        </div>
+
+        <!-- Delete Custom Track Option (Minhas Coisas Only) -->
+        <div id="btn-delete-custom-track-container" class="hidden mt-3 pt-3 border-t border-stone-200 dark:border-slate-800 flex items-center justify-between">
+          <span class="text-[11px] text-slate-500 font-medium">Treino personalizado de Minhas Coisas</span>
+          <button onclick="window.handleDeleteActiveCustomTrack()" class="text-xs px-3 py-1 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 font-bold transition flex items-center gap-1 cursor-pointer">
+            <span>🗑️</span> <span>Excluir Treino</span>
+          </button>
         </div>
       </div>
 
@@ -709,10 +733,88 @@
         </div>
 
         <button type="submit" id="btn-save-custom-track" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-2 mt-2 active:scale-98">
-          <span>Criar Treino no Meu Laboratório</span>
+          <span>Criar Treino em Minhas Coisas</span>
           <span>⚡</span>
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- VIP Mentorship Teaser Modal (Opção B - Lead Upsell) -->
+  <div id="vip-teaser-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl text-white relative">
+      <button onclick="document.getElementById('vip-teaser-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition cursor-pointer" title="Fechar">✕</button>
+
+      <div class="text-center mb-5">
+        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-3xl mx-auto mb-3 shadow-lg">
+          👑
+        </div>
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+          ACOMPANHAMENTO INDIVIDUAL 1 A 1
+        </span>
+        <h3 class="text-xl font-bold font-serif text-white mt-2">Mentoria VIP do Professor Leo</h3>
+        <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+          Prescrições de áudio e vídeo sob medida gravadas diretamente para você e para os seus desafios reais de fala.
+        </p>
+      </div>
+
+      <div class="space-y-2.5 p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-200 mb-5">
+        <div class="flex items-start gap-2.5">
+          <span class="text-amber-400 font-bold">✓</span>
+          <span><b>Aulas Personalizadas:</b> Gravações no seu player baseadas nas suas reuniões, viagens e apresentações.</span>
+        </div>
+        <div class="flex items-start gap-2.5">
+          <span class="text-amber-400 font-bold">✓</span>
+          <span><b>Correção Fina de Reflexo:</b> Ajuste de connected speech, pausas e entonação sem tradução mental.</span>
+        </div>
+        <div class="flex items-start gap-2.5">
+          <span class="text-amber-400 font-bold">✓</span>
+          <span><b>Linha Direta no WhatsApp:</b> Acesso 1 a 1 com o Professor Leonardo Leite.</span>
+        </div>
+      </div>
+
+  <!-- Free Tier Limit Modal (SaaS Gate) -->
+  <div id="free-limit-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl text-white relative">
+      <button onclick="document.getElementById('free-limit-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition cursor-pointer" title="Fechar">✕</button>
+
+      <div class="text-center mb-5">
+        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-3xl mx-auto mb-3 shadow-lg">
+          🧪
+        </div>
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+          LIMITE DO PLANO GRATUITO
+        </span>
+        <h3 class="text-xl font-bold font-serif text-white mt-2">1 Treino Ativo em Minhas Coisas</h3>
+        <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+          No plano gratuito, você pode manter 1 treino de música ou vídeo do YouTube ativo para praticar com karaokê.
+        </p>
+      </div>
+
+      <div class="space-y-2.5 p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-200 mb-5">
+        <p class="font-bold text-amber-300 text-xs">Com o Plano Pro Ilimitado você desbloqueia:</p>
+        <div class="flex items-start gap-2.5">
+          <span class="text-amber-400 font-bold">✓</span>
+          <span><b>Músicas e Vídeos Ilimitados:</b> Importe quantas músicas, podcasts e entrevistas desejar do YouTube.</span>
+        </div>
+        <div class="flex items-start gap-2.5">
+          <span class="text-amber-400 font-bold">✓</span>
+          <span><b>Todas as Masterclasses e Cursos:</b> Acesso completo a toda a biblioteca de cursos AgoraEuFalo.</span>
+        </div>
+        <div class="flex items-start gap-2.5">
+          <span class="text-amber-400 font-bold">✓</span>
+          <span><b>Treino em Segundo Plano:</b> Áudio contínuo no bolso com tela apagada.</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <a href="https://wa.me/5531999817975?text=Oi%20Leo!%20Estou%20no%20Player%20e%20quero%20desbloquear%20o%20Acesso%20Pro%20Ilimitado." target="_blank" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition active:scale-98">
+          <span>Desbloquear Acesso Ilimitado Pro 🚀</span>
+        </a>
+        <button type="button" onclick="window.handleReplaceCurrentCustomTrack()" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-bold transition cursor-pointer">
+          Excluir treino atual para criar um novo
+        </button>
+      </div>
     </div>
   </div>
 
@@ -744,6 +846,36 @@
           document.getElementById("btn-player-play").innerHTML = isPlaying ? pauseSvg : playSvg;
           document.getElementById("btn-driving-play").innerHTML = isPlaying ? drivingPauseSvg : drivingPlaySvg;
           document.getElementById("player-bar-status").innerText = isPlaying ? "Now Playing..." : "Paused";
+
+          // Sincronização de Vídeo (Dual-Media)
+          const videoEl = document.getElementById("track-video-el");
+          if (videoEl && !videoEl.classList.contains("hidden")) {
+            if (isPlaying && videoEl.paused) videoEl.play().catch(e => console.warn(e));
+            if (!isPlaying && !videoEl.paused) videoEl.pause();
+          }
+          const ytContainer = document.getElementById("track-yt-container");
+          if (ytContainer && !ytContainer.classList.contains("hidden")) {
+            const iframe = ytContainer.querySelector("iframe");
+            if (iframe && iframe.contentWindow) {
+              iframe.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: isPlaying ? 'playVideo' : 'pauseVideo',
+                args: []
+              }), '*');
+            }
+          }
+
+          // Atualiza o indicador visual da frase ativa
+          const activeIdx = engine.activeSentenceIndex;
+          if (activeIdx >= 0) {
+            const ind = document.getElementById(`play-indicator-${activeIdx}`);
+            if (ind) {
+              ind.innerHTML = isPlaying ? "⏸" : "▶";
+              ind.className = isPlaying 
+                ? "w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-[10px] font-black shrink-0 transition shadow-sm scale-110"
+                : "w-6 h-6 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px] font-black shrink-0 transition shadow-xs";
+            }
+          }
         },
         onTimeUpdate: (curTime, duration) => {
           document.getElementById("player-current-time").innerText = uiController.formatTime(curTime);
@@ -760,10 +892,25 @@
           const prevCard = document.querySelector(".sentence-card.active-sentence");
           if (prevCard) {
             prevCard.classList.remove("active-sentence");
+            const prevInd = prevCard.querySelector("[id^='play-indicator-']");
+            if (prevInd) {
+              prevInd.innerHTML = "▶";
+              prevInd.className = "w-6 h-6 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px] font-black shrink-0 transition shadow-xs";
+            }
           }
+
           const targetCard = document.getElementById(`sentence-${index}`);
           if (targetCard) {
             targetCard.classList.add("active-sentence");
+            const targetInd = document.getElementById(`play-indicator-${index}`);
+            if (targetInd) {
+              const isPlaying = !engine.audio.paused;
+              targetInd.innerHTML = isPlaying ? "⏸" : "▶";
+              targetInd.className = isPlaying
+                ? "w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-[10px] font-black shrink-0 transition shadow-sm scale-110"
+                : "w-6 h-6 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px] font-black shrink-0 transition shadow-xs";
+            }
+
             if (window.autoScrollEnabled && !window.isEditModeActive) {
               targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
             }
@@ -771,6 +918,25 @@
 
           if (sentence) {
             document.getElementById("driving-active-ticker").innerText = `"${sentence.text}"`;
+
+            // Sincroniza seek de vídeo dual-media
+            const videoEl = document.getElementById("track-video-el");
+            if (videoEl && !videoEl.classList.contains("hidden")) {
+              if (Math.abs(videoEl.currentTime - sentence.start) > 0.6) {
+                videoEl.currentTime = sentence.start;
+              }
+            }
+            const ytContainer = document.getElementById("track-yt-container");
+            if (ytContainer && !ytContainer.classList.contains("hidden")) {
+              const iframe = ytContainer.querySelector("iframe");
+              if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage(JSON.stringify({
+                  event: 'command',
+                  func: 'seekTo',
+                  args: [sentence.start, true]
+                }), '*');
+              }
+            }
           }
         },
         onTrackLoaded: (track, trackIndex, sentences) => {
@@ -821,6 +987,22 @@
         }
       });
 
+      // Dual-Media Video Player Event Listeners
+      const trackVideoEl = document.getElementById("track-video-el");
+      if (trackVideoEl) {
+        trackVideoEl.addEventListener("play", () => {
+          if (engine.audio.paused) engine.play();
+        });
+        trackVideoEl.addEventListener("pause", () => {
+          if (!engine.audio.paused) engine.pause();
+        });
+        trackVideoEl.addEventListener("seeking", () => {
+          if (Math.abs(engine.audio.currentTime - trackVideoEl.currentTime) > 0.5) {
+            engine.seek(trackVideoEl.currentTime);
+          }
+        });
+      }
+
       const uiController = new AEFUIController(engine);
       window.uiController = uiController;
       window.playerEngine = engine;
@@ -860,20 +1042,52 @@
         showSyncToast("🎉 Acesso destravado com sucesso! Bom treino!");
       };
 
-      window.currentActiveTab = "prescribed";
-      window.prescribedTracks = [];
-      window.myLabTracks = [];
+      function getBaseStudentData(id) {
+        id = (id || "estevao").toLowerCase().trim();
+        if (id === "thomas" && window.AEF_STUDENT_THOMAS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_THOMAS));
+        if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ESTEVAO));
+        if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ANDRE));
+        if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_MATHEUS));
+        if (id === "public" || id === "publico") return { id: "public", name: "Player Aberto (Degustação)", badge: "Acesso Aberto", tracks: (window.AEF_STUDENT_PUBLIC ? window.AEF_STUDENT_PUBLIC.tracks : []) };
+        
+        const registered = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === id) : null;
+        if (registered) {
+          return { id: registered.id, name: registered.name, badge: registered.badge || "VIP Mentee", tracks: [] };
+        }
+
+        const formattedName = id.charAt(0).toUpperCase() + id.slice(1);
+        return { id: id, name: formattedName, badge: (id === "public" ? "Acesso Aberto" : "VIP Mentee"), tracks: [] };
+      }
+
+      window.switchActiveStudent = (newId) => {
+        studentId = newId.toLowerCase().trim();
+        localStorage.setItem("aef_active_student", studentId);
+        const newUrl = window.location.pathname + "?aluno=" + studentId;
+        window.history.replaceState(null, "", newUrl);
+        bootPlayer();
+      };
+
+      window.currentActiveTab = "suggestions";
+      window.vipTracks = [];
+      window.suggestionsTracks = [];
+      window.coursesTracks = [];
+      window.myStuffTracks = [];
+      window.isVipUser = false;
 
       async function bootPlayer() {
         let studentData = getBaseStudentData(studentId);
         
+        // Sincroniza seletor do header
+        const selectEl = document.getElementById("header-student-select");
+        if (selectEl) {
+          selectEl.value = ["thomas", "estevao", "andre", "matheus", "public"].includes(studentId) ? studentId : "estevao";
+        }
+
         // Show/Hide Public Mode Features
         const publicTour = document.getElementById("public-app-tour");
         if (publicTour) {
           if (studentId === "public" || studentId === "publico") {
             publicTour.classList.remove("hidden");
-            
-            // Check Lead Gate
             if (!localStorage.getItem("aef_public_lead")) {
               document.getElementById("public-lead-gate-modal").classList.remove("hidden");
             }
@@ -882,36 +1096,65 @@
           }
         }
 
-        // 1. Load Prescribed Tracks (Leo)
-        if (window.aefAudioHub) {
-          try {
-            const mergedTracks = await window.aefAudioHub.getMergedTracksForStudent(studentId);
-            if (mergedTracks && mergedTracks.length > 0) {
-              studentData.tracks = mergedTracks;
-            }
-          } catch (e) {
-            console.warn("Could not load central hub tracks:", e);
-          }
-        }
-        
-        window.prescribedTracks = studentData.tracks || [];
+        // Check if student is VIP
+        window.isVipUser = ["estevao", "thomas", "andre", "matheus"].includes(studentId) || 
+          (studentData.badge && studentData.badge.includes("VIP")) || 
+          (localStorage.getItem("aef_user_tier") === "vip");
 
-        // 2. Load My Lab Tracks (Saved & Custom)
+        // 1. VIP Tracks (Prescrições 1 a 1 do Leo)
+        if (window.isVipUser) {
+          if (window.aefAudioHub) {
+            try {
+              const mergedTracks = await window.aefAudioHub.getMergedTracksForStudent(studentId);
+              if (mergedTracks && mergedTracks.length > 0) studentData.tracks = mergedTracks;
+            } catch (e) {
+              console.warn("Could not load central hub tracks:", e);
+            }
+          }
+          window.vipTracks = studentData.tracks || [];
+        } else {
+          window.vipTracks = [];
+        }
+
+        // 2. Suggestions Tracks (Sugestões do Leo - Curadoria Global)
+        if (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks) {
+          window.suggestionsTracks = window.AEF_STUDENT_PUBLIC.tracks;
+        } else if (window.AEF_PUBLIC_SHOWCASE && window.AEF_PUBLIC_SHOWCASE.tracks) {
+          window.suggestionsTracks = window.AEF_PUBLIC_SHOWCASE.tracks;
+        } else {
+          window.suggestionsTracks = [];
+        }
+
+        // 3. Courses Tracks (Faixas enviadas da Sala de Aula / Cursos)
+        const coursesSaved = JSON.parse(localStorage.getItem("aef_mylab_tracks_public") || "[]");
+        window.coursesTracks = coursesSaved;
+
+        // 4. My Stuff Tracks (Minhas Coisas - YouTube / Áudios do Aluno)
         const localLabKey = `aef_mylab_tracks_${studentId}`;
-        const localLab = JSON.parse(localStorage.getItem(localLabKey) || "[]");
-        window.myLabTracks = localLab;
+        const myStuffSaved = JSON.parse(localStorage.getItem(localLabKey) || "[]");
+        window.myStuffTracks = myStuffSaved;
 
         // Update Tab Badges
-        const badgePrescribed = document.getElementById("badge-count-prescribed");
-        const badgeMyLab = document.getElementById("badge-count-mylab");
-        if (badgePrescribed) badgePrescribed.innerText = window.prescribedTracks.length;
-        if (badgeMyLab) badgeMyLab.innerText = window.myLabTracks.length;
+        const badgeVip = document.getElementById("badge-count-vip");
+        const badgeSug = document.getElementById("badge-count-suggestions");
+        const badgeCourses = document.getElementById("badge-count-courses");
+        const badgeMyStuff = document.getElementById("badge-count-my-stuff");
+
+        if (badgeVip) badgeVip.innerText = window.vipTracks.length;
+        if (badgeSug) badgeSug.innerText = window.suggestionsTracks.length;
+        if (badgeCourses) badgeCourses.innerText = window.coursesTracks.length;
+        if (badgeMyStuff) badgeMyStuff.innerText = window.myStuffTracks.length;
+
+        // Update VIP Tab Label if non-VIP (Opção B - Cadeado Teaser)
+        const tabVipLabel = document.getElementById("tab-vip-label");
+        if (!window.isVipUser && tabVipLabel) {
+          tabVipLabel.innerHTML = 'Mentoria VIP <span class="text-[10px]">🔒</span>';
+        }
 
         window.currentLoadedStudent = studentData;
-        document.getElementById("header-student-name").innerText = studentData.name;
         const badgeEl = document.getElementById("header-student-badge");
         if (badgeEl) {
-          badgeEl.innerText = studentData.badge === "Acesso Aberto" ? "ABERTO" : (studentData.badge ? studentData.badge.replace(" Mentee", "") : "VIP");
+          badgeEl.innerText = window.isVipUser ? "MENTORADO VIP" : (studentData.badge === "Acesso Aberto" ? "ABERTO" : "ALUNO");
         }
 
         // Real-time Cloud Sync Listener
@@ -919,8 +1162,7 @@
           window.aefCloudSync.subscribeToStudentTracks(studentId, async (cloudTracks) => {
             if (cloudTracks && cloudTracks.length > 0) {
               const updated = await window.aefAudioHub.getMergedTracksForStudent(studentId);
-              if (updated && updated.length > window.prescribedTracks.length) {
-                // Show floating notification banner
+              if (updated && updated.length > window.vipTracks.length) {
                 const latestNewTrack = updated[updated.length - 1];
                 const notifBanner = document.getElementById("new-episode-notification-banner");
                 const notifTitle = document.getElementById("new-episode-title-toast");
@@ -929,9 +1171,9 @@
                   notifBanner.classList.remove("hidden");
                 }
                 
-                window.prescribedTracks = updated;
-                if (badgePrescribed) badgePrescribed.innerText = updated.length;
-                if (window.currentActiveTab === "prescribed") {
+                window.vipTracks = updated;
+                if (badgeVip) badgeVip.innerText = updated.length;
+                if (window.currentActiveTab === "vip") {
                   studentData.tracks = updated;
                   window.currentLoadedStudent = studentData;
                   renderPlaylistDrawer(updated, engine.currentTrackIndex);
@@ -940,42 +1182,67 @@
             }
           });
         }
+
+        // Default Initial Tab Selection (Decisão 1)
+        const initialTab = window.isVipUser && window.vipTracks.length > 0 ? "vip" : "suggestions";
+        window.switchPlayerTab(initialTab);
       }
 
       window.switchPlayerTab = (tab) => {
+        // Se clicar em VIP sem ser VIP, abre o modal de Teaser (Decisão 2 - Opção B)
+        if (tab === 'vip' && !window.isVipUser) {
+          const teaser = document.getElementById("vip-teaser-modal");
+          if (teaser) teaser.classList.remove("hidden");
+          return;
+        }
+
         window.currentActiveTab = tab;
-        const isPrescribed = tab === 'prescribed';
-        const btnPrescribed = document.getElementById('tab-btn-prescribed');
-        const btnMyLab = document.getElementById('tab-btn-mylab');
-        const myLabBanner = document.getElementById('mylab-header-banner');
 
-        if (isPrescribed) {
-          if (btnPrescribed) btnPrescribed.className = "flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer";
-          if (btnMyLab) btnMyLab.className = "flex-1 py-2.5 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer";
-          if (myLabBanner) myLabBanner.classList.add("hidden");
-          
-          window.currentLoadedStudent.tracks = window.prescribedTracks;
-          if (window.prescribedTracks.length > 0) {
-            engine.loadStudentData(window.currentLoadedStudent, 0);
-            renderPlaylistDrawer(window.prescribedTracks, 0);
-          }
-        } else {
-          if (btnPrescribed) btnPrescribed.className = "flex-1 py-2.5 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer";
-          if (btnMyLab) btnMyLab.className = "flex-1 py-2.5 px-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 bg-amber-500 text-slate-950 shadow-md cursor-pointer";
-          if (myLabBanner) myLabBanner.classList.remove("hidden");
-
-          window.currentLoadedStudent.tracks = window.myLabTracks;
-          if (window.myLabTracks.length > 0) {
-            engine.loadStudentData(window.currentLoadedStudent, 0);
-            renderPlaylistDrawer(window.myLabTracks, 0);
+        const tabs = ['vip', 'suggestions', 'courses', 'my-stuff'];
+        tabs.forEach(t => {
+          const btn = document.getElementById(`tab-btn-${t}`);
+          if (!btn) return;
+          if (t === tab) {
+            btn.className = "flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-black text-[11px] sm:text-xs transition flex items-center justify-center gap-1 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer shrink-0 border border-amber-400/40";
           } else {
-            renderPlaylistDrawer([], 0);
-            renderSentencesList([]);
+            btn.className = "flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0";
           }
+        });
+
+        const myLabBanner = document.getElementById('mylab-header-banner');
+        if (myLabBanner) {
+          myLabBanner.classList.toggle("hidden", tab !== 'my-stuff');
+        }
+
+        const deleteBtnContainer = document.getElementById("btn-delete-custom-track-container");
+        if (deleteBtnContainer) {
+          deleteBtnContainer.classList.toggle("hidden", tab !== 'my-stuff' || !window.myStuffTracks || window.myStuffTracks.length === 0);
+        }
+
+        let targetTracks = [];
+        if (tab === 'vip') targetTracks = window.vipTracks;
+        else if (tab === 'suggestions') targetTracks = window.suggestionsTracks;
+        else if (tab === 'courses') targetTracks = window.coursesTracks;
+        else if (tab === 'my-stuff') targetTracks = window.myStuffTracks;
+
+        window.currentLoadedStudent.tracks = targetTracks;
+        if (targetTracks.length > 0) {
+          engine.loadStudentData(window.currentLoadedStudent, 0);
+          renderPlaylistDrawer(targetTracks, 0);
+        } else {
+          renderPlaylistDrawer([], 0);
+          renderSentencesList([]);
         }
       };
 
       window.openAddCustomTrackModal = () => {
+        // Trava SaaS: Alunos Free possuem limite de 1 treino ativo
+        const isFree = !window.isVipUser && localStorage.getItem("aef_user_tier") !== "pro" && localStorage.getItem("aef_user_tier") !== "club_anual" && localStorage.getItem("aef_user_tier") !== "lifetime";
+        if (isFree && window.myStuffTracks && window.myStuffTracks.length >= 1) {
+          const limitModal = document.getElementById("free-limit-modal");
+          if (limitModal) limitModal.classList.remove("hidden");
+          return;
+        }
         document.getElementById("add-custom-track-modal").classList.remove("hidden");
       };
 
@@ -983,11 +1250,36 @@
         document.getElementById("add-custom-track-modal").classList.add("hidden");
       };
 
+      window.handleReplaceCurrentCustomTrack = () => {
+        const limitModal = document.getElementById("free-limit-modal");
+        if (limitModal) limitModal.classList.add("hidden");
+        // Esvazia para permitir novo cadastro
+        window.myStuffTracks = [];
+        localStorage.setItem(`aef_mylab_tracks_${studentId}`, JSON.stringify([]));
+        const badgeMyStuff = document.getElementById("badge-count-my-stuff");
+        if (badgeMyStuff) badgeMyStuff.innerText = 0;
+        document.getElementById("add-custom-track-modal").classList.remove("hidden");
+      };
+
+      window.handleDeleteActiveCustomTrack = () => {
+        if (!confirm("Deseja realmente excluir este treino de Minhas Coisas?")) return;
+        const currentIdx = window.playerEngine.currentTrackIndex;
+        if (window.myStuffTracks && window.myStuffTracks[currentIdx]) {
+          const trackId = window.myStuffTracks[currentIdx].id;
+          window.myStuffTracks = window.myStuffTracks.filter(t => t.id !== trackId);
+          localStorage.setItem(`aef_mylab_tracks_${studentId}`, JSON.stringify(window.myStuffTracks));
+          const badgeMyStuff = document.getElementById("badge-count-my-stuff");
+          if (badgeMyStuff) badgeMyStuff.innerText = window.myStuffTracks.length;
+          window.switchPlayerTab("my-stuff");
+          showSyncToast("🗑️ Treino excluído de Minhas Coisas com sucesso!");
+        }
+      };
+
       window.openFilePickerForCustomTrack = () => {
         window.AEFFilePicker.open({
           accept: "audio/*",
           folder: `audio/students/${studentId}`,
-          title: "Upload de Áudio para o Meu Laboratório",
+          title: "Upload de Áudio para Minhas Coisas",
           onComplete: (url) => {
             document.getElementById("custom-track-audio").value = url;
           }
@@ -1009,7 +1301,7 @@
 
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = "<span>Extraindo e Otimizando na Nuvem...</span> <span class='animate-spin'>⏳</span>";
+          submitBtn.innerHTML = "<span>Extraindo legendas e gerando tradução falada...</span> <span class='animate-spin'>⏳</span>";
         }
 
         const extractYtId = (url) => {
@@ -1023,21 +1315,110 @@
 
         if (ytId) {
           coverImg = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
-          // Se não enviou MP3 manual, utiliza o fluxo de áudio da nuvem
           if (!audioUrl) {
             audioUrl = `https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media`;
           }
         }
 
+        // 🧠 Motor Universal de Tradução Pedagógica para Português Falado Real (Prof. Leo Leite)
+        window.AEFSpokenTranslator = {
+          dictionary: {
+            "wish you were here": "Queria tanto que você estivesse aqui",
+            "so you think you can tell": "Então você acha mesmo que consegue diferenciar?",
+            "so, so you think you can tell": "Então você acha mesmo que sabe diferenciar?",
+            "heaven from hell": "O paraíso do inferno?",
+            "blue skies from pain": "Céus azuis do sofrimento?",
+            "can you tell a green field": "Você sabe dizer a diferença de um campo verde",
+            "from a cold steel rail": "Pra um trilho de aço frio?",
+            "a smile from a veil": "Um sorriso de um disfarce?",
+            "do you think you can tell": "Você acha mesmo que sabe?",
+            "we're just two lost souls": "Somos só duas almas perdidas",
+            "swimming in a fish bowl": "Nadando num aquário",
+            "running over the same old ground": "Correndo sempre no mesmo lugar",
+            "what have we found": "E o que foi que a gente encontrou?",
+            "the same old fears": "Os mesmos velhos medos de sempre",
+            "hey there": "E aí, tudo bem?",
+            "hi there": "Oi, tudo certo?",
+            "how has your week been": "Como é que tá sendo a sua semana?",
+            "how's it going": "Como vão as coisas?",
+            "to be honest": "Pra falar a verdade...",
+            "same here": "Aqui também!",
+            "that's awesome": "Que demais!",
+            "that sounds great": "Parece uma ótima ideia!",
+            "hold on a second": "Peraí um segundo",
+            "hold on": "Peraí um instante",
+            "i'm down for that": "Tô super dentro!",
+            "im down for that": "Tô super dentro!",
+            "it's up to you": "Você quem decide",
+            "its up to you": "Você quem manda",
+            "what are you up to": "O que você tá aprontando?",
+            "catch up on": "Botar em dia",
+            "by the way": "A propósito / Por falar nisso",
+            "take it easy": "Vai com calma / Fica tranquilo",
+            "no worries": "Relaxa, sem problema",
+            "you got it": "Pode deixar comigo!",
+            "make sense": "Faz todo sentido",
+            "does that make sense": "Fez sentido pra você?",
+            "let me know": "Me avisa / Me dá um toque",
+            "check it out": "Dá uma olhada nisso aqui",
+            "give it a shot": "Dá uma chance / Tenta aí",
+            "keep in touch": "Vamos mantendo contato",
+            "hit the road": "Pegar a estrada",
+            "feel like": "Tô com vontade de...",
+            "i don't think so": "Acho que não, hein",
+            "never mind": "Deixa pra lá / Esquece",
+            "are you kidding me": "Tá de brincadeira comigo?",
+            "long time no see": "Quanto tempo que a gente não se vê!",
+            "i see what you mean": "Tô entendendo o seu ponto",
+            "good afternoon, everyone": "Boa tarde, pessoal!",
+            "my name is": "Meu nome é",
+            "thank you for having me": "Muito obrigado pelo convite e pela oportunidade",
+            "let's get started": "Bora começar!"
+          },
+          translate: function(text) {
+            if (!text || typeof text !== 'string') return "";
+            const clean = text.trim();
+            const lower = clean.toLowerCase();
+
+            // 1. Busca exata ou por fragmentos no dicionário conversacional
+            for (const [key, val] of Object.entries(this.dictionary)) {
+              if (lower === key || lower.includes(key)) {
+                return val;
+              }
+            }
+
+            // 2. Heurísticas contextuais de fala cotidiana
+            if (lower.startsWith("how to ")) return "Como " + clean.slice(7) + " no dia a dia";
+            if (lower.startsWith("why do we ")) return "Por que a gente " + clean.slice(10) + "?";
+            if (lower.startsWith("what is ")) return "O que é " + clean.slice(8) + "?";
+            if (lower.startsWith("what are ")) return "O que são " + clean.slice(9) + "?";
+            if (lower.startsWith("i want to ")) return "Eu quero " + clean.slice(10);
+            if (lower.startsWith("i need to ")) return "Eu preciso " + clean.slice(10);
+            if (lower.startsWith("let's ")) return "Bora " + clean.slice(6);
+            if (lower.startsWith("can you ")) return "Você consegue " + clean.slice(8) + "?";
+
+            return "";
+          }
+        };
+
         let parsedSentences = [];
-        if (window.aefAudioHub && rawText) {
-          parsedSentences = window.aefAudioHub.parseScriptToSentences(rawText, 45);
-        } else if (rawText) {
+        if (rawText) {
           const lines = rawText.split('\n').filter(l => l.trim().length > 0);
-          parsedSentences = lines.map((l, i) => ({ id: i + 1, start: i * 4, end: (i + 1) * 4, text: l.trim() }));
+          parsedSentences = lines.map((l, i) => {
+            const lineText = l.trim();
+            const translated = window.AEFSpokenTranslator.translate(lineText);
+            return {
+              id: i + 1,
+              start: i * 4.5,
+              end: (i + 1) * 4.5,
+              text: lineText,
+              spokenTranslation: translated
+            };
+          });
         } else {
+          const defaultTrans = window.AEFSpokenTranslator.translate(title) || "Treino prático de escuta e reflexo no seu player";
           parsedSentences = [
-            { id: 1, start: 0, end: 10, text: title, notes: "Treino do Meu Laboratório" }
+            { id: 1, start: 0, end: 6.0, text: title, spokenTranslation: defaultTrans }
           ];
         }
 
@@ -1048,14 +1429,14 @@
           coverImage: coverImg,
           audioUrl: audioUrl,
           videoUrl: ytUrl || "",
-          summary: ytUrl ? `Treino criado a partir do YouTube (${title})` : "Treino pessoal do Meu Laboratório.",
-          goldenTip: "Treine a melodia e a cadência contínua ouvindo repetidas vezes.",
+          summary: ytUrl ? `Treino criado a partir do YouTube (${title})` : "Treino pessoal de Minhas Coisas.",
+          goldenTip: "Treine a melodia e a cadência contínua ouvindo repetidas vezes com Play/Pause no toque.",
           sentences: parsedSentences,
           createdAt: new Date().toISOString()
         };
 
-        window.myLabTracks.unshift(newTrack);
-        localStorage.setItem(`aef_mylab_tracks_${studentId}`, JSON.stringify(window.myLabTracks));
+        window.myStuffTracks.unshift(newTrack);
+        localStorage.setItem(`aef_mylab_tracks_${studentId}`, JSON.stringify(window.myStuffTracks));
         
         // Sincroniza com Cloud Firestore se disponível
         if (window.aefCloudSync && window.aefCloudSync.db) {
@@ -1069,21 +1450,21 @@
           }
         }
 
-        const badgeMyLab = document.getElementById("badge-count-mylab");
-        if (badgeMyLab) badgeMyLab.innerText = window.myLabTracks.length;
+        const badgeMyStuff = document.getElementById("badge-count-my-stuff");
+        if (badgeMyStuff) badgeMyStuff.innerText = window.myStuffTracks.length;
 
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = "<span>Criar Treino no Meu Laboratório</span> <span>⚡</span>";
+          submitBtn.innerHTML = "<span>Criar Treino em Minhas Coisas</span> <span>⚡</span>";
         }
 
         window.closeAddCustomTrackModal();
-        window.switchPlayerTab("mylab");
+        window.switchPlayerTab("my-stuff");
         
         // Carrega e toca a nova faixa imediatamente
-        window.currentLoadedStudent.tracks = window.myLabTracks;
+        window.currentLoadedStudent.tracks = window.myStuffTracks;
         engine.loadStudentData(window.currentLoadedStudent, 0);
-        showSyncToast(`✨ "${title}" adicionado ao seu Laboratório!`);
+        showSyncToast(`✨ "${title}" adicionado a Minhas Coisas!`);
       };
 
       bootPlayer();
@@ -1148,63 +1529,142 @@
         setTimeout(() => toast.classList.add("hidden"), 3500);
       }
 
-      function getBaseStudentData(id) {
-        id = id.toLowerCase().trim();
-        if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ESTEVAO));
-        if (id === "thomas" && window.AEF_STUDENT_THOMAS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_THOMAS));
-        if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ANDRE));
-        if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_MATHEUS));
-        if (id === "public" || id === "publico") return { id: "public", name: "Player Público (Demonstração)", badge: "Acesso Aberto", tracks: [] };
-        
-        const registered = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === id) : null;
-        if (registered) {
-          return { id: registered.id, name: registered.name, badge: registered.badge || "VIP Mentee", tracks: [] };
-        }
 
-        const formattedName = id.charAt(0).toUpperCase() + id.slice(1);
-        return { id: id, name: formattedName, badge: (id === "public" ? "Acesso Aberto" : "VIP Mentee"), tracks: [] };
-      }
 
       function renderSentencesList(sentences) {
         const container = document.getElementById("sentences-container");
         if (!sentences || sentences.length === 0) {
-          container.innerHTML = `<div class="p-8 text-center bg-white dark:bg-[#112240] rounded-3xl border border-amber-200 dark:border-slate-800 text-slate-500">No session transcript found for this track.</div>`;
+          container.innerHTML = `<div class="p-8 text-center bg-white dark:bg-[#112240] rounded-3xl border border-amber-200 dark:border-slate-800 text-slate-500">Nenhuma transcrição encontrada para esta faixa.</div>`;
           return;
         }
 
-        container.innerHTML = sentences.map((s, idx) => `
-          <div id="sentence-${idx}" onclick="if(!window.isEditModeActive) window.playerEngine.jumpToSentence(${idx})" class="sentence-card group bg-white dark:bg-[#112240] border-2 border-stone-200/90 dark:border-slate-800/80 hover:border-amber-400 rounded-2xl p-4 sm:p-5 cursor-pointer shadow-xs transition-all active:scale-[0.99]">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <span class="time-pill px-2.5 py-0.5 rounded-lg bg-amber-50 dark:bg-slate-800 text-amber-900 dark:text-amber-300 text-[11px] font-bold font-mono tracking-tight border border-amber-200/60 dark:border-slate-700">
-                ${uiController.formatTime(s.start)}
-              </span>
-              <button id="loop-btn-${idx}" onclick="event.stopPropagation(); window.toggleSingleLoop(${idx})" class="card-loop-btn text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-700 dark:text-slate-300 font-bold transition-all cursor-pointer border border-transparent flex items-center gap-1" title="Loop this sentence">
-                <span>🔁</span> <span id="loop-text-${idx}">Loop</span>
-              </button>
-            </div>
-            
-            <div class="sentence-content">
-              ${window.isEditModeActive ? `
-                <textarea onchange="window.updateSentenceText(${idx}, this.value)" class="w-full p-2.5 bg-amber-50/50 dark:bg-slate-900 rounded-xl border border-amber-300 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white leading-relaxed focus:outline-none focus:border-amber-500" rows="2">${s.text}</textarea>
-              ` : `
-                <p class="sentence-text text-[#0A192F] dark:text-slate-100 leading-relaxed font-medium text-base sm:text-lg">
-                  ${s.text}
-                </p>
-              `}
-            </div>
+        container.innerHTML = sentences.map((s, idx) => {
+          let translationText = s.spokenTranslation || s.translation || "";
+          if (!translationText && window.AEFSpokenTranslator && s.text) {
+            translationText = window.AEFSpokenTranslator.translateToSpokenPt(s.text);
+          }
 
-            ${s.notes ? `
-              <div class="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[11px] font-semibold text-amber-900 dark:text-amber-300">
-                <span>🎯</span> <span>${s.notes}</span>
+          return `
+            <div id="sentence-${idx}" onclick="window.handleSentenceCardClick(${idx})" class="sentence-card group bg-white dark:bg-[#112240] border-2 border-stone-200/90 dark:border-slate-800/80 hover:border-amber-400 rounded-2xl p-4 sm:p-5 cursor-pointer shadow-xs transition-all active:scale-[0.99] relative overflow-hidden select-none">
+              <!-- Card Header: Status Indicator, Timestamp & Minimalist Repeat (🔂) -->
+              <div class="flex items-center justify-between gap-3 mb-2">
+                <div class="flex items-center gap-2">
+                  <span id="play-indicator-${idx}" class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-[10px] font-black shrink-0 transition shadow-xs">
+                    ▶
+                  </span>
+                  <span class="time-pill px-2.5 py-0.5 rounded-lg bg-amber-50 dark:bg-slate-800 text-amber-900 dark:text-amber-300 text-[11px] font-bold font-mono tracking-tight border border-amber-200/60 dark:border-slate-700">
+                    ${uiController.formatTime(s.start)}
+                  </span>
+                </div>
+                
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider hidden sm:inline mr-1">
+                    Toque para ouvir
+                  </span>
+                  <!-- Botão Minimalista de Repetição Contínua (Opção 1 - Zero Palavra 'Loop') -->
+                  <button id="repeat-btn-${idx}" onclick="event.stopPropagation(); window.togglePhraseRepeat(${idx})" class="w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold transition-all cursor-pointer bg-stone-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-500 dark:text-slate-400 border border-stone-200 dark:border-slate-700 active:scale-95" title="Travar repetição contínua desta frase">
+                    <span>🔂</span>
+                  </button>
+                </div>
               </div>
-            ` : ""}
-          </div>
-        `).join("");
+              
+              <!-- Card Body: English Text + Spoken Brazilian Portuguese Translation -->
+              <div class="sentence-content space-y-1.5">
+                ${window.isEditModeActive ? `
+                  <div class="space-y-2">
+                    <div>
+                      <label class="text-[10px] uppercase font-bold text-slate-500 block mb-0.5">Inglês Original:</label>
+                      <textarea onchange="window.updateSentenceText(${idx}, this.value)" class="w-full p-2.5 bg-amber-50/50 dark:bg-slate-900 rounded-xl border border-amber-300 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white leading-relaxed focus:outline-none focus:border-amber-500" rows="2">${s.text}</textarea>
+                    </div>
+                    <div>
+                      <label class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 block mb-0.5">Tradução em Português Falado Real:</label>
+                      <input type="text" value="${translationText}" onchange="window.updateSentenceTranslation(${idx}, this.value)" placeholder="Ex: Tô super dentro!" class="w-full px-3 py-1.5 bg-white dark:bg-slate-950 rounded-lg border border-amber-200 dark:border-slate-700 text-xs text-amber-950 dark:text-amber-300 font-medium italic focus:outline-none focus:border-amber-500">
+                    </div>
+                  </div>
+                ` : `
+                  <p class="sentence-text text-[#0A192F] dark:text-slate-100 leading-relaxed font-bold text-base sm:text-lg">
+                    ${s.text}
+                  </p>
+                  ${translationText ? `
+                    <p class="sentence-translation text-amber-900/90 dark:text-amber-300/90 leading-relaxed text-xs sm:text-sm font-medium italic pt-0.5">
+                      ${translationText}
+                    </p>
+                  ` : ''}
+                `}
+              </div>
+            </div>
+          `;
+        }).join("");
       }
+
+      window.togglePhraseRepeat = (index) => {
+        const engine = window.playerEngine;
+        if (!engine || !engine.sentences || !engine.sentences[index]) return;
+
+        const isCurrentlyRepeating = engine.isLoopSentenceEnabled && engine.loopSentenceIndex === index;
+
+        if (isCurrentlyRepeating) {
+          // Destrava a repetição e libera o áudio contínuo
+          engine.isLoopSentenceEnabled = false;
+          engine.loopSentenceIndex = -1;
+          
+          document.querySelectorAll("[id^='repeat-btn-']").forEach(btn => {
+            btn.className = "w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold transition-all cursor-pointer bg-stone-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-500 dark:text-slate-400 border border-stone-200 dark:border-slate-700 active:scale-95";
+          });
+          
+          showSyncToast("▶️ Repetição destravada! Áudio contínuo liberado.");
+        } else {
+          // Trava a repetição contínua nesta frase
+          engine.isLoopSentenceEnabled = true;
+          engine.loopSentenceIndex = index;
+          engine.seek(engine.sentences[index].start);
+          engine.play();
+
+          document.querySelectorAll("[id^='repeat-btn-']").forEach((btn, i) => {
+            if (i === index) {
+              btn.className = "w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black transition-all cursor-pointer bg-amber-500 text-slate-950 shadow-md border border-amber-400 scale-110";
+            } else {
+              btn.className = "w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold transition-all cursor-pointer bg-stone-100 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-slate-500 dark:text-slate-400 border border-stone-200 dark:border-slate-700 active:scale-95";
+            }
+          });
+
+          showSyncToast("🔂 Frase travada em repetição contínua!");
+        }
+      };
+
+      window.handleSentenceCardClick = (index) => {
+        if (window.isEditModeActive) return;
+        const engine = window.playerEngine;
+        if (!engine || !engine.sentences || !engine.sentences[index]) return;
+
+        const isCurrentActive = engine.activeSentenceIndex === index;
+        const isPlaying = !engine.audio.paused;
+
+        if (isCurrentActive && isPlaying) {
+          // 2º toque no mesmo card: PAUSA
+          engine.pause();
+        } else if (isCurrentActive && !isPlaying) {
+          // Toca novamente a mesma frase
+          engine.seek(engine.sentences[index].start);
+          engine.play();
+        } else {
+          // Pula para a nova frase e inicia o play
+          engine.jumpToSentence(index, true);
+        }
+      };
 
       window.updateSentenceText = (index, newText) => {
         if (engine.sentences && engine.sentences[index]) {
           engine.sentences[index].text = newText;
+          if (!engine.sentences[index].spokenTranslation && window.AEFSpokenTranslator) {
+            engine.sentences[index].spokenTranslation = window.AEFSpokenTranslator.translate(newText);
+          }
+        }
+      };
+
+      window.updateSentenceTranslation = (index, newTranslation) => {
+        if (engine.sentences && engine.sentences[index]) {
+          engine.sentences[index].spokenTranslation = newTranslation;
         }
       };
 

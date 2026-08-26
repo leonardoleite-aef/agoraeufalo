@@ -57,7 +57,7 @@
           <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
         </a>
         <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
-          PUBLIC PLAYER STUDIO
+          SUGESTÕES DO LEO & PLAYER PÚBLICO
         </span>
       </div>
 
@@ -68,7 +68,7 @@
         </a>
         <a href="treino/player.html?aluno=public" target="_blank" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black flex items-center gap-1.5 transition shadow-sm">
           <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-          <span>Abrir Player Público ↗</span>
+          <span>Abrir Player ↗</span>
         </a>
         <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold flex items-center gap-1 transition shadow-sm">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
@@ -100,7 +100,7 @@
 
       <div class="bg-[#112240] border border-amber-400/30 rounded-2xl p-5 shadow-xs flex items-center justify-between">
         <div>
-          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Episódios Públicos Ativos</p>
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Sugestões do Leo Ativas</p>
           <h3 id="stat-total-tracks" class="text-3xl font-extrabold text-white mt-1">1</h3>
         </div>
         <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
@@ -126,17 +126,17 @@
     <!-- 3. TABS: LEADS vs EPISÓDIOS               -->
     <!-- ========================================== -->
     <div class="flex items-center gap-2 border-b border-white/10 pb-3">
-      <button onclick="switchTab('leads')" id="tab-btn-leads" class="px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-slate-950 transition flex items-center gap-1.5">
+      <button onclick="switchTab('leads')" id="tab-btn-leads" class="px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-slate-950 transition flex items-center gap-1.5 cursor-pointer">
         <i data-lucide="users" class="w-4 h-4"></i>
         <span>Leads do Lead Gate</span>
       </button>
-      <button onclick="switchTab('episodes')" id="tab-btn-episodes" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+      <button onclick="switchTab('episodes')" id="tab-btn-episodes" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer">
         <i data-lucide="music" class="w-4 h-4"></i>
-        <span>Episódios Públicos Ativos</span>
+        <span>Sugestões do Leo (Ativas no Player)</span>
       </button>
-      <button onclick="switchTab('new')" id="tab-btn-new" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+      <button onclick="switchTab('new')" id="tab-btn-new" class="px-4 py-2 rounded-xl font-bold text-xs bg-white/5 text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer">
         <i data-lucide="plus-circle" class="w-4 h-4"></i>
-        <span>Novo Treino (Com FilePicker)</span>
+        <span>Novo Treino (Com FilePicker Cloud)</span>
       </button>
     </div>
 
@@ -537,6 +537,14 @@
     // ==========================================
     // PUBLIC TRACKS CRUD
     // ==========================================
+    function normalizeCoverPath(path) {
+      if (!path) return "assets/images/cover-default-aef.jpg";
+      if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:")) return path;
+      if (path.startsWith("../")) return path.substring(3);
+      if (path.startsWith("/")) return path.substring(1);
+      return path;
+    }
+
     async function renderPublicTracks() {
       const container = document.getElementById("public-tracks-list");
       let baseTracks = window.AEF_STUDENT_PUBLIC?.tracks || [];
@@ -552,7 +560,7 @@
               id: f.id?.stringValue || d.name.split("/").pop(),
               title: f.title?.stringValue || "Sem Título",
               duration: f.duration?.stringValue || "00:00",
-              coverImage: f.coverImage?.stringValue || "../assets/images/cover-public-spoken-reflex.jpg",
+              coverImage: f.coverImage?.stringValue || "assets/images/cover-public-spoken-reflex.jpg",
               audioUrl: f.audioUrl?.stringValue || "",
               videoUrl: f.videoUrl?.stringValue || "",
               summary: f.summary?.stringValue || "",
@@ -572,10 +580,11 @@
 
       container.innerHTML = baseTracks.map((t, idx) => {
         const isArchived = t.status === 'archived';
+        const coverSrc = normalizeCoverPath(t.coverImage);
         return `
           <div class="bg-[#0A192F] border ${isArchived ? 'border-dashed border-white/20 opacity-70' : 'border-amber-400/40'} rounded-2xl p-4 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3 truncate">
-              <img src="${t.coverImage || 'assets/images/cover-default-aef.jpg'}" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0 ${isArchived ? 'grayscale' : ''}">
+              <img src="${coverSrc}" onerror="this.src='assets/images/cover-default-aef.jpg'" class="w-16 h-16 rounded-xl object-cover border border-amber-400/30 shrink-0 ${isArchived ? 'grayscale' : ''}">
               <div class="truncate">
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
                   <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
