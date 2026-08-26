@@ -731,35 +731,45 @@
     });
 
     // =========================================================================
-    // 1. FIRESTORE BLOG CMS METHODS
+    // 1. FIRESTORE BLOG POSTS METHODS
     // =========================================================================
     async function fetchBlogPostsFromFirestore() {
+      let list = [];
       try {
-        await window.aefPortalAuth.ready();
-        const db = window.aefPortalAuth.db;
-
-        if (db) {
-          const snap = await db.collection('blog_posts').get();
-          let list = [];
-          snap.forEach(doc => {
-            list.push({ id: doc.id, ...doc.data() });
+        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/blog_posts");
+        const data = await res.json();
+        if (data.documents && data.documents.length > 0) {
+          list = data.documents.map(d => {
+            const f = d.fields || {};
+            const slug = f.slug?.stringValue || d.name.split("/").pop();
+            return {
+              id: slug,
+              slug: slug,
+              title: f.title?.stringValue || "Sem Título",
+              subtitle: f.subtitle?.stringValue || "",
+              category: f.category?.stringValue || "Geral",
+              dateFormatted: f.dateFormatted?.stringValue || "2026",
+              youtubeId: f.youtubeId?.stringValue || "",
+              published: f.published?.booleanValue !== false
+            };
           });
-
-          if (list.length === 0) {
-            for (const p of DEFAULT_SEED_BLOG_POSTS) {
-              await db.collection('blog_posts').doc(p.slug).set(p);
-            }
-            list = [...DEFAULT_SEED_BLOG_POSTS];
-          }
-          rawBlogPostsList = list;
-        } else {
-          rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
         }
       } catch (err) {
-        console.warn("Could not fetch Firestore blog posts, using cache:", err);
-        rawBlogPostsList = [...DEFAULT_SEED_BLOG_POSTS];
+        console.warn("Could not fetch blog_posts via REST, using default seed:", err);
       }
 
+      if (list.length === 0) {
+        list = [...DEFAULT_SEED_BLOG_POSTS];
+      } else {
+        // Merge seed posts if missing
+        DEFAULT_SEED_BLOG_POSTS.forEach(p => {
+          if (!list.some(x => x.slug === p.slug)) {
+            list.push(p);
+          }
+        });
+      }
+
+      rawBlogPostsList = list;
       renderAdminBlogPosts();
     }
 
@@ -1034,27 +1044,68 @@
     // 2. FIRESTORE STUDENT CRM METHODS
     // =========================================================================
     async function fetchStudentsFromFirestore() {
+      let list = [];
       try {
-        await window.aefPortalAuth.ready();
-        const db = window.aefPortalAuth.db;
-
-        if (db) {
-          const snap = await db.collection('users').get();
-          let list = [];
-          snap.forEach(doc => {
-            list.push({ uid: doc.id, ...doc.data() });
-          });
-
-          if (list.length === 0) {
-            for (const s of DEFAULT_SEED_STUDENTS) {
-              await db.collection('users').doc(s.uid).set(s);
-            }
-            list = [...DEFAULT_SEED_STUDENTS];
+        // 1. Fetch Registered Students from Firestore REST (users)
+        try {
+          const resUsers = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/users");
+          const dataUsers = await resUsers.json();
+          if (dataUsers.documents && dataUsers.documents.length > 0) {
+            dataUsers.documents.forEach(d => {
+              const f = d.fields || {};
+              const uid = f.uid?.stringValue || d.name.split("/").pop();
+              list.push({
+                uid: uid,
+                name: f.name?.stringValue || "Aluno",
+                email: f.email?.stringValue || "",
+                phone: f.phone?.stringValue || f.whatsapp?.stringValue || "",
+                tier: f.tier?.stringValue || "vip_mentorship",
+                streak: parseInt(f.streak?.integerValue || 0),
+                source: f.source?.stringValue || "portal"
+              });
+            });
           }
-          rawStudentsList = list;
+        } catch (e) {}
+
+        // 2. Fetch Free Gate Leads from Firestore REST (leads)
+        try {
+          const resLeads = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/leads");
+          const dataLeads = await resLeads.json();
+          if (dataLeads.documents && dataLeads.documents.length > 0) {
+            dataLeads.documents.forEach(d => {
+              const f = d.fields || {};
+              const uid = d.name.split("/").pop();
+              const email = f.email?.stringValue || "";
+              const alreadyInList = list.some(s => s.email.toLowerCase() === email.toLowerCase());
+              if (!alreadyInList && email) {
+                list.push({
+                  uid: uid,
+                  name: f.name?.stringValue || "Lead Gratuito",
+                  email: email,
+                  phone: f.whatsapp?.stringValue || f.phone?.stringValue || "Não informado",
+                  tier: "free",
+                  streak: 0,
+                  source: f.source?.stringValue || "gate_free",
+                  tag: f.tag?.stringValue || "portal_aef"
+                });
+              }
+            });
+          }
+        } catch (e) {}
+
+        // Fallback to default seed if empty
+        if (list.length === 0) {
+          list = [...DEFAULT_SEED_STUDENTS];
         } else {
-          rawStudentsList = [...DEFAULT_SEED_STUDENTS];
+          // Merge seed students if not present
+          DEFAULT_SEED_STUDENTS.forEach(seed => {
+            if (!list.some(x => x.uid === seed.uid || x.email.toLowerCase() === seed.email.toLowerCase())) {
+              list.push(seed);
+            }
+          });
         }
+
+        rawStudentsList = list;
       } catch (err) {
         console.warn("Could not fetch Firestore users, using local cache:", err);
         rawStudentsList = [...DEFAULT_SEED_STUDENTS];
