@@ -29,25 +29,30 @@
 
       this.initPromise = new Promise(async (resolve) => {
         try {
-          // Load Firebase SDKs if not present
-          await this.loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js");
-          await this.loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js");
-          await this.loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js");
-
-          if (!window.firebase.apps.length) {
-            this.app = window.firebase.initializeApp(FIREBASE_CONFIG);
-          } else {
-            this.app = window.firebase.app();
+          if (!window.firebase) {
+            await this.loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js");
+            await this.loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js");
+            await this.loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js");
           }
 
-          this.db = window.firebase.firestore();
-          this.storage = window.firebase.storage();
-          this.isInitialized = true;
-          console.log("☁️ [AEFCloudSync] Conectado com sucesso à Nuvem Global Google Cloud / Firebase.");
+          if (window.firebase) {
+            if (!window.firebase.apps || !window.firebase.apps.length) {
+              this.app = window.firebase.initializeApp(FIREBASE_CONFIG);
+            } else {
+              this.app = window.firebase.app();
+            }
+
+            this.db = window.firebase.firestore();
+            if (window.firebase.storage) {
+              this.storage = window.firebase.storage();
+            }
+            this.isInitialized = true;
+            console.log("☁️ [AEFCloudSync] Conectado com sucesso ao Firebase / Firestore.");
+          }
           resolve(true);
         } catch (err) {
-          console.warn("⚠️ [AEFCloudSync] Erro ao inicializar Firebase:", err);
-          resolve(false);
+          console.warn("⚠️ [AEFCloudSync] Erro ao inicializar Firebase compat:", err);
+          resolve(true); // Always resolve so REST fallbacks work
         }
       });
 
@@ -69,154 +74,126 @@
     }
 
     /**
-     * Uploads an audio blob to Cloud Storage and saves track metadata in Firestore.
+     * Publishes a synthesized audio track to Firestore & IndexedDB
      */
-    async publishTrackToCloud({ studentId, track, audioBlob, onProgress }) {
-      const ready = await this.init();
-      if (!ready) throw new Error("Não foi possível inicializar a conexão com a Nuvem Google.");
+    async publishTrackToCloud(trackData, studentIds = ["public"]) {
+      await this.init();
+      const results = [];
+      const timestamp = new Date().toISOString();
 
-      let finalAudioUrl = track.audioUrl || "";
+      for (const studentId of studentIds) {
+        const payload = {
+          id: trackData.id || `track_${Date.now()}`,
+          title: trackData.title || "Treino de Reflexo Oral",
+          duration: trackData.duration || "00:30",
+          coverImage: trackData.coverImage || "assets/images/cover-default-aef.jpg",
+          audioUrl: trackData.audioUrl || "",
+          videoUrl: trackData.videoUrl || "",
+          summary: trackData.summary || "",
+          goldenTip: trackData.goldenTip || "",
+          status: trackData.status || "active",
+          assignedTo: [studentId],
+          sentences: (trackData.sentences || []).map((s) => ({
+            id: s.id || 1,
+            start: parseFloat(s.start) || 0.0,
+            end: parseFloat(s.end) || 0.0,
+            text: s.text || "",
+            notes: s.notes || ""
+          })),
+          updatedAt: timestamp,
+          publishedTimestamp: Date.now()
+        };
 
-      // 1. Upload Audio Blob to Firebase Storage if provided
-      if (audioBlob) {
-        const fileExt = audioBlob.type?.includes("mp4") || audioBlob.type?.includes("m4a") ? "m4a" : "mp3";
-        const storageRef = this.storage.ref().child(`audio/${studentId}/${track.id}_${Date.now()}.${fileExt}`);
-        
-        const uploadTask = storageRef.put(audioBlob, {
-          contentType: audioBlob.type || "audio/mp3",
-          customMetadata: {
-            studentId: studentId,
-            title: track.title,
-            publishedBy: "Prof. Leo Leite - AgoraEuFalo"
-          }
-        });
-
-        await new Promise((resolve, reject) => {
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              if (onProgress) onProgress(progress);
-            },
-            (error) => reject(error),
-            async () => {
-              finalAudioUrl = await uploadTask.snapshot.ref.getDownloadURL();
-              resolve();
-            }
-          );
-        });
-      }
-
-      // 2. Prepare Firestore Document Payload
-      const cloudPayload = {
-        id: track.id,
-        title: track.title,
-        duration: track.duration || "00:30",
-        coverImage: track.coverImage || "../assets/images/cover-default-aef.jpg",
-        audioUrl: finalAudioUrl,
-        summary: track.summary || "Treino auditivo personalizado com o Prof. Leonardo Leite.",
-        goldenTip: track.goldenTip || "Breathe naturally at pause markers and connect sound chunks smoothly.",
-        sentences: track.sentences || [],
-        assignedTo: [studentId],
-        publishedAt: new Date().toISOString(),
-        publishedTimestamp: Date.now()
-      };
-
-      // 3. Save in Firestore Collection
-      const docRef = this.db.collection("students").doc(studentId).collection("tracks").doc(track.id);
-      await docRef.set(cloudPayload, { merge: true });
-
-      console.log(`✅ [AEFCloudSync] Episódio '${track.title}' publicado globalmente para '${studentId}'!`);
-      return cloudPayload;
-    }
-
-    /**
-     * Fetches all cloud tracks for a given student from Firestore.
-     */
-    async getStudentCloudTracks(studentId) {
-      const ready = await this.init();
-      if (!ready) return [];
-
-      try {
-        const snapshot = await this.db
-          .collection("students")
-          .doc(studentId)
-          .collection("tracks")
-          .orderBy("publishedTimestamp", "desc")
-          .get();
-
-        const tracks = [];
-        snapshot.forEach((doc) => {
-          tracks.push(doc.data());
-        });
-        return tracks;
-      } catch (err) {
-        console.warn(`⚠️ [AEFCloudSync] Erro ao buscar faixas na nuvem para ${studentId}:`, err);
-        return [];
-      }
-    }
-
-    /**
-     * Real-time listener for student tracks
-     */
-    async subscribeToStudentTracks(studentId, onTracksUpdated) {
-      const ready = await this.init();
-      if (!ready) return () => {};
-
-      try {
-        return this.db
-          .collection("students")
-          .doc(studentId)
-          .collection("tracks")
-          .orderBy("publishedTimestamp", "asc")
-          .onSnapshot((snapshot) => {
-            const tracks = [];
-            snapshot.forEach((doc) => {
-              tracks.push(doc.data());
+        try {
+          if (this.db) {
+            await this.db
+              .collection("students")
+              .doc(studentId)
+              .collection("tracks")
+              .doc(payload.id)
+              .set(payload, { merge: true });
+          } else {
+            // REST Fallback for Firestore
+            const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/students/${studentId}/tracks/${payload.id}`;
+            await fetch(restUrl, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                fields: {
+                  id: { stringValue: payload.id },
+                  title: { stringValue: payload.title },
+                  duration: { stringValue: payload.duration },
+                  audioUrl: { stringValue: payload.audioUrl },
+                  videoUrl: { stringValue: payload.videoUrl },
+                  coverImage: { stringValue: payload.coverImage },
+                  summary: { stringValue: payload.summary },
+                  goldenTip: { stringValue: payload.goldenTip },
+                  status: { stringValue: payload.status },
+                  assignedTo: { arrayValue: { values: [{ stringValue: studentId }] } },
+                  updatedAt: { stringValue: timestamp }
+                }
+              })
             });
-            if (onTracksUpdated) onTracksUpdated(tracks);
-          });
-      } catch (err) {
-        console.warn(`⚠️ [AEFCloudSync] Erro ao subscrever em tempo real para ${studentId}:`, err);
-        return () => {};
+          }
+          results.push({ studentId, success: true, trackId: payload.id });
+        } catch (err) {
+          console.error(`❌ [AEFCloudSync] Erro ao publicar para ${studentId}:`, err);
+          results.push({ studentId, success: false, error: err.message });
+        }
       }
+
+      return results;
     }
 
     /**
-     * Uploads any generic media file (Video MP4, Audio MP3, Image, PDF) directly to Cloud Storage.
+     * Uploads any generic media file (Video MP4, Audio MP3, Image, PDF) directly to Google Cloud Storage.
+     * Uses resilient REST API with XHR progress monitoring.
      * @param {File|Blob} file 
-     * @param {string} folder e.g. "videos/public", "courses/materials"
-     * @param {function} onProgress callback with percentage
+     * @param {string} folder e.g. "videos/public", "audio/students"
+     * @param {function} onProgress callback with percentage (0 to 100)
      * @returns {Promise<string>} Download URL from Google Cloud
      */
     async uploadFileToStorage(file, folder = "uploads", onProgress = null) {
-      const ready = await this.init();
-      if (!ready) throw new Error("Não foi possível inicializar conexão com o Google Cloud Storage.");
+      if (!file) throw new Error("Nenhum arquivo selecionado para upload.");
 
       const filename = `${Date.now()}_${file.name ? file.name.replace(/[^a-zA-Z0-9._-]/g, "_") : "media.bin"}`;
-      const storageRef = this.storage.ref().child(`${folder}/${filename}`);
-      
-      const uploadTask = storageRef.put(file, {
-        contentType: file.type || "application/octet-stream",
-        customMetadata: {
-          uploadedBy: "Prof. Leo Leite - AgoraEuFalo Admin",
-          uploadedAt: new Date().toISOString()
-        }
-      });
+      const filePath = `${folder}/${filename}`;
+      const encodedName = encodeURIComponent(filePath);
+      const bucket = FIREBASE_CONFIG.storageBucket;
+      const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o?uploadType=media&name=${encodedName}`;
 
       return new Promise((resolve, reject) => {
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            if (onProgress) onProgress(progress);
-          },
-          (error) => reject(error),
-          async () => {
-            const downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", uploadUrl, true);
+        xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+
+        if (xhr.upload && onProgress) {
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              const pct = Math.round((e.loaded / e.total) * 100);
+              onProgress(pct);
+            }
+          };
+        }
+
+        xhr.onload = () => {
+          if (xhr.status === 200 || xhr.status === 201) {
+            if (onProgress) onProgress(100);
+            const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodedName}?alt=media`;
+            console.log("☁️ [AEFCloudSync] Arquivo enviado com sucesso para a Nuvem:", downloadUrl);
             resolve(downloadUrl);
+          } else {
+            console.error("❌ [AEFCloudSync] Erro HTTP no upload:", xhr.status, xhr.responseText);
+            reject(new Error(`Erro HTTP ${xhr.status} no envio para a nuvem.`));
           }
-        );
+        };
+
+        xhr.onerror = () => {
+          console.error("❌ [AEFCloudSync] Erro de rede durante o upload.");
+          reject(new Error("Falha de conexão com o Google Cloud Storage."));
+        };
+
+        xhr.send(file);
       });
     }
   }
