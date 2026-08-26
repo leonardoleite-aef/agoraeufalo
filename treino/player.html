@@ -256,9 +256,10 @@
         </button>
       </div>
 
-      <!-- Self-Hosted Video Player (Dual Media) -->
+      <!-- Self-Hosted Video & YouTube Player (Dual Media) -->
       <div id="track-video-container" class="hidden rounded-3xl overflow-hidden border-2 border-amber-400/40 bg-black shadow-lg">
-        <video id="track-video-el" controls class="w-full max-h-[380px] object-contain mx-auto bg-black" playsinline></video>
+        <video id="track-video-el" controls class="hidden w-full max-h-[380px] object-contain mx-auto bg-black" playsinline></video>
+        <div id="track-yt-container" class="hidden aspect-video w-full"></div>
       </div>
 
       <!-- Public App Functional Tour (Only for Public Showcase Mode) -->
@@ -680,29 +681,35 @@
       <form id="custom-track-form" onsubmit="window.handleSaveCustomTrack(event)" class="space-y-3.5">
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título do Treino *</label>
-          <input type="text" id="custom-track-title" required placeholder="Ex: Oxford Tech Keynote Drill" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+          <input type="text" id="custom-track-title" required placeholder="Ex: Wish you were here - Pink Floyd" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-semibold focus:border-amber-400 focus:outline-none">
+        </div>
+
+        <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-400/30 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-[10px] font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <span>🎥 Link do Vídeo no YouTube</span>
+            </label>
+            <span class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider">Conversão Cloud</span>
+          </div>
+          <input type="text" id="custom-track-yt" placeholder="https://www.youtube.com/watch?v=K6qj09DHvjw" class="w-full px-3 py-2 rounded-xl bg-black/40 border border-amber-400/40 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          <p class="text-[10px] text-slate-400">Cole o link do YouTube para extrair o áudio e a arte de capa automaticamente.</p>
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Áudio MP3 na Nuvem ou Arquivo *</label>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ou informe uma URL / Arquivo MP3 (Opcional)</label>
           <div class="flex items-center gap-2">
-            <input type="text" id="custom-track-audio" required placeholder="https://..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
-            <button type="button" onclick="window.openFilePickerForCustomTrack()" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+            <input type="text" id="custom-track-audio" placeholder="https://... (ou deixe vazio se usar YouTube)" class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+            <button type="button" onclick="window.openFilePickerForCustomTrack()" class="px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold shrink-0">📁 Arquivo</button>
           </div>
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Link do YouTube (Opcional)</label>
-          <input type="text" id="custom-track-yt" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none font-mono">
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Letra da Música / Texto da Sessão (Opcional - Uma frase por linha)</label>
+          <textarea id="custom-track-text" rows="3" placeholder="So, so you think you can tell&#10;Heaven from hell&#10;Blue skies from pain..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs leading-relaxed font-mono focus:border-amber-400 focus:outline-none custom-scrollbar"></textarea>
         </div>
 
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Texto da Sessão (Uma frase por linha)</label>
-          <textarea id="custom-track-text" rows="4" placeholder="Good morning everyone.\nToday I want to share three ideas.\nLet's get started." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs leading-relaxed focus:border-amber-400 focus:outline-none"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5 mt-2">
-          <span>Salvar no Meu Laboratório</span>
+        <button type="submit" id="btn-save-custom-track" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-2 mt-2 active:scale-98">
+          <span>Criar Treino no Meu Laboratório</span>
           <span>⚡</span>
         </button>
       </form>
@@ -778,16 +785,33 @@
           document.getElementById("driving-cover-img").src = cover;
           document.getElementById("player-bar-thumb").src = cover;
 
-          // Self-Hosted Video Player Display Toggle
+          // Self-Hosted Video & YouTube Player Display Toggle
           const videoContainer = document.getElementById("track-video-container");
           const videoEl = document.getElementById("track-video-el");
-          if (videoContainer && videoEl) {
+          const ytContainer = document.getElementById("track-yt-container");
+
+          const extractYtId = (url) => {
+            if (!url) return null;
+            const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/i);
+            return match ? match[1] : null;
+          };
+
+          if (videoContainer) {
             if (track.videoUrl && track.videoUrl.trim().length > 0) {
-              videoEl.src = track.videoUrl;
+              const ytId = extractYtId(track.videoUrl);
+              if (ytId && ytContainer) {
+                if (videoEl) { videoEl.pause(); videoEl.classList.add("hidden"); }
+                ytContainer.innerHTML = `<iframe class="w-full h-full aspect-video rounded-2xl" src="https://www.youtube.com/embed/${ytId}?enablejsapi=1" title="${track.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                ytContainer.classList.remove("hidden");
+              } else if (videoEl) {
+                if (ytContainer) { ytContainer.innerHTML = ""; ytContainer.classList.add("hidden"); }
+                videoEl.src = track.videoUrl;
+                videoEl.classList.remove("hidden");
+              }
               videoContainer.classList.remove("hidden");
             } else {
-              videoEl.pause();
-              videoEl.removeAttribute("src");
+              if (videoEl) { videoEl.pause(); videoEl.removeAttribute("src"); videoEl.classList.add("hidden"); }
+              if (ytContainer) { ytContainer.innerHTML = ""; ytContainer.classList.add("hidden"); }
               videoContainer.classList.add("hidden");
             }
           }
@@ -970,43 +994,96 @@
         });
       };
 
-      window.handleSaveCustomTrack = (e) => {
+      window.handleSaveCustomTrack = async (e) => {
         e.preventDefault();
         const title = document.getElementById("custom-track-title").value.trim();
-        const audioUrl = document.getElementById("custom-track-audio").value.trim();
+        let audioUrl = document.getElementById("custom-track-audio").value.trim();
         const ytUrl = document.getElementById("custom-track-yt").value.trim();
         const rawText = document.getElementById("custom-track-text").value.trim();
+        const submitBtn = document.getElementById("btn-save-custom-track");
+
+        if (!audioUrl && !ytUrl) {
+          alert("Por favor, cole um Link do YouTube ou informe uma URL de áudio.");
+          return;
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = "<span>Extraindo e Otimizando na Nuvem...</span> <span class='animate-spin'>⏳</span>";
+        }
+
+        const extractYtId = (url) => {
+          if (!url) return null;
+          const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/i);
+          return match ? match[1] : null;
+        };
+
+        const ytId = extractYtId(ytUrl);
+        let coverImg = "assets/images/cover-default-aef.jpg";
+
+        if (ytId) {
+          coverImg = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+          // Se não enviou MP3 manual, utiliza o fluxo de áudio da nuvem
+          if (!audioUrl) {
+            audioUrl = `https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media`;
+          }
+        }
 
         let parsedSentences = [];
         if (window.aefAudioHub && rawText) {
           parsedSentences = window.aefAudioHub.parseScriptToSentences(rawText, 45);
         } else if (rawText) {
           const lines = rawText.split('\n').filter(l => l.trim().length > 0);
-          parsedSentences = lines.map((l, i) => ({ id: i + 1, start: i * 3, end: (i + 1) * 3, text: l.trim() }));
+          parsedSentences = lines.map((l, i) => ({ id: i + 1, start: i * 4, end: (i + 1) * 4, text: l.trim() }));
         } else {
-          parsedSentences = [{ id: 1, start: 0, end: 5, text: title, notes: "Custom Lab Track" }];
+          parsedSentences = [
+            { id: 1, start: 0, end: 10, text: title, notes: "Treino do Meu Laboratório" }
+          ];
         }
 
         const newTrack = {
           id: `lab_${Date.now()}`,
           title: title,
-          duration: "01:00",
-          coverImage: "assets/images/cover-default-aef.jpg",
+          duration: "03:45",
+          coverImage: coverImg,
           audioUrl: audioUrl,
           videoUrl: ytUrl || "",
-          summary: "Treino pessoal adicionado no Meu Laboratório.",
-          sentences: parsedSentences
+          summary: ytUrl ? `Treino criado a partir do YouTube (${title})` : "Treino pessoal do Meu Laboratório.",
+          goldenTip: "Treine a melodia e a cadência contínua ouvindo repetidas vezes.",
+          sentences: parsedSentences,
+          createdAt: new Date().toISOString()
         };
 
         window.myLabTracks.unshift(newTrack);
         localStorage.setItem(`aef_mylab_tracks_${studentId}`, JSON.stringify(window.myLabTracks));
         
+        // Sincroniza com Cloud Firestore se disponível
+        if (window.aefCloudSync && window.aefCloudSync.db) {
+          try {
+            await window.aefCloudSync.db
+              .collection("students").doc(studentId)
+              .collection("tracks").doc(newTrack.id)
+              .set(newTrack, { merge: true });
+          } catch (err) {
+            console.warn("Firestore custom track sync:", err);
+          }
+        }
+
         const badgeMyLab = document.getElementById("badge-count-mylab");
         if (badgeMyLab) badgeMyLab.innerText = window.myLabTracks.length;
 
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "<span>Criar Treino no Meu Laboratório</span> <span>⚡</span>";
+        }
+
         window.closeAddCustomTrackModal();
         window.switchPlayerTab("mylab");
-        showSyncToast("🧪 Treino adicionado ao seu Laboratório!");
+        
+        // Carrega e toca a nova faixa imediatamente
+        window.currentLoadedStudent.tracks = window.myLabTracks;
+        engine.loadStudentData(window.currentLoadedStudent, 0);
+        showSyncToast(`✨ "${title}" adicionado ao seu Laboratório!`);
       };
 
       bootPlayer();
