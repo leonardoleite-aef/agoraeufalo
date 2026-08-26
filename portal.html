@@ -367,7 +367,7 @@
 
   <!-- Portal Engine Controller -->
   <script>
-    // Dynamic & Fallback Courses Catalog
+    // Dynamic 3-Tier Courses Hierarchy (Course > Modules > Lessons)
     let PORTAL_COURSES = {
       "projeto-aef-2026": {
         id: "projeto-aef-2026",
@@ -375,24 +375,31 @@
         badge: "FLAGSHIP 2026",
         coverImageUrl: "assets/images/cover-default-aef.jpg",
         description: "Treinamento completo de reflexo oral, cadência, connected speech e automação de fala para 2026.",
-        lessons: [
+        modules: [
           {
-            id: "aef-01",
-            title: "Aula 01 • O Reflexo da Conexão Sonora",
-            desc: "Como conectar consoantes finais com vogais sem pausas artificiais.",
-            videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
-            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
-            goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia.",
-            pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media"
-          },
-          {
-            id: "aef-02",
-            title: "Aula 02 • Desbloqueio do Present Perfect",
-            desc: "Treino prático de reflexo com casos reais do cotidiano.",
-            videoUrl: "",
-            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_02.mp3?alt=media",
-            goldenTip: "Use o Present Perfect para conectar experiências passadas com o momento presente de forma automática.",
-            pdfUrl: ""
+            id: "ciclo-01-fundamentos",
+            title: "Ciclo 01 • Fundamentos do Reflexo Oral",
+            order: 1,
+            lessons: [
+              {
+                id: "aef-01",
+                title: "Aula 01 • O Reflexo da Conexão Sonora",
+                desc: "Como conectar consoantes finais com vogais sem pausas artificiais.",
+                videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+                goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia.",
+                pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media"
+              },
+              {
+                id: "aef-02",
+                title: "Aula 02 • Desbloqueio do Present Perfect",
+                desc: "Treino prático de reflexo com casos reais do cotidiano.",
+                videoUrl: "",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_02.mp3?alt=media",
+                goldenTip: "Use o Present Perfect para conectar experiências passadas com o momento presente de forma automática.",
+                pdfUrl: ""
+              }
+            ]
           }
         ]
       },
@@ -402,15 +409,22 @@
         badge: "30 CICLOS",
         coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
         description: "30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas de ouro com o Leo Gringo.",
-        lessons: [
+        modules: [
           {
-            id: "ms-01",
+            id: "ciclo-01-historia-grazi",
             title: "Ciclo 01 • A História da Grazi",
-            desc: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
-            videoUrl: "",
-            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
-            goldenTip: "Responda às perguntas em voz alta antes que o áudio termine de perguntar.",
-            pdfUrl: "Material-PDF/magic-story-grazi.pdf"
+            order: 1,
+            lessons: [
+              {
+                id: "ms-01",
+                title: "Treino 01 • Listen & Answer da Grazi",
+                desc: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
+                videoUrl: "",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+                goldenTip: "Responda às perguntas em voz alta antes que o áudio termine de perguntar.",
+                pdfUrl: "Material-PDF/magic-story-grazi.pdf"
+              }
+            ]
           }
         ]
       }
@@ -431,15 +445,15 @@
         if (data.documents && data.documents.length > 0) {
           data.documents.forEach(d => {
             const f = d.fields || {};
-            const cid = f.id?.stringValue || d.name.split("/").pop();
+            const cid = f.courseId?.stringValue || f.id?.stringValue || d.name.split("/").pop();
             const existing = PORTAL_COURSES[cid];
             PORTAL_COURSES[cid] = {
               id: cid,
               title: f.title?.stringValue || "Sem Título",
-              badge: f.tier?.stringValue === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO",
+              badge: f.tierRequired?.stringValue === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO",
               coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
               description: f.description?.stringValue || "",
-              lessons: existing ? existing.lessons : []
+              modules: existing ? existing.modules : []
             };
           });
         }
@@ -461,6 +475,7 @@
         const c = PORTAL_COURSES[k];
         const isVip = c.badge.includes("VIP");
         const badgeColor = isVip ? "bg-amber-500 text-slate-950" : "bg-sky-500 text-slate-950";
+        const totalLessonsCount = (c.modules || []).reduce((acc, m) => acc + (m.lessons || []).length, 0);
 
         return `
           <div class="bg-[#112240] border-2 border-white/10 hover:border-amber-400 rounded-3xl overflow-hidden shadow-lg transition flex flex-col justify-between group">
@@ -476,13 +491,13 @@
                 <p class="text-xs text-slate-300 leading-relaxed line-clamp-2">${c.description || ''}</p>
                 <div class="pt-2 flex items-center gap-2 text-[11px] font-bold text-amber-400">
                   <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                  <span>${(c.lessons || []).length} Aulas com Áudio</span>
+                  <span>${(c.modules || []).length} Módulos • ${totalLessonsCount} Aulas</span>
                 </div>
               </div>
             </div>
             <div class="p-5 pt-0">
               <button onclick="loadCourseView('${c.id}')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
-                <span>Acessar Aulas</span>
+                <span>Acessar Módulos</span>
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -535,38 +550,60 @@
       document.getElementById("viewer-course-title").innerText = course.title;
       document.getElementById("viewer-course-badge").innerText = course.badge;
 
-      // Populate Lessons Sidebar
+      // Populate Modules Accordion with Lessons
       const listEl = document.getElementById("viewer-lessons-list");
-      listEl.innerHTML = course.lessons.map((les, idx) => `
-        <div onclick="selectLesson('${les.id}')" class="p-3 rounded-xl border border-white/10 hover:border-amber-400 bg-white/5 hover:bg-white/10 transition cursor-pointer flex items-center justify-between gap-2">
-          <div class="truncate">
-            <p class="text-[10px] font-extrabold uppercase text-amber-400">Aula ${idx + 1}</p>
-            <h5 class="font-bold text-xs text-white truncate">${les.title}</h5>
+      const modules = course.modules || [];
+
+      let firstLesson = null;
+      listEl.innerHTML = modules.map((mod, modIdx) => {
+        const modLessons = mod.lessons || [];
+        if (!firstLesson && modLessons.length > 0) firstLesson = modLessons[0];
+
+        return `
+          <div class="space-y-1.5 pb-2 border-b border-white/5 last:border-0">
+            <div class="px-2 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-amber-400 flex items-center justify-between">
+              <span>${mod.title}</span>
+              <span class="text-slate-400 font-mono">${modLessons.length} Aulas</span>
+            </div>
+            <div class="space-y-1 pl-1">
+              ${modLessons.map((les, lIdx) => `
+                <div onclick="selectLesson('${les.id}')" class="p-2.5 rounded-xl border border-white/10 hover:border-amber-400 bg-white/5 hover:bg-white/10 transition cursor-pointer flex items-center justify-between gap-2">
+                  <div class="truncate">
+                    <p class="text-[9px] font-bold uppercase text-slate-400">Aula ${lIdx + 1}</p>
+                    <h5 class="font-bold text-xs text-white truncate">${les.title}</h5>
+                  </div>
+                  <i data-lucide="play" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                </div>
+              `).join("")}
+            </div>
           </div>
-          <i data-lucide="play" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
-        </div>
-      `).join("");
+        `;
+      }).join("");
 
       lucide.createIcons();
-      selectLesson(course.lessons[0].id);
+      if (firstLesson) selectLesson(firstLesson.id);
       document.getElementById("course-viewer-modal").classList.remove("hidden");
     }
 
     function selectLesson(lessonId) {
       if (!activeCourse) return;
-      const lesson = activeCourse.lessons.find(l => l.id === lessonId);
-      if (!lesson) return;
+      let foundLesson = null;
+      for (const m of (activeCourse.modules || [])) {
+        const l = (m.lessons || []).find(x => x.id === lessonId);
+        if (l) { foundLesson = l; break; }
+      }
+      if (!foundLesson) return;
 
-      activeLesson = lesson;
-      document.getElementById("viewer-lesson-title").innerText = lesson.title;
-      document.getElementById("viewer-lesson-desc").innerText = lesson.desc;
-      document.getElementById("viewer-golden-tip").innerText = `"${lesson.goldenTip}"`;
+      activeLesson = foundLesson;
+      document.getElementById("viewer-lesson-title").innerText = foundLesson.title;
+      document.getElementById("viewer-lesson-desc").innerText = foundLesson.desc || foundLesson.description || "";
+      document.getElementById("viewer-golden-tip").innerText = `"${foundLesson.goldenTip || 'Foque no ritmo e na melodia natural do bloco sonoro.'}"`;
 
       const videoEl = document.getElementById("viewer-video-el");
       const videoCont = document.getElementById("viewer-video-container");
 
-      if (lesson.videoUrl) {
-        videoEl.src = lesson.videoUrl;
+      if (foundLesson.videoUrl) {
+        videoEl.src = foundLesson.videoUrl;
         videoCont.classList.remove("hidden");
       } else {
         videoEl.pause();
@@ -575,8 +612,8 @@
       }
 
       const pdfLink = document.getElementById("viewer-pdf-link");
-      if (lesson.pdfUrl) {
-        pdfLink.href = lesson.pdfUrl;
+      if (foundLesson.pdfUrl) {
+        pdfLink.href = foundLesson.pdfUrl;
         pdfLink.classList.remove("hidden");
       } else {
         pdfLink.classList.add("hidden");

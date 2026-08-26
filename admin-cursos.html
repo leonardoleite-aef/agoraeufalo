@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Studio & Gestor de Aulas | AgoraEuFalo Admin</title>
-  <meta name="description" content="Estúdio de criação e gerenciamento de cursos, masterclasses, vídeos e apostilas do Professor Leonardo Leite.">
+  <title>Course Studio Hierárquico • Cursos, Módulos & Aulas | AgoraEuFalo Admin</title>
+  <meta name="description" content="Estúdio completo de criação em 3 níveis (Cursos > Módulos > Aulas) com upload direto para o Google Cloud Storage e Firestore.">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <meta name="theme-color" content="#0A192F">
 
@@ -58,7 +58,7 @@
           <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
         </a>
         <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
-          COURSE STUDIO CMS
+          COURSE STUDIO 3-TIER
         </span>
       </div>
 
@@ -76,45 +76,114 @@
   </header>
 
   <!-- ========================================== -->
-  <!-- 2. MAIN WORKSPACE                          -->
+  <!-- 2. MAIN WORKSPACE (3-TIER HIERARCHY)       -->
   <!-- ========================================== -->
   <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
     
-    <!-- Top Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
-      <div>
-        <h1 class="text-2xl font-bold font-serif text-white">Gestor de Cursos & Masterclasses</h1>
-        <p class="text-xs text-slate-400 mt-0.5">Crie cursos, adicione módulos e suba vídeos, áudios e apostilas direto para o Google Cloud Storage.</p>
-      </div>
+    <!-- Dynamic Breadcrumb Navigation -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 bg-white/5 p-3 rounded-2xl border border-white/10" id="breadcrumbNav">
+      <button onclick="navigateToView('courses')" class="font-bold text-amber-400 hover:underline flex items-center gap-1">
+        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+        <span>Todos os Cursos</span>
+      </button>
+      <span id="breadcrumb-sep-1" class="hidden">/</span>
+      <button onclick="navigateToView('modules')" id="breadcrumb-course-name" class="hidden font-bold text-amber-300 hover:underline truncate max-w-[200px]"></button>
+      <span id="breadcrumb-sep-2" class="hidden">/</span>
+      <span id="breadcrumb-module-name" class="hidden text-white font-bold truncate max-w-[200px]"></span>
+    </nav>
 
-      <div class="flex items-center gap-2">
-        <button onclick="openNewCourseModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+    <!-- ======================================================== -->
+    <!-- VIEW 1: GRID DE CURSOS (NÍVEL 1)                         -->
+    <!-- ======================================================== -->
+    <section id="view-courses" class="space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div>
+          <h1 class="text-2xl font-bold font-serif text-white">1. Cursos & Programas</h1>
+          <p class="text-xs text-slate-400 mt-0.5">Nível 1 do catálogo (`courses/{courseId}`). Selecione um curso para gerenciar seus Módulos e Aulas.</p>
+        </div>
+
+        <button onclick="openCourseModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
           <span>Novo Curso</span>
         </button>
       </div>
-    </div>
 
-    <!-- Active Courses Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="admin-courses-grid">
-      <div class="col-span-full py-12 text-center text-slate-400 text-xs">
-        <div class="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-        Carregando cursos do Firestore...
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="coursesGrid">
+        <!-- Injected via JS -->
       </div>
-    </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 2: MÓDULOS / CICLOS DO CURSO (NÍVEL 2)              -->
+    <!-- ======================================================== -->
+    <section id="view-modules" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider" id="activeCourseBadge">VIP</span>
+            <h1 class="text-2xl font-bold font-serif text-white" id="activeCourseTitle">Projeto AgoraEuFalo 2026</h1>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">Nível 2 (`courses/{courseId}/modules/{moduleId}`). Módulos e Ciclos estruturados em ordem pedagógica.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="navigateToView('courses')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold transition flex items-center gap-1">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Voltar aos Cursos</span>
+          </button>
+          <button onclick="openModuleModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Novo Módulo / Ciclo</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-4" id="modulesContainer">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 3: AULAS DENTRO DO MÓDULO (NÍVEL 3)                 -->
+    <!-- ======================================================== -->
+    <section id="view-lessons" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-sky-500 text-slate-950 font-extrabold text-[10px] uppercase tracking-wider" id="activeModuleOrderBadge">MÓDULO 01</span>
+            <h1 class="text-2xl font-bold font-serif text-white" id="activeModuleTitle">Fundamentos do Reflexo Oral</h1>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">Nível 3 (`courses/{id}/modules/{id}/lessons/{id}`). Masterclasses em Vídeo, Áudios MP3, PDFs e Chunks de Treino.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="navigateToView('modules')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold transition flex items-center gap-1">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Voltar aos Módulos</span>
+          </button>
+          <button onclick="openLessonModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Nova Aula neste Módulo</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-3" id="lessonsContainer">
+        <!-- Injected via JS -->
+      </div>
+    </section>
 
   </main>
 
   <!-- ========================================== -->
-  <!-- 3. MODAL: CRIAR / EDITAR CURSO             -->
+  <!-- 3. MODAL: CRIAR / EDITAR CURSO (NÍVEL 1)   -->
   <!-- ========================================== -->
   <div id="courseModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-white relative max-h-[90vh] overflow-y-auto">
-      
       <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
         <div class="flex items-center gap-2">
           <span class="text-xl">📦</span>
-          <h3 id="courseModalTitle" class="font-bold text-base text-white">Novo Curso / Programa</h3>
+          <h3 id="courseModalTitle" class="font-bold text-base text-white">Novo Curso (Nível 1)</h3>
         </div>
         <button onclick="closeCourseModal()" class="text-slate-400 hover:text-white p-1">✕</button>
       </div>
@@ -129,11 +198,11 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Identificador (Slug) *</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Slug (Identificador Único) *</label>
             <input type="text" id="courseInputSlug" required placeholder="ex: projeto-aef-2026" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
           </div>
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Plano Necessário *</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Plano Necessário (`tierRequired`) *</label>
             <select id="courseInputTier" class="w-full px-3.5 py-2 rounded-xl bg-[#112240] border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold">
               <option value="vip">👑 Mentoria VIP Individual</option>
               <option value="club_anual">⭐ Magic Stories Club (Anual)</option>
@@ -147,21 +216,21 @@
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa do Curso (16:9 na Nuvem) *</label>
           <div class="flex items-center gap-2">
             <input type="text" id="courseInputCover" required placeholder="https://..." class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
-            <button type="button" onclick="openFilePickerForCourse('courseInputCover', 'image/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+            <button type="button" onclick="openFilePickerForEntity('courseInputCover', 'image/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
           </div>
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição / Proposta Pedagógica</label>
-          <textarea id="courseInputDesc" rows="3" placeholder="Resumo do programa e objetivos de fluência..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição do Curso</label>
+          <textarea id="courseInputDesc" rows="3" placeholder="Resumo dos objetivos e metodologia..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
         </div>
 
         <div class="flex items-center justify-between pt-2">
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="courseInputPublished" checked class="rounded text-amber-500">
-            <span class="text-xs text-slate-300 font-semibold">Publicar Imediatamente no Portal</span>
+            <span class="text-xs text-slate-300 font-semibold">Publicado no Portal</span>
           </label>
-          <button type="submit" id="saveCourseBtn" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
             Salvar Curso 🚀
           </button>
         </div>
@@ -170,61 +239,93 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 4. MODAL: GESTÃO DE AULAS DO CURSO         -->
+  <!-- 4. MODAL: CRIAR / EDITAR MÓDULO (NÍVEL 2)  -->
   <!-- ========================================== -->
-  <div id="lessonsManagerModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-5xl w-full p-6 shadow-2xl text-white my-auto max-h-[92vh] flex flex-col">
-      
-      <!-- Top Bar -->
+  <div id="moduleModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-white relative max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-        <div>
-          <span class="text-[10px] font-extrabold uppercase text-amber-400">Gerenciador de Módulos & Aulas</span>
-          <h3 id="lessonsManagerCourseTitle" class="text-lg font-bold text-white">Projeto AgoraEuFalo 2026</h3>
-        </div>
         <div class="flex items-center gap-2">
-          <button onclick="openNewLessonModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center gap-1">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-            <span>Nova Aula</span>
-          </button>
-          <button onclick="closeLessonsManagerModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-white">✕</button>
+          <span class="text-xl">📂</span>
+          <h3 id="moduleModalTitle" class="font-bold text-base text-white">Novo Módulo / Ciclo (Nível 2)</h3>
         </div>
+        <button onclick="closeModuleModal()" class="text-slate-400 hover:text-white p-1">✕</button>
       </div>
 
-      <!-- Lessons Table / List -->
-      <div class="flex-1 overflow-y-auto space-y-3 pr-1" id="courseLessonsList">
-        <!-- Injected via JS -->
-      </div>
+      <form id="moduleForm" onsubmit="handleSaveModule(event)" class="space-y-3.5">
+        <input type="hidden" id="moduleFormId">
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título do Módulo / Ciclo *</label>
+          <input type="text" id="moduleInputTitle" required placeholder="Ex: Ciclo 01 • Fundamentos do Reflexo Oral" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Identificador (`moduleId`) *</label>
+            <input type="text" id="moduleInputId" required placeholder="ex: ciclo-01-fundamentos" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Ordem de Exibição (`order`) *</label>
+            <input type="number" id="moduleInputOrder" required value="1" min="1" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição Pedagógica do Módulo</label>
+          <textarea id="moduleInputDesc" rows="2" placeholder="O que o aluno dominará neste módulo..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="moduleInputPublished" checked class="rounded text-amber-500">
+            <span class="text-xs text-slate-300 font-semibold">Módulo Ativo / Liberado</span>
+          </label>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+            Salvar Módulo 🚀
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
   <!-- ========================================== -->
-  <!-- 5. MODAL: CRIAR / EDITAR AULA              -->
+  <!-- 5. MODAL: CRIAR / EDITAR AULA (NÍVEL 3)    -->
   <!-- ========================================== -->
-  <div id="lessonEditModal" class="hidden fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4">
+  <div id="lessonModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-xl w-full p-6 shadow-2xl text-white relative max-h-[92vh] overflow-y-auto">
-      
       <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
         <div class="flex items-center gap-2">
           <span class="text-xl">🎬</span>
-          <h3 id="lessonEditModalTitle" class="font-bold text-base text-white">Adicionar Nova Aula</h3>
+          <h3 id="lessonModalTitle" class="font-bold text-base text-white">Nova Aula / Masterclass (Nível 3)</h3>
         </div>
-        <button onclick="closeLessonEditModal()" class="text-slate-400 hover:text-white p-1">✕</button>
+        <button onclick="closeLessonModal()" class="text-slate-400 hover:text-white p-1">✕</button>
       </div>
 
       <form id="lessonForm" onsubmit="handleSaveLesson(event)" class="space-y-3.5">
         <input type="hidden" id="lessonFormId">
-        <input type="hidden" id="lessonFormCourseId">
 
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título da Aula *</label>
           <input type="text" id="lessonInputTitle" required placeholder="Ex: Aula 01 • O Reflexo da Conexão Sonora" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
         </div>
 
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">ID da Aula (`lessonId`) *</label>
+            <input type="text" id="lessonInputId" required placeholder="ex: aula-01-reflexo-oral" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Ordem da Aula (`order`) *</label>
+            <input type="number" id="lessonInputOrder" required value="1" min="1" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Media Uploads with FilePicker -->
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Vídeo Masterclass MP4 na Nuvem (Google Cloud Storage)</label>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Vídeo Masterclass MP4 na Nuvem (Opcional)</label>
           <div class="flex items-center gap-2">
             <input type="text" id="lessonInputVideo" placeholder="https://firebasestorage.googleapis.com/.../video.mp4" class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
-            <button type="button" onclick="openFilePickerForCourse('lessonInputVideo', 'video/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+            <button type="button" onclick="openFilePickerForEntity('lessonInputVideo', 'video/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
           </div>
         </div>
 
@@ -232,15 +333,24 @@
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Áudio MP3 Puro 128kbps (Compatível com MediaSession / Bolso) *</label>
           <div class="flex items-center gap-2">
             <input type="text" id="lessonInputAudio" required placeholder="https://firebasestorage.googleapis.com/.../audio.mp3" class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
-            <button type="button" onclick="openFilePickerForCourse('lessonInputAudio', 'audio/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+            <button type="button" onclick="openFilePickerForEntity('lessonInputAudio', 'audio/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
           </div>
         </div>
 
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Apostila em PDF Diagramada</label>
-          <div class="flex items-center gap-2">
-            <input type="text" id="lessonInputPdf" placeholder="Material-PDF/apostila.pdf" class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
-            <button type="button" onclick="openFilePickerForCourse('lessonInputPdf', 'application/pdf')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Apostila em PDF Diagramada</label>
+            <div class="flex items-center gap-1.5">
+              <input type="text" id="lessonInputPdf" placeholder="Material-PDF/...pdf" class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+              <button type="button" onclick="openFilePickerForEntity('lessonInputPdf', 'application/pdf')" class="px-2.5 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold shrink-0">📁</button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa 1:1 (`artworkUrl` Lock Screen)</label>
+            <div class="flex items-center gap-1.5">
+              <input type="text" id="lessonInputArtwork" placeholder="assets/images/...jpg" class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+              <button type="button" onclick="openFilePickerForEntity('lessonInputArtwork', 'image/*')" class="px-2.5 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold shrink-0">📁</button>
+            </div>
           </div>
         </div>
 
@@ -249,15 +359,18 @@
           <input type="text" id="lessonInputTip" placeholder="Ex: Não leia tentando traduzir. Ouça o bloco sonoro completo..." class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
         </div>
 
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição / Instruções da Aula</label>
-          <textarea id="lessonInputDesc" rows="2" placeholder="Orientações pedagógicas para o aluno..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
+        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-between gap-3">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="lessonInputHasTrack" checked class="rounded text-amber-500">
+            <span class="text-xs text-amber-300 font-bold">Conectar ao Training Player de Bolso (`hasTrainingTrack`)</span>
+          </label>
+          <input type="text" id="lessonInputTrackId" placeholder="trackId (opcional)" class="w-36 px-2.5 py-1 rounded-lg bg-[#0A192F] border border-amber-400/40 text-amber-300 text-[11px] font-mono">
         </div>
 
         <div class="pt-2 flex items-center justify-between">
-          <button type="button" onclick="closeLessonEditModal()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold">Cancelar</button>
-          <button type="submit" id="saveLessonBtn" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
-            Salvar Aula 🚀
+          <button type="button" onclick="closeLessonModal()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+            Salvar Aula no Módulo 🚀
           </button>
         </div>
       </form>
@@ -265,178 +378,256 @@
   </div>
 
   <!-- Toast Notification -->
-  <div id="course-toast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5">
-    <span class="text-base" id="course-toast-icon">✅</span>
-    <span id="course-toast-text">Curso salvo com sucesso!</span>
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5">
+    <span class="text-base" id="toastIcon">✅</span>
+    <span id="toastText">Operação concluída com sucesso!</span>
   </div>
 
-  <!-- Course Studio Engine Controller -->
+  <!-- 3-Tier Hierarchy Controller -->
   <script>
-    let localCourses = [
+    // State
+    let currentView = "courses"; // "courses" | "modules" | "lessons"
+    let selectedCourse = null;
+    let selectedModule = null;
+
+    // Local in-memory store synchronized with Firestore
+    let coursesData = [
       {
         id: "projeto-aef-2026",
+        courseId: "projeto-aef-2026",
         title: "Projeto AgoraEuFalo 2026",
         slug: "projeto-aef-2026",
-        tier: "vip",
+        tierRequired: "vip",
         coverImageUrl: "assets/images/cover-default-aef.jpg",
         description: "Treinamento completo de reflexo oral, cadência, connected speech e automação de fala para 2026.",
+        totalModules: 2,
         published: true,
-        lessons: [
+        modules: [
           {
-            id: "aef-01",
-            title: "Aula 01 • O Reflexo da Conexão Sonora",
-            desc: "Como conectar consoantes finais com vogais sem pausas artificiais.",
-            videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
-            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
-            goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia.",
-            pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media"
+            id: "ciclo-01-fundamentos",
+            moduleId: "ciclo-01-fundamentos",
+            title: "Ciclo 01 • Fundamentos do Reflexo Oral",
+            order: 1,
+            description: "Desbloqueio de cadência e eliminação do vício de tradução mental.",
+            published: true,
+            lessons: [
+              {
+                id: "aula-01-conexao-sonora",
+                lessonId: "aula-01-conexao-sonora",
+                moduleId: "ciclo-01-fundamentos",
+                courseId: "projeto-aef-2026",
+                title: "Aula 01 • O Reflexo da Conexão Sonora",
+                order: 1,
+                description: "Como conectar consoantes finais com vogais sem pausas artificiais.",
+                videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+                durationSeconds: 300,
+                artworkUrl: "assets/images/cover-default-aef.jpg",
+                pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media",
+                goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento.",
+                hasTrainingTrack: true,
+                trainingTrackId: "track_01",
+                published: true
+              }
+            ]
           },
           {
-            id: "aef-02",
-            title: "Aula 02 • Desbloqueio do Present Perfect",
-            desc: "Treino prático de reflexo com casos reais do cotidiano.",
-            videoUrl: "",
-            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_02.mp3?alt=media",
-            goldenTip: "Use o Present Perfect para conectar experiências passadas com o momento presente de forma automática.",
-            pdfUrl: ""
+            id: "ciclo-02-connected-speech",
+            moduleId: "ciclo-02-connected-speech",
+            title: "Ciclo 02 • Connected Speech & Reduções",
+            order: 2,
+            description: "Domine gonna, wanna, gotta e as junções de velocidade nativa.",
+            published: true,
+            lessons: []
           }
         ]
       },
       {
         id: "magic-stories-club",
+        courseId: "magic-stories-club",
         title: "Magic Stories Club • 30 Ciclos",
         slug: "magic-stories-club",
-        tier: "club_anual",
+        tierRequired: "club_anual",
         coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
         description: "30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas de ouro com o Leo Gringo.",
+        totalModules: 1,
         published: true,
-        lessons: [
+        modules: [
           {
-            id: "ms-01",
+            id: "ciclo-01-historia-grazi",
+            moduleId: "ciclo-01-historia-grazi",
             title: "Ciclo 01 • A História da Grazi",
-            desc: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
-            videoUrl: "",
-            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
-            goldenTip: "Responda às perguntas em voz alta antes que o áudio termine de perguntar.",
-            pdfUrl: "Material-PDF/magic-story-grazi.pdf"
+            order: 1,
+            description: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
+            published: true,
+            lessons: [
+              {
+                id: "ms-01-listen-answer",
+                lessonId: "ms-01-listen-answer",
+                moduleId: "ciclo-01-historia-grazi",
+                courseId: "magic-stories-club",
+                title: "Treino 01 • Listen & Answer da Grazi",
+                order: 1,
+                description: "Repetição de alta frequência de blocos sonoros.",
+                videoUrl: "",
+                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+                durationSeconds: 240,
+                artworkUrl: "assets/images/cover-public-spoken-reflex.jpg",
+                pdfUrl: "Material-PDF/magic-story-grazi.pdf",
+                goldenTip: "Responda antes que o locutor responda para ativar seu reflexo.",
+                hasTrainingTrack: true,
+                published: true
+              }
+            ]
           }
         ]
       }
     ];
 
-    let currentEditingCourseId = null;
-
     document.addEventListener("DOMContentLoaded", () => {
-      loadCoursesFromFirestore();
+      loadHierarchyFromFirestore();
     });
 
-    async function loadCoursesFromFirestore() {
-      const grid = document.getElementById("admin-courses-grid");
+    async function loadHierarchyFromFirestore() {
       try {
         const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
         const data = await res.json();
         if (data.documents && data.documents.length > 0) {
-          const cloudCourses = data.documents.map(d => {
+          data.documents.forEach(d => {
             const f = d.fields || {};
             const cid = f.id?.stringValue || d.name.split("/").pop();
-            const existing = localCourses.find(c => c.id === cid);
-            return {
-              id: cid,
-              title: f.title?.stringValue || "Sem Título",
-              slug: f.slug?.stringValue || cid,
-              tier: f.tier?.stringValue || "vip",
-              coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
-              description: f.description?.stringValue || "",
-              published: f.published?.booleanValue !== false,
-              lessons: existing ? existing.lessons : []
-            };
+            const existing = coursesData.find(c => c.id === cid);
+            if (existing) {
+              existing.title = f.title?.stringValue || existing.title;
+              existing.tierRequired = f.tierRequired?.stringValue || existing.tierRequired;
+              existing.coverImageUrl = f.coverImageUrl?.stringValue || existing.coverImageUrl;
+              existing.description = f.description?.stringValue || existing.description;
+            } else {
+              coursesData.push({
+                id: cid,
+                courseId: cid,
+                title: f.title?.stringValue || "Sem Título",
+                slug: f.slug?.stringValue || cid,
+                tierRequired: f.tierRequired?.stringValue || "vip",
+                coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
+                description: f.description?.stringValue || "",
+                totalModules: 0,
+                published: f.published?.booleanValue !== false,
+                modules: []
+              });
+            }
           });
-          localCourses = cloudCourses;
         }
       } catch (err) {
-        console.warn("Could not fetch cloud courses, using local dataset:", err);
+        console.warn("Using local courses fallback:", err);
       }
-      renderCoursesGrid();
+      renderCourses();
     }
 
-    function renderCoursesGrid() {
-      const grid = document.getElementById("admin-courses-grid");
-      if (localCourses.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400 text-xs border-2 border-dashed border-white/10 rounded-3xl">Nenhum curso cadastrado ainda. Clique em "Novo Curso" acima!</div>`;
-        return;
+    // ==========================================
+    // VIEW NAVIGATION
+    // ==========================================
+    function navigateToView(view) {
+      currentView = view;
+      document.getElementById("view-courses").classList.toggle("hidden", view !== "courses");
+      document.getElementById("view-modules").classList.toggle("hidden", view !== "modules");
+      document.getElementById("view-lessons").classList.toggle("hidden", view !== "lessons");
+
+      // Update Breadcrumbs
+      const sep1 = document.getElementById("breadcrumb-sep-1");
+      const sep2 = document.getElementById("breadcrumb-sep-2");
+      const courseBtn = document.getElementById("breadcrumb-course-name");
+      const moduleName = document.getElementById("breadcrumb-module-name");
+
+      if (view === "courses") {
+        sep1.classList.add("hidden");
+        sep2.classList.add("hidden");
+        courseBtn.classList.add("hidden");
+        moduleName.classList.add("hidden");
+        renderCourses();
+      } else if (view === "modules") {
+        sep1.classList.remove("hidden");
+        sep2.classList.add("hidden");
+        courseBtn.classList.remove("hidden");
+        courseBtn.innerText = selectedCourse.title;
+        moduleName.classList.add("hidden");
+        renderModules();
+      } else if (view === "lessons") {
+        sep1.classList.remove("hidden");
+        sep2.classList.remove("hidden");
+        courseBtn.classList.remove("hidden");
+        courseBtn.innerText = selectedCourse.title;
+        moduleName.classList.remove("hidden");
+        moduleName.innerText = selectedModule.title;
+        renderLessons();
       }
 
-      grid.innerHTML = localCourses.map(c => `
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // LEVEL 1: COURSES (NÍVEL 1)
+    // ==========================================
+    function renderCourses() {
+      const grid = document.getElementById("coursesGrid");
+      grid.innerHTML = coursesData.map(c => `
         <div class="bg-[#112240] border-2 border-amber-400/40 hover:border-amber-400 rounded-3xl overflow-hidden shadow-lg transition flex flex-col justify-between group">
           <div>
             <div class="aspect-video relative bg-black overflow-hidden">
               <img src="${c.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full ${c.tier === 'vip' ? 'bg-amber-500 text-slate-950' : 'bg-sky-500 text-slate-950'} font-black text-[10px] uppercase tracking-wider">
-                ${c.tier === 'vip' ? '👑 MENTORIA VIP' : '⭐ CLUB ANUAL'}
+              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full ${c.tierRequired === 'vip' ? 'bg-amber-500 text-slate-950' : 'bg-sky-500 text-slate-950'} font-black text-[10px] uppercase tracking-wider">
+                ${c.tierRequired === 'vip' ? '👑 MENTORIA VIP' : '⭐ CLUB ANUAL'}
               </span>
             </div>
             <div class="p-5 space-y-2">
               <h3 class="font-bold text-base text-white truncate">${c.title}</h3>
               <p class="text-xs text-slate-400 line-clamp-2">${c.description || ''}</p>
               <div class="flex items-center gap-2 text-[11px] font-bold text-amber-400 pt-1">
-                <i data-lucide="video" class="w-3.5 h-3.5"></i>
-                <span>${(c.lessons || []).length} Aulas / Masterclasses</span>
+                <i data-lucide="folder" class="w-3.5 h-3.5"></i>
+                <span>${(c.modules || []).length} Módulos / Ciclos</span>
               </div>
             </div>
           </div>
 
           <div class="p-5 pt-0 flex items-center gap-2">
-            <button onclick="openLessonsManager('${c.id}')" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
-              <i data-lucide="list" class="w-3.5 h-3.5"></i>
-              <span>Gerenciar Aulas (${(c.lessons || []).length})</span>
+            <button onclick="selectCourse('${c.id}')" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              <span>Abrir Módulos (${(c.modules || []).length})</span>
             </button>
-            <button onclick="editCourse('${c.id}')" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition cursor-pointer" title="Editar Informações do Curso">
+            <button onclick="editCourse('${c.id}')" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition" title="Editar Curso">
               <i data-lucide="edit-2" class="w-4 h-4"></i>
-            </button>
-            <button onclick="deleteCourse('${c.id}')" class="p-2.5 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition cursor-pointer" title="Excluir Curso">
-              <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           </div>
         </div>
       `).join("");
-
       lucide.createIcons();
     }
 
-    function openFilePickerForCourse(targetInputId, acceptType) {
-      let folder = "courses/materials";
-      if (acceptType.startsWith("video/")) folder = "videos/courses";
-      else if (acceptType.startsWith("audio/")) folder = "audio/courses";
-      else if (acceptType.startsWith("image/")) folder = "covers/courses";
-
-      window.AEFFilePicker.open({
-        accept: acceptType,
-        folder: folder,
-        title: "Upload de Mídia para o Curso",
-        onComplete: (url) => {
-          document.getElementById(targetInputId).value = url;
-        }
-      });
+    function selectCourse(courseId) {
+      selectedCourse = coursesData.find(c => c.id === courseId);
+      if (!selectedCourse) return;
+      document.getElementById("activeCourseTitle").innerText = selectedCourse.title;
+      document.getElementById("activeCourseBadge").innerText = selectedCourse.tierRequired.toUpperCase();
+      navigateToView("modules");
     }
 
-    function openNewCourseModal() {
+    function openCourseModal() {
       document.getElementById("courseFormId").value = "";
       document.getElementById("courseInputTitle").value = "";
       document.getElementById("courseInputSlug").value = "";
       document.getElementById("courseInputCover").value = "assets/images/cover-default-aef.jpg";
       document.getElementById("courseInputDesc").value = "";
-      document.getElementById("courseModalTitle").innerText = "Novo Curso / Programa";
+      document.getElementById("courseModalTitle").innerText = "Novo Curso (Nível 1)";
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
     function editCourse(courseId) {
-      const c = localCourses.find(x => x.id === courseId);
+      const c = coursesData.find(x => x.id === courseId);
       if (!c) return;
-
       document.getElementById("courseFormId").value = c.id;
-      document.getElementById("courseInputTitle").value = c.title || "";
+      document.getElementById("courseInputTitle").value = c.title;
       document.getElementById("courseInputSlug").value = c.slug || c.id;
-      document.getElementById("courseInputTier").value = c.tier || "vip";
+      document.getElementById("courseInputTier").value = c.tierRequired || "vip";
       document.getElementById("courseInputCover").value = c.coverImageUrl || "";
       document.getElementById("courseInputDesc").value = c.description || "";
       document.getElementById("courseModalTitle").innerText = "Editar Curso";
@@ -460,14 +651,14 @@
       const courseId = formId || slug || `course_${Date.now()}`;
       const payload = {
         fields: {
-          id: { stringValue: courseId },
+          courseId: { stringValue: courseId },
           title: { stringValue: title },
           slug: { stringValue: slug },
-          tier: { stringValue: tier },
+          tierRequired: { stringValue: tier },
           coverImageUrl: { stringValue: cover },
           description: { stringValue: desc },
           published: { booleanValue: published },
-          updatedAt: { stringValue: new Date().toISOString() }
+          createdAt: { stringValue: new Date().toISOString() }
         }
       };
 
@@ -478,57 +669,149 @@
           body: JSON.stringify(payload)
         });
 
-        const existingIdx = localCourses.findIndex(c => c.id === courseId);
-        const updatedCourse = { id: courseId, title, slug, tier, coverImageUrl: cover, description: desc, published, lessons: existingIdx >= 0 ? localCourses[existingIdx].lessons : [] };
+        const existingIdx = coursesData.findIndex(c => c.id === courseId);
+        const newObj = { id: courseId, courseId, title, slug, tierRequired: tier, coverImageUrl: cover, description: desc, published, modules: existingIdx >= 0 ? coursesData[existingIdx].modules : [] };
         
-        if (existingIdx >= 0) localCourses[existingIdx] = updatedCourse;
-        else localCourses.unshift(updatedCourse);
+        if (existingIdx >= 0) coursesData[existingIdx] = newObj;
+        else coursesData.unshift(newObj);
 
         closeCourseModal();
-        renderCoursesGrid();
-        showToast(`Curso "${title}" salvo com sucesso na Nuvem!`);
+        renderCourses();
+        showToast(`Curso "${title}" salvo com sucesso no Firestore!`);
       } catch (err) {
         alert("Erro ao salvar curso: " + err.message);
       }
     }
 
-    async function deleteCourse(courseId) {
-      if (!confirm(`Tem certeza que deseja excluir o curso "${courseId}" do Firestore?`)) return;
+    // ==========================================
+    // LEVEL 2: MODULES (NÍVEL 2)
+    // ==========================================
+    function renderModules() {
+      const container = document.getElementById("modulesContainer");
+      if (!selectedCourse) return;
+
+      const modules = selectedCourse.modules || [];
+      if (modules.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-slate-400 text-xs border border-dashed border-white/10 rounded-3xl">Nenhum módulo cadastrado neste curso. Clique em "+ Novo Módulo / Ciclo" acima!</div>`;
+        return;
+      }
+
+      container.innerHTML = modules.map((m, idx) => `
+        <div class="p-5 rounded-3xl bg-[#112240] border-2 border-white/10 hover:border-amber-400/50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center shrink-0">
+              ${m.order || idx + 1}
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-0.5">
+                <span class="px-2 py-0.2 rounded bg-white/10 text-amber-300 text-[10px] font-mono font-bold">MÓDULO ${m.order || idx + 1}</span>
+                <span class="text-xs text-slate-400 font-bold">${(m.lessons || []).length} Aulas</span>
+              </div>
+              <h3 class="font-bold text-sm text-white">${m.title}</h3>
+              <p class="text-xs text-slate-400 mt-0.5">${m.description || ''}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="selectModule('${m.id}')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+              <i data-lucide="video" class="w-3.5 h-3.5"></i>
+              <span>Abrir Aulas (${(m.lessons || []).length})</span>
+            </button>
+            <button onclick="editModule('${m.id}')" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition" title="Editar Módulo">
+              <i data-lucide="edit-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join("");
+      lucide.createIcons();
+    }
+
+    function selectModule(moduleId) {
+      selectedModule = (selectedCourse.modules || []).find(m => m.id === moduleId);
+      if (!selectedModule) return;
+      document.getElementById("activeModuleTitle").innerText = selectedModule.title;
+      document.getElementById("activeModuleOrderBadge").innerText = `MÓDULO 0${selectedModule.order || 1}`;
+      navigateToView("lessons");
+    }
+
+    function openModuleModal() {
+      document.getElementById("moduleFormId").value = "";
+      document.getElementById("moduleInputTitle").value = "";
+      document.getElementById("moduleInputId").value = `ciclo-0${(selectedCourse.modules || []).length + 1}`;
+      document.getElementById("moduleInputOrder").value = (selectedCourse.modules || []).length + 1;
+      document.getElementById("moduleInputDesc").value = "";
+      document.getElementById("moduleModalTitle").innerText = `Novo Módulo em ${selectedCourse.title}`;
+      document.getElementById("moduleModal").classList.remove("hidden");
+    }
+
+    function editModule(moduleId) {
+      const m = (selectedCourse.modules || []).find(x => x.id === moduleId);
+      if (!m) return;
+      document.getElementById("moduleFormId").value = m.id;
+      document.getElementById("moduleInputTitle").value = m.title;
+      document.getElementById("moduleInputId").value = m.moduleId || m.id;
+      document.getElementById("moduleInputOrder").value = m.order || 1;
+      document.getElementById("moduleInputDesc").value = m.description || "";
+      document.getElementById("moduleModalTitle").innerText = "Editar Módulo";
+      document.getElementById("moduleModal").classList.remove("hidden");
+    }
+
+    function closeModuleModal() {
+      document.getElementById("moduleModal").classList.add("hidden");
+    }
+
+    async function handleSaveModule(e) {
+      e.preventDefault();
+      const formId = document.getElementById("moduleFormId").value;
+      const title = document.getElementById("moduleInputTitle").value.trim();
+      const modId = document.getElementById("moduleInputId").value.trim().toLowerCase();
+      const order = parseInt(document.getElementById("moduleInputOrder").value) || 1;
+      const desc = document.getElementById("moduleInputDesc").value.trim();
+      const published = document.getElementById("moduleInputPublished").checked;
+
+      const moduleId = formId || modId || `mod_${Date.now()}`;
+      const payload = {
+        fields: {
+          moduleId: { stringValue: moduleId },
+          title: { stringValue: title },
+          order: { integerValue: order },
+          description: { stringValue: desc },
+          published: { booleanValue: published }
+        }
+      };
+
       try {
-        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${courseId}`, {
-          method: "DELETE"
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${selectedCourse.id}/modules/${moduleId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
-        localCourses = localCourses.filter(c => c.id !== courseId);
-        renderCoursesGrid();
-        showToast("Curso excluído do Firestore com sucesso.");
+
+        if (!selectedCourse.modules) selectedCourse.modules = [];
+        const existingIdx = selectedCourse.modules.findIndex(m => m.id === moduleId);
+        const modObj = { id: moduleId, moduleId, title, order, description: desc, published, lessons: existingIdx >= 0 ? selectedCourse.modules[existingIdx].lessons : [] };
+
+        if (existingIdx >= 0) selectedCourse.modules[existingIdx] = modObj;
+        else selectedCourse.modules.push(modObj);
+
+        closeModuleModal();
+        renderModules();
+        showToast(`Módulo "${title}" salvo no Firestore!`);
       } catch (err) {
-        alert("Erro ao excluir curso: " + err.message);
+        alert("Erro ao salvar módulo: " + err.message);
       }
     }
 
     // ==========================================
-    // LESSONS MANAGEMENT METHODS
+    // LEVEL 3: LESSONS (NÍVEL 3)
     // ==========================================
-    function openLessonsManager(courseId) {
-      currentEditingCourseId = courseId;
-      const c = localCourses.find(x => x.id === courseId);
-      if (!c) return;
+    function renderLessons() {
+      const container = document.getElementById("lessonsContainer");
+      if (!selectedModule) return;
 
-      document.getElementById("lessonsManagerCourseTitle").innerText = c.title;
-      renderCourseLessonsList(c);
-      document.getElementById("lessonsManagerModal").classList.remove("hidden");
-    }
-
-    function closeLessonsManagerModal() {
-      document.getElementById("lessonsManagerModal").classList.add("hidden");
-    }
-
-    function renderCourseLessonsList(course) {
-      const container = document.getElementById("courseLessonsList");
-      const lessons = course.lessons || [];
-
+      const lessons = selectedModule.lessons || [];
       if (lessons.length === 0) {
-        container.innerHTML = `<div class="py-12 text-center text-slate-400 text-xs border border-dashed border-white/10 rounded-2xl">Nenhuma aula cadastrada neste curso. Clique em "+ Nova Aula" acima!</div>`;
+        container.innerHTML = `<div class="py-12 text-center text-slate-400 text-xs border border-dashed border-white/10 rounded-3xl">Nenhuma aula cadastrada neste módulo. Clique em "+ Nova Aula neste Módulo" acima!</div>`;
         return;
       }
 
@@ -536,12 +819,15 @@
         <div class="p-4 rounded-2xl bg-[#112240] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="truncate">
             <div class="flex items-center gap-2 mb-1">
-              <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[10px] uppercase">AULA ${idx + 1}</span>
+              <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[10px] uppercase">AULA ${l.order || idx + 1}</span>
               ${l.videoUrl ? '<span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold text-[10px]">🎬 Vídeo MP4</span>' : ''}
+              ${l.audioUrl ? '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-[10px]">🎧 Áudio 128k</span>' : ''}
               ${l.pdfUrl ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">📑 PDF</span>' : ''}
+              ${l.hasTrainingTrack ? '<span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold text-[10px]">📌 Training Player</span>' : ''}
             </div>
             <h4 class="font-bold text-sm text-white truncate">${l.title}</h4>
-            <p class="text-xs text-slate-400 truncate mt-0.5">${l.desc || ''}</p>
+            <p class="text-xs text-slate-400 truncate mt-0.5">${l.description || ''}</p>
+            ${l.goldenTip ? `<p class="text-[11px] text-amber-300/80 font-medium truncate mt-1">💡 ${l.goldenTip}</p>` : ''}
           </div>
 
           <div class="flex items-center gap-2 shrink-0">
@@ -554,94 +840,135 @@
           </div>
         </div>
       `).join("");
-
       lucide.createIcons();
     }
 
-    function openNewLessonModal() {
+    function openLessonModal() {
       document.getElementById("lessonFormId").value = "";
-      document.getElementById("lessonFormCourseId").value = currentEditingCourseId;
       document.getElementById("lessonInputTitle").value = "";
+      document.getElementById("lessonInputId").value = `aula-0${(selectedModule.lessons || []).length + 1}`;
+      document.getElementById("lessonInputOrder").value = (selectedModule.lessons || []).length + 1;
       document.getElementById("lessonInputVideo").value = "";
       document.getElementById("lessonInputAudio").value = "";
       document.getElementById("lessonInputPdf").value = "";
+      document.getElementById("lessonInputArtwork").value = "assets/images/cover-default-aef.jpg";
       document.getElementById("lessonInputTip").value = "";
-      document.getElementById("lessonInputDesc").value = "";
-      document.getElementById("lessonEditModalTitle").innerText = "Adicionar Nova Aula";
-      document.getElementById("lessonEditModal").classList.remove("hidden");
+      document.getElementById("lessonInputTrackId").value = "";
+      document.getElementById("lessonModalTitle").innerText = `Nova Aula em ${selectedModule.title}`;
+      document.getElementById("lessonModal").classList.remove("hidden");
     }
 
     function editLesson(lessonId) {
-      const c = localCourses.find(x => x.id === currentEditingCourseId);
-      if (!c) return;
-      const l = (c.lessons || []).find(x => x.id === lessonId);
+      const l = (selectedModule.lessons || []).find(x => x.id === lessonId);
       if (!l) return;
-
       document.getElementById("lessonFormId").value = l.id;
-      document.getElementById("lessonFormCourseId").value = currentEditingCourseId;
-      document.getElementById("lessonInputTitle").value = l.title || "";
+      document.getElementById("lessonInputTitle").value = l.title;
+      document.getElementById("lessonInputId").value = l.lessonId || l.id;
+      document.getElementById("lessonInputOrder").value = l.order || 1;
       document.getElementById("lessonInputVideo").value = l.videoUrl || "";
       document.getElementById("lessonInputAudio").value = l.audioUrl || "";
       document.getElementById("lessonInputPdf").value = l.pdfUrl || "";
+      document.getElementById("lessonInputArtwork").value = l.artworkUrl || "";
       document.getElementById("lessonInputTip").value = l.goldenTip || "";
-      document.getElementById("lessonInputDesc").value = l.desc || "";
-      document.getElementById("lessonEditModalTitle").innerText = "Editar Aula";
-      document.getElementById("lessonEditModal").classList.remove("hidden");
+      document.getElementById("lessonInputHasTrack").checked = l.hasTrainingTrack !== false;
+      document.getElementById("lessonInputTrackId").value = l.trainingTrackId || "";
+      document.getElementById("lessonModalTitle").innerText = "Editar Aula";
+      document.getElementById("lessonModal").classList.remove("hidden");
     }
 
-    function closeLessonEditModal() {
-      document.getElementById("lessonEditModal").classList.add("hidden");
+    function closeLessonModal() {
+      document.getElementById("lessonModal").classList.add("hidden");
     }
 
-    function handleSaveLesson(e) {
+    async function handleSaveLesson(e) {
       e.preventDefault();
-      const course = localCourses.find(x => x.id === currentEditingCourseId);
-      if (!course) return;
-
       const formId = document.getElementById("lessonFormId").value;
       const title = document.getElementById("lessonInputTitle").value.trim();
+      const lesId = document.getElementById("lessonInputId").value.trim().toLowerCase();
+      const order = parseInt(document.getElementById("lessonInputOrder").value) || 1;
       const videoUrl = document.getElementById("lessonInputVideo").value.trim();
       const audioUrl = document.getElementById("lessonInputAudio").value.trim();
       const pdfUrl = document.getElementById("lessonInputPdf").value.trim();
-      const tip = document.getElementById("lessonInputTip").value.trim();
-      const desc = document.getElementById("lessonInputDesc").value.trim();
+      const artworkUrl = document.getElementById("lessonInputArtwork").value.trim();
+      const goldenTip = document.getElementById("lessonInputTip").value.trim();
+      const hasTrainingTrack = document.getElementById("lessonInputHasTrack").checked;
+      const trainingTrackId = document.getElementById("lessonInputTrackId").value.trim() || lesId;
 
-      const lessonId = formId || `lesson_${Date.now()}`;
-      const lessonObj = {
-        id: lessonId,
-        title: title,
-        videoUrl: videoUrl,
-        audioUrl: audioUrl,
-        pdfUrl: pdfUrl,
-        goldenTip: tip,
-        desc: desc
+      const lessonId = formId || lesId || `les_${Date.now()}`;
+      const payload = {
+        fields: {
+          lessonId: { stringValue: lessonId },
+          moduleId: { stringValue: selectedModule.id },
+          courseId: { stringValue: selectedCourse.id },
+          title: { stringValue: title },
+          order: { integerValue: order },
+          description: { stringValue: title },
+          videoUrl: { stringValue: videoUrl },
+          audioUrl: { stringValue: audioUrl },
+          pdfUrl: { stringValue: pdfUrl },
+          artworkUrl: { stringValue: artworkUrl },
+          goldenTip: { stringValue: goldenTip },
+          hasTrainingTrack: { booleanValue: hasTrainingTrack },
+          trainingTrackId: { stringValue: trainingTrackId },
+          durationSeconds: { integerValue: 300 }
+        }
       };
 
-      if (!course.lessons) course.lessons = [];
-      const existingIdx = course.lessons.findIndex(x => x.id === lessonId);
-      if (existingIdx >= 0) course.lessons[existingIdx] = lessonObj;
-      else course.lessons.push(lessonObj);
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${selectedCourse.id}/modules/${selectedModule.id}/lessons/${lessonId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-      closeLessonEditModal();
-      renderCourseLessonsList(course);
-      renderCoursesGrid();
-      showToast(`Aula "${title}" salva com sucesso!`);
+        if (!selectedModule.lessons) selectedModule.lessons = [];
+        const existingIdx = selectedModule.lessons.findIndex(l => l.id === lessonId);
+        const lesObj = { id: lessonId, lessonId, moduleId: selectedModule.id, courseId: selectedCourse.id, title, order, videoUrl, audioUrl, pdfUrl, artworkUrl, goldenTip, hasTrainingTrack, trainingTrackId, durationSeconds: 300 };
+
+        if (existingIdx >= 0) selectedModule.lessons[existingIdx] = lesObj;
+        else selectedModule.lessons.push(lesObj);
+
+        closeLessonModal();
+        renderLessons();
+        showToast(`Aula "${title}" salva com sucesso no Módulo!`);
+      } catch (err) {
+        alert("Erro ao salvar aula: " + err.message);
+      }
     }
 
-    function deleteLesson(lessonId) {
-      const course = localCourses.find(x => x.id === currentEditingCourseId);
-      if (!course) return;
-      if (!confirm("Tem certeza que deseja excluir esta aula?")) return;
+    async function deleteLesson(lessonId) {
+      if (!confirm(`Tem certeza que deseja excluir esta aula?`)) return;
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${selectedCourse.id}/modules/${selectedModule.id}/lessons/${lessonId}`, {
+          method: "DELETE"
+        });
+        selectedModule.lessons = (selectedModule.lessons || []).filter(l => l.id !== lessonId);
+        renderLessons();
+        showToast("Aula excluída do Firestore.");
+      } catch (err) {
+        alert("Erro ao excluir aula: " + err.message);
+      }
+    }
 
-      course.lessons = (course.lessons || []).filter(x => x.id !== lessonId);
-      renderCourseLessonsList(course);
-      renderCoursesGrid();
-      showToast("Aula excluída com sucesso.");
+    function openFilePickerForEntity(targetInputId, acceptType) {
+      let folder = "courses/materials";
+      if (acceptType.startsWith("video/")) folder = "videos/courses";
+      else if (acceptType.startsWith("audio/")) folder = "audio/courses";
+      else if (acceptType.startsWith("image/")) folder = "covers/courses";
+
+      window.AEFFilePicker.open({
+        accept: acceptType,
+        folder: folder,
+        title: "Upload de Mídia para a Nuvem",
+        onComplete: (url) => {
+          document.getElementById(targetInputId).value = url;
+        }
+      });
     }
 
     function showToast(msg) {
-      const toast = document.getElementById("course-toast");
-      const text = document.getElementById("course-toast-text");
+      const toast = document.getElementById("toastNotification");
+      const text = document.getElementById("toastText");
       if (!toast || !text) return;
       text.innerText = msg;
       toast.classList.remove("hidden");
