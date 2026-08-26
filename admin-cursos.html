@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Studio & Gestor de Aulas | AgoraEuFalo Admin</title>
+  <meta name="description" content="Estúdio de criação e gerenciamento de cursos, masterclasses, vídeos e apostilas do Professor Leonardo Leite.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#0A192F">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#D97706',
+              'gold-light': '#F59E0B',
+              'gold-bright': '#FBBF24',
+              slate: '#1E293B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-filepicker.js"></script>
+</head>
+<body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ========================================== -->
+  <!-- 1. HEADER                                  -->
+  <!-- ========================================== -->
+  <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="admin.html" class="flex items-center gap-2">
+          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
+        </a>
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
+          COURSE STUDIO CMS
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2.5 text-xs">
+        <a href="admin.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Command Center</span>
+        </a>
+        <a href="portal.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Ver no Portal ↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN WORKSPACE                          -->
+  <!-- ========================================== -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
+    
+    <!-- Top Action Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div>
+        <h1 class="text-2xl font-bold font-serif text-white">Gestor de Cursos & Masterclasses</h1>
+        <p class="text-xs text-slate-400 mt-0.5">Crie cursos, adicione módulos e suba vídeos, áudios e apostilas direto para o Google Cloud Storage.</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openNewCourseModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Novo Curso</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Courses Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="admin-courses-grid">
+      <div class="col-span-full py-12 text-center text-slate-400 text-xs">
+        <div class="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        Carregando cursos do Firestore...
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 3. MODAL: CRIAR / EDITAR CURSO             -->
+  <!-- ========================================== -->
+  <div id="courseModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-white relative max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📦</span>
+          <h3 id="courseModalTitle" class="font-bold text-base text-white">Novo Curso / Programa</h3>
+        </div>
+        <button onclick="closeCourseModal()" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <form id="courseForm" onsubmit="handleSaveCourse(event)" class="space-y-3.5">
+        <input type="hidden" id="courseFormId">
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título do Curso *</label>
+          <input type="text" id="courseInputTitle" required placeholder="Ex: Projeto AgoraEuFalo 2026" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Identificador (Slug) *</label>
+            <input type="text" id="courseInputSlug" required placeholder="ex: projeto-aef-2026" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Plano Necessário *</label>
+            <select id="courseInputTier" class="w-full px-3.5 py-2 rounded-xl bg-[#112240] border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none font-semibold">
+              <option value="vip">👑 Mentoria VIP Individual</option>
+              <option value="club_anual">⭐ Magic Stories Club (Anual)</option>
+              <option value="lifetime">💎 Acesso Vitalício Master</option>
+              <option value="free">🌱 Acesso Aberto (Degustação)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa do Curso (16:9 na Nuvem) *</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="courseInputCover" required placeholder="https://..." class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+            <button type="button" onclick="openFilePickerForCourse('courseInputCover', 'image/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição / Proposta Pedagógica</label>
+          <textarea id="courseInputDesc" rows="3" placeholder="Resumo do programa e objetivos de fluência..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="courseInputPublished" checked class="rounded text-amber-500">
+            <span class="text-xs text-slate-300 font-semibold">Publicar Imediatamente no Portal</span>
+          </label>
+          <button type="submit" id="saveCourseBtn" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+            Salvar Curso 🚀
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 4. MODAL: GESTÃO DE AULAS DO CURSO         -->
+  <!-- ========================================== -->
+  <div id="lessonsManagerModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-5xl w-full p-6 shadow-2xl text-white my-auto max-h-[92vh] flex flex-col">
+      
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase text-amber-400">Gerenciador de Módulos & Aulas</span>
+          <h3 id="lessonsManagerCourseTitle" class="text-lg font-bold text-white">Projeto AgoraEuFalo 2026</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openNewLessonModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center gap-1">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>Nova Aula</span>
+          </button>
+          <button onclick="closeLessonsManagerModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-white">✕</button>
+        </div>
+      </div>
+
+      <!-- Lessons Table / List -->
+      <div class="flex-1 overflow-y-auto space-y-3 pr-1" id="courseLessonsList">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 5. MODAL: CRIAR / EDITAR AULA              -->
+  <!-- ========================================== -->
+  <div id="lessonEditModal" class="hidden fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-xl w-full p-6 shadow-2xl text-white relative max-h-[92vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🎬</span>
+          <h3 id="lessonEditModalTitle" class="font-bold text-base text-white">Adicionar Nova Aula</h3>
+        </div>
+        <button onclick="closeLessonEditModal()" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <form id="lessonForm" onsubmit="handleSaveLesson(event)" class="space-y-3.5">
+        <input type="hidden" id="lessonFormId">
+        <input type="hidden" id="lessonFormCourseId">
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título da Aula *</label>
+          <input type="text" id="lessonInputTitle" required placeholder="Ex: Aula 01 • O Reflexo da Conexão Sonora" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Vídeo Masterclass MP4 na Nuvem (Google Cloud Storage)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="lessonInputVideo" placeholder="https://firebasestorage.googleapis.com/.../video.mp4" class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+            <button type="button" onclick="openFilePickerForCourse('lessonInputVideo', 'video/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Áudio MP3 Puro 128kbps (Compatível com MediaSession / Bolso) *</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="lessonInputAudio" required placeholder="https://firebasestorage.googleapis.com/.../audio.mp3" class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+            <button type="button" onclick="openFilePickerForCourse('lessonInputAudio', 'audio/*')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Apostila em PDF Diagramada</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="lessonInputPdf" placeholder="Material-PDF/apostila.pdf" class="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+            <button type="button" onclick="openFilePickerForCourse('lessonInputPdf', 'application/pdf')" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black shrink-0">📁 FilePicker</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">💡 Sacada de Ouro do Professor Leo</label>
+          <input type="text" id="lessonInputTip" placeholder="Ex: Não leia tentando traduzir. Ouça o bloco sonoro completo..." class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição / Instruções da Aula</label>
+          <textarea id="lessonInputDesc" rows="2" placeholder="Orientações pedagógicas para o aluno..." class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between">
+          <button type="button" onclick="closeLessonEditModal()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold">Cancelar</button>
+          <button type="submit" id="saveLessonBtn" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+            Salvar Aula 🚀
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="course-toast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5">
+    <span class="text-base" id="course-toast-icon">✅</span>
+    <span id="course-toast-text">Curso salvo com sucesso!</span>
+  </div>
+
+  <!-- Course Studio Engine Controller -->
+  <script>
+    let localCourses = [
+      {
+        id: "projeto-aef-2026",
+        title: "Projeto AgoraEuFalo 2026",
+        slug: "projeto-aef-2026",
+        tier: "vip",
+        coverImageUrl: "assets/images/cover-default-aef.jpg",
+        description: "Treinamento completo de reflexo oral, cadência, connected speech e automação de fala para 2026.",
+        published: true,
+        lessons: [
+          {
+            id: "aef-01",
+            title: "Aula 01 • O Reflexo da Conexão Sonora",
+            desc: "Como conectar consoantes finais com vogais sem pausas artificiais.",
+            videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
+            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+            goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia.",
+            pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media"
+          },
+          {
+            id: "aef-02",
+            title: "Aula 02 • Desbloqueio do Present Perfect",
+            desc: "Treino prático de reflexo com casos reais do cotidiano.",
+            videoUrl: "",
+            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_02.mp3?alt=media",
+            goldenTip: "Use o Present Perfect para conectar experiências passadas com o momento presente de forma automática.",
+            pdfUrl: ""
+          }
+        ]
+      },
+      {
+        id: "magic-stories-club",
+        title: "Magic Stories Club • 30 Ciclos",
+        slug: "magic-stories-club",
+        tier: "club_anual",
+        coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
+        description: "30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas de ouro com o Leo Gringo.",
+        published: true,
+        lessons: [
+          {
+            id: "ms-01",
+            title: "Ciclo 01 • A História da Grazi",
+            desc: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
+            videoUrl: "",
+            audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
+            goldenTip: "Responda às perguntas em voz alta antes que o áudio termine de perguntar.",
+            pdfUrl: "Material-PDF/magic-story-grazi.pdf"
+          }
+        ]
+      }
+    ];
+
+    let currentEditingCourseId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadCoursesFromFirestore();
+    });
+
+    async function loadCoursesFromFirestore() {
+      const grid = document.getElementById("admin-courses-grid");
+      try {
+        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
+        const data = await res.json();
+        if (data.documents && data.documents.length > 0) {
+          const cloudCourses = data.documents.map(d => {
+            const f = d.fields || {};
+            const cid = f.id?.stringValue || d.name.split("/").pop();
+            const existing = localCourses.find(c => c.id === cid);
+            return {
+              id: cid,
+              title: f.title?.stringValue || "Sem Título",
+              slug: f.slug?.stringValue || cid,
+              tier: f.tier?.stringValue || "vip",
+              coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
+              description: f.description?.stringValue || "",
+              published: f.published?.booleanValue !== false,
+              lessons: existing ? existing.lessons : []
+            };
+          });
+          localCourses = cloudCourses;
+        }
+      } catch (err) {
+        console.warn("Could not fetch cloud courses, using local dataset:", err);
+      }
+      renderCoursesGrid();
+    }
+
+    function renderCoursesGrid() {
+      const grid = document.getElementById("admin-courses-grid");
+      if (localCourses.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400 text-xs border-2 border-dashed border-white/10 rounded-3xl">Nenhum curso cadastrado ainda. Clique em "Novo Curso" acima!</div>`;
+        return;
+      }
+
+      grid.innerHTML = localCourses.map(c => `
+        <div class="bg-[#112240] border-2 border-amber-400/40 hover:border-amber-400 rounded-3xl overflow-hidden shadow-lg transition flex flex-col justify-between group">
+          <div>
+            <div class="aspect-video relative bg-black overflow-hidden">
+              <img src="${c.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full ${c.tier === 'vip' ? 'bg-amber-500 text-slate-950' : 'bg-sky-500 text-slate-950'} font-black text-[10px] uppercase tracking-wider">
+                ${c.tier === 'vip' ? '👑 MENTORIA VIP' : '⭐ CLUB ANUAL'}
+              </span>
+            </div>
+            <div class="p-5 space-y-2">
+              <h3 class="font-bold text-base text-white truncate">${c.title}</h3>
+              <p class="text-xs text-slate-400 line-clamp-2">${c.description || ''}</p>
+              <div class="flex items-center gap-2 text-[11px] font-bold text-amber-400 pt-1">
+                <i data-lucide="video" class="w-3.5 h-3.5"></i>
+                <span>${(c.lessons || []).length} Aulas / Masterclasses</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5 pt-0 flex items-center gap-2">
+            <button onclick="openLessonsManager('${c.id}')" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+              <span>Gerenciar Aulas (${(c.lessons || []).length})</span>
+            </button>
+            <button onclick="editCourse('${c.id}')" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition cursor-pointer" title="Editar Informações do Curso">
+              <i data-lucide="edit-2" class="w-4 h-4"></i>
+            </button>
+            <button onclick="deleteCourse('${c.id}')" class="p-2.5 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition cursor-pointer" title="Excluir Curso">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join("");
+
+      lucide.createIcons();
+    }
+
+    function openFilePickerForCourse(targetInputId, acceptType) {
+      let folder = "courses/materials";
+      if (acceptType.startsWith("video/")) folder = "videos/courses";
+      else if (acceptType.startsWith("audio/")) folder = "audio/courses";
+      else if (acceptType.startsWith("image/")) folder = "covers/courses";
+
+      window.AEFFilePicker.open({
+        accept: acceptType,
+        folder: folder,
+        title: "Upload de Mídia para o Curso",
+        onComplete: (url) => {
+          document.getElementById(targetInputId).value = url;
+        }
+      });
+    }
+
+    function openNewCourseModal() {
+      document.getElementById("courseFormId").value = "";
+      document.getElementById("courseInputTitle").value = "";
+      document.getElementById("courseInputSlug").value = "";
+      document.getElementById("courseInputCover").value = "assets/images/cover-default-aef.jpg";
+      document.getElementById("courseInputDesc").value = "";
+      document.getElementById("courseModalTitle").innerText = "Novo Curso / Programa";
+      document.getElementById("courseModal").classList.remove("hidden");
+    }
+
+    function editCourse(courseId) {
+      const c = localCourses.find(x => x.id === courseId);
+      if (!c) return;
+
+      document.getElementById("courseFormId").value = c.id;
+      document.getElementById("courseInputTitle").value = c.title || "";
+      document.getElementById("courseInputSlug").value = c.slug || c.id;
+      document.getElementById("courseInputTier").value = c.tier || "vip";
+      document.getElementById("courseInputCover").value = c.coverImageUrl || "";
+      document.getElementById("courseInputDesc").value = c.description || "";
+      document.getElementById("courseModalTitle").innerText = "Editar Curso";
+      document.getElementById("courseModal").classList.remove("hidden");
+    }
+
+    function closeCourseModal() {
+      document.getElementById("courseModal").classList.add("hidden");
+    }
+
+    async function handleSaveCourse(e) {
+      e.preventDefault();
+      const formId = document.getElementById("courseFormId").value;
+      const title = document.getElementById("courseInputTitle").value.trim();
+      const slug = document.getElementById("courseInputSlug").value.trim().toLowerCase();
+      const tier = document.getElementById("courseInputTier").value;
+      const cover = document.getElementById("courseInputCover").value.trim();
+      const desc = document.getElementById("courseInputDesc").value.trim();
+      const published = document.getElementById("courseInputPublished").checked;
+
+      const courseId = formId || slug || `course_${Date.now()}`;
+      const payload = {
+        fields: {
+          id: { stringValue: courseId },
+          title: { stringValue: title },
+          slug: { stringValue: slug },
+          tier: { stringValue: tier },
+          coverImageUrl: { stringValue: cover },
+          description: { stringValue: desc },
+          published: { booleanValue: published },
+          updatedAt: { stringValue: new Date().toISOString() }
+        }
+      };
+
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${courseId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const existingIdx = localCourses.findIndex(c => c.id === courseId);
+        const updatedCourse = { id: courseId, title, slug, tier, coverImageUrl: cover, description: desc, published, lessons: existingIdx >= 0 ? localCourses[existingIdx].lessons : [] };
+        
+        if (existingIdx >= 0) localCourses[existingIdx] = updatedCourse;
+        else localCourses.unshift(updatedCourse);
+
+        closeCourseModal();
+        renderCoursesGrid();
+        showToast(`Curso "${title}" salvo com sucesso na Nuvem!`);
+      } catch (err) {
+        alert("Erro ao salvar curso: " + err.message);
+      }
+    }
+
+    async function deleteCourse(courseId) {
+      if (!confirm(`Tem certeza que deseja excluir o curso "${courseId}" do Firestore?`)) return;
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${courseId}`, {
+          method: "DELETE"
+        });
+        localCourses = localCourses.filter(c => c.id !== courseId);
+        renderCoursesGrid();
+        showToast("Curso excluído do Firestore com sucesso.");
+      } catch (err) {
+        alert("Erro ao excluir curso: " + err.message);
+      }
+    }
+
+    // ==========================================
+    // LESSONS MANAGEMENT METHODS
+    // ==========================================
+    function openLessonsManager(courseId) {
+      currentEditingCourseId = courseId;
+      const c = localCourses.find(x => x.id === courseId);
+      if (!c) return;
+
+      document.getElementById("lessonsManagerCourseTitle").innerText = c.title;
+      renderCourseLessonsList(c);
+      document.getElementById("lessonsManagerModal").classList.remove("hidden");
+    }
+
+    function closeLessonsManagerModal() {
+      document.getElementById("lessonsManagerModal").classList.add("hidden");
+    }
+
+    function renderCourseLessonsList(course) {
+      const container = document.getElementById("courseLessonsList");
+      const lessons = course.lessons || [];
+
+      if (lessons.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-slate-400 text-xs border border-dashed border-white/10 rounded-2xl">Nenhuma aula cadastrada neste curso. Clique em "+ Nova Aula" acima!</div>`;
+        return;
+      }
+
+      container.innerHTML = lessons.map((l, idx) => `
+        <div class="p-4 rounded-2xl bg-[#112240] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="truncate">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[10px] uppercase">AULA ${idx + 1}</span>
+              ${l.videoUrl ? '<span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold text-[10px]">🎬 Vídeo MP4</span>' : ''}
+              ${l.pdfUrl ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[10px]">📑 PDF</span>' : ''}
+            </div>
+            <h4 class="font-bold text-sm text-white truncate">${l.title}</h4>
+            <p class="text-xs text-slate-400 truncate mt-0.5">${l.desc || ''}</p>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="editLesson('${l.id}')" class="p-2 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar Aula">
+              <i data-lucide="edit-2" class="w-4 h-4"></i>
+            </button>
+            <button onclick="deleteLesson('${l.id}')" class="p-2 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Aula">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join("");
+
+      lucide.createIcons();
+    }
+
+    function openNewLessonModal() {
+      document.getElementById("lessonFormId").value = "";
+      document.getElementById("lessonFormCourseId").value = currentEditingCourseId;
+      document.getElementById("lessonInputTitle").value = "";
+      document.getElementById("lessonInputVideo").value = "";
+      document.getElementById("lessonInputAudio").value = "";
+      document.getElementById("lessonInputPdf").value = "";
+      document.getElementById("lessonInputTip").value = "";
+      document.getElementById("lessonInputDesc").value = "";
+      document.getElementById("lessonEditModalTitle").innerText = "Adicionar Nova Aula";
+      document.getElementById("lessonEditModal").classList.remove("hidden");
+    }
+
+    function editLesson(lessonId) {
+      const c = localCourses.find(x => x.id === currentEditingCourseId);
+      if (!c) return;
+      const l = (c.lessons || []).find(x => x.id === lessonId);
+      if (!l) return;
+
+      document.getElementById("lessonFormId").value = l.id;
+      document.getElementById("lessonFormCourseId").value = currentEditingCourseId;
+      document.getElementById("lessonInputTitle").value = l.title || "";
+      document.getElementById("lessonInputVideo").value = l.videoUrl || "";
+      document.getElementById("lessonInputAudio").value = l.audioUrl || "";
+      document.getElementById("lessonInputPdf").value = l.pdfUrl || "";
+      document.getElementById("lessonInputTip").value = l.goldenTip || "";
+      document.getElementById("lessonInputDesc").value = l.desc || "";
+      document.getElementById("lessonEditModalTitle").innerText = "Editar Aula";
+      document.getElementById("lessonEditModal").classList.remove("hidden");
+    }
+
+    function closeLessonEditModal() {
+      document.getElementById("lessonEditModal").classList.add("hidden");
+    }
+
+    function handleSaveLesson(e) {
+      e.preventDefault();
+      const course = localCourses.find(x => x.id === currentEditingCourseId);
+      if (!course) return;
+
+      const formId = document.getElementById("lessonFormId").value;
+      const title = document.getElementById("lessonInputTitle").value.trim();
+      const videoUrl = document.getElementById("lessonInputVideo").value.trim();
+      const audioUrl = document.getElementById("lessonInputAudio").value.trim();
+      const pdfUrl = document.getElementById("lessonInputPdf").value.trim();
+      const tip = document.getElementById("lessonInputTip").value.trim();
+      const desc = document.getElementById("lessonInputDesc").value.trim();
+
+      const lessonId = formId || `lesson_${Date.now()}`;
+      const lessonObj = {
+        id: lessonId,
+        title: title,
+        videoUrl: videoUrl,
+        audioUrl: audioUrl,
+        pdfUrl: pdfUrl,
+        goldenTip: tip,
+        desc: desc
+      };
+
+      if (!course.lessons) course.lessons = [];
+      const existingIdx = course.lessons.findIndex(x => x.id === lessonId);
+      if (existingIdx >= 0) course.lessons[existingIdx] = lessonObj;
+      else course.lessons.push(lessonObj);
+
+      closeLessonEditModal();
+      renderCourseLessonsList(course);
+      renderCoursesGrid();
+      showToast(`Aula "${title}" salva com sucesso!`);
+    }
+
+    function deleteLesson(lessonId) {
+      const course = localCourses.find(x => x.id === currentEditingCourseId);
+      if (!course) return;
+      if (!confirm("Tem certeza que deseja excluir esta aula?")) return;
+
+      course.lessons = (course.lessons || []).filter(x => x.id !== lessonId);
+      renderCourseLessonsList(course);
+      renderCoursesGrid();
+      showToast("Aula excluída com sucesso.");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("course-toast");
+      const text = document.getElementById("course-toast-text");
+      if (!toast || !text) return;
+      text.innerText = msg;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3500);
+    }
+  </script>
+</body>
+</html>
