@@ -130,5 +130,11 @@ Sempre que um documento de especificação técnica, modelo de dados ou arquitet
 2. **Conformidade Campo a Campo (1:1):** Todos os campos especificados nas interfaces (`videoUrl`, `audioUrl`, `pdfUrl`, `artworkUrl`, `hasTrainingTrack`, `order`, `durationSeconds`, `goldenTip`, etc.) devem ser implementados sem omissões arbitrárias.
 3. **Auditoria Pré-Execução:** Antes de gerar código sobre um schema complexo, o agente deve validar mentalmente o mapeamento completo dos níveis para garantir que nenhuma estrutura seja deixada de fora.
 
+---
+
+## 12. Política de Deploy: Automático por Padrão com Kill-Switch Obrigatório
+- **Padrão (Default):** O agente realiza o build (`npm run build`) e o deploy (`git push origin main`) automaticamente ao concluir as entregas solicitadas, garantindo que o usuário não precise se preocupar em executar comandos manuais.
+- **Trava de Segurança Obrigatória (Kill-Switch):** Se em QUALQUER momento o usuário incluir termos como *"no deploy"*, *"não faça deploy"*, *"não suba para produção"*, *"apenas local"* ou *"não dê push"*, o agente é terminantemente PROIBIDO de executar `git push`, mantendo todas as alterações estritamente no ambiente de desenvolvimento local até que uma autorização explícita seja dada.
+
 
 
