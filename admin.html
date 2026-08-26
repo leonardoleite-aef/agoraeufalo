@@ -1040,6 +1040,8 @@
       } catch (err) {
         showToast("Erro ao excluir artigo.", "error");
       }
+    }
+
     async function toggleBlogPublishStatus(slug) {
       const p = rawBlogPostsList.find(x => x.slug === slug);
       if (!p) return;
