@@ -449,26 +449,35 @@
         </button>
       </div>
 
-      <!-- 6 Canonical Magic Stories Activities Navigation Bar -->
-      <div id="activity-selector-bar" class="flex items-center gap-1.5 overflow-x-auto pb-2 pt-1 no-scrollbar border-b border-stone-200 dark:border-slate-800">
-        <button id="act-btn-listen_read" onclick="window.switchActivityMode('listen_read')" class="act-pill px-3 py-1.5 rounded-xl text-xs font-black bg-amber-500 text-slate-950 shadow-xs border border-amber-400 shrink-0 cursor-pointer transition">
-          <span>1. 🎧 Listen & Read</span>
-        </button>
-        <button id="act-btn-vocab" onclick="window.switchActivityMode('vocab')" class="act-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition">
-          <span>2. 💡 Vocabulary</span>
-        </button>
-        <button id="act-btn-listen_answer" onclick="window.switchActivityMode('listen_answer')" class="act-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition">
-          <span>3. ⚡ Listen & Answer</span>
-        </button>
-        <button id="act-btn-look_retell" onclick="window.switchActivityMode('look_retell')" class="act-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition">
-          <span>4. 🗣️ Look & Retell (AI Coach)</span>
-        </button>
-        <button id="act-btn-listen_ask" onclick="window.switchActivityMode('listen_ask')" class="act-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition">
-          <span>5. ❓ Listen & Ask</span>
-        </button>
-        <button id="act-btn-pronunciation" onclick="window.switchActivityMode('pronunciation')" class="act-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition">
-          <span>6. 🔂 Pronunciation</span>
-        </button>
+      <!-- 6 Canonical Magic Stories Activities Navigation Bar (High Visibility Segmented Bar) -->
+      <div class="bg-amber-500/10 dark:bg-slate-900/90 p-3 rounded-2xl border-2 border-amber-400/40 space-y-2 shadow-xs">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs">🎯</span>
+            <span class="text-[11px] font-black uppercase tracking-wider text-amber-900 dark:text-amber-300">As 6 Etapas do Treino Magic Stories:</span>
+          </div>
+          <span class="text-[10px] text-amber-800 dark:text-amber-400 font-bold">Toque na etapa desejada</span>
+        </div>
+        <div id="activity-selector-bar" class="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+          <button id="act-btn-listen_read" onclick="window.switchActivityMode('listen_read')" class="act-pill px-3.5 py-2 rounded-xl text-xs font-black bg-amber-500 text-slate-950 shadow-sm border border-amber-400 shrink-0 cursor-pointer transition flex items-center gap-1.5">
+            <span>1. 🎧 Listen & Read</span>
+          </button>
+          <button id="act-btn-vocab" onclick="window.switchActivityMode('vocab')" class="act-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition border border-stone-200 dark:border-slate-700 flex items-center gap-1.5">
+            <span>2. 💡 Vocabulary</span>
+          </button>
+          <button id="act-btn-listen_answer" onclick="window.switchActivityMode('listen_answer')" class="act-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition border border-stone-200 dark:border-slate-700 flex items-center gap-1.5">
+            <span>3. ⚡ Listen & Answer</span>
+          </button>
+          <button id="act-btn-look_retell" onclick="window.switchActivityMode('look_retell')" class="act-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition border border-stone-200 dark:border-slate-700 flex items-center gap-1.5">
+            <span>4. 🗣️ Look & Retell (AI Coach)</span>
+          </button>
+          <button id="act-btn-listen_ask" onclick="window.switchActivityMode('listen_ask')" class="act-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition border border-stone-200 dark:border-slate-700 flex items-center gap-1.5">
+            <span>5. ❓ Listen & Ask</span>
+          </button>
+          <button id="act-btn-pronunciation" onclick="window.switchActivityMode('pronunciation')" class="act-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-slate-700 shrink-0 cursor-pointer transition border border-stone-200 dark:border-slate-700 flex items-center gap-1.5">
+            <span>6. 🔂 Pronunciation</span>
+          </button>
+        </div>
       </div>
 
       <!-- Special Activity Dynamic Stage (For Vocab, Look & Retell AI Coach, Listen & Answer, etc.) -->
