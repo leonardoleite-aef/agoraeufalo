@@ -244,12 +244,14 @@
           ? '<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-black">👑 MENTORADO VIP</span>'
           : '<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">ALUNO FREE</span>';
 
+        const avatarHtml = s.avatarUrl 
+          ? `<img src="${s.avatarUrl}" alt="${s.name}" class="w-7 h-7 rounded-lg object-cover border border-slate-200">`
+          : `<div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center font-bold text-xs shrink-0">${s.name.substring(0, 2).toUpperCase()}</div>`;
+
         return `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center font-bold text-xs">
-                ${s.name.substring(0, 2).toUpperCase()}
-              </div>
+              ${avatarHtml}
               <span>${s.name}</span>
             </td>
             <td class="py-3.5 px-4 font-mono text-slate-600">${s.email}</td>

@@ -172,11 +172,16 @@
           profile.role = 'admin';
           profile.tier = 'vip_mentorship';
         }
-        await this.db.collection('users').doc(user.uid).update({
+        const updates = {
           role: profile.role,
           tier: profile.tier,
           lastLoginAt: new Date().toISOString()
-        });
+        };
+        if (user.photoURL && !profile.avatarUrl) {
+          updates.avatarUrl = user.photoURL;
+          profile.avatarUrl = user.photoURL;
+        }
+        await this.db.collection('users').doc(user.uid).update(updates);
       }
 
       this.currentProfile = profile;

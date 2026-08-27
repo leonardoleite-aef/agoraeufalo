@@ -55,13 +55,30 @@ class AEFUIController {
   }
 
   _applyFontSize(size) {
-    const contentEl = document.getElementById("sentences-container");
-    if (!contentEl) return;
+    const root = document.documentElement;
+    if (size === "sm") {
+      root.style.setProperty("--sentence-en-size", "15px");
+      root.style.setProperty("--sentence-pt-size", "12px");
+    } else if (size === "lg") {
+      root.style.setProperty("--sentence-en-size", "22px");
+      root.style.setProperty("--sentence-pt-size", "16px");
+    } else {
+      // base (tamanho padrão normal)
+      root.style.setProperty("--sentence-en-size", "18px");
+      root.style.setProperty("--sentence-pt-size", "14px");
+    }
 
-    contentEl.classList.remove("text-base", "text-lg", "text-xl");
-    if (size === "sm") contentEl.classList.add("text-base");
-    else if (size === "base") contentEl.classList.add("text-lg");
-    else if (size === "lg") contentEl.classList.add("text-xl");
+    // Atualiza botões A- / A / A+
+    ['sm', 'base', 'lg'].forEach(s => {
+      const btn = document.getElementById(`btn-font-${s}`);
+      if (btn) {
+        if (s === size) {
+          btn.className = "px-2.5 py-0.5 rounded-lg text-xs font-black bg-amber-500 text-slate-950 shadow-xs border border-amber-400";
+        } else {
+          btn.className = "px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600 transition cursor-pointer";
+        }
+      }
+    });
   }
 
   toggleDrivingMode() {

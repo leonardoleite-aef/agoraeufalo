@@ -23,6 +23,7 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 
 | Interface | URL Produção | Arquivo Local | Descrição |
 | :--- | :--- | :--- | :--- |
+| **Player Universal (Root SaaS)** | [agoraeufalo.com.br/player.html](https://agoraeufalo.com.br/player.html) | [`player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/player.html) | Rota canônica universal do SaaS Player com Smart Welcome, PWA e direcionamento por Tier. |
 | **Personal Training Player Unificado** | [agoraeufalo.com.br/treino/player.html](https://agoraeufalo.com.br/treino/player.html) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player SaaS com 4 abas (*Mentoria VIP*, *Sugestões do Leo*, *Meus Cursos*, *Minhas Coisas*), Play/Pause no toque, tradução falada real e dual-media (Vídeo + Áudio). |
 | **Landing Page do Player** | [agoraeufalo.com.br/personal-trainer.html](https://agoraeufalo.com.br/personal-trainer.html) | [`personal-trainer.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/personal-trainer.html) | Landing page de alta conversão do aplicativo de treino de reflexo com Lead Gate. |
 | **Treinador (Alias)** | [agoraeufalo.com.br/treinador.html](https://agoraeufalo.com.br/treinador.html) | [`treinador.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treinador.html) | Link alternativo curto para compartilhamento nas redes sociais e WhatsApp. |

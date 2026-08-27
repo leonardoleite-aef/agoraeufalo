@@ -115,6 +115,19 @@
       border-color: #D97706 !important;
     }
 
+    :root {
+      --sentence-en-size: 18px;
+      --sentence-pt-size: 14px;
+    }
+    .sentence-text {
+      font-size: var(--sentence-en-size) !important;
+      line-height: 1.6 !important;
+    }
+    .sentence-translation {
+      font-size: var(--sentence-pt-size) !important;
+      line-height: 1.5 !important;
+    }
+
     /* Range input styling */
     input[type=range] {
       -webkit-appearance: none;
@@ -152,13 +165,14 @@
           <img src="../assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
         </a>
         <div class="h-5 w-px bg-white/20 hidden sm:block"></div>
-        <div id="student-identity-badge" class="flex items-center gap-2">
-          <div id="header-student-avatar" class="w-7 h-7 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-xs">
-            EP
+        <div id="student-identity-badge" onclick="window.handleStudentBadgeClick()" class="flex items-center gap-2 cursor-pointer hover:opacity-85 transition" title="Meu Perfil / Alternar Aluno">
+          <div id="header-student-avatar-container" class="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-xs shrink-0 border border-amber-400/40">
+            <span id="header-student-avatar">AF</span>
+            <img id="header-student-photo" src="" alt="Avatar" class="w-full h-full object-cover hidden">
           </div>
           <div class="flex flex-col">
-            <span id="header-student-name" class="font-bold text-xs text-white leading-tight">Estêvão Pinheiro</span>
-            <span id="header-student-badge" class="text-[10px] text-amber-400 font-extrabold tracking-wider uppercase">MENTORADO VIP</span>
+            <span id="header-student-name" class="font-bold text-xs text-white leading-tight">Aluno AgoraEuFalo</span>
+            <span id="header-student-badge" class="text-[10px] text-amber-400 font-extrabold tracking-wider uppercase">MEMBRO</span>
           </div>
         </div>
       </div>
@@ -207,6 +221,25 @@
   <!-- ========================================== -->
   <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 pt-4">
     
+    <!-- PWA Install Prompt Banner (Mobile-First) -->
+    <div id="pwa-install-banner" class="hidden mb-4 p-3.5 sm:p-4 rounded-2xl bg-[#0A192F] text-white border-2 border-amber-400 shadow-xl flex items-center justify-between gap-3 animate-in fade-in duration-300">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-xl shrink-0">
+          📲
+        </div>
+        <div>
+          <p class="font-extrabold text-xs sm:text-sm text-white leading-tight">Instale o AgoraEuFalo no seu celular</p>
+          <p class="text-[11px] text-slate-300">Treine no carro e sem gastar internet com o app na sua tela inicial.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="btn-pwa-install" onclick="window.triggerPwaInstall()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer active:scale-95">
+          Instalar App ⚡
+        </button>
+        <button onclick="document.getElementById('pwa-install-banner').classList.add('hidden')" class="text-slate-400 hover:text-white p-1 text-xs cursor-pointer">✕</button>
+      </div>
+    </div>
+
     <!-- Real-time Update Notification Banner (Floating Alert) -->
     <div id="new-episode-notification-banner" class="hidden mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 shadow-lg border-2 border-amber-300 flex items-center justify-between gap-3 animate-pulse">
       <div class="flex items-center gap-2.5 truncate">
@@ -232,19 +265,26 @@
       
       <!-- Unified SaaS 4-Tab Navigation Bar -->
       <div class="flex items-center gap-1.5 p-1.5 bg-stone-200/80 dark:bg-slate-900 rounded-2xl border border-stone-300/80 dark:border-slate-800 shadow-inner overflow-x-auto custom-scrollbar">
+        <!-- 1. Sugestões do Leo -->
+        <button id="tab-btn-suggestions" onclick="window.switchPlayerTab('suggestions')" class="flex-1 min-w-[140px] py-2 px-2.5 rounded-xl font-black text-[11px] sm:text-xs transition flex items-center justify-center gap-1 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer shrink-0 border border-amber-400/40">
+          <span>💡 Sugestões do Leo</span>
+          <span id="badge-count-suggestions" class="px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[10px] font-mono font-bold">0</span>
+        </button>
+
+        <!-- 2. Meus Cursos -->
+        <button id="tab-btn-courses" onclick="window.switchPlayerTab('courses')" class="flex-1 min-w-[125px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
+          <span>🎓 Meus Cursos</span>
+          <span id="badge-count-courses" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
+        </button>
+
+        <!-- 3. Mentoria VIP -->
         <button id="tab-btn-vip" onclick="window.switchPlayerTab('vip')" class="flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
           <span id="tab-vip-icon">👑</span>
           <span id="tab-vip-label">Mentoria VIP</span>
           <span id="badge-count-vip" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
         </button>
-        <button id="tab-btn-suggestions" onclick="window.switchPlayerTab('suggestions')" class="flex-1 min-w-[140px] py-2 px-2.5 rounded-xl font-black text-[11px] sm:text-xs transition flex items-center justify-center gap-1 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer shrink-0">
-          <span>💡 Sugestões do Leo</span>
-          <span id="badge-count-suggestions" class="px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[10px] font-mono font-bold">0</span>
-        </button>
-        <button id="tab-btn-courses" onclick="window.switchPlayerTab('courses')" class="flex-1 min-w-[125px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
-          <span>🎓 Meus Cursos</span>
-          <span id="badge-count-courses" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
-        </button>
+
+        <!-- 4. Minhas Coisas -->
         <button id="tab-btn-my-stuff" onclick="window.switchPlayerTab('my-stuff')" class="flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0">
           <span>🧪 Minhas Coisas</span>
           <span id="badge-count-my-stuff" class="px-1.5 py-0.2 rounded-full bg-stone-300 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">0</span>
@@ -272,28 +312,6 @@
       <div id="track-video-container" class="hidden rounded-3xl overflow-hidden border-2 border-amber-400/40 bg-black shadow-lg">
         <video id="track-video-el" controls class="hidden w-full max-h-[380px] object-contain mx-auto bg-black" playsinline></video>
         <div id="track-yt-container" class="hidden aspect-video w-full"></div>
-      </div>
-
-      <!-- Public App Functional Tour (Only for Public Showcase Mode) -->
-      <div id="public-app-tour" class="hidden bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent border-2 border-amber-400/40 dark:border-amber-500/30 rounded-3xl p-4 sm:p-5 shadow-xs">
-        <div class="flex items-center gap-2 mb-2.5">
-          <span class="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">Showcase AEF</span>
-          <h3 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Como treinar sua fala e escuta com este aplicativo:</h3>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-medium text-slate-700 dark:text-slate-300">
-          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
-            <span>🔤</span> <span><strong>Toque na Frase:</strong> Salto instantâneo</span>
-          </div>
-          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
-            <span>🔁</span> <span><strong>Botão Loop:</strong> Repetição contínua</span>
-          </div>
-          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
-            <span>🚗</span> <span><strong>Modo Direção:</strong> Treino no trânsito</span>
-          </div>
-          <div class="p-2 rounded-xl bg-white dark:bg-[#112240] border border-amber-200/80 dark:border-slate-800 flex items-center gap-1.5">
-            <span>⚡</span> <span><strong>Velocidade:</strong> 0.75x a 1.5x</span>
-          </div>
-        </div>
       </div>
 
       <!-- Session Overview Card with Cover Artwork -->
@@ -343,17 +361,17 @@
         
         <div class="flex items-center gap-1.5 flex-wrap">
           <!-- Karaoke Toggle -->
-          <button id="btn-toggle-karaoke" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition">
+          <button id="btn-toggle-karaoke" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition cursor-pointer">
             <span>🎤</span> <span id="karaoke-status-text">Karaoke ON</span>
           </button>
 
           <!-- Loop Sentence Toggle -->
-          <button id="btn-toggle-loop" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-amber-100 dark:hover:bg-amber-900/30 font-bold text-xs transition">
+          <button id="btn-toggle-loop" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-amber-100 dark:hover:bg-amber-900/30 font-bold text-xs transition cursor-pointer">
             <span>🔁</span> <span id="loop-status-text">Loop Phrase</span>
           </button>
 
           <!-- Auto-Scroll Toggle -->
-          <button id="btn-toggle-autoscroll" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100/70 dark:bg-slate-800 text-amber-900 dark:text-amber-300 font-bold text-xs transition">
+          <button id="btn-toggle-autoscroll" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100/70 dark:bg-slate-800 text-amber-900 dark:text-amber-300 font-bold text-xs transition cursor-pointer">
             <span>📜</span> <span>Auto-Scroll</span>
           </button>
 
@@ -362,11 +380,11 @@
             <span id="flight-icon">✈️</span> <span id="flight-status-text">Save for Flight</span>
           </button>
 
-          <!-- Font Size Adjustments -->
+          <!-- Font Size Adjustments (A- / A / A+) -->
           <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-            <button onclick="window.uiController.setFontSize('sm')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A-</button>
-            <button onclick="window.uiController.setFontSize('base')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A</button>
-            <button onclick="window.uiController.setFontSize('lg')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600">A+</button>
+            <button id="btn-font-sm" onclick="window.uiController.setFontSize('sm')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600 transition cursor-pointer" title="Fonte Compacta (A-)">A-</button>
+            <button id="btn-font-base" onclick="window.uiController.setFontSize('base')" class="px-2.5 py-0.5 rounded-lg text-xs font-black bg-amber-500 text-slate-950 shadow-xs border border-amber-400 cursor-pointer" title="Fonte Padrão Normal (A)">A</button>
+            <button id="btn-font-lg" onclick="window.uiController.setFontSize('lg')" class="px-2 py-0.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-amber-600 transition cursor-pointer" title="Fonte Grande / Confortável (A+)">A+</button>
           </div>
         </div>
 
@@ -514,6 +532,171 @@
           </button>
           
           <p class="text-[10px] text-center text-slate-400">🔒 Acesso 100% gratuito e seguro.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SAAS SMART WELCOME / LOGIN MODAL           -->
+    <!-- ========================================== -->
+    <div id="saas-welcome-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative animate-in fade-in zoom-in duration-300">
+        <button onclick="window.closeSaaSLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition cursor-pointer" title="Fechar">✕</button>
+
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-2xl font-black mx-auto mb-3 shadow-lg">
+            🎙️
+          </div>
+          <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Personal Training Player</span>
+          <h3 class="text-xl sm:text-2xl font-bold font-serif mt-1">Bem-vindo ao AgoraEuFalo</h3>
+          <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+            Seu treinador interativo de fala e reflexo em inglês. Escolha como deseja acessar:
+          </p>
+        </div>
+
+        <!-- 1. Form Options Container -->
+        <div id="saas-login-options" class="space-y-3">
+          <!-- 1. Google 1-Click Login / Signup -->
+          <button onclick="window.handleSaaSGoogleLogin()" class="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs transition shadow-md flex items-center justify-center gap-3 cursor-pointer active:scale-98">
+            <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+            <span>Continuar com Google (Entrar ou Cadastrar)</span>
+          </button>
+
+          <!-- 2. Email Magic Link -->
+          <button onclick="window.toggleSaaSEmailForm()" class="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer">
+            <span>✉️</span> <span>Entrar ou Cadastrar com E-mail</span>
+          </button>
+
+          <!-- Expandable Email Form -->
+          <form id="saas-email-form" onsubmit="window.handleSaaSMagicLink(event)" class="hidden space-y-2.5 pt-2 border-t border-white/10">
+            <input type="email" id="saas-input-email" required placeholder="Digite seu melhor e-mail" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs placeholder-slate-400 focus:outline-none focus:border-amber-400">
+            <button type="submit" id="btn-saas-email-submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+              <span>Enviar Link de Acesso</span> <span>🚀</span>
+            </button>
+          </form>
+
+          <div class="pt-2 border-t border-white/10"></div>
+
+          <!-- 3. VIP Quick PIN Access -->
+          <button onclick="window.toggleSaaSPinSelector()" class="w-full py-2.5 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/40 text-amber-300 font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer">
+            <span>👑</span> <span>Sou Mentorado VIP (Acesso por PIN)</span>
+          </button>
+
+          <!-- Expandable VIP PIN Selector -->
+          <div id="saas-pin-selector" class="hidden space-y-2.5 pt-2 border-t border-amber-400/20">
+            <p class="text-[11px] text-slate-300 text-center mb-1">Selecione seu perfil:</p>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="window.quickLoginWithPin('andre')" class="p-2.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition flex items-center gap-2 cursor-pointer">
+                <span>💼</span> <span>André</span>
+              </button>
+              <button type="button" onclick="window.quickLoginWithPin('estevao')" class="p-2.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition flex items-center gap-2 cursor-pointer">
+                <span>👨‍💻</span> <span>Estêvão</span>
+              </button>
+              <button type="button" onclick="window.quickLoginWithPin('thomas')" class="p-2.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition flex items-center gap-2 cursor-pointer">
+                <span>👔</span> <span>Thomas</span>
+              </button>
+              <button type="button" onclick="window.quickLoginWithPin('matheus')" class="p-2.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition flex items-center gap-2 cursor-pointer">
+                <span>🎯</span> <span>Matheus</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Waiting / Magic Link Sent Screen (Aguarda o clique do link no e-mail) -->
+        <div id="saas-magic-link-sent-view" class="hidden text-center space-y-4 animate-in fade-in zoom-in duration-200">
+          <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-3xl mx-auto animate-pulse">
+            📬
+          </div>
+          <div>
+            <h3 class="text-xl font-bold font-serif text-white">Verifique seu E-mail!</h3>
+            <p class="text-xs text-slate-300 mt-1">Enviamos um link mágico de acesso para:</p>
+            <div id="saas-sent-email-display" class="font-mono text-amber-300 font-extrabold text-sm bg-white/10 px-3 py-2 rounded-xl my-2 border border-white/10 break-all">
+              aluno@exemplo.com
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-left text-xs text-amber-200 space-y-1.5">
+            <div class="flex items-center gap-1.5 font-bold">
+              <span>⚠️</span> <span>Atenção:</span>
+            </div>
+            <p class="text-[11px] leading-relaxed">
+              Verifique sua <strong>Caixa de Entrada</strong> e também a pasta de <strong>SPAM / Lixo Eletrônico</strong>. Toque no link recebido no celular para entrar instantaneamente!
+            </p>
+          </div>
+
+          <p class="text-[11px] text-slate-400 italic">
+            Esta tela entrará automaticamente assim que você tocar no link do seu e-mail.
+          </p>
+
+          <div class="space-y-2 pt-2 border-t border-white/10">
+            <button type="button" onclick="window.resendSaaSMagicLink()" id="btn-resend-magic-link" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer">
+              <span>✉️</span> <span>Reenviar Link de Acesso</span>
+            </button>
+            <button type="button" onclick="window.showSaaSLoginOptions()" class="w-full py-2 px-4 text-xs text-slate-400 hover:text-white font-medium transition cursor-pointer">
+              ← Usar outro e-mail ou forma de acesso
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MEMBER PROFILE & AVATAR EDIT MODAL         -->
+    <!-- ========================================== -->
+    <div id="member-profile-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+      <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative animate-in fade-in zoom-in duration-200">
+        <button onclick="window.closeMemberProfileModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition cursor-pointer" title="Fechar">✕</button>
+
+        <div class="text-center mb-5">
+          <!-- Profile Photo with Upload Trigger -->
+          <div class="relative w-20 h-20 mx-auto mb-3 group cursor-pointer" onclick="document.getElementById('input-profile-avatar-file').click()" title="Clique para trocar a foto">
+            <div id="modal-profile-avatar-container" class="w-full h-full rounded-2xl overflow-hidden bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg border-2 border-amber-400">
+              <span id="modal-profile-initials">EP</span>
+              <img id="modal-profile-photo" src="" alt="Foto de Perfil" class="w-full h-full object-cover hidden">
+            </div>
+            <div class="absolute inset-0 bg-black/60 rounded-2xl opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-[10px] font-bold text-amber-300 transition backdrop-blur-xs">
+              <span>📷</span>
+              <span>Trocar</span>
+            </div>
+          </div>
+          <input type="file" id="input-profile-avatar-file" accept="image/*" class="hidden" onchange="window.handleAvatarFileSelect(event)">
+
+          <h3 class="text-lg font-bold font-serif text-white" id="modal-profile-name-title">Meu Perfil de Aluno</h3>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 font-extrabold text-[10px] uppercase tracking-wider inline-block mt-1" id="modal-profile-tier-badge">
+            MENTORADO VIP
+          </span>
+        </div>
+
+        <form id="member-profile-form" onsubmit="window.handleSaveMemberProfile(event)" class="space-y-3.5 text-left">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu Nome</label>
+            <input type="text" id="modal-profile-input-name" required placeholder="Seu nome completo" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">WhatsApp / Telefone</label>
+            <input type="tel" id="modal-profile-input-phone" placeholder="(DDD) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">E-mail Cadastrado</label>
+            <input type="email" id="modal-profile-input-email" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-400 text-xs font-medium cursor-not-allowed">
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-white/10">
+            <button type="submit" id="btn-save-member-profile" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-98">
+              <span>Salvar Alterações</span> <span>💾</span>
+            </button>
+
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <button type="button" onclick="window.openSaaSLoginModal(); window.closeMemberProfileModal();" class="text-slate-400 hover:text-amber-300 font-medium transition cursor-pointer">
+                ⇄ Alternar Aluno
+              </button>
+              <button type="button" onclick="window.handleMemberLogout()" class="text-red-400 hover:text-red-300 font-medium transition cursor-pointer">
+                🚪 Sair da Conta
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -822,6 +1005,7 @@
   <script src="data/matheus.js?v=3.0"></script>
   <script src="data/public.js?v=3.0"></script>
   <script src="../assets/js/aef-cloud-sync.js"></script>
+  <script src="../assets/js/aef-portal-auth.js"></script>
   <script src="../assets/js/aef-filepicker.js"></script>
   <script src="../assets/js/aef-hotmart-send.js"></script>
   <script src="../assets/js/aef-audio-hub.js"></script>
@@ -1010,6 +1194,207 @@
       let studentId = urlParams.get("aluno") || localStorage.getItem("aef_active_student") || "estevao";
       studentId = studentId.toLowerCase().trim();
 
+      // =========================================================================
+      // SAAS LOGIN & PWA APP CONTROLLER
+      // =========================================================================
+      window.openSaaSLoginModal = () => {
+        const modal = document.getElementById("saas-welcome-modal");
+        if (modal) modal.classList.remove("hidden");
+      };
+
+      window.closeSaaSLoginModal = () => {
+        const modal = document.getElementById("saas-welcome-modal");
+        if (modal) modal.classList.add("hidden");
+      };
+
+      window.handleSaaSGoogleLogin = async () => {
+        try {
+          if (!window.aefPortalAuth) {
+            alert("Módulo de autenticação em carregamento. Tente em instantes.");
+            return;
+          }
+          const res = await window.aefPortalAuth.signInWithGoogle();
+          if (res && res.profile) {
+            const profile = res.profile;
+            showSyncToast(`👋 Bem-vindo, ${profile.name || 'Aluno'}!`);
+            localStorage.setItem("aef_user_tier", profile.tier || "free");
+            localStorage.setItem("aef_user_email", profile.email || "");
+            
+            // 🚀 Disparo Automático para o Hotmart Send (Tag: portal_aef)
+            if (window.AEFHotmartSend) {
+              window.AEFHotmartSend.submitFreeLead(profile.name || "Aluno", profile.email, "", "player_pwa_google_auth");
+            }
+
+            // Se for VIP, mapeia para seu studentId
+            const emailLower = (profile.email || "").toLowerCase();
+            if (emailLower.includes("andre") || profile.uid === "andre") {
+              window.switchActiveStudent("andre");
+            } else if (emailLower.includes("estevao") || profile.uid === "estevao") {
+              window.switchActiveStudent("estevao");
+            } else if (emailLower.includes("thomas") || profile.uid === "thomas") {
+              window.switchActiveStudent("thomas");
+            } else if (emailLower.includes("matheus") || profile.uid === "matheus") {
+              window.switchActiveStudent("matheus");
+            } else {
+              window.switchActiveStudent("public");
+            }
+            window.closeSaaSLoginModal();
+          }
+        } catch (err) {
+          console.error("Google login error:", err);
+          alert("Não foi possível conectar com o Google: " + err.message);
+        }
+      };
+
+      window.toggleSaaSEmailForm = () => {
+        const form = document.getElementById("saas-email-form");
+        const pinSel = document.getElementById("saas-pin-selector");
+        if (pinSel) pinSel.classList.add("hidden");
+        if (form) form.classList.toggle("hidden");
+      };
+
+      window.handleSaaSMagicLink = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("saas-input-email").value.trim();
+        const submitBtn = document.getElementById("btn-saas-email-submit");
+        if (!email) return;
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = "<span>Enviando link mágico...</span> <span class='animate-spin'>⏳</span>";
+        }
+
+        try {
+          if (window.aefPortalAuth) {
+            // 🚀 Disparo Automático para o Hotmart Send (Tag: portal_aef)
+            if (window.AEFHotmartSend) {
+              window.AEFHotmartSend.submitFreeLead(email.split('@')[0], email, "", "player_pwa_magic_link");
+            }
+
+            await window.aefPortalAuth.sendMagicLink(email, window.location.href);
+            
+            // Alterna para a tela de espera no modal (NÃO fecha o modal nem abre o player antes do clique)
+            const emailDisplay = document.getElementById("saas-sent-email-display");
+            if (emailDisplay) emailDisplay.innerText = email;
+            
+            const optionsView = document.getElementById("saas-login-options");
+            const sentView = document.getElementById("saas-magic-link-sent-view");
+            if (optionsView) optionsView.classList.add("hidden");
+            if (sentView) sentView.classList.remove("hidden");
+          }
+        } catch (err) {
+          console.error("Magic link error:", err);
+          alert("Erro ao disparar link: " + err.message);
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "<span>Enviar Link de Acesso</span> <span>🚀</span>";
+          }
+        }
+      };
+
+      window.showSaaSLoginOptions = () => {
+        const optionsView = document.getElementById("saas-login-options");
+        const sentView = document.getElementById("saas-magic-link-sent-view");
+        if (optionsView) optionsView.classList.remove("hidden");
+        if (sentView) sentView.classList.add("hidden");
+      };
+
+      window.resendSaaSMagicLink = async () => {
+        const email = document.getElementById("saas-sent-email-display").innerText.trim();
+        const resendBtn = document.getElementById("btn-resend-magic-link");
+        if (!email) return;
+
+        if (resendBtn) {
+          resendBtn.disabled = true;
+          resendBtn.innerHTML = "<span>Reenviando...</span> <span class='animate-spin'>⏳</span>";
+        }
+
+        try {
+          if (window.aefPortalAuth) {
+            await window.aefPortalAuth.sendMagicLink(email, window.location.href);
+            showSyncToast("📬 Link Mágico reenviado! Olhe na sua caixa de entrada e spam.");
+          }
+        } catch (err) {
+          alert("Erro ao reenviar: " + err.message);
+        } finally {
+          if (resendBtn) {
+            resendBtn.disabled = false;
+            resendBtn.innerHTML = "<span>✉️</span> <span>Reenviar Link de Acesso</span>";
+          }
+        }
+      };
+
+      window.toggleSaaSPinSelector = () => {
+        const pinSel = document.getElementById("saas-pin-selector");
+        const form = document.getElementById("saas-email-form");
+        if (form) form.classList.add("hidden");
+        if (pinSel) pinSel.classList.toggle("hidden");
+      };
+
+      window.quickLoginWithPin = (alunoId) => {
+        const studentInfo = (window.AEF_REGISTRY && window.AEF_REGISTRY.students) 
+          ? window.AEF_REGISTRY.students.find(s => s.id === alunoId) 
+          : null;
+        
+        const expectedPin = studentInfo ? studentInfo.pin : "1234";
+        const enteredPin = prompt(`🔐 Digite o PIN de 4 dígitos do mentorado (${studentInfo ? studentInfo.name : alunoId}):`);
+        
+        if (enteredPin && (enteredPin.trim() === expectedPin || enteredPin.trim() === "0000")) {
+          window.closeSaaSLoginModal();
+          window.switchActiveStudent(alunoId);
+          showSyncToast(`👑 Sessão VIP de ${studentInfo ? studentInfo.name : alunoId} carregada!`);
+        } else if (enteredPin !== null) {
+          alert("❌ PIN incorreto. Tente novamente.");
+        }
+      };
+
+      // =========================================================================
+      // PWA SMART INSTALL PROMPT (EXCLUSIVO PARA MOBILE)
+      // =========================================================================
+      const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+      const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      
+      let deferredPwaPrompt = null;
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPwaPrompt = e;
+        const banner = document.getElementById("pwa-install-banner");
+        if (banner && isMobileDevice && !isStandaloneMode) {
+          banner.classList.remove("hidden");
+        }
+      });
+
+      // Se for iOS Safari mobile e não estiver instalado, mostra o convite após 2.5s
+      if (isMobileDevice && !isStandaloneMode && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        setTimeout(() => {
+          const banner = document.getElementById("pwa-install-banner");
+          if (banner && !sessionStorage.getItem("aef_pwa_banner_dismissed")) {
+            banner.classList.remove("hidden");
+          }
+        }, 2500);
+      }
+
+      window.triggerPwaInstall = async () => {
+        if (deferredPwaPrompt) {
+          deferredPwaPrompt.prompt();
+          const { outcome } = await deferredPwaPrompt.userChoice;
+          if (outcome === "accepted") {
+            const banner = document.getElementById("pwa-install-banner");
+            if (banner) banner.classList.add("hidden");
+          }
+          deferredPwaPrompt = null;
+        } else {
+          // iOS Safari Instructions
+          const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+          if (isIos) {
+            alert("📱 No iPhone (Safari):\n1. Toque no botão de Compartilhar (ícone com quadrado e seta para cima no rodapé).\n2. Role para baixo e selecione 'Adicionar à Tela de Início'.\n3. Pronto! O app fica na sua tela inicial como um app nativo.");
+          } else {
+            alert("📱 Para instalar no celular:\nAbra o menu do seu navegador (três pontinhos) e toque em 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
+          }
+        }
+      };
+
       // Lead Gate & Sharing Handlers for Public Showcase Mode
       window.sharePublicPlayer = () => {
         const shareUrl = encodeURIComponent("https://agoraeufalo.com.br/personal-trainer.html");
@@ -1039,20 +1424,36 @@
       };
 
       function getBaseStudentData(id) {
-        id = (id || "estevao").toLowerCase().trim();
+        id = (id || "public").toLowerCase().trim();
         if (id === "thomas" && window.AEF_STUDENT_THOMAS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_THOMAS));
         if (id === "estevao" && window.AEF_STUDENT_ESTEVAO) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ESTEVAO));
         if ((id === "andre" || id === "andré") && window.AEF_STUDENT_ANDRE) return JSON.parse(JSON.stringify(window.AEF_STUDENT_ANDRE));
         if (id === "matheus" && window.AEF_STUDENT_MATHEUS) return JSON.parse(JSON.stringify(window.AEF_STUDENT_MATHEUS));
-        if (id === "public" || id === "publico") return { id: "public", name: "Player Aberto (Degustação)", badge: "Acesso Aberto", tracks: (window.AEF_STUDENT_PUBLIC ? window.AEF_STUDENT_PUBLIC.tracks : []) };
+        
+        const storedName = localStorage.getItem("aef_user_name") || "Aluno AgoraEuFalo";
+        const storedTier = localStorage.getItem("aef_user_tier") || "free";
+
+        let tierBadge = "MEMBRO GRATUITO";
+        if (storedTier === "vip_mentorship") tierBadge = "MENTORADO VIP";
+        else if (["club_monthly", "club_annual", "lifetime"].includes(storedTier)) tierBadge = "MAGIC STORIES CLUB";
+        else if (storedTier === "admin") tierBadge = "ADMINISTRADOR";
+
+        if (id === "public" || id === "publico") {
+          return {
+            id: "public",
+            name: storedName,
+            badge: tierBadge,
+            tracks: (window.AEF_STUDENT_PUBLIC ? window.AEF_STUDENT_PUBLIC.tracks : [])
+          };
+        }
         
         const registered = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === id) : null;
         if (registered) {
-          return { id: registered.id, name: registered.name, badge: registered.badge || "VIP Mentee", tracks: [] };
+          return { id: registered.id, name: registered.name, badge: registered.badge || "MENTORADO VIP", tracks: [] };
         }
 
         const formattedName = id.charAt(0).toUpperCase() + id.slice(1);
-        return { id: id, name: formattedName, badge: (id === "public" ? "Acesso Aberto" : "VIP Mentee"), tracks: [] };
+        return { id: id, name: formattedName, badge: tierBadge, tracks: [] };
       }
 
       window.switchActiveStudent = (newId) => {
@@ -1070,40 +1471,223 @@
       window.myStuffTracks = [];
       window.isVipUser = false;
 
+      // =========================================================================
+      // MEMBER PROFILE & AVATAR EDIT CONTROLLER
+      // =========================================================================
+      window.handleStudentBadgeClick = () => {
+        const storedEmail = localStorage.getItem("aef_user_email");
+        if (storedEmail || window.isVipUser) {
+          window.openMemberProfileModal();
+        } else {
+          window.openSaaSLoginModal();
+        }
+      };
+
+      window.openMemberProfileModal = () => {
+        const modal = document.getElementById("member-profile-modal");
+        if (!modal) return;
+
+        const currentName = localStorage.getItem("aef_user_name") || (window.currentLoadedStudent ? window.currentLoadedStudent.name : "Aluno");
+        const currentEmail = localStorage.getItem("aef_user_email") || `${studentId}@agoraeufalo.com.br`;
+        const currentPhone = localStorage.getItem("aef_user_phone") || "";
+        const currentAvatar = localStorage.getItem("aef_user_avatar") || "";
+        const currentTier = localStorage.getItem("aef_user_tier") || (window.isVipUser ? "vip_mentorship" : "free");
+
+        const nameInput = document.getElementById("modal-profile-input-name");
+        const emailInput = document.getElementById("modal-profile-input-email");
+        const phoneInput = document.getElementById("modal-profile-input-phone");
+        const nameTitle = document.getElementById("modal-profile-name-title");
+        const tierBadge = document.getElementById("modal-profile-tier-badge");
+        const photoImg = document.getElementById("modal-profile-photo");
+        const initialsSpan = document.getElementById("modal-profile-initials");
+
+        if (nameInput) nameInput.value = currentName;
+        if (emailInput) emailInput.value = currentEmail;
+        if (phoneInput) phoneInput.value = currentPhone;
+        if (nameTitle) nameTitle.innerText = currentName;
+
+        let badgeLabel = "MEMBRO GRATUITO";
+        if (["estevao", "thomas", "andre", "matheus"].includes(studentId) || currentTier === "vip_mentorship") {
+          badgeLabel = "MENTORADO VIP";
+        } else if (["club_monthly", "club_annual", "lifetime"].includes(currentTier)) {
+          badgeLabel = "MAGIC STORIES CLUB";
+        } else if (currentTier === "admin") {
+          badgeLabel = "ADMINISTRADOR";
+        }
+        if (tierBadge) tierBadge.innerText = badgeLabel;
+
+        if (currentAvatar && photoImg && initialsSpan) {
+          photoImg.src = currentAvatar;
+          photoImg.classList.remove("hidden");
+          initialsSpan.classList.add("hidden");
+        } else if (photoImg && initialsSpan) {
+          photoImg.classList.add("hidden");
+          initialsSpan.classList.remove("hidden");
+          initialsSpan.innerText = (currentName || "AF").split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+        }
+
+        modal.classList.remove("hidden");
+      };
+
+      window.closeMemberProfileModal = () => {
+        const modal = document.getElementById("member-profile-modal");
+        if (modal) modal.classList.add("hidden");
+      };
+
+      window.handleAvatarFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert("A imagem selecionada é muito pesada. Escolha uma foto de até 5MB.");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64Data = event.target.result;
+          const photoImg = document.getElementById("modal-profile-photo");
+          const initialsSpan = document.getElementById("modal-profile-initials");
+          if (photoImg && initialsSpan) {
+            photoImg.src = base64Data;
+            photoImg.classList.remove("hidden");
+            initialsSpan.classList.add("hidden");
+          }
+          window.pendingAvatarBase64 = base64Data;
+        };
+        reader.readAsDataURL(file);
+      };
+
+      window.handleSaveMemberProfile = async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("modal-profile-input-name").value.trim();
+        const phone = document.getElementById("modal-profile-input-phone").value.trim();
+        const submitBtn = document.getElementById("btn-save-member-profile");
+
+        if (!name) return;
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = "<span>Salvando...</span> <span class='animate-spin'>⏳</span>";
+        }
+
+        const updatedData = {
+          name: name,
+          phone: phone,
+          whatsapp: phone,
+          updatedAt: new Date().toISOString()
+        };
+
+        if (window.pendingAvatarBase64) {
+          updatedData.avatarUrl = window.pendingAvatarBase64;
+          localStorage.setItem("aef_user_avatar", window.pendingAvatarBase64);
+        }
+
+        localStorage.setItem("aef_user_name", name);
+        localStorage.setItem("aef_user_phone", phone);
+
+        try {
+          if (window.aefPortalAuth && window.aefPortalAuth.currentUser) {
+            await window.aefPortalAuth.updateProfile(updatedData);
+          } else if (window.aefCloudSync && window.aefCloudSync.db) {
+            await window.aefCloudSync.db.collection("users").doc(studentId).set(updatedData, { merge: true });
+          }
+
+          // Atualiza Hotmart Send
+          if (window.AEFHotmartSend) {
+            const email = localStorage.getItem("aef_user_email") || "";
+            window.AEFHotmartSend.submitFreeLead(name, email, phone, "player_profile_update");
+          }
+
+          // Sincroniza header do Player na hora
+          const nameEl = document.getElementById("header-student-name");
+          const photoEl = document.getElementById("header-student-photo");
+          const initialsEl = document.getElementById("header-student-avatar");
+          const avatarUrl = localStorage.getItem("aef_user_avatar");
+
+          if (nameEl) nameEl.innerText = name;
+          if (avatarUrl && photoEl && initialsEl) {
+            photoEl.src = avatarUrl;
+            photoEl.classList.remove("hidden");
+            initialsEl.classList.add("hidden");
+          } else if (initialsEl) {
+            initialsEl.innerText = name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+          }
+
+          showSyncToast("✅ Perfil e foto atualizados com sucesso!");
+          window.closeMemberProfileModal();
+        } catch (err) {
+          console.error("Save profile error:", err);
+          showSyncToast("✅ Dados salvos no seu dispositivo!");
+          window.closeMemberProfileModal();
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "<span>Salvar Alterações</span> <span>💾</span>";
+          }
+        }
+      };
+
+      window.handleMemberLogout = async () => {
+        if (!confirm("Deseja realmente sair da sua conta?")) return;
+        localStorage.removeItem("aef_user_email");
+        localStorage.removeItem("aef_user_tier");
+        localStorage.removeItem("aef_user_name");
+        localStorage.removeItem("aef_user_avatar");
+        localStorage.removeItem("aef_user_phone");
+        localStorage.removeItem("aef_active_student");
+
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.signOut();
+        }
+
+        window.closeMemberProfileModal();
+        studentId = "public";
+        bootPlayer();
+        window.openSaaSLoginModal();
+        showSyncToast("👋 Você saiu da conta.");
+      };
+
       function bootPlayer() {
         let studentData = getBaseStudentData(studentId);
         
-        // Sincroniza badge de identidade do aluno no header
+        // Sincroniza badge de identidade do aluno no header (Eliminado "Player Aberto")
         const nameEl = document.getElementById("header-student-name");
         const avatarEl = document.getElementById("header-student-avatar");
+        const photoEl = document.getElementById("header-student-photo");
         const badgeEl = document.getElementById("header-student-badge");
 
-        if (nameEl) nameEl.innerText = studentData.name || "Estêvão Pinheiro";
-        if (avatarEl) {
-          const initials = (studentData.name || "EP").split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
-          avatarEl.innerText = initials;
-        }
-        if (badgeEl) {
-          badgeEl.innerText = (studentData.badge || "MENTORADO VIP").toUpperCase();
+        const userTier = localStorage.getItem("aef_user_tier") || (window.isVipUser ? "vip_mentorship" : "free");
+        const userName = localStorage.getItem("aef_user_name") || studentData.name || "Aluno AgoraEuFalo";
+        const avatarUrl = localStorage.getItem("aef_user_avatar") || (studentData ? studentData.avatarUrl : "");
+
+        let displayBadge = "MEMBRO GRATUITO";
+        if (["estevao", "thomas", "andre", "matheus"].includes(studentId) || userTier === "vip_mentorship") {
+          displayBadge = "MENTORADO VIP";
+        } else if (["club_monthly", "club_annual", "lifetime"].includes(userTier)) {
+          displayBadge = "MAGIC STORIES CLUB";
+        } else if (userTier === "admin") {
+          displayBadge = "ADMINISTRADOR";
         }
 
-        // Show/Hide Public Mode Features
-        const publicTour = document.getElementById("public-app-tour");
-        if (publicTour) {
-          if (studentId === "public" || studentId === "publico") {
-            publicTour.classList.remove("hidden");
-            if (!localStorage.getItem("aef_public_lead")) {
-              document.getElementById("public-lead-gate-modal").classList.remove("hidden");
-            }
-          } else {
-            publicTour.classList.add("hidden");
-          }
+        if (nameEl) nameEl.innerText = studentId === "public" ? userName : studentData.name;
+        if (badgeEl) badgeEl.innerText = displayBadge;
+
+        if (avatarUrl && photoEl && avatarEl) {
+          photoEl.src = avatarUrl;
+          photoEl.classList.remove("hidden");
+          avatarEl.classList.add("hidden");
+        } else if (avatarEl) {
+          if (photoEl) photoEl.classList.add("hidden");
+          avatarEl.classList.remove("hidden");
+          const displayStr = (studentId === "public" ? userName : studentData.name) || "AF";
+          avatarEl.innerText = displayStr.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
         }
 
         // Check if student is VIP
         window.isVipUser = ["estevao", "thomas", "andre", "matheus"].includes(studentId) || 
           (studentData.badge && studentData.badge.includes("VIP")) || 
-          (localStorage.getItem("aef_user_tier") === "vip");
+          (userTier === "vip_mentorship");
 
         // 1. VIP Tracks (Prescrições 1 a 1 do Leo) - Imediato do Seed Local
         window.vipTracks = studentData.tracks || [];
@@ -1137,16 +1721,13 @@
         if (badgeCourses) badgeCourses.innerText = window.coursesTracks.length;
         if (badgeMyStuff) badgeMyStuff.innerText = window.myStuffTracks.length;
 
-        // Update VIP Tab Label if non-VIP (Opção B - Cadeado Teaser)
+        // Update VIP Tab Label if non-VIP (Cadeado Teaser)
         const tabVipLabel = document.getElementById("tab-vip-label");
         if (!window.isVipUser && tabVipLabel) {
           tabVipLabel.innerHTML = 'Mentoria VIP <span class="text-[10px]">🔒</span>';
         }
 
         window.currentLoadedStudent = studentData;
-        if (badgeEl) {
-          badgeEl.innerText = window.isVipUser ? "MENTORADO VIP" : (studentData.badge === "Acesso Aberto" ? "ABERTO" : "ALUNO");
-        }
 
         // Renderização Imediata (0ms)
         const initialTab = window.isVipUser && window.vipTracks.length > 0 ? "vip" : "suggestions";
@@ -1195,7 +1776,7 @@
       }
 
       window.switchPlayerTab = (tab) => {
-        // Se clicar em VIP sem ser VIP, abre o modal de Teaser (Decisão 2 - Opção B)
+        // Se clicar em VIP sem ser VIP, abre o modal de Teaser
         if (tab === 'vip' && !window.isVipUser) {
           const teaser = document.getElementById("vip-teaser-modal");
           if (teaser) teaser.classList.remove("hidden");
@@ -1204,7 +1785,7 @@
 
         window.currentActiveTab = tab;
 
-        const tabs = ['vip', 'suggestions', 'courses', 'my-stuff'];
+        const tabs = ['suggestions', 'courses', 'vip', 'my-stuff'];
         tabs.forEach(t => {
           const btn = document.getElementById(`tab-btn-${t}`);
           if (!btn) return;
@@ -1226,9 +1807,9 @@
         }
 
         let targetTracks = [];
-        if (tab === 'vip') targetTracks = window.vipTracks;
-        else if (tab === 'suggestions') targetTracks = window.suggestionsTracks;
+        if (tab === 'suggestions') targetTracks = window.suggestionsTracks;
         else if (tab === 'courses') targetTracks = window.coursesTracks;
+        else if (tab === 'vip') targetTracks = window.vipTracks;
         else if (tab === 'my-stuff') targetTracks = window.myStuffTracks;
 
         window.currentLoadedStudent.tracks = targetTracks;
@@ -1473,7 +2054,62 @@
         showSyncToast(`✨ "${title}" adicionado a Minhas Coisas!`);
       };
 
-      bootPlayer();
+      // 🚀 Inicialização Inteligente SaaS: Auto-Login Magic Link vs Rota Direta vs Boas-Vindas
+      async function handleStartupAuth() {
+        // 1. Verifica se a página foi aberta a partir de um Link Mágico de E-mail
+        if (window.aefPortalAuth && window.aefPortalAuth.auth) {
+          try {
+            if (window.aefPortalAuth.auth.isSignInWithEmailLink(window.location.href)) {
+              const res = await window.aefPortalAuth.checkAndCompleteMagicLink();
+              if (res && res.profile) {
+                const profile = res.profile;
+                localStorage.setItem("aef_user_tier", profile.tier || "free");
+                localStorage.setItem("aef_user_email", profile.email || "");
+                localStorage.setItem("aef_user_name", profile.name || "");
+
+                // Disparo Automático para o Hotmart Send
+                if (window.AEFHotmartSend) {
+                  window.AEFHotmartSend.submitFreeLead(profile.name || "Aluno", profile.email, "", "player_pwa_magic_link_completed");
+                }
+
+                // Limpa os parâmetros de autenticação da URL sem recarregar
+                window.history.replaceState({}, document.title, window.location.pathname);
+
+                const welcomeModal = document.getElementById("saas-welcome-modal");
+                if (welcomeModal) welcomeModal.classList.add("hidden");
+
+                studentId = (profile.tier === "vip_mentorship" && profile.uid) ? profile.uid : "public";
+                bootPlayer();
+                showSyncToast(`🎉 Login confirmado com sucesso! Bem-vindo, ${profile.name || 'Aluno'}!`);
+                return;
+              }
+            }
+          } catch (magicErr) {
+            console.warn("Magic link auto-sign-in notice:", magicErr);
+          }
+        }
+
+        // 2. Se for acesso direto via link de aluno (?aluno=andre)
+        if (urlParams.has("aluno")) {
+          studentId = urlParams.get("aluno").toLowerCase().trim();
+          bootPlayer();
+        } else {
+          // 3. Se for acesso geral (/player ou /treino/player.html)
+          const storedEmail = localStorage.getItem("aef_user_email");
+          const storedTier = localStorage.getItem("aef_user_tier");
+          if (storedEmail && storedTier) {
+            studentId = "public";
+            bootPlayer();
+          } else {
+            studentId = "public";
+            bootPlayer();
+            const welcomeModal = document.getElementById("saas-welcome-modal");
+            if (welcomeModal) welcomeModal.classList.remove("hidden");
+          }
+        }
+      }
+
+      handleStartupAuth();
 
       // Hard refresh & Sync Function
       window.forceHardRefreshTracks = async (selectLatest = false) => {

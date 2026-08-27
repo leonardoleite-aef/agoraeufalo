@@ -143,23 +143,24 @@
             <span>Live Meet</span>
           </a>
         </nav>
-      </div>
 
-      <!-- Bottom Profile Card -->
-      <div class="pt-6 border-t border-slate-200/60 flex items-center justify-between">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-black text-xs flex items-center justify-center shadow-xs shrink-0" id="sidebar-avatar-initials">
-            EP
+        <!-- Profile Card (Posicionado logo abaixo da navegação para visibilidade 100% imediata) -->
+        <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between">
+          <div onclick="window.openMemberProfileModal()" class="flex items-center gap-2.5 min-w-0 cursor-pointer hover:bg-white/80 p-1.5 rounded-2xl border border-transparent hover:border-slate-200 transition group" title="Meu Perfil / Editar Dados e Foto">
+            <div class="w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-black text-xs flex items-center justify-center shadow-xs shrink-0 border border-amber-400/40" id="sidebar-avatar-container">
+              <span id="sidebar-avatar-initials">AF</span>
+              <img id="sidebar-avatar-photo" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+            </div>
+            <div class="leading-tight min-w-0 pr-1">
+              <p class="font-bold text-xs text-slate-900 truncate group-hover:text-amber-700 transition" id="sidebar-user-name">Aluno</p>
+              <p class="text-[9px] font-black text-amber-700 uppercase" id="sidebar-user-tier">MEMBRO</p>
+            </div>
           </div>
-          <div class="leading-tight min-w-0">
-            <p class="font-bold text-xs text-slate-900 truncate" id="sidebar-user-name">Estêvão Pinheiro</p>
-            <p class="text-[10px] font-black text-amber-700 uppercase" id="sidebar-user-tier">MENTORADO VIP</p>
-          </div>
+
+          <a href="admin.html" class="p-2 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-white transition" title="Painel Admin">
+            <i data-lucide="shield" class="w-4 h-4"></i>
+          </a>
         </div>
-
-        <a href="admin.html" class="p-2 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-white/60 transition" title="Painel Admin">
-          <i data-lucide="shield" class="w-4 h-4"></i>
-        </a>
       </div>
 
     </aside>
@@ -175,7 +176,7 @@
         <!-- Greeting -->
         <div class="space-y-1">
           <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900" id="top-greeting-title">
-            Good morning, <span id="top-user-name-target">Estêvão</span> 👋
+            Good morning, <span id="top-user-name-target">Aluno</span> 👋
           </h1>
           <p class="text-xs sm:text-sm text-slate-500 font-medium">Your oral reflex journey continues today.</p>
         </div>
@@ -195,7 +196,7 @@
 
             <div class="leading-tight min-w-0 pr-2">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Currently Playing</p>
-              <p class="text-xs font-bold text-slate-900 truncate max-w-[200px]">Sreehari Letter to Ashna</p>
+              <p class="text-xs font-bold text-slate-900 truncate max-w-[200px]" id="top-currently-playing-title">Magic Story MS001</p>
             </div>
 
             <a href="treino/player.html" class="w-9 h-9 rounded-2xl bg-slate-950 hover:bg-amber-500 text-white hover:text-slate-950 transition flex items-center justify-center shadow-xs shrink-0 active:scale-95">
@@ -207,9 +208,22 @@
           <div class="glass-pill rounded-3xl p-3 px-5 flex items-center gap-3 shadow-sm shrink-0">
             <span class="text-xl">🔥</span>
             <div class="leading-tight">
-              <p class="text-sm font-black text-slate-900 font-mono" id="streak-counter-pill">15 Days</p>
+              <p class="text-sm font-black text-slate-900 font-mono" id="streak-counter-pill">1 Day</p>
               <p class="text-[9px] font-extrabold text-emerald-600 uppercase">Active Streak</p>
             </div>
+          </div>
+
+          <!-- 3. Member Profile Capsule (Visível no topo, com foto e clique para editar) -->
+          <div onclick="window.openMemberProfileModal()" class="glass-pill rounded-3xl p-2.5 px-4 flex items-center gap-3 shadow-sm shrink-0 cursor-pointer hover:border-amber-400 hover:bg-amber-50/80 transition group border border-slate-200" title="Meu Perfil / Editar Dados e Foto">
+            <div class="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-black text-xs flex items-center justify-center shadow-xs shrink-0 border border-amber-400/50" id="top-avatar-container">
+              <span id="top-avatar-initials">AF</span>
+              <img id="top-avatar-photo" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+            </div>
+            <div class="leading-tight min-w-0">
+              <p class="text-xs font-bold text-slate-900 group-hover:text-amber-700 transition truncate max-w-[140px]" id="top-profile-name">Aluno</p>
+              <p class="text-[9px] font-black text-amber-700 uppercase" id="top-profile-tier">MEMBRO</p>
+            </div>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-600 transition"></i>
           </div>
 
         </div>
@@ -220,8 +234,8 @@
       <div class="flex items-center justify-between gap-4 py-2 border-b border-slate-200/60 text-xs">
         <div class="flex items-center gap-2 text-slate-400 flex-1 max-w-md">
           <i data-lucide="search" class="w-4 h-4"></i>
-          <input type="text" placeholder="Search Masterclasses, chunks, recordings..." class="w-full bg-transparent text-slate-900 placeholder-slate-400 focus:outline-none font-medium">
-          <span class="text-[10px] font-mono font-bold bg-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">⌘K</span>
+          <input type="text" id="portal-search-input" placeholder="Search Masterclasses, chunks, recordings..." class="w-full bg-transparent text-slate-900 placeholder-slate-400 focus:outline-none font-medium">
+          <kbd class="text-[10px] font-mono font-bold bg-slate-200/70 px-2 py-0.5 rounded-md text-slate-500 shadow-xs border border-slate-300/60" title="Atalho: Pressione Command+K ou Ctrl+K no teclado">⌘K</kbd>
         </div>
 
         <div class="hidden sm:flex items-center gap-3 text-slate-500 font-bold">
@@ -412,30 +426,324 @@
     <p>AgoraEuFalo © 2026 • Professor Leonardo Leite • Experiência Viva do Inglês</p>
   </footer>
 
+  <!-- ========================================== -->
+  <!-- MEMBER PROFILE & AVATAR EDIT MODAL         -->
+  <!-- ========================================== -->
+  <div id="member-profile-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative border border-slate-200 animate-in fade-in zoom-in duration-200">
+      <button onclick="window.closeMemberProfileModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1 text-sm transition cursor-pointer" title="Fechar">✕</button>
+
+      <div class="text-center mb-5">
+        <!-- Profile Photo with Upload Trigger -->
+        <div class="relative w-20 h-20 mx-auto mb-3 group cursor-pointer" onclick="document.getElementById('portal-profile-avatar-file').click()" title="Clique para trocar a foto">
+          <div id="modal-profile-avatar-container" class="w-full h-full rounded-2xl overflow-hidden bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 flex items-center justify-center text-xl font-black shadow-md border-2 border-amber-300">
+            <span id="modal-profile-initials">EP</span>
+            <img id="modal-profile-photo" src="" alt="Foto de Perfil" class="w-full h-full object-cover hidden">
+          </div>
+          <div class="absolute inset-0 bg-black/60 rounded-2xl opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-[10px] font-bold text-amber-300 transition backdrop-blur-xs">
+            <span>📷</span>
+            <span>Trocar</span>
+          </div>
+        </div>
+        <input type="file" id="portal-profile-avatar-file" accept="image/*" class="hidden" onchange="window.handlePortalAvatarSelect(event)">
+
+        <h3 class="text-lg font-bold font-serif text-slate-900" id="modal-profile-name-title">Meu Perfil de Aluno</h3>
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-[10px] uppercase tracking-wider inline-block mt-1" id="modal-profile-tier-badge">
+          MENTORADO VIP
+        </span>
+      </div>
+
+      <form id="portal-profile-form" onsubmit="window.handleSavePortalProfile(event)" class="space-y-3.5 text-left">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Seu Nome</label>
+          <input type="text" id="modal-profile-input-name" required placeholder="Seu nome completo" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-amber-500 transition">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">WhatsApp / Telefone</label>
+          <input type="tel" id="modal-profile-input-phone" placeholder="(DDD) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-amber-500 transition">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">E-mail Cadastrado</label>
+          <input type="email" id="modal-profile-input-email" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 text-xs font-medium cursor-not-allowed">
+        </div>
+
+        <div class="space-y-2 pt-2 border-t border-slate-100">
+          <button type="submit" id="btn-save-portal-profile" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98">
+            <span>Salvar Alterações</span> <span>💾</span>
+          </button>
+
+          <div class="flex items-center justify-between pt-1 text-xs">
+            <a href="treino/player.html" class="text-slate-500 hover:text-amber-600 font-medium transition">
+              🎙️ Ir para o Player
+            </a>
+            <button type="button" onclick="window.handlePortalLogout()" class="text-red-500 hover:text-red-600 font-medium transition cursor-pointer">
+              🚪 Sair da Conta
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="portal-toast" class="fixed top-6 right-6 z-50 hidden bg-slate-900 text-amber-300 px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-3">
+    <span>✅</span>
+    <span id="portal-toast-text">Perfil atualizado com sucesso!</span>
+  </div>
+
   <!-- Script Dinâmico -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const studentId = (urlParams.get('aluno') || localStorage.getItem('aef_active_student') || 'estevao').toLowerCase().trim();
+      let studentId = (urlParams.get('aluno') || localStorage.getItem('aef_active_student') || 'estevao').toLowerCase().trim();
+      if (studentId === 'player' || studentId === 'public') {
+        studentId = 'estevao';
+      }
 
       const studentData = (window.aefAudioHub && window.aefAudioHub.getStudents) 
         ? window.aefAudioHub.getStudents().find(s => s.id === studentId) 
         : null;
 
-      const studentName = studentData ? studentData.name : (studentId.charAt(0).toUpperCase() + studentId.slice(1));
+      const storedName = localStorage.getItem('aef_user_name');
+      const studentName = storedName || (studentData ? studentData.name : 'Estêvão Pinheiro');
+      const avatarUrl = localStorage.getItem('aef_user_avatar') || (studentData ? studentData.avatarUrl : '');
+      const userTier = localStorage.getItem('aef_user_tier') || (studentData ? 'vip_mentorship' : 'free');
       
       const topGreeting = document.getElementById('top-greeting-title');
       const sidebarName = document.getElementById('sidebar-user-name');
       const sidebarInitials = document.getElementById('sidebar-avatar-initials');
+      const sidebarPhoto = document.getElementById('sidebar-avatar-photo');
+      const sidebarTier = document.getElementById('sidebar-user-tier');
 
-      if (topGreeting) topGreeting.innerHTML = `Good morning, ${studentName} 👋`;
+      const topProfileName = document.getElementById('top-profile-name');
+      const topProfileTier = document.getElementById('top-profile-tier');
+      const topAvatarPhoto = document.getElementById('top-avatar-photo');
+      const topAvatarInitials = document.getElementById('top-avatar-initials');
+
+      let displayBadge = "MEMBRO GRATUITO";
+      if (["estevao", "thomas", "andre", "matheus"].includes(studentId) || userTier === "vip_mentorship") {
+        displayBadge = "MENTORADO VIP";
+      } else if (["club_monthly", "club_annual", "lifetime"].includes(userTier)) {
+        displayBadge = "MAGIC STORIES CLUB";
+      } else if (userTier === "admin") {
+        displayBadge = "ADMINISTRADOR";
+      }
+
+      function getTimeBasedGreeting() {
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 12) {
+          return "Good morning";
+        } else if (hour >= 12 && hour < 18) {
+          return "Good afternoon";
+        } else {
+          return "Good evening";
+        }
+      }
+
+      const greetingText = getTimeBasedGreeting();
+      if (topGreeting) topGreeting.innerHTML = `${greetingText}, <span id="top-user-name-target">${studentName.split(' ')[0]}</span> 👋`;
       if (sidebarName) sidebarName.innerText = studentName;
-      if (sidebarInitials) sidebarInitials.innerText = studentName.substring(0, 2).toUpperCase();
+      if (sidebarTier) sidebarTier.innerText = displayBadge;
+
+      if (topProfileName) topProfileName.innerText = studentName;
+      if (topProfileTier) topProfileTier.innerText = displayBadge;
+
+      const initials = studentName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'EP';
+
+      // Sidebar Photo
+      if (avatarUrl && sidebarPhoto && sidebarInitials) {
+        sidebarPhoto.src = avatarUrl;
+        sidebarPhoto.classList.remove('hidden');
+        sidebarInitials.classList.add('hidden');
+      } else if (sidebarInitials) {
+        sidebarInitials.innerText = initials;
+      }
+
+      // Top Header Photo
+      if (avatarUrl && topAvatarPhoto && topAvatarInitials) {
+        topAvatarPhoto.src = avatarUrl;
+        topAvatarPhoto.classList.remove('hidden');
+        topAvatarInitials.classList.add('hidden');
+      } else if (topAvatarInitials) {
+        topAvatarInitials.innerText = initials;
+      }
+
+      // Global Search Keyboard Shortcut (Cmd + K / Ctrl + K)
+      window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          const searchInput = document.getElementById('portal-search-input');
+          if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+          }
+        }
+      });
+
+      // Live search filter on Masterclasses
+      const searchInput = document.getElementById('portal-search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const q = e.target.value.toLowerCase().trim();
+          const cards = document.querySelectorAll('.masterclass-card, section .grid > div');
+          cards.forEach(card => {
+            if (!q) {
+              card.style.display = '';
+              return;
+            }
+            const text = card.innerText.toLowerCase();
+            card.style.display = text.includes(q) ? '' : 'none';
+          });
+        });
+      }
 
       if (window.lucide) {
         lucide.createIcons();
       }
     });
+
+    // Modal Member Profile Controls
+    window.openMemberProfileModal = () => {
+      const modal = document.getElementById('member-profile-modal');
+      if (!modal) return;
+
+      const currentName = localStorage.getItem('aef_user_name') || document.getElementById('sidebar-user-name').innerText;
+      const currentEmail = localStorage.getItem('aef_user_email') || 'aluno@agoraeufalo.com.br';
+      const currentPhone = localStorage.getItem('aef_user_phone') || '';
+      const currentAvatar = localStorage.getItem('aef_user_avatar') || '';
+      const currentTier = localStorage.getItem('aef_user_tier') || 'vip_mentorship';
+
+      document.getElementById('modal-profile-input-name').value = currentName;
+      document.getElementById('modal-profile-input-email').value = currentEmail;
+      document.getElementById('modal-profile-input-phone').value = currentPhone;
+      document.getElementById('modal-profile-name-title').innerText = currentName;
+
+      let badgeLabel = "MEMBRO GRATUITO";
+      if (currentTier === "vip_mentorship") badgeLabel = "MENTORADO VIP";
+      else if (["club_monthly", "club_annual", "lifetime"].includes(currentTier)) badgeLabel = "MAGIC STORIES CLUB";
+      else if (currentTier === "admin") badgeLabel = "ADMINISTRADOR";
+      document.getElementById('modal-profile-tier-badge').innerText = badgeLabel;
+
+      const photoImg = document.getElementById('modal-profile-photo');
+      const initialsSpan = document.getElementById('modal-profile-initials');
+      if (currentAvatar && photoImg && initialsSpan) {
+        photoImg.src = currentAvatar;
+        photoImg.classList.remove('hidden');
+        initialsSpan.classList.add('hidden');
+      } else if (photoImg && initialsSpan) {
+        photoImg.classList.add('hidden');
+        initialsSpan.classList.remove('hidden');
+        initialsSpan.innerText = currentName.substring(0, 2).toUpperCase();
+      }
+
+      modal.classList.remove('hidden');
+    };
+
+    window.closeMemberProfileModal = () => {
+      const modal = document.getElementById('member-profile-modal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.handlePortalAvatarSelect = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("A foto selecionada é muito pesada. Escolha uma foto de até 5MB.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Data = event.target.result;
+        const photoImg = document.getElementById('modal-profile-photo');
+        const initialsSpan = document.getElementById('modal-profile-initials');
+        if (photoImg && initialsSpan) {
+          photoImg.src = base64Data;
+          photoImg.classList.remove('hidden');
+          initialsSpan.classList.add('hidden');
+        }
+        window.pendingPortalAvatar = base64Data;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.handleSavePortalProfile = async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('modal-profile-input-name').value.trim();
+      const phone = document.getElementById('modal-profile-input-phone').value.trim();
+      const btn = document.getElementById('btn-save-portal-profile');
+
+      if (!name) return;
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>Salvando...</span> <span>⏳</span>';
+      }
+
+      const updateData = {
+        name,
+        phone,
+        whatsapp: phone,
+        updatedAt: new Date().toISOString()
+      };
+
+      if (window.pendingPortalAvatar) {
+        updateData.avatarUrl = window.pendingPortalAvatar;
+        localStorage.setItem('aef_user_avatar', window.pendingPortalAvatar);
+      }
+
+      localStorage.setItem('aef_user_name', name);
+      localStorage.setItem('aef_user_phone', phone);
+
+      try {
+        if (window.aefPortalAuth && window.aefPortalAuth.currentUser) {
+          await window.aefPortalAuth.updateProfile(updateData);
+        }
+
+        // Atualiza elementos visuais na hora
+        document.getElementById('sidebar-user-name').innerText = name;
+        document.getElementById('top-user-name-target').innerText = name.split(' ')[0];
+
+        const avatarUrl = localStorage.getItem('aef_user_avatar');
+        const photoEl = document.getElementById('sidebar-avatar-photo');
+        const initialsEl = document.getElementById('sidebar-avatar-initials');
+        if (avatarUrl && photoEl && initialsEl) {
+          photoEl.src = avatarUrl;
+          photoEl.classList.remove('hidden');
+          initialsEl.classList.add('hidden');
+        }
+
+        showPortalToast('✅ Perfil e foto atualizados com sucesso!');
+        window.closeMemberProfileModal();
+      } catch (err) {
+        showPortalToast('✅ Dados salvos no seu dispositivo!');
+        window.closeMemberProfileModal();
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Salvar Alterações</span> <span>💾</span>';
+        }
+      }
+    };
+
+    window.handlePortalLogout = async () => {
+      if (!confirm('Deseja realmente sair da sua conta?')) return;
+      localStorage.clear();
+      if (window.aefPortalAuth) await window.aefPortalAuth.signOut();
+      window.location.href = 'treino/player.html';
+    };
+
+    function showPortalToast(msg) {
+      const toast = document.getElementById('portal-toast');
+      const text = document.getElementById('portal-toast-text');
+      if (toast && text) {
+        text.innerText = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3500);
+      }
+    }
   </script>
 </body>
 </html>
