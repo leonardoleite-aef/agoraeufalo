@@ -43,40 +43,41 @@
     }
   </script>
 
-  <!-- Custom Stylesheet & Glassmorphism -->
-  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
-  
+  <!-- Lucide Icons & AgoraEuFalo SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D97706; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
   </style>
 </head>
-<body class="ambient-bg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
+<body class="bg-[#070B14] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
 
   <!-- ========================================== -->
-  <!-- 1. TOP CLASSROOM NAV BAR (Glassmorphism)   -->
+  <!-- 1. TOP CLASSROOM NAV BAR                   -->
   <!-- ========================================== -->
-  <header class="bg-white/85 backdrop-blur-xl border-b border-slate-200/80 sticky top-0 z-40 shadow-sm">
+  <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-lg">
     <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
       
       <!-- Left: Back & Course Breadcrumbs -->
       <div class="flex items-center gap-3 truncate">
-        <a href="portal.html" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0" title="Voltar ao Portal">
+        <a href="portal.html" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-amber-400 font-bold text-xs transition flex items-center gap-1.5 shrink-0" title="Voltar ao Portal">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
           <span class="hidden md:inline">Portal</span>
         </a>
 
-        <div class="h-4 w-px bg-slate-200 hidden md:block"></div>
+        <div class="h-4 w-px bg-white/10 hidden md:block"></div>
 
         <div class="truncate">
           <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-extrabold text-[9px] uppercase tracking-wider shrink-0 border border-amber-200" id="classroomCourseBadge">
+            <span class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider shrink-0" id="classroomCourseBadge">
               CURSO
             </span>
-            <h1 class="font-bold text-xs sm:text-sm text-slate-900 truncate" id="classroomCourseTitle">
+            <h1 class="font-bold text-xs sm:text-sm text-white truncate" id="classroomCourseTitle">
               Carregando Curso...
             </h1>
           </div>
@@ -85,25 +86,25 @@
 
       <!-- Center: Progress Indicator -->
       <div class="hidden xl:flex items-center gap-3">
-        <div class="w-48 bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
+        <div class="w-48 bg-white/10 rounded-full h-2 overflow-hidden">
           <div id="classroomProgressBar" class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-500" style="width: 25%;"></div>
         </div>
-        <span class="text-[11px] font-bold text-slate-600 font-mono" id="classroomProgressText">25% Concluído</span>
+        <span class="text-[11px] font-bold text-slate-300 font-mono" id="classroomProgressText">25% Concluído</span>
       </div>
 
       <!-- Right: Cinema Toggle & User Menu -->
       <div class="flex items-center gap-2 shrink-0">
-        <button onclick="toggleCinemaMode()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer" title="Expandir/Recolher Sidebar">
-          <i data-lucide="layout" class="w-3.5 h-3.5 text-amber-600"></i>
+        <button onclick="toggleCinemaMode()" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold text-xs transition flex items-center gap-1.5 cursor-pointer" title="Expandir/Recolher Sidebar">
+          <i data-lucide="layout" class="w-3.5 h-3.5 text-amber-400"></i>
           <span class="hidden sm:inline" id="cinemaToggleText">Modo Cinema</span>
         </button>
 
         <!-- User Profile Dropdown -->
-        <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-extrabold text-xs flex items-center justify-center shadow-sm" id="userAvatar">
+        <div class="flex items-center gap-2 pl-2 border-l border-white/10">
+          <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shadow" id="userAvatar">
             AL
           </div>
-          <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-rose-600 p-1 font-semibold" title="Sair da Conta">
+          <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-rose-400 p-1 font-semibold" title="Sair da Conta">
             <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
           </button>
         </div>
@@ -123,7 +124,7 @@
     <section id="mainStageContainer" class="lg:col-span-8 flex flex-col space-y-4 transition-all duration-300">
       
       <!-- Video / Cinema Player Card -->
-      <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl relative group">
+      <div class="bg-[#0A192F] border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative group">
         
         <!-- Video Container -->
         <div class="aspect-video bg-slate-950 relative flex items-center justify-center overflow-hidden" id="videoStage">
@@ -142,24 +143,24 @@
         </div>
 
         <!-- Lesson Meta & Action Bar -->
-        <div class="p-4 sm:p-5 bg-white/80 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="p-4 sm:p-5 bg-[#0A192F] border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div class="flex items-center gap-2 mb-1">
-              <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md uppercase tracking-wider font-mono" id="currentLessonOrderBadge">AULA 01</span>
-              <span class="text-slate-300">•</span>
-              <span class="text-[10px] text-slate-500 font-bold" id="currentModuleLabel">Módulo 01</span>
+              <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider font-mono" id="currentLessonOrderBadge">AULA 01</span>
+              <span class="text-slate-500">•</span>
+              <span class="text-[10px] text-slate-400" id="currentModuleLabel">Módulo 01</span>
             </div>
-            <h2 class="text-lg sm:text-xl font-bold font-serif text-slate-900 tracking-tight" id="currentLessonTitle">
+            <h2 class="text-lg sm:text-xl font-bold font-serif text-white tracking-tight" id="currentLessonTitle">
               Carregando aula...
             </h2>
           </div>
 
           <!-- Tactical Training Button -->
           <div class="flex items-center gap-2.5 shrink-0">
-            <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
+            <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
               <span>📌 Enviar para Training Player</span>
             </button>
-            <button onclick="toggleLessonCompletion()" id="btnMarkComplete" class="p-2.5 rounded-2xl bg-slate-100 hover:bg-emerald-500 hover:text-white text-slate-600 font-bold transition flex items-center gap-1.5 text-xs cursor-pointer border border-slate-200" title="Marcar como Concluída">
+            <button onclick="toggleLessonCompletion()" id="btnMarkComplete" class="p-2.5 rounded-2xl bg-white/10 hover:bg-emerald-500 hover:text-slate-950 text-slate-300 font-bold transition flex items-center gap-1.5 text-xs cursor-pointer" title="Marcar como Concluída">
               <i data-lucide="check" class="w-4 h-4"></i>
             </button>
           </div>
@@ -168,24 +169,24 @@
       </div>
 
       <!-- Pedagogical Content & Tabs -->
-      <div class="glass-card rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+      <div class="bg-[#0A192F] border border-white/10 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
         
         <!-- Tab Navigation -->
-        <div class="flex items-center justify-between border-b border-slate-200/80 pb-3">
-          <div class="flex rounded-2xl bg-slate-100 p-1 border border-slate-200 text-xs">
-            <button onclick="switchPedagogicalTab('content')" id="tabBtnContent" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-black transition shadow-sm">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex rounded-2xl bg-white/5 p-1 border border-white/10 text-xs">
+            <button onclick="switchPedagogicalTab('content')" id="tabBtnContent" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black transition">
               📖 Conteúdo & Chunks
             </button>
-            <button onclick="switchPedagogicalTab('golden')" id="tabBtnGolden" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-950 font-bold transition">
+            <button onclick="switchPedagogicalTab('golden')" id="tabBtnGolden" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition">
               💡 Sacada de Ouro
             </button>
-            <button onclick="switchPedagogicalTab('materials')" id="tabBtnMaterials" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-950 font-bold transition">
+            <button onclick="switchPedagogicalTab('materials')" id="tabBtnMaterials" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white font-bold transition">
               📄 Material em PDF
             </button>
           </div>
 
           <!-- Media Quick Controls -->
-          <div class="hidden sm:flex items-center gap-2 text-xs text-slate-500 font-mono">
+          <div class="hidden sm:flex items-center gap-2 text-xs text-slate-400 font-mono">
             <span id="audioTrackStatus">Áudio 128k Pronto</span>
           </div>
         </div>
@@ -200,12 +201,12 @@
 
         <!-- TAB 2: SACADA DE OURO DO PROFESSOR LEO -->
         <div id="tabGoldenSection" class="hidden space-y-3">
-          <div class="p-6 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-950 space-y-2">
+          <div class="p-6 rounded-2xl bg-amber-500/10 border-2 border-amber-400/40 text-amber-200 space-y-2">
             <div class="flex items-center gap-2">
               <span class="text-2xl">💡</span>
-              <h3 class="font-bold text-sm text-amber-900 font-serif">A Sacada de Ouro do Professor Leonardo Leite</h3>
+              <h3 class="font-bold text-sm text-amber-300 font-serif">A Sacada de Ouro do Professor Leonardo Leite</h3>
             </div>
-            <p class="text-xs sm:text-sm text-slate-800 leading-relaxed italic" id="goldenTipDisplay">
+            <p class="text-xs sm:text-sm text-amber-100 leading-relaxed italic" id="goldenTipDisplay">
               "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia."
             </p>
           </div>
@@ -213,17 +214,17 @@
 
         <!-- TAB 3: MATERIAIS & APOSTILA EM PDF -->
         <div id="tabMaterialsSection" class="hidden space-y-3">
-          <div class="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl font-bold">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold">
                 📄
               </div>
               <div>
-                <h4 class="font-bold text-sm text-slate-900 font-serif" id="pdfMaterialTitle">Apostila Diagramada da Aula</h4>
-                <p class="text-xs text-slate-500">Guia em PDF para revisão offline e exercícios práticos.</p>
+                <h4 class="font-bold text-sm text-white font-serif" id="pdfMaterialTitle">Apostila Diagramada da Aula</h4>
+                <p class="text-xs text-slate-400">Guia em PDF para revisão offline e exercícios práticos.</p>
               </div>
             </div>
-            <a id="pdfDownloadLink" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2">
+            <a id="pdfDownloadLink" href="#" target="_blank" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-2">
               <i data-lucide="download" class="w-4 h-4"></i>
               <span>Baixar Apostila (PDF)</span>
             </a>
@@ -237,16 +238,16 @@
     <!-- ======================================================== -->
     <!-- RIGHT: SIDEBAR DE MÓDULOS & AULAS (4 cols)              -->
     <!-- ======================================================== -->
-    <aside id="sidebarOutline" class="lg:col-span-4 glass-panel rounded-3xl p-4 sm:p-5 flex flex-col h-[calc(100vh-90px)] sticky top-[75px] shadow-xl overflow-hidden">
+    <aside id="sidebarOutline" class="lg:col-span-4 bg-[#0A192F] border border-white/10 rounded-3xl p-4 sm:p-5 flex flex-col h-[calc(100vh-90px)] sticky top-[75px] shadow-2xl overflow-hidden">
       
       <!-- Sidebar Header -->
-      <div class="pb-3 border-b border-slate-200/80 flex items-center justify-between">
+      <div class="pb-3 border-b border-white/10 flex items-center justify-between">
         <div>
-          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-            <i data-lucide="layers" class="w-4 h-4 text-amber-600"></i>
+          <h3 class="font-bold text-sm text-white flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i>
             <span>Conteúdo do Curso</span>
           </h3>
-          <p class="text-[11px] text-slate-500" id="sidebarTotalLessonsCount">Carregando aulas...</p>
+          <p class="text-[11px] text-slate-400" id="sidebarTotalLessonsCount">Carregando aulas...</p>
         </div>
       </div>
 
