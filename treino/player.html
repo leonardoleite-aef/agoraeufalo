@@ -263,6 +263,17 @@
     <!-- Reading View -->
     <div id="reading-view" class="w-full flex flex-col space-y-4 pb-24 sm:pb-8">
       
+      <!-- Return to Classroom Active Lesson Banner -->
+      <div id="return-to-classroom-banner" class="hidden p-3.5 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-between gap-3 shadow-lg border border-amber-400 font-bold text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🎓</span>
+          <span id="return-to-classroom-text">Você está no Training Player praticando uma aula do curso.</span>
+        </div>
+        <a id="return-to-classroom-link" href="../sala-de-aula.html" class="px-3.5 py-1.5 rounded-xl bg-slate-950 text-white hover:bg-slate-900 font-black text-xs shrink-0 flex items-center gap-1 transition shadow-sm">
+          <span>Voltar para a Aula ➔</span>
+        </a>
+      </div>
+
       <!-- Unified SaaS 4-Tab Navigation Bar -->
       <div class="flex items-center gap-1.5 p-1.5 bg-stone-200/80 dark:bg-slate-900 rounded-2xl border border-stone-300/80 dark:border-slate-800 shadow-inner overflow-x-auto custom-scrollbar">
         <!-- 1. Sugestões do Leo -->
@@ -1754,11 +1765,46 @@
           tabVipLabel.innerHTML = 'Mentoria VIP <span class="text-[10px]">🔒</span>';
         }
 
-        window.currentLoadedStudent = studentData;
+        // Check for Classroom / Deep Link parameters
+        const reqTab = urlParams.get("tab");
+        const reqTrackId = urlParams.get("trackId") || urlParams.get("track");
+        const reqActivity = urlParams.get("activity");
+        const fromCourse = urlParams.get("fromCourse") || urlParams.get("course");
+        const fromLesson = urlParams.get("fromLesson") || urlParams.get("lesson");
+
+        if (fromCourse) {
+          const retBanner = document.getElementById("return-to-classroom-banner");
+          const retLink = document.getElementById("return-to-classroom-link");
+          if (retBanner && retLink) {
+            retLink.href = `../sala-de-aula.html?course=${fromCourse}${fromLesson ? `&lesson=${fromLesson}` : ''}`;
+            retBanner.classList.remove("hidden");
+          }
+        }
 
         // Renderização Imediata (0ms)
-        const initialTab = window.isVipUser && window.vipTracks.length > 0 ? "vip" : "suggestions";
+        let initialTab = "suggestions";
+        if (reqTab && ['suggestions', 'courses', 'vip', 'my-stuff'].includes(reqTab)) {
+          initialTab = reqTab;
+        } else if (fromCourse) {
+          initialTab = "courses";
+        } else if (window.isVipUser && window.vipTracks.length > 0) {
+          initialTab = "vip";
+        }
         window.switchPlayerTab(initialTab);
+
+        // Se uma faixa específica foi solicitada via URL, busca e seleciona
+        if (reqTrackId && window.currentLoadedStudent?.tracks) {
+          const tIdx = window.currentLoadedStudent.tracks.findIndex(t => t.id === reqTrackId || (t.title && t.title.toLowerCase().includes(reqTrackId.toLowerCase())));
+          if (tIdx >= 0) {
+            engine.loadStudentData(window.currentLoadedStudent, tIdx);
+            renderPlaylistDrawer(window.currentLoadedStudent.tracks, tIdx);
+          }
+        }
+
+        // Se uma atividade específica foi solicitada via URL (ex: activity=look_retell)
+        if (reqActivity && ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'].includes(reqActivity)) {
+          window.switchActivityMode(reqActivity);
+        }
 
         // Async Background Cloud Sync (Sem travar o usuário)
         if (window.aefCloudSync) {

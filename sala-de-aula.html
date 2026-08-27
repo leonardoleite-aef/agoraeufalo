@@ -620,7 +620,16 @@
         localStorage.setItem("aef_mylab_tracks_public", JSON.stringify(currentLab));
       }
 
-      showToast("📌 Aula enviada com sucesso para o seu Training Player de Bolso!");
+      const playerUrl = `treino/player.html?tab=courses&trackId=${encodeURIComponent(activeLesson.id)}&fromCourse=${encodeURIComponent(currentCourseId || 'magic-story')}&fromLesson=${encodeURIComponent(activeLesson.id)}&activity=listen_read`;
+
+      showToast(`
+        <div class="flex flex-col gap-1.5 text-left">
+          <span>📌 <strong>${activeLesson.title}</strong> enviada para o Training Player!</span>
+          <a href="${playerUrl}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-sm transition">
+            <span>Abrir no Training Player ➔</span>
+          </a>
+        </div>
+      `, 6000);
     }
 
     function toggleCinemaMode() {
