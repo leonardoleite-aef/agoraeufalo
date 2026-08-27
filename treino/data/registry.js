@@ -28,7 +28,7 @@ window.AEF_REGISTRY = {
     },
     {
       id: "andre",
-      name: "André",
+      name: "André Birchal",
       badge: "VIP Mentee",
       subtitle: "Professional Storytelling & Global Interviews",
       avatarEmoji: "💼",

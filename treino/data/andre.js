@@ -4,7 +4,7 @@
  */
 window.AEF_STUDENT_ANDRE = {
   "id": "andre",
-  "name": "André",
+  "name": "André Birchal",
   "badge": "VIP Mentee",
   "tracks": [
     {

@@ -839,9 +839,9 @@
       },
       {
         uid: 'andre',
-        name: 'André',
-        email: 'andre@techglobal.com',
-        phone: '21999995555',
+        name: 'André Birchal',
+        email: 'andrebarrote1992@gmail.com',
+        phone: '+55 11 99868-4559',
         tier: 'vip_mentorship',
         role: 'student',
         stats: { streakDays: 3, totalListeningMinutes: 60 },
@@ -1694,7 +1694,10 @@
         await window.aefPortalAuth.ready();
         const db = window.aefPortalAuth.db;
         if (db) {
-          await db.collection('users').doc(uid).update({ tier: newTier });
+          await db.collection('users').doc(uid).set({ 
+            tier: newTier,
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
         }
         const student = rawStudentsList.find(s => s.uid === uid);
         if (student) {
@@ -1739,13 +1742,14 @@
         await window.aefPortalAuth.ready();
         const db = window.aefPortalAuth.db;
         if (db) {
-          await db.collection('users').doc(uid).update({
+          await db.collection('users').doc(uid).set({
             name: name,
             email: email,
             phone: phone,
+            whatsapp: phone,
             tier: tier,
             updatedAt: new Date().toISOString()
-          });
+          }, { merge: true });
         }
         const student = rawStudentsList.find(s => s.uid === uid);
         if (student) {
