@@ -1635,42 +1635,104 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       }
     });
 
+    function handleTierChange(tierVal) {
+      const studentsContainer = document.getElementById('publishStudentsContainer');
+      if (!studentsContainer) return;
+      if (tierVal === 'tier3_vip') {
+        studentsContainer.classList.remove('hidden');
+      } else {
+        studentsContainer.classList.add('hidden');
+      }
+    }
+
     function loadTemplate(type) {
       const scriptArea = document.getElementById('scriptInput');
       const titleInput = document.getElementById('audioTitleInput');
       const menu = document.getElementById('templateMenu');
       if (menu) menu.classList.add('hidden');
 
-      if (type === 'magic_story') {
+      if (type === 'magic_story_1_listen_read' || type === 'magic_story') {
         setSpeakerMode('dual');
         document.getElementById('speakerAAlias').value = "Leo";
         document.getElementById('speakerBAlias').value = "Student";
         document.getElementById('speakerAVoiceSelect').value = "Kore";
         document.getElementById('speakerBVoiceSelect').value = "Puck";
-        if (titleInput) titleInput.value = "magic_story_reflex_01";
+        if (titleInput) titleInput.value = "magic_story_01_listen_read";
         if (scriptArea) {
           scriptArea.value = 
-`Leo: Listen carefully. Grazi lived in a small apartment in São Paulo. Did she live in New York?
-Student: No, she didn't! She lived in São Paulo.
-Leo: Exactly. Where did she want to move?
-Student: She wanted to move to London to work at a design studio.
-Leo: Brilliant! Repeat this sound chunk: "She wanted to move to London."`;
+`Leo: Listen carefully. Grazi lived in a small apartment in São Paulo. [pt: Ouça com atenção. A Grazi morava num apartamento pequeno em São Paulo.]
+Student: Did she live in New York? [pt: Ela morava em Nova York?]
+Leo: No, she didn't! She lived in São Paulo. [pt: Não, de jeito nenhum! Ela morava em São Paulo.]
+Student: Where did she want to move? [pt: Pra onde ela queria se mudar?]
+Leo: She wanted to move to London to work at a design studio. [pt: Ela queria se mudar pra Londres pra trabalhar num estúdio de design.]
+Leo: Repeat this sound chunk: "She wanted to move to London." [pt: Repita este bloco sonoro: "Ela queria se mudar pra Londres."]`;
         }
-      } else if (type === 'listen_answer') {
+      } else if (type === 'magic_story_2_vocab') {
+        setSpeakerMode('single');
+        document.getElementById('singleVoiceSelect').value = "Charon";
+        updateSingleVoiceInfo();
+        if (titleInput) titleInput.value = "magic_story_02_vocabulary_chunks";
+        if (scriptArea) {
+          scriptArea.value = 
+`Let's master the key sound chunks from this story.
+Chunk number one: "Run out of time." For example: "We're running out of time before the deadline."
+Chunk number two: "Keep track of." For example: "It's hard to keep track of all these expenses."
+Chunk number three: "Come up with." For example: "She came up with a brilliant idea."
+Repeat each chunk in your mind and out loud with natural rhythm.`;
+        }
+      } else if (type === 'magic_story_3_listen_answer' || type === 'listen_answer') {
         setSpeakerMode('dual');
-        document.getElementById('speakerAAlias').value = "Coach";
-        document.getElementById('speakerBAlias').value = "Learner";
+        document.getElementById('speakerAAlias').value = "Leo";
+        document.getElementById('speakerBAlias').value = "Student";
         document.getElementById('speakerAVoiceSelect').value = "Charon";
         document.getElementById('speakerBVoiceSelect').value = "Fenrir";
-        if (titleInput) titleInput.value = "drill_listen_and_answer_01";
+        if (titleInput) titleInput.value = "magic_story_03_listen_and_answer";
         if (scriptArea) {
           scriptArea.value = 
-`Coach: Did Mark buy a new laptop yesterday?
-Learner: Yes, he bought a brand new MacBook.
-Coach: Did he pay with credit card?
-Learner: No, he paid with cash.
-Coach: Great reflex! Answer again: Was it cheap?
-Learner: No, it wasn't cheap at all!`;
+`Leo: Did Mark buy a new laptop yesterday? ... [pause] ... Yes, he bought a brand new MacBook!
+Leo: Did he pay with credit card? ... [pause] ... No, he paid with cash!
+Leo: Was the laptop cheap? ... [pause] ... No, it wasn't cheap at all!
+Leo: Did he get a discount? ... [pause] ... Yes, he got a ten percent discount!`;
+        }
+      } else if (type === 'magic_story_4_look_retell') {
+        setSpeakerMode('single');
+        document.getElementById('singleVoiceSelect').value = "Puck";
+        updateSingleVoiceInfo();
+        if (titleInput) titleInput.value = "magic_story_04_look_and_retell_guide";
+        if (scriptArea) {
+          scriptArea.value = 
+`Look & Retell Visual Guide Questions:
+1. Who was Grazi and where did she live?
+2. What was her biggest dream regarding her design career?
+3. Why was moving to London a challenging decision for her?
+4. How did she feel when she finally arrived at Heathrow airport?
+Now click the record button and retell the whole story in your own words!`;
+        }
+      } else if (type === 'magic_story_5_listen_ask') {
+        setSpeakerMode('dual');
+        document.getElementById('speakerAAlias').value = "Leo";
+        document.getElementById('speakerBAlias').value = "Student";
+        document.getElementById('speakerAVoiceSelect').value = "Charon";
+        document.getElementById('speakerBVoiceSelect').value = "Aoede";
+        if (titleInput) titleInput.value = "magic_story_05_listen_and_ask";
+        if (scriptArea) {
+          scriptArea.value = 
+`Leo: Statement: Tom bought a red car yesterday. Ask where! ... [pause] ... Where did Tom buy a red car?
+Leo: Statement: Sarah is traveling to London next week. Ask when! ... [pause] ... When is Sarah traveling to London?
+Leo: Statement: They finished the project ahead of time. Ask how! ... [pause] ... How did they finish the project ahead of time?`;
+        }
+      } else if (type === 'magic_story_6_pronunciation') {
+        setSpeakerMode('single');
+        document.getElementById('singleVoiceSelect').value = "Aoede";
+        updateSingleVoiceInfo();
+        if (titleInput) titleInput.value = "magic_story_06_pronunciation_connected_speech";
+        if (scriptArea) {
+          scriptArea.value = 
+`Connected speech and rhythm drill:
+Notice the reduction: "What are you going to do?" becomes "Whatcha gonna do?"
+Notice the link: "Hold on a second" connects as "Hold-on-a-second".
+Notice the drop: "Last night" drops the 't' smoothly into "Las'night".
+Repeat with the continuous loop button until the mouth movement becomes a reflex.`;
         }
       } else if (type === 'coffee_shop') {
         setSpeakerMode('dual');
@@ -2350,13 +2412,20 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
       const category = document.getElementById('publishCategorySelect')?.value || "Magic Story";
       const summary = document.getElementById('publishSummaryInput')?.value.trim() || "";
       const goldenTip = document.getElementById('publishGoldenTipInput')?.value.trim() || "Respire nas pausas e conecte os chunks.";
+      const tier = document.querySelector('input[name="publishTier"]:checked')?.value || 'tier1_suggestions';
 
-      const selectedCheckboxes = document.querySelectorAll('input[name="publishRecipient"]:checked');
-      const assignedTo = Array.from(selectedCheckboxes).map(cb => cb.value);
-
-      if (assignedTo.length === 0) {
-        showToast("Selecione pelo menos um aluno destinatário ou o Player Público.", "warning");
-        return;
+      let assignedTo = ['public'];
+      if (tier === 'tier3_vip') {
+        const selectedCheckboxes = document.querySelectorAll('input[name="publishRecipient"]:checked');
+        assignedTo = Array.from(selectedCheckboxes).map(cb => cb.value);
+        if (assignedTo.length === 0) {
+          showToast("Selecione pelo menos um mentorado VIP para o Tier 3.", "warning");
+          return;
+        }
+      } else if (tier === 'tier2_courses') {
+        assignedTo = ['courses_all'];
+      } else {
+        assignedTo = ['public'];
       }
 
       if (!STATE.currentAudioBlob) {
@@ -2366,13 +2435,28 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
 
       if (publishBtn) {
         publishBtn.disabled = true;
-        publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando...</span>`;
+        publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Alinhando Fonética & Nuvem...</span>`;
       }
 
       try {
         const trackId = (STATE.currentMeta?.title || 'track_' + Date.now()).toLowerCase().replace(/[^a-z0-9_-]/g, '_');
         const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
         const durationSec = Math.round((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
+
+        // STT Phonetic Alignment Step via Gemini 2.5 Flash if API Key is available
+        let finalSentences = currentParsedSentences;
+        if (STATE.apiKey && window.aefAudioHub) {
+          try {
+            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Alinhando Timestamps IA...</span>`;
+            const aligned = await window.aefAudioHub.transcribeAudioWithGemini(STATE.currentAudioBlob, STATE.apiKey);
+            if (aligned && aligned.length > 0) {
+              finalSentences = aligned;
+              console.log("🎯 [TTS Studio] Timestamps fonéticos e tradução falada alinhados via Gemini:", aligned);
+            }
+          } catch (sttErr) {
+            console.warn("⚠️ Alinhamento STT não concluído, usando fallback heurístico:", sttErr);
+          }
+        }
 
         let coverImg = STATE.currentMeta?.coverImage || "";
         if (!coverImg) {
@@ -2398,7 +2482,7 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
           videoUrl: document.getElementById("publishVideoUrlInput")?.value.trim() || "",
           speakers: STATE.currentMeta?.speakers || "Gemini HD",
           scriptRaw: STATE.currentMeta?.script || "",
-          sentences: currentParsedSentences,
+          sentences: finalSentences,
           assignedTo: assignedTo,
           coverImage: coverImg
         };
@@ -2407,36 +2491,36 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
           await window.aefAudioHub.saveTrack(trackData, STATE.currentAudioBlob);
         }
 
-        // Upload to Google Cloud Storage & Firestore for global multi-device access
+        // Upload to Google Cloud Storage & Firestore based on Tier
         if (window.aefCloudSync) {
-          for (const sId of assignedTo) {
-            try {
-              if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Nuvem Google (${sId})...</span>`;
+          if (tier === 'tier1_suggestions') {
+            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando Sugestões do Leo...</span>`;
+            await window.aefCloudSync.publishSuggestionTrack(trackData);
+          } else if (tier === 'tier2_courses') {
+            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando em Meus Cursos...</span>`;
+            await window.aefCloudSync.publishCourseTrack('public_courses', trackData);
+          } else if (tier === 'tier3_vip') {
+            for (const sId of assignedTo) {
+              if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Nuvem VIP (${sId})...</span>`;
               await window.aefCloudSync.publishTrackToCloud({
                 studentId: sId,
                 track: trackData,
                 audioBlob: STATE.currentAudioBlob
               });
-            } catch (cloudErr) {
-              console.warn(`⚠️ Erro ao sincronizar com a nuvem para ${sId}:`, cloudErr);
             }
           }
         }
 
         closePublishModal();
 
-        const firstTarget = assignedTo[0];
-        const studentObj = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === firstTarget) : null;
-        const studentName = studentObj ? studentObj.name : (firstTarget === 'public' ? 'Público' : firstTarget);
-
-        const targetUrl = firstTarget === 'public' ? `treino/player.html?aluno=public` : `treino/player.html?aluno=${firstTarget}`;
+        const targetUrl = tier === 'tier3_vip' ? `treino/player.html?aluno=${assignedTo[0]}` : `treino/player.html?aluno=public`;
 
         showToast(`
           <div class="flex flex-col gap-1">
-            <span>🚀 <strong>${title}</strong> publicado na Nuvem Global para <strong>${assignedTo.join(', ')}</strong>!</span>
-            <span class="text-[10px] text-emerald-300">Disponível em tempo real no mundo inteiro.</span>
+            <span>🚀 <strong>${title}</strong> publicado com sucesso (${tier === 'tier1_suggestions' ? 'Tier 1: Sugestões' : tier === 'tier2_courses' ? 'Tier 2: Cursos' : 'Tier 3: VIP'})!</span>
+            <span class="text-[10px] text-emerald-300">Timestamps e tradução falada sincronizados na Nuvem.</span>
             <a href="${targetUrl}" target="_blank" class="inline-flex items-center gap-1 text-amber-300 hover:underline font-bold text-[11px] mt-0.5">
-              <span>Abrir Player de ${studentName}</span>
+              <span>Abrir Player de Treino</span>
               <i data-lucide="external-link" class="w-3 h-3"></i>
             </a>
           </div>
