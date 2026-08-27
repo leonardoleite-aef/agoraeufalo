@@ -323,11 +323,22 @@ class AEFAudioHub {
         cleanText = parts.slice(1).join(':').trim();
       }
 
+      cleanText = (cleanText || line)
+        .replace(/\\?\[\s*break\s+time=[^\]]+\\?\]/gi, "")
+        .replace(/\\?\[\s*long\s+pause\s*\\?\]/gi, "")
+        .replace(/\\?\[\s*pause\s*\\?\]/gi, "")
+        .replace(/\\?\[\s*pausa[^\]]*\\?\]/gi, "")
+        .replace(/\\?\[\s*break[^\]]*\\?\]/gi, "")
+        .replace(/\\([!?.',"-])/g, "$1")
+        .replace(/\s+/g, " ")
+        .replace(/\s+([!?,.])/g, "$1")
+        .trim();
+
       return {
         id: idx + 1,
         start: start,
         end: end,
-        text: cleanText || line,
+        text: cleanText,
         notes: notes ? `Speaker: ${notes}` : ""
       };
     });

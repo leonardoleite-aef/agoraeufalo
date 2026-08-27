@@ -1544,10 +1544,25 @@
           return;
         }
 
+        function cleanTextDisplay(text) {
+          if (!text) return "";
+          return text
+            .replace(/\\?\[\s*break\s+time=[^\]]+\\?\]/gi, "")
+            .replace(/\\?\[\s*long\s+pause\s*\\?\]/gi, "")
+            .replace(/\\?\[\s*pause\s*\\?\]/gi, "")
+            .replace(/\\?\[\s*pausa[^\]]*\\?\]/gi, "")
+            .replace(/\\?\[\s*break[^\]]*\\?\]/gi, "")
+            .replace(/\\([!?.',"-])/g, "$1")
+            .replace(/\s+/g, " ")
+            .replace(/\s+([!?,.])/g, "$1")
+            .trim();
+        }
+
         container.innerHTML = sentences.map((s, idx) => {
-          let translationText = s.spokenTranslation || s.translation || "";
-          if (!translationText && window.AEFSpokenTranslator && s.text) {
-            translationText = window.AEFSpokenTranslator.translateToSpokenPt(s.text);
+          const cleanSentenceText = cleanTextDisplay(s.text);
+          let translationText = cleanTextDisplay(s.spokenTranslation || s.translation || "");
+          if (!translationText && window.AEFSpokenTranslator && cleanSentenceText) {
+            translationText = window.AEFSpokenTranslator.translateToSpokenPt(cleanSentenceText);
           }
 
           return `
@@ -1580,7 +1595,7 @@
                   <div class="space-y-2">
                     <div>
                       <label class="text-[10px] uppercase font-bold text-slate-500 block mb-0.5">Inglês Original:</label>
-                      <textarea onchange="window.updateSentenceText(${idx}, this.value)" class="w-full p-2.5 bg-amber-50/50 dark:bg-slate-900 rounded-xl border border-amber-300 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white leading-relaxed focus:outline-none focus:border-amber-500" rows="2">${s.text}</textarea>
+                      <textarea onchange="window.updateSentenceText(${idx}, this.value)" class="w-full p-2.5 bg-amber-50/50 dark:bg-slate-900 rounded-xl border border-amber-300 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white leading-relaxed focus:outline-none focus:border-amber-500" rows="2">${cleanSentenceText}</textarea>
                     </div>
                     <div>
                       <label class="text-[10px] uppercase font-bold text-amber-700 dark:text-amber-400 block mb-0.5">Tradução em Português Falado Real:</label>
@@ -1589,7 +1604,7 @@
                   </div>
                 ` : `
                   <p class="sentence-text text-[#0A192F] dark:text-slate-100 leading-relaxed font-bold text-base sm:text-lg">
-                    ${s.text}
+                    ${cleanSentenceText}
                   </p>
                   ${translationText ? `
                     <p class="sentence-translation text-amber-900/90 dark:text-amber-300/90 leading-relaxed text-xs sm:text-sm font-medium italic pt-0.5">
