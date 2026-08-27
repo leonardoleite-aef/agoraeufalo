@@ -251,6 +251,9 @@
         </button>
       </div>
 
+      <!-- Horizontal Episode Pills Bar (Instant 1-Touch Switching between Tracks) -->
+      <div id="inline-track-pills-container" class="hidden flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar"></div>
+
       <!-- My Lab Empty / Add Track Banner -->
       <div id="mylab-header-banner" class="hidden p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5">
@@ -1719,6 +1722,40 @@
                 <h4 class="font-bold text-xs text-white truncate ${isActive ? 'text-amber-300' : ''}">${t.title}</h4>
               </div>
             </div>
+          `;
+        }).join("");
+
+        renderInlineTrackPills(validTracks, activeIndex);
+      }
+
+      function renderInlineTrackPills(tracks, activeIndex) {
+        const container = document.getElementById("inline-track-pills-container");
+        if (!container) return;
+
+        const validTracks = (tracks || []).filter(t => t && typeof t === 'object' && t.title && t.title.trim().length > 0);
+        if (validTracks.length <= 1) {
+          container.innerHTML = "";
+          container.classList.add("hidden");
+          return;
+        }
+
+        container.classList.remove("hidden");
+        container.innerHTML = validTracks.map((t, idx) => {
+          const isActive = idx === activeIndex;
+          const isLatest = idx === 0;
+
+          return `
+            <button onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx});" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold transition shrink-0 cursor-pointer shadow-xs border ${
+              isActive 
+                ? 'bg-[#0A192F] text-amber-300 border-amber-400/60 shadow-md ring-1 ring-amber-400/40' 
+                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-stone-200 dark:border-slate-700 hover:border-amber-400/50 hover:bg-amber-50 dark:hover:bg-slate-700'
+            }">
+              <span class="w-5 h-5 rounded-full ${isActive ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'} flex items-center justify-center text-[10px] font-black shrink-0">
+                ${idx + 1}
+              </span>
+              <span class="truncate max-w-[200px] sm:max-w-xs">${t.title}</span>
+              ${isLatest ? `<span class="px-1.5 py-0.2 rounded-md bg-emerald-500 text-slate-950 font-black text-[9px] uppercase tracking-wider">Novo</span>` : ''}
+            </button>
           `;
         }).join("");
       }
