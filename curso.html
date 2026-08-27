@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visão Geral do Curso • Módulos & Aulas | AgoraEuFalo</title>
+  <meta name="description" content="Portal de navegação e módulos do curso. Acesso a todas as aulas com vídeo, áudio de bolso e apostilas diagramadas.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#F5F6FA">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+</head>
+<body class="ambient-bg text-slate-800 min-h-screen antialiased selection:bg-amber-100 selection:text-amber-900 p-3 sm:p-6 lg:p-8 flex flex-col justify-between">
+
+  <!-- Glass Container Canvas -->
+  <div class="max-w-[1440px] w-full mx-auto glass-panel rounded-[32px] sm:rounded-[40px] p-4 sm:p-8 space-y-8 shadow-2xl relative overflow-hidden">
+    
+    <!-- Top Header Bar -->
+    <header class="flex items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+      <div class="flex items-center gap-3">
+        <a href="portal.html" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-900 hover:text-white text-slate-700 font-bold text-xs transition border border-slate-200 shadow-sm">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Voltar ao Início</span>
+        </a>
+        <span class="text-slate-300 hidden sm:inline">|</span>
+        <span class="text-xs font-black text-amber-700 bg-amber-100/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider hidden sm:inline" id="header-course-badge">
+          PROJETO 2026
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="treino/player.html" class="px-4 py-2 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-1.5 active:scale-95">
+          <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
+          <span>Training Player</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Course Hero Banner -->
+    <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-amber-200/80 bg-gradient-to-r from-amber-50/50 via-white to-amber-50/30">
+      <div class="space-y-2 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider border border-amber-200">
+          <span>🏛️</span> <span>PROGRAMA OFICIAL • PROFESSOR LEO LEITE</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-slate-900" id="course-main-title">Projeto AgoraEuFalo 2026</h1>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" id="course-main-desc">
+          O treinamento definitivo de reflexo oral, cadência e connected speech. Repita os blocos até a fala virar reflexo natural.
+        </p>
+
+        <!-- Progress Indicator -->
+        <div class="pt-2 flex items-center gap-4 text-xs font-bold">
+          <div class="flex-1 max-w-xs bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
+            <div class="bg-gradient-to-r from-amber-400 to-amber-500 h-full w-[35%] rounded-full"></div>
+          </div>
+          <span class="text-amber-700">35% Concluído (17 de 48 Aulas)</span>
+        </div>
+      </div>
+
+      <div class="shrink-0">
+        <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=1" class="px-5 py-3 rounded-2xl bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
+          <i data-lucide="play-circle" class="w-4 h-4"></i>
+          <span>Continuar Aula Atual</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Modules Showcase Grid -->
+    <section class="space-y-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight">Módulos & Trilha de Aprendizagem</h2>
+          <p class="text-xs text-slate-500">Clique em qualquer módulo para expandir a lista de aulas.</p>
+        </div>
+        <span class="text-xs font-bold text-slate-400">12 Módulos Disponíveis</span>
+      </div>
+
+      <!-- Modules List -->
+      <div class="space-y-4" id="modules-container">
+        
+        <!-- Module 1 Card -->
+        <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
+          <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-5 cursor-pointer hover:bg-white/80 transition" onclick="toggleModuleLessons('m1')">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
+                <img src="assets/images/cover-default-aef.jpg" alt="Módulo 1" class="w-full h-full object-cover">
+              </div>
+              <div>
+                <span class="text-[10px] font-black text-amber-700 uppercase tracking-wider">MÓDULO 01</span>
+                <h3 class="text-base font-bold text-slate-900 mt-0.5">Fundamentos do Reflexo Oral & Ritmo</h3>
+                <p class="text-xs text-slate-500 mt-0.5">4 Aulas • Connected Speech, Intonation e Pausas Estratégicas</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">4 / 4 Concluídas</span>
+              <i data-lucide="chevron-down" id="icon-m1" class="w-4 h-4 text-slate-400 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Lessons Sub-List (Expansible) -->
+          <div id="lessons-m1" class="border-t border-slate-100 bg-white/50 divide-y divide-slate-100 text-xs">
+            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=1" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
+              <div class="flex items-center gap-3">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span class="font-bold text-slate-800">Aula 01: O Segredo da Conexão Sonora</span>
+                <div class="hidden sm:flex items-center gap-2 text-[10px] text-slate-400 ml-2">
+                  <span class="px-1.5 py-0.5 rounded bg-slate-100">🎬 14 min</span>
+                  <span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">🎧 Áudio</span>
+                </div>
+              </div>
+              <span class="text-amber-700 font-bold hover:underline">Assistir →</span>
+            </a>
+
+            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=2" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
+              <div class="flex items-center gap-3">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span class="font-bold text-slate-800">Aula 02: Eliminando a Tradução Mental</span>
+                <div class="hidden sm:flex items-center gap-2 text-[10px] text-slate-400 ml-2">
+                  <span class="px-1.5 py-0.5 rounded bg-slate-100">🎬 18 min</span>
+                  <span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">🎧 Áudio</span>
+                </div>
+              </div>
+              <span class="text-amber-700 font-bold hover:underline">Assistir →</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Module 2 Card -->
+        <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
+          <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-5 cursor-pointer hover:bg-white/80 transition" onclick="toggleModuleLessons('m2')">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
+                <img src="assets/images/cover-public-spoken-reflex.jpg" alt="Módulo 2" class="w-full h-full object-cover">
+              </div>
+              <div>
+                <span class="text-[10px] font-black text-amber-700 uppercase tracking-wider">MÓDULO 02</span>
+                <h3 class="text-base font-bold text-slate-900 mt-0.5">Frases Prontas para Reuniões Internacionais</h3>
+                <p class="text-xs text-slate-500 mt-0.5">4 Aulas • Aberturas, Interrupções Elegantes e Fechamentos</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">2 / 4 Concluídas</span>
+              <i data-lucide="chevron-down" id="icon-m2" class="w-4 h-4 text-slate-400 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Lessons Sub-List -->
+          <div id="lessons-m2" class="border-t border-slate-100 bg-white/50 divide-y divide-slate-100 text-xs">
+            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=5" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
+              <div class="flex items-center gap-3">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span class="font-bold text-slate-800">Aula 05: Apresentação Pessoal & Framing</span>
+              </div>
+              <span class="text-amber-700 font-bold hover:underline">Assistir →</span>
+            </a>
+
+            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=6" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
+              <div class="flex items-center gap-3">
+                <span class="text-amber-600 font-bold">▶</span>
+                <span class="font-bold text-slate-800">Aula 06: Conduzindo uma Discussão com Firmeza</span>
+              </div>
+              <span class="text-amber-700 font-bold hover:underline">Continuar →</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="max-w-[1440px] w-full mx-auto text-center text-xs text-slate-400 py-4 font-medium">
+    <p>AgoraEuFalo © 2026 • Professor Leonardo Leite</p>
+  </footer>
+
+  <script>
+    function toggleModuleLessons(id) {
+      const container = document.getElementById(`lessons-${id}`);
+      const icon = document.getElementById(`icon-${id}`);
+      if (!container) return;
+
+      const isHidden = container.classList.toggle('hidden');
+      if (icon) icon.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get('id') || 'projeto-aef-2026';
+
+      if (courseId === 'magic-stories-club') {
+        document.getElementById('course-main-title').innerText = 'Magic Stories Club';
+        document.getElementById('course-main-desc').innerText = '30 ciclos narrativos completos com histórias, Listen & Answer e Chunks com o Leo Gringo.';
+        document.getElementById('header-course-badge').innerText = 'MAGIC STORIES CLUB';
+      }
+
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

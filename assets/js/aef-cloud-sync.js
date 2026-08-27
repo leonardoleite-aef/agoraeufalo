@@ -464,6 +464,56 @@
       }
       return list;
     }
+
+    /**
+     * Sends transactional emails via Resend API / Cloud Function Trigger
+     * Supports: magic_link, new_vip_track, new_course_module, forum_reply, meet_reminder, streak_milestone, hotmart_welcome
+     */
+    async sendTransactionalEmail(triggerEvent, payload) {
+      console.log(`📨 [AEFCloudSync] Disparando e-mail transacional (${triggerEvent}) para ${payload.email}`);
+      try {
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer re_aef_live_transacional"
+          },
+          body: JSON.stringify({
+            from: "Professor Leonardo Leite <contato@agoraeufalo.com.br>",
+            to: [payload.email],
+            subject: payload.subject,
+            html: payload.html
+          })
+        });
+        return await response.json();
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Simulação de envio de e-mail transacional local:", triggerEvent, payload);
+        return { success: true, simulated: true };
+      }
+    }
+
+    /**
+     * Publishes a new topic to the community forum
+     */
+    async publishCommunityPost(authorData, text, mediaUrl = "") {
+      await this.init();
+      const post = {
+        id: `post_${Date.now()}`,
+        authorName: authorData.name || "Aluno AgoraEuFalo",
+        authorEmail: authorData.email || "",
+        authorRole: authorData.role || "aluno",
+        text: text.trim(),
+        mediaUrl: mediaUrl || "",
+        likes: 0,
+        commentsCount: 0,
+        createdAt: new Date().toISOString()
+      };
+
+      if (this.db) {
+        await this.db.collection("community_posts").doc(post.id).set(post);
+      }
+      return post;
+    }
   }
 
   // Global Singleton

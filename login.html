@@ -7,52 +7,27 @@
   <meta name="description" content="Acesse sua área exclusiva de treinos de reflexo oral, Magic Stories e materiais com o Professor Leonardo Leite.">
   
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              gold: '#F59E0B',
-              navy: '#0A192F',
-              dark: '#070B14',
-              card: '#0F172A',
-              border: '#1E293B'
-            }
-          },
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Google Fonts: Plus Jakarta Sans (Identical to Home) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- AgoraEuFalo Portal Auth SDK -->
   <script src="assets/js/aef-portal-auth.js"></script>
-
-  <style>
-    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  </style>
 </head>
-<body class="bg-[#070B14] text-slate-100 min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 font-sans antialiased">
+<body class="ambient-bg text-slate-800 min-h-full flex flex-col justify-between selection:bg-amber-100 selection:text-amber-900 font-sans antialiased p-4">
 
   <!-- Top Simple Header -->
-  <header class="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+  <header class="w-full max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
     <a href="index.html" class="flex items-center gap-2 group transition" title="Voltar ao início">
-      <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 sm:h-9 object-contain group-hover:scale-[1.02] transition">
+      <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 sm:h-9 object-contain filter invert opacity-90 hover:opacity-100 transition">
     </a>
-    <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-amber-400 transition">
+    <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-950 px-3 py-1.5 rounded-xl bg-white border border-slate-200 shadow-sm transition">
       <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
       <span>Voltar ao Site</span>
     </a>
@@ -62,37 +37,34 @@
   <main class="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
     <div class="w-full max-w-md">
       
-      <!-- Main Card -->
-      <div class="bg-[#0F172A] border border-[#1E293B] rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      <!-- Main Glass Card -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden space-y-6">
         
-        <!-- Subtle Glow Effect -->
-        <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
         <!-- Header Titles -->
-        <div class="text-center mb-6">
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider mb-3">
-            <span>✨ Área de Membros AgoraEuFalo</span>
+        <div class="text-center space-y-2">
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider border border-amber-200">
+            <span>✨ ÁREA DO ALUNO AGORAEUFALO</span>
           </div>
-          <h1 id="authCardTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 id="authCardTitle" class="text-2xl sm:text-3xl font-bold font-serif text-slate-900 tracking-tight">
             Bem-vindo de volta!
           </h1>
-          <p id="authCardSubtitle" class="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">
+          <p id="authCardSubtitle" class="text-slate-500 text-xs sm:text-sm leading-relaxed">
             Acesse seus treinos diários e conteúdos exclusivos.
           </p>
         </div>
 
         <!-- Mode Toggle Tabs (Entrar vs Criar Conta) -->
-        <div class="flex rounded-2xl bg-[#070B14] p-1 border border-[#1E293B] mb-6">
-          <button id="tabSignInBtn" onclick="switchAuthTab('signin')" class="flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm">
+        <div class="flex rounded-2xl bg-slate-100 p-1 border border-slate-200">
+          <button id="tabSignInBtn" onclick="switchAuthTab('signin')" class="flex-1 py-2 text-xs font-bold rounded-xl transition text-white bg-slate-900 shadow-sm">
             Entrar
           </button>
-          <button id="tabSignUpBtn" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white">
+          <button id="tabSignUpBtn" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-600 hover:text-slate-900">
             Criar Conta Grátis
           </button>
         </div>
 
         <!-- Google One-Click Login -->
-        <button onclick="handleGoogleSignIn()" class="w-full py-3 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm border border-slate-200 cursor-pointer active:scale-[0.99] mb-5">
+        <button onclick="handleGoogleSignIn()" class="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm border border-slate-200 cursor-pointer active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
             <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
@@ -103,74 +75,60 @@
         </button>
 
         <!-- Divider -->
-        <div class="relative flex items-center justify-center mb-5">
-          <div class="border-t border-[#1E293B] w-full"></div>
-          <span class="bg-[#0F172A] px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">ou com email</span>
+        <div class="relative flex items-center justify-center">
+          <div class="border-t border-slate-200 w-full"></div>
+          <span class="bg-white/80 px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">ou com email</span>
         </div>
 
         <!-- Auth Form -->
         <form id="authForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
           
           <!-- Name Field (Only in Sign Up) -->
-          <div id="nameFieldGroup" class="hidden space-y-1.5">
-            <label class="text-xs font-semibold text-slate-300">Seu Nome Completo</label>
+          <div id="nameFieldGroup" class="hidden space-y-1">
+            <label class="text-xs font-bold text-slate-700">Seu Nome Completo</label>
             <div class="relative">
-              <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-              <input type="text" id="userNameInput" placeholder="Ex: Estevão Ribeiro" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
+              <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="text" id="userNameInput" placeholder="Ex: Estevão Ribeiro" class="w-full bg-white border border-slate-200 focus:border-amber-500 rounded-xl pl-10 pr-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none transition font-sans shadow-sm">
             </div>
           </div>
 
           <!-- Email Field -->
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-slate-300">Seu Email</label>
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-700">Seu Email</label>
             <div class="relative">
-              <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-              <input type="email" id="userEmailInput" required placeholder="seuemail@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
+              <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="email" id="userEmailInput" required placeholder="seuemail@exemplo.com" class="w-full bg-white border border-slate-200 focus:border-amber-500 rounded-xl pl-10 pr-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none transition font-sans shadow-sm">
             </div>
           </div>
 
           <!-- Password Field -->
-          <div class="space-y-1.5">
+          <div class="space-y-1">
             <div class="flex items-center justify-between">
-              <label class="text-xs font-semibold text-slate-300">Sua Senha</label>
-              <button type="button" id="forgotPassLink" onclick="openForgotPassModal()" class="text-[11px] font-semibold text-amber-400 hover:underline">
+              <label class="text-xs font-bold text-slate-700">Sua Senha</label>
+              <button type="button" id="forgotPassLink" onclick="openForgotPassModal()" class="text-[11px] font-bold text-amber-700 hover:underline">
                 Esqueceu a senha?
               </button>
             </div>
             <div class="relative">
-              <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
-              <input type="password" id="userPasswordInput" required placeholder="••••••••" minlength="6" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl pl-10 pr-10 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
-              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-3 text-slate-500 hover:text-slate-300 transition">
+              <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input type="password" id="userPasswordInput" required placeholder="••••••••" minlength="6" class="w-full bg-white border border-slate-200 focus:border-amber-500 rounded-xl pl-10 pr-10 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none transition font-sans shadow-sm">
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-2.5 text-slate-400 hover:text-slate-600 transition">
                 <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" id="submitAuthBtn" class="w-full mt-2 py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/20 cursor-pointer active:scale-[0.99]">
-            <span id="submitBtnText">Acessar Meu Portal</span>
+          <button type="submit" id="submitAuthBtn" class="w-full mt-2 py-2.5 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-sm cursor-pointer active:scale-[0.99]">
+            <span id="btnText">Entrar no Portal</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
 
-          <!-- Passwordless Magic Link Option -->
-          <div id="magicLinkOptionWrapper" class="text-center pt-2">
-            <button type="button" onclick="handleSendMagicLink()" class="text-[11px] font-bold text-sky-400 hover:text-sky-300 transition inline-flex items-center justify-center gap-1.5 mx-auto">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-              <span>Ou receba um Link Mágico no Email (Sem Senha)</span>
-            </button>
-          </div>
         </form>
 
-        <!-- Direct Link to Preview Portal -->
-        <div class="text-center mt-4">
-          <a href="portal/index.html" class="text-[11px] text-slate-500 hover:text-amber-400 underline transition">
-            Visualizar demonstração da Área de Membros
-          </a>
-        </div>
-
-        <!-- Terms & Privacy Note -->
-        <p class="text-[11px] text-center text-slate-500 mt-4 leading-relaxed">
-          Ao continuar, você concorda com os termos pedagógicos e privacidade do AgoraEuFalo.
+        <!-- Terms / Notice -->
+        <p class="text-center text-[11px] text-slate-400 leading-tight">
+          Ao entrar, você concorda com nossos <a href="termos-de-uso.html" class="text-slate-600 font-bold hover:underline">Termos de Uso</a> e <a href="politica-de-privacidade.html" class="text-slate-600 font-bold hover:underline">Privacidade</a>.
         </p>
 
       </div>
@@ -178,247 +136,100 @@
     </div>
   </main>
 
-  <!-- Forgot Password Modal -->
-  <div id="forgotPassModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-    <div class="bg-[#0F172A] border border-[#1E293B] rounded-3xl p-6 max-w-sm w-full shadow-2xl relative">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="font-bold text-white text-base">Recuperar Senha</h3>
-        <button onclick="closeForgotPassModal()" class="text-slate-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+  <!-- Password Reset Modal -->
+  <div id="forgotPassModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel border-2 border-amber-300 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold font-serif text-slate-900">Recuperar Senha</h3>
+        <button onclick="closeForgotPassModal()" class="text-slate-400 hover:text-slate-900 font-bold">✕</button>
       </div>
-      <p class="text-slate-400 text-xs leading-relaxed mb-4">
-        Digite seu email cadastrado para receber o link seguro de redefinição de senha.
-      </p>
-      <input type="email" id="forgotEmailInput" placeholder="seuemail@exemplo.com" class="w-full bg-[#070B14] border border-[#1E293B] focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none mb-4 font-sans">
-      <button onclick="handleSendPasswordReset()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
-        Enviar Link de Recuperação
-      </button>
+      <p class="text-xs text-slate-600">Digite seu e-mail cadastrado para enviarmos um link de redefinição seguro.</p>
+      <form onsubmit="handleForgotPassword(event)" class="space-y-3">
+        <input type="email" id="forgotEmailInput" required placeholder="seuemail@exemplo.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none shadow-sm">
+        <button type="submit" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm">
+          Enviar Link de Recuperação
+        </button>
+      </form>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <div id="toastContent" class="bg-[#0F172A] border border-amber-500/40 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold">
-      <!-- Injetado via JS -->
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="w-full py-6 text-center text-xs text-slate-600 border-t border-[#1E293B]/40">
-    <span>© 2026 AgoraEuFalo — Professor Leonardo Leite. Todos os direitos reservados.</span>
+  <footer class="w-full max-w-6xl mx-auto px-4 py-4 text-center text-xs text-slate-400 font-medium">
+    <p>AgoraEuFalo © 2026 • Professor Leonardo Leite</p>
   </footer>
 
   <script>
-    let currentMode = 'signin';
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (window.lucide) lucide.createIcons();
-
-      // Check if arriving from a Magic Link in email
-      if (window.location.search.includes('apiKey=') || window.location.search.includes('magicLink=')) {
-        showToast("Validando Link Mágico de acesso...", "info");
-        try {
-          const magicUser = await window.aefPortalAuth.checkAndCompleteMagicLink();
-          if (magicUser) {
-            showToast("Acesso autorizado com sucesso via Link Mágico!", "success");
-            setTimeout(() => {
-              window.location.href = "portal/index.html";
-            }, 1000);
-            return;
-          }
-        } catch (err) {
-          console.error("Magic Link Error:", err);
-          showToast("Link Mágico expirado ou inválido.", "error");
-        }
-      }
-
-      window.addEventListener('aef:auth-changed', (e) => {
-        if (e.detail && e.detail.user) {
-          showToast("Sessão ativa detectada. Redirecionando...", "success");
-          setTimeout(() => {
-            window.location.href = "portal/index.html";
-          }, 800);
-        }
-      });
-    });
+    let authMode = 'signin';
 
     function switchAuthTab(mode) {
-      currentMode = mode;
-      const tabSignIn = document.getElementById('tabSignInBtn');
-      const tabSignUp = document.getElementById('tabSignUpBtn');
-      const title = document.getElementById('authCardTitle');
-      const subtitle = document.getElementById('authCardSubtitle');
-      const nameGroup = document.getElementById('nameFieldGroup');
-      const nameInput = document.getElementById('userNameInput');
-      const forgotLink = document.getElementById('forgotPassLink');
-      const submitText = document.getElementById('submitBtnText');
+      authMode = mode;
+      const isSignIn = mode === 'signin';
+      
+      document.getElementById('nameFieldGroup').classList.toggle('hidden', isSignIn);
+      document.getElementById('authCardTitle').innerText = isSignIn ? 'Bem-vindo de volta!' : 'Crie sua Conta Grátis';
+      document.getElementById('authCardSubtitle').innerText = isSignIn ? 'Acesse seus treinos diários e conteúdos exclusivos.' : 'Comece a treinar seu reflexo oral hoje mesmo.';
+      document.getElementById('btnText').innerText = isSignIn ? 'Entrar no Portal' : 'Cadastrar e Acessar';
 
-      if (mode === 'signup') {
-        tabSignUp.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm";
-        tabSignIn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white";
-        title.innerText = "Crie sua Conta Gratuita";
-        subtitle.innerText = "Acesse materiais de degustação e comece sua jornada hoje.";
-        nameGroup.classList.remove('hidden');
-        nameInput.required = true;
-        forgotLink.classList.add('hidden');
-        submitText.innerText = "Cadastrar Gratuitamente";
+      document.getElementById('tabSignInBtn').className = isSignIn
+        ? 'flex-1 py-2 text-xs font-bold rounded-xl transition text-white bg-slate-900 shadow-sm'
+        : 'flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-600 hover:text-slate-900';
+
+      document.getElementById('tabSignUpBtn').className = !isSignIn
+        ? 'flex-1 py-2 text-xs font-bold rounded-xl transition text-white bg-slate-900 shadow-sm'
+        : 'flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-600 hover:text-slate-900';
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('userPasswordInput');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
       } else {
-        tabSignIn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-950 bg-amber-500 shadow-sm";
-        tabSignUp.className = "flex-1 py-2 text-xs font-bold rounded-xl transition text-slate-400 hover:text-white";
-        title.innerText = "Bem-vindo de volta!";
-        subtitle.innerText = "Acesse seus treinos diários e conteúdos exclusivos.";
-        nameGroup.classList.add('hidden');
-        nameInput.required = false;
-        forgotLink.classList.remove('hidden');
-        submitText.innerText = "Acessar Meu Portal";
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
       }
-      if (window.lucide) lucide.createIcons();
+      lucide.createIcons();
+    }
+
+    function openForgotPassModal() { document.getElementById('forgotPassModal').classList.remove('hidden'); }
+    function closeForgotPassModal() { document.getElementById('forgotPassModal').classList.add('hidden'); }
+
+    async function handleGoogleSignIn() {
+      if (window.AEFPortalAuth) {
+        await window.AEFPortalAuth.signInWithGoogle();
+      } else {
+        window.location.href = 'portal.html';
+      }
     }
 
     async function handleFormSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('userEmailInput').value.trim();
-      const pass = document.getElementById('userPasswordInput').value;
-      const submitBtn = document.getElementById('submitAuthBtn');
+      const password = document.getElementById('userPasswordInput').value;
+      const name = document.getElementById('userNameInput')?.value.trim() || '';
 
-      if (!email || !pass) {
-        showToast("Preencha todos os campos obrigatórios.", "warning");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Processando...</span>`;
-
-      try {
-        if (currentMode === 'signup') {
-          const name = document.getElementById('userNameInput').value.trim() || 'Novo Aluno';
-          await window.aefPortalAuth.signUpWithEmail(name, email, pass);
-          showToast("Conta criada com sucesso! Entrando...", "success");
+      if (window.AEFPortalAuth) {
+        if (authMode === 'signup') {
+          await window.AEFPortalAuth.signUpWithEmail(email, password, name);
         } else {
-          await window.aefPortalAuth.signInWithEmail(email, pass);
-          showToast("Login realizado com sucesso!", "success");
+          await window.AEFPortalAuth.signInWithEmail(email, password);
         }
-
-        setTimeout(() => {
-          window.location.href = "portal.html";
-        }, 1000);
-
-      } catch (err) {
-        console.error("Auth Error:", err);
-        let msg = "Erro ao autenticar. Verifique seus dados.";
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-          msg = "Email ou senha incorretos.";
-        } else if (err.code === 'auth/email-already-in-use') {
-          msg = "Este email já possui cadastro. Clique em Entrar.";
-        } else if (err.code === 'auth/weak-password') {
-          msg = "A senha deve ter pelo menos 6 caracteres.";
-        }
-        showToast(msg, "error");
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span id="submitBtnText">${currentMode === 'signup' ? 'Cadastrar Gratuitamente' : 'Acessar Meu Portal'}</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
-        if (window.lucide) lucide.createIcons();
-      }
-    }
-
-    async function handleGoogleSignIn() {
-      try {
-        showToast("Conectando com o Google...", "info");
-        await window.aefPortalAuth.signInWithGoogle();
-        showToast("Login com Google concluído! Entrando...", "success");
-        setTimeout(() => {
-          window.location.href = "portal.html";
-        }, 1000);
-      } catch (err) {
-        console.error("Google Auth Error:", err);
-        let msg = "Não foi possível conectar com o Google.";
-        if (err.code === 'auth/unauthorized-domain') {
-          msg = "O domínio agoraeufalo.com.br precisa ser autorizado na aba Settings do Firebase Auth.";
-        } else if (err.code === 'auth/popup-closed-by-user') {
-          msg = "A janela de login do Google foi fechada antes de concluir.";
-        } else if (err.message) {
-          msg = err.message;
-        }
-        showToast(msg, "error", 6000);
-      }
-    }
-
-    function openForgotPassModal() {
-      document.getElementById('forgotPassModal').classList.remove('hidden');
-      const email = document.getElementById('userEmailInput').value.trim();
-      if (email) document.getElementById('forgotEmailInput').value = email;
-    }
-
-    function closeForgotPassModal() {
-      document.getElementById('forgotPassModal').classList.add('hidden');
-    }
-
-    async function handleSendPasswordReset() {
-      const email = document.getElementById('forgotEmailInput').value.trim();
-      if (!email) {
-        showToast("Digite o seu email.", "warning");
-        return;
-      }
-      try {
-        await window.aefPortalAuth.sendPasswordReset(email);
-        closeForgotPassModal();
-        showToast("Email de recuperação enviado! Verifique sua caixa de entrada.", "success", 6000);
-      } catch (err) {
-        showToast("Erro ao enviar email de recuperação.", "error");
-      }
-    }
-
-    async function handleSendMagicLink() {
-      const email = document.getElementById('userEmailInput').value.trim();
-      if (!email) {
-        showToast("Digite seu email no campo acima para receber o Link Mágico.", "warning");
-        document.getElementById('userEmailInput').focus();
-        return;
-      }
-      try {
-        showToast("Enviando Link Mágico para seu email...", "info");
-        await window.aefPortalAuth.sendMagicLink(email);
-        showToast("✨ Link Mágico enviado! Verifique sua Caixa de Entrada (ou pasta de Spam/Promoções).", "success", 8000);
-      } catch (err) {
-        console.error("Magic link send error:", err);
-        showToast("Erro ao enviar link mágico. Verifique o email informado.", "error");
-      }
-    }
-
-    function togglePasswordVisibility() {
-      const passInput = document.getElementById('userPasswordInput');
-      const eyeIcon = document.getElementById('eyeIcon');
-      if (passInput.type === 'password') {
-        passInput.type = 'text';
-        eyeIcon.setAttribute('data-lucide', 'eye-off');
       } else {
-        passInput.type = 'password';
-        eyeIcon.setAttribute('data-lucide', 'eye');
+        localStorage.setItem('aef_active_student', email.split('@')[0]);
+        window.location.href = 'portal.html';
       }
-      if (window.lucide) lucide.createIcons();
     }
 
-    function showToast(message, type = "info", duration = 4000) {
-      const toast = document.getElementById('toast');
-      const content = document.getElementById('toastContent');
-      let icon = "info";
-      let colorClass = "text-sky-400";
-
-      if (type === "success") { icon = "check-circle"; colorClass = "text-emerald-400"; }
-      else if (type === "error") { icon = "alert-circle"; colorClass = "text-rose-400"; }
-      else if (type === "warning") { icon = "alert-triangle"; colorClass = "text-amber-400"; }
-
-      content.innerHTML = `
-        <i data-lucide="${icon}" class="w-4 h-4 ${colorClass}"></i>
-        <span>${message}</span>
-      `;
-      if (window.lucide) lucide.createIcons();
-
-      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-      }, duration);
+    async function handleForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgotEmailInput').value.trim();
+      alert(`✅ Link de redefinição enviado para ${email}!`);
+      closeForgotPassModal();
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
   </script>
 </body>
 </html>

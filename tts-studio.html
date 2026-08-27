@@ -58,6 +58,7 @@
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-filepicker.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,9 +113,10 @@
     .modal-backdrop.active .modal-card {
       transform: scale(1) translateY(0);
     }
-  </style>
+  <!-- Glassmorphism Stylesheet -->
+  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
 </head>
-<body class="h-full flex flex-col font-sans antialiased bg-[#0B0F17] text-slate-200 selection:bg-amber-500/30 selection:text-amber-200">
+<body class="h-full flex flex-col font-sans antialiased ambient-bg text-slate-800 selection:bg-amber-100 selection:text-amber-900">
 
   <!-- Audio Element specifically for Voice Sample Previews -->
   <audio id="voiceSampleAudioElement" preload="none" class="hidden"></audio>

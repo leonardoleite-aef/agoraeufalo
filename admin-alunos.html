@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão de Alunos & Permissões da Equipe (RBAC) | AgoraEuFalo Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#F5F6FA">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="treino/data/registry.js"></script>
+  <script src="assets/js/aef-audio-hub.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
+</head>
+<body class="ambient-bg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+    
+    <!-- Top Header Banner -->
+    <div class="glass-card rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-amber-200/80 bg-gradient-to-r from-amber-50/60 via-white to-amber-50/40">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider mb-2 border border-amber-200">
+          <span>👥</span> <span>Gestão Central de Usuários</span>
+        </div>
+        <h1 class="text-2xl font-bold font-serif text-slate-900">Alunos, Mentorados & Permissões da Equipe</h1>
+        <p class="text-xs text-slate-600 mt-0.5">Gerencie os planos de acesso dos alunos e autorize novos administradores com segurança.</p>
+      </div>
+
+      <!-- Quick Tab Switcher -->
+      <div class="flex items-center gap-2 bg-white/80 p-1.5 rounded-2xl border border-slate-200 shadow-sm shrink-0">
+        <button onclick="switchTab('students')" id="tab-btn-students" class="px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm">
+          🎓 Alunos & Mentorados
+        </button>
+        <button onclick="switchTab('rbac')" id="tab-btn-rbac" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+          🔐 Equipe & Admins (RBAC)
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: GESTÃO DE ALUNOS (CRM & TIERS)                                 -->
+    <!-- ========================================================================= -->
+    <section id="section-students" class="space-y-6">
+      
+      <!-- Stats & Filter Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="glass-card p-4 rounded-2xl">
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Alunos</p>
+          <p class="text-2xl font-black text-slate-900 mt-1" id="stat-total-students">4</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border-emerald-200">
+          <p class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Mentorados VIP</p>
+          <p class="text-2xl font-black text-emerald-800 mt-1" id="stat-vip-students">4</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border-sky-200">
+          <p class="text-[10px] text-sky-700 font-bold uppercase tracking-wider">Membros Club / Pro</p>
+          <p class="text-2xl font-black text-sky-800 mt-1" id="stat-pro-students">0</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border-amber-200">
+          <p class="text-[10px] text-amber-700 font-bold uppercase tracking-wider">Alunos Free</p>
+          <p class="text-2xl font-black text-amber-800 mt-1" id="stat-free-students">0</p>
+        </div>
+      </div>
+
+      <!-- Students Table Card -->
+      <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
+        <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="users" class="w-5 h-5 text-amber-600"></i>
+            <h3 class="font-bold text-base text-slate-900">Base de Alunos Ativos</h3>
+          </div>
+          <button onclick="openAddStudentModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Adicionar Aluno</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+              <tr>
+                <th class="py-3 px-4">Aluno</th>
+                <th class="py-3 px-4">E-mail Cadastrado</th>
+                <th class="py-3 px-4">Nível / Plano</th>
+                <th class="py-3 px-4">Treinos Ativos</th>
+                <th class="py-3 px-4">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="students-table-body" class="divide-y divide-slate-100 font-medium">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: EQUIPE & PERMISSÕES RBAC                                       -->
+    <!-- ========================================================================= -->
+    <section id="section-rbac" class="space-y-6 hidden">
+      
+      <!-- RBAC Grant Form -->
+      <div class="glass-card p-6 rounded-3xl space-y-4 border-amber-200">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🔐</span>
+          <div>
+            <h3 class="font-bold text-base text-slate-900">Conceder Acesso Administrativo a Novo Colaborador</h3>
+            <p class="text-xs text-slate-600">Digite o e-mail da pessoa que você deseja autorizar para gerenciar o ecossistema.</p>
+          </div>
+        </div>
+
+        <form id="form-grant-admin" onsubmit="handleGrantAdmin(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">E-mail do Colaborador *</label>
+            <input type="email" id="admin-email-input" required placeholder="ex: assistente@agoraeufalo.com.br" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Papel / Nível de Acesso *</label>
+            <select id="admin-role-select" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+              <option value="admin">👑 Administrador Total (Acesso a Tudo)</option>
+              <option value="moderator">💬 Moderador (Fórum, Suporte e Alunos)</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <span>Autorizar Acesso</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Current Admin Team Table -->
+      <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shield" class="w-5 h-5 text-amber-600"></i>
+            <h3 class="font-bold text-base text-slate-900">Membros da Equipe Autorizados</h3>
+          </div>
+          <span class="text-xs text-slate-500">Super-Admin Mestre: <strong>selexenglish@gmail.com</strong></span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
+              <tr>
+                <th class="py-3 px-4">Administrador</th>
+                <th class="py-3 px-4">E-mail</th>
+                <th class="py-3 px-4">Papel (Role)</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="admins-table-body" class="divide-y divide-slate-100 font-medium">
+              <!-- Injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Add Student Modal -->
+  <div id="add-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold font-serif text-slate-900">Cadastrar Novo Aluno</h3>
+        <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-900">✕</button>
+      </div>
+
+      <form id="form-add-student" onsubmit="handleSaveStudent(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo *</label>
+          <input type="text" id="new-student-name" required placeholder="ex: João Silva" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">E-mail do Aluno *</label>
+          <input type="email" id="new-student-email" required placeholder="ex: joao@gmail.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Plano / Nível *</label>
+          <select id="new-student-tier" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+            <option value="vip">👑 Mentorado VIP (Prescrições 1 a 1)</option>
+            <option value="club_anual">🎓 Magic Stories Club (Anual)</option>
+            <option value="pro">🚀 Projeto 2026 Pro</option>
+            <option value="free">🌱 Aluno Gratuito (Free)</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2">
+          Salvar Aluno no Firestore
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const INITIAL_STUDENTS = [
+      { id: "estevao", name: "Estêvão Pinheiro", email: "estevaopin@gmail.com", tier: "vip", tracksCount: 4 },
+      { id: "thomas", name: "Thomas", email: "thomas@agoraeufalo.com.br", tier: "vip", tracksCount: 6 },
+      { id: "andre", name: "André", email: "andre@agoraeufalo.com.br", tier: "vip", tracksCount: 1 },
+      { id: "matheus", name: "Matheus", email: "matheus@agoraeufalo.com.br", tier: "vip", tracksCount: 1 }
+    ];
+
+    const INITIAL_ADMINS = [
+      { name: "Prof. Leonardo Leite", email: "selexenglish@gmail.com", role: "superadmin", isMaster: true },
+      { name: "Leonardo Leite (Principal)", email: "leonardo@agoraeufalo.com.br", role: "admin", isMaster: false }
+    ];
+
+    function switchTab(tab) {
+      const isStudents = tab === 'students';
+      document.getElementById('section-students').classList.toggle('hidden', !isStudents);
+      document.getElementById('section-rbac').classList.toggle('hidden', isStudents);
+
+      document.getElementById('tab-btn-students').className = isStudents
+        ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm'
+        : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+
+      document.getElementById('tab-btn-rbac').className = !isStudents
+        ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm'
+        : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+    }
+
+    function renderStudentsTable() {
+      const tbody = document.getElementById('students-table-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = INITIAL_STUDENTS.map(s => {
+        const tierBadge = s.tier === 'vip' 
+          ? '<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-black">👑 MENTORADO VIP</span>'
+          : '<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">ALUNO FREE</span>';
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center font-bold text-xs">
+                ${s.name.substring(0, 2).toUpperCase()}
+              </div>
+              <span>${s.name}</span>
+            </td>
+            <td class="py-3.5 px-4 font-mono text-slate-600">${s.email}</td>
+            <td class="py-3.5 px-4">${tierBadge}</td>
+            <td class="py-3.5 px-4 font-bold text-amber-700">${s.tracksCount} faixas gravadas</td>
+            <td class="py-3.5 px-4">
+              <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-700 text-[11px] font-bold transition inline-flex items-center gap-1">
+                <span>Player</span> <span>↗</span>
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAdminsTable() {
+      const tbody = document.getElementById('admins-table-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = INITIAL_ADMINS.map(a => {
+        const roleLabel = a.role === 'superadmin' 
+          ? '<span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black">👑 SUPER-ADMIN MESTRE</span>'
+          : (a.role === 'admin' 
+            ? '<span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200 text-[10px] font-bold">ADMIN TOTAL</span>' 
+            : '<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold">MODERADOR</span>');
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 flex items-center justify-center font-black text-xs">
+                ${a.name.substring(0, 2).toUpperCase()}
+              </div>
+              <span>${a.name}</span>
+            </td>
+            <td class="py-3.5 px-4 font-mono text-slate-600">${a.email}</td>
+            <td class="py-3.5 px-4">${roleLabel}</td>
+            <td class="py-3.5 px-4 text-emerald-600 font-bold">● Ativo</td>
+            <td class="py-3.5 px-4">
+              ${a.isMaster 
+                ? '<span class="text-[11px] text-slate-400 italic">Proprietário</span>' 
+                : `<button onclick="handleRevokeAdmin('${a.email}')" class="text-rose-600 hover:text-rose-700 text-[11px] font-bold">Revogar</button>`}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openAddStudentModal() { document.getElementById('add-student-modal').classList.remove('hidden'); }
+    function closeAddStudentModal() { document.getElementById('add-student-modal').classList.add('hidden'); }
+
+    function handleSaveStudent(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-student-name').value.trim();
+      const email = document.getElementById('new-student-email').value.trim();
+      const tier = document.getElementById('new-student-tier').value;
+      const id = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      INITIAL_STUDENTS.unshift({ id, name, email, tier, tracksCount: 0 });
+      renderStudentsTable();
+      closeAddStudentModal();
+      alert(`✅ Aluno ${name} cadastrado com sucesso!`);
+    }
+
+    function handleGrantAdmin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email-input').value.trim().toLowerCase();
+      const role = document.getElementById('admin-role-select').value;
+      const name = email.split('@')[0];
+
+      INITIAL_ADMINS.push({ name, email, role, isMaster: false });
+      renderAdminsTable();
+      document.getElementById('admin-email-input').value = '';
+      alert(`✅ Acesso concedido para ${email} como ${role.toUpperCase()}!`);
+    }
+
+    function handleRevokeAdmin(email) {
+      if (!confirm(`Deseja revogar as permissões administrativas de ${email}?`)) return;
+      const idx = INITIAL_ADMINS.findIndex(a => a.email === email);
+      if (idx >= 0 && !INITIAL_ADMINS[idx].isMaster) {
+        INITIAL_ADMINS.splice(idx, 1);
+        renderAdminsTable();
+        alert(`🔒 Acesso administrativo de ${email} revogado.`);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStudentsTable();
+      renderAdminsTable();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

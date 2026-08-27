@@ -48,6 +48,7 @@
   <script src="assets/js/aef-hotmart-send.js"></script>
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
 
   <!-- Local Student Data Fallbacks -->
   <script src="treino/data/thomas.js"></script>
@@ -69,50 +70,11 @@
       pointer-events: auto;
       visibility: visible;
     }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+  <!-- Glassmorphism Stylesheet -->
+  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
 </head>
-<body class="bg-[#FAF8F5] text-slate-900 min-h-screen flex flex-col antialiased selection:bg-amber-200 selection:text-amber-900 font-sans">  <!-- ========================================================================= -->
-  <!-- 1. TOP BAR & NAVIGATION                                                   -->
-  <!-- ========================================================================= -->
-  <header class="bg-[#0A192F] text-white border-b border-white/10 sticky top-0 z-40 shadow-md">
-    <div class="w-full max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between gap-4 flex-wrap">
-      
-      <!-- Brand & Hub Name -->
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2">
-          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 object-contain">
-        </a>
-        <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-400 font-extrabold text-[10px] tracking-wider uppercase">
-          COMMAND CENTER
-        </span>
-      </div>
-
-      <!-- Quick Links to Ecosystem Sub-Tools -->
-      <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
-        <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-sm">
-          <span>TTS Studio</span>
-        </a>
-        <a href="admin-publico.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5">
-          <span>Player Público</span>
-        </a>
-        <a href="blog-panel.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5">
-          <span>Blog Panel</span>
-        </a>
-        <a href="blog/index.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5">
-          <span>Ver Blog ↗</span>
-        </a>
-        <a href="admin-cursos.html" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold transition flex items-center gap-1.5">
-          <span>Gestor de Cursos</span>
-        </a>
-        <a href="portal.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-sm">
-          <span>Portal do Aluno ↗</span>
-        </a>
-      </div>
-
-    </div>
-  </header>
+<body class="ambient-bg text-slate-900 min-h-screen flex flex-col antialiased selection:bg-amber-100 selection:text-amber-900 font-sans">
 
   <!-- ========================================================================= -->
   <!-- 2. MAIN CONTENT (WIDESCREEN DESKTOP OPTIMIZED)                             -->

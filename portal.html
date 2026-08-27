@@ -1,675 +1,441 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR" class="h-full">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal do Aluno • Área de Membros | AgoraEuFalo</title>
-  <meta name="description" content="Área de Membros e Cursos do Professor Leonardo Leite. Masterclasses, apostilas e integração com o English Personal Training Player.">
+  <title>Portal do Aluno • AgoraEuFalo</title>
+  <meta name="description" content="Portal do Aluno AgoraEuFalo. Treino de reflexo oral e cursos com o Professor Leonardo Leite.">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <meta name="theme-color" content="#0A192F">
+  <meta name="theme-color" content="#F4F5F9">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             serif: ['"Playfair Display"', 'Georgia', 'serif'],
             mono: ['"Fira Code"', 'monospace']
-          },
-          colors: {
-            aef: {
-              navy: '#0A192F',
-              'navy-light': '#112240',
-              'navy-dark': '#060D17',
-              gold: '#D97706',
-              'gold-light': '#F59E0B',
-              'gold-bright': '#FBBF24',
-              'amber-bg': '#FFFBEB',
-              slate: '#1E293B',
-              muted: '#64748B'
-            }
           }
         }
       }
     }
   </script>
 
-  <!-- Lucide Icons & Cloud Integration -->
+  <!-- Lucide Icons & Core Cloud SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
-  <script src="assets/js/aef-filepicker.js"></script>
-  <script src="assets/js/aef-hotmart-send.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
-</head>
-<body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+  <script src="treino/data/registry.js"></script>
+  <script src="assets/js/aef-audio-hub.js"></script>
 
-  <!-- ========================================== -->
-  <!-- 1. TOP BAR & NAVIGATION                     -->
-  <!-- ========================================== -->
-  <header class="bg-[#0A192F]/95 backdrop-blur-md border-b border-white/10 sticky top-0 z-40 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2">
-          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 sm:h-9 object-contain">
-        </a>
-        <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-400 font-extrabold text-[10px] tracking-wider uppercase">
-          MEMBER PORTAL
-        </span>
-      </div>
-
-      <!-- Right Navigation: Player Shortcut & User Status -->
-      <div class="flex items-center gap-3">
-        
-        <!-- Quick Link to Personal Training Player -->
-        <a href="treino/player.html?aluno=public" id="nav-btn-open-player" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">Training Player</span>
-        </a>
-
-        <!-- Streak Counter -->
-        <div id="user-streak-badge" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-amber-300">
-          <span>🔥</span>
-          <span id="streak-days-count">0 Dias</span>
-        </div>
-
-        <!-- User Profile Pill / Login Trigger -->
-        <div id="auth-state-container">
-          <button onclick="openAuthModal()" id="btn-login-trigger" class="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition border border-white/20 flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="user" class="w-3.5 h-3.5"></i>
-            <span>Entrar / Acessar</span>
-          </button>
-
-          <div id="user-profile-menu" class="hidden flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center font-black text-xs shadow-md" id="user-avatar-initials">
-              AL
-            </div>
-            <div class="hidden md:block text-left">
-              <p id="user-display-name" class="font-bold text-xs text-white leading-tight truncate max-w-[120px]">Aluno VIP</p>
-              <p id="user-plan-badge" class="text-[10px] text-amber-400 font-semibold">Projeto 2026</p>
-            </div>
-            <button onclick="handleLogout()" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/5 transition" title="Sair da Conta">
-              <i data-lucide="log-out" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </header>
-
-  <!-- ========================================== -->
-  <!-- 2. MAIN MEMBER DASHBOARD                    -->
-  <!-- ========================================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8">
-    
-    <!-- Welcome Header Banner -->
-    <section class="bg-gradient-to-r from-[#112240] via-[#0A192F] to-[#112240] border-2 border-amber-400/40 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-black uppercase tracking-wider mb-2.5 border border-amber-500/30">
-            <span>🏛️</span> <span>Ecossistema de Aprendizado Ativo</span>
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-bold font-serif text-white">
-            Bem-vindo ao Portal de Cursos & Masterclasses
-          </h1>
-          <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1.5 leading-relaxed">
-            Assista às aulas teóricas com o Professor Leonardo Leite e use o botão <strong class="text-amber-300">"📌 Enviar para Meu Player"</strong> para praticar o reflexo oral de bolso.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-3 shrink-0">
-          <button onclick="openPlayerShortcutModal()" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
-            <i data-lucide="play-circle" class="w-4 h-4"></i>
-            <span>Treinar no Player de Bolso</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Enrolled Courses Grid -->
-    <section id="courses-section" class="space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
-          <h2 class="text-lg font-bold text-white uppercase tracking-wide">Meus Cursos & Programas</h2>
-        </div>
-        <span class="text-xs text-slate-400 font-medium" id="total-courses-count">3 Programas Disponíveis</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="courses-grid-container">
-        
-        <!-- Course 1: Projeto AEF 2026 -->
-        <div class="bg-[#112240] border-2 border-amber-400/40 rounded-3xl overflow-hidden shadow-lg hover:border-amber-400 transition flex flex-col justify-between group">
-          <div>
-            <div class="aspect-video relative bg-slate-900 overflow-hidden">
-              <img src="assets/images/cover-default-aef.jpg" alt="Projeto AEF 2026" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-sm">
-                FLAGSHIP 2026
-              </span>
-            </div>
-            <div class="p-5 space-y-2">
-              <h3 class="font-bold text-base text-white group-hover:text-amber-300 transition">Projeto AgoraEuFalo 2026</h3>
-              <p class="text-xs text-slate-300 leading-relaxed line-clamp-2">
-                Treinamento completo de reflexo oral, cadência, connected speech e automação de fala para 2026.
-              </p>
-              <div class="pt-2 flex items-center gap-2 text-[11px] font-bold text-amber-400">
-                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                <span>12 Módulos • 48 Aulas com Áudio</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-5 pt-0">
-            <button onclick="loadCourseView('projeto-aef-2026')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
-              <span>Acessar Aulas</span>
-              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Course 2: Magic Stories Club -->
-        <div class="bg-[#112240] border-2 border-white/10 rounded-3xl overflow-hidden shadow-lg hover:border-amber-400 transition flex flex-col justify-between group">
-          <div>
-            <div class="aspect-video relative bg-slate-900 overflow-hidden">
-              <img src="assets/images/cover-public-spoken-reflex.jpg" alt="Magic Stories Club" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-sky-500 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-sm">
-                30 CICLOS
-              </span>
-            </div>
-            <div class="p-5 space-y-2">
-              <h3 class="font-bold text-base text-white group-hover:text-amber-300 transition">Magic Stories Club</h3>
-              <p class="text-xs text-slate-300 leading-relaxed line-clamp-2">
-                30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas de ouro com o Leo Gringo.
-              </p>
-              <div class="pt-2 flex items-center gap-2 text-[11px] font-bold text-sky-400">
-                <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
-                <span>30 Ciclos • Apostilas Diagramadas</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-5 pt-0">
-            <button onclick="loadCourseView('magic-stories-club')" class="w-full py-2.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 cursor-pointer">
-              <span>Acessar Ciclos</span>
-              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Course 3: Mentoria VIP Individual -->
-        <div class="bg-[#112240] border-2 border-emerald-500/30 rounded-3xl overflow-hidden shadow-lg hover:border-emerald-400 transition flex flex-col justify-between group">
-          <div>
-            <div class="aspect-video relative bg-slate-900 overflow-hidden">
-              <img src="assets/images/cover-estevao-session01.jpg" alt="Mentoria VIP" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-sm">
-                VIP 1-ON-1
-              </span>
-            </div>
-            <div class="p-5 space-y-2">
-              <h3 class="font-bold text-base text-white group-hover:text-emerald-300 transition">Mentoria VIP Individual</h3>
-              <p class="text-xs text-slate-300 leading-relaxed line-clamp-2">
-                Acompanhamento direto do Prof. Leo com gravação sob medida para apresentações, reuniões e keynote speeches.
-              </p>
-              <div class="pt-2 flex items-center gap-2 text-[11px] font-bold text-emerald-400">
-                <i data-lucide="mic" class="w-3.5 h-3.5"></i>
-                <span>Treinos Gravados Exclusivos</span>
-              </div>
-            </div>
-          </div>
-          <div class="p-5 pt-0">
-            <a href="treino/player.html?aluno=estevao" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 text-center">
-              <span>Abrir Meu Player VIP</span>
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-
-
-    <!-- Auth & Lead Gate Modal (Hotmart Send + Firebase Magic Link) -->
-    <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-      <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white relative">
-        <button onclick="closeAuthModal()" id="btn-close-auth-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm transition" title="Fechar">✕</button>
-
-        <!-- STATE 1: FORMULÁRIO DE LOGIN (APENAS ALUNOS CADASTRADOS) -->
-        <div id="auth-form-container">
-          <div class="text-center mb-5">
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl mx-auto mb-3">
-              🎓
-            </div>
-            <h3 class="text-xl font-bold font-serif">Acesso ao Portal do Aluno</h3>
-            <p class="text-xs text-slate-300 mt-1">
-              Digite seu e-mail cadastrado para receber seu link de acesso instantâneo sem precisar de senha.
-            </p>
-          </div>
-
-          <form id="portal-login-form" onsubmit="handleMagicLinkLogin(event)" class="space-y-3.5">
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Seu E-mail Cadastrado *</label>
-              <input type="email" id="login-email-input" required placeholder="seu.email@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 text-xs font-medium focus:outline-none focus:border-amber-400 transition">
-            </div>
-
-            <button type="submit" id="btn-login-submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
-              <span>Receber Link de Acesso por E-mail</span>
-              <span>✉️</span>
-            </button>
-          </form>
-
-          <div class="relative flex items-center justify-center my-4">
-            <div class="border-t border-white/10 w-full"></div>
-            <span class="bg-[#0A192F] px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">ou</span>
-          </div>
-
-          <button onclick="handleGoogleSignIn()" type="button" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2.5 transition shadow-sm border border-slate-200 cursor-pointer active:scale-95">
-            <svg class="w-4 h-4" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-            </svg>
-            <span>Entrar com Conta Google</span>
-          </button>
-
-          <!-- Chamada para Novos Alunos -->
-          <div class="mt-5 pt-3.5 border-t border-white/10 text-center bg-white/5 rounded-2xl p-3 border border-white/5">
-            <p class="text-xs text-slate-300">
-              Ainda não é aluno?
-              <a href="cadastro.html" class="text-amber-400 font-extrabold hover:text-amber-300 underline ml-1 block sm:inline mt-1 sm:mt-0">
-                Crie sua conta gratuitamente ↗
-              </a>
-            </p>
-          </div>
-
-          <div class="mt-3 text-center">
-            <p class="text-[11px] text-slate-400">
-              Dúvidas com seu acesso? <a href="https://wa.me/5531999817975?text=Olá%20Prof.%20Leo!%20Preciso%20de%20ajuda%20para%20acessar%20a%20Área%20de%20Membros." target="_blank" class="text-amber-400 font-bold underline">Chame no WhatsApp</a>.
-            </p>
-          </div>
-        </div>
-
-        <!-- STATE 2: CONFIRMAÇÃO DE ENVIO DO LINK (VERIFIQUE SEU EMAIL) -->
-        <div id="auth-sent-container" class="hidden text-center py-4 space-y-4">
-          <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/40 flex items-center justify-center text-3xl mx-auto shadow-lg">
-            ✉️
-          </div>
-          
-          <div>
-            <h3 class="text-2xl font-bold font-serif text-white">Verifique seu E-mail!</h3>
-            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-              Enviamos um <b>Link de Acesso Direto</b> para o endereço:
-            </p>
-            <p id="sent-email-display" class="font-mono font-bold text-amber-300 text-xs bg-black/40 px-3.5 py-2 rounded-xl my-2 border border-amber-400/30 break-all inline-block"></p>
-          </div>
-
-          <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-left text-xs text-amber-200 space-y-1.5">
-            <p class="font-bold flex items-center gap-1.5 text-amber-300">
-              <span>💡 Como concluir seu acesso:</span>
-            </p>
-            <ol class="list-decimal pl-4 space-y-1 text-[11px] text-slate-300 leading-relaxed">
-              <li>Abra a sua caixa de entrada no e-mail informado.</li>
-              <li>Clique no link <b>"Fazer Login no AgoraEuFalo"</b> que enviamos.</li>
-              <li>O seu navegador abrirá diretamente a Área de Membros autenticada!</li>
-            </ol>
-            <p class="text-[10px] text-amber-300/80 pt-1">
-              ⚠️ Caso não localize em 1 minuto, verifique a sua pasta de <b>Spam</b> ou <b>Promoções</b>.
-            </p>
-          </div>
-
-          <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <button onclick="resendMagicLink()" type="button" class="text-xs font-bold text-amber-400 hover:text-amber-300 underline cursor-pointer">
-              Reenviar Link de Acesso
-            </button>
-            <span class="text-slate-600 hidden sm:inline">•</span>
-            <button onclick="backToAuthForm()" type="button" class="text-xs font-bold text-slate-400 hover:text-white underline cursor-pointer">
-              Digitar outro e-mail
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ========================================== -->
-  <!-- 4. FOOTER                                  -->
-  <!-- ========================================== -->
-  <footer class="bg-[#060D17] border-t border-white/10 py-6 text-center text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p>© 2026 AgoraEuFalo • Professor Leonardo Leite. Todos os direitos reservados.</p>
-      <p class="text-[11px] text-slate-400">Mídias hospedadas com segurança no Google Cloud Storage.</p>
-    </div>
-  </footer>
-
-  <!-- Toast Notification -->
-  <div id="portal-toast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2.5">
-    <span class="text-base" id="portal-toast-icon">✅</span>
-    <span id="portal-toast-text">Ação executada com sucesso!</span>
-  </div>
-
-  <!-- Portal Engine Controller -->
-  <script>
-    // Dynamic 3-Tier Courses Hierarchy (Course > Modules > Lessons)
-    let PORTAL_COURSES = {
-      "projeto-aef-2026": {
-        id: "projeto-aef-2026",
-        title: "Projeto AgoraEuFalo 2026",
-        badge: "FLAGSHIP 2026",
-        coverImageUrl: "assets/images/cover-default-aef.jpg",
-        description: "Treinamento completo de reflexo oral, cadência, connected speech e automação de fala para 2026.",
-        modules: [
-          {
-            id: "ciclo-01-fundamentos",
-            title: "Ciclo 01 • Fundamentos do Reflexo Oral",
-            order: 1,
-            lessons: [
-              {
-                id: "aef-01",
-                title: "Aula 01 • O Reflexo da Conexão Sonora",
-                desc: "Como conectar consoantes finais com vogais sem pausas artificiais.",
-                videoUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fpublic%2Fspoken_reflex_intro.mp4?alt=media",
-                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
-                goldenTip: "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia.",
-                pdfUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/materials%2Fpdf%2Flivro-agora-eu-falo-ingles.pdf?alt=media"
-              },
-              {
-                id: "aef-02",
-                title: "Aula 02 • Desbloqueio do Present Perfect",
-                desc: "Treino prático de reflexo com casos reais do cotidiano.",
-                videoUrl: "",
-                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_02.mp3?alt=media",
-                goldenTip: "Use o Present Perfect para conectar experiências passadas com o momento presente de forma automática.",
-                pdfUrl: ""
-              }
-            ]
-          }
-        ]
-      },
-      "magic-stories-club": {
-        id: "magic-stories-club",
-        title: "Magic Stories Club • 30 Ciclos",
-        badge: "30 CICLOS",
-        coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
-        description: "30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas de ouro com o Leo Gringo.",
-        modules: [
-          {
-            id: "ciclo-01-historia-grazi",
-            title: "Ciclo 01 • A História da Grazi",
-            order: 1,
-            lessons: [
-              {
-                id: "ms-01",
-                title: "Treino 01 • Listen & Answer da Grazi",
-                desc: "Treino auditivo de reflexo e repetição ativa com perguntas e respostas.",
-                videoUrl: "",
-                audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_track_01.mp3?alt=media",
-                goldenTip: "Responda às perguntas em voz alta antes que o áudio termine de perguntar.",
-                pdfUrl: "Material-PDF/magic-story-grazi.pdf"
-              }
-            ]
-          }
-        ]
-      }
-    };
-
-    async function fetchCloudCourses() {
-      try {
-        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
-        const data = await res.json();
-        if (data.documents && data.documents.length > 0) {
-          data.documents.forEach(d => {
-            const f = d.fields || {};
-            const cid = f.courseId?.stringValue || f.id?.stringValue || d.name.split("/").pop();
-            const existing = PORTAL_COURSES[cid];
-            PORTAL_COURSES[cid] = {
-              id: cid,
-              title: f.title?.stringValue || "Sem Título",
-              badge: f.tierRequired?.stringValue === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO",
-              coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
-              description: f.description?.stringValue || "",
-              modules: existing ? existing.modules : []
-            };
-          });
-        }
-      } catch (err) {
-        console.warn("Could not fetch cloud courses:", err);
-      }
-      renderPortalCourses();
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: 
+        radial-gradient(circle at 5% 15%, rgba(245, 158, 11, 0.07) 0%, transparent 35%),
+        radial-gradient(circle at 95% 10%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.04) 0%, transparent 45%),
+        #F4F5F9;
+      color: #0F172A;
     }
 
-    function renderPortalCourses() {
-      const container = document.getElementById("courses-grid-container");
-      const totalCount = document.getElementById("total-courses-count");
-      const courseKeys = Object.keys(PORTAL_COURSES);
+    /* Glass Panels */
+    .glass-canvas {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.04);
+    }
 
-      if (totalCount) totalCount.innerText = `${courseKeys.length} Programas Disponíveis`;
-      if (!container) return;
+    .glass-pill {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    }
 
-      container.innerHTML = courseKeys.map(k => {
-        const c = PORTAL_COURSES[k];
-        const isVip = c.badge.includes("VIP");
-        const badgeColor = isVip ? "bg-amber-500 text-slate-950" : "bg-sky-500 text-slate-950";
-        const totalLessonsCount = (c.modules || []).reduce((acc, m) => acc + (m.lessons || []).length, 0);
+    .glass-item {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-item:hover {
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -4px rgba(217, 119, 6, 0.1), 0 0 0 1px rgba(245, 158, 11, 0.2);
+    }
 
-        return `
-          <div class="bg-[#112240] border-2 border-white/10 hover:border-amber-400 rounded-3xl overflow-hidden shadow-lg transition flex flex-col justify-between group">
+    /* Waveform Animation */
+    @keyframes soundwave {
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
+    }
+    .wave-bar {
+      animation: soundwave 1.1s ease-in-out infinite alternate;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.45s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.2s; }
+  </style>
+</head>
+<body class="min-h-screen p-3 sm:p-6 lg:p-10 flex flex-col justify-between antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WIDE CANVAS (Exact 1:1 Spatial Architecture from Concept 4 Mockup)   -->
+  <!-- ========================================================================= -->
+  <div class="max-w-[1520px] w-full mx-auto glass-canvas rounded-[36px] sm:rounded-[48px] p-6 sm:p-10 flex flex-col lg:flex-row gap-10 relative overflow-hidden">
+    
+    <!-- ======================================================================= -->
+    <!-- LEFT SIDEBAR: Sleek Floating Navigation                                -->
+    <!-- ======================================================================= -->
+    <aside class="w-full lg:w-60 shrink-0 flex flex-col justify-between space-y-8 border-b lg:border-b-0 lg:border-r border-slate-200/60 pb-6 lg:pb-0 lg:pr-8">
+      
+      <div class="space-y-8">
+        <!-- Brand / Traffic Light Dots -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-400/80 inline-block shadow-xs"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-400/80 inline-block shadow-xs"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-400/80 inline-block shadow-xs"></span>
+          </div>
+
+          <a href="portal.html" class="block">
+            <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 object-contain filter invert opacity-90 hover:opacity-100 transition">
+          </a>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="space-y-1.5 text-xs font-bold">
+          <a href="portal.html" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white text-slate-950 shadow-xs border border-slate-200/70 transition">
+            <i data-lucide="home" class="w-4 h-4 text-amber-600"></i>
+            <span>Home</span>
+          </a>
+
+          <a href="curso.html?id=projeto-aef-2026" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-white/60 transition">
+            <i data-lucide="book-open" class="w-4 h-4 text-slate-400"></i>
+            <span>Courses</span>
+          </a>
+
+          <a href="repertorio.html" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-white/60 transition">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+            <span>Repertoire (<span id="sidebar-rep-count">58</span>)</span>
+          </a>
+
+          <a href="treino/player.html" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-white/60 transition">
+            <i data-lucide="headphones" class="w-4 h-4 text-emerald-600"></i>
+            <span>Training Player</span>
+          </a>
+
+          <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-900 hover:bg-white/60 transition">
+            <i data-lucide="video" class="w-4 h-4 text-rose-500"></i>
+            <span>Live Meet</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Bottom Profile Card -->
+      <div class="pt-6 border-t border-slate-200/60 flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 font-black text-xs flex items-center justify-center shadow-xs shrink-0" id="sidebar-avatar-initials">
+            EP
+          </div>
+          <div class="leading-tight min-w-0">
+            <p class="font-bold text-xs text-slate-900 truncate" id="sidebar-user-name">Estêvão Pinheiro</p>
+            <p class="text-[10px] font-black text-amber-700 uppercase" id="sidebar-user-tier">MENTORADO VIP</p>
+          </div>
+        </div>
+
+        <a href="admin.html" class="p-2 rounded-xl text-slate-400 hover:text-amber-600 hover:bg-white/60 transition" title="Painel Admin">
+          <i data-lucide="shield" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- ======================================================================= -->
+    <!-- RIGHT MAIN WORKSPACE                                                   -->
+    <!-- ======================================================================= -->
+    <main class="flex-1 space-y-10 min-w-0">
+      
+      <!-- 1. TOP HEADER: Greeting + Audio Capsule + Streak (1:1 from Mockup) -->
+      <header class="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+        
+        <!-- Greeting -->
+        <div class="space-y-1">
+          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900" id="top-greeting-title">
+            Good morning, <span id="top-user-name-target">Estêvão</span> 👋
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium">Your oral reflex journey continues today.</p>
+        </div>
+
+        <!-- Floating Action Capsules -->
+        <div class="flex items-center gap-3.5 flex-wrap">
+          
+          <!-- Currently Playing Glass Capsule with Soundwave -->
+          <div class="glass-pill rounded-3xl p-3 px-5 flex items-center gap-4 shadow-sm">
+            <div class="flex items-center gap-1 h-5 shrink-0">
+              <span class="w-1 bg-amber-500 rounded-full wave-bar"></span>
+              <span class="w-1 bg-amber-400 rounded-full wave-bar"></span>
+              <span class="w-1 bg-amber-600 rounded-full wave-bar"></span>
+              <span class="w-1 bg-amber-500 rounded-full wave-bar"></span>
+              <span class="w-1 bg-amber-400 rounded-full wave-bar"></span>
+            </div>
+
+            <div class="leading-tight min-w-0 pr-2">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Currently Playing</p>
+              <p class="text-xs font-bold text-slate-900 truncate max-w-[200px]">Sreehari Letter to Ashna</p>
+            </div>
+
+            <a href="treino/player.html" class="w-9 h-9 rounded-2xl bg-slate-950 hover:bg-amber-500 text-white hover:text-slate-950 transition flex items-center justify-center shadow-xs shrink-0 active:scale-95">
+              <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+            </a>
+          </div>
+
+          <!-- Streak Capsule -->
+          <div class="glass-pill rounded-3xl p-3 px-5 flex items-center gap-3 shadow-sm shrink-0">
+            <span class="text-xl">🔥</span>
+            <div class="leading-tight">
+              <p class="text-sm font-black text-slate-900 font-mono" id="streak-counter-pill">15 Days</p>
+              <p class="text-[9px] font-extrabold text-emerald-600 uppercase">Active Streak</p>
+            </div>
+          </div>
+
+        </div>
+
+      </header>
+
+      <!-- 2. QUICK ACCESS / SEARCH BAR -->
+      <div class="flex items-center justify-between gap-4 py-2 border-b border-slate-200/60 text-xs">
+        <div class="flex items-center gap-2 text-slate-400 flex-1 max-w-md">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <input type="text" placeholder="Search Masterclasses, chunks, recordings..." class="w-full bg-transparent text-slate-900 placeholder-slate-400 focus:outline-none font-medium">
+          <span class="text-[10px] font-mono font-bold bg-slate-200/60 px-2 py-0.5 rounded-md text-slate-500">⌘K</span>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-3 text-slate-500 font-bold">
+          <span class="text-slate-400">Quick Access:</span>
+          <a href="repertorio.html" class="text-slate-800 hover:text-amber-600 transition">Frases Prontas</a>
+          <span>•</span>
+          <a href="curso.html?id=magic-stories-club" class="text-slate-800 hover:text-amber-600 transition">Magic Stories</a>
+          <span>•</span>
+          <a href="treino/player.html?tab=my-stuff" class="text-slate-800 hover:text-amber-600 transition">YouTube Lab</a>
+        </div>
+      </div>
+
+      <!-- 3. MASTERCLASS & COURSE SHOWCASE (Large, Airy Showcase from Mockup) -->
+      <section class="space-y-5">
+        
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Masterclass Index</h2>
+          <p class="text-xs text-slate-500">Curated training tracks and high-impact oral immersion programs.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Masterclass Card 1 -->
+          <div class="glass-item rounded-[32px] overflow-hidden flex flex-col justify-between group">
             <div>
-              <div class="aspect-video relative bg-slate-900 overflow-hidden">
-                <img src="${c.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${c.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full ${badgeColor} font-black text-[10px] uppercase tracking-wider shadow-sm">
-                  ${c.badge}
-                </span>
+              <div class="aspect-[16/10] bg-slate-100 overflow-hidden relative">
+                <img src="assets/images/cover-default-aef.jpg" alt="Projeto AgoraEuFalo 2026" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute top-4 left-4 flex gap-2">
+                  <span class="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-amber-800 font-black text-[9px] uppercase tracking-wider shadow-xs">
+                    FLAGSHIP 2026
+                  </span>
+                  <span class="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-white font-bold text-[9px] uppercase tracking-wider">
+                    12 MÓDULOS
+                  </span>
+                </div>
               </div>
-              <div class="p-5 space-y-2">
-                <h3 class="font-bold text-base text-white group-hover:text-amber-300 transition">${c.title}</h3>
-                <p class="text-xs text-slate-300 leading-relaxed line-clamp-2">${c.description || ''}</p>
-                <div class="pt-2 flex items-center gap-2 text-[11px] font-bold text-amber-400">
-                  <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                  <span>${(c.modules || []).length} Módulos • ${totalLessonsCount} Aulas</span>
+
+              <div class="p-6 space-y-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-extrabold text-[10px] flex items-center justify-center">PL</div>
+                  <span class="text-xs font-bold text-slate-700">Prof. Leo Leite</span>
+                </div>
+                <h3 class="font-extrabold text-base text-slate-900 group-hover:text-amber-700 transition">
+                  Projeto AgoraEuFalo 2026
+                </h3>
+                <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                  Connected speech, cadência sonora e automação do reflexo oral em 48 aulas completas.
+                </p>
+
+                <!-- Tags from Mockup -->
+                <div class="flex items-center gap-2 pt-2 text-[10px] font-extrabold">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">RHYTHM</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800">CONNECTED</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800">CORE</span>
                 </div>
               </div>
             </div>
-            <div class="p-5 pt-0">
-              <button onclick="loadCourseView('${c.id}')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+
+            <div class="p-6 pt-0">
+              <a href="curso.html?id=projeto-aef-2026" class="w-full py-3 rounded-2xl bg-white hover:bg-slate-950 hover:text-white text-slate-900 font-bold text-xs transition border border-slate-200/80 shadow-xs flex items-center justify-center gap-2 text-center">
                 <span>Acessar Módulos</span>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-              </button>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </a>
             </div>
           </div>
-        `;
-      }).join("");
 
-      if (window.lucide) lucide.createIcons();
-    }
+          <!-- Masterclass Card 2 -->
+          <div class="glass-item rounded-[32px] overflow-hidden flex flex-col justify-between group">
+            <div>
+              <div class="aspect-[16/10] bg-slate-100 overflow-hidden relative">
+                <img src="assets/images/cover-public-spoken-reflex.jpg" alt="Magic Stories Club" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute top-4 left-4 flex gap-2">
+                  <span class="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-sky-800 font-black text-[9px] uppercase tracking-wider shadow-xs">
+                    30 HISTÓRIAS
+                  </span>
+                  <span class="px-3 py-1 rounded-full bg-rose-500/90 backdrop-blur-md text-white font-bold text-[9px] uppercase tracking-wider">
+                    INTERATIVO
+                  </span>
+                </div>
+              </div>
 
-    let activeCourse = null;
-    let activeLesson = null;
+              <div class="p-6 space-y-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-sky-500 text-white font-extrabold text-[10px] flex items-center justify-center">LG</div>
+                  <span class="text-xs font-bold text-slate-700">Leo Gringo</span>
+                </div>
+                <h3 class="font-extrabold text-base text-slate-900 group-hover:text-amber-700 transition">
+                  Magic Stories Club
+                </h3>
+                <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                  Treino intensivo de Listen & Answer, Chunks e perguntas rápidas sem tradução mental.
+                </p>
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      fetchCloudCourses();
-      // 1. Executa bloqueio imediato se o usuário não estiver logado
-      checkAuthStatus();
+                <!-- Tags from Mockup -->
+                <div class="flex items-center gap-2 pt-2 text-[10px] font-extrabold">
+                  <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800">LISTENING</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">STORIES</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800">CHUNKS</span>
+                </div>
+              </div>
+            </div>
 
-      // 2. Se estiver retornando de um Magic Link enviado por e-mail, completa login
-      try {
-        if (window.aefPortalAuth) {
-          await window.aefPortalAuth.ready();
-          const magicResult = await window.aefPortalAuth.checkAndCompleteMagicLink();
-          if (magicResult && magicResult.user) {
-            const user = magicResult.user;
-            const profile = magicResult.profile;
-            localStorage.setItem("aef_user_email", user.email);
-            localStorage.setItem("aef_user_name", profile?.name || user.displayName || user.email.split('@')[0]);
-            localStorage.setItem("aef_user_tier", profile?.tier || 'free');
-            showToast("🎉 Autenticação confirmada! Bem-vindo de volta ao Portal.");
-            window.history.replaceState({}, document.title, window.location.pathname);
-            checkAuthStatus();
-          }
-        }
-      } catch (e) {
-        console.warn("Magic link listener:", e);
+            <div class="p-6 pt-0">
+              <a href="curso.html?id=magic-stories-club" class="w-full py-3 rounded-2xl bg-white hover:bg-slate-950 hover:text-white text-slate-900 font-bold text-xs transition border border-slate-200/80 shadow-xs flex items-center justify-center gap-2 text-center">
+                <span>Acessar Ciclos</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Masterclass Card 3 (VIP Mentorship) -->
+          <div class="glass-item rounded-[32px] overflow-hidden flex flex-col justify-between group border-amber-300/80">
+            <div>
+              <div class="aspect-[16/10] bg-slate-100 overflow-hidden relative">
+                <img src="assets/images/cover-estevao-session01.jpg" alt="Mentoria VIP" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute top-4 left-4 flex gap-2">
+                  <span class="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-emerald-800 font-black text-[9px] uppercase tracking-wider shadow-xs">
+                    INDIVIDUAL 1-ON-1
+                  </span>
+                  <span class="px-3 py-1 rounded-full bg-emerald-600 text-white font-bold text-[9px] uppercase tracking-wider">
+                    VIP EXCLUSIVO
+                  </span>
+                </div>
+              </div>
+
+              <div class="p-6 space-y-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-emerald-600 text-white font-extrabold text-[10px] flex items-center justify-center">PL</div>
+                  <span class="text-xs font-bold text-slate-700">Prescrição Leo Leite</span>
+                </div>
+                <h3 class="font-extrabold text-base text-slate-900 group-hover:text-emerald-700 transition">
+                  Mentoria VIP Individual
+                </h3>
+                <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                  Áudios sob medida gravados especialmente para suas apresentações e reuniões reais.
+                </p>
+
+                <!-- Tags from Mockup -->
+                <div class="flex items-center gap-2 pt-2 text-[10px] font-extrabold">
+                  <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800">PERSONAL</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800">4 FAIXAS</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">HD AUDIO</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 pt-0">
+              <a href="treino/player.html" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider transition shadow-xs flex items-center justify-center gap-2 text-center">
+                <span>Abrir Player VIP</span>
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- 4. PROFESSOR LEO'S EDITORIAL DISPATCH -->
+      <section class="glass-pill rounded-[32px] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-amber-200/80">
+        <div class="flex items-start gap-5">
+          <div class="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-serif font-black text-lg shrink-0 shadow-md ring-4 ring-amber-100">
+            PL
+          </div>
+          <div class="space-y-1.5 max-w-2xl">
+            <div class="flex items-center gap-2">
+              <h4 class="font-extrabold text-sm text-slate-900">Professor Leonardo Leite</h4>
+              <span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[9px] font-black uppercase">DICA DE OURO</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed italic">
+              "Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Repita a mesma história no player até a fala virar reflexo natural."
+            </p>
+          </div>
+        </div>
+
+        <a href="repertorio.html" class="px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xs flex items-center justify-center gap-2 shrink-0 active:scale-95">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Ver Repertório</span>
+        </a>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="max-w-[1520px] w-full mx-auto text-center text-xs text-slate-400 py-6 font-medium">
+    <p>AgoraEuFalo © 2026 • Professor Leonardo Leite • Experiência Viva do Inglês</p>
+  </footer>
+
+  <!-- Script Dinâmico -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const studentId = (urlParams.get('aluno') || localStorage.getItem('aef_active_student') || 'estevao').toLowerCase().trim();
+
+      const studentData = (window.aefAudioHub && window.aefAudioHub.getStudents) 
+        ? window.aefAudioHub.getStudents().find(s => s.id === studentId) 
+        : null;
+
+      const studentName = studentData ? studentData.name : (studentId.charAt(0).toUpperCase() + studentId.slice(1));
+      
+      const topGreeting = document.getElementById('top-greeting-title');
+      const sidebarName = document.getElementById('sidebar-user-name');
+      const sidebarInitials = document.getElementById('sidebar-avatar-initials');
+
+      if (topGreeting) topGreeting.innerHTML = `Good morning, ${studentName} 👋`;
+      if (sidebarName) sidebarName.innerText = studentName;
+      if (sidebarInitials) sidebarInitials.innerText = studentName.substring(0, 2).toUpperCase();
+
+      if (window.lucide) {
+        lucide.createIcons();
       }
     });
-
-    function isUserAuthenticated() {
-      const email = localStorage.getItem("aef_user_email");
-      const fbUser = window.aefPortalAuth && window.aefPortalAuth.currentUser;
-      return !!(email || fbUser);
-    }
-
-    function checkAuthStatus() {
-      const userEmail = localStorage.getItem("aef_user_email") || (window.aefPortalAuth?.currentUser?.email);
-      const userName = localStorage.getItem("aef_user_name");
-
-      if (userEmail) {
-        document.getElementById("btn-login-trigger").classList.add("hidden");
-        document.getElementById("user-profile-menu").classList.remove("hidden");
-        document.getElementById("user-display-name").innerText = userName || userEmail.split("@")[0];
-        document.getElementById("user-avatar-initials").innerText = (userName || userEmail).substring(0, 2).toUpperCase();
-        document.getElementById("user-streak-badge").classList.remove("hidden");
-        document.getElementById("streak-days-count").innerText = "1 Dia 🔥";
-        closeAuthModal(true);
-      } else {
-        document.getElementById("btn-login-trigger").classList.remove("hidden");
-        document.getElementById("user-profile-menu").classList.add("hidden");
-        document.getElementById("user-streak-badge").classList.add("hidden");
-        openAuthModal();
-      }
-    }
-
-    function openAuthModal() {
-      const modal = document.getElementById("auth-modal");
-      if (!modal) return;
-      modal.classList.remove("hidden");
-      
-      const closeBtn = document.getElementById("btn-close-auth-modal");
-      if (closeBtn) {
-        closeBtn.style.display = isUserAuthenticated() ? 'block' : 'none';
-      }
-    }
-
-    function closeAuthModal(force = false) {
-      if (!force && !isUserAuthenticated()) {
-        showToast("⚠️ Por favor, acesse com seu e-mail para desbloquear o Portal.");
-        return;
-      }
-      const modal = document.getElementById("auth-modal");
-      if (modal) modal.classList.add("hidden");
-    }
-
-    async function handleMagicLinkLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById("login-email-input").value.trim();
-
-      const btn = document.getElementById("btn-login-submit");
-      if (!email) return;
-
-      btn.disabled = true;
-      btn.innerHTML = `<div class="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Enviando link...</span>`;
-
-      try {
-        // Dispara o Link Mágico oficial de autenticação para o e-mail do aluno
-        await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
-
-        // Salva rascunho de e-mail
-        localStorage.setItem("aef_pending_email", email);
-
-        // Alterna modal para a tela de confirmação ("Verifique seu E-mail")
-        document.getElementById("auth-form-container").classList.add("hidden");
-        document.getElementById("auth-sent-container").classList.remove("hidden");
-        document.getElementById("sent-email-display").innerText = email;
-
-        showToast("✉️ Link de acesso enviado! Verifique seu e-mail.");
-      } catch (err) {
-        console.error("Magic link error:", err);
-        showToast("Erro ao enviar link de acesso. Verifique o e-mail digitado.");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<span>Receber Link de Acesso por E-mail</span> <span>✉️</span>`;
-      }
-    }
-
-    async function resendMagicLink() {
-      const email = localStorage.getItem("aef_pending_email") || document.getElementById("login-email-input").value.trim();
-      if (!email) return;
-      try {
-        showToast("Reenviando link de acesso...");
-        await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?magicLink=true');
-        showToast("✨ Novo link de acesso enviado para " + email);
-      } catch (err) {
-        showToast("Erro ao reenviar link.");
-      }
-    }
-
-    function backToAuthForm() {
-      document.getElementById("auth-sent-container").classList.add("hidden");
-      document.getElementById("auth-form-container").classList.remove("hidden");
-    }
-
-    async function handleGoogleSignIn() {
-      try {
-        showToast("Conectando com o Google...");
-        const result = await window.aefPortalAuth.signInWithGoogle();
-        if (result && result.user) {
-          localStorage.setItem("aef_user_email", result.user.email);
-          localStorage.setItem("aef_user_name", result.profile?.name || result.user.displayName || result.user.email.split('@')[0]);
-          localStorage.setItem("aef_user_tier", result.profile?.tier || 'free');
-          
-          if (window.AEFHotmartSend) {
-            await window.AEFHotmartSend.submitFreeLead(result.user.displayName || "Aluno Google", result.user.email, "", "portal_google");
-          }
-          
-          closeAuthModal(true);
-          checkAuthStatus();
-          showToast("🎉 Bem-vindo ao Portal AgoraEuFalo!");
-        }
-      } catch (err) {
-        console.error("Google Auth error:", err);
-        showToast("Não foi possível conectar com o Google.");
-      }
-    }
-
-    function handleLogout() {
-      localStorage.removeItem("aef_user_email");
-      localStorage.removeItem("aef_user_name");
-      localStorage.removeItem("aef_user_tier");
-      localStorage.removeItem("aef_pending_email");
-      localStorage.removeItem("aef_free_lead_unlocked");
-      if (window.aefPortalAuth) window.aefPortalAuth.signOut();
-      window.location.reload();
-    }
-
-    function loadCourseView(courseId) {
-      if (!isUserAuthenticated()) {
-        openAuthModal();
-        showToast("⚠️ Por favor, acesse com seu e-mail para abrir as aulas deste curso.");
-        return;
-      }
-      // Redireciona diretamente para a Sala de Aula Imersiva em Tela Cheia
-      window.location.href = `sala-de-aula.html?curso=${courseId}`;
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById("portal-toast");
-      const text = document.getElementById("portal-toast-text");
-      if (!toast || !text) return;
-      text.innerText = msg;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 4000);
-    }
   </script>
 </body>
 </html>
