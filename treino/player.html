@@ -1734,18 +1734,33 @@
         window.switchPlayerTab(initialTab);
 
         // Async Background Cloud Sync (Sem travar o usuário)
-        if (window.isVipUser && window.aefAudioHub) {
-          window.aefAudioHub.getMergedTracksForStudent(studentId).then(mergedTracks => {
-            if (mergedTracks && mergedTracks.length > 0) {
-              studentData.tracks = mergedTracks;
-              window.vipTracks = mergedTracks;
-              if (badgeVip) badgeVip.innerText = mergedTracks.length;
-              if (window.currentActiveTab === "vip") {
-                window.currentLoadedStudent = studentData;
-                renderPlaylistDrawer(mergedTracks, engine.currentTrackIndex);
+        if (window.aefCloudSync) {
+          // 1. Sync Tier 1 Suggestions (Público / Universal)
+          window.aefCloudSync.getSuggestionsTracks().then(sugTracks => {
+            if (sugTracks && sugTracks.length > 0) {
+              window.suggestionsTracks = sugTracks;
+              if (badgeSug) badgeSug.innerText = sugTracks.length;
+              if (window.currentActiveTab === "suggestions") {
+                window.currentLoadedStudent.tracks = sugTracks;
+                renderPlaylistDrawer(sugTracks, engine.currentTrackIndex);
               }
             }
-          }).catch(e => console.warn("Background merge warning:", e));
+          }).catch(e => console.warn("Background suggestions sync warning:", e));
+
+          // 2. Sync Tier 3 VIP Tracks (se for VIP)
+          if (window.isVipUser && window.aefAudioHub) {
+            window.aefAudioHub.getMergedTracksForStudent(studentId).then(mergedTracks => {
+              if (mergedTracks && mergedTracks.length > 0) {
+                studentData.tracks = mergedTracks;
+                window.vipTracks = mergedTracks;
+                if (badgeVip) badgeVip.innerText = mergedTracks.length;
+                if (window.currentActiveTab === "vip") {
+                  window.currentLoadedStudent = studentData;
+                  renderPlaylistDrawer(mergedTracks, engine.currentTrackIndex);
+                }
+              }
+            }).catch(e => console.warn("Background merge warning:", e));
+          }
         }
 
         // Real-time Cloud Sync Listener

@@ -122,7 +122,30 @@ async function seedAll() {
     }
   }
 
-  console.log('\n🎉 ALL STUDENTS AND TRACKS SUCCESSFULLY SEEDED TO FIRESTORE!');
+  // Seed Tier 1: Leo's Suggestions (Public)
+  const publicData = loadStudent('treino/data/public.js', 'AEF_STUDENT_PUBLIC');
+  if (publicData && publicData.tracks) {
+    console.log(`\n💡 Seeding Tier 1: Leo's Suggestions (Public Showcase)`);
+    for (const track of publicData.tracks) {
+      const trackDocId = track.id || `sug_${Date.now()}`;
+      await writeFirestoreDoc('suggestions', trackDocId, {
+        id: trackDocId,
+        title: track.title,
+        duration: track.duration || '00:30',
+        coverImage: track.coverImage || '../assets/images/cover-default-aef.jpg',
+        audioUrl: track.audioUrl,
+        videoUrl: track.videoUrl || '',
+        summary: track.summary || '',
+        goldenTip: track.goldenTip || '',
+        published: true,
+        order: 1,
+        sentences: track.sentences || [],
+        updatedAt: new Date().toISOString()
+      });
+    }
+  }
+
+  console.log('\n🎉 ALL STUDENTS AND SUGGESTIONS SUCCESSFULLY SEEDED TO FIRESTORE!');
 }
 
 seedAll().catch(console.error);

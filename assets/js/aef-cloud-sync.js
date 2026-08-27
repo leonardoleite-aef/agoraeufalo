@@ -207,6 +207,195 @@
     }
 
     /**
+     * Tier 1: Gets all Leo's Suggestions tracks from suggestions collection
+     */
+    async getSuggestionsTracks() {
+      await this.init();
+      try {
+        if (this.db) {
+          const snapshot = await this.db.collection("suggestions").get();
+          if (!snapshot.empty) {
+            const tracks = [];
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              if (data && data.status !== 'archived') {
+                tracks.push(data);
+              }
+            });
+            return tracks.sort((a, b) => (a.order || 0) - (b.order || 0));
+          }
+        }
+
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/suggestions`;
+        const res = await fetch(restUrl);
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (!data.documents || data.documents.length === 0) return [];
+
+        return data.documents.map(d => {
+          const f = d.fields || {};
+          const sentences = (f.sentences?.arrayValue?.values || []).map(sv => {
+            const sf = sv.mapValue?.fields || {};
+            return {
+              id: parseInt(sf.id?.integerValue || sf.id?.stringValue || "1"),
+              start: parseFloat(sf.start?.doubleValue || sf.start?.stringValue || "0"),
+              end: parseFloat(sf.end?.doubleValue || sf.end?.stringValue || "0"),
+              text: sf.text?.stringValue || "",
+              spokenTranslation: sf.spokenTranslation?.stringValue || sf.translation?.stringValue || ""
+            };
+          });
+
+          return {
+            id: f.id?.stringValue || d.name.split("/").pop(),
+            title: f.title?.stringValue || "Sugestão do Leo",
+            duration: f.duration?.stringValue || "00:00",
+            audioUrl: f.audioUrl?.stringValue || "",
+            videoUrl: f.videoUrl?.stringValue || "",
+            coverImage: f.coverImage?.stringValue || "../assets/images/cover-default-aef.jpg",
+            summary: f.summary?.stringValue || "",
+            goldenTip: f.goldenTip?.stringValue || "",
+            status: f.status?.stringValue || "active",
+            order: parseInt(f.order?.integerValue || "0"),
+            sentences: sentences
+          };
+        });
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro ao carregar Sugestões do Leo:", err);
+        return [];
+      }
+    }
+
+    /**
+     * Tier 1: Publishes or updates a track in the suggestions collection
+     */
+    async publishSuggestionTrack(trackData) {
+      await this.init();
+      const trackId = trackData.id || `sug_${Date.now()}`;
+      const payload = {
+        ...trackData,
+        id: trackId,
+        published: true,
+        updatedAt: new Date().toISOString()
+      };
+      if (this.db) {
+        await this.db.collection("suggestions").doc(trackId).set(payload, { merge: true });
+      }
+      return payload;
+    }
+
+    /**
+     * Tier 2: Gets course training tracks for an enrolled student
+     */
+    async getCourseTracks(userId) {
+      if (!userId) return [];
+      await this.init();
+      try {
+        if (this.db) {
+          const snapshot = await this.db.collection("users").doc(userId).collection("course_tracks").get();
+          if (!snapshot.empty) {
+            const tracks = [];
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              if (data && data.status !== 'archived') {
+                tracks.push(data);
+              }
+            });
+            return tracks;
+          }
+        }
+        return [];
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro ao carregar faixas de cursos:", err);
+        return [];
+      }
+    }
+
+    /**
+     * Tier 2: Publishes a course track to a student's course_tracks collection
+     */
+    async publishCourseTrack(userId, trackData) {
+      if (!userId) throw new Error("ID do usuário obrigatório.");
+      await this.init();
+      const trackId = trackData.id || `course_track_${Date.now()}`;
+      const payload = {
+        ...trackData,
+        id: trackId,
+        updatedAt: new Date().toISOString()
+      };
+      if (this.db) {
+        await this.db.collection("users").doc(userId).collection("course_tracks").doc(trackId).set(payload, { merge: true });
+      }
+      return payload;
+    }
+
+    /**
+     * Minhas Coisas: Gets custom tracks imported by a student
+     */
+    async getCustomTracks(userId) {
+      if (!userId) return [];
+      await this.init();
+      try {
+        if (this.db) {
+          const snapshot = await this.db.collection("users").doc(userId).collection("custom_tracks").get();
+          if (!snapshot.empty) {
+            const tracks = [];
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              if (data && data.status !== 'archived') {
+                tracks.push(data);
+              }
+            });
+            return tracks;
+          }
+        }
+        return [];
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro ao carregar Minhas Coisas:", err);
+        return [];
+      }
+    }
+
+    /**
+     * Minhas Coisas: Publishes a custom track with quota validation (1 for Free, unlimited for Pro/VIP)
+     */
+    async publishCustomTrack(userId, trackData, userTier = 'free') {
+      if (!userId) throw new Error("ID do usuário obrigatório.");
+      await this.init();
+      
+      // Check quota for Free users
+      if (userTier === 'free') {
+        const existing = await this.getCustomTracks(userId);
+        if (existing.length >= 1 && !existing.some(t => t.id === trackData.id)) {
+          throw new Error("QUOTA_EXCEEDED: Usuários gratuitos podem manter 1 treino ativo no Minhas Coisas. Assine o Pro para treinos ilimitados!");
+        }
+      }
+
+      const trackId = trackData.id || `custom_${Date.now()}`;
+      const payload = {
+        ...trackData,
+        id: trackId,
+        updatedAt: new Date().toISOString()
+      };
+      if (this.db) {
+        await this.db.collection("users").doc(userId).collection("custom_tracks").doc(trackId).set(payload, { merge: true });
+      }
+      return payload;
+    }
+
+    /**
+     * Minhas Coisas: Deletes a custom track
+     */
+    async deleteCustomTrack(userId, trackId) {
+      if (!userId || !trackId) return false;
+      await this.init();
+      if (this.db) {
+        await this.db.collection("users").doc(userId).collection("custom_tracks").doc(trackId).delete();
+        return true;
+      }
+      return false;
+    }
+
+    /**
      * Subscribes to real-time track updates for a student
      */
     subscribeToStudentTracks(studentId, callback) {
