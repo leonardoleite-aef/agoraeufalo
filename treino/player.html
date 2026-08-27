@@ -1396,22 +1396,19 @@
         else if (["club_monthly", "club_annual", "lifetime"].includes(storedTier)) tierBadge = "MAGIC STORIES CLUB";
         else if (storedTier === "admin") tierBadge = "ADMINISTRADOR";
 
-        if (id === "public" || id === "publico") {
-          return {
-            id: "public",
-            name: storedName,
-            badge: tierBadge,
-            tracks: (window.AEF_STUDENT_PUBLIC ? window.AEF_STUDENT_PUBLIC.tracks : [])
-          };
-        }
-        
-        const registered = window.aefAudioHub ? window.aefAudioHub.getStudents().find(s => s.id === id) : null;
-        if (registered) {
-          return { id: registered.id, name: registered.name, badge: registered.badge || "MENTORADO VIP", tracks: [] };
+        let defaultTracks = [];
+        if (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks && window.AEF_STUDENT_PUBLIC.tracks.length > 0) {
+          defaultTracks = window.AEF_STUDENT_PUBLIC.tracks;
+        } else if (window.AEF_STUDENT_ESTEVAO && window.AEF_STUDENT_ESTEVAO.tracks) {
+          defaultTracks = window.AEF_STUDENT_ESTEVAO.tracks;
         }
 
-        const formattedName = id.charAt(0).toUpperCase() + id.slice(1);
-        return { id: id, name: formattedName, badge: tierBadge, tracks: [] };
+        return {
+          id: id || "public",
+          name: storedName,
+          badge: tierBadge,
+          tracks: defaultTracks
+        };
       }
 
       window.switchActiveStudent = (newId) => {
@@ -1608,8 +1605,9 @@
 
       function bootPlayer() {
         let studentData = getBaseStudentData(studentId);
+        window.currentLoadedStudent = studentData;
         
-        // Sincroniza badge de identidade do aluno no header (Eliminado "Player Aberto")
+        // Sincroniza badge de identidade do aluno no header
         const nameEl = document.getElementById("header-student-name");
         const avatarEl = document.getElementById("header-student-avatar");
         const photoEl = document.getElementById("header-student-photo");
@@ -1655,8 +1653,8 @@
           window.suggestionsTracks = window.AEF_STUDENT_PUBLIC.tracks;
         } else if (window.AEF_PUBLIC_SHOWCASE && window.AEF_PUBLIC_SHOWCASE.tracks && window.AEF_PUBLIC_SHOWCASE.tracks.length > 0) {
           window.suggestionsTracks = window.AEF_PUBLIC_SHOWCASE.tracks;
-        } else if (window.ESTEVAO_DATA && window.ESTEVAO_DATA.tracks && window.ESTEVAO_DATA.tracks.length > 0) {
-          window.suggestionsTracks = window.ESTEVAO_DATA.tracks;
+        } else if (window.AEF_STUDENT_ESTEVAO && window.AEF_STUDENT_ESTEVAO.tracks && window.AEF_STUDENT_ESTEVAO.tracks.length > 0) {
+          window.suggestionsTracks = window.AEF_STUDENT_ESTEVAO.tracks;
         } else {
           window.suggestionsTracks = [];
         }
@@ -1677,7 +1675,7 @@
         const badgeMyStuff = document.getElementById("badge-count-my-stuff");
 
         if (badgeVip) badgeVip.innerText = window.vipTracks.length;
-        if (badgeSug) badgeSug.innerText = window.suggestionsTracks.length;
+        if (badgeSug) badgeSug.innerText = (window.suggestionsTracks && window.suggestionsTracks.length) || 1;
         if (badgeCourses) badgeCourses.innerText = window.coursesTracks.length;
         if (badgeMyStuff) badgeMyStuff.innerText = window.myStuffTracks.length;
 
@@ -1802,7 +1800,7 @@
           if (t === tab) {
             btn.className = "flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-black text-[11px] sm:text-xs transition flex items-center justify-center gap-1 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer shrink-0 border border-amber-400/40";
           } else {
-            btn.className = "flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer shrink-0";
+            btn.className = "flex-1 min-w-[130px] py-2 px-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 text-slate-600 hover:text-slate-900 cursor-pointer shrink-0";
           }
         });
 
@@ -1817,13 +1815,24 @@
         }
 
         let targetTracks = [];
-        if (tab === 'suggestions') targetTracks = window.suggestionsTracks;
-        else if (tab === 'courses') targetTracks = window.coursesTracks;
-        else if (tab === 'vip') targetTracks = window.vipTracks;
-        else if (tab === 'my-stuff') targetTracks = window.myStuffTracks;
+        if (tab === 'suggestions') {
+          targetTracks = (window.suggestionsTracks && window.suggestionsTracks.length > 0)
+            ? window.suggestionsTracks
+            : (window.AEF_STUDENT_PUBLIC?.tracks || window.AEF_STUDENT_ESTEVAO?.tracks || []);
+        } else if (tab === 'courses') {
+          targetTracks = window.coursesTracks || [];
+        } else if (tab === 'vip') {
+          targetTracks = window.vipTracks || [];
+        } else if (tab === 'my-stuff') {
+          targetTracks = window.myStuffTracks || [];
+        }
 
+        if (!window.currentLoadedStudent) {
+          window.currentLoadedStudent = { id: studentId, name: "Aluno AgoraEuFalo", tracks: targetTracks };
+        }
         window.currentLoadedStudent.tracks = targetTracks;
-        if (targetTracks.length > 0) {
+
+        if (targetTracks && targetTracks.length > 0) {
           engine.loadStudentData(window.currentLoadedStudent, 0);
           renderPlaylistDrawer(targetTracks, 0);
         } else {
