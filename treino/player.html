@@ -1645,10 +1645,12 @@
         window.vipTracks = studentData.tracks || [];
 
         // 2. Suggestions Tracks (Sugestões do Leo - Curadoria Global)
-        if (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks) {
+        if (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks && window.AEF_STUDENT_PUBLIC.tracks.length > 0) {
           window.suggestionsTracks = window.AEF_STUDENT_PUBLIC.tracks;
-        } else if (window.AEF_PUBLIC_SHOWCASE && window.AEF_PUBLIC_SHOWCASE.tracks) {
+        } else if (window.AEF_PUBLIC_SHOWCASE && window.AEF_PUBLIC_SHOWCASE.tracks && window.AEF_PUBLIC_SHOWCASE.tracks.length > 0) {
           window.suggestionsTracks = window.AEF_PUBLIC_SHOWCASE.tracks;
+        } else if (window.ESTEVAO_DATA && window.ESTEVAO_DATA.tracks && window.ESTEVAO_DATA.tracks.length > 0) {
+          window.suggestionsTracks = window.ESTEVAO_DATA.tracks;
         } else {
           window.suggestionsTracks = [];
         }
