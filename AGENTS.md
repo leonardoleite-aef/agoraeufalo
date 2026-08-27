@@ -64,7 +64,9 @@ A criação e manutenção de conteúdo são executadas por um squad especializa
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                         SQUAD DE AGENTES AGORAEUFALO                                    │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. Leo-Content-Writer: Redação de histórias, roteiros das 6 etapas e tradução falada.   │
+│ 1. Leo-Content-Writer: Redação de histórias, dramaturgia vocal (injeção de pausas      │
+│    dramáticas, risadas, suspiros e tags de atuação Gemini TTS), roteiros das 6 etapas │
+│    e tradução em Português Falado Brasileiro Real.                                      │
 │ 2. Visual-Artwork-Artist: Capas 16:9 (Blog) e 1:1 512x512 <90KB (Player/Lockscreen).   │
 │ 3. Player-Audio-Engine: Síntese Gemini TTS (Dual/Single), MP3 128k e timestamps reais. │
 │ 4. Editorial-PDF-Engine: Compilação de apostilas A4 Diagramadas (ReportLab) anti-corte. │

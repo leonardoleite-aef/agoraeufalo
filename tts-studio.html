@@ -165,31 +165,57 @@
           <span class="hidden md:inline">Templates Didáticos</span>
           <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
         </button>
-        <div id="templateMenu" class="hidden absolute right-0 mt-1.5 w-64 rounded-xl bg-[#161F33] border border-[#2D3D60] shadow-2xl p-1.5 z-50 text-xs">
-          <div class="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Modelos de Diálogo AEF</div>
-          <button onclick="loadTemplate('magic_story')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-amber-300">🪄 Magic Story (Mini-Diálogo)</span>
-            <span class="text-[10px] text-slate-400">Treino de reflexo com 2 falantes e pergunta</span>
+        <div id="templateMenu" class="hidden absolute right-0 mt-1.5 w-72 rounded-xl bg-[#161F33] border border-[#2D3D60] shadow-2xl p-1.5 z-50 text-xs max-h-[80vh] overflow-y-auto">
+          <div class="px-2.5 py-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">🪄 As 6 Atividades Canônicas (Magic Stories)</div>
+          
+          <button onclick="loadTemplate('magic_story_1_listen_read')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-amber-300">1. Listen & Read (Diálogo Dual Speaker)</span>
+            <span class="text-[10px] text-slate-400">2 vozes + Karaokê + Tradução Falada Real [pt]</span>
           </button>
-          <button onclick="loadTemplate('listen_answer')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-sky-300">🎧 Listen & Answer Drill</span>
-            <span class="text-[10px] text-slate-400">Drill de pergunta rápida e resposta instantânea</span>
+
+          <button onclick="loadTemplate('magic_story_1_listen_read_narration')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-amber-400">1. Listen & Read (Narração 1 Speaker Solo)</span>
+            <span class="text-[10px] text-slate-400">1 voz expressiva + Karaokê + Tradução Falada [pt]</span>
           </button>
-          <button onclick="loadTemplate('coffee_shop')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-emerald-300">☕ Coffee Shop Real Talk</span>
-            <span class="text-[10px] text-slate-400">Diálogo natural entre barista e cliente</span>
+
+          <button onclick="loadTemplate('magic_story_2_vocab')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-emerald-300">2. Vocabulary Session (Sound Chunks)</span>
+            <span class="text-[10px] text-slate-400">Matriz de blocos acústicos & collocations</span>
           </button>
-          <button onclick="loadTemplate('vip_coaching')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-fuchsia-300">🎙️ VIP Coaching (Leo & Mentorado)</span>
-            <span class="text-[10px] text-slate-400">Ajuste de pronúncia e chunks práticos</span>
+
+          <button onclick="loadTemplate('magic_story_3_listen_answer')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-sky-300">3. Listen & Answer Drill</span>
+            <span class="text-[10px] text-slate-400">Call & Response com pausas cronometradas</span>
           </button>
-          <button onclick="loadTemplate('executive_keynote')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-amber-400">👔 Executive Keynote (Apresentação Solo)</span>
-            <span class="text-[10px] text-slate-400">Apresentação contínua de alto impacto (1 voz)</span>
+
+          <button onclick="loadTemplate('magic_story_4_look_retell')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-purple-300">4. Look & Retell Visual Guide</span>
+            <span class="text-[10px] text-slate-400">Perguntas-guia para Speaking autônomo (AI Coach)</span>
           </button>
-          <button onclick="loadTemplate('story_narration')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
-            <span class="font-bold text-amber-300">📖 Single Speaker (Narração Didática)</span>
-            <span class="text-[10px] text-slate-400">Texto contínuo com pausas sonoras</span>
+
+          <button onclick="loadTemplate('magic_story_5_listen_ask')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-rose-300">5. Listen & Ask Challenge</span>
+            <span class="text-[10px] text-slate-400">Afirmação sonora ➔ Formulação de perguntas</span>
+          </button>
+
+          <button onclick="loadTemplate('magic_story_6_pronunciation')" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-bold text-teal-300">6. Pronunciation & Connected Speech</span>
+            <span class="text-[10px] text-slate-400">Reduções sonoras, ritmo e loop contínuo 🔂</span>
+          </button>
+
+          <div class="my-1 border-t border-[#1F2B45]"></div>
+          <div class="px-2.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Outros Formatos</div>
+
+          <button onclick="loadTemplate('coffee_shop')" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-semibold text-amber-200">☕ Coffee Shop Real Talk</span>
+          </button>
+
+          <button onclick="loadTemplate('vip_coaching')" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-semibold text-fuchsia-200">🎙️ VIP Coaching (Leo & Mentorado)</span>
+          </button>
+
+          <button onclick="loadTemplate('executive_keynote')" class="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#1F2B45] text-slate-200 flex flex-col transition">
+            <span class="font-semibold text-sky-200">👔 Executive Keynote (Oxford Solo)</span>
           </button>
         </div>
       </div>
@@ -1666,6 +1692,21 @@ Leo: No, she didn't! She lived in São Paulo. [pt: Não, de jeito nenhum! Ela mo
 Student: Where did she want to move? [pt: Pra onde ela queria se mudar?]
 Leo: She wanted to move to London to work at a design studio. [pt: Ela queria se mudar pra Londres pra trabalhar num estúdio de design.]
 Leo: Repeat this sound chunk: "She wanted to move to London." [pt: Repita este bloco sonoro: "Ela queria se mudar pra Londres."]`;
+        }
+      } else if (type === 'magic_story_1_listen_read_narration') {
+        setSpeakerMode('single');
+        document.getElementById('singleVoiceSelect').value = "Charon";
+        updateSingleVoiceInfo();
+        if (titleInput) titleInput.value = "magic_story_01_listen_read_narration";
+        if (scriptArea) {
+          scriptArea.value = 
+`Grazi lived in a cozy little apartment in the heart of São Paulo. [pt: A Grazi morava num apartamento bem aconchegante no coração de São Paulo.]
+Every morning, she would sip her black coffee and dream about something bigger. [pt: Toda manhã ela tomava seu cafezinho preto e sonhava com algo maior.]
+... [pause] ...
+One day, an unexpected email popped up in her inbox. [pt: Um dia, uma mensagem inesperada pipocou na caixa de entrada dela.]
+It was an official job offer from a prestigious design studio in London! [pt: Era uma proposta oficial de emprego de um estúdio de design super conceituado em Londres!]
+She could hardly believe her eyes. [pt: Ela mal conseguiu acreditar no que tava vendo.]
+Without hesitating for a single moment, she packed her bags and began her new journey. [pt: Sem pensar duas vezes, ela fez as malas e começou essa nova jornada.]`;
         }
       } else if (type === 'magic_story_2_vocab') {
         setSpeakerMode('single');
