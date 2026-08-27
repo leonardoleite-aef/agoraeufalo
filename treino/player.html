@@ -828,7 +828,7 @@
 
   <!-- Player Bootstrapper -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    function initPlayerApp() {
       const playSvg = `<svg class="w-6 h-6 ml-0.5 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
       const pauseSvg = `<svg class="w-6 h-6 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
       const drivingPlaySvg = `<svg class="w-10 h-10 ml-1 text-slate-950" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
@@ -1067,7 +1067,7 @@
       window.myStuffTracks = [];
       window.isVipUser = false;
 
-      async function bootPlayer() {
+      function bootPlayer() {
         let studentData = getBaseStudentData(studentId);
         
         // Sincroniza badge de identidade do aluno no header
@@ -1102,20 +1102,8 @@
           (studentData.badge && studentData.badge.includes("VIP")) || 
           (localStorage.getItem("aef_user_tier") === "vip");
 
-        // 1. VIP Tracks (Prescrições 1 a 1 do Leo)
-        if (window.isVipUser) {
-          if (window.aefAudioHub) {
-            try {
-              const mergedTracks = await window.aefAudioHub.getMergedTracksForStudent(studentId);
-              if (mergedTracks && mergedTracks.length > 0) studentData.tracks = mergedTracks;
-            } catch (e) {
-              console.warn("Could not load central hub tracks:", e);
-            }
-          }
-          window.vipTracks = studentData.tracks || [];
-        } else {
-          window.vipTracks = [];
-        }
+        // 1. VIP Tracks (Prescrições 1 a 1 do Leo) - Imediato do Seed Local
+        window.vipTracks = studentData.tracks || [];
 
         // 2. Suggestions Tracks (Sugestões do Leo - Curadoria Global)
         if (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks) {
@@ -1157,13 +1145,32 @@
           badgeEl.innerText = window.isVipUser ? "MENTORADO VIP" : (studentData.badge === "Acesso Aberto" ? "ABERTO" : "ALUNO");
         }
 
+        // Renderização Imediata (0ms)
+        const initialTab = window.isVipUser && window.vipTracks.length > 0 ? "vip" : "suggestions";
+        window.switchPlayerTab(initialTab);
+
+        // Async Background Cloud Sync (Sem travar o usuário)
+        if (window.isVipUser && window.aefAudioHub) {
+          window.aefAudioHub.getMergedTracksForStudent(studentId).then(mergedTracks => {
+            if (mergedTracks && mergedTracks.length > 0) {
+              studentData.tracks = mergedTracks;
+              window.vipTracks = mergedTracks;
+              if (badgeVip) badgeVip.innerText = mergedTracks.length;
+              if (window.currentActiveTab === "vip") {
+                window.currentLoadedStudent = studentData;
+                renderPlaylistDrawer(mergedTracks, engine.currentTrackIndex);
+              }
+            }
+          }).catch(e => console.warn("Background merge warning:", e));
+        }
+
         // Real-time Cloud Sync Listener
         if (window.aefCloudSync) {
           window.aefCloudSync.subscribeToStudentTracks(studentId, async (cloudTracks) => {
             if (cloudTracks && cloudTracks.length > 0) {
               const updated = await window.aefAudioHub.getMergedTracksForStudent(studentId);
               if (updated && updated.length > window.vipTracks.length) {
-                const latestNewTrack = updated[updated.length - 1];
+                const latestNewTrack = updated[0];
                 const notifBanner = document.getElementById("new-episode-notification-banner");
                 const notifTitle = document.getElementById("new-episode-title-toast");
                 if (notifBanner && notifTitle && latestNewTrack) {
@@ -1182,10 +1189,6 @@
             }
           });
         }
-
-        // Default Initial Tab Selection (Decisão 1)
-        const initialTab = window.isVipUser && window.vipTracks.length > 0 ? "vip" : "suggestions";
-        window.switchPlayerTab(initialTab);
       }
 
       window.switchPlayerTab = (tab) => {
@@ -1698,6 +1701,7 @@
 
         listEl.innerHTML = validTracks.map((t, idx) => {
           const isActive = idx === activeIndex;
+          const isLatest = idx === 0;
 
           return `
             <div onclick="window.playerEngine.loadStudentData(window.currentLoadedStudent, ${idx}); window.uiController.togglePlaylistDrawer();" class="p-3.5 rounded-2xl border ${isActive ? 'bg-amber-500/20 border-amber-400 ring-1 ring-amber-400/40' : 'bg-white/5 border-white/10 hover:border-amber-400/40 hover:bg-white/10'} cursor-pointer transition flex items-center gap-3">
@@ -1859,7 +1863,14 @@
           }
         }
       }, 500);
-    });
+    }
+
+    // Inicialização resiliente e imediata
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPlayerApp);
+    } else {
+      initPlayerApp();
+    }
   </script>
 </body>
 </html>
