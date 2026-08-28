@@ -43,8 +43,9 @@
     }
   </script>
 
-  <!-- Lucide Vector Icons CDN -->
+  <!-- Lucide Vector Icons & Core SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
@@ -57,12 +58,12 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C68A36; }
   </style>
 </head>
-<body class="aef-canvas-bg min-h-screen text-slate-900 font-sans antialiased selection:bg-amber-200">
+<body class="aef-canvas-bg min-h-screen text-slate-900 font-sans antialiased selection:bg-amber-200 flex flex-col">
 
   <!-- ========================================================================= -->
-  <!-- 1. TOP APP HEADER: Hamburger Menu + Logo + Search + Profile (1:1 Mockup)  -->
+  <!-- 1. TOP APP HEADER                                                         -->
   <!-- ========================================================================= -->
-  <header class="bg-[#0D1E36] text-white border-b border-white/10 sticky top-0 z-40">
+  <header class="bg-[#0D1E36] text-white border-b border-white/10 sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
       
       <!-- Left: Hamburger Drawer Trigger + Logo -->
@@ -80,19 +81,20 @@
 
       <!-- Desktop Center Nav Links -->
       <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-300">
-        <a href="portal.html" class="text-white border-b-2 border-[#C68A36] pb-0.5">Meus Cursos</a>
-        <a href="curso.html?id=projeto-aef-2026" class="hover:text-white transition">Grade de Módulos</a>
+        <a href="portal.html" class="text-white border-b-2 border-[#C68A36] pb-0.5">Dashboard</a>
+        <a href="#meus-cursos" class="hover:text-white transition">Meus Cursos</a>
+        <a href="#vitrine-cursos" class="hover:text-white transition">Vitrine de Cursos</a>
         <a href="treino/player.html" class="hover:text-white transition">Training Player</a>
       </nav>
 
-      <!-- Right: Search + Direct Training CTA + Profile Avatar -->
+      <!-- Right: Direct Training CTA + Profile Avatar -->
       <div class="flex items-center gap-2.5">
         <a href="treino/player.html" class="px-3.5 py-1.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span>Player</span>
         </a>
 
-        <div onclick="window.openMemberProfileModal()" class="w-8 h-8 rounded-full bg-white/10 text-amber-300 flex items-center justify-center font-bold text-xs border border-white/20 cursor-pointer shadow-xs">
+        <div onclick="window.openMemberProfileModal()" class="w-8 h-8 rounded-full bg-white/10 text-amber-300 flex items-center justify-center font-bold text-xs border border-white/20 cursor-pointer shadow-xs" title="Meu Perfil">
           <span id="header-avatar-initials">LL</span>
         </div>
       </div>
@@ -101,11 +103,67 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- 2. MAIN HUB WORKSPACE                                                     -->
+  <!-- 2. MAIN DASHBOARD WORKSPACE                                               -->
   <!-- ========================================================================= -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+  <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 flex-1">
 
-    <!-- 1. CINEMATIC HERO BANNER CARD (Clean 16:9 Banner) -->
+    <!-- A. GREETING & STUDENT METRICS BAR (STATS DASHBOARD) -->
+    <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#EAE5DC]">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#C68A36]">PORTAL DO MEMBRO</span>
+          <h1 class="text-xl sm:text-2xl font-black text-[#0A192F] tracking-tight">
+            Olá, <span id="top-user-greeting">Aluno</span> 👋
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] text-xs font-bold font-mono flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="student-tier-badge">Membro VIP</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Stats Metric Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        
+        <!-- Card 1: Streak -->
+        <div class="p-4 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
+            <i data-lucide="flame" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#7A7369]">Streak Ativo</span>
+            <p class="text-base font-black text-[#0A192F]"><span id="stat-streak-days">5</span> Dias Seguidos</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Listening Time -->
+        <div class="p-4 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center shrink-0">
+            <i data-lucide="headphones" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#7A7369]">Tempo de Escuta</span>
+            <p class="text-base font-black text-[#0A192F]"><span id="stat-listening-minutes">48</span> min acumulados</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Speaking Sessions -->
+        <div class="p-4 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+            <i data-lucide="mic" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#7A7369]">Recontos no AI Coach</span>
+            <p class="text-base font-black text-[#0A192F]"><span id="stat-speaking-records">12</span> Avaliações</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- B. HERO CARD: "CONTINUAR DE ONDE PAROU" -->
     <section class="bg-gradient-to-br from-[#0D1E36] via-[#112240] to-[#0A192F] rounded-2xl sm:rounded-3xl overflow-hidden relative shadow-xl p-5 sm:p-7 text-white space-y-4">
       
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -113,17 +171,17 @@
         <div class="space-y-2 flex-1 min-w-0">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-full bg-[#C68A36] text-white font-mono font-black text-[9px] uppercase tracking-wider">
-              CURSO ATIVO
+              PRÁTICA RECOMENDADA DE HOJE
             </span>
-            <span class="text-xs text-slate-300 font-medium">Turma Oficial 2026</span>
+            <span class="text-xs text-slate-300 font-medium" id="hero-course-tag">Projeto AEF 2026</span>
           </div>
 
-          <h2 class="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight">
-            Projeto AgoraEuFalo 2026 • Método Magic Stories
+          <h2 class="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight" id="hero-lesson-title">
+            Aula 01 • O Reflexo da Conexão Sonora
           </h2>
 
-          <p class="text-xs text-slate-300 leading-relaxed font-medium">
-            Masterclasses de alta definição, matriz de Sound Chunks acústicos e AI Speech Coach.
+          <p class="text-xs text-slate-300 leading-relaxed font-medium" id="hero-lesson-desc">
+            Treine a musicalidade do inglês falado real e a cadência acústica sem tradução mental.
           </p>
         </div>
 
@@ -134,52 +192,82 @@
 
       </div>
 
-      <!-- Progress Bar & Actions Row -->
-      <div class="pt-2 border-t border-white/10 space-y-3">
-        
-        <div class="flex items-center justify-between text-xs font-mono font-bold text-slate-300">
-          <span>Progresso do Aluno</span>
-          <span id="hero-progress-label" class="text-amber-300">33% Concluído</span>
-        </div>
+      <!-- Actions Row -->
+      <div class="pt-3 border-t border-white/10 flex flex-wrap items-center gap-3">
+        <a id="hero-cta-class" href="sala-de-aula.html?curso=projeto-aef-2026&aula=aef-01" class="px-5 py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+          <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+          <span>Assistir Masterclass</span>
+        </a>
 
-        <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-          <div id="hero-progress-bar" class="bg-[#C68A36] h-full rounded-full transition-all duration-500" style="width: 33%;"></div>
-        </div>
-
-        <div class="pt-1 flex flex-wrap items-center gap-2.5">
-          <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=aef-01" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
-            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-            <span>Continuar Assistindo (Aula 01)</span>
-          </a>
-
-          <a href="curso.html?id=projeto-aef-2026" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5">
-            <i data-lucide="grid" class="w-3.5 h-3.5 text-amber-300"></i>
-            <span>Ver Grade Completa</span>
-          </a>
-        </div>
-
+        <a id="hero-cta-train" href="treino/player.html?course=projeto-aef-2026&activity=listen_read" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5">
+          <i data-lucide="headphones" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>Ir para Training Player</span>
+        </a>
       </div>
 
     </section>
 
-    <!-- 2. COURSE MODULES & LESSONS (Clean Full-Width Vertical Accordion) -->
-    <section class="space-y-4">
+    <!-- C. SEÇÃO 1: "MEUS CURSOS MATRICULADOS" (GRADE DE CARDS) -->
+    <section id="meus-cursos" class="space-y-4">
       
       <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
         <div>
-          <h3 class="font-black text-sm sm:text-base text-[#0A192F]">Conteúdo do Curso</h3>
-          <p class="text-xs text-[#7A7369]">Selecione uma aula para assistir ou treinar:</p>
+          <h3 class="font-black text-base sm:text-lg text-[#0A192F] flex items-center gap-2">
+            <i data-lucide="book-open" class="w-5 h-5 text-[#C68A36]"></i>
+            <span>Meus Cursos Matriculados</span>
+          </h3>
+          <p class="text-xs text-[#7A7369]">Cursos com acesso liberado na sua conta:</p>
         </div>
-        <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-mono text-[10px] font-bold">
-          3 AULAS
+        <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-mono text-[11px] font-bold" id="enrolled-courses-count">
+          0 CURSOS
         </span>
       </div>
 
-      <!-- Modules Accordion List -->
-      <div id="portalModulesAccordion" class="space-y-3">
-        <!-- Injected via JS -->
+      <!-- Enrolled Courses Grid -->
+      <div id="enrolledCoursesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Injected dynamically via JS -->
       </div>
 
+    </section>
+
+    <!-- D. SEÇÃO 2: "VITRINE & CURSOS DISPONÍVEIS PARA INSCRIÇÃO" (CATÁLOGO) -->
+    <section id="vitrine-cursos" class="space-y-4 pt-4 border-t border-[#EAE5DC]">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
+        <div>
+          <h3 class="font-black text-base sm:text-lg text-[#0A192F] flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-amber-500"></i>
+            <span>Vitrine de Treinamentos & Especializações</span>
+          </h3>
+          <p class="text-xs text-[#7A7369]">Expanda sua fluência com novos programas do Professor Leo:</p>
+        </div>
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-700 font-mono text-[10px] font-bold uppercase">
+          DISPONÍVEL
+        </span>
+      </div>
+
+      <!-- Available Courses Grid -->
+      <div id="availableCoursesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Injected dynamically via JS -->
+      </div>
+
+    </section>
+
+    <!-- E. CENTRAL DE RECURSOS & CONTATO DIRETO -->
+    <section class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-[#C68A36] flex items-center justify-center shrink-0">
+          <i data-lucide="message-circle" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h4 class="font-black text-sm text-[#0A192F]">Precisa de Orientação Pedagógica?</h4>
+          <p class="text-xs text-[#7A7369]">Fale diretamente com o Professor Leonardo Leite no WhatsApp.</p>
+        </div>
+      </div>
+      <a href="https://wa.me/5531999817975?text=Oi%20Leo!%20Estou%20aqui%20no%20Portal%20do%20Aluno%20AgoraEuFalo%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida." target="_blank" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm shrink-0">
+        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+        <span>WhatsApp do Leo</span>
+      </a>
     </section>
 
   </main>
@@ -197,7 +285,7 @@
         <span class="font-serif font-black text-lg tracking-tight text-[#0A192F]">
           Agora<span class="text-[#C68A36]">EuFalo+</span>
         </span>
-        <button onclick="window.togglePortalDrawer()" class="p-1 rounded-lg text-slate-500 hover:text-slate-900">
+        <button onclick="window.togglePortalDrawer()" class="p-1 rounded-lg text-slate-500 hover:text-slate-900 cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -205,24 +293,28 @@
       <!-- Drawer Nav Links -->
       <nav class="space-y-1 text-xs font-bold">
         <a href="portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs">
-          <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#C68A36]"></i>
+          <span>Dashboard Geral</span>
+        </a>
+        <a href="#meus-cursos" onclick="window.togglePortalDrawer()" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Meus Cursos</span>
         </a>
-        <a href="curso.html?id=projeto-aef-2026" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="grid" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Grade de Módulos</span>
-        </a>
-        <a href="repertorio.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="layers" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Flashcards & Chunks</span>
+        <a href="#vitrine-cursos" onclick="window.togglePortalDrawer()" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="sparkles" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Vitrine de Cursos</span>
         </a>
         <a href="treino/player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Personal Training Player</span>
+          <span>Training Player</span>
         </a>
         <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Aulas ao Vivo (Meet)</span>
+        </a>
+        <a href="blog/index.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="newspaper" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Blog & Sacadas do Leo</span>
         </a>
       </nav>
     </div>
@@ -279,7 +371,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- JAVASCRIPT PORTAL CONTROLLER                                              -->
+  <!-- JAVASCRIPT PORTAL CONTROLLER (DYNAMIC FIRESTORE MATRIZ)                   -->
   <!-- ========================================================================= -->
   <script>
     function updateIcons() {
@@ -288,157 +380,203 @@
       }
     }
 
-    const COURSE_SEEDS = {
-      id: "projeto-aef-2026",
-      title: "Projeto AgoraEuFalo 2026",
-      modules: [
-        {
-          id: "mod-01",
-          order: 1,
-          title: "01 - Destravando a Escuta e o Reflexo",
-          lessons: [
-            {
-              id: "aef-01",
-              order: 1,
-              title: "Aula 01: O Segredo da Conversação Espontânea",
-              duration: "09:30",
-              trackId: "aef-01-reflexo"
-            },
-            {
-              id: "aef-02",
-              order: 2,
-              title: "Aula 02: O Ritmo do Inglês Falado Real",
-              duration: "08:15",
-              trackId: "aef-02-ritmo"
-            }
-          ]
-        },
-        {
-          id: "mod-02",
-          order: 2,
-          title: "02 - Fluência Situacional & Spoken Reflex",
-          lessons: [
-            {
-              id: "aef-03",
-              order: 3,
-              title: "Aula 03: Small Talk & Conversas Corporativas",
-              duration: "11:40",
-              trackId: "aef-03-smalltalk"
-            }
-          ]
-        }
-      ]
+    // Matriz de Cursos Oficial Fallback / Base
+    const OFFICIAL_COURSES_MATRIX = {
+      "projeto-aef-2026": {
+        id: "projeto-aef-2026",
+        title: "Projeto AgoraEuFalo 2026",
+        slug: "projeto-aef-2026",
+        badge: "FLAGSHIP 2026",
+        tierRequired: "vip",
+        published: true,
+        coverImageUrl: "assets/images/cover-default-aef.jpg",
+        description: "Treinamento completo de reflexo oral, cadência, connected speech e automação de fala com o Método Magic Stories.",
+        totalLessons: 3,
+        completedLessons: 1
+      },
+      "magic-stories-club": {
+        id: "magic-stories-club",
+        title: "Magic Stories Club • 30 Ciclos Clássicos",
+        slug: "magic-stories-club",
+        badge: "30 CICLOS",
+        tierRequired: "club_anual",
+        published: true,
+        coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
+        description: "Acervo de 30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas com o Professor Leo.",
+        totalLessons: 30,
+        completedLessons: 0
+      },
+      "guia-pronuncia-ritmo": {
+        id: "guia-pronuncia-ritmo",
+        title: "Guia Definitivo de Pronúncia & Rhythm",
+        slug: "guia-pronuncia-ritmo",
+        badge: "ESPECIALIZAÇÃO",
+        tierRequired: "club_anual",
+        published: true,
+        coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
+        description: "Domine linkings consonant-to-vowel, redução de vogais fracas e a musicalidade natural da língua inglesa.",
+        totalLessons: 12,
+        completedLessons: 0
+      },
+      "mentoria-vip-individual": {
+        id: "mentoria-vip-individual",
+        title: "Mentoria VIP Individual 1 a 1",
+        slug: "mentoria-vip-individual",
+        badge: "VIP 1 A 1",
+        tierRequired: "vip",
+        published: true,
+        coverImageUrl: "assets/images/leonardo-leite.png",
+        description: "Acompanhamento cirúrgico e individual com gravações personalizadas, feedback direto e sessões ao vivo no Google Meet.",
+        totalLessons: 6,
+        completedLessons: 2
+      }
     };
 
-    let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
-
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       const studentName = localStorage.getItem("aef_user_name") || "Leonardo Leite";
       const studentEmail = localStorage.getItem("aef_user_email") || "leonardo@agoraeufalo.com.br";
+      const enrolledProducts = JSON.parse(localStorage.getItem("aef_enrolled_products") || '["projeto-aef-2026", "mentoria-vip-individual"]');
 
       const topGreeting = document.getElementById("top-user-greeting");
       const drawerName = document.getElementById("drawer-user-name");
-      if (topGreeting) topGreeting.innerText = studentName.split(" ")[0] || "Leonardo";
+      if (topGreeting) topGreeting.innerText = studentName.split(" ")[0] || "Aluno";
       if (drawerName) drawerName.innerText = studentName;
 
-      renderPortalModules();
+      // Stats Telemetry from LocalStorage / Firestore
+      const listeningSeconds = parseInt(localStorage.getItem("aef_listening_seconds") || "2880");
+      const listeningMinutes = Math.round(listeningSeconds / 60);
+      const minutesEl = document.getElementById("stat-listening-minutes");
+      if (minutesEl) minutesEl.innerText = listeningMinutes;
+
+      await renderCoursesShowcase(enrolledProducts);
       updateIcons();
     });
 
-    function renderPortalModules() {
-      const container = document.getElementById("portalModulesAccordion");
-      if (!container) return;
+    async function renderCoursesShowcase(enrolledProducts) {
+      let courses = OFFICIAL_COURSES_MATRIX;
 
-      let totalLessons = 0;
-      let totalCompleted = 0;
-
-      container.innerHTML = COURSE_SEEDS.modules.map((mod, mIdx) => {
-        const modLessons = mod.lessons || [];
-        totalLessons += modLessons.length;
-        
-        let modCompleted = 0;
-        modLessons.forEach(l => {
-          if (completedLessonIds.includes(l.id)) {
-            modCompleted++;
-            totalCompleted++;
+      // Busca matriz atualizada no Firestore se disponível
+      try {
+        if (window.aefCloudSync) await window.aefCloudSync.init();
+        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.documents && data.documents.length > 0) {
+            const cloudCourses = {};
+            data.documents.forEach(doc => {
+              const f = doc.fields || {};
+              const id = f.id?.stringValue || doc.name.split("/").pop();
+              cloudCourses[id] = {
+                id: id,
+                title: f.title?.stringValue || id,
+                slug: f.slug?.stringValue || id,
+                badge: f.badge?.stringValue || "CURSO",
+                tierRequired: f.tierRequired?.stringValue || "club_anual",
+                published: f.published?.booleanValue ?? true,
+                coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
+                description: f.description?.stringValue || ""
+              };
+            });
+            courses = Object.assign({}, OFFICIAL_COURSES_MATRIX, cloudCourses);
           }
-        });
+        }
+      } catch (err) {
+        console.log("Using registered courses matrix fallback:", err);
+      }
 
-        const modPercent = modLessons.length > 0 ? Math.round((modCompleted / modLessons.length) * 100) : 0;
-        const isModComplete = modPercent === 100;
+      const enrolledContainer = document.getElementById("enrolledCoursesGrid");
+      const availableContainer = document.getElementById("availableCoursesGrid");
+      const enrolledCountBadge = document.getElementById("enrolled-courses-count");
 
-        return `
-          <div class="border border-[#EAE5DC] rounded-2xl bg-white overflow-hidden shadow-xs">
-            
-            <!-- Module Header -->
-            <div onclick="toggleModuleList('${mod.id}')" class="p-4 sm:p-5 bg-white hover:bg-[#FAF8F5] transition cursor-pointer flex items-center justify-between gap-3 select-none">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-8 h-8 rounded-full ${isModComplete ? 'bg-emerald-500 text-white' : 'bg-[#0D1E36] text-amber-300'} flex items-center justify-center font-bold text-xs shrink-0">
-                  ${isModComplete ? '<i data-lucide="check" class="w-4 h-4"></i>' : (mIdx + 1)}
+      let enrolledHtml = "";
+      let availableHtml = "";
+      let enrolledCount = 0;
+
+      for (const [id, course] of Object.entries(courses)) {
+        // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
+        if (course.published === false) continue;
+
+        const isEnrolled = enrolledProducts.includes(id);
+
+        if (isEnrolled) {
+          enrolledCount++;
+          const progressPercent = course.totalLessons ? Math.round(((course.completedLessons || 0) / course.totalLessons) * 100) : 33;
+
+          enrolledHtml += `
+            <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-[#C68A36]/60 transition flex flex-col justify-between">
+              
+              <div>
+                <!-- Course Cover Image -->
+                <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                  <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover">
+                  <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-[#C68A36] text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
+                    ${course.badge || 'CURSO ATIVO'}
+                  </span>
                 </div>
 
-                <div class="min-w-0">
-                  <h4 class="font-black text-xs sm:text-sm text-[#0A192F] truncate">${mod.title}</h4>
-                  <span class="text-[10px] font-bold ${isModComplete ? 'text-emerald-600 flex items-center gap-1' : 'text-[#7A7369]'}">${isModComplete ? 'Completo <i data-lucide="check" class="w-3 h-3 text-emerald-600"></i>' : `${modPercent}% Concluído`}</span>
+                <!-- Course Body -->
+                <div class="p-4 sm:p-5 space-y-2">
+                  <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description}</p>
                 </div>
               </div>
 
-              <i data-lucide="chevron-down" id="chevron-${mod.id}" class="w-4 h-4 text-[#7A7369] transition duration-200"></i>
-            </div>
-
-            <!-- Lessons List -->
-            <div id="lessons-list-${mod.id}" class="p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
-              ${modLessons.map(les => {
-                const isCompleted = completedLessonIds.includes(les.id);
-                return `
-                  <div class="p-3 rounded-xl bg-white border border-[#EAE5DC] hover:border-[#C68A36] transition flex items-center justify-between gap-3">
-                    
-                    <div class="flex items-center gap-3 min-w-0">
-                      <div class="relative w-14 h-10 rounded-lg bg-[#0D1E36] overflow-hidden shrink-0 flex items-center justify-center">
-                        <img src="assets/images/leonardo-leite.png" alt="Thumb" class="w-full h-full object-cover object-top opacity-80">
-                        <span class="absolute bottom-0.5 right-0.5 px-1 py-0.2 rounded bg-black/80 text-white font-mono text-[7px]">
-                          ${les.duration}
-                        </span>
-                      </div>
-
-                      <div class="min-w-0">
-                        <h5 class="font-bold text-xs text-[#0A192F] truncate">${les.title}</h5>
-                        <p class="text-[10px] text-[#7A7369]">${les.duration} • Prof. Leo</p>
-                      </div>
-                    </div>
-
-                    <div class="flex items-center gap-1.5 shrink-0">
-                      <a href="sala-de-aula.html?curso=${COURSE_SEEDS.id}&aula=${les.id}" class="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-[#0A192F] font-bold text-[11px] transition">
-                        Aula
-                      </a>
-                      <a href="treino/player.html?tab=courses&trackId=${les.trackId}&activity=listen_read" class="px-2.5 py-1.5 rounded-lg bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-[11px] transition flex items-center gap-1">
-                        <i data-lucide="play" class="w-2.5 h-2.5 fill-current"></i>
-                        <span>Treinar</span>
-                      </a>
-                    </div>
-
+              <!-- Progress & Action -->
+              <div class="p-4 sm:p-5 pt-0 space-y-3">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
+                    <span>Progresso</span>
+                    <span class="text-[#C68A36]">${progressPercent}% Concluído</span>
                   </div>
-                `;
-              }).join('')}
+                  <div class="w-full bg-[#FAF8F5] border border-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-[#C68A36] h-full rounded-full" style="width: ${progressPercent}%;"></div>
+                  </div>
+                </div>
+
+                <a href="curso.html?id=${course.slug || course.id}" class="w-full py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs">
+                  <span>Acessar Módulos</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+
             </div>
+          `;
+        } else {
+          availableHtml += `
+            <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between">
+              
+              <div>
+                <!-- Course Cover Image -->
+                <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                  <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover opacity-90">
+                  <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
+                    DISPONÍVEL
+                  </span>
+                </div>
 
-          </div>
-        `;
-      }).join('');
+                <!-- Course Body -->
+                <div class="p-4 sm:p-5 space-y-2">
+                  <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description}</p>
+                </div>
+              </div>
 
-      const globalPercent = totalLessons > 0 ? Math.round((totalCompleted / totalLessons) * 100) : 0;
-      const heroLabel = document.getElementById("hero-progress-label");
-      const heroBar = document.getElementById("hero-progress-bar");
-      if (heroLabel) heroLabel.innerText = `${globalPercent}% Concluído`;
-      if (heroBar) heroBar.style.width = `${globalPercent}%`;
-    }
+              <!-- Action Button -->
+              <div class="p-4 sm:p-5 pt-0">
+                <a href="https://wa.me/5531999817975?text=Oi%20Leo!%20Quero%20saber%20mais%20sobre%20o%20curso%20${encodeURIComponent(course.title)}" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm">
+                  <span>Garantir Vaga</span>
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
 
-    function toggleModuleList(modId) {
-      const body = document.getElementById(`lessons-list-${modId}`);
-      const chevron = document.getElementById(`chevron-${modId}`);
-      if (!body) return;
-      body.classList.toggle("hidden");
-      if (chevron) chevron.classList.toggle("rotate-180");
+            </div>
+          `;
+        }
+      }
+
+      if (enrolledContainer) enrolledContainer.innerHTML = enrolledHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso matriculado no momento.</p>`;
+      if (availableContainer) availableContainer.innerHTML = availableHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso adicional disponível.</p>`;
+      if (enrolledCountBadge) enrolledCountBadge.innerText = `${enrolledCount} CURSO${enrolledCount > 1 ? 'S' : ''}`;
     }
 
     window.togglePortalDrawer = () => {
@@ -475,7 +613,9 @@
       const name = document.getElementById("modal-profile-input-name").value.trim();
       localStorage.setItem("aef_user_name", name);
       const drawerName = document.getElementById("drawer-user-name");
+      const topGreeting = document.getElementById("top-user-greeting");
       if (drawerName) drawerName.innerText = name;
+      if (topGreeting) topGreeting.innerText = name.split(" ")[0];
       window.closeMemberProfileModal();
     };
   </script>
