@@ -371,31 +371,25 @@
       ]
     };
 
-    const SOUND_CHUNKS = [
-      { en: "to be honest", pt: "pra falar a verdade / sendo bem honesto" },
-      { en: "back-to-back team meetings", pt: "reuniões uma atrás da outra" },
-      { en: "huge relief", pt: "um alívio enorme" },
-      { en: "off your plate", pt: "fora da sua frente / resolvido" },
-      { en: "if the weather holds up", pt: "se o tempo firmar / se não chover" },
-      { en: "catch up on some reading", pt: "botar as leituras em dia" }
-    ];
+    function getActiveChunks() {
+      if (REAL_TRACK.chunks && REAL_TRACK.chunks.length > 0) {
+        return REAL_TRACK.chunks;
+      }
+      return (REAL_TRACK.sentences || []).slice(0, 6).map((s, idx) => ({
+        en: s.text,
+        pt: s.spokenTranslation || ""
+      }));
+    }
 
-    const QA_PAIRS = [
-      { q: "How has Mark's week been so far?", a: "It's been pretty busy, but really productive." },
-      { q: "What did Sarah finalize this morning?", a: "She finalized the new project roadmap after back-to-back meetings." },
-      { q: "What is Mark thinking of doing this weekend?", a: "He's thinking of taking a quick road trip to the coast." }
-    ];
-
-    const RETELL_PROMPTS = [
-      { text: "1. How did Sarah and Mark start their conversation about their week?" },
-      { text: "2. What did Sarah accomplish with her team this morning?" },
-      { text: "3. What are Mark and Sarah planning to do over the weekend?" }
-    ];
-
-    const NEGATIVE_ASK_PAIRS = [
-      { statement: "Mark wasn't having an unproductive week.", question: "Was Mark having an unproductive week?" },
-      { statement: "Sarah didn't forget to finalize the project roadmap.", question: "Did Sarah finalize the project roadmap?" }
-    ];
+    function getActiveItems() {
+      if (state.activity === 'look_retell') {
+        if (REAL_TRACK.retellPrompts && REAL_TRACK.retellPrompts.length > 0) {
+          return REAL_TRACK.retellPrompts.map(p => ({ text: p.text || p }));
+        }
+        return (REAL_TRACK.sentences || []).map((s, idx) => ({ text: `${idx + 1}. ${s.text}` }));
+      }
+      return REAL_TRACK.sentences || [];
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -426,6 +420,12 @@
         }
       }
 
+      const trackParam = urlParams.get('trackId') || urlParams.get('track');
+      if (trackParam && state.student && state.student.tracks) {
+        const found = state.student.tracks.find(t => t.id === trackParam);
+        if (found) REAL_TRACK = found;
+      }
+
       // Sincroniza metadados do Sidebar
       const sideName = document.getElementById('sidebar-activity-name');
       if (sideName) sideName.innerText = REAL_TRACK.title;
@@ -448,6 +448,7 @@
       state.activity = newAct;
       state.loopingSentenceIndex = -1;
       state.currentSentenceIndex = 0;
+      state.revealedAnswers = {};
       
       if (state.activity === 'look_retell') {
         state.audio.pause();
@@ -457,31 +458,6 @@
       renderZenStage();
       renderBottomDock();
       updateIcons();
-    }
-
-    function getActiveItems() {
-      if (state.activity === 'listen_answer') {
-        return [
-          { text: "Pergunta: How has Mark's week been going so far?", speaker: "Leo", start: 0.0, end: 3.17 },
-          { text: "Resposta: It's been pretty busy, but really productive.", speaker: "Aluno", start: 3.52, end: 8.25 },
-          { text: "Pergunta: What did Sarah finalize this morning?", speaker: "Leo", start: 8.6, end: 15.09 },
-          { text: "Resposta: She finalized the new project roadmap after back-to-back meetings.", speaker: "Aluno", start: 15.44, end: 20.05 },
-          { text: "Pergunta: What is Mark thinking of doing this weekend?", speaker: "Leo", start: 20.4, end: 24.77 },
-          { text: "Resposta: He's thinking of taking a quick road trip to the coast.", speaker: "Aluno", start: 25.12, end: 35.8 }
-        ];
-      }
-      if (state.activity === 'look_retell') {
-        return RETELL_PROMPTS.map(p => ({ text: p.text }));
-      }
-      if (state.activity === 'listen_ask') {
-        return [
-          { text: "Afirmação: Mark wasn't having an unproductive week.", speaker: "Leo", start: 0.0, end: 8.25 },
-          { text: "Pergunta: Was Mark having an unproductive week?", speaker: "Aluno", start: 8.6, end: 15.09 },
-          { text: "Afirmação: Sarah didn't forget to finalize the project roadmap.", speaker: "Leo", start: 15.44, end: 24.77 },
-          { text: "Pergunta: Did Sarah finalize the project roadmap?", speaker: "Aluno", start: 25.12, end: 35.8 }
-        ];
-      }
-      return REAL_TRACK.sentences;
     }
 
     function renderZenStage() {
@@ -586,7 +562,7 @@
                 <i data-lucide="layers" class="w-4 h-4 text-[#C68A36]"></i> Sound Chunks Isolados da Lição:
               </span>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                ${SOUND_CHUNKS.map((chunk, cIdx) => 
+                ${getActiveChunks().map((chunk, cIdx) => 
                   window.AEFPlayerZenTemplate.renderSoundChunkCard(chunk, cIdx)
                 ).join('')}
               </div>
