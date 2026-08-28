@@ -14,7 +14,7 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 | **Projeto AEF 2026** | [agoraeufalo.com.br/projeto-aef.html](https://agoraeufalo.com.br/projeto-aef.html) | [`projeto-aef.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/projeto-aef.html) | Página oficial de vendas e matrícula da turma 2026. |
 | **Mentoria VIP** | [agoraeufalo.com.br/mentoria.html](https://agoraeufalo.com.br/mentoria.html) | [`mentoria.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/mentoria.html) | Página do programa de Mentoria Individual e Acompanhamento Direto com o Prof. Leo. |
 | **Guia Definitivo Magic Stories** | [agoraeufalo.com.br/guia-magic-stories.html](https://agoraeufalo.com.br/guia-magic-stories.html) | [`guia-magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/guia-magic-stories.html) | Masterclass e guia completo com Diagrama Hexagonal e treino prático com o Leo Gringo. |
-| **Portal de Membros (Área do Aluno)** | [agoraeufalo.com.br/portal.html](https://agoraeufalo.com.br/portal.html) | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | Área autenticada de cursos, masterclasses, download de PDFs e envio direto para o Player. |
+| **Portal de Membros (Área do Aluno)** | [agoraeufalo.com.br/portal.html](https://agoraeufalo.com.br/portal.html) | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | Dashboard Editorial Prestige 1:1 com Hero MasterClass em Midnight Navy, navegação vertical, áudio visualizer, sentenças bilíngues e agenda de aulas ao vivo. |
 | **Canal de Contato** | [agoraeufalo.com.br/contato.html](https://agoraeufalo.com.br/contato.html) | [`contato.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/contato.html) | Formulário de contato direto e link para o WhatsApp do Professor Leo. |
 
 ---
@@ -87,3 +87,14 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 | **Página de Confirmação (Obrigado)** | [agoraeufalo.com.br/obrigado.html](https://agoraeufalo.com.br/obrigado.html) | [`obrigado.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/obrigado.html) | Página de confirmação de cadastro de lead e entrega de material. |
 | **Política de Privacidade** | [agoraeufalo.com.br/politica-de-privacidade.html](https://agoraeufalo.com.br/politica-de-privacidade.html) | [`politica-de-privacidade.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/politica-de-privacidade.html) | Termos de conformidade com a LGPD e privacidade de dados. |
 | **Termos de Uso** | [agoraeufalo.com.br/termos-de-uso.html](https://agoraeufalo.com.br/termos-de-uso.html) | [`termos-de-uso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/termos-de-uso.html) | Condições gerais de uso do site e serviços educacionais. |
+
+---
+
+## 🎨 7. Templates Modulares & Design System Core (`assets/js/templates/`)
+
+| Módulo de Template | Arquivo Local | Descrição |
+| :--- | :--- | :--- |
+| **AEF Editorial Prestige Template** | [`assets/js/templates/aef-template-editorial.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/js/templates/aef-template-editorial.js) | Renderizador do Hero MasterClass 16:9 em Midnight Navy, Acordeão de Módulos e telemetria de progresso do Portal. |
+| **AEF Player Zen Template** | [`assets/js/templates/aef-template-player-zen.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/js/templates/aef-template-player-zen.js) | Renderizador do Palco Zen de Cartão Único, Medidor Circular AI Coach (8.8/10), Cards Unificados de Alto Contraste e Matriz de Chunks. |
+| **AEF Master Luxury CSS** | [`assets/css/aef-luxury-system.css`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/css/aef-luxury-system.css) | Folha de estilos unificada do Luxury Editorial Prestige Design System do AgoraEuFalo. |
+

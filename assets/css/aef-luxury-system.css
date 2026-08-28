@@ -1,30 +1,32 @@
 /**
- * 🏛️ AGORAEUFALO LUXURY DESIGN SYSTEM (CORE)
+ * 🏛️ AGORAEUFALO LUXURY DESIGN SYSTEM & TEMPLATE CORE
  * Padrão Visual Editorial de Alto Padrão - Professor Leonardo Leite
- * Diretrizes Oficiais: AGENTS.md, GEMINI.md & implementation_plan.md
+ * Templates: Editorial Prestige (Desktop & Mobile) + Training Player Zen Mode
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
 :root {
-  /* Master Palette Tokens */
+  /* Master Palette Tokens - Editorial Prestige Warmth */
   --aef-canvas: #FAF8F5;
   --aef-card-bg: #FFFFFF;
   --aef-card-linen: #FFFDF9;
   --aef-card-amber: #FFFBEB;
-  --aef-card-amber-border: #FCD34D;
   
   --aef-text-navy: #0A192F;
+  --aef-text-midnight: #0D1E36;
   --aef-text-body: #1E293B;
-  --aef-text-muted: #64748B;
-  --aef-text-amber: #78350F;
+  --aef-text-muted: #7A7369;
+  --aef-text-ochre: #C68A36;
   
+  --aef-ochre: #C68A36;
+  --aef-ochre-hover: #B3792A;
+  --aef-ochre-light: #FDF8F0;
   --aef-gold: #D97706;
   --aef-gold-light: #F59E0B;
-  --aef-gold-bright: #FBBF24;
   
-  --aef-border-subtle: #EAE6DE;
-  --aef-border-card: #E2DDD5;
+  --aef-border-subtle: #F0EBE1;
+  --aef-border-card: #EAE5DC;
   --aef-shadow-lux: 0 20px 50px -10px rgba(15, 23, 42, 0.04), 0 4px 15px -2px rgba(15, 23, 42, 0.02);
 }
 
@@ -44,98 +46,179 @@
 /* Master Ambient Canvas */
 body, .aef-canvas-bg {
   background: 
-    radial-gradient(circle at 5% 12%, rgba(245, 158, 11, 0.07) 0%, transparent 35%),
-    radial-gradient(circle at 95% 8%, rgba(217, 119, 6, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 50% 92%, rgba(16, 185, 129, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 5% 12%, rgba(198, 138, 54, 0.06) 0%, transparent 35%),
+    radial-gradient(circle at 95% 8%, rgba(13, 30, 54, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 50% 92%, rgba(198, 138, 54, 0.03) 0%, transparent 45%),
     var(--aef-canvas) !important;
   color: var(--aef-text-body);
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Luxury Frosted Glass Containers */
-.aef-glass-panel {
-  background: rgba(255, 255, 255, 0.82) !important;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: var(--aef-shadow-lux);
+/* ========================================================================= */
+/* 🏛️ TEMPLATE 1: EDITORIAL PRESTIGE SHELL (Desktop & Mobile)                */
+/* ========================================================================= */
+.aef-shell-editorial-prestige {
+  max-width: 1440px;
+  width: 100%;
+  background: #FFFDF9;
+  border: 1px solid #EAE5DC;
+  border-radius: 36px;
+  padding: 2rem;
+  box-shadow: 0 25px 60px -15px rgba(10, 25, 47, 0.06);
 }
 
-.aef-glass-pill {
-  background: rgba(255, 255, 255, 0.9) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+@media (min-width: 1024px) {
+  .aef-shell-editorial-prestige {
+    border-radius: 44px;
+    padding: 2.5rem;
+  }
 }
 
-/* Luxury Card Foundations */
-.aef-card {
-  background-color: var(--aef-card-bg);
-  border: 1px solid var(--aef-border-card);
-  border-radius: 28px;
-  box-shadow: var(--aef-shadow-lux);
+/* Active Nav Pill (Linho Quente) */
+.aef-nav-pill-active {
+  background-color: #F5EFE6 !important;
+  color: #2C2416 !important;
+  border: 1px solid #E8E0D2 !important;
+  font-weight: 700 !important;
+}
+
+/* ========================================================================= */
+/* 🎙️ TEMPLATE 2: TRAINING PLAYER ZEN MODE & AI COACH (Desktop & Mobile)     */
+/* ========================================================================= */
+
+/* Circular Gauge Score Widget (8.8 / 10) */
+.aef-gauge-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.aef-gauge-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.aef-gauge-track {
+  fill: none;
+  stroke: #EAE5DC;
+  stroke-width: 10;
+}
+
+.aef-gauge-fill {
+  fill: none;
+  stroke: #C68A36;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 60; /* 8.8 of 10 */
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+/* Bicolor Split Bilingual Card (Mockup Opção A Mobile) */
+.aef-bilingual-split-card {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(10, 25, 47, 0.08);
+  border: 1px solid #EAE5DC;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.aef-card:hover {
-  border-color: rgba(217, 119, 6, 0.35);
-  box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.08);
+.aef-bilingual-split-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 35px -5px rgba(10, 25, 47, 0.12);
+  border-color: #C68A36;
 }
 
-/* Zero Dark Boxes Modal Pattern (Paper & Ink Luxury) */
+.aef-bilingual-split-card .card-top-navy {
+  background-color: #0D1E36;
+  color: #FFFFFF;
+  padding: 1.25rem 1.5rem;
+}
+
+.aef-bilingual-split-card .card-bottom-ochre {
+  background-color: #C68A36;
+  color: #FFFFFF;
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+}
+
+/* Glowing Radiant Microphone Button */
+.aef-mic-radiant {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #DDA44D 0%, #C68A36 70%, #B3792A 100%);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 35px 8px rgba(198, 138, 54, 0.4), 0 10px 25px -5px rgba(179, 121, 42, 0.5);
+  border: 4px solid #FFFDF9;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aef-mic-radiant:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 45px 12px rgba(198, 138, 54, 0.55);
+}
+
+.aef-mic-radiant:active {
+  transform: scale(0.96);
+}
+
+/* Micro Metric Badge (Acc, Flow, Tone) */
+.aef-micro-metric {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #C68A36;
+  background: #FFFDF9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0A192F;
+}
+
+/* Honey Ochre CTA Buttons */
+.btn-ochre, .btn-aef-primary {
+  background-color: #C68A36 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-ochre:hover, .btn-aef-primary:hover {
+  background-color: #B3792A !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -4px rgba(198, 138, 54, 0.35);
+}
+
+.btn-ochre:active, .btn-aef-primary:active {
+  transform: translateY(0);
+}
+
+/* Zero Dark Boxes Modal Pattern */
 .aef-modal-card {
   background: #FFFFFF !important;
-  border: 2px solid #FDE68A !important;
+  border: 2px solid #EAE5DC !important;
   border-radius: 32px !important;
-  box-shadow: 0 30px 70px -15px rgba(10, 25, 47, 0.25), 0 0 0 1px rgba(245, 158, 11, 0.1) !important;
+  box-shadow: 0 30px 70px -15px rgba(10, 25, 47, 0.25), 0 0 0 1px rgba(198, 138, 54, 0.1) !important;
   color: var(--aef-text-body) !important;
 }
 
-/* Acoustic Sentence Card (Millimetric Feedback) */
-.sentence-card {
-  background-color: #FFFFFF;
-  border: 1.5px solid var(--aef-border-subtle);
-  border-radius: 20px;
-  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
-}
-
-.sentence-card:hover {
-  border-color: var(--aef-gold-light);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px -3px rgba(217, 119, 6, 0.08);
-}
-
-.sentence-card.active-sentence {
-  transform: translateY(-2px) scale(1.006);
-  border-color: #F59E0B !important;
-  background-color: var(--aef-card-amber) !important;
-  box-shadow: 0 14px 35px -5px rgba(217, 119, 6, 0.18), 0 0 0 1px rgba(245, 158, 11, 0.4);
-}
-
-.sentence-card.active-sentence .sentence-text {
-  color: #0A192F !important;
-  font-weight: 800;
-}
-
-.sentence-card.active-sentence .time-pill {
-  background-color: #D97706 !important;
-  color: #FFFFFF !important;
-  border-color: #D97706 !important;
-}
-
-.sentence-text {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  letter-spacing: -0.01em;
-}
-
-.sentence-translation {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  letter-spacing: -0.005em;
-}
-
-/* Soundwave Pulse Animation for AI Speech Coach */
+/* Soundwave Pulse Animation */
 @keyframes soundwave-pulse {
   0%, 100% { height: 6px; opacity: 0.4; transform: scaleY(0.6); }
   50% { height: 36px; opacity: 1; transform: scaleY(1); }

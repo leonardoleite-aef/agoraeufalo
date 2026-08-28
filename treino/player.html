@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Personal Training Player • AgoraEuFalo</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Training Player • Spoken Reflex Studio | AgoraEuFalo</title>
+  <meta name="description" content="Personal Training Player do AgoraEuFalo • Treine reflexo oral, compreensão e connected speech com as 6 Atividades Canônicas.">
   
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <meta name="theme-color" content="#FAF8F5">
+
   <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & Fira Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
@@ -24,10 +29,13 @@
           colors: {
             aef: {
               navy: '#0A192F',
-              gold: '#D97706',
-              'gold-light': '#F59E0B',
-              'gold-bright': '#FBBF24',
-              canvas: '#FAF8F5'
+              midnight: '#0D1E36',
+              ochre: '#C68A36',
+              'ochre-hover': '#B3792A',
+              canvas: '#FAF8F5',
+              paper: '#FFFDF9',
+              border: '#EAE5DC',
+              muted: '#7A7369'
             }
           }
         }
@@ -35,14 +43,15 @@
     }
   </script>
 
-  <!-- Lucide Vector Icons CDN -->
+  <!-- Lucide Vector Icons & Real Registry SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../treino/data/public.js"></script>
+  <script src="../assets/js/templates/aef-template-player-zen.js"></script>
 
-  <!-- AgoraEuFalo Luxury Design System Core -->
+  <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="../assets/css/aef-luxury-system.css">
 
   <style>
-    /* Range input styling */
     input[type=range] {
       -webkit-appearance: none;
       background: transparent;
@@ -55,858 +64,725 @@
       height: 14px;
       width: 14px;
       border-radius: 50%;
-      background: #F59E0B;
+      background: #C68A36;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      transition: transform 0.1s ease;
     }
-    input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.25);
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      height: 4px;
-      width: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #E2DDD5;
-      border-radius: 4px;
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-full aef-canvas-bg flex flex-col antialiased text-slate-900 selection:bg-amber-200">
+<body class="aef-canvas-bg text-slate-900 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-200">
 
-  <!-- ================================================================= -->
-  <!-- 1. TOP LUXURY NAVIGATION HEADER                                    -->
-  <!-- ================================================================= -->
-  <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-stone-200/90 shadow-xs">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+  <!-- ========================================================================= -->
+  <!-- 1. TOP HEADER: Navigation & Brand                                         -->
+  <!-- ========================================================================= -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-[#EAE5DC] sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
       
-      <!-- Brand Logo -->
-      <a href="../index.html" class="flex items-center gap-2.5 transition active:scale-95 group">
-        <span class="font-serif font-black text-xl tracking-tight text-[#0A192F]">
-          Agora<span class="text-amber-600">EuFalo</span><span class="text-amber-500 font-sans text-xs ml-0.5">.</span>
-        </span>
-      </a>
-
-      <!-- Student Tier & Controls Header Group -->
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        
-        <!-- Active Student Pill -->
-        <button onclick="window.openSaaSLoginModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-100/80 hover:bg-amber-100/70 border border-stone-200/80 transition cursor-pointer text-left" title="Alternar Aluno ou Entrar">
-          <div id="header-avatar-badge" class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-black text-[11px] shrink-0">
-            AG
-          </div>
-          <div class="hidden sm:block leading-tight pr-1">
-            <span id="header-student-name" class="font-bold text-xs text-[#0A192F] block">Aluno Demonstração</span>
-            <span id="header-tier-label" class="text-[9px] font-black uppercase tracking-wider text-amber-700 block">Acesso Gratuito</span>
-          </div>
-          <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 hidden sm:inline"></i>
+      <!-- Brand Logo + Mobile Hamburger -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button onclick="window.togglePlayerDrawer()" class="p-1.5 rounded-xl hover:bg-stone-100 text-[#0A192F] md:hidden transition cursor-pointer" title="Menu de Navegação">
+          <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
 
-        <!-- Direct Link to Classroom -->
-        <a href="../sala-de-aula.html" class="px-3.5 py-1.5 rounded-full bg-[#0A192F] hover:bg-[#112240] text-amber-300 font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
-          <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span class="hidden sm:inline">Sala de Aula</span>
+        <a href="../portal.html" class="flex items-center gap-2.5 transition active:scale-95 group">
+          <div class="w-8 h-8 rounded-xl bg-[#C68A36]/15 border border-[#C68A36]/30 flex items-center justify-center text-[#C68A36]">
+            <i data-lucide="message-square" class="w-4 h-4"></i>
+          </div>
+          <span class="font-serif font-black text-lg tracking-tight text-[#0A192F]">
+            Agora<span class="text-[#C68A36]">EuFalo</span>
+          </span>
         </a>
       </div>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-bold">
+        <a href="../portal.html" class="text-[#7A7369] hover:text-[#0A192F] transition">Portal</a>
+        <a href="../curso.html?id=projeto-aef-2026" class="text-[#7A7369] hover:text-[#0A192F] transition">Grade do Curso</a>
+        <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="text-[#7A7369] hover:text-[#0A192F] transition">Sala de Aula</a>
+        <a href="player.html" class="text-[#0A192F] border-b-2 border-[#0A192F] pb-1 font-black">Training Player</a>
+      </nav>
+
+      <!-- Right: Student Profile Pill -->
+      <div class="flex items-center gap-3">
+        <a href="../portal.html" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FFFDF9] hover:bg-[#FDF8F0] border border-[#EAE5DC] transition text-left" title="Ir para o Portal">
+          <div class="w-7 h-7 rounded-full bg-[#C68A36] text-white flex items-center justify-center font-bold text-[10px] shrink-0" id="header-avatar-badge">
+            <span id="header-student-initials">LL</span>
+          </div>
+          <span class="text-xs font-bold text-[#0A192F] hidden sm:inline" id="header-student-name">Leonardo Leite</span>
+        </a>
+      </div>
+
     </div>
   </header>
 
-  <!-- ================================================================= -->
-  <!-- 2. MAIN PLAYER WORKSPACE                                          -->
-  <!-- ================================================================= -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 space-y-5 pb-44">
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN ZEN MODE WORKSPACE: TITLE BAR + PALCO ZEN & AI COACH PANEL        -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4 pb-36">
 
-    <!-- 4 CANONICAL SAAS TIER TABS (Vector Icons Only - Zero Emojis) -->
-    <div class="flex items-center gap-1.5 p-1.5 bg-stone-200/80 rounded-2xl border border-stone-300/80 overflow-x-auto custom-scrollbar shadow-inner">
-      <button id="tab-suggestions" onclick="window.switchTierTab('suggestions')" class="flex-1 min-w-[130px] py-2 px-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
-        <span>Sugestões</span>
-        <span id="badge-suggestions-count" class="px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 text-[10px] font-mono font-bold">1</span>
-      </button>
-
-      <button id="tab-courses" onclick="window.switchTierTab('courses')" class="flex-1 min-w-[130px] py-2 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-950 hover:bg-white/60 cursor-pointer">
-        <i data-lucide="book-open" class="w-3.5 h-3.5 text-slate-500"></i>
-        <span>Meus Cursos</span>
-        <span id="badge-courses-count" class="px-1.5 py-0.2 rounded-full bg-stone-300 text-slate-700 text-[10px] font-mono font-bold">0</span>
-      </button>
-
-      <button id="tab-vip" onclick="window.switchTierTab('vip')" class="flex-1 min-w-[130px] py-2 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-950 hover:bg-white/60 cursor-pointer">
-        <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i>
-        <span>Mentoria VIP</span>
-        <span id="badge-vip-count" class="px-1.5 py-0.2 rounded-full bg-stone-300 text-slate-700 text-[10px] font-mono font-bold">4</span>
-      </button>
-
-      <button id="tab-mystuff" onclick="window.switchTierTab('mystuff')" class="flex-1 min-w-[130px] py-2 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-950 hover:bg-white/60 cursor-pointer">
-        <i data-lucide="flask-conical" class="w-3.5 h-3.5 text-slate-500"></i>
-        <span>Minhas Coisas</span>
-        <span id="badge-mystuff-count" class="px-1.5 py-0.2 rounded-full bg-stone-300 text-slate-700 text-[10px] font-mono font-bold">0</span>
-      </button>
-    </div>
-
-    <!-- EPISODE SELECTOR PILLS -->
-    <div id="episode-pills-bar" class="hidden flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar"></div>
-
-    <!-- =============================================================== -->
-    <!-- 3. SESSION HERO CARD (Editorial Prestige)                       -->
-    <!-- =============================================================== -->
-    <div class="bg-white border border-stone-200/90 rounded-[28px] p-5 sm:p-7 shadow-xl shadow-slate-900/5 space-y-4">
-      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-        
-        <!-- Artwork Cover -->
-        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-amber-300 shadow-md shrink-0 bg-[#0A192F]">
-          <img id="session-cover-img" src="../assets/images/cover-default-aef.jpg" alt="Capa da Sessão" class="w-full h-full object-cover">
-        </div>
-
-        <div class="flex-1 text-center sm:text-left space-y-1.5">
-          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black uppercase tracking-wider border border-amber-300/60">
-            <i data-lucide="mic" class="w-3 h-3 text-amber-800"></i>
-            <span id="session-badge-text">Sessão Oficial • Prof. Leonardo Leite</span>
-          </div>
-          <h1 id="session-title-text" class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-[#0A192F] leading-tight">
-            Daily Spoken Reflex: Conversational Clarity & Small Talk
-          </h1>
-          <p id="session-summary-text" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Treino demonstrativo prático de conversação natural, conexões sonoras (chunks) e reflexo oral coached por Prof. Leonardo Leite.
-          </p>
-        </div>
+    <!-- Activity Title Bar with Time & Connection Pills -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+      <div>
+        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#C68A36] block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
+        <h1 class="text-xl sm:text-2xl font-black tracking-tight text-[#0A192F] uppercase" id="zen-activity-title">
+          1. LISTEN AND READ
+        </h1>
       </div>
 
-      <!-- Golden Insight Card (Sacada de Ouro Selada) -->
-      <div class="bg-amber-50/90 border border-amber-300/80 rounded-2xl p-4 text-xs sm:text-sm">
-        <div class="flex items-start gap-3">
-          <i data-lucide="lightbulb" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
-          <div>
-            <span class="font-black text-amber-950 uppercase tracking-wider text-[10px] block mb-0.5">Prof. Leo's Golden Insight:</span>
-            <span id="session-golden-tip" class="text-slate-800 leading-relaxed font-medium">Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão de repetição contínua para fixar a musicalidade de cada resposta.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- =============================================================== -->
-    <!-- 4. THE 6 CANONICAL MAGIC STORIES ACTIVITIES NAVIGATION          -->
-    <!-- =============================================================== -->
-    <div class="bg-white p-2.5 sm:p-3 rounded-2xl border border-stone-200/90 shadow-sm space-y-2">
-      <div class="flex items-center justify-between px-1">
-        <span class="text-[11px] font-black uppercase tracking-wider text-[#0A192F] flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-          As 6 Atividades do Método:
-        </span>
-        <span class="text-[10px] text-slate-400 font-bold">Toque para alternar</span>
-      </div>
-
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
-        <button id="act-tab-listen_read" onclick="window.switchActivity('listen_read')" class="act-btn px-3.5 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-md border border-amber-400 shrink-0 transition flex items-center gap-1.5">
+      <!-- Activity Selector (6 Canonical Tabs) -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <button id="act-tab-listen_read" onclick="window.switchActivity('listen_read')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span>1. Listen & Read</span>
         </button>
-        <button id="act-tab-vocab" onclick="window.switchActivity('vocab')" class="act-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-amber-100 text-slate-700 border border-stone-200 shrink-0 transition flex items-center gap-1.5">
+        <button id="act-tab-vocab" onclick="window.switchActivity('vocab')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="layers" class="w-3.5 h-3.5"></i>
           <span>2. Vocabulary</span>
         </button>
-        <button id="act-tab-listen_answer" onclick="window.switchActivity('listen_answer')" class="act-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-amber-100 text-slate-700 border border-stone-200 shrink-0 transition flex items-center gap-1.5">
-          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+        <button id="act-tab-listen_answer" onclick="window.switchActivity('listen_answer')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
           <span>3. Listen & Answer</span>
         </button>
-        <button id="act-tab-look_retell" onclick="window.switchActivity('look_retell')" class="act-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-amber-100 text-slate-700 border border-stone-200 shrink-0 transition flex items-center gap-1.5">
+        <button id="act-tab-look_retell" onclick="window.switchActivity('look_retell')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="mic" class="w-3.5 h-3.5"></i>
           <span>4. Look & Retell</span>
         </button>
-        <button id="act-tab-listen_ask" onclick="window.switchActivity('listen_ask')" class="act-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-amber-100 text-slate-700 border border-stone-200 shrink-0 transition flex items-center gap-1.5">
+        <button id="act-tab-listen_ask" onclick="window.switchActivity('listen_ask')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
           <span>5. Listen & Ask</span>
         </button>
-        <button id="act-tab-pronunciation" onclick="window.switchActivity('pronunciation')" class="act-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-amber-100 text-slate-700 border border-stone-200 shrink-0 transition flex items-center gap-1.5">
-          <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+        <button id="act-tab-pronunciation" onclick="window.switchActivity('pronunciation')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
           <span>6. Pronunciation</span>
         </button>
       </div>
     </div>
 
-    <!-- =============================================================== -->
-    <!-- 5. INTERACTIVE STAGE & SENTENCE CARDS CONTAINER                -->
-    <!-- =============================================================== -->
-    <div id="interactive-stage-container" class="space-y-3">
-      <!-- Dynamically Populated by JS -->
-    </div>
-
-    <!-- Public Share & Direct Leo Support -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-3">
-      <div class="bg-white border border-emerald-300/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <i data-lucide="share-2" class="w-4 h-4 text-emerald-600"></i>
-            <h4 class="font-bold text-sm text-[#0A192F]">Gostou deste treino?</h4>
-          </div>
-          <p class="text-xs text-slate-600 mb-3">Compartilhe este treinador interativo com um amigo.</p>
+    <!-- 2-Column Layout: Zen Stage (8 cols) + AI Coach Sidebar (4 cols) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- LEFT: PALCO ZEN CENTRAL DE CARTÃO ÚNICO (8 cols) -->
+      <div class="lg:col-span-8 space-y-4">
+        
+        <!-- Zen Stage Container -->
+        <div id="zen-main-stage-container" class="aef-stage-zen relative p-4 sm:p-6 space-y-4">
+          <!-- Populated Dynamically via JS -->
         </div>
-        <button onclick="window.sharePlayerLink()" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
-          <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          <span>Compartilhar no WhatsApp</span>
-        </button>
+
       </div>
 
-      <div class="bg-white border border-amber-300/60 rounded-2xl p-4 flex flex-col justify-between shadow-xs">
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <i data-lucide="message-square" class="w-4 h-4 text-amber-600"></i>
-            <h4 class="font-bold text-sm text-[#0A192F]">Dúvidas com o Prof. Leo</h4>
+      <!-- RIGHT: AI COACH SIDEBAR PANEL (4 cols) -->
+      <aside class="lg:col-span-4 space-y-4">
+        
+        <!-- Card: AI Coach & Status -->
+        <div class="aef-sidecard-zen p-5 sm:p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-[#EAE5DC]">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-xl bg-[#0D1E36] text-amber-300 flex items-center justify-center font-black text-xs shadow-xs">
+                AI
+              </div>
+              <div>
+                <h3 class="font-black text-xs text-[#0A192F] uppercase tracking-wider">AI Speech Coach</h3>
+                <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Active Listening
+                </span>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">8.8 / 10</span>
           </div>
-          <p class="text-xs text-slate-600 mb-3">Travou em alguma pronúncia? Mande mensagem direta no WhatsApp.</p>
+
+          <!-- Current Training Track -->
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#7A7369]">Faixa Ativa</span>
+            <p class="font-black text-xs sm:text-sm text-[#0A192F] leading-tight" id="sidebar-activity-name">
+              Daily Spoken Reflex: Conversational Clarity
+            </p>
+          </div>
+
+          <!-- Golden Tip Box -->
+          <div class="p-3.5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 space-y-1 text-left">
+            <span class="text-[10px] font-black uppercase tracking-wider text-[#C68A36] flex items-center gap-1">
+              <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Sacada do Professor Leo:
+            </span>
+            <p class="text-xs text-[#0A192F] leading-relaxed font-medium" id="sidebar-grammar-tip">
+              "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta."
+            </p>
+          </div>
+
+          <!-- Quick Return to Classroom -->
+          <div class="pt-2 border-t border-[#EAE5DC]">
+            <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="w-full py-2.5 rounded-xl bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] font-bold text-xs flex items-center justify-center gap-2 border border-stone-200 transition">
+              <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+              <span>Voltar para Sala de Aula</span>
+            </a>
+          </div>
         </div>
-        <a href="https://wa.me/5531999817975?text=Olá%20Prof.%20Leo!%20Estou%20praticando%20no%20Player%20e%20gostaria%20de%20tirar%20uma%20dúvida." target="_blank" class="w-full py-2 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-xs flex items-center justify-center gap-1.5 text-center">
-          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-          <span>Conversar com o Leo</span>
-        </a>
-      </div>
+
+      </aside>
+
     </div>
 
   </main>
 
-  <!-- ================================================================= -->
-  <!-- 6. FIXED BOTTOM AUDIO DOCK (Apple-Style Luxury Pill)               -->
-  <!-- ================================================================= -->
-  <div class="fixed bottom-4 inset-x-4 max-w-3xl mx-auto z-40">
-    <div class="bg-[#0A192F] text-white rounded-3xl p-3 sm:p-3.5 shadow-2xl border border-amber-400/40 flex flex-col gap-2 backdrop-blur-md">
+  <!-- ========================================================================= -->
+  <!-- 3. FIXED AUDIO DOCK CONTROLLER                                            -->
+  <!-- ========================================================================= -->
+  <div id="audio-dock-container" class="fixed bottom-0 inset-x-0 bg-[#0D1E36]/95 backdrop-blur-lg border-t border-[#C68A36]/40 shadow-2xl z-40 py-3 px-4 sm:px-8 text-white">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       
-      <!-- Progress Bar & Timers -->
-      <div class="flex items-center gap-2.5 px-1">
-        <span id="dock-time-current" class="font-mono text-[10px] text-amber-300/90 w-8 text-right">00:00</span>
-        <input type="range" id="dock-seekbar" min="0" max="100" value="0" step="0.1" class="flex-1 h-1.5 bg-slate-700 rounded-full cursor-pointer accent-amber-500">
-        <span id="dock-time-duration" class="font-mono text-[10px] text-slate-400 w-8">00:00</span>
-      </div>
-
-      <!-- Playback Controls Row -->
-      <div class="flex items-center justify-between gap-2">
-        
-        <!-- Track Thumbnail & Title -->
-        <div class="flex items-center gap-2.5 min-w-0 flex-1">
-          <img id="dock-cover-thumb" src="../assets/images/cover-default-aef.jpg" alt="Thumb" class="w-9 h-9 rounded-xl object-cover border border-amber-400/50 shrink-0">
-          <div class="min-w-0 truncate">
-            <p id="dock-title-text" class="text-xs font-bold text-white truncate">Daily Spoken Reflex</p>
-            <p class="text-[10px] text-amber-300/80">Prof. Leonardo Leite</p>
+      <!-- Track Title & Progress Info -->
+      <div class="flex items-center gap-3 w-full sm:w-auto min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-[#C68A36] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0 flex-1 sm:flex-initial">
+          <p class="font-black text-xs truncate" id="dock-title-text">Daily Spoken Reflex: Conversational Clarity</p>
+          <div class="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
+            <span id="dock-current-time">00:00</span>
+            <span>/</span>
+            <span id="dock-total-time">00:36</span>
           </div>
         </div>
+      </div>
 
-        <!-- Center Audio Buttons -->
+      <!-- Center Audio Timeline & Controls -->
+      <div class="flex items-center justify-center gap-4 w-full sm:w-auto">
+        
+        <!-- Timeline Slider -->
+        <div class="flex items-center gap-2 flex-1 sm:w-64 max-w-xs">
+          <input type="range" id="dock-seek-bar" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer">
+        </div>
+
+        <!-- Audio Buttons -->
         <div class="flex items-center gap-2 shrink-0">
-          <button onclick="window.seekOffset(-10)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition" title="Voltar 10s">
+          <button onclick="window.seekOffset(-5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Voltar 5s">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
           </button>
           
-          <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 hover:scale-105 active:scale-95 text-slate-950 flex items-center justify-center font-black text-base shadow-lg transition">
-            <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+          <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-10 h-10 rounded-full bg-[#C68A36] hover:bg-[#B3792A] active:scale-95 text-white flex items-center justify-center font-black shadow-lg transition cursor-pointer">
+            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
           </button>
           
-          <button onclick="window.seekOffset(10)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition" title="Avançar 10s">
+          <button onclick="window.seekOffset(5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Avançar 5s">
             <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
           </button>
         </div>
 
-        <!-- Speed Selector Pill -->
-        <div class="hidden sm:flex items-center gap-1 bg-white/10 px-2 py-1 rounded-xl shrink-0">
-          <button onclick="window.setPlaybackSpeed(0.75)" class="speed-btn px-1.5 py-0.5 rounded text-[10px] text-slate-300 font-bold hover:text-white">0.75x</button>
-          <button onclick="window.setPlaybackSpeed(1.0)" class="speed-btn px-1.5 py-0.5 rounded text-[10px] bg-amber-500 text-slate-950 font-black">1.0x</button>
-          <button onclick="window.setPlaybackSpeed(1.25)" class="speed-btn px-1.5 py-0.5 rounded text-[10px] text-slate-300 font-bold hover:text-white">1.25x</button>
-        </div>
-
       </div>
+
     </div>
   </div>
 
-  <!-- ================================================================= -->
-  <!-- 7. LUXURY MODALS (Zero Caixas Escuras)                            -->
-  <!-- ================================================================= -->
+  <!-- Slide-Over Navigation Drawer -->
+  <div id="playerDrawerOverlay" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden" onclick="window.togglePlayerDrawer()"></div>
 
-  <!-- Modal 1: Login & Student Selector -->
-  <div id="saas-welcome-modal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="aef-modal-card max-w-md w-full p-6 sm:p-8 relative animate-in fade-in zoom-in duration-200">
-      <button onclick="window.closeSaaSLoginModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-900 p-1 text-sm cursor-pointer" title="Fechar">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-
-      <div class="text-center mb-5">
-        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 border border-amber-300 flex items-center justify-center text-2xl mx-auto mb-2 shadow-xs">
-          <i data-lucide="mic" class="w-6 h-6 text-amber-800"></i>
-        </div>
-        <span class="text-[10px] font-black uppercase tracking-widest text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300/60">Training Player</span>
-        <h3 class="text-xl font-black tracking-tight text-[#0A192F] mt-1.5">Entrar no AgoraEuFalo</h3>
-        <p class="text-xs text-slate-600 mt-1">Escolha como deseja praticar hoje:</p>
-      </div>
-
-      <div class="space-y-2.5">
-        <button onclick="window.loginAsStudent('public')" class="w-full p-3 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-300/80 text-left transition cursor-pointer flex items-center justify-between">
-          <div>
-            <p class="font-black text-xs text-amber-950 flex items-center gap-1.5">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
-              Praticar Treino Aberto (Free)
-            </p>
-            <p class="text-[11px] text-amber-900/80 mt-0.5">Acesso livre à faixa demonstrativa diária</p>
-          </div>
-          <i data-lucide="arrow-right" class="w-4 h-4 text-amber-600"></i>
+  <aside id="playerDrawerMenu" class="fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] bg-[#FFFDF9] border-r border-[#EAE5DC] z-50 p-6 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
+    <div class="space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-[#EAE5DC]">
+        <span class="font-serif font-black text-lg tracking-tight text-[#0A192F]">
+          Agora<span class="text-[#C68A36]">EuFalo</span>
+        </span>
+        <button onclick="window.togglePlayerDrawer()" class="p-1 rounded-lg text-slate-500 hover:text-slate-900">
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
+      </div>
 
-        <div class="pt-2 border-t border-stone-200">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 text-center">Mentorados VIP (Acesso com 1 Toque):</p>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="window.loginAsStudent('estevao')" class="p-2.5 rounded-xl bg-stone-50 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs border border-stone-200 transition text-left flex items-center gap-2 cursor-pointer">
-              <i data-lucide="user" class="w-3.5 h-3.5"></i> <span>Estêvão</span>
-            </button>
-            <button onclick="window.loginAsStudent('andre')" class="p-2.5 rounded-xl bg-stone-50 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs border border-stone-200 transition text-left flex items-center gap-2 cursor-pointer">
-              <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> <span>André</span>
-            </button>
-            <button onclick="window.loginAsStudent('thomas')" class="p-2.5 rounded-xl bg-stone-50 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs border border-stone-200 transition text-left flex items-center gap-2 cursor-pointer">
-              <i data-lucide="user-check" class="w-3.5 h-3.5"></i> <span>Thomas</span>
-            </button>
-            <button onclick="window.loginAsStudent('matheus')" class="p-2.5 rounded-xl bg-stone-50 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs border border-stone-200 transition text-left flex items-center gap-2 cursor-pointer">
-              <i data-lucide="target" class="w-3.5 h-3.5"></i> <span>Matheus</span>
-            </button>
-          </div>
+      <nav class="space-y-1 text-xs font-bold">
+        <a href="../portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Meus Cursos</span>
+        </a>
+        <a href="../curso.html?id=projeto-aef-2026" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="grid" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Grade de Módulos</span>
+        </a>
+        <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Sala de Aula</span>
+        </a>
+        <a href="player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs">
+          <i data-lucide="headphones" class="w-4 h-4 text-[#C68A36]"></i>
+          <span>Training Player</span>
+        </a>
+        <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="users" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Aulas ao Vivo (Meet)</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Drawer Bottom: Student Profile Card -->
+    <div class="pt-4 border-t border-[#EAE5DC]">
+      <div class="flex items-center gap-3 p-2 rounded-2xl">
+        <div class="w-9 h-9 rounded-full bg-[#C68A36] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+          LL
+        </div>
+        <div class="leading-tight min-w-0 flex-1">
+          <p class="font-black text-xs text-[#0A192F] truncate">Leonardo Leite</p>
+          <p class="text-[10px] font-bold text-[#8C8275] uppercase tracking-wider">Membro VIP</p>
         </div>
       </div>
     </div>
-  </div>
+  </aside>
 
   <!-- Toast Notification -->
-  <div id="aef-toast" class="fixed top-5 inset-x-0 mx-auto max-w-sm px-4 py-2.5 bg-[#0A192F] text-white rounded-2xl border border-amber-400/60 shadow-2xl text-xs font-bold text-center pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4 z-50">
-    Toast Message
+  <div id="player-toast" class="fixed top-6 right-6 z-50 hidden bg-[#0D1E36] border border-[#C68A36] text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-3">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="player-toast-text">Notificação</span>
   </div>
 
-  <!-- ================================================================= -->
-  <!-- 8. CORE JAVASCRIPT ENGINE                                         -->
-  <!-- ================================================================= -->
-  <script src="data/registry.js?v=3.0"></script>
-  <script src="data/public.js?v=3.0"></script>
-  <script src="data/estevao.js?v=3.0"></script>
-  <script src="data/andre.js?v=3.0"></script>
-  <script src="data/thomas.js?v=3.0"></script>
-  <script src="data/matheus.js?v=3.0"></script>
-
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT PLAYER ENGINE: SINGLE ZEN ACTIVE CARD CONTROLLER               -->
+  <!-- ========================================================================= -->
   <script>
-    (function() {
-      // 1. App State
-      const state = {
-        studentId: 'public',
-        tierTab: 'suggestions',
-        activity: 'listen_read',
-        currentTrackIndex: 0,
-        repeatSentenceIndex: -1,
-        isPlaying: false,
-        playbackSpeed: 1.0,
-        audio: new Audio()
-      };
+    function updateIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
 
-      // Toast Helper
-      function showToast(msg) {
-        const toast = document.getElementById('aef-toast');
-        if (!toast) return;
-        toast.innerText = msg;
-        toast.classList.remove('opacity-0', '-translate-y-4');
-        toast.classList.add('opacity-100', 'translate-y-0');
-        setTimeout(() => {
-          toast.classList.remove('opacity-100', 'translate-y-0');
-          toast.classList.add('opacity-0', '-translate-y-4');
-        }, 2800);
+    const state = {
+      activity: 'listen_read',
+      currentSentenceIndex: 0,
+      isPlaying: false,
+      isRecording: false,
+      loopingSentenceIndex: -1,
+      audio: new Audio(),
+      playbackSpeed: 1.0
+    };
+
+    // 100% REAL SPOKEN ENGLISH TRACK FROM FIREBASE STORAGE
+    const REAL_TRACK = (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks?.[0]) || {
+      id: "public-01",
+      title: "Daily Spoken Reflex: Conversational Clarity",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_spoken_reflex_session01.mp3?alt=media",
+      goldenTip: "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta.",
+      sentences: [
+        { id: 1, start: 0.0, end: 3.17, text: "Hey there! How has your week been going so far?", spokenTranslation: "E aí, tudo bem? Como é que tá sendo a sua semana até agora?", speaker: "Sarah" },
+        { id: 2, start: 3.52, end: 8.25, text: "It’s been pretty busy, to be honest, but really productive. What about yours?", spokenTranslation: "Olha, tá bem corrida pra falar a verdade, mas super produtiva. E a sua?", speaker: "Mark" },
+        { id: 3, start: 8.6, end: 15.09, text: "Same here! I had back-to-back team meetings all morning, but we finally finalized the new project roadmap.", spokenTranslation: "Aqui também! Tive reunião uma atrás da outra a manhã inteira, mas finalmente fechamos o cronograma do projeto.", speaker: "Sarah" },
+        { id: 4, start: 15.44, end: 20.05, text: "That’s awesome! It must feel like a huge relief to have that off your plate.", spokenTranslation: "Que demais! Deve ser um alívio enorme tirar essa pendência da sua frente.", speaker: "Mark" },
+        { id: 5, start: 20.4, end: 24.77, text: "It definitely does. Are you doing anything special this coming weekend?", spokenTranslation: "Com certeza é! Vai fazer alguma coisa de bom agora no fim de semana?", speaker: "Sarah" },
+        { id: 6, start: 25.12, end: 30.13, text: "I’m thinking of taking a quick road trip to the coast if the weather holds up. How about you?", spokenTranslation: "Tô pensando em dar um pulo no litoral de carro se o tempo ajudar. E você?", speaker: "Mark" },
+        { id: 7, start: 30.48, end: 35.8, text: "Sounds amazing! I'll probably just relax, catch up on some reading, and recharge.", spokenTranslation: "Parece bom demais! Eu provavelmente vou só relaxar, botar as leituras em dia e recarregar as energias.", speaker: "Sarah" }
+      ]
+    };
+
+    const SOUND_CHUNKS = [
+      { en: "to be honest", pt: "pra falar a verdade / sendo bem honesto" },
+      { en: "back-to-back team meetings", pt: "reuniões uma atrás da outra" },
+      { en: "huge relief", pt: "um alívio enorme" },
+      { en: "off your plate", pt: "fora da sua frente / resolvido" },
+      { en: "if the weather holds up", pt: "se o tempo firmar / se não chover" },
+      { en: "catch up on some reading", pt: "botar as leituras em dia" }
+    ];
+
+    const QA_PAIRS = [
+      { q: "How has Mark's week been so far?", a: "It's been pretty busy, but really productive." },
+      { q: "What did Sarah finalize this morning?", a: "She finalized the new project roadmap after back-to-back meetings." },
+      { q: "What is Mark thinking of doing this weekend?", a: "He's thinking of taking a quick road trip to the coast." }
+    ];
+
+    const RETELL_PROMPTS = [
+      { text: "1. How did Sarah and Mark start their conversation about their week?" },
+      { text: "2. What did Sarah accomplish with her team this morning?" },
+      { text: "3. What are Mark and Sarah planning to do over the weekend?" }
+    ];
+
+    const NEGATIVE_ASK_PAIRS = [
+      { statement: "Mark wasn't having an unproductive week.", question: "Was Mark having an unproductive week?" },
+      { statement: "Sarah didn't forget to finalize the project roadmap.", question: "Did Sarah finalize the project roadmap?" }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const actParam = urlParams.get('activity');
+      if (actParam && ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'].includes(actParam)) {
+        state.activity = actParam;
       }
 
-      // Time Formatter (mm:ss)
-      function formatTime(sec) {
-        if (!sec || isNaN(sec)) return "00:00";
-        const m = Math.floor(sec / 60).toString().padStart(2, '0');
-        const s = Math.floor(sec % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+      state.audio.src = REAL_TRACK.audioUrl;
+      initAudioEvents();
+      renderZenStage();
+      setupSwipeGestures();
+      updateIcons();
+    });
+
+    function switchActivity(newAct) {
+      state.activity = newAct;
+      state.loopingSentenceIndex = -1;
+      state.currentSentenceIndex = 0;
+      
+      if (state.activity === 'look_retell') {
+        state.audio.pause();
+        state.isPlaying = false;
+        document.getElementById('audio-dock-container').classList.add('hidden');
+      } else {
+        document.getElementById('audio-dock-container').classList.remove('hidden');
       }
 
-      // Refresh Lucide Icons safely
-      function updateIcons() {
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-          window.lucide.createIcons();
-        }
-      }
+      renderZenStage();
+      updateIcons();
+    }
 
-      // Get Active Student Data Object
-      function getStudentData(id) {
-        if (id === 'estevao') return window.AEF_STUDENT_ESTEVAO || window.AEF_STUDENT_PUBLIC;
-        if (id === 'andre') return window.AEF_STUDENT_ANDRE || window.AEF_STUDENT_PUBLIC;
-        if (id === 'thomas') return window.AEF_STUDENT_THOMAS || window.AEF_STUDENT_PUBLIC;
-        if (id === 'matheus') return window.AEF_STUDENT_MATHEUS || window.AEF_STUDENT_PUBLIC;
-        return window.AEF_STUDENT_PUBLIC;
-      }
-
-      // Load & Bind Track to UI
-      function loadTrack(trackIndex) {
-        const student = getStudentData(state.studentId);
-        const tracks = student.tracks || [];
-        state.currentTrackIndex = trackIndex >= 0 && trackIndex < tracks.length ? trackIndex : 0;
-        const track = tracks[state.currentTrackIndex] || {};
-
-        // Update Hero Card
-        document.getElementById('session-title-text').innerText = track.title || "Sessão de Treino";
-        document.getElementById('session-summary-text').innerText = track.summary || "Treino prático de reflexo e conversação.";
-        document.getElementById('session-golden-tip').innerText = track.goldenTip || "Respire nas pausas e conecte os blocos sonoros.";
-        if (track.coverImage) {
-          document.getElementById('session-cover-img').src = track.coverImage;
-          document.getElementById('dock-cover-thumb').src = track.coverImage;
-        }
-
-        // Update Dock Title
-        document.getElementById('dock-title-text').innerText = track.title || "AgoraEuFalo";
-
-        // Setup Audio Element
-        if (track.audioUrl && state.audio.src !== track.audioUrl) {
-          state.audio.src = track.audioUrl;
-          state.audio.load();
-        }
-
-        renderInteractiveStage();
-      }
-
-      // Render the Active Activity Stage
-      function renderInteractiveStage() {
-        const container = document.getElementById('interactive-stage-container');
-        const student = getStudentData(state.studentId);
-        const track = student.tracks?.[state.currentTrackIndex] || {};
-        const sentences = track.sentences || [];
-
-        // Update Activity Tab Highlights
-        document.querySelectorAll('.act-btn').forEach(btn => {
-          btn.className = "act-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-amber-100 text-slate-700 border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer";
+    function getActiveItems() {
+      if (state.activity === 'listen_answer') {
+        const items = [];
+        QA_PAIRS.forEach(pair => {
+          items.push({ text: `Pergunta: ${pair.q}`, speaker: "Leo" });
+          items.push({ text: `Resposta: ${pair.a}`, speaker: "Aluno" });
         });
-        const activeBtn = document.getElementById(`act-tab-${state.activity}`);
-        if (activeBtn) {
-          activeBtn.className = "act-btn px-3.5 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-md border border-amber-400 shrink-0 transition flex items-center gap-1.5 cursor-pointer";
-        }
+        return items;
+      }
+      if (state.activity === 'look_retell') {
+        return RETELL_PROMPTS.map(p => ({ text: p.text, speaker: "Prompt" }));
+      }
+      if (state.activity === 'listen_ask') {
+        const items = [];
+        NEGATIVE_ASK_PAIRS.forEach(pair => {
+          items.push({ text: `Afirmação: ${pair.statement}`, speaker: "Leo" });
+          items.push({ text: `Pergunta: ${pair.question}`, speaker: "Aluno" });
+        });
+        return items;
+      }
+      return REAL_TRACK.sentences;
+    }
 
-        // 1. LISTEN & READ (Millimetric Sentence Cards)
-        if (state.activity === 'listen_read') {
-          container.innerHTML = sentences.map((s, idx) => `
-            <div id="sentence-card-${idx}" onclick="window.playSentence(${idx})" class="sentence-card p-4 sm:p-5 rounded-2xl bg-white border border-stone-200/90 hover:border-amber-400 shadow-xs transition cursor-pointer select-none">
-              <div class="flex items-center justify-between gap-3 mb-2">
-                <div class="flex items-center gap-2">
-                  <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-800 font-black text-[10px] flex items-center justify-center">
-                    <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-                  </span>
-                  <span class="time-pill px-2.5 py-0.5 rounded-lg bg-stone-100 font-mono text-[11px] font-bold text-slate-700 border border-stone-200">
-                    ${formatTime(s.start)}
-                  </span>
-                </div>
-                <button onclick="event.stopPropagation(); window.toggleRepeatSentence(${idx})" class="w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold bg-stone-100 hover:bg-amber-200 text-slate-600 border border-stone-200 transition" title="Repetir frase">
-                  <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+    function renderZenStage() {
+      const stage = document.getElementById('zen-main-stage-container');
+      const items = getActiveItems();
+      const currentItem = items[state.currentSentenceIndex] || items[0];
+
+      // Update Tab Buttons Highlight
+      document.querySelectorAll('.act-btn').forEach(btn => {
+        btn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer";
+      });
+      const activeBtn = document.getElementById(`act-tab-${state.activity}`);
+      if (activeBtn) {
+        activeBtn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer";
+      }
+
+      // Title Subhead
+      let activityLabel = "1. LISTEN AND READ";
+      if (state.activity === 'vocab') activityLabel = "2. VOCABULARY & CHUNKS";
+      else if (state.activity === 'listen_answer') activityLabel = "3. LISTEN AND ANSWER";
+      else if (state.activity === 'look_retell') activityLabel = "4. LOOK AND RETELL";
+      else if (state.activity === 'listen_ask') activityLabel = "5. LISTEN AND ASK";
+      else if (state.activity === 'pronunciation') activityLabel = "6. PRONUNCIATION PRACTICE";
+
+      document.getElementById('zen-activity-title').innerText = activityLabel;
+
+      stage.innerHTML = `
+        <div class="space-y-4 max-w-xl mx-auto">
+          
+          <!-- Top Bar inside Stage: Activity Mode + Counter -->
+          <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+            <span class="text-[11px] font-black uppercase tracking-widest text-[#7A7369]">
+              ${state.activity === 'vocab' ? 'VOCABULARY (TRADUÇÃO VISÍVEL)' : (state.activity === 'look_retell' ? 'SPEAKING 100% AUTÔNOMO' : 'PALCO ZEN DE REPETIÇÃO')}
+            </span>
+            <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2.5 py-0.5 rounded-full border border-[#C68A36]/30">
+              FRASE ${state.currentSentenceIndex + 1} DE ${items.length}
+            </span>
+          </div>
+
+          ${state.activity === 'look_retell' ? `
+            <!-- Look & Retell Radiant Mic Hero Box -->
+            <div class="p-5 sm:p-7 rounded-3xl bg-white border border-[#EAE5DC] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+              <div class="flex flex-col items-center gap-3">
+                <button id="btn-mic-retell" onclick="window.toggleRetellRecording()" class="aef-mic-radiant active:scale-95 cursor-pointer">
+                  <i data-lucide="mic" class="w-8 h-8"></i>
+                  <span class="text-[8px] font-black uppercase tracking-wider mt-0.5">${state.isRecording ? 'RECORDING' : 'REC SPEAKING'}</span>
                 </button>
+                <span class="text-xs font-bold text-[#0A192F]">Grave seu reconto em voz alta</span>
               </div>
-              <div class="space-y-1">
-                <p class="sentence-text text-[#0A192F] font-bold text-base sm:text-lg leading-relaxed">${s.text}</p>
-                ${s.spokenTranslation ? `<p class="sentence-translation text-amber-900 text-xs sm:text-sm font-medium italic leading-relaxed">↳ ${s.spokenTranslation}</p>` : ''}
+
+              <div>
+                ${window.AEFPlayerZenTemplate.renderCircularGauge(8.8, 10, "Score AI Coach", "EXCELENTE")}
               </div>
             </div>
-          `).join('');
-        }
-        
-        // 2. VOCABULARY (Sound Chunks Grid)
-        else if (state.activity === 'vocab') {
-          container.innerHTML = `
-            <div class="space-y-3">
-              <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-2.5">
-                <i data-lucide="layers" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
-                <div>
-                  <h3 class="font-bold text-sm">Matriz de Sound Chunks</h3>
-                  <p class="text-xs text-amber-900/90 mt-0.5">Estude os blocos acústicos inteiros para fixar as expressões sem tradução mental.</p>
-                </div>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                ${sentences.map((s, idx) => `
-                  <div onclick="window.playSentence(${idx})" class="p-4 rounded-2xl bg-white border border-amber-200/90 hover:border-amber-400 space-y-2 shadow-xs cursor-pointer transition">
-                    <div class="flex items-center justify-between text-xs">
-                      <span class="font-mono font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">Chunk #${idx+1}</span>
-                      <span class="text-[11px] text-amber-800 font-bold flex items-center gap-1">
-                        <i data-lucide="volume-2" class="w-3 h-3"></i> Ouvir
-                      </span>
-                    </div>
-                    <p class="font-bold text-sm text-[#0A192F]">"${s.text}"</p>
-                    ${s.spokenTranslation ? `<p class="text-xs text-amber-900 italic font-medium">↳ ${s.spokenTranslation}</p>` : ''}
-                  </div>
-                `).join('')}
+          ` : ''}
+
+          <!-- 1. O CARTÃO ÚNICO ATIVO (Foco Total, Zero Vazar Bordas) -->
+          <div id="card-stage-slot" class="w-full">
+            ${window.AEFPlayerZenTemplate.renderSingleZenCard(
+              currentItem, 
+              state.currentSentenceIndex, 
+              items.length, 
+              state.activity, 
+              state.isPlaying, 
+              state.loopingSentenceIndex === state.currentSentenceIndex
+            )}
+          </div>
+
+          <!-- 2. CONTROLES DE NAVEGAÇÃO ENTRE FRASES (Setas + Bolinhas de Paginação) -->
+          <div class="p-3 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex items-center justify-between gap-3">
+            
+            <button onclick="window.navSentence(-1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Frase Anterior">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              <span class="hidden sm:inline">Anterior</span>
+            </button>
+
+            <!-- Bolinhas Interativas (1 toque pula direto para a frase) -->
+            <div class="flex items-center justify-center gap-1.5 flex-1 overflow-x-auto no-scrollbar py-1">
+              ${items.map((_, idx) => `
+                <button onclick="window.jumpToSentence(${idx})" class="h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  state.currentSentenceIndex === idx ? 'w-6 bg-[#C68A36]' : 'w-2 bg-[#D1C7B7] hover:bg-[#C68A36]/60'
+                }" title="Ir para frase ${idx+1}"></button>
+              `).join('')}
+            </div>
+
+            <button onclick="window.navSentence(1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Próxima Frase">
+              <span class="hidden sm:inline">Próxima</span>
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+
+          </div>
+
+          ${state.activity === 'vocab' ? `
+            <!-- Matriz de Chunks Isolados na aba Vocabulary -->
+            <div class="pt-3 border-t border-[#F0EBE1] space-y-2.5">
+              <span class="text-xs font-black uppercase tracking-wider text-[#0A192F] flex items-center gap-1.5">
+                <i data-lucide="layers" class="w-4 h-4 text-[#C68A36]"></i> Sound Chunks Isolados da Lição:
+              </span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                ${SOUND_CHUNKS.map((chunk, cIdx) => 
+                  window.AEFPlayerZenTemplate.renderSoundChunkCard(chunk, cIdx)
+                ).join('')}
               </div>
             </div>
-          `;
+          ` : ''}
+
+        </div>
+      `;
+
+      updateIcons();
+    }
+
+    /**
+     * Play / Pause ao tocar no Cartão Único
+     */
+    window.handleCardTouch = (index) => {
+      const items = getActiveItems();
+      const sentence = items[index] || items[0];
+
+      // Se tocar no card que está tocando: PAUSA NO SEGUNDO EXATO
+      if (state.isPlaying) {
+        state.audio.pause();
+        state.isPlaying = false;
+        renderZenStage();
+        updateDockPlayButton();
+        return;
+      }
+
+      // Se estava pausado: Retoma ou pula para a frase
+      state.currentSentenceIndex = index;
+      if (sentence.start !== undefined && state.audio.currentTime === 0) {
+        state.audio.currentTime = sentence.start;
+      }
+      state.audio.play().then(() => {
+        state.isPlaying = true;
+        renderZenStage();
+        updateDockPlayButton();
+      }).catch(err => console.log('Audio play error:', err));
+    };
+
+    window.navSentence = (dir) => {
+      const items = getActiveItems();
+      const newIdx = Math.max(0, Math.min(items.length - 1, state.currentSentenceIndex + dir));
+      state.currentSentenceIndex = newIdx;
+      
+      if (state.activity !== 'look_retell') {
+        const sentence = items[newIdx];
+        if (sentence && sentence.start !== undefined) {
+          state.audio.currentTime = sentence.start;
         }
-
-        // 3. LISTEN & ANSWER (Reflex & Speed Drill)
-        else if (state.activity === 'listen_answer') {
-          container.innerHTML = `
-            <div class="space-y-3">
-              <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-2.5">
-                <i data-lucide="zap" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
-                <div>
-                  <h3 class="font-bold text-sm">Listen & Answer (Reflexo Oral)</h3>
-                  <p class="text-xs text-amber-900/90 mt-0.5">Ouça a pergunta do Leo, responda na micro-pausa e valide com a confirmação.</p>
-                </div>
-              </div>
-              <div class="space-y-2.5">
-                ${sentences.map((s, idx) => `
-                  <div class="p-4 rounded-2xl bg-white border border-stone-200 hover:border-amber-400 space-y-2 shadow-xs transition">
-                    <div class="flex items-center justify-between">
-                      <span class="text-xs font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded">Drill #${idx+1}</span>
-                      <button onclick="window.playSentence(${idx})" class="px-3 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1">
-                        <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-                        <span>Ouvir Pergunta</span>
-                      </button>
-                    </div>
-                    <p class="font-bold text-sm text-[#0A192F]">${s.text}</p>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
+        if (state.isPlaying) {
+          state.audio.play();
         }
+      }
+      renderZenStage();
+    };
 
-        // 4. LOOK & RETELL + AI SPEECH COACH
-        else if (state.activity === 'look_retell') {
-          container.innerHTML = `
-            <div class="space-y-4">
-              <!-- Visual Guide Prompt Cards -->
-              <div class="p-5 rounded-3xl bg-white border border-amber-200 shadow-xs space-y-3">
-                <div class="flex items-center gap-2">
-                  <span class="w-7 h-7 rounded-xl bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">4</span>
-                  <div>
-                    <h3 class="font-bold text-sm text-[#0A192F]">Look & Retell • AI Speech Coach</h3>
-                    <p class="text-[11px] text-amber-900 font-medium">100% Speaking Autônomo • Zero Listening Prévio</p>
-                  </div>
-                </div>
-                <div class="space-y-2 pt-1">
-                  ${sentences.slice(0, 4).map((s, idx) => `
-                    <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-stone-50 border border-stone-200">
-                      <span class="w-5 h-5 rounded-md bg-amber-500 text-slate-950 flex items-center justify-center font-black text-[10px] shrink-0">${idx+1}</span>
-                      <span class="text-xs font-medium text-slate-900 leading-relaxed">${s.text.replace(/^[A-Za-z]+:\s*/, '')}</span>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-
-              <!-- AI Recording Studio -->
-              <div class="p-6 sm:p-8 rounded-3xl bg-white border-2 border-amber-300 text-center space-y-4 shadow-xl">
-                <div class="space-y-1">
-                  <span class="px-3 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black uppercase tracking-widest border border-amber-300 inline-flex items-center gap-1">
-                    <i data-lucide="mic" class="w-3 h-3"></i> Estúdio de Fala Ativa
-                  </span>
-                  <h3 class="text-xl sm:text-2xl font-black tracking-tight text-[#0A192F]">Reconte a História em Voz Alta</h3>
-                  <p class="text-xs text-slate-600 max-w-sm mx-auto">Aperte o microfone e fale com naturalidade. O Coach avaliará sua compreensibilidade de 0 a 10.</p>
-                </div>
-
-                <!-- Live Soundwave & Mic Button -->
-                <div class="flex items-center justify-center gap-4 py-2">
-                  <div class="flex items-center gap-1 h-10">
-                    <span class="w-1.5 bg-amber-400 soundwave-bar"></span>
-                    <span class="w-1.5 bg-amber-500 soundwave-bar"></span>
-                    <span class="w-1.5 bg-amber-600 soundwave-bar"></span>
-                  </div>
-
-                  <button id="btn-mic-retell" onclick="window.toggleRetellRecording()" class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-300 hover:scale-105 active:scale-95 text-slate-950 flex items-center justify-center shadow-xl shadow-amber-500/30 transition border-4 border-amber-100 cursor-pointer">
-                    <i data-lucide="mic" class="w-8 h-8 text-slate-950"></i>
-                  </button>
-
-                  <div class="flex items-center gap-1 h-10">
-                    <span class="w-1.5 bg-amber-600 soundwave-bar"></span>
-                    <span class="w-1.5 bg-amber-500 soundwave-bar"></span>
-                    <span class="w-1.5 bg-amber-400 soundwave-bar"></span>
-                  </div>
-                </div>
-
-                <div id="retell-timer" class="font-mono text-2xl font-black text-amber-800">00:00</div>
-                <p id="retell-status" class="text-xs text-slate-600 font-semibold">Toque no microfone para iniciar sua gravação</p>
-
-                <!-- Feedback Diagnostic Card -->
-                <div id="retell-feedback-box" class="hidden text-left p-5 rounded-2xl bg-amber-50/70 border border-amber-300 space-y-3 animate-in fade-in duration-200">
-                  <div class="flex items-center justify-between pb-3 border-b border-amber-200">
-                    <div>
-                      <h4 class="font-bold text-sm text-[#0A192F] flex items-center gap-1.5">
-                        <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
-                        Diagnóstico do Coach Leo
-                      </h4>
-                      <p class="text-[11px] text-slate-600">Compreendido por nativos</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-full bg-amber-500 text-slate-950 font-mono font-black flex flex-col items-center justify-center shadow-inner">
-                      <span class="text-xs leading-none">8.8</span>
-                      <span class="text-[7px] uppercase">/ 10</span>
-                    </div>
-                  </div>
-                  <p class="text-xs text-slate-800 leading-relaxed font-medium"><strong>Análise do Leo:</strong> Excelente fluência e ritmo natural! Você transmitiu a ideia central com clareza.</p>
-                </div>
-              </div>
-            </div>
-          `;
+    window.jumpToSentence = (idx) => {
+      state.currentSentenceIndex = idx;
+      if (state.activity !== 'look_retell') {
+        const items = getActiveItems();
+        const sentence = items[idx];
+        if (sentence && sentence.start !== undefined) {
+          state.audio.currentTime = sentence.start;
         }
-
-        // 5. LISTEN & ASK
-        else if (state.activity === 'listen_ask') {
-          container.innerHTML = `
-            <div class="space-y-3">
-              <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-2.5">
-                <i data-lucide="help-circle" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
-                <div>
-                  <h3 class="font-bold text-sm">Listen & Ask (Formulação de Perguntas)</h3>
-                  <p class="text-xs text-amber-900/90 mt-0.5">O Leo faz a afirmação &rarr; formule a pergunta correspondente em voz alta.</p>
-                </div>
-              </div>
-              <div class="space-y-2.5">
-                ${sentences.map((s, idx) => `
-                  <div class="p-4 rounded-2xl bg-white border border-stone-200 space-y-2 shadow-xs">
-                    <div class="flex items-center justify-between text-xs">
-                      <span class="font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded">Desafio #${idx+1}</span>
-                      <button onclick="window.playSentence(${idx})" class="px-3 py-1 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1">
-                        <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-                        <span>Ouvir Afirmação</span>
-                      </button>
-                    </div>
-                    <p class="font-bold text-sm text-[#0A192F]">"${s.text}"</p>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
+        if (state.isPlaying) {
+          state.audio.play();
         }
+      }
+      renderZenStage();
+    };
 
-        // 6. PRONUNCIATION
-        else if (state.activity === 'pronunciation') {
-          container.innerHTML = `
-            <div class="space-y-3">
-              <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-start gap-2.5">
-                <i data-lucide="repeat" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
-                <div>
-                  <h3 class="font-bold text-sm">Pronunciation & Connected Speech</h3>
-                  <p class="text-xs text-amber-900/90 mt-0.5">${track.goldenTip || "Treine a conexão de som das palavras."}</p>
-                </div>
-              </div>
-              <div class="space-y-2.5">
-                ${sentences.map((s, idx) => `
-                  <div class="p-4 rounded-2xl bg-white border border-stone-200 flex items-center justify-between gap-3 shadow-xs">
-                    <div>
-                      <span class="font-mono text-[10px] text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">[${formatTime(s.start)}]</span>
-                      <p class="font-bold text-sm text-[#0A192F] mt-1">${s.text}</p>
-                    </div>
-                    <button onclick="window.toggleRepeatSentence(${idx})" class="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm flex items-center justify-center shrink-0 shadow-xs cursor-pointer">
-                      <i data-lucide="repeat" class="w-4 h-4"></i>
-                    </button>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
+    window.toggleLoopSentence = (index) => {
+      if (state.loopingSentenceIndex === index) {
+        state.loopingSentenceIndex = -1;
+        showToast('Repetição em loop desativada');
+      } else {
+        state.loopingSentenceIndex = index;
+        showToast(`Loop contínuo ativado na frase #${index+1}`);
+      }
+      renderZenStage();
+    };
+
+    window.playChunkAudio = (url, index) => {
+      showToast(`Tocando áudio do Chunk #${index+1}`);
+    };
+
+    function setupSwipeGestures() {
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > 50) {
+          if (diff < 0) {
+            // Swipe Left -> Próxima frase
+            window.navSentence(1);
+          } else {
+            // Swipe Right -> Frase anterior
+            window.navSentence(-1);
+          }
         }
+      }, { passive: true });
+    }
 
+    function initAudioEvents() {
+      state.audio.addEventListener('timeupdate', () => {
+        const cur = state.audio.currentTime;
+        const dur = state.audio.duration || 35.8;
+
+        document.getElementById('dock-current-time').innerText = formatTime(cur);
+        document.getElementById('dock-total-time').innerText = formatTime(dur);
+
+        const seek = document.getElementById('dock-seek-bar');
+        if (seek && dur > 0) seek.value = (cur / dur) * 100;
+
+        // Modo Pronunciation: Pausa obrigatória ao final da frase
+        if (state.activity === 'pronunciation' && state.currentSentenceIndex >= 0) {
+          const s = REAL_TRACK.sentences[state.currentSentenceIndex];
+          if (s && cur >= s.end) {
+            if (state.loopingSentenceIndex === state.currentSentenceIndex) {
+              state.audio.currentTime = s.start;
+            } else {
+              state.audio.pause();
+              state.isPlaying = false;
+              renderZenStage();
+              updateDockPlayButton();
+            }
+          }
+        } else {
+          // Localiza sentença ativa pelo timestamp real do Firebase
+          const items = getActiveItems();
+          const foundIdx = items.findIndex(s => s.start !== undefined && cur >= s.start && cur < s.end);
+          if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
+            state.currentSentenceIndex = foundIdx;
+            renderZenStage();
+          }
+        }
+      });
+
+      state.audio.addEventListener('ended', () => {
+        state.isPlaying = false;
+        updateDockPlayButton();
+        renderZenStage();
+      });
+
+      const seek = document.getElementById('dock-seek-bar');
+      if (seek) {
+        seek.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value);
+          const dur = state.audio.duration || 35.8;
+          state.audio.currentTime = (val / 100) * dur;
+        });
+      }
+    }
+
+    // Atalho de Teclado (Espaço)
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        window.togglePlayPause();
+      }
+    });
+
+    window.togglePlayPause = () => {
+      if (state.isPlaying) {
+        state.audio.pause();
+        state.isPlaying = false;
+      } else {
+        state.audio.play().then(() => {
+          state.isPlaying = true;
+        }).catch(e => console.log(e));
+      }
+      updateDockPlayButton();
+      renderZenStage();
+    };
+
+    function updateDockPlayButton() {
+      const btn = document.getElementById('dock-btn-play');
+      if (btn) {
+        btn.innerHTML = `<i data-lucide="${state.isPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-current"></i>`;
         updateIcons();
       }
+    }
 
-      // Audio Event Listeners for Highlighting & Seeking
-      state.audio.ontimeupdate = () => {
-        const currentTime = state.audio.currentTime;
-        const duration = state.audio.duration || 1;
-        
-        // Update Seekbar & Timer
-        document.getElementById('dock-time-current').innerText = formatTime(currentTime);
-        document.getElementById('dock-seekbar').value = (currentTime / duration) * 100;
+    window.seekOffset = (sec) => {
+      state.audio.currentTime = Math.max(0, state.audio.currentTime + sec);
+    };
 
-        // Check active sentence
-        const student = getStudentData(state.studentId);
-        const track = student.tracks?.[state.currentTrackIndex] || {};
-        const sentences = track.sentences || [];
+    window.toggleRetellRecording = () => {
+      state.isRecording = !state.isRecording;
+      if (state.isRecording) {
+        showToast('Gravando sua fala... Fale com espontaneidade!');
+      } else {
+        showToast('Diagnóstico: Compreensibilidade 8.8/10 (Excelente!)');
+      }
+      renderZenStage();
+    };
 
-        // Check Repeat Loop
-        if (state.repeatSentenceIndex >= 0 && sentences[state.repeatSentenceIndex]) {
-          const rep = sentences[state.repeatSentenceIndex];
-          if (currentTime >= rep.end) {
-            state.audio.currentTime = rep.start;
-            return;
-          }
-        }
+    window.togglePlayerDrawer = () => {
+      const overlay = document.getElementById('playerDrawerOverlay');
+      const menu = document.getElementById('playerDrawerMenu');
+      if (!overlay || !menu) return;
 
-        // Highlight Active Sentence Card in Listen & Read
-        if (state.activity === 'listen_read') {
-          sentences.forEach((s, idx) => {
-            const card = document.getElementById(`sentence-card-${idx}`);
-            if (!card) return;
-            if (currentTime >= s.start && currentTime <= s.end) {
-              if (!card.classList.contains('active-sentence')) {
-                card.classList.add('active-sentence');
-              }
-            } else {
-              card.classList.remove('active-sentence');
-            }
-          });
-        }
-      };
+      const isClosed = menu.classList.contains('-translate-x-full');
+      if (isClosed) {
+        overlay.classList.remove('hidden');
+        menu.classList.remove('-translate-x-full');
+      } else {
+        overlay.classList.add('hidden');
+        menu.classList.add('-translate-x-full');
+      }
+    };
 
-      state.audio.onloadedmetadata = () => {
-        document.getElementById('dock-time-duration').innerText = formatTime(state.audio.duration);
-      };
+    function formatTime(sec) {
+      if (isNaN(sec) || sec < 0) return "00:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
 
-      state.audio.onplay = () => {
-        state.isPlaying = true;
-        const playBtn = document.getElementById('dock-btn-play');
-        if (playBtn) {
-          playBtn.innerHTML = '<i data-lucide="pause" class="w-5 h-5 fill-current"></i>';
-          updateIcons();
-        }
-      };
-
-      state.audio.onpause = () => {
-        state.isPlaying = false;
-        const playBtn = document.getElementById('dock-btn-play');
-        if (playBtn) {
-          playBtn.innerHTML = '<i data-lucide="play" class="w-5 h-5 fill-current"></i>';
-          updateIcons();
-        }
-      };
-
-      // Seekbar Interaction
-      document.getElementById('dock-seekbar').oninput = (e) => {
-        const percent = parseFloat(e.target.value);
-        if (state.audio.duration) {
-          state.audio.currentTime = (percent / 100) * state.audio.duration;
-        }
-      };
-
-      // Global Window Exposed Functions
-      window.togglePlayPause = () => {
-        if (state.audio.paused) {
-          state.audio.play().catch(e => console.warn("Play error:", e));
-        } else {
-          state.audio.pause();
-        }
-      };
-
-      window.seekOffset = (sec) => {
-        state.audio.currentTime = Math.max(0, Math.min(state.audio.duration || 0, state.audio.currentTime + sec));
-      };
-
-      window.setPlaybackSpeed = (speed) => {
-        state.playbackSpeed = speed;
-        state.audio.playbackRate = speed;
-        document.querySelectorAll('.speed-btn').forEach(btn => {
-          btn.className = "speed-btn px-1.5 py-0.5 rounded text-[10px] text-slate-300 font-bold hover:text-white";
-        });
-        event.currentTarget.className = "speed-btn px-1.5 py-0.5 rounded text-[10px] bg-amber-500 text-slate-950 font-black";
-        showToast(`Velocidade: ${speed}x`);
-      };
-
-      window.playSentence = (idx) => {
-        const student = getStudentData(state.studentId);
-        const track = student.tracks?.[state.currentTrackIndex] || {};
-        const s = track.sentences?.[idx];
-        if (!s) return;
-
-        state.repeatSentenceIndex = -1;
-        state.audio.currentTime = s.start;
-        state.audio.play().catch(e => console.warn(e));
-      };
-
-      window.toggleRepeatSentence = (idx) => {
-        if (state.repeatSentenceIndex === idx) {
-          state.repeatSentenceIndex = -1;
-          showToast("Repetição contínua desativada");
-        } else {
-          state.repeatSentenceIndex = idx;
-          window.playSentence(idx);
-          showToast("Frase em repetição contínua");
-        }
-      };
-
-      window.switchActivity = (act) => {
-        state.activity = act;
-        renderInteractiveStage();
-      };
-
-      window.switchTierTab = (tab) => {
-        state.tierTab = tab;
-        
-        // Highlight active tier tab
-        ['suggestions', 'courses', 'vip', 'mystuff'].forEach(t => {
-          const btn = document.getElementById(`tab-${t}`);
-          if (!btn) return;
-          if (t === tab) {
-            btn.className = "flex-1 min-w-[130px] py-2 px-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 bg-[#0A192F] text-amber-300 shadow-md cursor-pointer";
-          } else {
-            btn.className = "flex-1 min-w-[130px] py-2 px-3 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-950 hover:bg-white/60 cursor-pointer";
-          }
-        });
-
-        if (tab === 'vip') {
-          window.loginAsStudent('estevao');
-        } else if (tab === 'suggestions') {
-          window.loginAsStudent('public');
-        } else {
-          showToast("Aba em sincronização com seus cursos matriculados.");
-        }
-      };
-
-      window.loginAsStudent = (id) => {
-        state.studentId = id;
-        const student = getStudentData(id);
-
-        document.getElementById('header-student-name').innerText = student.name || "Aluno";
-        document.getElementById('header-tier-label').innerText = student.badge || "Membro";
-        document.getElementById('header-avatar-badge').innerText = (student.name || "AG").slice(0, 2).toUpperCase();
-
-        window.closeSaaSLoginModal();
-        loadTrack(0);
-        showToast(`Aluno Ativo: ${student.name}`);
-      };
-
-      window.openSaaSLoginModal = () => {
-        document.getElementById('saas-welcome-modal').classList.remove('hidden');
-      };
-
-      window.closeSaaSLoginModal = () => {
-        document.getElementById('saas-welcome-modal').classList.add('hidden');
-      };
-
-      window.sharePlayerLink = () => {
-        if (navigator.share) {
-          navigator.share({
-            title: 'Personal Training Player • AgoraEuFalo',
-            url: window.location.href
-          }).catch(() => {});
-        } else {
-          const text = encodeURIComponent(`Estou praticando no Training Player do AgoraEuFalo! Venha treinar também: ${window.location.href}`);
-          window.open(`https://wa.me/?text=${text}`, '_blank');
-        }
-      };
-
-      // AI Retell Mock Recording
-      let recSec = 0;
-      let recTimer = null;
-      window.toggleRetellRecording = () => {
-        const btn = document.getElementById('btn-mic-retell');
-        const status = document.getElementById('retell-status');
-        const timer = document.getElementById('retell-timer');
-        const box = document.getElementById('retell-feedback-box');
-
-        if (recTimer) {
-          clearInterval(recTimer);
-          recTimer = null;
-          btn.classList.remove('bg-rose-500', 'animate-pulse');
-          btn.classList.add('bg-gradient-to-tr', 'from-amber-500', 'to-amber-300');
-          status.innerText = "Diagnóstico concluído pelo Coach Leo!";
-          if (box) box.classList.remove('hidden');
-        } else {
-          recSec = 0;
-          if (box) box.classList.add('hidden');
-          btn.classList.remove('bg-gradient-to-tr', 'from-amber-500', 'to-amber-300');
-          btn.classList.add('bg-rose-500', 'animate-pulse');
-          status.innerText = "Gravando sua voz... Fale em voz alta agora!";
-          recTimer = setInterval(() => {
-            recSec++;
-            if (timer) timer.innerText = formatTime(recSec);
-          }, 1000);
-        }
-      };
-
-      // Initial Boot
-      loadTrack(0);
-      updateIcons();
-
-    })();
+    function showToast(msg) {
+      const toast = document.getElementById('player-toast');
+      const text = document.getElementById('player-toast-text');
+      if (!toast || !text) return;
+      text.innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3500);
+    }
   </script>
 </body>
 </html>

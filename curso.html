@@ -1,214 +1,467 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth h-full">
+<html lang="pt-BR" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visão Geral do Curso • Módulos & Aulas | AgoraEuFalo</title>
-  <meta name="description" content="Portal de navegação e módulos do curso. Acesso a todas as aulas com vídeo, áudio de bolso e apostilas diagramadas.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Visão Geral do Curso • AgoraEuFalo+</title>
+  <meta name="description" content="Página de Entrada do Curso • Metodologia Magic Stories do Professor Leonardo Leite.">
+  
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <meta name="theme-color" content="#F5F6FA">
+  <meta name="theme-color" content="#0D1E36">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & Fira Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/css/aef-glassmorphism.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              midnight: '#0D1E36',
+              ochre: '#C68A36',
+              'ochre-hover': '#B3792A',
+              canvas: '#FAF8F5',
+              paper: '#FFFDF9',
+              border: '#EAE5DC',
+              muted: '#7A7369'
+            }
+          }
+        }
+      }
+    }
+  </script>
 
-  <!-- Lucide Icons & Core Cloud SDKs -->
+  <!-- Lucide Vector Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
+
+  <!-- AgoraEuFalo Master Luxury Design System Core -->
+  <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
+
+  <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(234, 229, 220, 0.4); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #D1C7B7; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C68A36; }
+  </style>
 </head>
-<body class="ambient-bg text-slate-800 min-h-screen antialiased selection:bg-amber-100 selection:text-amber-900 p-3 sm:p-6 lg:p-8 flex flex-col justify-between">
+<body class="aef-canvas-bg min-h-screen text-slate-900 font-sans antialiased selection:bg-amber-200">
 
-  <!-- Glass Container Canvas -->
-  <div class="max-w-[1440px] w-full mx-auto glass-panel rounded-[32px] sm:rounded-[40px] p-4 sm:p-8 space-y-8 shadow-2xl relative overflow-hidden">
-    
-    <!-- Top Header Bar -->
-    <header class="flex items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+  <!-- ========================================================================= -->
+  <!-- 1. TOP APP BAR: Hamburger Menu + Logo + Quick Actions (1:1 with Portal)    -->
+  <!-- ========================================================================= -->
+  <header class="bg-[#0D1E36] text-white border-b border-white/10 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+      
+      <!-- Left: Hamburger Drawer Trigger + Logo -->
       <div class="flex items-center gap-3">
-        <a href="portal.html" class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-900 hover:text-white text-slate-700 font-bold text-xs transition border border-slate-200 shadow-sm">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          <span>Voltar ao Início</span>
+        <button onclick="window.toggleCourseDrawer()" class="p-1.5 rounded-xl hover:bg-white/10 text-white transition cursor-pointer" title="Menu de Navegação">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <a href="portal.html" class="flex items-center gap-2 transition active:scale-95">
+          <span class="font-serif font-black text-lg sm:text-xl tracking-tight text-white">
+            Agora<span class="text-[#C68A36]">EuFalo+</span>
+          </span>
         </a>
-        <span class="text-slate-300 hidden sm:inline">|</span>
-        <span class="text-xs font-black text-amber-700 bg-amber-100/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider hidden sm:inline" id="header-course-badge">
-          PROJETO 2026
-        </span>
       </div>
 
-      <div class="flex items-center gap-3">
-        <a href="treino/player.html" class="px-4 py-2 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-1.5 active:scale-95">
+      <!-- Desktop Center Nav Links -->
+      <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-300">
+        <a href="portal.html" class="hover:text-white transition">Meus Cursos</a>
+        <a href="curso.html?id=projeto-aef-2026" class="text-white border-b-2 border-[#C68A36] pb-0.5">Grade de Módulos</a>
+        <a href="treino/player.html" class="hover:text-white transition">Training Player</a>
+      </nav>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-2.5">
+        <a href="treino/player.html" class="px-3.5 py-1.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
-          <span>Training Player</span>
+          <span>Player</span>
         </a>
-      </div>
-    </header>
 
-    <!-- Course Hero Banner -->
-    <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-amber-200/80 bg-gradient-to-r from-amber-50/50 via-white to-amber-50/30">
-      <div class="space-y-2 max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider border border-amber-200">
-          <span>🏛️</span> <span>PROGRAMA OFICIAL • PROFESSOR LEO LEITE</span>
+        <div onclick="window.toggleCourseDrawer()" class="w-8 h-8 rounded-full bg-white/10 text-amber-300 flex items-center justify-center font-bold text-xs border border-white/20 cursor-pointer shadow-xs">
+          LL
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-slate-900" id="course-main-title">Projeto AgoraEuFalo 2026</h1>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" id="course-main-desc">
-          O treinamento definitivo de reflexo oral, cadência e connected speech. Repita os blocos até a fala virar reflexo natural.
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. CINEMATIC WIDE HERO BANNER (1:1 from Reference Images 2 & 4)           -->
+  <!-- ========================================================================= -->
+  <section class="bg-gradient-to-b from-[#0D1E36] via-[#112240] to-[#0A192F] text-white relative overflow-hidden py-8 sm:py-12 border-b border-[#EAE5DC]">
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+      
+      <!-- Left Content -->
+      <div class="space-y-4 max-w-2xl text-center md:text-left">
+        <a href="portal.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-300 hover:text-white transition">
+          <i data-lucide="arrow-left" class="w-4 h-4 text-[#C68A36]"></i>
+          <span>Voltar ao Portal</span>
+        </a>
+
+        <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight" id="courseHeroTitle">
+          Projeto AgoraEuFalo 2026 • Método Magic Stories
+        </h1>
+
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl" id="courseHeroDescription">
+          Aprenda o inglês falado da vida real através de histórias narradas, matriz de Sound Chunks acústicos, reflexo oral imediato e AI Speech Coaching 1 a 1.
         </p>
 
-        <!-- Progress Indicator -->
-        <div class="pt-2 flex items-center gap-4 text-xs font-bold">
-          <div class="flex-1 max-w-xs bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
-            <div class="bg-gradient-to-r from-amber-400 to-amber-500 h-full w-[35%] rounded-full"></div>
+        <!-- Progress Indicator & CTA -->
+        <div class="pt-2 space-y-3">
+          <div class="flex items-center justify-center md:justify-start gap-3 text-xs font-mono font-bold text-slate-300">
+            <span id="courseCompletedLessonsLabel">1/3 conteúdos</span>
+            <span>—</span>
+            <span id="courseProgressPercentageLabel" class="text-[#C68A36]">33%</span>
           </div>
-          <span class="text-amber-700">35% Concluído (17 de 48 Aulas)</span>
+
+          <div class="w-full max-w-md bg-white/10 rounded-full h-2 overflow-hidden mx-auto md:mx-0">
+            <div id="courseHeroProgressBar" class="bg-[#C68A36] h-full rounded-full transition-all duration-500" style="width: 33%;"></div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+            <a id="btnContinueWatching" href="sala-de-aula.html?curso=projeto-aef-2026&aula=aef-01" class="px-6 py-3 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 active:scale-95 cursor-pointer">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+              <span>Continuar assistindo</span>
+            </a>
+
+            <a href="treino/player.html?tab=courses&trackId=aef-01-reflexo&activity=listen_read" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center gap-2">
+              <i data-lucide="headphones" class="w-4 h-4 text-amber-300"></i>
+              <span>Praticar no Player</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right 1:1 Course Artwork -->
+      <div class="relative w-48 h-48 sm:w-64 sm:h-64 shrink-0 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#C68A36]/40 bg-[#0A192F]">
+        <img src="assets/images/leonardo-leite.png" alt="Capa do Curso" class="w-full h-full object-cover object-top">
+        <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/70 text-amber-300 font-mono text-[9px] font-bold uppercase">
+          TURMA OFICIAL 2026
         </div>
       </div>
 
-      <div class="shrink-0">
-        <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=1" class="px-5 py-3 rounded-2xl bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
-          <i data-lucide="play-circle" class="w-4 h-4"></i>
-          <span>Continuar Aula Atual</span>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 3. COURSE CONTENT & SYLLABUS ACCORDION (1:1 from Reference Images 1 & 3)  -->
+  <!-- ========================================================================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT: MODULES ACCORDION STREAM (8 cols) -->
+      <div class="lg:col-span-8 space-y-6">
+        
+        <!-- Navigation Tabs & Search -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EAE5DC]">
+          <div class="flex items-center gap-6 text-sm font-bold">
+            <button class="text-[#0A192F] border-b-2 border-[#0A192F] pb-1 font-black">Conteúdos</button>
+            <button class="text-[#7A7369] hover:text-[#0A192F] pb-1 transition">Sobre o Curso</button>
+          </div>
+
+          <div class="relative max-w-xs w-full">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+            <input type="text" placeholder="Buscar conteúdo..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-[#EAE5DC] text-xs font-medium focus:outline-none focus:border-[#C68A36]">
+          </div>
+        </div>
+
+        <!-- Modules Accordion List -->
+        <div id="courseModulesAccordion" class="space-y-4">
+          <!-- Populated Dynamically via JS -->
+        </div>
+
+      </div>
+
+      <!-- RIGHT: UPSELL / NEXT LEARNING WIDGET (4 cols - 1:1 from Mockup) -->
+      <aside class="lg:col-span-4 space-y-4">
+        
+        <div class="p-5 sm:p-6 rounded-[28px] bg-white border border-[#EAE5DC] shadow-sm space-y-4">
+          
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">
+              Membros AgoraEuFalo
+            </span>
+            <h3 class="font-black text-sm text-[#0A192F]">Seu próximo aprendizado está aqui!</h3>
+            <p class="text-xs text-[#7A7369]">Mais de 35 anos de sala de aula e método de fala espontânea.</p>
+          </div>
+
+          <!-- Training Player Promo Card -->
+          <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#EAE5DC] space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-[#0D1E36] text-amber-300 flex items-center justify-center font-black text-xs shrink-0">
+                <i data-lucide="mic" class="w-6 h-6 text-[#C68A36]"></i>
+              </div>
+              <div class="min-w-0">
+                <h4 class="font-bold text-xs text-[#0A192F] truncate">Personal Training Player</h4>
+                <p class="text-[11px] text-[#7A7369]">Look-Retell AI Speech Coach</p>
+              </div>
+            </div>
+            
+            <a href="treino/player.html" class="w-full py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs text-center transition shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+              <span>Abrir Training Player</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+
+          <!-- Community Card -->
+          <div class="p-4 rounded-2xl bg-white border border-[#EAE5DC] flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="message-circle" class="w-5 h-5 text-emerald-600"></i>
+              <div>
+                <p class="font-bold text-xs text-[#0A192F]">Dúvidas com o Leo?</p>
+                <p class="text-[10px] text-[#7A7369]">Suporte direto via WhatsApp</p>
+              </div>
+            </div>
+            <a href="https://wa.me/5531999817975" target="_blank" class="text-xs font-bold text-[#C68A36] hover:underline">
+              Falar
+            </a>
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. SLIDE-OVER NAVIGATION DRAWER (Triggered by Hamburger Menu Icon)        -->
+  <!-- ========================================================================= -->
+  <div id="courseDrawerOverlay" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden" onclick="window.toggleCourseDrawer()"></div>
+
+  <aside id="courseDrawerMenu" class="fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] bg-[#FFFDF9] border-r border-[#EAE5DC] z-50 p-6 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
+    
+    <div class="space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-[#EAE5DC]">
+        <span class="font-serif font-black text-lg tracking-tight text-[#0A192F]">
+          Agora<span class="text-[#C68A36]">EuFalo+</span>
+        </span>
+        <button onclick="window.toggleCourseDrawer()" class="p-1 rounded-lg text-slate-500 hover:text-slate-900">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <nav class="space-y-1 text-xs font-bold">
+        <a href="portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Meus Cursos</span>
         </a>
+        <a href="curso.html?id=projeto-aef-2026" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs">
+          <i data-lucide="grid" class="w-4 h-4 text-[#C68A36]"></i>
+          <span>Grade de Módulos</span>
+        </a>
+        <a href="repertorio.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="layers" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Flashcards & Chunks</span>
+        </a>
+        <a href="treino/player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Personal Training Player</span>
+        </a>
+        <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Aulas ao Vivo (Meet)</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Drawer Bottom: Student Profile Card -->
+    <div class="pt-4 border-t border-[#EAE5DC]">
+      <div class="flex items-center gap-3 p-2 rounded-2xl">
+        <div class="w-9 h-9 rounded-full bg-[#C68A36] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+          LL
+        </div>
+        <div class="leading-tight min-w-0 flex-1">
+          <p class="font-black text-xs text-[#0A192F] truncate">Leonardo Leite</p>
+          <p class="text-[10px] font-bold text-[#8C8275] uppercase tracking-wider">Membro VIP</p>
+        </div>
       </div>
     </div>
 
-    <!-- Modules Showcase Grid -->
-    <section class="space-y-5">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-lg font-bold text-slate-900 tracking-tight">Módulos & Trilha de Aprendizagem</h2>
-          <p class="text-xs text-slate-500">Clique em qualquer módulo para expandir a lista de aulas.</p>
-        </div>
-        <span class="text-xs font-bold text-slate-400">12 Módulos Disponíveis</span>
-      </div>
-
-      <!-- Modules List -->
-      <div class="space-y-4" id="modules-container">
-        
-        <!-- Module 1 Card -->
-        <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
-          <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-5 cursor-pointer hover:bg-white/80 transition" onclick="toggleModuleLessons('m1')">
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
-                <img src="assets/images/cover-default-aef.jpg" alt="Módulo 1" class="w-full h-full object-cover">
-              </div>
-              <div>
-                <span class="text-[10px] font-black text-amber-700 uppercase tracking-wider">MÓDULO 01</span>
-                <h3 class="text-base font-bold text-slate-900 mt-0.5">Fundamentos do Reflexo Oral & Ritmo</h3>
-                <p class="text-xs text-slate-500 mt-0.5">4 Aulas • Connected Speech, Intonation e Pausas Estratégicas</p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">4 / 4 Concluídas</span>
-              <i data-lucide="chevron-down" id="icon-m1" class="w-4 h-4 text-slate-400 transition-transform"></i>
-            </div>
-          </div>
-
-          <!-- Lessons Sub-List (Expansible) -->
-          <div id="lessons-m1" class="border-t border-slate-100 bg-white/50 divide-y divide-slate-100 text-xs">
-            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=1" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
-              <div class="flex items-center gap-3">
-                <span class="text-emerald-600 font-bold">✓</span>
-                <span class="font-bold text-slate-800">Aula 01: O Segredo da Conexão Sonora</span>
-                <div class="hidden sm:flex items-center gap-2 text-[10px] text-slate-400 ml-2">
-                  <span class="px-1.5 py-0.5 rounded bg-slate-100">🎬 14 min</span>
-                  <span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">🎧 Áudio</span>
-                </div>
-              </div>
-              <span class="text-amber-700 font-bold hover:underline">Assistir →</span>
-            </a>
-
-            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=2" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
-              <div class="flex items-center gap-3">
-                <span class="text-emerald-600 font-bold">✓</span>
-                <span class="font-bold text-slate-800">Aula 02: Eliminando a Tradução Mental</span>
-                <div class="hidden sm:flex items-center gap-2 text-[10px] text-slate-400 ml-2">
-                  <span class="px-1.5 py-0.5 rounded bg-slate-100">🎬 18 min</span>
-                  <span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">🎧 Áudio</span>
-                </div>
-              </div>
-              <span class="text-amber-700 font-bold hover:underline">Assistir →</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Module 2 Card -->
-        <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
-          <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-5 cursor-pointer hover:bg-white/80 transition" onclick="toggleModuleLessons('m2')">
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
-                <img src="assets/images/cover-public-spoken-reflex.jpg" alt="Módulo 2" class="w-full h-full object-cover">
-              </div>
-              <div>
-                <span class="text-[10px] font-black text-amber-700 uppercase tracking-wider">MÓDULO 02</span>
-                <h3 class="text-base font-bold text-slate-900 mt-0.5">Frases Prontas para Reuniões Internacionais</h3>
-                <p class="text-xs text-slate-500 mt-0.5">4 Aulas • Aberturas, Interrupções Elegantes e Fechamentos</p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">2 / 4 Concluídas</span>
-              <i data-lucide="chevron-down" id="icon-m2" class="w-4 h-4 text-slate-400 transition-transform"></i>
-            </div>
-          </div>
-
-          <!-- Lessons Sub-List -->
-          <div id="lessons-m2" class="border-t border-slate-100 bg-white/50 divide-y divide-slate-100 text-xs">
-            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=5" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
-              <div class="flex items-center gap-3">
-                <span class="text-emerald-600 font-bold">✓</span>
-                <span class="font-bold text-slate-800">Aula 05: Apresentação Pessoal & Framing</span>
-              </div>
-              <span class="text-amber-700 font-bold hover:underline">Assistir →</span>
-            </a>
-
-            <a href="sala-de-aula.html?curso=projeto-aef-2026&aula=6" class="p-4 px-6 flex items-center justify-between hover:bg-white transition">
-              <div class="flex items-center gap-3">
-                <span class="text-amber-600 font-bold">▶</span>
-                <span class="font-bold text-slate-800">Aula 06: Conduzindo uma Discussão com Firmeza</span>
-              </div>
-              <span class="text-amber-700 font-bold hover:underline">Continuar →</span>
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </div>
-
-  <!-- Footer -->
-  <footer class="max-w-[1440px] w-full mx-auto text-center text-xs text-slate-400 py-4 font-medium">
-    <p>AgoraEuFalo © 2026 • Professor Leonardo Leite</p>
-  </footer>
+  </aside>
 
   <script>
-    function toggleModuleLessons(id) {
-      const container = document.getElementById(`lessons-${id}`);
-      const icon = document.getElementById(`icon-${id}`);
-      if (!container) return;
-
-      const isHidden = container.classList.toggle('hidden');
-      if (icon) icon.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+    function updateIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get('id') || 'projeto-aef-2026';
+    const COURSE_DATA = {
+      id: "projeto-aef-2026",
+      title: "Projeto AgoraEuFalo 2026 • Método Magic Stories",
+      description: "Aprenda o inglês falado da vida real através de histórias narradas, matriz de Sound Chunks acústicos, reflexo oral imediato e AI Speech Coaching 1 a 1.",
+      modules: [
+        {
+          id: "mod-01",
+          order: 1,
+          title: "01 - Destravando a Escuta e o Reflexo",
+          lessons: [
+            {
+              id: "aef-01",
+              order: 1,
+              title: "Aula 01: O Segredo da Conversação Espontânea",
+              duration: "09:30",
+              videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+            },
+            {
+              id: "aef-02",
+              order: 2,
+              title: "Aula 02: O Ritmo do Inglês Falado Real",
+              duration: "08:15",
+              videoUrl: ""
+            }
+          ]
+        },
+        {
+          id: "mod-02",
+          order: 2,
+          title: "02 - Fluência Situacional & Spoken Reflex",
+          lessons: [
+            {
+              id: "aef-03",
+              order: 3,
+              title: "Aula 03: Small Talk & Conversas Corporativas",
+              duration: "11:40",
+              videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+            }
+          ]
+        }
+      ]
+    };
 
-      if (courseId === 'magic-stories-club') {
-        document.getElementById('course-main-title').innerText = 'Magic Stories Club';
-        document.getElementById('course-main-desc').innerText = '30 ciclos narrativos completos com histórias, Listen & Answer e Chunks com o Leo Gringo.';
-        document.getElementById('header-course-badge').innerText = 'MAGIC STORIES CLUB';
-      }
+    let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
 
-      lucide.createIcons();
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCourseAccordion();
+      updateIcons();
     });
+
+    function renderCourseAccordion() {
+      const container = document.getElementById("courseModulesAccordion");
+      if (!container) return;
+
+      let totalLessons = 0;
+      let totalCompleted = 0;
+
+      container.innerHTML = COURSE_DATA.modules.map((mod, mIdx) => {
+        const modLessons = mod.lessons || [];
+        totalLessons += modLessons.length;
+        
+        let modCompleted = 0;
+        modLessons.forEach(l => {
+          if (completedLessonIds.includes(l.id)) {
+            modCompleted++;
+            totalCompleted++;
+          }
+        });
+
+        const modPercent = modLessons.length > 0 ? Math.round((modCompleted / modLessons.length) * 100) : 0;
+        const isModComplete = modPercent === 100;
+
+        return `
+          <div class="border border-[#EAE5DC] rounded-2xl bg-white overflow-hidden shadow-xs">
+            
+            <!-- Module Accordion Header -->
+            <div onclick="toggleModuleAccordion('${mod.id}')" class="p-4 sm:p-5 bg-white hover:bg-[#FAF8F5] transition cursor-pointer flex items-center justify-between gap-4 select-none">
+              
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-8 h-8 rounded-full ${isModComplete ? 'bg-emerald-500 text-white' : 'bg-[#0D1E36] text-amber-300'} flex items-center justify-center font-bold text-xs shrink-0">
+                  ${isModComplete ? '<i data-lucide="check" class="w-4 h-4"></i>' : (mIdx + 1)}
+                </div>
+
+                <div class="min-w-0">
+                  <h3 class="font-black text-sm text-[#0A192F] truncate">${mod.title}</h3>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <span class="text-[11px] font-bold ${isModComplete ? 'text-emerald-600 flex items-center gap-1' : 'text-[#7A7369]'}">${isModComplete ? 'Completo <i data-lucide="check" class="w-3 h-3 text-emerald-600"></i>' : `${modPercent}% Concluído`}</span>
+                  </div>
+                </div>
+              </div>
+
+              <i data-lucide="chevron-down" id="chevron-${mod.id}" class="w-4 h-4 text-[#7A7369] transition duration-200"></i>
+
+            </div>
+
+            <!-- Module Lessons List (Accordion Body) -->
+            <div id="lessons-list-${mod.id}" class="p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
+              ${modLessons.map((les) => {
+                const isCompleted = completedLessonIds.includes(les.id);
+                return `
+                  <a href="sala-de-aula.html?curso=${COURSE_DATA.id}&aula=${les.id}" class="p-3 rounded-xl bg-white hover:border-[#C68A36] border border-[#EAE5DC] transition flex items-center justify-between gap-3 group">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <div class="relative w-16 h-11 rounded-lg bg-[#0D1E36] overflow-hidden shrink-0 flex items-center justify-center">
+                        <img src="assets/images/leonardo-leite.png" alt="Thumb" class="w-full h-full object-cover object-top opacity-80">
+                        <span class="absolute bottom-0.5 right-0.5 px-1 py-0.2 rounded bg-black/80 text-white font-mono text-[7px]">
+                          ${les.duration}
+                        </span>
+                      </div>
+                      <div class="min-w-0">
+                        <h4 class="font-bold text-xs text-[#0A192F] truncate group-hover:text-[#C68A36] transition">${les.title}</h4>
+                        <p class="text-[10px] text-[#7A7369]">${les.duration} • Prof. Leonardo Leite</p>
+                      </div>
+                    </div>
+
+                    <div class="shrink-0 flex items-center gap-2">
+                      ${isCompleted ? '<span class="text-emerald-600 font-bold text-xs flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i></span>' : '<i data-lucide="play" class="w-3.5 h-3.5 text-slate-400 group-hover:text-[#C68A36]"></i>'}
+                    </div>
+                  </a>
+                `;
+              }).join('')}
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      // Update Global Progress
+      const globalPercent = totalLessons > 0 ? Math.round((totalCompleted / totalLessons) * 100) : 0;
+      document.getElementById("courseCompletedLessonsLabel").innerText = `${totalCompleted}/${totalLessons} conteúdos`;
+      document.getElementById("courseProgressPercentageLabel").innerText = `${globalPercent}%`;
+      document.getElementById("courseHeroProgressBar").style.width = `${globalPercent}%`;
+    }
+
+    function toggleModuleAccordion(modId) {
+      const body = document.getElementById(`lessons-list-${modId}`);
+      const chevron = document.getElementById(`chevron-${modId}`);
+      if (!body) return;
+
+      body.classList.toggle("hidden");
+      if (chevron) chevron.classList.toggle("rotate-180");
+    }
+
+    window.toggleCourseDrawer = () => {
+      const overlay = document.getElementById("courseDrawerOverlay");
+      const menu = document.getElementById("courseDrawerMenu");
+      if (!overlay || !menu) return;
+
+      const isClosed = menu.classList.contains("-translate-x-full");
+      if (isClosed) {
+        overlay.classList.remove("hidden");
+        menu.classList.remove("-translate-x-full");
+      } else {
+        overlay.classList.add("hidden");
+        menu.classList.add("-translate-x-full");
+      }
+    };
   </script>
 </body>
 </html>

@@ -30,30 +30,35 @@ Qualquer assistente ou agente de IA deve seguir estas regras rigorosamente em qu
 
 ---
 
-## 3. As 6 Atividades Canônicas do Método Magic Stories
-Todas as aulas e treinos do ecossistema seguem rigorosamente a estrutura pedagógica de 6 etapas:
+## 3. As 6 Atividades Canônicas do Método Magic Stories (Regras Mecânicas do Player)
+Todas as aulas e treinos do ecossistema seguem rigorosamente a estrutura pedagógica e o design de cards padronizado em todas as abas:
 
-1. **`1. Listen & Read` (Entrada & Imersão Auditiva):**
-   - Áudio de estúdio Dual Speaker com karaokê interativo milimétrico (Play/Pause por toque).
-   - Linha secundária obrigatória com **Tradução em Português Falado Brasileiro Real (`spokenTranslation`)**.
-2. **`2. Vocabulary Session` (Matriz de Chunks Sonoros):**
-   - Explicação contextual de collocations e expressões em blocos acústicos.
-   - Apresentação em cards visuais claros (`bg-amber-50`) e compilação em **Apostila diagramada em PDF A4**.
-   - *Sem tradução literal palavra por palavra.*
-3. **`3. Listen & Answer` (Reflexo & Velocidade de Resposta):**
-   - Template Call & Response: Pergunta rápida do Leo ➔ **micro-pausa cronometrada de 2 a 4 segundos** para o aluno responder em voz alta ➔ Resposta padrão imediata do Leo para validação auditiva.
-   - *Sem necessidade de tradução em português na tela.*
-4. **`4. Look & Retell` + AI Speech Coach (Produção Própria & Speaking Ativo):**
-   - **Zero listening prévio do aluno. 100% Speaking autônomo.**
-   - O aluno visualiza apenas as **perguntas-guia visuais** na tela e clica no microfone para recontar a história com suas próprias palavras.
-   - O agente **`Look-Retell-AI-Coach`** avalia o áudio:
-     - Atribui **Score de Compreensibilidade de 0 a 10** (foco em ser compreendido por nativos, sem rigor gramatical punitivo).
-     - Mapeia o ponto exato da história onde o aluno se embolou ou hesitou.
-     - Entrega feedback caloroso no tom do Professor Leo incentivando a repetição.
-5. **`5. Listen & Ask` (Desafio de Formulação de Perguntas):**
-   - O Leo faz uma afirmação sonora ➔ micro-pausa para o aluno formular a pergunta correspondente ➔ Leo confirma a pergunta correta.
-6. **`6. Pronunciation & Connected Speech` (Musicalidade & Ritmo):**
-   - Treino cirúrgico de reduções acústicas (*gonna, wanna, coulda, drop de 't'/'d'*, conexões consoante-vogal) com botão de repetição contínua (`🔂`).
+1. **`1. Listen & Read (LR)` (Entrada & Imersão Auditiva):**
+   - A história ou diálogo narrado.
+   - Cada card contém uma frase/turno completo. Em diálogos, cada card indica seu locutor (`speaker`).
+   - **Sem tradução na tela.** 
+   - Mecânica: Áudio contínuo, play/pause com 1 toque no card e auto-scroll suave.
+2. **`2. Vocabulary Session (VOC)` (Matriz de Chunks & Conteúdo Formatado):**
+   - O mesmo texto/diálogo de Listen & Read, mas **COM a Tradução em Português Falado Brasileiro Real (`spokenTranslation`)** visível no card.
+   - Espaço reservado para o texto formatado original (estilo apostila PDF/blogpost).
+   - Abaixo do texto principal: Matriz de Chunks Sonoros (**Cards de Chunks / FrasesProntas**).
+   - Cada card de chunk possui um **pequeno botão de áudio (`▶`)** para ouvir o chunk isolado (áudios gravados no Firestore).
+3. **`3. Listen & Answer (LA)` (Reflexo & Velocidade de Resposta):**
+   - Cards intercalados: **1 card de Pergunta** ➔ **1 card de Resposta**.
+   - **Sem tradução na tela.**
+   - Template Call & Response com micro-pausa cronometrada de 2 a 4 segundos.
+4. **`4. Look & Retell (LRT)` + AI Speech Coach (Produção Própria & Speaking Ativo):**
+   - **Zero áudio prévio e zero auto-scroll.** 100% Speaking autônomo.
+   - Todos os cards mostram **apenas as perguntas-guia visuais** na tela.
+   - Aluno clica no microfone radiante para gravar seu reconto e o `Look-Retell-AI-Coach` atribui Score de Compreensibilidade de 0 a 10.
+5. **`5. Listen & Ask (LASK)` (Desafio de Formulação de Perguntas):**
+   - Cards intercalados: **1 card com a Frase na Negativa / Afirmação** ➔ **1 card com a Pergunta correspondente** com áudio.
+   - **Sem tradução na tela.**
+6. **`6. Pronunciation & Connected Speech (PRO)` (Musicalidade & Ritmo Cirúrgico):**
+   - As mesmas frases de Listen & Read.
+   - **Pausa obrigatória ao final de cada frase.**
+   - 1º toque pula o áudio para o segundo exato do início daquela frase (`start`), toca até o `end` e pausa. Para tocar a próxima, basta tocar no card dela.
+   - Botão de repetição contínua em loop no card (`🔂`).
 
 ---
 
@@ -157,3 +162,29 @@ Sempre que qualquer nova interface, página, artigo de blog, player ou módulo a
 ## 14. Política de Deploy: Automático por Padrão com Kill-Switch Obrigatório
 - **Padrão (Default):** O agente realiza o build (`npm run build`) e o deploy (`git push origin main`) automaticamente ao concluir as entregas solicitadas.
 - **Kill-Switch Obrigatório:** Se o usuário incluir termos como *"no deploy"*, *"não faça deploy"*, *"não suba para produção"*, *"apenas local"* ou *"não dê push"*, o agente é terminantemente PROIBIDO de executar `git push`.
+
+---
+
+### 15. Proibição Absoluta de Dados Fake Hardcoded (Zero Mockup em Produção)
+- É terminantemente proibido deixar frases, links ou cards hardcoded nas páginas finais (ex: "bilingual sentences" estáticos ou links fictícios).
+- Toda a interface deve ser alimentada dinamicamente pelas faixas e aulas reais de `registry.js` e do Firestore (`courses`, `modules`, `lessons`, `tracks`, `sentences`).
+
+---
+
+### 16. Arquitetura Canônica do Training Player (Desktop Zen Mode vs. Mobile de Bolso)
+- **No Desktop (Zen Mode):** A tela NÃO é uma lista longa de áudio. É um **Palco Zen Central** focado no exercício ativo (Look & Retell / Listen & Read) com o Medidor de Compreensibilidade 8.8/10, ao lado do **Painel Lateral de Diagnóstico e Evolução do AI Coach**.
+- **No Mobile (AI Coach de Bolso):** Fluxo vertical estrito com Medidor Circular no topo, Card Bicolor (Navy/Ochre) no centro e Estúdio de Microfone Radiante no rodapé.
+
+---
+
+### 17. Desacoplamento Rígido: Templates vs. Dados
+- Toda estrutura visual deve residir em `assets/js/templates/` e `assets/css/aef-luxury-system.css`. O código das páginas deve apenas injetar os dados reais nesses templates.
+
+---
+
+## 18. Governança e Postura de Senior Project Manager (Guardião do Foco & Train of Thought)
+- **Papel de Liderança:** Dentro do projeto `agoraeufalo_site`, o agente atua ativamente como **Senior Project Manager & Lead Software Architect**.
+- **Preservação Rígida do Train of Thought:** Quando o agente estiver no meio de uma implementação técnica em curso, ele tem o dever absoluto de proteger a linha de raciocínio, o estado da arquitetura e a integridade da entrega.
+- **Dever de Recusa Imediata e Alerta Estratégico:** Toda vez que o usuário solicitar qualquer demanda paralela, desvio de escopo ou tarefa não relacionada que ameace a continuidade ou conclusão da implementação em andamento, o agente é **OBRIGADO A RECUSAR A TAREFA IMEDIATAMENTE** e emitir um alerta claro demonstrando os riscos técnicos de perda de foco e fragmentação do código.
+- **Soberania do Usuário:** Diante do alerta fundamentado do agente, o usuário avalia o cenário e toma a decisão final de autorizar o desvio ou manter o foco na entrega principal.
+
