@@ -111,8 +111,13 @@
         <a href="player.html" class="text-[#0A192F] border-b-2 border-[#0A192F] pb-1 font-black">Training Player</a>
       </nav>
 
-      <!-- Right: Student Profile Pill -->
-      <div class="flex items-center gap-3">
+      <!-- Right: Classroom Return Button & Student Profile Pill -->
+      <div class="flex items-center gap-2.5">
+        <a id="return-to-classroom-btn" href="../sala-de-aula.html?curso=projeto-aef-2026" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D1E36] hover:bg-[#C68A36] text-white text-xs font-bold transition shadow-xs">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Sala de Aula</span>
+        </a>
+
         <a href="../portal.html" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FFFDF9] hover:bg-[#FDF8F0] border border-[#EAE5DC] transition text-left" title="Ir para o Portal">
           <div class="w-7 h-7 rounded-full bg-[#C68A36] text-white flex items-center justify-center font-bold text-[10px] shrink-0" id="header-avatar-badge">
             <span id="header-student-initials">LL</span>
@@ -327,6 +332,107 @@
     </div>
   </aside>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: LABORATÓRIO "MINHAS COISAS" (UPLOAD MP3 / YOUTUBE / TEXTO)         -->
+  <!-- ========================================================================= -->
+  <div id="customTrackModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="aef-modal-card max-w-lg w-full p-6 relative animate-in fade-in zoom-in duration-200 text-left space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-[#EAE5DC]">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase tracking-wider block">🧪 LABORATÓRIO DO ALUNO</span>
+          <h3 class="text-base sm:text-lg font-black text-[#0A192F]">Criar Treino Próprio</h3>
+        </div>
+        <button onclick="window.closeCustomTrackStudio()" class="p-1 rounded-lg text-slate-400 hover:text-slate-900 cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Studio Navigation Tabs (MP3 / YouTube / Texto) -->
+      <div class="flex p-1 rounded-2xl bg-[#FAF8F5] border border-[#EAE5DC] gap-1">
+        <button id="studio-tab-btn-mp3" onclick="window.switchStudioTab('mp3')" class="flex-1 py-2 rounded-xl bg-[#C68A36] text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+          <i data-lucide="music" class="w-3.5 h-3.5"></i>
+          <span>1. Subir MP3</span>
+        </button>
+        <button id="studio-tab-btn-youtube" onclick="window.switchStudioTab('youtube')" class="flex-1 py-2 rounded-xl text-[#7A7369] hover:bg-stone-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+          <i data-lucide="video" class="w-3.5 h-3.5"></i>
+          <span>2. YouTube</span>
+        </button>
+        <button id="studio-tab-btn-text" onclick="window.switchStudioTab('text')" class="flex-1 py-2 rounded-xl text-[#7A7369] hover:bg-stone-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>3. Texto</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: UPLOAD DE ÁUDIO MP3 / M4A -->
+      <form id="studio-tab-content-mp3" onsubmit="window.handleProcessMp3Track(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">1. Selecione o Arquivo de Áudio *</label>
+          <input type="file" id="custom-mp3-file" accept="audio/*" required class="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#C68A36] file:text-white hover:file:bg-[#B3792A] cursor-pointer">
+          <span class="text-[10px] text-slate-500 mt-1 block">Formatos suportados: MP3, M4A, WAV (gravações de reuniões, podcasts, mensagens).</span>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">2. Título do Treino (Opcional)</label>
+          <input type="text" id="custom-mp3-title" placeholder="Deixe em branco para gerarmos um título automático" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:border-[#C68A36] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">3. Transcrição / Diálogo em Inglês *</label>
+          <textarea id="custom-mp3-text" rows="4" required placeholder="Cole aqui o texto falado no áudio em inglês. O sistema vai quebrar em frases sincronizadas para você treinar..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-[#C68A36] focus:outline-none leading-relaxed custom-scrollbar"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Gerar Treino no Palco Zen</span>
+        </button>
+      </form>
+
+      <!-- TAB 2: IMPORTAR DO YOUTUBE -->
+      <form id="studio-tab-content-youtube" onsubmit="window.handleProcessYouTubeTrack(event)" class="space-y-3.5 hidden">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">URL do Vídeo do YouTube *</label>
+          <input type="url" id="custom-yt-url" required placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:border-[#C68A36] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Título do Treino (Opcional)</label>
+          <input type="text" id="custom-yt-title" placeholder="Deixe em branco para gerarmos um título automático" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:border-[#C68A36] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Legenda / Transcrição em Inglês</label>
+          <textarea id="custom-yt-text" rows="4" placeholder="Cole as frases que você quer praticar deste vídeo..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-[#C68A36] focus:outline-none leading-relaxed custom-scrollbar"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="video" class="w-4 h-4"></i>
+          <span>Importar Treino do YouTube</span>
+        </button>
+      </form>
+
+      <!-- TAB 3: TEXTO DIRETO -->
+      <form id="studio-tab-content-text" onsubmit="window.handleProcessTextTrack(event)" class="space-y-3.5 hidden">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Título do Treino (Opcional)</label>
+          <input type="text" id="custom-txt-title" placeholder="Ex: Apresentação para a Diretoria" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:border-[#C68A36] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Texto em Inglês *</label>
+          <textarea id="custom-txt-content" rows="5" required placeholder="Cole aqui seu diálogo, e-mail de trabalho ou roteiro..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-[#C68A36] focus:outline-none leading-relaxed custom-scrollbar"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="play" class="w-4 h-4"></i>
+          <span>Criar Treino de Leitura & Reflexo</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="player-toast" class="fixed top-6 right-6 z-50 hidden bg-[#0D1E36] border border-[#C68A36] text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-3">
     <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
@@ -400,6 +506,18 @@
       const actParam = urlParams.get('activity');
       if (actParam && ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'].includes(actParam)) {
         state.activity = actParam;
+      }
+
+      // Resolução de Curso & Aula da Sala de Aula (?curso=...&aula=...)
+      const cursoParam = urlParams.get('curso') || urlParams.get('course');
+      const aulaParam = urlParams.get('aula') || urlParams.get('lesson');
+      if (cursoParam) {
+        state.environment = 'course';
+        const returnBtn = document.getElementById('return-to-classroom-btn');
+        if (returnBtn) {
+          returnBtn.href = `../sala-de-aula.html?curso=${cursoParam}${aulaParam ? `&aula=${aulaParam}` : ''}`;
+          returnBtn.classList.remove('hidden');
+        }
       }
 
       // Resolução de Aluno VIP via Query Param (?aluno=estevao, thomas, andre, matheus)
@@ -567,6 +685,12 @@
 
       if (state.environment === 'ms_legacy') {
         stage.innerHTML = window.AEFPlayerZenTemplate.renderContinuousStoryView(REAL_TRACK, state.currentSentenceIndex);
+        updateIcons();
+        return;
+      }
+
+      if (state.environment === 'custom') {
+        stage.innerHTML = window.AEFPlayerZenTemplate.renderCustomTracksHub(getCustomTracks(), REAL_TRACK.id);
         updateIcons();
         return;
       }
@@ -859,6 +983,238 @@
 
     window.playChunkAudio = (url, index) => {
       showToast(`Tocando áudio do Chunk #${index+1}`);
+    };
+
+    // =========================================================================
+    // LABORATÓRIO "MINHAS COISAS" (UPLOAD MP3 / YOUTUBE / TEXTO)
+    // =========================================================================
+    function generateSmartTitle(text) {
+      if (!text || !text.trim()) return "Meu Treino Personalizado";
+      const clean = text.replace(/[\r\n]+/g, ' ').trim();
+      const words = clean.split(/\s+/).slice(0, 5).join(' ');
+      return `Prática: ${words}...`;
+    }
+
+    function getCustomTracks() {
+      try {
+        return JSON.parse(localStorage.getItem('aef_custom_tracks') || '[]');
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveCustomTracksList(list) {
+      localStorage.setItem('aef_custom_tracks', JSON.stringify(list));
+    }
+
+    window.openCustomTrackStudio = (tab = 'mp3') => {
+      const modal = document.getElementById('customTrackModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        window.switchStudioTab(tab);
+      }
+    };
+
+    window.closeCustomTrackStudio = () => {
+      const modal = document.getElementById('customTrackModal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.switchStudioTab = (tab) => {
+      ['mp3', 'youtube', 'text'].forEach(t => {
+        const el = document.getElementById(`studio-tab-content-${t}`);
+        const btn = document.getElementById(`studio-tab-btn-${t}`);
+        if (el) el.classList.toggle('hidden', t !== tab);
+        if (btn) {
+          if (t === tab) {
+            btn.className = "flex-1 py-2 rounded-xl bg-[#C68A36] text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 cursor-pointer";
+          } else {
+            btn.className = "flex-1 py-2 rounded-xl text-[#7A7369] hover:bg-stone-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer";
+          }
+        }
+      });
+    };
+
+    window.handleProcessMp3Track = async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('custom-mp3-file');
+      const titleInput = document.getElementById('custom-mp3-title');
+      const textInput = document.getElementById('custom-mp3-text');
+
+      const file = fileInput.files[0];
+      if (!file) {
+        showToast('Selecione um arquivo de áudio MP3/M4A.');
+        return;
+      }
+
+      const rawText = textInput.value.trim() || "Listen to this audio carefully and practice your spoken reflex.";
+      const title = titleInput.value.trim() || generateSmartTitle(rawText);
+
+      const audioBlobUrl = URL.createObjectURL(file);
+      const tempAudio = new Audio(audioBlobUrl);
+      
+      await new Promise((resolve) => {
+        tempAudio.onloadedmetadata = resolve;
+        tempAudio.onerror = resolve;
+        setTimeout(resolve, 1200);
+      });
+
+      const durationSec = tempAudio.duration && !isNaN(tempAudio.duration) ? tempAudio.duration : 45;
+      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+/).filter(s => s.trim().length > 0);
+      const count = Math.max(1, sentencesRaw.length);
+      const timePerSentence = durationSec / count;
+
+      const sentences = sentencesRaw.map((s, idx) => ({
+        id: idx + 1,
+        start: parseFloat((idx * timePerSentence).toFixed(2)),
+        end: parseFloat(((idx + 1) * timePerSentence).toFixed(2)),
+        text: s.trim(),
+        spokenTranslation: ""
+      }));
+
+      const trackId = `custom-mp3-${Date.now()}`;
+      const newTrack = {
+        id: trackId,
+        title: title,
+        sourceType: 'mp3',
+        audioUrl: audioBlobUrl,
+        duration: formatSec(durationSec),
+        coverImage: '../assets/images/cover-default-aef.jpg',
+        goldenTip: "Ouça o áudio prestando atenção no ritmo e musicalidade, e responda aos prompts em voz alta.",
+        sentences: sentences
+      };
+
+      const currentList = getCustomTracks();
+      currentList.unshift(newTrack);
+      saveCustomTracksList(currentList);
+
+      window.closeCustomTrackStudio();
+      showToast(`Treino criado: ${title}`);
+      window.playCustomTrack(trackId);
+    };
+
+    window.handleProcessYouTubeTrack = (e) => {
+      e.preventDefault();
+      const urlInput = document.getElementById('custom-yt-url');
+      const titleInput = document.getElementById('custom-yt-title');
+      const textInput = document.getElementById('custom-yt-text');
+
+      const url = urlInput.value.trim();
+      if (!url) return;
+
+      let ytId = "";
+      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      if (match && match[1]) ytId = match[1];
+
+      const rawText = textInput.value.trim() || "Practice your listening reflex with this YouTube content.";
+      const title = titleInput.value.trim() || generateSmartTitle(rawText);
+
+      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+/).filter(s => s.trim().length > 0);
+      const count = Math.max(1, sentencesRaw.length);
+      const durationSec = count * 6;
+
+      const sentences = sentencesRaw.map((s, idx) => ({
+        id: idx + 1,
+        start: idx * 6,
+        end: (idx + 1) * 6,
+        text: s.trim(),
+        spokenTranslation: ""
+      }));
+
+      const trackId = `custom-yt-${Date.now()}`;
+      const newTrack = {
+        id: trackId,
+        title: title,
+        sourceType: 'youtube',
+        audioUrl: REAL_TRACK.audioUrl,
+        duration: formatSec(durationSec),
+        coverImage: ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '../assets/images/cover-default-aef.jpg',
+        goldenTip: "Assista ao vídeo e repita as frases conectando o som sem tradução mental.",
+        sentences: sentences
+      };
+
+      const currentList = getCustomTracks();
+      currentList.unshift(newTrack);
+      saveCustomTracksList(currentList);
+
+      window.closeCustomTrackStudio();
+      showToast(`Treino do YouTube criado: ${title}`);
+      window.playCustomTrack(trackId);
+    };
+
+    window.handleProcessTextTrack = (e) => {
+      e.preventDefault();
+      const titleInput = document.getElementById('custom-txt-title');
+      const textInput = document.getElementById('custom-txt-content');
+
+      const rawText = textInput.value.trim();
+      if (!rawText) return;
+
+      const title = titleInput.value.trim() || generateSmartTitle(rawText);
+      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+/).filter(s => s.trim().length > 0);
+      const count = Math.max(1, sentencesRaw.length);
+      const durationSec = count * 5;
+
+      const sentences = sentencesRaw.map((s, idx) => ({
+        id: idx + 1,
+        start: idx * 5,
+        end: (idx + 1) * 5,
+        text: s.trim(),
+        spokenTranslation: ""
+      }));
+
+      const trackId = `custom-txt-${Date.now()}`;
+      const newTrack = {
+        id: trackId,
+        title: title,
+        sourceType: 'text',
+        audioUrl: REAL_TRACK.audioUrl,
+        duration: formatSec(durationSec),
+        coverImage: '../assets/images/cover-default-aef.jpg',
+        goldenTip: "Leia as frases em voz alta conectando o ritmo da fala.",
+        sentences: sentences
+      };
+
+      const currentList = getCustomTracks();
+      currentList.unshift(newTrack);
+      saveCustomTracksList(currentList);
+
+      window.closeCustomTrackStudio();
+      showToast(`Treino criado: ${title}`);
+      window.playCustomTrack(trackId);
+    };
+
+    window.playCustomTrack = (trackId) => {
+      const tracks = getCustomTracks();
+      const found = tracks.find(t => t.id === trackId);
+      if (!found) return;
+
+      state.environment = 'custom_active';
+      REAL_TRACK = found;
+      state.currentSentenceIndex = 0;
+      state.revealedAnswers = {};
+      state.loopingSentenceIndex = -1;
+      state.audio.src = REAL_TRACK.audioUrl;
+      state.isPlaying = false;
+
+      const sideName = document.getElementById('sidebar-activity-name');
+      if (sideName) sideName.innerText = REAL_TRACK.title;
+      const dockTitle = document.getElementById('dock-title-text');
+      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
+      const tipText = document.getElementById('sidebar-grammar-tip');
+      if (tipText) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
+
+      renderZenStage();
+      renderBottomDock();
+      updateMediaSessionMetadata();
+      showToast(`Carregado: ${REAL_TRACK.title}`);
+    };
+
+    window.deleteCustomTrack = (trackId) => {
+      let list = getCustomTracks().filter(t => t.id !== trackId);
+      saveCustomTracksList(list);
+      showToast('Treino removido com sucesso.');
+      renderZenStage();
     };
 
     /**

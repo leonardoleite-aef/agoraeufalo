@@ -500,8 +500,9 @@
 
     function sendCurrentLessonToTrainingPlayer() {
       if (!activeLesson) return;
+      const courseId = activeCourse?.slug || activeCourse?.id || "projeto-aef-2026";
       const trackId = activeLesson.trainingTrackId || activeLesson.id;
-      window.location.href = `treino/player.html?tab=courses&trackId=${trackId}&activity=listen_read`;
+      window.location.href = `treino/player.html?curso=${courseId}&aula=${activeLesson.id}&trackId=${trackId}&activity=listen_read`;
     }
 
     window.toggleSyllabusDrawer = () => {
