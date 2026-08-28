@@ -159,9 +159,11 @@ Sempre que qualquer nova interface, página, artigo de blog, player ou módulo a
 
 ---
 
-## 14. Política de Deploy: Automático por Padrão com Kill-Switch Obrigatório
-- **Padrão (Default):** O agente realiza o build (`npm run build`) e o deploy (`git push origin main`) automaticamente ao concluir as entregas solicitadas.
-- **Kill-Switch Obrigatório:** Se o usuário incluir termos como *"no deploy"*, *"não faça deploy"*, *"não suba para produção"*, *"apenas local"* ou *"não dê push"*, o agente é terminantemente PROIBIDO de executar `git push`.
+## 14. Política de Deploy: Proibição de Deploy Espontâneo & Relatório Prévio Obrigatório
+- **ZERO DEPLOYS ESPONTÂNEOS:** O agente está TERMINANTEMENTE PROIBIDO de executar `git push` ou deploy em produção sem antes:
+  1. Apresentar relatório completo detalhando quais arquivos foram modificados, quais arquivos foram expurgados/deletados e a comprovação de ausência de dados mockados;
+  2. Receber a aprovação expressa e inequívoca do usuário para o envio.
+- **Limpeza Prévia Rigorosa (Zero Lixo de Teste):** Antes de qualquer proposta de deploy, todo e qualquer mock, arquivo de teste temporário ou dado estático hardcoded deve ser 100% expurgado, operando com a fonte real do Firestore e `registry.js`.
 
 ---
 

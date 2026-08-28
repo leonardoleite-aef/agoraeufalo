@@ -51,6 +51,7 @@
   <script src="../treino/data/thomas.js"></script>
   <script src="../treino/data/andre.js"></script>
   <script src="../treino/data/matheus.js"></script>
+  <script src="../assets/js/aef-cloud-sync.js"></script>
   <script src="../assets/js/templates/aef-template-player-zen.js"></script>
   <script src="../assets/js/ai/aef-speech-coach.js"></script>
 
@@ -219,6 +220,9 @@
               "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta."
             </p>
           </div>
+
+          <!-- Dynamic VIP Student Tracks Playlist Container -->
+          <div id="sidebar-tracks-container"></div>
 
           <!-- Quick Return to Classroom -->
           <div class="pt-2 border-t border-[#EAE5DC]">
@@ -436,13 +440,90 @@
       const tipText = document.getElementById('sidebar-grammar-tip');
       if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
 
+      // Busca faixas atualizadas no Google Cloud Firestore em tempo real (Single Source of Truth)
+      if (alunoParam && window.AEFCloudSync) {
+        const cloudSync = new AEFCloudSync();
+        cloudSync.getStudentCloudTracks(alunoParam).then(cloudTracks => {
+          if (cloudTracks && cloudTracks.length > 0) {
+            state.student = { 
+              id: alunoParam, 
+              name: state.student?.name || alunoParam, 
+              tracks: cloudTracks 
+            };
+            if (!trackParam) {
+              REAL_TRACK = cloudTracks[0];
+              state.audio.src = REAL_TRACK.audioUrl;
+            }
+            renderSidebarTracks();
+            renderZenStage();
+            renderBottomDock();
+            updateMediaSessionMetadata();
+          }
+        }).catch(err => console.log('Firestore sync fallback to registered track:', err));
+      }
+
       state.audio.src = REAL_TRACK.audioUrl;
       initAudioEvents();
+      renderSidebarTracks();
       renderZenStage();
       renderBottomDock();
       setupSwipeGestures();
       updateIcons();
     });
+
+    window.selectTrack = (trackId) => {
+      if (!state.student || !state.student.tracks) return;
+      const track = state.student.tracks.find(t => t.id === trackId);
+      if (!track) return;
+
+      REAL_TRACK = track;
+      state.currentSentenceIndex = 0;
+      state.revealedAnswers = {};
+      state.loopingSentenceIndex = -1;
+      state.audio.src = REAL_TRACK.audioUrl;
+      state.audio.currentTime = 0;
+      state.isPlaying = false;
+
+      const sideName = document.getElementById('sidebar-activity-name');
+      if (sideName) sideName.innerText = REAL_TRACK.title;
+
+      const dockTitle = document.getElementById('dock-title-text');
+      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
+
+      const tipText = document.getElementById('sidebar-grammar-tip');
+      if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
+
+      updateMediaSessionMetadata();
+      renderSidebarTracks();
+      renderZenStage();
+      renderBottomDock();
+      showToast(`Sessão carregada: ${REAL_TRACK.title}`);
+    };
+
+    function renderSidebarTracks() {
+      const container = document.getElementById('sidebar-tracks-container');
+      if (!container) return;
+      if (!state.student || !state.student.tracks || state.student.tracks.length <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="pt-2.5 border-t border-[#EAE5DC] space-y-1.5 text-left">
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">Sessões Gravadas (${state.student.tracks.length}):</span>
+          <div class="space-y-1 max-h-48 overflow-y-auto no-scrollbar">
+            ${state.student.tracks.map((t, idx) => `
+              <button onclick="window.selectTrack('${t.id}')" class="w-full p-2 rounded-xl text-xs font-bold text-left transition flex items-center justify-between gap-2 cursor-pointer ${
+                REAL_TRACK.id === t.id ? 'bg-[#C68A36] text-white shadow-xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200'
+              }">
+                <span class="truncate">${idx + 1}. ${t.title}</span>
+                <span class="text-[10px] font-mono shrink-0 opacity-80">${t.duration || ''}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
 
     function switchActivity(newAct) {
       state.activity = newAct;
