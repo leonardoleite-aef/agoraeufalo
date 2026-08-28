@@ -47,6 +47,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../treino/data/public.js"></script>
   <script src="../assets/js/templates/aef-template-player-zen.js"></script>
+  <script src="../assets/js/ai/aef-speech-coach.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="../assets/css/aef-luxury-system.css">
@@ -78,7 +79,7 @@
   <!-- 1. TOP HEADER: Navigation & Brand                                         -->
   <!-- ========================================================================= -->
   <header class="bg-white/95 backdrop-blur-md border-b border-[#EAE5DC] sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-4">
       
       <!-- Brand Logo + Mobile Hamburger -->
       <div class="flex items-center gap-2.5 shrink-0">
@@ -120,19 +121,19 @@
   <!-- ========================================================================= -->
   <!-- 2. MAIN ZEN MODE WORKSPACE: TITLE BAR + PALCO ZEN & AI COACH PANEL        -->
   <!-- ========================================================================= -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4 pb-36">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4 space-y-2.5 sm:space-y-4 pb-28 sm:pb-36">
 
     <!-- Activity Title Bar with Time & Connection Pills -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-0.5">
       <div>
-        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#C68A36] block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
-        <h1 class="text-xl sm:text-2xl font-black tracking-tight text-[#0A192F] uppercase" id="zen-activity-title">
+        <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-[#C68A36] hidden sm:block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
+        <h1 class="text-base sm:text-2xl font-black tracking-tight text-[#0A192F] uppercase" id="zen-activity-title">
           1. LISTEN AND READ
         </h1>
       </div>
 
       <!-- Activity Selector (6 Canonical Tabs) -->
-      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
         <button id="act-tab-listen_read" onclick="window.switchActivity('listen_read')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span>1. Listen & Read</span>
@@ -163,11 +164,11 @@
     <!-- 2-Column Layout: Zen Stage (8 cols) + AI Coach Sidebar (4 cols) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      <!-- LEFT: PALCO ZEN CENTRAL DE CARTÃO ÚNICO (8 cols) -->
+      <!-- LEFT: PALCO ZEN CENTRAL (8 cols) -->
       <div class="lg:col-span-8 space-y-4">
         
         <!-- Zen Stage Container -->
-        <div id="zen-main-stage-container" class="aef-stage-zen relative p-4 sm:p-6 space-y-4">
+        <div id="zen-main-stage-container" class="aef-stage-zen relative p-2.5 sm:p-6 space-y-2.5 sm:space-y-4">
           <!-- Populated Dynamically via JS -->
         </div>
 
@@ -191,7 +192,9 @@
                 </span>
               </div>
             </div>
-            <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">8.8 / 10</span>
+            <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30" id="sidebar-score-pill">
+              8.8 / 10
+            </span>
           </div>
 
           <!-- Current Training Track -->
@@ -202,8 +205,8 @@
             </p>
           </div>
 
-          <!-- Golden Tip Box -->
-          <div class="p-3.5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 space-y-1 text-left">
+          <!-- Golden Tip Box / AI Diagnosis Container -->
+          <div id="sidebar-coach-box" class="p-3.5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 space-y-1 text-left">
             <span class="text-[10px] font-black uppercase tracking-wider text-[#C68A36] flex items-center gap-1">
               <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Sacada do Professor Leo:
             </span>
@@ -228,51 +231,11 @@
   </main>
 
   <!-- ========================================================================= -->
-  <!-- 3. FIXED AUDIO DOCK CONTROLLER                                            -->
+  <!-- 3. FIXED BOTTOM CONTROLLER DOCK (AUDIO PLAYER OR LOOK & RETELL MIC DOCK)  -->
   <!-- ========================================================================= -->
   <div id="audio-dock-container" class="fixed bottom-0 inset-x-0 bg-[#0D1E36]/95 backdrop-blur-lg border-t border-[#C68A36]/40 shadow-2xl z-40 py-3 px-4 sm:px-8 text-white">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-      
-      <!-- Track Title & Progress Info -->
-      <div class="flex items-center gap-3 w-full sm:w-auto min-w-0">
-        <div class="w-9 h-9 rounded-xl bg-[#C68A36] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md">
-          <i data-lucide="volume-2" class="w-4 h-4"></i>
-        </div>
-        <div class="min-w-0 flex-1 sm:flex-initial">
-          <p class="font-black text-xs truncate" id="dock-title-text">Daily Spoken Reflex: Conversational Clarity</p>
-          <div class="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
-            <span id="dock-current-time">00:00</span>
-            <span>/</span>
-            <span id="dock-total-time">00:36</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Center Audio Timeline & Controls -->
-      <div class="flex items-center justify-center gap-4 w-full sm:w-auto">
-        
-        <!-- Timeline Slider -->
-        <div class="flex items-center gap-2 flex-1 sm:w-64 max-w-xs">
-          <input type="range" id="dock-seek-bar" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer">
-        </div>
-
-        <!-- Audio Buttons -->
-        <div class="flex items-center gap-2 shrink-0">
-          <button onclick="window.seekOffset(-5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Voltar 5s">
-            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-          </button>
-          
-          <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-10 h-10 rounded-full bg-[#C68A36] hover:bg-[#B3792A] active:scale-95 text-white flex items-center justify-center font-black shadow-lg transition cursor-pointer">
-            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-          </button>
-          
-          <button onclick="window.seekOffset(5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Avançar 5s">
-            <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-
-      </div>
-
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3" id="dock-inner-content">
+      <!-- Populated dynamically (Audio Controls or Radiant Mic Dock) -->
     </div>
   </div>
 
@@ -290,28 +253,55 @@
         </button>
       </div>
 
-      <nav class="space-y-1 text-xs font-bold">
-        <a href="../portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Meus Cursos</span>
-        </a>
-        <a href="../curso.html?id=projeto-aef-2026" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="grid" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Grade de Módulos</span>
-        </a>
-        <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Sala de Aula</span>
-        </a>
-        <a href="player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs">
-          <i data-lucide="headphones" class="w-4 h-4 text-[#C68A36]"></i>
-          <span>Training Player</span>
-        </a>
-        <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="users" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Aulas ao Vivo (Meet)</span>
-        </a>
-      </nav>
+      <div class="space-y-4">
+        <span class="text-[10px] font-black uppercase tracking-widest text-[#7A7369]">Espaço de Treino</span>
+        
+        <div class="space-y-1 text-xs font-bold">
+          <button onclick="window.setEnvironment('public')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'public' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
+            <i data-lucide="sparkles" class="w-4 h-4 text-[#C68A36]"></i>
+            <span class="flex-1">Sugestões do Leo</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-mono">FREE</span>
+          </button>
+
+          <button onclick="window.setEnvironment('course')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'course' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
+            <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
+            <span class="flex-1">Magic Stories 2026</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono">CURSO</span>
+          </button>
+
+          <button onclick="window.setEnvironment('ms_legacy')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'ms_legacy' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
+            <i data-lucide="archive" class="w-4 h-4 text-[#C68A36]"></i>
+            <span class="flex-1">MS-Legacy (Curso Clássico)</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-mono">TEXTO LIVRE</span>
+          </button>
+
+          <button onclick="window.setEnvironment('vip')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'vip' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
+            <i data-lucide="crown" class="w-4 h-4 text-[#C68A36]"></i>
+            <span class="flex-1">Mentoria VIP</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-mono">1 a 1</span>
+          </button>
+
+          <button onclick="window.setEnvironment('custom')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'custom' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
+            <i data-lucide="flask-conical" class="w-4 h-4 text-[#C68A36]"></i>
+            <span class="flex-1">Minhas Coisas</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono">LAB</span>
+          </button>
+        </div>
+
+        <div class="pt-3 border-t border-[#EAE5DC]">
+          <span class="text-[10px] font-black uppercase tracking-widest text-[#7A7369] block mb-2">Navegação Geral</span>
+          <nav class="space-y-1 text-xs font-bold">
+            <a href="../portal.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+              <i data-lucide="grid" class="w-4 h-4 text-[#8C8275]"></i>
+              <span>Portal de Aluno</span>
+            </a>
+            <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+              <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
+              <span>Sala de Aula</span>
+            </a>
+          </nav>
+        </div>
+      </div>
     </div>
 
     <!-- Drawer Bottom: Student Profile Card -->
@@ -335,7 +325,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- JAVASCRIPT PLAYER ENGINE: SINGLE ZEN ACTIVE CARD CONTROLLER               -->
+  <!-- JAVASCRIPT PLAYER ENGINE: ERGONOMIC POCKET AI COACH CONTROLLER             -->
   <!-- ========================================================================= -->
   <script>
     function updateIcons() {
@@ -345,11 +335,16 @@
     }
 
     const state = {
+      environment: 'course',
       activity: 'listen_read',
       currentSentenceIndex: 0,
       isPlaying: false,
       isRecording: false,
+      recordingSeconds: 0,
+      evaluation: null,
+      studentAudioObj: null,
       loopingSentenceIndex: -1,
+      revealedAnswers: {},
       audio: new Audio(),
       playbackSpeed: 1.0
     };
@@ -407,6 +402,7 @@
       state.audio.src = REAL_TRACK.audioUrl;
       initAudioEvents();
       renderZenStage();
+      renderBottomDock();
       setupSwipeGestures();
       updateIcons();
     });
@@ -419,34 +415,34 @@
       if (state.activity === 'look_retell') {
         state.audio.pause();
         state.isPlaying = false;
-        document.getElementById('audio-dock-container').classList.add('hidden');
-      } else {
-        document.getElementById('audio-dock-container').classList.remove('hidden');
       }
 
       renderZenStage();
+      renderBottomDock();
       updateIcons();
     }
 
     function getActiveItems() {
       if (state.activity === 'listen_answer') {
-        const items = [];
-        QA_PAIRS.forEach(pair => {
-          items.push({ text: `Pergunta: ${pair.q}`, speaker: "Leo" });
-          items.push({ text: `Resposta: ${pair.a}`, speaker: "Aluno" });
-        });
-        return items;
+        return [
+          { text: "Pergunta: How has Mark's week been going so far?", speaker: "Leo", start: 0.0, end: 3.17 },
+          { text: "Resposta: It's been pretty busy, but really productive.", speaker: "Aluno", start: 3.52, end: 8.25 },
+          { text: "Pergunta: What did Sarah finalize this morning?", speaker: "Leo", start: 8.6, end: 15.09 },
+          { text: "Resposta: She finalized the new project roadmap after back-to-back meetings.", speaker: "Aluno", start: 15.44, end: 20.05 },
+          { text: "Pergunta: What is Mark thinking of doing this weekend?", speaker: "Leo", start: 20.4, end: 24.77 },
+          { text: "Resposta: He's thinking of taking a quick road trip to the coast.", speaker: "Aluno", start: 25.12, end: 35.8 }
+        ];
       }
       if (state.activity === 'look_retell') {
-        return RETELL_PROMPTS.map(p => ({ text: p.text, speaker: "Prompt" }));
+        return RETELL_PROMPTS.map(p => ({ text: p.text }));
       }
       if (state.activity === 'listen_ask') {
-        const items = [];
-        NEGATIVE_ASK_PAIRS.forEach(pair => {
-          items.push({ text: `Afirmação: ${pair.statement}`, speaker: "Leo" });
-          items.push({ text: `Pergunta: ${pair.question}`, speaker: "Aluno" });
-        });
-        return items;
+        return [
+          { text: "Afirmação: Mark wasn't having an unproductive week.", speaker: "Leo", start: 0.0, end: 8.25 },
+          { text: "Pergunta: Was Mark having an unproductive week?", speaker: "Aluno", start: 8.6, end: 15.09 },
+          { text: "Afirmação: Sarah didn't forget to finalize the project roadmap.", speaker: "Leo", start: 15.44, end: 24.77 },
+          { text: "Pergunta: Did Sarah finalize the project roadmap?", speaker: "Aluno", start: 25.12, end: 35.8 }
+        ];
       }
       return REAL_TRACK.sentences;
     }
@@ -475,28 +471,29 @@
 
       document.getElementById('zen-activity-title').innerText = activityLabel;
 
+      if (state.environment === 'ms_legacy') {
+        stage.innerHTML = window.AEFPlayerZenTemplate.renderContinuousStoryView(REAL_TRACK, state.currentSentenceIndex);
+        updateIcons();
+        return;
+      }
+
       stage.innerHTML = `
         <div class="space-y-4 max-w-xl mx-auto">
-          
-          <!-- Top Bar inside Stage: Activity Mode + Counter -->
-          <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
-            <span class="text-[11px] font-black uppercase tracking-widest text-[#7A7369]">
-              ${state.activity === 'vocab' ? 'VOCABULARY (TRADUÇÃO VISÍVEL)' : (state.activity === 'look_retell' ? 'SPEAKING 100% AUTÔNOMO' : 'PALCO ZEN DE REPETIÇÃO')}
-            </span>
-            <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2.5 py-0.5 rounded-full border border-[#C68A36]/30">
-              FRASE ${state.currentSentenceIndex + 1} DE ${items.length}
-            </span>
-          </div>
 
-          ${state.activity === 'look_retell' ? `
-            <!-- Look & Retell Radiant Mic Hero Box -->
-            <div class="p-5 sm:p-7 rounded-3xl bg-white border border-[#EAE5DC] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
-              <div class="flex flex-col items-center gap-3">
-                <button id="btn-mic-retell" onclick="window.toggleRetellRecording()" class="aef-mic-radiant active:scale-95 cursor-pointer">
-                  <i data-lucide="mic" class="w-8 h-8"></i>
-                  <span class="text-[8px] font-black uppercase tracking-wider mt-0.5">${state.isRecording ? 'RECORDING' : 'REC SPEAKING'}</span>
+          <!-- No Desktop: Hero Box com Microfone Radiante e Medidor Circular lado a lado -->
+          ${state.activity === 'look_retell' && !state.evaluation ? `
+            <div class="hidden lg:flex p-6 rounded-3xl bg-white border border-[#EAE5DC] items-center justify-between gap-6 shadow-sm">
+              <div class="flex items-center gap-4">
+                <button onclick="window.toggleRetellRecording()" class="aef-mic-radiant active:scale-95 cursor-pointer ${state.isRecording ? 'animate-pulse ring-4 ring-rose-500/50' : ''}">
+                  <i data-lucide="${state.isRecording ? 'square' : 'mic'}" class="w-8 h-8 ${state.isRecording ? 'text-rose-600' : ''}"></i>
+                  <span class="text-[8px] font-black uppercase tracking-wider mt-0.5">
+                    ${state.isRecording ? `PARAR (${formatSec(state.recordingSeconds)})` : 'REC SPEAKING'}
+                  </span>
                 </button>
-                <span class="text-xs font-bold text-[#0A192F]">Grave seu reconto em voz alta</span>
+                <div class="text-left">
+                  <h4 class="font-black text-sm text-[#0A192F]">${state.isRecording ? 'Gravando continuamente...' : 'Grave seu reconto em voz alta'}</h4>
+                  <p class="text-xs text-[#7A7369]">Pressione Espaço no teclado ou clique no botão</p>
+                </div>
               </div>
 
               <div>
@@ -505,7 +502,10 @@
             </div>
           ` : ''}
 
-          <!-- 1. O CARTÃO ÚNICO ATIVO (Foco Total, Zero Vazar Bordas) -->
+          <!-- Relatório de Diagnóstico do AI Coach (Exibido quando finalizado) -->
+          ${state.activity === 'look_retell' && state.evaluation ? window.AEFPlayerZenTemplate.renderEvaluationReport(state.evaluation) : ''}
+
+          <!-- 1. O CARTÃO ÚNICO ATIVO -->
           <div id="card-stage-slot" class="w-full">
             ${window.AEFPlayerZenTemplate.renderSingleZenCard(
               currentItem, 
@@ -513,29 +513,30 @@
               items.length, 
               state.activity, 
               state.isPlaying, 
-              state.loopingSentenceIndex === state.currentSentenceIndex
+              state.loopingSentenceIndex === state.currentSentenceIndex,
+              Boolean(state.revealedAnswers[state.currentSentenceIndex])
             )}
           </div>
 
-          <!-- 2. CONTROLES DE NAVEGAÇÃO ENTRE FRASES (Setas + Bolinhas de Paginação) -->
+          <!-- 2. CONTROLES DE NAVEGAÇÃO ENTRE PROMPTS/FRASES (Setas + Bolinhas) -->
           <div class="p-3 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex items-center justify-between gap-3">
             
-            <button onclick="window.navSentence(-1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Frase Anterior">
+            <button onclick="window.navSentence(-1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Anterior">
               <i data-lucide="chevron-left" class="w-4 h-4"></i>
               <span class="hidden sm:inline">Anterior</span>
             </button>
 
-            <!-- Bolinhas Interativas (1 toque pula direto para a frase) -->
+            <!-- Bolinhas Interativas (1 toque pula direto para o prompt) -->
             <div class="flex items-center justify-center gap-1.5 flex-1 overflow-x-auto no-scrollbar py-1">
               ${items.map((_, idx) => `
                 <button onclick="window.jumpToSentence(${idx})" class="h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   state.currentSentenceIndex === idx ? 'w-6 bg-[#C68A36]' : 'w-2 bg-[#D1C7B7] hover:bg-[#C68A36]/60'
-                }" title="Ir para frase ${idx+1}"></button>
+                }" title="Ir para prompt ${idx+1}"></button>
               `).join('')}
             </div>
 
-            <button onclick="window.navSentence(1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Próxima Frase">
-              <span class="hidden sm:inline">Próxima</span>
+            <button onclick="window.navSentence(1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Próximo">
+              <span class="hidden sm:inline">Próximo</span>
               <i data-lucide="chevron-right" class="w-4 h-4"></i>
             </button>
 
@@ -562,34 +563,147 @@
     }
 
     /**
+     * Renderizador do Dock Inferior Ergonômico (Player de Áudio OU Estúdio de Microfone Look & Retell)
+     */
+    function renderBottomDock() {
+      const container = document.getElementById('dock-inner-content');
+      if (!container) return;
+
+      if (state.activity === 'look_retell') {
+        // DOCK ERGONÔMICO DO LOOK & RETELL: Botão Circular de Microfone + Espaço Amplo para Texto
+        const items = getActiveItems();
+        container.innerHTML = `
+          <div class="w-full flex items-center justify-between gap-4">
+            
+            <!-- Left & Center: Informações Espaçosas -->
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-10 h-10 rounded-2xl ${state.isRecording ? 'bg-rose-500 animate-pulse ring-4 ring-rose-400/30' : 'bg-[#C68A36]'} text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md transition-all">
+                <i data-lucide="${state.isRecording ? 'radio' : 'sparkles'}" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="font-black text-xs sm:text-sm text-white truncate">
+                  ${state.isRecording ? `Gravando Reconto • Prompt ${state.currentSentenceIndex + 1}/${items.length}` : `Look & Retell • Speaking Autônomo`}
+                </p>
+                <p class="text-[11px] ${state.isRecording ? 'text-rose-300 font-mono font-black animate-pulse' : 'text-[#C68A36] font-medium'} truncate">
+                  ${state.isRecording ? `TEMPO DE FALA: ${formatSec(state.recordingSeconds)} (Toque no botão para finalizar)` : 'Toque no botão ao lado para começar'}
+                </p>
+              </div>
+            </div>
+
+            <!-- Right: Botão Circular Cirúrgico de Microfone (Sem espremer o texto) -->
+            <div class="shrink-0">
+              <button onclick="window.toggleRetellRecording()" class="w-12 h-12 rounded-full flex items-center justify-center shadow-xl transition-all active:scale-90 cursor-pointer ${
+                state.isRecording 
+                  ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse ring-4 ring-rose-500/40' 
+                  : 'bg-[#C68A36] hover:bg-[#B3792A] text-white ring-2 ring-[#C68A36]/60 shadow-amber-500/20'
+              }" title="${state.isRecording ? 'Finalizar Gravação' : 'Iniciar Gravação'}">
+                <i data-lucide="${state.isRecording ? 'square' : 'mic'}" class="w-5 h-5 fill-current"></i>
+              </button>
+            </div>
+
+          </div>
+        `;
+      } else {
+        // DOCK DO PLAYER DE ÁUDIO TRADICIONAL
+        container.innerHTML = `
+          <!-- Track Title & Progress Info -->
+          <div class="flex items-center gap-3 w-full sm:w-auto min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-[#C68A36] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md">
+              <i data-lucide="volume-2" class="w-4 h-4"></i>
+            </div>
+            <div class="min-w-0 flex-1 sm:flex-initial">
+              <p class="font-black text-xs truncate" id="dock-title-text">Daily Spoken Reflex: Conversational Clarity</p>
+              <div class="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
+                <span id="dock-current-time">00:00</span>
+                <span>/</span>
+                <span id="dock-total-time">00:36</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Audio Timeline & Controls -->
+          <div class="flex items-center justify-center gap-4 w-full sm:w-auto">
+            
+            <div class="flex items-center gap-2 flex-1 sm:w-64 max-w-xs">
+              <input type="range" id="dock-seek-bar" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer">
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="window.seekOffset(-5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Voltar 5s">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              </button>
+              
+              <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-10 h-10 rounded-full bg-[#C68A36] hover:bg-[#B3792A] active:scale-95 text-white flex items-center justify-center font-black shadow-lg transition cursor-pointer">
+                <i data-lucide="${state.isPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-current"></i>
+              </button>
+              
+              <button onclick="window.seekOffset(5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Avançar 5s">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+          </div>
+        `;
+
+        const seek = document.getElementById('dock-seek-bar');
+        if (seek) {
+          seek.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            const dur = state.audio.duration || 35.8;
+            state.audio.currentTime = (val / 100) * dur;
+          });
+        }
+      }
+
+      updateIcons();
+    }
+
+    /**
      * Play / Pause ao tocar no Cartão Único
      */
     window.handleCardTouch = (index) => {
+      if (state.activity === 'look_retell') return; // Zero áudio no Look & Retell
+
       const items = getActiveItems();
       const sentence = items[index] || items[0];
 
-      // Se tocar no card que está tocando: PAUSA NO SEGUNDO EXATO
-      if (state.isPlaying) {
+      // Se clicar no card que está atualmente tocando: PAUSA NO MILISSEGUNDO EXATO
+      if (state.isPlaying && state.currentSentenceIndex === index) {
         state.audio.pause();
         state.isPlaying = false;
         renderZenStage();
-        updateDockPlayButton();
+        renderBottomDock();
         return;
       }
 
-      // Se estava pausado: Retoma ou pula para a frase
+      // Se clicou em outro card ou estava pausado:
       state.currentSentenceIndex = index;
-      if (sentence.start !== undefined && state.audio.currentTime === 0) {
-        state.audio.currentTime = sentence.start;
+
+      if (state.activity === 'pronunciation') {
+        if (sentence.start !== undefined) {
+          state.audio.currentTime = sentence.start;
+        }
+      } else {
+        // Se o áudio está fora da faixa da frase clicada, pula para o início dela
+        if (sentence.start !== undefined && (state.audio.currentTime < sentence.start || state.audio.currentTime >= (sentence.end || 999))) {
+          state.audio.currentTime = sentence.start;
+        }
       }
+
       state.audio.play().then(() => {
         state.isPlaying = true;
         renderZenStage();
-        updateDockPlayButton();
+        renderBottomDock();
       }).catch(err => console.log('Audio play error:', err));
     };
 
+    window.toggleBlur = (index) => {
+      state.revealedAnswers[index] = !state.revealedAnswers[index];
+      renderZenStage();
+    };
+
     window.navSentence = (dir) => {
+      state.revealedAnswers = {}; // Reset de blur ao navegar
       const items = getActiveItems();
       const newIdx = Math.max(0, Math.min(items.length - 1, state.currentSentenceIndex + dir));
       state.currentSentenceIndex = newIdx;
@@ -607,6 +721,7 @@
     };
 
     window.jumpToSentence = (idx) => {
+      state.revealedAnswers = {}; // Reset de blur ao pular
       state.currentSentenceIndex = idx;
       if (state.activity !== 'look_retell') {
         const items = getActiveItems();
@@ -627,13 +742,84 @@
         showToast('Repetição em loop desativada');
       } else {
         state.loopingSentenceIndex = index;
-        showToast(`Loop contínuo ativado na frase #${index+1}`);
+        showToast(`Loop ativado na frase #${index+1}`);
       }
       renderZenStage();
     };
 
+    window.setEnvironment = (env) => {
+      state.environment = env;
+      state.currentSentenceIndex = 0;
+      state.revealedAnswers = {};
+      
+      let label = "Magic Stories 2026";
+      if (env === 'public') label = "Sugestões do Leo (Público)";
+      else if (env === 'vip') label = "Mentoria VIP Individual";
+      else if (env === 'custom') label = "Minhas Coisas (Laboratório)";
+
+      showToast(`Ambiente alterado para: ${label}`);
+      window.togglePlayerDrawer();
+      renderZenStage();
+      renderBottomDock();
+    };
+
     window.playChunkAudio = (url, index) => {
       showToast(`Tocando áudio do Chunk #${index+1}`);
+    };
+
+    /**
+     * Microfone Radiante Ergonômico: Gravação e Avaliação de Fala
+     */
+    window.toggleRetellRecording = async () => {
+      if (!state.isRecording) {
+        state.evaluation = null;
+        state.recordingSeconds = 0;
+        const res = await window.AEFSpeechCoach.startRecording((sec) => {
+          state.recordingSeconds = sec;
+          renderBottomDock();
+        });
+
+        if (res.success) {
+          state.isRecording = true;
+          showToast('Microfone ativo no rodapé! Responda aos prompts.');
+          renderZenStage();
+          renderBottomDock();
+        } else {
+          showToast(`Erro: ${res.error || 'Microfone indisponível'}`);
+        }
+      } else {
+        state.isRecording = false;
+        showToast('Diagnosticando sua fala com o AI Speech Coach...');
+
+        const stopRes = await window.AEFSpeechCoach.stopRecording();
+        if (stopRes.success) {
+          const evalResult = await window.AEFSpeechCoach.evaluateSpeaking(REAL_TRACK, { 
+            durationSec: stopRes.durationSec, 
+            transcript: stopRes.transcript 
+          });
+          state.evaluation = evalResult;
+
+          // Atualiza Sidebar do AI Coach
+          const scorePill = document.getElementById('sidebar-score-pill');
+          if (scorePill) scorePill.innerText = `${evalResult.score.toFixed(1)} / 10`;
+
+          const tipText = document.getElementById('sidebar-grammar-tip');
+          if (tipText) tipText.innerText = `"${evalResult.leoTip}"`;
+
+          showToast(`O Teste do Gringo: ${evalResult.gringoBadge}`);
+          renderZenStage();
+          renderBottomDock();
+        }
+      }
+    };
+
+    window.playStudentRecording = (url) => {
+      if (state.studentAudioObj) {
+        state.studentAudioObj.pause();
+      }
+      state.studentAudioObj = new Audio(url);
+      state.studentAudioObj.play();
+      showToast('Reproduzindo a sua gravação de voz...');
     };
 
     function setupSwipeGestures() {
@@ -649,26 +835,93 @@
         const diff = touchEndX - touchStartX;
         if (Math.abs(diff) > 50) {
           if (diff < 0) {
-            // Swipe Left -> Próxima frase
             window.navSentence(1);
           } else {
-            // Swipe Right -> Frase anterior
             window.navSentence(-1);
           }
         }
       }, { passive: true });
     }
 
+    function updateMediaSessionMetadata() {
+      if (!('mediaSession' in navigator)) return;
+
+      const coverUrl = new URL('../assets/images/cover-public-spoken-reflex.jpg', window.location.href).href;
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: REAL_TRACK.title,
+        artist: "Professor Leonardo Leite",
+        album: "AgoraEuFalo • Magic Stories",
+        artwork: [
+          { src: coverUrl, sizes: "96x96", type: "image/jpeg" },
+          { src: coverUrl, sizes: "128x128", type: "image/jpeg" },
+          { src: coverUrl, sizes: "192x192", type: "image/jpeg" },
+          { src: coverUrl, sizes: "256x256", type: "image/jpeg" },
+          { src: coverUrl, sizes: "384x384", type: "image/jpeg" },
+          { src: coverUrl, sizes: "512x512", type: "image/jpeg" }
+        ]
+      });
+
+      const handlers = [
+        ['play', () => window.togglePlayPause()],
+        ['pause', () => window.togglePlayPause()],
+        ['previoustrack', () => window.navSentence(-1)],
+        ['nexttrack', () => window.navSentence(1)],
+        ['seekbackward', () => window.seekOffset(-5)],
+        ['seekforward', () => window.seekOffset(5)],
+        ['seekto', (details) => {
+          if (details.seekTime !== undefined) {
+            state.audio.currentTime = details.seekTime;
+          }
+        }]
+      ];
+
+      handlers.forEach(([action, handler]) => {
+        try {
+          navigator.mediaSession.setActionHandler(action, handler);
+        } catch(e) {}
+      });
+    }
+
     function initAudioEvents() {
+      updateMediaSessionMetadata();
+
+      state.audio.addEventListener('play', () => {
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'playing';
+        }
+      });
+
+      state.audio.addEventListener('pause', () => {
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'paused';
+        }
+      });
+
       state.audio.addEventListener('timeupdate', () => {
+        if (state.activity === 'look_retell') return;
+
         const cur = state.audio.currentTime;
         const dur = state.audio.duration || 35.8;
 
-        document.getElementById('dock-current-time').innerText = formatTime(cur);
-        document.getElementById('dock-total-time').innerText = formatTime(dur);
+        const curTimeEl = document.getElementById('dock-current-time');
+        const totTimeEl = document.getElementById('dock-total-time');
+        if (curTimeEl) curTimeEl.innerText = formatTime(cur);
+        if (totTimeEl) totTimeEl.innerText = formatTime(dur);
 
         const seek = document.getElementById('dock-seek-bar');
         if (seek && dur > 0) seek.value = (cur / dur) * 100;
+
+        // Atualiza posição na tela de bloqueio
+        if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession && state.audio.duration && !isNaN(state.audio.duration)) {
+          try {
+            navigator.mediaSession.setPositionState({
+              duration: state.audio.duration,
+              playbackRate: state.audio.playbackRate || 1.0,
+              position: Math.min(state.audio.currentTime, state.audio.duration)
+            });
+          } catch(e) {}
+        }
 
         // Modo Pronunciation: Pausa obrigatória ao final da frase
         if (state.activity === 'pronunciation' && state.currentSentenceIndex >= 0) {
@@ -680,41 +933,69 @@
               state.audio.pause();
               state.isPlaying = false;
               renderZenStage();
-              updateDockPlayButton();
+              renderBottomDock();
             }
           }
         } else {
-          // Localiza sentença ativa pelo timestamp real do Firebase
+          // Auto-scroll contínuo pelas frases do áudio
           const items = getActiveItems();
-          const foundIdx = items.findIndex(s => s.start !== undefined && cur >= s.start && cur < s.end);
+          let foundIdx = -1;
+          for (let i = 0; i < items.length; i++) {
+            const it = items[i];
+            if (it.start !== undefined && it.end !== undefined) {
+              const nextStart = (i + 1 < items.length && items[i+1].start !== undefined) ? items[i+1].start : (it.end + 1.0);
+              if (cur >= (it.start - 0.05) && cur < nextStart) {
+                foundIdx = i;
+                break;
+              }
+            }
+          }
+
           if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
+            state.revealedAnswers = {}; // Reset de blur ao avançar para a próxima frase
             state.currentSentenceIndex = foundIdx;
             renderZenStage();
           }
         }
       });
 
+      // 2. Transição Contínua entre Atividades em Background (Pulando Look & Retell)
       state.audio.addEventListener('ended', () => {
         state.isPlaying = false;
-        updateDockPlayButton();
-        renderZenStage();
+        
+        // Auto-chaining de escuta em tela bloqueada / fone:
+        if (state.activity === 'listen_read') {
+          showToast('Avançando para 2. Vocabulary & Chunks...');
+          window.switchActivity('vocab');
+          window.togglePlayPause();
+        } else if (state.activity === 'vocab') {
+          showToast('Avançando para 3. Listen & Answer...');
+          window.switchActivity('listen_answer');
+          window.togglePlayPause();
+        } else if (state.activity === 'listen_answer') {
+          showToast('Avançando para 5. Listen & Ask (Pulando Look & Retell)...');
+          window.switchActivity('listen_ask');
+          window.togglePlayPause();
+        } else if (state.activity === 'listen_ask') {
+          showToast('Avançando para 6. Pronunciation Practice...');
+          window.switchActivity('pronunciation');
+          window.togglePlayPause();
+        } else {
+          renderZenStage();
+          renderBottomDock();
+        }
       });
-
-      const seek = document.getElementById('dock-seek-bar');
-      if (seek) {
-        seek.addEventListener('input', (e) => {
-          const val = parseFloat(e.target.value);
-          const dur = state.audio.duration || 35.8;
-          state.audio.currentTime = (val / 100) * dur;
-        });
-      }
     }
 
     // Atalho de Teclado (Espaço)
     document.addEventListener('keydown', (e) => {
       if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
         e.preventDefault();
-        window.togglePlayPause();
+        if (state.activity === 'look_retell') {
+          window.toggleRetellRecording();
+        } else {
+          window.togglePlayPause();
+        }
       }
     });
 
@@ -727,30 +1008,12 @@
           state.isPlaying = true;
         }).catch(e => console.log(e));
       }
-      updateDockPlayButton();
       renderZenStage();
+      renderBottomDock();
     };
-
-    function updateDockPlayButton() {
-      const btn = document.getElementById('dock-btn-play');
-      if (btn) {
-        btn.innerHTML = `<i data-lucide="${state.isPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-current"></i>`;
-        updateIcons();
-      }
-    }
 
     window.seekOffset = (sec) => {
       state.audio.currentTime = Math.max(0, state.audio.currentTime + sec);
-    };
-
-    window.toggleRetellRecording = () => {
-      state.isRecording = !state.isRecording;
-      if (state.isRecording) {
-        showToast('Gravando sua fala... Fale com espontaneidade!');
-      } else {
-        showToast('Diagnóstico: Compreensibilidade 8.8/10 (Excelente!)');
-      }
-      renderZenStage();
     };
 
     window.togglePlayerDrawer = () => {
@@ -769,6 +1032,13 @@
     };
 
     function formatTime(sec) {
+      if (isNaN(sec) || sec < 0) return "00:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function formatSec(sec) {
       if (isNaN(sec) || sec < 0) return "00:00";
       const m = Math.floor(sec / 60);
       const s = Math.floor(sec % 60);

@@ -184,3 +184,18 @@ Sempre que qualquer nova interface, página, artigo de blog, player ou módulo a
 - **Dever de Recusa Imediata e Alerta Estratégico:** Toda vez que o usuário solicitar qualquer demanda paralela, desvio de escopo ou tarefa não relacionada que ameace a continuidade ou conclusão da implementação em andamento, o agente é **OBRIGADO A RECUSAR A TAREFA IMEDIATAMENTE** e emitir um alerta claro demonstrando os riscos técnicos de perda de foco e fragmentação do código.
 - **Soberania do Usuário:** Diante do alerta fundamentado do agente, o usuário avalia o cenário e toma a decisão final de autorizar o desvio ou manter o foco na entrega principal.
 
+---
+
+## 19. A Filosofia Canônica de Avaliação de Fala (O Teste do Gringo & A Lei do Acúmulo de Escuta)
+- **A Lei Maior do Professor Leo Leite:** *"Escutar e Falar NÃO caminham juntas no tempo. A fala é consequência tardia do exagero e acúmulo de horas de escuta focada e curiosa. Ninguém é forçado a falar."*
+- **O Milestone Zero (O Teste do Gringo):**
+  - **A Pergunta Central:** *"Uma pessoa falante de inglês que NÃO sabe nada de português foi capaz de entender o aluno recontando a história? (SIM / NÃO)"*
+  - **Se SIM (Milestone Conquistado!):** Mesmo que haja pequenos erros, se a mensagem fez sentido para quem não fala português, o aluno atingiu o objetivo máximo da comunicação viva.
+  - **Se NÃO (Convite ao Acúmulo de Escuta):** O aluno não é punido nem cobrado. O AI Coach emite o conselho acolhedor do Leo: *"Sem pressa! A fala ainda está amadurecendo. Volte para o Listen & Read e Listen & Answer para alimentar seus ouvidos mais algumas vezes."*
+- **Proibição de Cobrança Artificial de Vocabulário Forçado:**
+  - Ninguém lembra de usar uma frase ou chunk novo no mesmo dia ou no dia seguinte em que aprendeu.
+  - A avaliação julga se o aluno **conseguiu se comunicar com o inglês que ele tem no momento (no Agora)**. O uso de vocabulário específico da aula entra apenas como bônus de evolução, nunca como pré-requisito punitivo.
+- **Mecanismo de Transcrição e Sentido (Speech-to-Text & Intelligibility Gate):**
+  - O sistema transcreve o áudio do aluno e analisa se a fala formou sentido comunicativo contínuo.
+
+
