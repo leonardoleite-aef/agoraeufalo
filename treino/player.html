@@ -45,7 +45,12 @@
 
   <!-- Lucide Vector Icons & Real Registry SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../treino/data/registry.js"></script>
   <script src="../treino/data/public.js"></script>
+  <script src="../treino/data/estevao.js"></script>
+  <script src="../treino/data/thomas.js"></script>
+  <script src="../treino/data/andre.js"></script>
+  <script src="../treino/data/matheus.js"></script>
   <script src="../assets/js/templates/aef-template-player-zen.js"></script>
   <script src="../assets/js/ai/aef-speech-coach.js"></script>
 
@@ -350,7 +355,7 @@
     };
 
     // 100% REAL SPOKEN ENGLISH TRACK FROM FIREBASE STORAGE
-    const REAL_TRACK = (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks?.[0]) || {
+    let REAL_TRACK = (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks?.[0]) || {
       id: "public-01",
       title: "Daily Spoken Reflex: Conversational Clarity",
       audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_spoken_reflex_session01.mp3?alt=media",
@@ -398,6 +403,38 @@
       if (actParam && ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'].includes(actParam)) {
         state.activity = actParam;
       }
+
+      // Resolução de Aluno VIP via Query Param (?aluno=estevao, thomas, andre, matheus)
+      const alunoParam = urlParams.get('aluno');
+      if (alunoParam) {
+        if (alunoParam === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
+          state.student = window.AEF_STUDENT_ESTEVAO;
+          REAL_TRACK = window.AEF_STUDENT_ESTEVAO.tracks[0];
+          state.environment = 'vip';
+        } else if (alunoParam === 'thomas' && window.AEF_STUDENT_THOMAS) {
+          state.student = window.AEF_STUDENT_THOMAS;
+          REAL_TRACK = window.AEF_STUDENT_THOMAS.tracks[0];
+          state.environment = 'vip';
+        } else if (alunoParam === 'andre' && window.AEF_STUDENT_ANDRE) {
+          state.student = window.AEF_STUDENT_ANDRE;
+          REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
+          state.environment = 'vip';
+        } else if (alunoParam === 'matheus' && window.AEF_STUDENT_MATHEUS) {
+          state.student = window.AEF_STUDENT_MATHEUS;
+          REAL_TRACK = window.AEF_STUDENT_MATHEUS.tracks[0];
+          state.environment = 'vip';
+        }
+      }
+
+      // Sincroniza metadados do Sidebar
+      const sideName = document.getElementById('sidebar-activity-name');
+      if (sideName) sideName.innerText = REAL_TRACK.title;
+
+      const dockTitle = document.getElementById('dock-title-text');
+      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
+
+      const tipText = document.getElementById('sidebar-grammar-tip');
+      if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
 
       state.audio.src = REAL_TRACK.audioUrl;
       initAudioEvents();
