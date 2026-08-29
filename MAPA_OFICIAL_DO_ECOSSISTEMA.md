@@ -23,9 +23,8 @@ O ecossistema **AgoraEuFalo** foi desenhado com separação rígida de responsab
 │                                                                                                │
 │  🎓 ÁREA 2: PORTAL DO ALUNO & AMBIENTE DE ESTUDO (Membros Matriculados)                        │
 │  ├── Dashboard Geral do Aluno ────────────────► portal.html                                    │
-│  ├── Vitrine de Módulos do Curso ─────────────► curso.html?curso=ms-legacy                     │
-│  ├── Sala de Aula Masterclass (Vídeo + PDF) ──► sala-de-aula.html?curso=ms-legacy&aula=...     │
-│  └── Banco de Repertório & Flashcards ────────► repertorio.html                                │
+│  ├── Vitrine de Módulos do Curso ─────────────► curso.html?curso=[id]                          │
+│  └── Sala de Aula Masterclass (Vídeo + PDF) ──► sala-de-aula.html?curso=[id]&aula=...          │
 │                                                                                                │
 │  🎧 ÁREA 3: TRAINING PLAYER (Palco Zen de Fala, Escuta Ativa & Modo Avião)                    │
 │  ├── 💡 Sugestões do Leo (Free Plan 🌱) ──────► player.html (Ambiente 'public')                │
@@ -62,14 +61,13 @@ O ecossistema **AgoraEuFalo** foi desenhado com separação rígida de responsab
 
 ---
 
-### Área 2: Portal do Aluno & Sala de Aula
+### Área 2: Portal do Aluno & Sala de Aula (A Tríade Canônica)
 
 | Tela | Arquivo / Rota | Parâmetros Suportados | O que faz nesta tela? |
 | :--- | :--- | :--- | :--- |
-| **1. Dashboard do Membro** | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | N/A | **Hub Diário:** Indicador de ofensiva diária (streak), tempo de escuta acumulado, card da *Prática Ativa de Hoje* e lista dos cursos matriculados. |
-| **2. Vitrine de Módulos** | [`curso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/curso.html) | `?curso=ms-legacy` | **Grade Curricular:** Visualização de todos os módulos (MS001, MS002, MS003), acordeão de aulas com as **miniaturas 16:9 oficiais**, duração, status de conclusão e botão para abrir a aula. |
-| **3. Sala de Aula Masterclass** | [`sala-de-aula.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/sala-de-aula.html) | `?curso=ms-legacy&modulo=ms003-saturday-morning&aula=ms003-lr` | **Estudo Teórico & Materiais:** Player de vídeo 16:9, download do PDF oficial de 8 páginas da lição, chunks em destaque, Sacada de Ouro do Leo e botão *📌 Enviar para Training Player*. |
-| **4. Repertório de Frases** | [`repertorio.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/repertorio.html) | N/A | **Banco de Chunks & Flashcards:** Modo de memorização ativa e revisão espaçada de frases prontas para reuniões, apresentações e viagens. |
+| **1. Dashboard do Membro** | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | N/A | **Hub Diário:** Indicador de streak diária, tempo de escuta, card da *Prática Recomendada de Hoje* e catálogo dos 3 cursos oficiais (*Magic Stories*, *English QuickStart*, *Frases Prontas*). |
+| **2. Vitrine de Módulos** | [`curso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/curso.html) | `?curso=[id]` | **Grade Curricular:** Visualização de todos os módulos de qualquer curso, acordeão de aulas com as **miniaturas 16:9 oficiais**, duração, status de conclusão e botão para abrir a aula. |
+| **3. Sala de Aula Masterclass** | [`sala-de-aula.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/sala-de-aula.html) | `?curso=[id]&modulo=[modId]&aula=[lessonId]` | **Estudo Teórico & Materiais:** Player de vídeo 16:9, download do PDF oficial de 8 páginas da lição, chunks em destaque, Sacada de Ouro do Leo e botão *📌 Enviar para Training Player*. |
 
 ---
 
