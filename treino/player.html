@@ -52,6 +52,7 @@
   <script src="../treino/data/andre.js"></script>
   <script src="../treino/data/matheus.js"></script>
   <script src="../assets/js/aef-cloud-sync.js"></script>
+  <script src="../treino/js/offline-manager.js"></script>
   <script src="../assets/js/templates/aef-template-player-zen.js"></script>
   <script src="../assets/js/ai/aef-speech-coach.js"></script>
 
@@ -89,7 +90,7 @@
       
       <!-- Brand Logo + Mobile Hamburger -->
       <div class="flex items-center gap-2.5 shrink-0">
-        <button onclick="window.togglePlayerDrawer()" class="p-1.5 rounded-xl hover:bg-stone-100 text-[#0A192F] md:hidden transition cursor-pointer" title="Menu de Navegação">
+        <button onclick="window.togglePlayerDrawer()" class="p-1.5 rounded-xl hover:bg-stone-100 text-[#0A192F] transition cursor-pointer" title="Menu de Navegação & Ambientes">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
 
@@ -105,15 +106,23 @@
 
       <!-- Desktop Nav Links -->
       <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-bold">
-        <a href="../portal.html" class="text-[#7A7369] hover:text-[#0A192F] transition">Portal</a>
-        <a href="../curso.html?id=projeto-aef-2026" class="text-[#7A7369] hover:text-[#0A192F] transition">Grade do Curso</a>
-        <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="text-[#7A7369] hover:text-[#0A192F] transition">Sala de Aula</a>
+        <a href="../portal.html" class="text-[#7A7369] hover:text-[#0A192F] transition">Dashboard</a>
+        <a href="../sala-de-aula.html?curso=ms-legacy" class="text-[#7A7369] hover:text-[#0A192F] transition">Sala de Aula</a>
         <a href="player.html" class="text-[#0A192F] border-b-2 border-[#0A192F] pb-1 font-black">Training Player</a>
+        <a href="../repertorio.html" class="text-[#7A7369] hover:text-[#0A192F] transition">Repertório</a>
       </nav>
 
-      <!-- Right: Classroom Return Button & Student Profile Pill -->
-      <div class="flex items-center gap-2.5">
-        <a id="return-to-classroom-btn" href="../sala-de-aula.html?curso=projeto-aef-2026" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D1E36] hover:bg-[#C68A36] text-white text-xs font-bold transition shadow-xs">
+      <!-- Right: In-Flight Offline Button, Classroom Return Button & Student Profile Pill -->
+      <div class="flex items-center gap-2 sm:gap-2.5">
+        <!-- In-Flight Offline Mode Button (Desktop & Mobile) -->
+        <button id="btn-flight-mode" onclick="window.toggleFlightModeCache()" class="px-3 py-1.5 rounded-full bg-[#FFFDF9] hover:bg-[#FDF8F0] border border-[#EAE5DC] hover:border-[#C68A36]/50 text-[#0A192F] text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs group" title="Baixar Playlist para Modo Avião (100% Offline)">
+          <div class="w-5 h-5 rounded-full bg-[#C68A36]/15 flex items-center justify-center text-[#C68A36] group-hover:scale-110 transition shrink-0">
+            <i data-lucide="plane" class="w-3 h-3"></i>
+          </div>
+          <span id="flight-mode-text" class="hidden sm:inline">Modo Avião</span>
+        </button>
+
+        <a id="return-to-classroom-btn" href="../sala-de-aula.html?curso=ms-legacy" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D1E36] hover:bg-[#C68A36] text-white text-xs font-bold transition shadow-xs">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span>Sala de Aula</span>
         </a>
@@ -134,17 +143,51 @@
   <!-- ========================================================================= -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4 space-y-2.5 sm:space-y-4 pb-28 sm:pb-36">
 
-    <!-- Activity Title Bar with Time & Connection Pills -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-0.5">
+    <!-- 0. ESPAÇO DE TREINO / CATEGORY SELECTOR -->
+    <div class="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs">
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <button id="env-btn-public" onclick="window.setEnvironment('public')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
+          <span>Sugestões do Leo</span>
+          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 font-mono font-black">FREE</span>
+        </button>
+
+        <button id="env-btn-course" onclick="window.setEnvironment('course')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0D1E36] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer shrink-0">
+          <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>Magic Stories</span>
+          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-mono font-black">CURSO</span>
+        </button>
+
+        <button id="env-btn-vip" onclick="window.setEnvironment('vip')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0">
+          <i data-lucide="crown" class="w-3.5 h-3.5 text-purple-600"></i>
+          <span>Mentoria VIP</span>
+          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 font-mono font-black">1 a 1</span>
+        </button>
+
+        <button id="env-btn-custom" onclick="window.setEnvironment('custom')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0">
+          <i data-lucide="flask-conical" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Minhas Coisas</span>
+          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 font-mono font-black">LAB</span>
+        </button>
+      </div>
+
+      <button onclick="window.togglePlayerDrawer()" class="px-2.5 py-1.5 rounded-xl hover:bg-stone-100 text-[#7A7369] font-bold text-xs flex items-center gap-1 shrink-0 cursor-pointer" title="Abrir Menu de Ambientes">
+        <i data-lucide="menu" class="w-4 h-4"></i>
+        <span class="hidden sm:inline text-[11px]">Menu</span>
+      </button>
+    </div>
+
+    <!-- Activity Title Bar with Dynamic Subhead, MS Tabs & Minimalist Toolbar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-0.5" id="zen-top-control-bar">
       <div>
         <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-[#C68A36] hidden sm:block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
-        <h1 class="text-base sm:text-2xl font-black tracking-tight text-[#0A192F] uppercase" id="zen-activity-title">
+        <h1 class="text-base sm:text-2xl font-black tracking-tight text-[#0A192F]" id="zen-activity-title">
           1. LISTEN AND READ
         </h1>
       </div>
 
-      <!-- Activity Selector (6 Canonical Tabs) -->
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+      <!-- Container: Magic Stories 6 Canonical Tabs (Visible only in 'course') -->
+      <div id="ms-tabs-container" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
         <button id="act-tab-listen_read" onclick="window.switchActivity('listen_read')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span>1. Listen & Read</span>
@@ -169,6 +212,28 @@
           <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
           <span>6. Pronunciation</span>
         </button>
+      </div>
+
+      <!-- Container: Minimalist Zen Toolbar (Visible in 'public', 'vip', 'custom') -->
+      <div id="zen-toolbar-container" class="hidden items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+        <!-- Toggle Tradução -->
+        <button id="btn-toggle-translation" onclick="window.toggleTranslationMode()" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 text-[#7A7369] border-stone-200" title="Ativar/Desativar Tradução Falada">
+          <i data-lucide="languages" class="w-3.5 h-3.5"></i>
+          <span id="btn-translation-text">Tradução OFF</span>
+        </button>
+
+        <!-- Toggle Loop Frase -->
+        <button id="btn-toggle-loop" onclick="window.toggleCurrentSentenceLoop()" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 text-[#7A7369] border-stone-200" title="Repetir frase em loop">
+          <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+          <span id="btn-loop-text">Loop</span>
+        </button>
+
+        <!-- Speed Selector Pills -->
+        <div class="flex items-center p-0.5 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-bold">
+          <button onclick="window.setSpeed(0.8)" class="speed-btn px-2 py-1 rounded-lg text-stone-600 transition cursor-pointer" id="speed-btn-08">0.8x</button>
+          <button onclick="window.setSpeed(1.0)" class="speed-btn px-2 py-1 rounded-lg bg-[#C68A36] text-white shadow-2xs transition cursor-pointer" id="speed-btn-10">1.0x</button>
+          <button onclick="window.setSpeed(1.2)" class="speed-btn px-2 py-1 rounded-lg text-stone-600 transition cursor-pointer" id="speed-btn-12">1.2x</button>
+        </div>
       </div>
     </div>
 
@@ -245,10 +310,10 @@
   </main>
 
   <!-- ========================================================================= -->
-  <!-- 3. FIXED BOTTOM CONTROLLER DOCK (AUDIO PLAYER OR LOOK & RETELL MIC DOCK)  -->
+  <!-- 3. FIXED FLOATING CONTROLLER DOCK (AUDIO PLAYER OR RADIANT MIC ISLAND)   -->
   <!-- ========================================================================= -->
-  <div id="audio-dock-container" class="fixed bottom-0 inset-x-0 bg-[#0D1E36]/95 backdrop-blur-lg border-t border-[#C68A36]/40 shadow-2xl z-40 py-3 px-4 sm:px-8 text-white">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3" id="dock-inner-content">
+  <div id="audio-dock-container" class="fixed bottom-0 sm:bottom-4 inset-x-0 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 w-full sm:w-[92%] sm:max-w-3xl bg-[#0D1E36]/95 backdrop-blur-xl sm:rounded-2xl border-t sm:border border-[#C68A36]/40 shadow-2xl z-40 py-2.5 px-4 sm:px-6 text-white transition-all">
+    <div class="w-full flex items-center justify-between gap-3" id="dock-inner-content">
       <!-- Populated dynamically (Audio Controls or Radiant Mic Dock) -->
     </div>
   </div>
@@ -306,12 +371,20 @@
           <span class="text-[10px] font-black uppercase tracking-widest text-[#7A7369] block mb-2">Navegação Geral</span>
           <nav class="space-y-1 text-xs font-bold">
             <a href="../portal.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-              <i data-lucide="grid" class="w-4 h-4 text-[#8C8275]"></i>
-              <span>Portal de Aluno</span>
+              <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#8C8275]"></i>
+              <span>Dashboard</span>
             </a>
-            <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-              <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
+            <a href="../sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+              <i data-lucide="play-circle" class="w-4 h-4 text-[#8C8275]"></i>
               <span>Sala de Aula</span>
+            </a>
+            <a href="../repertorio.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+              <i data-lucide="layers" class="w-4 h-4 text-[#8C8275]"></i>
+              <span>Repertório</span>
+            </a>
+            <a href="../blog/index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+              <i data-lucide="newspaper" class="w-4 h-4 text-[#8C8275]"></i>
+              <span>Blog do Leo</span>
             </a>
           </nav>
         </div>
@@ -461,7 +534,8 @@
       loopingSentenceIndex: -1,
       revealedAnswers: {},
       audio: new Audio(),
-      playbackSpeed: 1.0
+      playbackSpeed: 1.0,
+      showTranslation: false
     };
 
     // 100% REAL SPOKEN ENGLISH TRACK FROM FIREBASE STORAGE
@@ -546,6 +620,10 @@
       if (trackParam && state.student && state.student.tracks) {
         const found = state.student.tracks.find(t => t.id === trackParam);
         if (found) REAL_TRACK = found;
+      } else if (cursoParam === 'ms-legacy' && window.AEF_STUDENT_ANDRE) {
+        REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
+      } else if ((trackParam === 'ms-legacy-01' || trackParam === 'andre-ms001-story') && window.AEF_STUDENT_ANDRE) {
+        REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
       }
 
       // Sincroniza metadados do Sidebar
@@ -580,25 +658,118 @@
         }).catch(err => console.log('Firestore sync fallback to registered track:', err));
       }
 
-      state.audio.src = REAL_TRACK.audioUrl;
+      loadTrackAudio(REAL_TRACK);
       initAudioEvents();
       renderSidebarTracks();
       renderZenStage();
       renderBottomDock();
       setupSwipeGestures();
       updateIcons();
+      window.checkFlightModeStatus();
     });
 
-    window.selectTrack = (trackId) => {
-      if (!state.student || !state.student.tracks) return;
-      const track = state.student.tracks.find(t => t.id === trackId);
+    window.checkFlightModeStatus = async () => {
+      if (!window.aefOfflineManager || !REAL_TRACK?.audioUrl) return;
+      try {
+        const isCached = await window.aefOfflineManager.isTrackCached(REAL_TRACK.audioUrl);
+        const btn = document.getElementById('btn-flight-mode');
+        const text = document.getElementById('flight-mode-text');
+        if (btn && text) {
+          if (isCached) {
+            btn.className = "px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
+            text.innerText = "Modo Avião ✓";
+          } else {
+            btn.className = "px-2.5 sm:px-3 py-1.5 rounded-full bg-stone-100 hover:bg-[#FDF8F0] border border-stone-200 text-[#0A192F] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
+            text.innerText = "Modo Avião";
+          }
+        }
+      } catch(e) {
+        console.log("Flight cache check skip:", e);
+      }
+    };
+
+    async function loadTrackAudio(track) {
+      if (!track) return;
+      if (window.aefOfflineManager) {
+        try {
+          const offlineUrl = await window.aefOfflineManager.getOfflineAudioUrl(track.audioUrl, track.id);
+          if (offlineUrl) {
+            console.log(`✈️ [Modo Avião] Reproduzindo áudio offline da faixa "${track.title}"!`);
+            state.audio.src = offlineUrl;
+            return;
+          }
+        } catch(e) {
+          console.log("Offline audio check skip:", e);
+        }
+      }
+      state.audio.src = track.audioUrl;
+    }
+
+    window.toggleFlightModeCache = async () => {
+      if (!window.aefOfflineManager) {
+        showToast("Gerenciador offline não disponível neste navegador.");
+        return;
+      }
+      const btn = document.getElementById('btn-flight-mode');
+      const text = document.getElementById('flight-mode-text');
+      
+      const tracksToCache = (state.student && state.student.tracks && state.student.tracks.length > 1) 
+        ? state.student.tracks 
+        : [REAL_TRACK];
+
+      try {
+        const isCached = await window.aefOfflineManager.isTrackCached(REAL_TRACK.audioUrl);
+        if (isCached && tracksToCache.length === 1) {
+          showToast("✈️ Esta lição já está salva no Modo Avião (100% Offline)!");
+          return;
+        }
+
+        const msgCount = tracksToCache.length > 1 ? `todas as ${tracksToCache.length} faixas da playlist` : 'a lição';
+        showToast(`✈️ Baixando ${msgCount} para o Modo Avião...`);
+        if (btn) btn.classList.add('animate-pulse');
+
+        if (tracksToCache.length > 1) {
+          await window.aefOfflineManager.cacheAllTracks(tracksToCache, (percent, msg) => {
+            console.log(`[Offline Sync] ${percent}% - ${msg}`);
+          });
+        } else {
+          await window.aefOfflineManager.cacheWorkout(REAL_TRACK, (percent, msg) => {
+            console.log(`[Offline Sync] ${percent}% - ${msg}`);
+          });
+        }
+
+        if (btn) {
+          btn.classList.remove('animate-pulse');
+          btn.className = "px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
+        }
+        if (text) text.innerText = tracksToCache.length > 1 ? `Playlist Salva (${tracksToCache.length}) ✓` : "Modo Avião ✓";
+        showToast(`✅ ${tracksToCache.length > 1 ? `Todas as ${tracksToCache.length} faixas da playlist salvas!` : 'Lição salva!'} Treine 100% offline no voo.`);
+      } catch (err) {
+        console.error("Erro ao salvar offline:", err);
+        showToast("Erro ao baixar áudio para modo avião. Tente novamente.");
+        if (btn) btn.classList.remove('animate-pulse');
+      }
+    };
+
+    window.selectTrack = async (trackId) => {
+      let track = null;
+      if (state.environment === 'public') {
+        track = (window.AEF_STUDENT_PUBLIC?.tracks || []).find(t => t.id === trackId);
+      } else if (state.environment === 'custom' || state.environment === 'custom_active') {
+        track = getCustomTracks().find(t => t.id === trackId);
+        if (track) state.environment = 'custom_active';
+      } else {
+        const pool = (state.student && state.student.tracks) ? state.student.tracks : (window.AEF_STUDENT_ANDRE?.tracks || []);
+        track = pool.find(t => t.id === trackId);
+      }
+
       if (!track) return;
 
       REAL_TRACK = track;
       state.currentSentenceIndex = 0;
       state.revealedAnswers = {};
       state.loopingSentenceIndex = -1;
-      state.audio.src = REAL_TRACK.audioUrl;
+      await loadTrackAudio(REAL_TRACK);
       state.audio.currentTime = 0;
       state.isPlaying = false;
 
@@ -615,22 +786,41 @@
       renderSidebarTracks();
       renderZenStage();
       renderBottomDock();
+      window.checkFlightModeStatus();
       showToast(`Sessão carregada: ${REAL_TRACK.title}`);
     };
 
     function renderSidebarTracks() {
       const container = document.getElementById('sidebar-tracks-container');
       if (!container) return;
-      if (!state.student || !state.student.tracks || state.student.tracks.length <= 1) {
+
+      let tracksList = [];
+      let playlistTitle = "Sessões Gravadas";
+
+      if (state.environment === 'public') {
+        tracksList = window.AEF_STUDENT_PUBLIC?.tracks || [];
+        playlistTitle = "Episódios Sugeridos do Leo";
+      } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
+        tracksList = (state.student && state.student.tracks) ? state.student.tracks : (window.AEF_STUDENT_ANDRE?.tracks || []);
+        playlistTitle = "Módulos Magic Stories";
+      } else if (state.environment === 'vip') {
+        tracksList = state.student?.tracks || [];
+        playlistTitle = `Prescrições • ${state.student?.name || 'Aluno'}`;
+      } else if (state.environment === 'custom' || state.environment === 'custom_active') {
+        tracksList = getCustomTracks();
+        playlistTitle = "Meus Treinos Salvos";
+      }
+
+      if (tracksList.length === 0) {
         container.innerHTML = '';
         return;
       }
 
       container.innerHTML = `
         <div class="pt-2.5 border-t border-[#EAE5DC] space-y-1.5 text-left">
-          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">Sessões Gravadas (${state.student.tracks.length}):</span>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">${playlistTitle} (${tracksList.length}):</span>
           <div class="space-y-1 max-h-48 overflow-y-auto no-scrollbar">
-            ${state.student.tracks.map((t, idx) => `
+            ${tracksList.map((t, idx) => `
               <button onclick="window.selectTrack('${t.id}')" class="w-full p-2 rounded-xl text-xs font-bold text-left transition flex items-center justify-between gap-2 cursor-pointer ${
                 REAL_TRACK.id === t.id ? 'bg-[#C68A36] text-white shadow-xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200'
               }">
@@ -659,29 +849,127 @@
       updateIcons();
     }
 
+    window.toggleTranslationMode = () => {
+      state.showTranslation = !state.showTranslation;
+      showToast(state.showTranslation ? "Tradução Falada Ativada 👁️" : "Tradução Ocultada (Foco 100% no Inglês) 🎧");
+      renderZenStage();
+    };
+
+    window.toggleCurrentSentenceLoop = () => {
+      if (state.loopingSentenceIndex === state.currentSentenceIndex && state.loopingSentenceIndex !== -1) {
+        state.loopingSentenceIndex = -1;
+        showToast('Repetição em loop desativada');
+      } else {
+        state.loopingSentenceIndex = state.currentSentenceIndex;
+        showToast(`Loop ativado na frase #${state.currentSentenceIndex + 1}`);
+      }
+      renderZenStage();
+    };
+
+    window.setSpeed = (speed) => {
+      state.playbackSpeed = speed;
+      if (state.audio) {
+        state.audio.playbackRate = speed;
+      }
+      showToast(`Velocidade alterada para ${speed}x`);
+      renderZenStage();
+    };
+
     function renderZenStage() {
       const stage = document.getElementById('zen-main-stage-container');
       const items = getActiveItems();
       const currentItem = items[state.currentSentenceIndex] || items[0];
+      const isMagicStory = (state.environment === 'course' || state.environment === 'ms_legacy');
 
-      // Update Tab Buttons Highlight
-      document.querySelectorAll('.act-btn').forEach(btn => {
-        btn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer";
-      });
-      const activeBtn = document.getElementById(`act-tab-${state.activity}`);
-      if (activeBtn) {
-        activeBtn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer";
+      // 1. TÍTULOS E SUBHEADS DINÂMICOS POR AMBIENTE (ADEUS AO TÍTULO FIXO DE MS EM TUDO)
+      let titleSubhead = "AgoraEuFalo • Spoken Reflex Studio";
+      let mainTitle = REAL_TRACK?.title || "Treino Ativo";
+
+      if (state.environment === 'public') {
+        titleSubhead = "💡 Sugestões do Leo • Free Plan";
+        mainTitle = REAL_TRACK?.title || "Conversational Clarity & Small Talk";
+      } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
+        titleSubhead = "🎓 Magic Stories Legacy • Módulo Oficial";
+        mainTitle = REAL_TRACK?.title || "MS003: Saturday Morning";
+      } else if (state.environment === 'vip') {
+        titleSubhead = `👑 Mentoria VIP Individual • ${state.student?.name || 'Aluno Particular'}`;
+        mainTitle = REAL_TRACK?.title || "Prescrição Individual";
+      } else if (state.environment === 'custom') {
+        titleSubhead = "🧪 Minhas Coisas • Laboratório do Aluno";
+        mainTitle = REAL_TRACK?.title || "Treinos Próprios";
       }
 
-      // Title Subhead
-      let activityLabel = "1. LISTEN AND READ";
-      if (state.activity === 'vocab') activityLabel = "2. VOCABULARY & CHUNKS";
-      else if (state.activity === 'listen_answer') activityLabel = "3. LISTEN AND ANSWER";
-      else if (state.activity === 'look_retell') activityLabel = "4. LOOK AND RETELL";
-      else if (state.activity === 'listen_ask') activityLabel = "5. LISTEN AND ASK";
-      else if (state.activity === 'pronunciation') activityLabel = "6. PRONUNCIATION PRACTICE";
+      const subheadEl = document.getElementById('zen-subhead-text');
+      if (subheadEl) subheadEl.innerText = titleSubhead;
 
-      document.getElementById('zen-activity-title').innerText = activityLabel;
+      const titleEl = document.getElementById('zen-activity-title');
+      if (titleEl) titleEl.innerText = mainTitle;
+
+      // 2. TOGGLE VISUAL DAS 6 ABAS DE MS vs TOOLBAR MINIMALISTA ZEN
+      const msContainer = document.getElementById('ms-tabs-container');
+      const zenToolbar = document.getElementById('zen-toolbar-container');
+
+      if (isMagicStory) {
+        if (msContainer) msContainer.classList.remove('hidden');
+        if (zenToolbar) {
+          zenToolbar.classList.remove('flex');
+          zenToolbar.classList.add('hidden');
+        }
+
+        // Highlight da Aba Ativa de MS
+        document.querySelectorAll('.act-btn').forEach(btn => {
+          btn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer";
+        });
+        const activeBtn = document.getElementById(`act-tab-${state.activity}`);
+        if (activeBtn) {
+          activeBtn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer";
+        }
+      } else {
+        if (msContainer) msContainer.classList.add('hidden');
+        if (zenToolbar) {
+          zenToolbar.classList.remove('hidden');
+          zenToolbar.classList.add('flex');
+        }
+
+        // Estilo do Botão Toggle de Tradução
+        const transBtn = document.getElementById('btn-toggle-translation');
+        const transText = document.getElementById('btn-translation-text');
+        if (transBtn && transText) {
+          if (state.showTranslation) {
+            transBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-[#C68A36] text-white border-[#C68A36] shadow-xs";
+            transText.innerText = "Tradução ON";
+          } else {
+            transBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border-stone-200";
+            transText.innerText = "Tradução OFF";
+          }
+        }
+
+        // Estilo do Botão Toggle de Loop
+        const loopBtn = document.getElementById('btn-toggle-loop');
+        const loopText = document.getElementById('btn-loop-text');
+        if (loopBtn && loopText) {
+          if (state.loopingSentenceIndex === state.currentSentenceIndex && state.loopingSentenceIndex !== -1) {
+            loopBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-[#0D1E36] text-amber-300 border-[#0D1E36] shadow-xs";
+            loopText.innerText = `Loop #${state.currentSentenceIndex + 1}`;
+          } else {
+            loopBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border-stone-200";
+            loopText.innerText = "Loop";
+          }
+        }
+
+        // Estilo dos Botões de Velocidade
+        ['08', '10', '12'].forEach(sp => {
+          const spBtn = document.getElementById(`speed-btn-${sp}`);
+          const rateVal = sp === '08' ? 0.8 : (sp === '10' ? 1.0 : 1.2);
+          if (spBtn) {
+            if (state.playbackSpeed === rateVal) {
+              spBtn.className = "speed-btn px-2 py-1 rounded-lg bg-[#C68A36] text-white shadow-2xs transition cursor-pointer";
+            } else {
+              spBtn.className = "speed-btn px-2 py-1 rounded-lg text-stone-600 hover:bg-white transition cursor-pointer";
+            }
+          }
+        });
+      }
 
       if (state.environment === 'ms_legacy') {
         stage.innerHTML = window.AEFPlayerZenTemplate.renderContinuousStoryView(REAL_TRACK, state.currentSentenceIndex);
@@ -698,8 +986,8 @@
       stage.innerHTML = `
         <div class="space-y-4 max-w-xl mx-auto">
 
-          <!-- No Desktop: Hero Box com Microfone Radiante e Medidor Circular lado a lado -->
-          ${state.activity === 'look_retell' && !state.evaluation ? `
+          <!-- No Desktop: Hero Box com Microfone Radiante e Medidor Circular (Apenas Magic Stories Look & Retell) -->
+          ${isMagicStory && state.activity === 'look_retell' && !state.evaluation ? `
             <div class="hidden lg:flex p-6 rounded-3xl bg-white border border-[#EAE5DC] items-center justify-between gap-6 shadow-sm">
               <div class="flex items-center gap-4">
                 <button onclick="window.toggleRetellRecording()" class="aef-mic-radiant active:scale-95 cursor-pointer ${state.isRecording ? 'animate-pulse ring-4 ring-rose-500/50' : ''}">
@@ -721,7 +1009,7 @@
           ` : ''}
 
           <!-- Relatório de Diagnóstico do AI Coach (Exibido quando finalizado) -->
-          ${state.activity === 'look_retell' && state.evaluation ? window.AEFPlayerZenTemplate.renderEvaluationReport(state.evaluation) : ''}
+          ${isMagicStory && state.activity === 'look_retell' && state.evaluation ? window.AEFPlayerZenTemplate.renderEvaluationReport(state.evaluation) : ''}
 
           <!-- 1. O CARTÃO ÚNICO ATIVO -->
           <div id="card-stage-slot" class="w-full">
@@ -729,10 +1017,11 @@
               currentItem, 
               state.currentSentenceIndex, 
               items.length, 
-              state.activity, 
+              isMagicStory ? state.activity : 'listen_read', 
               state.isPlaying, 
               state.loopingSentenceIndex === state.currentSentenceIndex,
-              Boolean(state.revealedAnswers[state.currentSentenceIndex])
+              Boolean(state.revealedAnswers[state.currentSentenceIndex]),
+              Boolean(state.showTranslation)
             )}
           </div>
 
@@ -760,7 +1049,7 @@
 
           </div>
 
-          ${state.activity === 'vocab' ? `
+          ${isMagicStory && state.activity === 'vocab' ? `
             <!-- Matriz de Chunks Isolados na aba Vocabulary -->
             <div class="pt-3 border-t border-[#F0EBE1] space-y-2.5">
               <span class="text-xs font-black uppercase tracking-wider text-[#0A192F] flex items-center gap-1.5">
@@ -822,40 +1111,43 @@
           </div>
         `;
       } else {
-        // DOCK DO PLAYER DE ÁUDIO TRADICIONAL
+        // DOCK DO PLAYER DE ÁUDIO TRADICIONAL (Ilha Flutuante Compacta & Ergonômica)
+        const trackTitle = REAL_TRACK?.title || 'Faixa Ativa • AgoraEuFalo';
+        const trackDur = REAL_TRACK?.duration || '00:36';
+
         container.innerHTML = `
           <!-- Track Title & Progress Info -->
-          <div class="flex items-center gap-3 w-full sm:w-auto min-w-0">
+          <div class="flex items-center gap-3 min-w-0 flex-1 sm:max-w-xs">
             <div class="w-9 h-9 rounded-xl bg-[#C68A36] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md">
               <i data-lucide="volume-2" class="w-4 h-4"></i>
             </div>
-            <div class="min-w-0 flex-1 sm:flex-initial">
-              <p class="font-black text-xs truncate" id="dock-title-text">Daily Spoken Reflex: Conversational Clarity</p>
+            <div class="min-w-0 flex-1">
+              <p class="font-black text-xs text-white truncate" id="dock-title-text">${trackTitle}</p>
               <div class="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
                 <span id="dock-current-time">00:00</span>
                 <span>/</span>
-                <span id="dock-total-time">00:36</span>
+                <span id="dock-total-time">${trackDur}</span>
               </div>
             </div>
           </div>
 
           <!-- Center Audio Timeline & Controls -->
-          <div class="flex items-center justify-center gap-4 w-full sm:w-auto">
+          <div class="flex items-center justify-end sm:justify-center gap-3 w-auto shrink-0">
             
-            <div class="flex items-center gap-2 flex-1 sm:w-64 max-w-xs">
-              <input type="range" id="dock-seek-bar" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer">
+            <div class="hidden sm:flex items-center gap-2 w-36 md:w-48 lg:w-60">
+              <input type="range" id="dock-seek-bar" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-white/20 rounded-lg cursor-pointer accent-[#C68A36]">
             </div>
 
-            <div class="flex items-center gap-2 shrink-0">
-              <button onclick="window.seekOffset(-5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Voltar 5s">
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="window.seekOffset(-5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer active:scale-95" title="Voltar 5s">
                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
               </button>
               
-              <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-10 h-10 rounded-full bg-[#C68A36] hover:bg-[#B3792A] active:scale-95 text-white flex items-center justify-center font-black shadow-lg transition cursor-pointer">
+              <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-10 h-10 rounded-full bg-[#C68A36] hover:bg-[#B3792A] active:scale-90 text-white flex items-center justify-center font-black shadow-lg shadow-amber-500/20 transition cursor-pointer">
                 <i data-lucide="${state.isPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-current"></i>
               </button>
               
-              <button onclick="window.seekOffset(5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" title="Avançar 5s">
+              <button onclick="window.seekOffset(5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer active:scale-95" title="Avançar 5s">
                 <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -970,15 +1262,72 @@
       state.currentSentenceIndex = 0;
       state.revealedAnswers = {};
       
-      let label = "Magic Stories 2026";
-      if (env === 'public') label = "Sugestões do Leo (Público)";
-      else if (env === 'vip') label = "Mentoria VIP Individual";
-      else if (env === 'custom') label = "Minhas Coisas (Laboratório)";
+      let label = "Magic Stories";
+      if (env === 'public') {
+        label = "Sugestões do Leo (Free Plan)";
+        if (window.AEF_STUDENT_PUBLIC?.tracks?.length > 0) {
+          REAL_TRACK = window.AEF_STUDENT_PUBLIC.tracks[0];
+          state.audio.src = REAL_TRACK.audioUrl;
+        }
+      } else if (env === 'course' || env === 'ms_legacy') {
+        label = "Magic Stories (Cursos)";
+        if (window.AEF_STUDENT_ANDRE?.tracks?.length > 0) {
+          REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
+          state.audio.src = REAL_TRACK.audioUrl;
+        }
+      } else if (env === 'vip') {
+        label = "Mentoria VIP Individual";
+        if (window.AEF_STUDENT_ESTEVAO?.tracks?.length > 0) {
+          state.student = window.AEF_STUDENT_ESTEVAO;
+          REAL_TRACK = window.AEF_STUDENT_ESTEVAO.tracks[0];
+          state.audio.src = REAL_TRACK.audioUrl;
+        }
+      } else if (env === 'custom') {
+        label = "Minhas Coisas (Laboratório)";
+        state.audio.pause();
+      }
+
+      // Update Pill & Badge Styles
+      ['public', 'course', 'vip', 'custom'].forEach(e => {
+        const btn = document.getElementById(`env-btn-${e}`);
+        if (btn) {
+          const badge = btn.querySelector('.env-badge');
+          if (e === env || (e === 'course' && env === 'ms_legacy')) {
+            btn.className = "env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0D1E36] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer shrink-0";
+            if (badge) badge.className = "env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-mono font-black";
+          } else {
+            btn.className = "env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0";
+            if (badge) {
+              const bgClass = e === 'public' ? 'bg-amber-100 text-amber-900' : (e === 'course' ? 'bg-blue-100 text-blue-900' : (e === 'vip' ? 'bg-purple-100 text-purple-900' : 'bg-emerald-100 text-emerald-900'));
+              badge.className = `env-badge text-[9px] px-1.5 py-0.2 rounded font-mono font-black ${bgClass}`;
+            }
+          }
+        }
+      });
+
+      // Update Subhead Text
+      const subhead = document.getElementById('zen-subhead-text');
+      if (subhead) subhead.innerText = `AgoraEuFalo • ${label}`;
+
+      // Update Sidebar Track Info
+      const sideName = document.getElementById('sidebar-activity-name');
+      if (sideName && REAL_TRACK.title) sideName.innerText = REAL_TRACK.title;
+
+      const tipText = document.getElementById('sidebar-grammar-tip');
+      if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
 
       showToast(`Ambiente alterado para: ${label}`);
-      window.togglePlayerDrawer();
+      
+      const drawer = document.getElementById("playerDrawerMenu");
+      if (drawer && !drawer.classList.contains("-translate-x-full")) {
+        window.togglePlayerDrawer();
+      }
+
+      renderSidebarTracks();
       renderZenStage();
       renderBottomDock();
+      window.checkFlightModeStatus();
+      if (window.lucide) window.lucide.createIcons();
     };
 
     window.playChunkAudio = (url, index) => {

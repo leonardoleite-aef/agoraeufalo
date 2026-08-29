@@ -3,7 +3,7 @@
  * Network-First strategy for data scripts & live updates.
  */
 
-const CACHE_NAME = 'aef-flight-cache-v3';
+const CACHE_NAME = 'aef-flight-cache-v4';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();

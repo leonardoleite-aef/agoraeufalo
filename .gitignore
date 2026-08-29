@@ -32,6 +32,7 @@ Material-PDF/.chrome-profile/
 *.m4v
 *.flac
 *.aac
+assets/videos
 assets/videos/
 assets/audio/alunos/
 assets/audio/public/*.mp3

@@ -30,55 +30,81 @@ Qualquer assistente ou agente de IA deve seguir estas regras rigorosamente em qu
 
 ---
 
-## 3. As 6 Atividades Canônicas do Método Magic Stories (Regras Mecânicas do Player)
+## 3. As 6 Atividades Canônicas do Método Magic Stories (Manifesto Pedagógico & Regras Mecânicas)
 Todas as aulas e treinos do ecossistema seguem rigorosamente a estrutura pedagógica e o design de cards padronizado em todas as abas:
 
-1. **`1. Listen & Read (LR)` (Entrada & Imersão Auditiva):**
-   - A história ou diálogo narrado.
-   - Cada card contém uma frase/turno completo. Em diálogos, cada card indica seu locutor (`speaker`).
-   - **Sem tradução na tela.** 
-   - Mecânica: Áudio contínuo, play/pause com 1 toque no card e auto-scroll suave.
-2. **`2. Vocabulary Session (VOC)` (Matriz de Chunks & Conteúdo Formatado):**
-   - O mesmo texto/diálogo de Listen & Read, mas **COM a Tradução em Português Falado Brasileiro Real (`spokenTranslation`)** visível no card.
-   - Espaço reservado para o texto formatado original (estilo apostila PDF/blogpost).
-   - Abaixo do texto principal: Matriz de Chunks Sonoros (**Cards de Chunks / FrasesProntas**).
-   - Cada card de chunk possui um **pequeno botão de áudio (`▶`)** para ouvir o chunk isolado (áudios gravados no Firestore).
-3. **`3. Listen & Answer (LA)` (Reflexo & Velocidade de Resposta):**
-   - Cards intercalados: **1 card de Pergunta** ➔ **1 card de Resposta**.
-   - **Sem tradução na tela.**
-   - Template Call & Response com micro-pausa cronometrada de 2 a 4 segundos.
+1. **`1. Listen & Read (LR)` (Entrada & Imersão Auditiva Real):**
+   - **O Propósito Canônico:** *"Todo mundo pensa que Escutar e Ler é para checar se entendeu. Grande ilusão! Ao ler e ouvir ao mesmo tempo, o cérebro foca na escrita e desliga os ouvidos. Listen & Read serve para você mudar o foco: observar com extrema atenção muito mais PELOS OUVIDOS do que pelos olhos, sentindo a diferença brutal entre a grafia e o som real. Escutar e ler uma única vez não funciona: a escuta precisa virar reflexo!"*
+   - Cada card contém uma frase/turno completo. Em diálogos, indica o locutor (`speaker`).
+   - **Sem tradução na tela.** Mecânica: Áudio contínuo, play/pause com 1 toque no card e auto-scroll suave.
+2. **`2. Vocabulary Session (VOC)` (Matriz de Chunks & Ativação de Vocabulário):**
+   - **O Propósito Canônico:** *"Aqui é o momento de ter 100% de certeza do contexto da história. Mas zero neurose: você NÃO vai decorar nada aqui agora. O cérebro armazena no vocabulário passivo. Vocabulário ativo é aquele que sai no piloto automático, e a ativação real só acontece no treino prático. Garanta a compreensão da história para seguir focado 100% no inglês."*
+   - O mesmo texto de Listen & Read, mas **COM Tradução em Português Falado Brasileiro Real (`spokenTranslation`)** visível no card.
+   - Matriz de Chunks Sonoros com **botões individuais de áudio (`▶`)** para fixar a melodia isolada.
+3. **`3. Listen & Answer (LA)` (Reflexo & Velocidade de Resposta no Diálogo):**
+   - **O Propósito Canônico:** *"Primeira arena de escuta e fala ativa. Zero obrigação de falar imediatamente: se quiser escutar calado nas primeiras vezes, tudo bem! O objetivo não é provar que você decorou a história, mas treinar velocidade e automação de diálogo em bate-pronto. Responda curto, do jeito que souber ou diga 'I don't know' / 'I don't understand'. O que vale é o reflexo imediato!"*
+   - **Regra Estrita de Magic Stories (Zero Respostas Reveladas):** **NÃO MOSTRAR AS RESPOSTAS!** Tanto na apostila/PDF de treino (Páginas 5 e 6) quanto na Sala de Aula, exibir apenas a **Pergunta** com linhas pautadas/espaço em branco para resposta manual ou reflexo oral. A resposta pronta é proibida para eliminar muletas visuais.
+   - Cards intercalados no Player: Pergunta no áudio com micro-pausa de 2 a 4 segundos antes da confirmação.
 4. **`4. Look & Retell (LRT)` + AI Speech Coach (Produção Própria & Speaking Ativo):**
-   - **Zero áudio prévio e zero auto-scroll.** 100% Speaking autônomo.
-   - Todos os cards mostram **apenas as perguntas-guia visuais** na tela.
-   - Aluno clica no microfone radiante para gravar seu reconto e o `Look-Retell-AI-Coach` atribui Score de Compreensibilidade de 0 a 10.
-5. **`5. Listen & Ask (LASK)` (Desafio de Formulação de Perguntas):**
-   - Cards intercalados: **1 card com a Frase na Negativa / Afirmação** ➔ **1 card com a Pergunta correspondente** com áudio.
-   - **Sem tradução na tela.**
-6. **`6. Pronunciation & Connected Speech (PRO)` (Musicalidade & Ritmo Cirúrgico):**
-   - As mesmas frases de Listen & Read.
-   - **Pausa obrigatória ao final de cada frase.**
-   - 1º toque pula o áudio para o segundo exato do início daquela frase (`start`), toca até o `end` e pausa. Para tocar a próxima, basta tocar no card dela.
-   - Botão de repetição contínua em loop no card (`🔂`).
+   - **O Propósito Canônico:** *"Mesma filosofia: sem forçar e sem prova de memória. É o treino para falar do que você já sabe com o inglês que você tem HOJE, no Agora. A cada repetição diária seu reconto se torna mais rico e espontâneo."*
+   - **Zero áudio prévio e zero auto-scroll.** 100% Speaking autônomo. Microfone radiante grava o reconto e o `AI Speech Coach` avalia a compreensibilidade (*O Teste do Gringo* de 0 a 10).
+   - **Fidelidade 100% às Perguntas de LA (Zero Perguntas Inventadas):** As perguntas-guia visuais de Look & Retell **SÃO EXATAMENTE AS MESMAS PERGUNTAS DE LISTEN & ANSWER (LA)**. Proibição absoluta de inventar perguntas acadêmicas ou artificiais como *"Describe..."*, *"Tell me about..."* ou expressões que ninguém usa na vida real como *"What is her profession?"*. Usar exclusivamente o inglês falado natural do dia a dia (*"What does she do for a living?"* / *"What does she do?"*).
+5. **`5. Listen & Ask (LASK)` (Desafio de Formulação Rápida de Perguntas):**
+   - **O Propósito Canônico:** *"Quem lidera e mantém conversas vivas em inglês é quem sabe perguntar com rapidez e ritmo. Ao ouvir uma frase afirmativa/negativa, o cérebro é provocado a formular a pergunta correspondente de imediato. Se travar, ouça a gravação e aplique na próxima repetição!"*
+   - **Regra Estrita de Magic Stories (Zero Perguntas Reveladas):** **NÃO MOSTRAR AS PERGUNTAS!** Tanto na apostila/PDF (Página 7) quanto na Sala de Aula, exibir apenas a **Frase Estímulo (Negação/Afirmação)** e a linha para formulação da pergunta. A pergunta pronta nunca é revelada previamente para forçar o cérebro a formular a pergunta no reflexo.
+6. **`6. Pronunciation & Connected Speech (PRO)` (Musicalidade, Boca & Ritmo Mecânico):**
+   - **O Propósito Canônico:** *"Treino 100% mecânico de moldar a musculatura da boca, entonação e ligação entre as palavras (Connected Speech). Ouvir e repetir com cadência até a boca acostumar a falar conectado e sem tropeçar."*
+   - **Regra Estrita de Magic Stories (Texto Completo de LR + Linking Sounds):** A Página 8 do PDF e a Sala de Aula devem conter **O TEXTO COMPLETO DO LISTEN & READ (LR)** com as marcações visuais de conexões consoante-vogal (*Linking Sounds*) em destaque azul cobalto, chave fonética das reduções principais, treino de repetição em loop contínuo (`🔂`) e a **Sacada de Ouro do Professor Leo** em destaque monumental âmbar.
+   - *Nota de Escopo:* As regras de ocultação de respostas em LA, ocultação de perguntas em LASK e texto integral com linking em PRO aplicam-se **estritamente às Magic Stories**.
 
 ---
 
 ## 4. O Squad Unificado de Agentes de IA
-A criação e manutenção de conteúdo são executadas por um squad especializado de 6 subagentes:
+A criação e manutenção de conteúdo são executadas por um squad especializado de 7 subagentes:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                         SQUAD DE AGENTES AGORAEUFALO                                    │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ 1. Leo-Content-Writer: Redação de histórias, dramaturgia vocal (injeção de pausas      │
-│    dramáticas, risadas, suspiros e tags de atuação Gemini TTS), roteiros das 6 etapas │
-│    e tradução em Português Falado Brasileiro Real.                                      │
-│ 2. Visual-Artwork-Artist: Capas 16:9 (Blog) e 1:1 512x512 <90KB (Player/Lockscreen).   │
-│ 3. Player-Audio-Engine: Síntese Gemini TTS (Dual/Single), MP3 128k e timestamps reais. │
-│ 4. Editorial-PDF-Engine: Compilação de apostilas A4 Diagramadas (ReportLab) anti-corte. │
-│ 5. Look-Retell-AI-Coach: Avaliação de áudio 0-10, diagnóstico de engasgos e feedback. │
-│ 6. Tier-Platform-Distributor: Distribuição Firestore (Free, Cursos, VIP) e Git Deploy. │
+│    dramáticas, risadas, suspiros e tags de atuação Gemini TTS) e roteiros das 6 etapas │
+│ 2. Leo-Vocab-Session-Architect: Dissecação de vocabulário, Tradução Falada Real,       │
+│    matriz de Sound Chunks acústicos, curiosidades gramaticais sem jargões ("O         │
+│    Sentimento da Estrutura") e exemplos de aplicação na vida real.                      │
+│ 3. Visual-Artwork-Artist: Capas 16:9 (Blog/LMS) e 1:1 512x512 <90KB (Player).          │
+│ 4. Player-Audio-Engine: Síntese Gemini TTS (Dual/Single), MP3 128k e timestamps reais. │
+│ 5. Editorial-PDF-Engine: Compilação de Livros Impressos & Apostilas Interativas A4    │
+│    (ReportLab) no Sistema Canônico dos 3 Arquétipos em 8 Páginas (Fontes 15 a 17pt):   │
+│    - P1: Arquétipo 1 (Module Divider / Capa Deep Navy, 01/02 Watermark, Arte & Sinopse)│
+│    - P2: Arquétipo 2 (Content & Insights: Listen & Read com fonte confortável 15-17pt) │
+│    - P3 & P4: Arquétipo 2 (Vocabulary Session: Tradução Real, Chunks & Curiosidades)   │
+│    - P5 a P8: Arquétipo 3 (Practice Workbook: LA sem respostas, LRT, LASK sem          │
+│      perguntas, PRO com texto completo de LR e Sacada de Ouro do Leo)                  │
+│ 6. Look-Retell-AI-Coach: Avaliação de áudio 0-10, diagnóstico de engasgos e feedback. │
+│ 7. Tier-Platform-Distributor: Distribuição Firestore (Free, Cursos, VIP) e Git Deploy. │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### 4.1. O Pipeline Canônico de Produção de Magic Stories & Livros Impressos (End-to-End):
+Sempre que um novo conteúdo, aula de curso ou Magic Story for criado a partir de um vídeo do YouTube, áudio MP3 ou texto base, o squad executa este fluxo industrial obrigatório:
+
+- **Etapa A (Curadoria de Densidade & Corte):** Extrair a transcrição completa e selecionar o trecho de maior potência comunicativa e narrativa.
+- **Etapa B (Redação da Magic Story & Áudio LR):** Escrever a história narrada ou diálogo vivo com dramaturgia vocal de modo que **CADA FRASE SEJA 100% UTILIZÁVEL** para as etapas de LA, LRT e LASK. Respeitar rigorosamente a duração: **mínimo de 1min10s (01:10) e máximo de 2min00s (02:00)** ➔ Síntese Gemini TTS (Dual/Single) MP3 128k ➔ Gera faixa de **`1. Listen & Read (LR)`** com timestamps milimétricos e **Página 2 do PDF** com fonte confortável de **15 a 17pt**.
+- **Etapa C (Explainer Didático & Vocabulary Session com o Leo-Vocab-Session-Architect):** Criar texto e áudio explicativo no estilo Google NotebookLM / Podcasting do Leo ➔ Tradução Falada Real + Matriz de Chunks Sonoros + Curiosidades Gramaticais sem Jargões ("O Sentimento da Estrutura") + Exemplos de Aplicação no Cotidiano ➔ Gera as **Páginas 3 e 4 do PDF (VOC)** e 4 cards em cascata na Sala de Aula e aba VOC do Player.
+- **Etapa D (Listen & Answer - Cobertura Literal 100% da História):** Criar **quantas perguntas forem necessárias para cobrir literalmente toda a história**. Esta dissecação exaustiva define a quantidade total de perguntas e respostas trabalhadas no módulo. **Proibição Absoluta de Limite Artificial e de Spoilers:** Proibido limitar perguntas e proibido mostrar as respostas no PDF/tela ➔ Síntese Gemini TTS com micro-pausas de 2 a 4 segundos ➔ Gera as **Páginas 5 e 6 do PDF (LA/LRT)** com linhas pautadas para escrita manual.
+- **Etapa E (Look & Retell + AI Speech Coach):** Organizar as perguntas-guia visuais (**que são obrigatoriamente as mesmas perguntas trabalhadas no Listen & Answer**) e espaço de palavras-chave (*Keywords*) ➔ Configurar o prompt de inteligibilidade comunicativa (*O Teste do Gringo 0-10*) ➔ Palco de gravação no Player.
+- **Etapa F (Listen & Ask - Desafio de Perguntas sem Spoilers):** Criar frases de estímulo (afirmativas/negativas) com espaço pautado para o aluno formular a pergunta no reflexo (**sem mostrar a pergunta pronta impressa**) ➔ Síntese Gemini TTS ➔ Gera a **Página 7 do PDF (LASK)**.
+- **Etapa G (Pronunciation & Connected Speech com Texto Integral):** Inserir **o texto integral da história (LR)** com as marcações visuais de conexões consoante-vogal (*Linking Sounds*), chave fonética e ações em cadeia usando o áudio da história (LR) com cortes por sentença, pausas automáticas e botão de loop (`🔂`) ➔ Redigir a Sacada de Ouro do Leo ➔ Gera a **Página 8 do PDF (PRO)**.
+- **Etapa H (Compilação do Livro Impresso no Padrão dos 3 Arquétipos em Exatas 8 Páginas):** Compilar o PDF Oficial em `Material-PDF/[codigo]_[slug]_Apostila_Oficial.pdf` (ReportLab) estruturado rigorosamente nos 3 Arquétipos com a **Tabela Canônica de Fontes Travadas**:
+  * **P1 (Capa Deep Navy):** `Título: 26pt` • `Sub: 13pt` • `Ficha: 10.5pt` • `Sinopse: 9.5pt` • Arte 1:1 e marca d'água gigante `"01"/"02"`.
+  * **P2 (LR):** `Texto História: 16.5pt` (Leading: `23.5pt`) • `Quick Tips: 9-10pt` • 3 blocos laterais + box de treino no Player.
+  * **P3 (VOC Parte 1):** `Texto Inglês: 14.5pt` • `Tradução Falada: 12.5pt` • `Chunks: 9-10pt` • Box de fixação sem decoreba.
+  * **P4 (VOC Parte 2 - Deep Dive):** `Títulos: 14pt` • `Explicações: 12.5pt` • `Exemplos Vida Real: 12pt` • 3 cards de estrutura sem jargões.
+  * **P5 (LA Parte 1):** `Perguntas 1 a 7: 13.5pt bold` • `Linhas de Resposta (sem respostas impressas): 10.5pt` • Checklist verde e aspas monumentais.
+  * **P6 (LA Parte 2 & LRT):** `Perguntas 8 a 14: 13.5pt bold` • `Linhas de Resposta: 10.5pt` • Palco do AI Coach (*Teste do Gringo 0-10*).
+  * **P7 (LASK):** `Cabeçalho: 13.5pt` • `Estímulos: 13pt` • `Espaço de Formulação: 13pt` (sem perguntas impressas).
+  * **P8 (PRO & Sacada de Ouro):** `Texto Integral LR com Linking: 10-10.5pt` • `Chave Fonética: 12.5pt azul` • `Sacada de Ouro: 13.5-14pt bold italic` em destaque âmbar.
+  * Suporte oficial sempre via `selexenglish@gmail.com`.
 
 ---
 
@@ -94,13 +120,14 @@ Sempre que um novo artigo for solicitado, execute o pipeline em lote único:
 
 ---
 
-## 6. A Fábrica de Cursos & Integração Fluida (Sala de Aula ⇄ Player)
+## 6. A Fábrica de Cursos & Integração Fluida (Sala de Aula ⇄ Player ⇄ Vitrine de Cursos)
 A área de membros opera com conexão bidirecional perfeita entre teoria e treino prático:
 
 1. **Na Sala de Aula (`sala-de-aula.html`):** O aluno assiste à masterclass, estuda os chunks claros, lê a Sacada de Ouro e baixa a apostila em PDF.
-2. **O Botão de Prática Ativa (*📌 Enviar para Training Player*):** Abre com 1 toque o Player na faixa exata da aula para os exercícios de *Listen & Read*, *Listen & Answer*, *Look & Retell* e *Pronúncia*.
-3. **Botão de Retorno no Player:** Permite voltar diretamente para a lição ativa da Sala de Aula.
-4. **Conformidade de Schema (1:1):** Cada aula no Firestore (`courses/{courseId}/modules/{moduleId}/lessons/{lessonId}`) contém os campos `hasTrainingTrack: true` e `trainingTrackId`.
+2. **Na Vitrine do Curso (`curso.html`):** O aluno visualiza a grade completa de módulos e o acordeão de aulas com as **miniaturas 16:9 oficiais de cada aula** (`thumbnailUrl`), duração exata e status de conclusão.
+3. **O Botão de Prática Ativa (*📌 Enviar para Training Player*):** Abre com 1 toque o Player na faixa exata da aula para os exercícios de *Listen & Read*, *Listen & Answer*, *Look & Retell* e *Pronúncia*.
+4. **Botão de Retorno no Player:** Permite voltar diretamente para a lição ativa da Sala de Aula.
+5. **Conformidade de Schema (1:1):** Cada aula no Firestore (`courses/{courseId}/modules/{moduleId}/lessons/{lessonId}`) e nas matrizes locais contém os campos `hasTrainingTrack: true`, `trainingTrackId` e `thumbnailUrl` apontando para a miniatura 16:9 correspondente da aula. **Proibição de Thumbnails Mockados:** É terminantemente obrigatório vincular as miniaturas 16:9 geradas de cada aula na esteira de produção.
 
 ---
 
@@ -129,8 +156,19 @@ O banco de dados Firestore é a **fonte única da verdade**, eliminando bifurca�
 ---
 
 ## 9. Diretriz de Criação de Capas e Mídias Visuais
+- **Unicidade de Imagem por Módulo & Consulta Prévia Obrigatória:**
+  - Cada Módulo / Magic Story deve ter uma imagem **completamente diferente e única**, 100% contextualizada com o enredo, personagens e tom da história.
+  - **Consulta Prévia Obrigatória:** No processo de criação de qualquer novo módulo, o agente deve **SEMPRE perguntar ao Professor Leo se ele possui uma foto/imagem própria ou uma imagem de sua preferência** antes de gerar ou selecionar a arte.
 - **Capa de Artigo de Blog (16:9):** Arte cinematográfica e editorial de alto impacto gerada via `generate_image`, salva em `assets/images/cover-[slug].jpg`.
 - **Capa de Treino do Aluno / Player (1:1):** Arte quadrada baseada no contexto real do diálogo. **Otimizada obrigatoriamente com `sips` para 512x512 pixels (<90 KB)** para suporte imediato à tela de bloqueio do iOS/Android via MediaSession API. Salva em `assets/images/cover-[aluno/tema]-[slug].jpg`.
+- **Kit de Capas 16:9 das Vídeo-Aulas (Cinema LMS Poster Frame):** Para cada Módulo / Magic Story, gerar o kit oficial de 6 capas 16:9 (1920x1080 <180KB) correspondentes às 6 atividades com a diferenciação cromática oficial:
+  1. `LR`: Azul Cobalto Real (`#1A56DB`) 🎧
+  2. `VOC`: Verde Esmeralda (`#047857`) 📖
+  3. `LA`: Ocre Dourado / Âmbar (`#D97706`) ⚡
+  4. `LRT`: Coral / Rubi Quente (`#E11D48`) 🎙️
+  5. `LASK`: Índigo / Violeta (`#6366F1`) ❓
+  6. `PRO`: Teal / Ciano Elétrico (`#0D9488`) 🎵
+  Salvas em `assets/images/thumbs/[modulo_id]/thumb_[modulo_id]_[atividade].jpg`.
 
 ---
 

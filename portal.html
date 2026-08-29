@@ -82,14 +82,14 @@
       <!-- Desktop Center Nav Links -->
       <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-300">
         <a href="portal.html" class="text-white border-b-2 border-[#C68A36] pb-0.5">Dashboard</a>
-        <a href="#meus-cursos" class="hover:text-white transition">Meus Cursos</a>
-        <a href="#vitrine-cursos" class="hover:text-white transition">Vitrine de Cursos</a>
-        <a href="treino/player.html" class="hover:text-white transition">Training Player</a>
+        <a href="sala-de-aula.html?curso=ms-legacy" class="hover:text-white transition">Sala de Aula</a>
+        <a href="player.html" class="hover:text-white transition">Training Player</a>
+        <a href="repertorio.html" class="hover:text-white transition">Repertório</a>
       </nav>
 
       <!-- Right: Direct Training CTA + Profile Avatar -->
       <div class="flex items-center gap-2.5">
-        <a href="treino/player.html" class="px-3.5 py-1.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
+        <a href="player.html" class="px-3.5 py-1.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span>Player</span>
         </a>
@@ -173,33 +173,33 @@
             <span class="px-2.5 py-0.5 rounded-full bg-[#C68A36] text-white font-mono font-black text-[9px] uppercase tracking-wider">
               PRÁTICA RECOMENDADA DE HOJE
             </span>
-            <span class="text-xs text-slate-300 font-medium" id="hero-course-tag">Projeto AEF 2026</span>
+            <span class="text-xs text-slate-300 font-medium" id="hero-course-tag">Magic Stories Legacy</span>
           </div>
 
           <h2 class="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight" id="hero-lesson-title">
-            Aula 01 • O Reflexo da Conexão Sonora
+            MS001 • Aula 01 • Listen & Read (LR)
           </h2>
 
           <p class="text-xs text-slate-300 leading-relaxed font-medium" id="hero-lesson-desc">
-            Treine a musicalidade do inglês falado real e a cadência acústica sem tradução mental.
+            Entrada & Imersão Auditiva • Acompanhamento da história em inglês sem tradução mental.
           </p>
         </div>
 
         <!-- Thumbnail Image -->
         <div class="relative w-20 h-20 sm:w-28 sm:h-28 shrink-0 rounded-2xl overflow-hidden border border-white/20 bg-[#0A192F] self-center sm:self-auto shadow-md">
-          <img src="assets/images/leonardo-leite.png" alt="Professor Leo Leite" class="w-full h-full object-cover object-top">
+          <img src="assets/images/thumbs/ms001/thumb_ms001_lr.jpg" alt="Aula 01 Listen & Read" class="w-full h-full object-cover">
         </div>
 
       </div>
 
       <!-- Actions Row -->
       <div class="pt-3 border-t border-white/10 flex flex-wrap items-center gap-3">
-        <a id="hero-cta-class" href="sala-de-aula.html?curso=projeto-aef-2026&aula=aef-01" class="px-5 py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+        <a id="hero-cta-class" href="sala-de-aula.html?curso=ms-legacy&modulo=ms001-grazi&aula=ms001-lr" class="px-5 py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
           <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
           <span>Assistir Masterclass</span>
         </a>
 
-        <a id="hero-cta-train" href="treino/player.html?course=projeto-aef-2026&activity=listen_read" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5">
+        <a id="hero-cta-train" href="player.html?track=andre_graziela&tab=lr" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5">
           <i data-lucide="headphones" class="w-3.5 h-3.5 text-amber-300"></i>
           <span>Ir para Training Player</span>
         </a>
@@ -296,17 +296,17 @@
           <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#C68A36]"></i>
           <span>Dashboard Geral</span>
         </a>
-        <a href="#meus-cursos" onclick="window.togglePortalDrawer()" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Meus Cursos</span>
+        <a href="sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="play-circle" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Sala de Aula</span>
         </a>
-        <a href="#vitrine-cursos" onclick="window.togglePortalDrawer()" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="sparkles" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Vitrine de Cursos</span>
-        </a>
-        <a href="treino/player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+        <a href="player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Training Player</span>
+        </a>
+        <a href="repertorio.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="layers" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>Meu Repertório de Frases</span>
         </a>
         <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
@@ -380,62 +380,38 @@
       }
     }
 
-    // Matriz de Cursos Oficial Fallback / Base
+    // Matriz de Cursos Oficial (Single Source of Truth)
     const OFFICIAL_COURSES_MATRIX = {
-      "projeto-aef-2026": {
-        id: "projeto-aef-2026",
-        title: "Projeto AgoraEuFalo 2026",
-        slug: "projeto-aef-2026",
-        badge: "FLAGSHIP 2026",
-        tierRequired: "vip",
+      "ms-legacy": {
+        id: "ms-legacy",
+        title: "Magic Stories Legacy • O Acervo Clássico",
+        slug: "ms-legacy",
+        badge: "LEGACY CLUB",
+        tierRequired: "legacy_member",
         published: true,
-        coverImageUrl: "assets/images/cover-default-aef.jpg",
-        description: "Treinamento completo de reflexo oral, cadência, connected speech e automação de fala com o Método Magic Stories.",
-        totalLessons: 3,
-        completedLessons: 1
-      },
-      "magic-stories-club": {
-        id: "magic-stories-club",
-        title: "Magic Stories Club • 30 Ciclos Clássicos",
-        slug: "magic-stories-club",
-        badge: "30 CICLOS",
-        tierRequired: "club_anual",
-        published: true,
-        coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
-        description: "Acervo de 30 histórias narrativas com treino de Listen & Answer, Chunks e sacadas com o Professor Leo.",
-        totalLessons: 30,
+        coverImageUrl: "assets/images/cover-andre-graziela.jpg",
+        description: "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas em PDF.",
+        totalLessons: 18,
         completedLessons: 0
       },
-      "guia-pronuncia-ritmo": {
-        id: "guia-pronuncia-ritmo",
-        title: "Guia Definitivo de Pronúncia & Rhythm",
-        slug: "guia-pronuncia-ritmo",
-        badge: "ESPECIALIZAÇÃO",
+      "english-quickstart": {
+        id: "english-quickstart",
+        title: "English QuickStart • Fundamentos da Fala",
+        slug: "english-quickstart",
+        badge: "EM BREVE",
         tierRequired: "club_anual",
-        published: true,
-        coverImageUrl: "assets/images/cover-public-spoken-reflex.jpg",
-        description: "Domine linkings consonant-to-vowel, redução de vogais fracas e a musicalidade natural da língua inglesa.",
+        published: false,
+        coverImageUrl: "assets/images/cover-default-aef.jpg",
+        description: "O acelerador de fundamentos para destravar a escuta e a produção de fala inicial sem bloqueios.",
         totalLessons: 12,
         completedLessons: 0
-      },
-      "mentoria-vip-individual": {
-        id: "mentoria-vip-individual",
-        title: "Mentoria VIP Individual 1 a 1",
-        slug: "mentoria-vip-individual",
-        badge: "VIP 1 A 1",
-        tierRequired: "vip",
-        published: true,
-        coverImageUrl: "assets/images/leonardo-leite.png",
-        description: "Acompanhamento cirúrgico e individual com gravações personalizadas, feedback direto e sessões ao vivo no Google Meet.",
-        totalLessons: 6,
-        completedLessons: 2
       }
     };
 
     document.addEventListener("DOMContentLoaded", async () => {
       const studentName = localStorage.getItem("aef_user_name") || "Leonardo Leite";
       const studentEmail = localStorage.getItem("aef_user_email") || "leonardo@agoraeufalo.com.br";
-      const enrolledProducts = JSON.parse(localStorage.getItem("aef_enrolled_products") || '["projeto-aef-2026", "mentoria-vip-individual"]');
+      const enrolledProducts = JSON.parse(localStorage.getItem("aef_enrolled_products") || '["ms-legacy", "mentoria-vip-individual"]');
 
       const topGreeting = document.getElementById("top-user-greeting");
       const drawerName = document.getElementById("drawer-user-name");

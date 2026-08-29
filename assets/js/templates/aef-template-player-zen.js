@@ -112,13 +112,13 @@ window.AEFPlayerZenTemplate = {
    * Renderiza o Palco Zen de Cartão Único Focado (Single Active Card)
    * 100% Limpo: Badges semânticos (ANSWER / ASK A QUESTION), toggle blur e controles essenciais
    */
-  renderSingleZenCard: function(item, index, total, activity, isPlaying = false, isLooping = false, isRevealed = false) {
+  renderSingleZenCard: function(item, index, total, activity, isPlaying = false, isLooping = false, isRevealed = false, showTranslationOverride = false) {
     const textEn = item.text || item.en || '';
     const textPt = item.spokenTranslation || item.pt || '';
     const speaker = (activity === 'listen_answer' || activity === 'listen_ask' || activity === 'look_retell') ? null : item.speaker;
 
     const isClickable = (activity !== 'look_retell');
-    const showTranslation = (activity === 'vocab') && Boolean(textPt);
+    const showTranslation = ((activity === 'vocab') || showTranslationOverride) && Boolean(textPt);
 
     // Identifica se é um card de produção ativa do aluno que deve vir embaçado
     const isSpeakingResponse = (activity === 'listen_answer' && index % 2 === 1) || (activity === 'listen_ask' && index % 2 === 1);

@@ -6,7 +6,7 @@
 
 class AEFOfflineManager {
   constructor() {
-    this.cacheName = 'aef-flight-cache-v1';
+    this.cacheName = 'aef-flight-cache-v4';
     this.isSupported = 'caches' in window || 'indexedDB' in window;
     this.init();
   }
@@ -15,8 +15,11 @@ class AEFOfflineManager {
     // Register Service Worker if supported and running on HTTP/HTTPS
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       try {
-        await navigator.serviceWorker.register('sw.js');
-        console.log('✅ In-Flight Service Worker registered successfully.');
+        const reg = await navigator.serviceWorker.register('sw.js');
+        if (reg) {
+          reg.update();
+        }
+        console.log('✅ In-Flight Service Worker registered & updated successfully.');
       } catch (err) {
         console.log('SW registration note:', err);
       }
@@ -96,6 +99,56 @@ class AEFOfflineManager {
     }
 
     onProgress(100, 'Flight Mode Ready!');
+    return true;
+  }
+
+  /**
+   * Download and cache multiple tracks (the whole playlist) for Flight Mode
+   */
+  async cacheAllTracks(tracksList, onProgress = () => {}) {
+    if (!('caches' in window)) {
+      throw new Error('Cache Storage not supported in this browser environment.');
+    }
+    const cache = await caches.open(this.cacheName);
+    const total = tracksList.length;
+    
+    onProgress(10, 'Salvando interface e banco de dados...');
+    const baseAssets = [
+      window.location.href,
+      'player.html',
+      '../assets/images/favicon.svg',
+      'data/registry.js',
+      'data/estevao.js',
+      'data/thomas.js',
+      'data/andre.js',
+      'data/matheus.js',
+      'data/public.js',
+      'js/offline-manager.js'
+    ];
+    for (const asset of baseAssets) {
+      try { await cache.add(asset); } catch(e) {}
+    }
+
+    for (let i = 0; i < total; i++) {
+      const track = tracksList[i];
+      if (!track || !track.audioUrl) continue;
+      
+      const percent = Math.round(15 + ((i + 1) / total) * 80);
+      onProgress(percent, `Baixando faixa ${i + 1}/${total}: ${track.title || ''}...`);
+      
+      try {
+        const response = await fetch(track.audioUrl);
+        if (response.ok) {
+          await cache.put(track.audioUrl, response.clone());
+          const blob = await response.blob();
+          await this._saveBlobToIndexedDB(track.id, blob);
+        }
+      } catch (err) {
+        console.warn(`Erro ao salvar faixa ${track.id}:`, err);
+      }
+    }
+
+    onProgress(100, 'Todas as faixas da playlist salvas para o voo!');
     return true;
   }
 

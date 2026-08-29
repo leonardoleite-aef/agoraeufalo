@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Sala de Aula • Imersão & Reflexo Oral | AgoraEuFalo</title>
-  <meta name="description" content="Sala de Aula do Aluno AgoraEuFalo • Assista às masterclasses, estude os chunks sonoros e envie exercícios para o Training Player.">
-  
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <meta name="theme-color" content="#FAF8F5">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sala de Aula • AgoraEuFalo</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & Fira Code -->
+  <!-- Google Fonts: Inter & Plus Jakarta Sans & Newsreader -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -22,18 +17,15 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
-            mono: ['"Fira Code"', 'monospace']
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif'],
           },
           colors: {
             aef: {
               navy: '#0A192F',
-              midnight: '#0D1E36',
-              ochre: '#C68A36',
-              'ochre-hover': '#B3792A',
-              canvas: '#FAF8F5',
+              gold: '#C68A36',
               paper: '#FFFDF9',
+              sand: '#FAF8F5',
               border: '#EAE5DC',
               muted: '#7A7369'
             }
@@ -43,9 +35,8 @@
     }
   </script>
 
-  <!-- Lucide Vector Icons & SDKs -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-portal-auth.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -57,50 +48,58 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C68A36; }
   </style>
 </head>
-<body class="aef-canvas-bg min-h-screen p-0 lg:p-8 flex flex-col justify-center items-center antialiased text-slate-900 selection:bg-amber-200">
+<body class="aef-canvas-bg min-h-screen p-0 lg:p-6 flex flex-col justify-center items-center antialiased text-slate-900 selection:bg-amber-200">
 
   <!-- ========================================================================= -->
-  <!-- MASTER CONTAINER (Desktop Editorial Prestige & Clean Native Mobile App)    -->
+  <!-- MASTER CONTAINER (Desktop 3-Column Layout: Nav | Cinema Player | Syllabus)  -->
   <!-- ========================================================================= -->
-  <div class="aef-shell-editorial-prestige flex flex-col lg:flex-row gap-0 lg:gap-10 relative overflow-hidden w-full max-w-[1440px] rounded-none lg:rounded-[40px] border-0 lg:border border-[#EAE5DC] bg-[#FFFDF9] min-h-screen lg:min-h-0 pb-20 lg:pb-0">
+  <div class="aef-shell-editorial-prestige flex flex-col lg:flex-row gap-0 relative overflow-hidden w-full max-w-[1720px] rounded-none lg:rounded-[36px] border-0 lg:border border-[#EAE5DC] bg-[#FFFDF9] min-h-screen lg:min-h-[92vh] pb-20 lg:pb-0 shadow-2xl transition-all duration-300">
     
     <!-- ======================================================================= -->
-    <!-- DESKTOP SIDEBAR: Visible ONLY on Desktop (hidden on mobile)            -->
+    <!-- 1. LEFT SIDEBAR: Portal Menu & Global Progress (Visible on Desktop)     -->
     <!-- ======================================================================= -->
-    <aside class="hidden lg:flex w-56 shrink-0 flex-col justify-between border-r border-[#EAE5DC] p-8 space-y-8">
+    <aside id="classroomLeftSidebar" class="hidden lg:flex w-52 shrink-0 flex-col justify-between border-r border-[#EAE5DC] p-6 space-y-6 bg-white/70 transition-all duration-300 ease-in-out">
       
-      <div class="space-y-8">
+      <div class="space-y-6">
         <!-- Brand Logo -->
-        <a href="index.html" class="flex items-center gap-2.5 transition active:scale-95 group">
+        <a href="portal.html" class="flex items-center gap-2.5 transition active:scale-95 group">
           <div class="w-8 h-8 rounded-xl bg-[#C68A36]/15 border border-[#C68A36]/30 flex items-center justify-center text-[#C68A36]">
             <i data-lucide="message-square" class="w-4 h-4"></i>
           </div>
           <span class="font-serif font-black text-xl tracking-tight text-[#0A192F]">
-            Agora<span class="text-[#C68A36]">EuFalo</span>
+            Agora<span class="text-[#C68A36]">EuFalo+</span>
           </span>
         </a>
 
         <!-- Vertical Navigation Menu -->
-        <nav class="space-y-1.5 text-xs font-bold">
-          <a href="portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs transition">
-            <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
-            <span>My Courses</span>
+        <nav class="space-y-1 text-xs font-bold">
+          <a href="portal.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
+            <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#8C8275]"></i>
+            <span>Dashboard</span>
           </a>
-          <a href="repertorio.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
+          <a id="leftSidebarCourseLink" href="curso.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition group" title="Página Inicial do Curso">
+            <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275] group-hover:text-[#C68A36]"></i>
+            <span>Visão Geral do Curso</span>
+          </a>
+          <a href="sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs transition">
+            <i data-lucide="play-circle" class="w-4 h-4 text-[#C68A36]"></i>
+            <span>Sala de Aula</span>
+          </a>
+          <a href="player.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
+            <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
+            <span>Training Player</span>
+          </a>
+          <a href="repertorio.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
             <i data-lucide="layers" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Flashcards</span>
+            <span>Repertório</span>
           </a>
-          <a href="treino/player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
-            <i data-lucide="volume-2" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Pronunciation Guide</span>
-          </a>
-          <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
+          <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
             <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Live Classes</span>
+            <span>Aulas ao Vivo</span>
           </a>
-          <a href="portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
-            <i data-lucide="settings" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Settings</span>
+          <a href="blog/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
+            <i data-lucide="newspaper" class="w-4 h-4 text-[#8C8275]"></i>
+            <span>Blog do Leo</span>
           </a>
         </nav>
       </div>
@@ -119,82 +118,126 @@
     </aside>
 
     <!-- ======================================================================= -->
-    <!-- MAIN WORKSPACE: Mobile Clean Native Player Layout (Image Reference 1:1) -->
+    <!-- 2. CENTER WORKSPACE: Cinema Video Player + Actions + Pedagogical Stream -->
     <!-- ======================================================================= -->
-    <main class="flex-1 flex flex-col min-w-0">
+    <main id="classroomMainWorkspace" class="flex-1 flex flex-col min-w-0 border-r border-[#EAE5DC] overflow-y-auto custom-scrollbar transition-all duration-300">
       
-      <!-- 1. MOBILE TOP HEADER (Back Arrow Only - 1:1 from Mockup) -->
+      <!-- Desktop Workspace Top Toolbar (Left Sidebar Toggle | Breadcrumbs / Cinema Mode | Right Sidebar Toggle) -->
+      <div class="hidden lg:flex items-center justify-between px-5 py-2.5 bg-white border-b border-[#EAE5DC] gap-4">
+        <!-- Left Side: Toggle Left Menu & Breadcrumbs with Exit Link -->
+        <div class="flex items-center gap-3 min-w-0">
+          <button id="btnToggleLeftSidebar" onclick="window.toggleClassroomLeftSidebar()" class="px-2.5 py-1.5 rounded-xl bg-stone-100 hover:bg-[#F5EFE6] text-[#0A192F] hover:text-[#C68A36] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs shrink-0" title="Recolher/Expandir Menu Lateral">
+            <i data-lucide="panel-left-close" id="iconToggleLeftSidebar" class="w-4 h-4"></i>
+            <span id="textToggleLeftSidebar" class="hidden xl:inline text-[11px]">Menu</span>
+          </button>
+
+          <div class="flex items-center gap-2 text-xs font-bold text-[#7A7369] min-w-0 truncate">
+            <a id="topBreadcrumbCourseLink" href="curso.html?curso=ms-legacy" class="text-[#0A192F] hover:text-[#C68A36] flex items-center gap-1.5 transition font-black truncate group shrink-0" title="Voltar à Visão Geral do Curso">
+              <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#C68A36] group-hover:-translate-x-0.5 transition-transform"></i>
+              <span id="topBreadcrumbCourse">Magic Stories Legacy</span>
+            </a>
+            <span>•</span>
+            <span class="text-[#C68A36] font-mono shrink-0" id="topBreadcrumbModule">MS001</span>
+            <span>•</span>
+            <span class="truncate text-slate-800" id="topBreadcrumbLesson">Aula 01 • Listen & Read</span>
+          </div>
+        </div>
+
+        <!-- Right Side: Cinema Mode Quick Toggle & Right Sidebar Toggle -->
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- Cinema Mode (Collapses Both Sidebars) -->
+          <button id="btnToggleCinemaMode" onclick="window.toggleCinemaMode()" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#0D1E36] hover:text-amber-300 text-[#0A192F] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Modo Cinema (Expande Vídeo e Texto ao Máximo)">
+            <i data-lucide="maximize" id="iconCinemaMode" class="w-3.5 h-3.5"></i>
+            <span class="text-[11px]">Modo Cinema</span>
+          </button>
+
+          <!-- Toggle Right Syllabus Sidebar -->
+          <button id="btnToggleRightSidebar" onclick="window.toggleClassroomRightSidebar()" class="px-2.5 py-1.5 rounded-xl bg-stone-100 hover:bg-[#F5EFE6] text-[#0A192F] hover:text-[#C68A36] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Recolher/Expandir Navegador de Aulas">
+            <span id="textToggleRightSidebar" class="hidden xl:inline text-[11px]">Aulas</span>
+            <i data-lucide="panel-right-close" id="iconToggleRightSidebar" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Top Header -->
       <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-[#EAE5DC] lg:hidden">
-        <a href="portal.html" class="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-[#0A192F] active:scale-95 transition" title="Voltar ao Portal">
+        <a id="mobileCourseHeaderLink" href="curso.html?curso=ms-legacy" class="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-[#0A192F] active:scale-95 transition" title="Voltar aos Módulos do Curso">
           <i data-lucide="chevron-left" class="w-5 h-5"></i>
         </a>
         <span class="text-xs font-black text-[#0A192F] truncate px-2" id="mobileCourseHeaderTitle">
-          Projeto AgoraEuFalo 2026
+          Magic Stories Legacy
         </span>
-        <div class="w-9"></div> <!-- spacer -->
+        <button onclick="window.toggleSyllabusDrawer()" class="w-9 h-9 rounded-full bg-[#F5EFE6] text-[#C68A36] flex items-center justify-center font-bold text-xs" title="Ver Aulas">
+          <i data-lucide="list" class="w-4 h-4"></i>
+        </button>
       </div>
 
-      <!-- 2. CINEMA VIDEO PLAYER (Full-Width Edge-to-Edge on Mobile) -->
+      <!-- Cinema Video Player (with 16:9 Thumbnail Poster) -->
       <div class="bg-[#0A192F] aspect-video w-full relative overflow-hidden shadow-md flex items-center justify-center">
         <div class="w-full h-full" id="videoStage">
-          <video id="mainVideoPlayer" controls playsinline class="w-full h-full object-contain"></video>
+          <video id="mainVideoPlayer" controls playsinline poster="assets/images/thumbs/ms001/thumb_ms001_lr.jpg" class="w-full h-full object-contain bg-black"></video>
         </div>
       </div>
 
-      <!-- 3. ACTION PILLS ROW (Directly Below Video - 1:1 from Mockup) -->
-      <div class="px-4 py-3 bg-white border-b border-[#EAE5DC] flex items-center gap-2 overflow-x-auto custom-scrollbar">
-        <!-- 1. Send to Training Player CTA -->
-        <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3.5 py-2 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95">
-          <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
-          <span>Treinar no Player</span>
-        </button>
+      <!-- Action Pills Row with Navigation Buttons -->
+      <div class="px-4 py-3 bg-white border-b border-[#EAE5DC] flex items-center justify-between gap-2 overflow-x-auto custom-scrollbar">
+        
+        <!-- Left: Previous / Next Navigation Buttons -->
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="btnPrevLesson" onclick="window.playPrevLesson()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95 border border-stone-200" title="Aula Anterior">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+            <span class="hidden sm:inline">Anterior</span>
+          </button>
+          
+          <button id="btnNextLesson" onclick="window.playNextLesson()" class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95 border border-stone-200" title="Próxima Aula">
+            <span class="hidden sm:inline">Próxima</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+          </button>
+        </div>
 
-        <!-- 2. Baixar Apostila PDF -->
-        <a id="pdfDownloadLink" href="#" target="_blank" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition">
-          <i data-lucide="download" class="w-3.5 h-3.5 text-[#C68A36]"></i>
-          <span>Apostila (PDF)</span>
-        </a>
+        <!-- Right: Training CTA, PDF, Complete Buttons -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3.5 py-2 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95">
+            <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
+            <span>Treinar no Player</span>
+          </button>
 
-        <!-- 3. Mark Complete Button -->
-        <button id="btnMarkComplete" onclick="toggleLessonCompletion()" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-emerald-50 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition cursor-pointer">
-          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i>
-          <span id="completeBtnLabel">Concluir Aula</span>
-        </button>
+          <a id="pdfDownloadLink" href="Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf" target="_blank" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+            <span>Apostila (PDF)</span>
+          </a>
+
+          <button id="btnMarkComplete" onclick="toggleLessonCompletion()" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-emerald-50 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition cursor-pointer">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i>
+            <span id="completeBtnLabel">Concluir Aula</span>
+          </button>
+        </div>
+
       </div>
 
-      <!-- 4. CUSTOMIZABLE PEDAGOGICAL CONTENT STREAM (Scrollable Body) -->
+      <!-- Pedagogical Content Stream -->
       <div class="p-4 sm:p-6 lg:p-8 space-y-4 max-w-4xl">
         
-        <!-- Card 1: Active Lesson Info & Goal (1:1 from Mockup) -->
+        <!-- Card 1: Active Lesson Info & Goal -->
         <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30 uppercase" id="currentLessonOrderBadge">AULA 01</span>
-            <span class="text-[11px] font-bold text-[#7A7369]" id="currentLessonDuration">09:30</span>
+            <span class="text-[11px] font-bold text-[#7A7369]" id="currentLessonDuration">03:39</span>
           </div>
           <h1 class="text-base sm:text-xl font-black text-[#0A192F] tracking-tight leading-snug" id="currentLessonTitle">
-            Aula 01: O Segredo da Conversação Espontânea
+            Aula 01 • Listen & Read (LR)
           </h1>
-          <p class="text-xs text-[#7A7369] leading-relaxed">
-            Estudo dos Sound Chunks de reflexo imediato e treino de imersão auditiva com o Professor Leo.
+          <p class="text-xs text-[#7A7369] leading-relaxed" id="currentLessonDescription">
+            Entrada & Imersão Auditiva • Acompanhamento da história em inglês sem tradução mental.
           </p>
         </div>
 
-        <!-- Card 2: Sound Chunks Didactic Box (High Contrast) -->
-        <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
-            <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-1.5">
-              <i data-lucide="layers" class="w-4 h-4 text-[#C68A36]"></i>
-              Sound Chunks da Aula (Matriz Acústica):
-            </span>
-            <span class="text-[10px] font-mono font-bold text-[#C68A36]">Sem Tradução Literal</span>
-          </div>
-
-          <div id="lessonChunksContainer" class="space-y-2">
-            <!-- Chunks rendered dynamically via JS -->
-          </div>
+        <!-- Card 2: Processed Content Stream (Cascading Cards) -->
+        <div id="lessonProcessedContentContainer" class="space-y-4">
+          <!-- Rendered dynamically -->
         </div>
 
-        <!-- Card 3: Sacada de Ouro do Leo Card (1:1 from Mockup "Ao concluir essa aula...") -->
+        <!-- Card 3: Sacada de Ouro do Leo Card -->
         <div class="p-4 sm:p-5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 text-[#0A192F] space-y-2">
           <div class="flex items-center gap-2">
             <i data-lucide="lightbulb" class="w-4 h-4 text-[#C68A36]"></i>
@@ -210,7 +253,87 @@
     </main>
 
     <!-- ======================================================================= -->
-    <!-- 5. FIXED BOTTOM TRAY: Now Playing & Next Lesson Drawer (1:1 from Mockup) -->
+    <!-- ======================================================================= -->
+    <!-- 3. RIGHT SIDEBAR: Navegador de Aulas do Módulo (Playlist Oficial)       -->
+    <!-- ======================================================================= -->
+    <aside id="classroomRightSidebar" class="hidden lg:flex w-80 lg:w-96 shrink-0 flex-col bg-[#FAF8F5]/80 p-5 space-y-4 overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out">
+      
+      <!-- Module Card & Dropdown Picker Header -->
+      <div class="space-y-2.5 pb-3 border-b border-[#EAE5DC]">
+        <!-- Module Dropdown Trigger Button -->
+        <div class="relative">
+          <button id="btnModulePicker" onclick="window.toggleModulePicker()" class="w-full p-3 rounded-2xl bg-white border border-[#EAE5DC] hover:border-[#C68A36]/50 shadow-xs flex items-center justify-between gap-3 transition cursor-pointer text-left group">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 mb-0.5">
+                <span class="text-[9px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.2 rounded border border-[#C68A36]/30 uppercase" id="desktopModuleBadge">
+                  MÓDULO 01 DE 30
+                </span>
+                <span class="text-[10px] font-mono font-bold text-[#7A7369]" id="desktopModuleProgressBadge">0/6 Aulas</span>
+              </div>
+              <h3 class="font-black text-xs text-[#0A192F] truncate group-hover:text-[#C68A36] transition" id="desktopModuleName">
+                MS001 - Grazi
+              </h3>
+            </div>
+            <div class="w-7 h-7 rounded-xl bg-stone-100 group-hover:bg-[#F5EFE6] text-[#7A7369] group-hover:text-[#C68A36] flex items-center justify-center shrink-0 transition">
+              <i data-lucide="chevron-down" id="modulePickerChevron" class="w-4 h-4 transition-transform duration-200"></i>
+            </div>
+          </button>
+
+          <!-- Module Dropdown Popover List -->
+          <div id="modulePickerDropdown" class="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAE5DC] rounded-2xl shadow-xl z-30 p-2.5 space-y-2 hidden animate-in fade-in slide-in-from-top-2 duration-150">
+            <!-- Search Bar in Dropdown -->
+            <div class="relative">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="moduleSearchInput" oninput="window.filterModulesList(this.value)" placeholder="Buscar módulo ou história..." class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#0A192F] placeholder-stone-400 focus:outline-none focus:border-[#C68A36]">
+            </div>
+
+            <!-- List of Modules (Scrollable) -->
+            <div id="modulePickerItemsList" class="space-y-1 max-h-60 overflow-y-auto custom-scrollbar pr-0.5">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Lesson Progress Bar -->
+        <div class="space-y-1 px-1">
+          <div class="flex items-center justify-between text-[11px] font-bold text-[#7A7369]">
+            <span>Progresso da História</span>
+            <span id="moduleWeeklyProgressPercent" class="font-mono text-[#0A192F]">0%</span>
+          </div>
+          <div class="w-full bg-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
+            <div id="moduleWeeklyProgressBar" class="bg-[#C68A36] h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista Interativa das 6 Aulas do Módulo Ativo -->
+      <div id="desktopLessonsList" class="space-y-2 flex-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Bottom: Module Step Navigators + Full Syllabus Link -->
+      <div class="pt-3 border-t border-[#EAE5DC] space-y-2">
+        <div class="flex items-center gap-2">
+          <button id="btnPrevModule" onclick="window.switchPrevModule()" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#F5EFE6] border border-[#EAE5DC] text-[#0A192F] text-[11px] font-bold flex items-center justify-center gap-1 transition shadow-2xs cursor-pointer">
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+            <span class="truncate">Módulo Anterior</span>
+          </button>
+          <button id="btnNextModule" onclick="window.switchNextModule()" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#F5EFE6] border border-[#EAE5DC] text-[#0A192F] text-[11px] font-bold flex items-center justify-center gap-1 transition shadow-2xs cursor-pointer">
+            <span class="truncate">Próximo Módulo</span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <a id="rightSidebarCourseLink" href="curso.html?curso=ms-legacy" class="w-full py-2 px-3 rounded-xl bg-[#F5EFE6] hover:bg-[#EAE0D0] text-[#C68A36] font-bold text-[11px] flex items-center justify-center gap-1.5 transition shadow-2xs">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <span>Ver Grade Completa no Curso</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- ======================================================================= -->
+    <!-- 4. FIXED BOTTOM TRAY (Mobile Only)                                      -->
     <!-- ======================================================================= -->
     <div class="fixed bottom-0 inset-x-0 bg-white border-t border-[#EAE5DC] shadow-2xl z-40 p-3 sm:px-6 flex items-center justify-between gap-3 lg:hidden">
       
@@ -219,17 +342,20 @@
           <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
         </div>
         <div class="min-w-0">
-          <p class="text-[10px] font-bold text-[#7A7369] uppercase tracking-wider" id="bottomTrayStatusLabel">Reproduzindo - Aula 1 de 3</p>
-          <p class="text-xs font-black text-[#0A192F] truncate" id="bottomTrayLessonTitle">Aula 01: Conversação Espontânea</p>
+          <p class="text-[10px] font-bold text-[#7A7369] uppercase tracking-wider" id="bottomTrayStatusLabel">Reproduzindo</p>
+          <p class="text-xs font-black text-[#0A192F] truncate" id="bottomTrayLessonTitle">Aula</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
+        <button onclick="window.playPrevLesson()" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-[#F5EFE6] text-[#0A192F] flex items-center justify-center transition" title="Aula Anterior">
+          <i data-lucide="skip-back" class="w-4 h-4"></i>
+        </button>
         <button onclick="window.playNextLesson()" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-[#F5EFE6] text-[#0A192F] flex items-center justify-center transition" title="Próxima Aula">
           <i data-lucide="skip-forward" class="w-4 h-4"></i>
         </button>
-        <button onclick="window.toggleSyllabusDrawer()" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-[#F5EFE6] text-[#0A192F] flex items-center justify-center transition" title="Ver Todas as Aulas">
-          <i data-lucide="chevron-up" class="w-4 h-4"></i>
+        <button onclick="window.toggleSyllabusDrawer()" class="w-9 h-9 rounded-full bg-[#F5EFE6] text-[#C68A36] flex items-center justify-center transition" title="Ver Todas as Aulas">
+          <i data-lucide="list" class="w-4 h-4"></i>
         </button>
       </div>
 
@@ -240,92 +366,997 @@
   <!-- ========================================================================= -->
   <!-- SYLLABUS BOTTOM DRAWER (Mobile Slide-Over for Modules & Lessons)           -->
   <!-- ========================================================================= -->
-  <div id="syllabusDrawer" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex flex-col justify-end">
-    <div class="bg-white rounded-t-[28px] p-5 max-h-[75vh] flex flex-col space-y-4 animate-in slide-in-from-bottom duration-200">
+  <div id="syllabusDrawer" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex flex-col justify-end lg:hidden">
+    <div class="bg-white rounded-t-[28px] p-5 max-h-[85vh] flex flex-col space-y-3.5 animate-in slide-in-from-bottom duration-200">
       
       <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
         <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-[#C68A36]">Módulo 01</span>
-          <h3 class="text-base font-black text-[#0A192F]">Grade de Aulas do Curso</h3>
+          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase" id="drawerModuleBadge">MÓDULO 01 DE 30</span>
+          <h3 class="font-black text-sm text-[#0A192F]" id="drawerModuleTitle">Navegador de Aulas</h3>
         </div>
-        <button onclick="window.toggleSyllabusDrawer()" class="w-8 h-8 rounded-full bg-stone-100 text-slate-500 flex items-center justify-center">
+        <button onclick="window.toggleSyllabusDrawer()" class="w-8 h-8 rounded-full bg-stone-100 text-slate-600 flex items-center justify-center cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div id="drawerLessonsList" class="space-y-2 overflow-y-auto pr-1 custom-scrollbar">
-        <!-- Lessons list hydrated via JS -->
+      <!-- Mobile Module Dropdown Button -->
+      <div class="relative">
+        <button onclick="window.toggleMobileModulePicker()" id="btnMobileModulePicker" class="w-full p-3 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between gap-2 text-left cursor-pointer">
+          <div class="min-w-0 flex-1">
+            <p class="text-[9px] font-bold text-[#7A7369] uppercase">Módulo Selecionado:</p>
+            <p class="font-black text-xs text-[#0A192F] truncate" id="mobileSelectedModuleName">MS001 - Grazi</p>
+          </div>
+          <div class="px-2.5 py-1 rounded-lg bg-[#C68A36] text-white text-[10px] font-bold flex items-center gap-1 shrink-0">
+            <span>Trocar</span>
+            <i data-lucide="chevron-down" id="mobileModulePickerChevron" class="w-3 h-3 transition-transform"></i>
+          </div>
+        </button>
+
+        <!-- Mobile Module Popover List -->
+        <div id="mobileModulePickerDropdown" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAE5DC] rounded-2xl shadow-2xl z-30 p-2.5 space-y-2">
+          <input type="text" id="mobileModuleSearchInput" oninput="window.filterMobileModulesList(this.value)" placeholder="Buscar história ou módulo..." class="w-full px-3 py-2 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+          <div id="mobileModulePickerItemsList" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar pr-0.5">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile 6 Lessons List -->
+      <div id="drawerLessonsList" class="space-y-2 overflow-y-auto custom-scrollbar flex-1 pr-0.5">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Mobile Module Nav Buttons -->
+      <div class="pt-2 border-t border-[#EAE5DC] flex items-center gap-2">
+        <button onclick="window.switchPrevModule()" class="flex-1 py-2.5 rounded-xl bg-stone-100 text-[#0A192F] text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
+          <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+          <span>Módulo Anterior</span>
+        </button>
+        <button onclick="window.switchNextModule()" class="flex-1 py-2.5 rounded-xl bg-stone-100 text-[#0A192F] text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
+          <span>Próximo Módulo</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </button>
       </div>
 
     </div>
   </div>
 
   <!-- ========================================================================= -->
-  <!-- JAVASCRIPT CLASSROOM CONTROLLER                                           -->
+  <!-- APPLICATION CORE LOGIC                                                    -->
   <!-- ========================================================================= -->
   <script>
-    function updateIcons() {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
-    }
-
     const COURSE_SEEDS = {
-      "projeto-aef-2026": {
-        id: "projeto-aef-2026",
-        title: "Projeto AgoraEuFalo 2026",
+      "ms-legacy": {
+        id: "ms-legacy",
+        title: "Magic Stories Legacy • O Acervo Clássico",
         modules: [
           {
-            id: "mod-01",
-            title: "Módulo 01 • Destravando o Reflexo",
+            id: "ms001-grazi",
+            title: "MS001 - Grazi",
+            shortTitle: "MS001 (Grazi)",
+            badge: "MÓDULO MS001 • GRAZI",
+            stats: "6 Aulas • 39 min",
             lessons: [
               {
-                id: "aef-01",
-                title: "Aula 01: O Segredo da Conversação Espontânea",
+                id: "ms001-lr",
+                title: "Aula 01 • Listen & Read (LR)",
                 order: 1,
-                duration: "09:30",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-                pdfUrl: "Material-PDF/como-falar-ingles-com-personalidade.pdf",
-                chunks: [
-                  { en: "as a matter of fact", pt: "na verdade / pra falar a verdade" },
-                  { en: "I've been meaning to", pt: "eu tava querendo / pretendendo" },
-                  { en: "what do you think of", pt: "o que você acha de" },
-                  { en: "to tell you the truth", pt: "pra ser bem sincero com você" }
-                ],
-                goldenTip: "Treine a resposta imediata em voz alta na micro-pausa de 2 a 4 segundos. Não tente traduzir para o português.",
-                trainingTrackId: "aef-01-reflexo"
+                duration: "03:39",
+                description: "Entrada & Imersão Auditiva • Acompanhamento da história em inglês sem tradução mental.",
+                videoUrl: "assets/videos/MS001_LR.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_lr.jpg",
+                pdfUrl: "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+                goldenTip: "Conecte os sons diretamente à escrita sem traduzir na cabeça. Mantenha o fluxo contínuo.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
+                          Texto da História (Listen & Read)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">Imersão Sonora Pura</span>
+                      </div>
+
+                      <div class="space-y-3.5 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <p>Graziela is a 45-year-old woman who wants to change her life. She lives in Brasília, the capital of Brazil, with her husband and two kids. She's a lawyer and she works for the federal government. She lives in a big house near the lake with a beautiful view to the waterfront.</p>
+                        <p>She's a very friendly and outgoing person. She loves talking to people although she sees herself as a very shy woman. Grazi doesn't like to stand out and she gets embarrassed very easily.</p>
+                        <p>Grazi loves outdoor activities like biking, hiking, swimming and taking walks with her daughters Anna and Flavia. Grazi is crazy about her daughters!</p>
+                        <p>Every day she gets up early, about 7:00. She goes running in the park for about 50 minutes. Then, she gets back home, jumps in the pool, takes a shower, has some breakfast and goes to work at 9:00. She works until 5:00 PM.</p>
+                        <p>In the evening, she sits in the backyard, puts her headphones on and listens to English lessons on her iPad.</p>
+                        <p class="font-bold text-[#0A192F] pt-1">The question, my friend, is: why does Grazi want to change her life?</p>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-01"
               },
               {
-                id: "aef-02",
-                title: "Aula 02: O Ritmo do Inglês Falado Real",
+                id: "ms001-voc",
+                title: "Aula 02 • Vocabulary Session (VOC)",
                 order: 2,
-                duration: "08:15",
-                videoUrl: "",
-                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                pdfUrl: "Material-PDF/como-treinar-o-ouvido-para-entender-ingles-rapido.pdf",
-                chunks: [
-                  { en: "are you gonna", pt: "cê vai..." },
-                  { en: "what are you up to", pt: "o que cê tá aprontando / fazendo" },
-                  { en: "I gotta head out", pt: "preciso dar uma saída / vazar" }
-                ],
-                goldenTip: "Reduções como 'gonna', 'wanna' e o drop do som de 't' e 'd' finais não são gírias, são a física do idioma.",
-                trainingTrackId: "aef-02-ritmo"
+                duration: "09:34",
+                description: "Matriz de Chunks & Tradução Falada Real • Dissecação dos blocos sonoros explicados pelo Professor Leo.",
+                videoUrl: "assets/videos/MS001_VOC.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_voc.jpg",
+                pdfUrl: "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+                goldenTip: "Idade antes do substantivo vira adjetivo no singular: a 45-year-old woman, a 10-dollar bill.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="languages" class="w-4 h-4 text-[#C68A36]"></i>
+                          Texto com Tradução Falada Real
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">Português Brasileiro Real</span>
+                      </div>
+
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Graziela is a 45-year-old woman who wants to change her life. She lives in Brasília, the capital of Brazil, with her husband and two kids. She's a lawyer and she works for the federal government. She lives in a big house near the lake with a beautiful view to the waterfront.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ A Graziela é uma mulher de 45 anos que quer mudar de vida. Ela mora em Brasília com o marido e dois filhos. É advogada e trabalha para o governo federal. Mora numa casa grande perto do lago, com vista linda para a orla.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-01"
               },
               {
-                id: "aef-03",
-                title: "Aula 03: Small Talk & Conversas Corporativas",
+                id: "ms001-la",
+                title: "Aula 03 • Listen & Answer (LA)",
                 order: 3,
-                duration: "11:40",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-                audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-                pdfUrl: "Material-PDF/expandindo-seu-vocabulario-em-ingles-sem-esquecer.pdf",
-                chunks: [
-                  { en: "catch you later", pt: "te vejo mais tarde / até logo" },
-                  { en: "let's touch base", pt: "vamos nos falar / alinhar os pontos" }
-                ],
-                goldenTip: "Em reuniões em inglês, use conectivos curtos para manter a melodia sem travar.",
-                trainingTrackId: "aef-03-smalltalk"
+                duration: "06:37",
+                description: "Reflexo & Velocidade de Resposta • Responda às 15 perguntas sobre a Graziella imediatamente na micro-pausa.",
+                videoUrl: "assets/videos/MS001_LA.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_la.jpg",
+                pdfUrl: "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+                goldenTip: "Responda no reflexo imediato com respostas curtas e naturais antes do professor dar a resposta.",
+                trainingTrackId: "ms-legacy-01"
+              },
+              {
+                id: "ms001-lrt",
+                title: "Aula 04 • Look & Retell (LRT)",
+                order: 4,
+                duration: "03:24",
+                description: "Produção Própria & Speaking Ativo • Use as 15 perguntas-guia visuais para recontar a história.",
+                videoUrl: "assets/videos/MS001_LRT.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_lrt.jpg",
+                pdfUrl: "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+                goldenTip: "Não tente lembrar de cada palavra exata. Reconte com o inglês que você tem no Agora.",
+                trainingTrackId: "ms-legacy-01"
+              },
+              {
+                id: "ms001-lask",
+                title: "Aula 05 • Listen & Ask (LASK)",
+                order: 5,
+                duration: "06:09",
+                description: "Desafio de Formulação Rápida • Ouça a afirmação na negativa e formule a pergunta correspondente no reflexo.",
+                videoUrl: "assets/videos/MS001_LASK.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_lask.jpg",
+                pdfUrl: "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+                goldenTip: "Quem lidera e mantém conversas vivas em inglês é quem sabe perguntar com rapidez e ritmo.",
+                trainingTrackId: "ms-legacy-01"
+              },
+              {
+                id: "ms001-pro",
+                title: "Aula 06 • Pronunciation & Connected Speech (PRO)",
+                order: 6,
+                duration: "10:52",
+                description: "Musicalidade & Conexões Sonoras • Domine o ritmo falado, reduções e conexões consoante-vogal de MS001.",
+                videoUrl: "assets/videos/MS001_PRO.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_pro.jpg",
+                pdfUrl: "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+                goldenTip: "Fluência não é falar rápido feito uma máquina; é falar conectado, com balanço e sem tropeçar.",
+                trainingTrackId: "ms-legacy-01"
+              }
+            ]
+          },
+          {
+            id: "ms002-tom",
+            title: "MS002 - Tom",
+            shortTitle: "MS002 (Tom)",
+            badge: "MÓDULO MS002 • TOM",
+            stats: "6 Aulas • 28 min",
+            lessons: [
+              {
+                id: "ms002-lr",
+                title: "Aula 01 • Listen & Read (LR)",
+                order: 1,
+                duration: "04:09",
+                description: "Entrada & Imersão Auditiva • Acompanhamento da história do Tom em inglês sem tradução mental.",
+                videoUrl: "assets/videos/MS002_LR.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_lr.jpg",
+                pdfUrl: "Material-PDF/MS002_Tom_workaholic_CEO_Apostila_Oficial.pdf",
+                goldenTip: "Ouça o fluxo contínuo da história do Tom. Observe o uso natural de 'have been married for 18 years'.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
+                          Texto da História (Listen & Read)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">Imersão Sonora Pura</span>
+                      </div>
+
+                      <div class="space-y-3.5 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <p>Grazi is married to Tom.</p>
+                        <p>Tom is a 50-year-old business administrator from Cleveland, Ohio. He is the Chief Executive Officer of a multinational pharmaceutical company based in Brasília.</p>
+                        <p>Tom is a great guy. Very friendly and easygoing. But Tom is a workaholic. He works many hours a week and sometimes on weekends.</p>
+                        <p>Grazi and Tom have been married for 18 years. Yes, they both speak English and Portuguese.</p>
+                        <p>He travels a lot. He has to fly to USA and stay there for about a week every single month. He is a very important executive for the company with a lot of responsibilities.</p>
+                        <p>Tom loves his daughters and he tries to be the best father he can be. But he doesn't get to see them very often. He is always very busy.</p>
+                        <p class="font-bold text-[#0A192F] pt-1">The question, my friend, is: what does Grazi think of that?</p>
+                      </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE5DC] space-y-3">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="bookmark-check" class="w-4 h-4 text-[#C68A36]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F]">Key Takeaways da Apostila (Aula 01):</span>
+                      </div>
+                      <ul class="text-xs text-slate-700 space-y-2 list-disc list-inside leading-relaxed">
+                        <li><b>Três Informações Condensadas:</b> <i>'a 50-year-old business administrator from Cleveland'</i> condensa idade, cargo e procedência em uma só melodia.</li>
+                        <li><b>Present Perfect Vivo:</b> <i>'Grazi and Tom have been married for 18 years'</i> expressa tempo decorrido até o Agora.</li>
+                      </ul>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-02"
+              },
+              {
+                id: "ms002-voc",
+                title: "Aula 02 • Vocabulary Session (VOC)",
+                order: 2,
+                duration: "07:43",
+                description: "Matriz de Chunks & Tradução Falada Real • Dissecação da rotina executiva e estruturas de Present Perfect.",
+                videoUrl: "assets/videos/MS002_VOC.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_voc.jpg",
+                pdfUrl: "Material-PDF/MS002_Tom_workaholic_CEO_Apostila_Oficial.pdf",
+                goldenTip: "Não tente decorar palavras soltas como 'workaholic'. Guarde o bloco com a entonação da frase.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <!-- Card 1: Texto com Tradução Falada Real -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="languages" class="w-4 h-4 text-[#C68A36]"></i>
+                          Texto da História com Tradução Falada Real
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">Português Brasileiro Real</span>
+                      </div>
+
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Grazi is married to Tom.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ A Grazi é casada com o Tom.</p>
+                        </div>
+
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Tom is a 50-year-old business administrator from Cleveland, Ohio. He is the Chief Executive Officer of a multinational pharmaceutical company based in Brasília.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ O Tom é um administrador de empresas de 50 anos, de Cleveland, Ohio. Ele é o Diretor Executivo (CEO) de uma empresa farmacêutica multinacional sediada em Brasília.</p>
+                        </div>
+
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Tom is a great guy. Very friendly and easygoing. But Tom is a workaholic. He works many hours a week and sometimes on weekends.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ O Tom é um cara fantástico. Super amigável e tranquilo. Mas o Tom é um workaholic (viciado em trabalho). Trabalha muitas horas por semana e às vezes nos fins de semana.</p>
+                        </div>
+
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Grazi and Tom have been married for 18 years. Yes, they both speak English and Portuguese.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ A Grazi e o Tom estão casados há 18 anos. Sim, os dois falam inglês e português.</p>
+                        </div>
+
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">He travels a lot. He has to fly to USA and stay there for about a week every single month. He is a very important executive for the company with a lot of responsibilities.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ Ele viaja muito. Tem que voar para os EUA e ficar lá por cerca de uma semana todo santo mês. É um executivo muito importante da empresa, com muitas responsabilidades.</p>
+                        </div>
+
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Tom loves his daughters and he tries to be the best father he can be. But he doesn't get to see them very often. He is always very busy.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ O Tom ama as filhas e tenta ser o melhor pai que pode. Mas não consegue vê-las com muita frequência. Ele está sempre super ocupado.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Card 2: Matriz de Sound Chunks Acústicos -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="layers" class="w-4 h-4 text-[#C68A36]"></i>
+                          Matriz de Sound Chunks Acústicos
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36]">Blocos Sonoros Prontos</span>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <div class="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC]">
+                          <p class="font-bold text-[#0A192F]">a 50-year-old business administrator</p>
+                          <p class="text-[11px] text-[#7A7369]">um administrador de empresas de 50 anos</p>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC]">
+                          <p class="font-bold text-[#0A192F]">have been married for 18 years</p>
+                          <p class="text-[11px] text-[#7A7369]">estão casados há 18 anos</p>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC]">
+                          <p class="font-bold text-[#0A192F]">every single month</p>
+                          <p class="text-[11px] text-[#7A7369]">todo santo mês (sem falhar)</p>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC]">
+                          <p class="font-bold text-[#0A192F]">doesn't get to see them</p>
+                          <p class="text-[11px] text-[#7A7369]">não tem a oportunidade de vê-las</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Card 3: Card Dourado de Curiosidades & Gramática Desmistificada -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 text-[#0A192F] space-y-3">
+                      <div class="flex items-center gap-2 pb-2 border-b border-[#C68A36]/20">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-[#C68A36]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#C68A36]">Curiosidades do Leo: O Sentimento da Estrutura</span>
+                      </div>
+                      
+                      <div class="space-y-2.5 text-xs leading-relaxed">
+                        <div>
+                          <p class="font-bold text-[#0A192F]">🔗 'Have been married for 18 years' (A Ponte Temporal):</p>
+                          <p class="text-slate-700">Para o falante nativo, o <i>have been</i> não é uma regra decorada: é uma ponte ligando o passado ao Agora. Uma ação que começou há 18 anos e continua acontecendo no presente.</p>
+                        </div>
+                        <div>
+                          <p class="font-bold text-[#0A192F]">🔗 'A 50-year-old business administrator':</p>
+                          <p class="text-slate-700">Idade colocada antes do substantivo funciona como adjetivo e <b>nunca vai para o plural</b>. Dizemos <i>a 50-year-old man</i> e <i>a 10-dollar bill</i>.</p>
+                        </div>
+                        <div>
+                          <p class="font-bold text-[#0A192F]">🔗 'Doesn't get to see them':</p>
+                          <p class="text-slate-700"><i>Get to</i> traz o sentimento de 'ter a oportunidade' ou 'conseguir fazer algo'. A rotina pesada o impede de curtir as filhas como gostaria.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Card 4: Aplicações no Dia a Dia -->
+                    <div class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="briefcase" class="w-4 h-4 text-[#1A56DB]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F]">Como Usar Essas Estruturas na Sua Vida:</span>
+                      </div>
+                      <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside leading-relaxed">
+                        <li><i>"I have worked at this company for 8 years."</i> (Trabalho nesta empresa há 8 anos.)</li>
+                        <li><i>"How long have you lived in your city?"</i> (Há quanto tempo você mora na sua cidade?)</li>
+                        <li><i>"I don't get to travel on weekends."</i> (Não consigo viajar nos fins de semana.)</li>
+                      </ul>
+                    </div>
+
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-02"
+              },
+              {
+                id: "ms002-la",
+                title: "Aula 03 • Listen & Answer (LA)",
+                order: 3,
+                duration: "06:38",
+                description: "Reflexo & Velocidade de Resposta • Responda às 15 perguntas sobre o Tom imediatamente na micro-pausa.",
+                videoUrl: "assets/videos/MS002_LA.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_la.jpg",
+                pdfUrl: "Material-PDF/MS002_Tom_workaholic_CEO_Apostila_Oficial.pdf",
+                goldenTip: "Responda com o inglês que você tem no Agora, curto e rápido na micro-pausa.",
+                trainingTrackId: "ms-legacy-02"
+              },
+              {
+                id: "ms002-lrt",
+                title: "Aula 04 • Look & Retell (LRT)",
+                order: 4,
+                duration: "03:46",
+                description: "Produção Própria & Speaking Ativo • Use as 14 perguntas-guia visuais para recontar a história do Tom.",
+                videoUrl: "assets/videos/MS002_LRT.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_lrt.jpg",
+                pdfUrl: "Material-PDF/MS002_Tom_workaholic_CEO_Apostila_Oficial.pdf",
+                goldenTip: "Grave seu áudio no Player. O AI Coach avalia a inteligibilidade comunicativa.",
+                trainingTrackId: "ms-legacy-02"
+              },
+              {
+                id: "ms002-lask",
+                title: "Aula 05 • Listen & Ask (LASK)",
+                order: 5,
+                duration: "06:13",
+                description: "Desafio de Formulação Rápida • Ouça a negação e formule a pergunta correspondente no reflexo.",
+                videoUrl: "assets/videos/MS002_LASK.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_lask.jpg",
+                pdfUrl: "Material-PDF/MS002_Tom_workaholic_CEO_Apostila_Oficial.pdf",
+                goldenTip: "Formule a pergunta antes do áudio responder. Ritmo e rapidez destravam conversas.",
+                trainingTrackId: "ms-legacy-02"
+              },
+              {
+                id: "ms002-pro",
+                title: "Aula 06 • Pronunciation & Connected Speech (PRO)",
+                order: 6,
+                duration: "04:09",
+                description: "Musicalidade & Conexões Sonoras • Domine o ritmo falado, linking sounds e Present Perfect de MS002.",
+                videoUrl: "assets/videos/MS002_LR.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_pro.jpg",
+                pdfUrl: "Material-PDF/MS002_Tom_workaholic_CEO_Apostila_Oficial.pdf",
+                goldenTip: "Fluência não é pressa; é melodia contínua e conexões consoante-vogal perfeitas.",
+                trainingTrackId: "ms-legacy-02"
+              }
+            ]
+          },
+          {
+            id: "ms003-saturday-morning",
+            title: "MS003 - Saturday Morning",
+            shortTitle: "MS003 (Saturday)",
+            badge: "MÓDULO MS003 • SATURDAY MORNING",
+            stats: "6 Aulas • 27 min",
+            lessons: [
+              {
+                id: "ms003-lr",
+                title: "Aula 01 • Listen & Read (LR)",
+                order: 1,
+                duration: "04:14",
+                description: "Entrada & Imersão Auditiva • Acompanhe a história da manhã da Grazi em Brasília pelos ouvidos sem tradução mental.",
+                videoUrl: "assets/videos/ms003/ms003_lr.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_lr.jpg",
+                pdfUrl: "Material-PDF/MS003_Saturday_Morning_Apostila_Oficial.pdf",
+                goldenTip: "Escute observando com os ouvidos. Deixe a escrita de lado e foque na melodia viva da história.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
+                          Texto da História (Listen & Read)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">Imersão Sonora Pura</span>
+                      </div>
+
+                      <div class="space-y-3.5 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <p>It’s a beautiful Saturday morning in Brasília.</p>
+                        <p>It’s the beginning of the fall and the weather is really nice. It’s not so dry and not so hot.</p>
+                        <p>Grazi wakes up early and goes downstairs to the kitchen to make some breakfast.</p>
+                        <p>She makes some coffee. She likes it black. She makes some toasts and eggs.</p>
+                        <p>She picks up a bottle of orange juice and a carton of milk out of the fridge.</p>
+                        <p>She sets up the table for breakfast with some plates, cups, glasses, forks, knives and spoons.</p>
+                        <p>It’s 8:00 AM and the girls are still in their bedrooms. Are they awake? Are they still asleep? Grazi is not sure.</p>
+                        <p>Grazi goes back upstairs, puts on her running shoes, knocks on the girls’ doors and yells: <i>“Breakfast is ready! I’m going for a run!”</i></p>
+                        <p>Grazi goes downstairs, picks up her bottle of water and runs out the door.</p>
+                        <p class="font-bold text-[#0A192F] pt-1">You tell me: where in the world is Tom?</p>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-03"
+              },
+              {
+                id: "ms003-voc",
+                title: "Aula 02 • Vocabulary Session (VOC)",
+                order: 2,
+                duration: "09:42",
+                description: "Matriz de Chunks, Estações do Ano & Sentido Real • Dissecação profunda conduzida pelo Professor Leonardo Leite.",
+                videoUrl: "assets/videos/ms003/ms003_voc.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_voc.jpg",
+                pdfUrl: "Material-PDF/MS003_Saturday_Morning_Apostila_Oficial.pdf",
+                goldenTip: "Trate verbo e direção como bloco único: 'goes-downstairs', 'runs-out'. O inglês falado é mecânico.",
+                processedContentHtml: `
+                  <div class="space-y-6">
+                    <!-- CARD 1: TEXTO BILÍNGUE COM TRADUÇÃO FALADA REAL -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="languages" class="w-4 h-4 text-[#C68A36]"></i>
+                          1. Texto da História com Tradução Falada Real
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#047857] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Português Brasileiro Real</span>
+                      </div>
+
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">It's a beautiful Saturday morning in Brasília.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ É uma linda manhã de sábado em Brasília.</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">It's the beginning of the fall and the weather is really nice. It's not so dry and not so hot.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ É comecinho de outono e o tempo tá uma delícia. Não tá tão seco e nem tão quente.</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Grazi wakes up early and goes downstairs to the kitchen to make some breakfast.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ A Grazi acorda cedinho e desce pra cozinha pra preparar o café da manhã.</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">She makes some coffee. She likes it black. She makes some toasts and eggs.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ Ela passa um café. Gosta dele puro/preto. Faz umas torradas com ovos mexidos.</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">She picks up a bottle of orange juice and a carton of milk out of the fridge.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ Pega uma garrafa de suco de laranja e uma caixinha de leite na geladeira.</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">She sets up the table with plates, cups, glasses, forks, knives and spoons.</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ Arruma a mesa do café com pratos, xícaras, copos, garfos, facas e colheres.</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Grazi goes back upstairs, puts on her running shoes, knocks on the doors and yells: <i>"Breakfast is ready! I'm going for a run!"</i></p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ A Grazi sobe de volta, calça o tênis, bate na porta das filhas e grita: <i>"Café tá pronto! Tô indo correr!"</i></p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">Grazi goes downstairs, picks up her water and runs out the door. Where in the world is Tom?</p>
+                          <p class="text-xs text-[#047857] italic font-medium">↳ Ela desce, pega a água e sai voada pela porta. Onde diabos foi parar o Tom?</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 2: MATRIZ DE SOUND CHUNKS ACÚSTICOS -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="sparkles" class="w-4 h-4 text-[#C68A36]"></i>
+                          2. Matriz de Sound Chunks Acústicos (Grave o Bloco Inteiro)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">Fluência em Blocos</span>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-black text-xs text-[#0A192F] block">the beginning of the fall</span>
+                          <span class="text-[11px] text-[#7A7369]">o comecinho do outono</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-black text-xs text-[#0A192F] block">goes downstairs / back upstairs</span>
+                          <span class="text-[11px] text-[#7A7369]">desce as escadas / sobe de volta</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-black text-xs text-[#0A192F] block">likes it black</span>
+                          <span class="text-[11px] text-[#7A7369]">gosta de café puro (sem leite/açúcar)</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-black text-xs text-[#0A192F] block">a carton of milk</span>
+                          <span class="text-[11px] text-[#7A7369]">uma caixa de leite longa vida</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-black text-xs text-[#0A192F] block">sets up the table</span>
+                          <span class="text-[11px] text-[#7A7369]">arruma / põe a mesa da refeição</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-black text-xs text-[#0A192F] block">where in the world is Tom?</span>
+                          <span class="text-[11px] text-[#7A7369]">onde diabos / onde no mundo está o Tom?</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 3: O SENTIMENTO DA ESTRUTURA (ESTAÇÕES, CLIMA E MOVIMENTO) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="compass" class="w-4 h-4 text-[#C68A36]"></i>
+                          3. O Sentimento da Estrutura (Sem Fórmulas Gramaticais)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#1A56DB] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Deep Dive do Leo</span>
+                      </div>
+
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <div class="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1.5">
+                          <h5 class="font-black text-xs sm:text-sm text-[#0A192F]">🍂 As 4 Estações do Ano & Sensação Térmica</h5>
+                          <p class="text-xs text-slate-700 leading-relaxed">No inglês americano, <b>Fall</b> é o outono (no britânico, <b>Autumn</b>). As 4 estações são: <i>Spring</i> (Primavera), <i>Summer</i> (Verão), <i>Fall</i> (Outono) e <i>Winter</i> (Inverno). Para falar de clima/temperatura: <b>Hot</b> (muito quente) ➔ <b>Warm</b> (quentinho) ➔ <b>Mild/Nice</b> (ameno) ➔ <b>Cool</b> (fresco) ➔ <b>Chilly</b> (friozinho) ➔ <b>Cold</b> (frio) ➔ <b>Freezing</b> (congelando).</p>
+                        </div>
+                        <div class="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1.5">
+                          <h5 class="font-black text-xs sm:text-sm text-[#0A192F]">🏡 Movimentação sem Preposição: 'Go downstairs' & 'Go upstairs'</h5>
+                          <p class="text-xs text-slate-700 leading-relaxed">Não tente traduzir 'descer para o andar de baixo'. Em inglês, <b>downstairs</b> e <b>upstairs</b> funcionam como advérbios diretos: <i>'She goes downstairs'</i> (ela desce pra cozinha/térreo), <i>'She goes upstairs'</i> (ela sobe para os quartos).</p>
+                        </div>
+                        <div class="p-3.5 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1.5">
+                          <h5 class="font-black text-xs sm:text-sm text-[#0A192F]">🍳 O 'Some' Falado com Alimentos & 'Where in the world...?'</h5>
+                          <p class="text-xs text-slate-700 leading-relaxed">O <i>some</i> com comida (<i>make some breakfast, some coffee, some toasts</i>) soa super natural e acolhedor ('fazer um cafezinho'). E <i>'Where in the world...?'</i> é a expressão máxima de espanto e curiosidade ('onde diabos').</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 4: EXEMPLOS PARA APLICAÇÃO NA VIDA REAL -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="check-circle" class="w-4 h-4 text-[#047857]"></i>
+                          4. Exemplos Práticos para Aplicar na Sua Vida
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#78350F] bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Uso no Dia a Dia</span>
+                      </div>
+
+                      <div class="space-y-2 text-xs sm:text-sm text-slate-800 font-medium">
+                        <p class="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#EAE5DC]">
+                          • <span class="font-bold text-[#1A56DB]">"The weather is very dry in Brasília in August."</span> <span class="text-slate-600 italic block sm:inline">➔ O tempo é super seco em Brasília em agosto.</span>
+                        </p>
+                        <p class="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#EAE5DC]">
+                          • <span class="font-bold text-[#1A56DB]">"I left my car keys upstairs."</span> <span class="text-slate-600 italic block sm:inline">➔ Deixei as chaves do carro lá em cima.</span>
+                        </p>
+                        <p class="p-2.5 bg-[#FAF8F5] rounded-lg border border-[#EAE5DC]">
+                          • <span class="font-bold text-[#1A56DB]">"Where in the world did I put my phone?"</span> <span class="text-slate-600 italic block sm:inline">➔ Onde no mundo eu coloquei meu celular?</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-03"
+              },
+              {
+                id: "ms003-la",
+                title: "Aula 03 • Listen & Answer (LA)",
+                order: 3,
+                duration: "05:25",
+                description: "Reflexo & Velocidade de Resposta • Responda às 14 perguntas sobre a rotina da Grazi na micro-pausa.",
+                videoUrl: "assets/videos/ms003/ms003_la.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_la.jpg",
+                pdfUrl: "Material-PDF/MS003_Saturday_Morning_Apostila_Oficial.pdf",
+                goldenTip: "Responda curto, do jeito que souber ou diga 'I don't know'. O que vale é o reflexo imediato!",
+                processedContentHtml: `
+                  <div class="space-y-6">
+                    <!-- CARD 1: CHECKLIST DE TREINO DE REFLEXO -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-[#065F46] space-y-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="check-square" class="w-4 h-4 text-[#047857]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider">Mecânica de Treino no Vídeo & Apostila:</span>
+                      </div>
+                      <p class="text-xs leading-relaxed text-emerald-950 font-medium">
+                        <b>[  ] Passo 1:</b> Ouça a pergunta na gravação • <b>[  ] Passo 2:</b> Responda em voz alta na micro-pausa de 2 a 4 segundos • <b>[  ] Passo 3:</b> Ouça a resposta imediata do Leo para confirmar.
+                      </p>
+                    </div>
+
+                    <!-- CARD 2: AS 14 PERGUNTAS DE REFLEXO (SEM SPOILER DE RESPOSTAS) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="help-circle" class="w-4 h-4 text-[#D97706]"></i>
+                          14 Perguntas de Reflexo Imediato (Listen & Answer)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#D97706] bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Sem Respostas Reveladas</span>
+                      </div>
+
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800 font-medium">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">1. What day of the week is it?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">2. What season of the year is it?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">3. What is the weather like in Brasília?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">4. Does Grazi wake up late on Saturdays?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">5. Where does Grazi go to make breakfast?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">6. How does Grazi like her coffee?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">7. What does she make to eat for breakfast?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">8. What does she pick up out of the fridge?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">9. What does she put on the table to set it up for breakfast?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">10. Where are Anna and Flavia at 8:00 AM?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">11. Why does Grazi go back upstairs?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">12. What does Grazi yell to the girls when knocking on their doors?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">13. What does Grazi pick up before running out the door?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">14. In your opinion: where in the world is Tom?</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] __________________________________________________</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 3: LEMBRETE DO LEO -->
+                    <div class="p-5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 text-[#0A192F] space-y-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 text-[#D97706]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#78350F]">A Regra de Ouro do Bate-Pronto:</span>
+                      </div>
+                      <p class="text-xs text-slate-700 leading-relaxed">
+                        Não tente formular respostas longas e perfeitas. Responda curto, direto e rápido na micro-pausa. O objetivo pedagógico não é testar sua memória, mas criar velocidade e automação no reflexo de fala!
+                      </p>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-03"
+              },
+              {
+                id: "ms003-lrt",
+                title: "Aula 04 • Look & Retell (LRT)",
+                order: 4,
+                duration: "02:52",
+                description: "Produção Própria & Speaking Ativo • Reconte a manhã da Grazi usando as perguntas-guia visuais.",
+                videoUrl: "assets/videos/ms003/ms003_lrt.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_lrt.jpg",
+                pdfUrl: "Material-PDF/MS003_Saturday_Morning_Apostila_Oficial.pdf",
+                goldenTip: "Grave seu áudio no Player. O AI Coach avalia a compreensibilidade comunicativa (0 a 10).",
+                processedContentHtml: `
+                  <div class="space-y-6">
+                    <!-- CARD 1: PALCO DO AI SPEECH COACH -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-950 space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-rose-200">
+                        <span class="font-black text-xs uppercase tracking-wider text-rose-900 flex items-center gap-2">
+                          <i data-lucide="mic" class="w-4 h-4 text-[#E11D48]"></i>
+                          🎙️ AI Speech Coach: O Teste do Gringo (0 a 10)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-300">Speaking Autônomo</span>
+                      </div>
+                      <p class="text-xs text-rose-900 leading-relaxed">
+                        Chegou a hora de falar com o inglês que você tem <b>HOJE, no Agora</b>. Zero obrigação de decorar! Abra o Training Player na aba <b>Look & Retell</b>, aperte o microfone radiante e reconte a manhã da Grazi usando as perguntas-guia abaixo como roteiro mental.
+                      </p>
+                    </div>
+
+                    <!-- CARD 2: AS 14 PERGUNTAS-GUIA VISUAIS DE RECONTO -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="list-ordered" class="w-4 h-4 text-[#E11D48]"></i>
+                          Perguntas-Guia de Apoio para Recontar a História
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-slate-500 bg-stone-100 px-2 py-0.5 rounded">Roteiro Visual</span>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-800">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">1. What day of the week is it?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">2. What season of the year is it?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">3. What is the weather like in Brasília?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">4. Does Grazi wake up late on Saturdays?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">5. Where does Grazi go to make breakfast?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">6. How does Grazi like her coffee?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">7. What does she make to eat for breakfast?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">8. What does she pick up out of the fridge?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">9. What does she put on the table to set it up?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">10. Where are Anna and Flavia at 8:00 AM?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">11. Why does Grazi go back upstairs?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">12. What does Grazi yell to the girls?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">13. What does Grazi pick up before running?</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">14. In your opinion: where in the world is Tom?</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 3: KEYWORDS DE ATIVAÇÃO -->
+                    <div class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-2">
+                      <div class="flex items-center gap-2 pb-2 border-b border-[#F0EBE1]">
+                        <i data-lucide="key" class="w-4 h-4 text-[#C68A36]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F]">Keywords de Apoio para Conectar Ideias:</span>
+                      </div>
+                      <p class="text-xs text-slate-700 leading-relaxed font-mono">
+                        beautiful Saturday • Brasília • beginning of the fall • not so dry / hot • wakes up early • goes downstairs • black coffee • toasts & eggs • orange juice • carton of milk • sets up table • girls upstairs • puts on running shoes • yells breakfast is ready • runs out the door • where in the world is Tom?
+                      </p>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-03"
+              },
+              {
+                id: "ms003-lask",
+                title: "Aula 05 • Listen & Ask (LASK)",
+                order: 5,
+                duration: "04:03",
+                description: "Desafio de Formulação Rápida • Ouça a negação e formule a pergunta correspondente no reflexo.",
+                videoUrl: "assets/videos/ms003/ms003_lask.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_lask.jpg",
+                pdfUrl: "Material-PDF/MS003_Saturday_Morning_Apostila_Oficial.pdf",
+                goldenTip: "Formule a pergunta antes do áudio responder. Ritmo e rapidez destravam conversas.",
+                processedContentHtml: `
+                  <div class="space-y-6">
+                    <!-- CARD 1: CHECKLIST DE TREINO -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-950 space-y-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-[#6366F1]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-indigo-900">Mecânica de Treino • O Jogo de Formular Perguntas:</span>
+                      </div>
+                      <p class="text-xs leading-relaxed text-indigo-950 font-medium">
+                        <b>[  ] Passo 1:</b> Ouça a frase de provocação na negativa ➔ <b>[  ] Passo 2:</b> Formule imediatamente a pergunta correspondente no reflexo antes do áudio responder!
+                      </p>
+                    </div>
+
+                    <!-- CARD 2: AS 12 FRASES ESTÍMULO (SEM PERGUNTAS REVELADAS) -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="sparkles" class="w-4 h-4 text-[#6366F1]"></i>
+                          12 Frases de Provocação (Listen & Ask)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#6366F1] bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Sem Perguntas Reveladas</span>
+                      </div>
+
+                      <div class="space-y-2.5 text-xs sm:text-sm text-slate-800 font-medium">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">1. It is not Sunday morning.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">2. It is not summer or winter.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">3. The weather is not terrible.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">4. Grazi does not wake up late.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">5. She does not stay upstairs.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">6. She does not like milk in her coffee.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">7. She does not make pancakes.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">8. She does not leave the juice outside.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">9. The girls are not in the kitchen.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">10. She does not whisper to the girls.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">11. Grazi is not going to sleep.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC] space-y-1">
+                          <p class="font-bold text-[#0A192F]">12. Tom is not at the breakfast table.</p>
+                          <p class="text-[11px] text-slate-400 font-mono">[ ] Formule sua pergunta: ___________________________________</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- CARD 3: SACADA DE LIDERANÇA EM CONVERSAS -->
+                    <div class="p-5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 text-[#0A192F] space-y-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4 text-[#6366F1]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F]">Por que Treinar Listen & Ask?</span>
+                      </div>
+                      <p class="text-xs text-slate-700 leading-relaxed">
+                        Quem lidera e mantém conversas vivas em inglês é quem sabe perguntar com rapidez e ritmo. Ao ouvir uma afirmação/negação, seu cérebro deve disparar a pergunta sem passar pelo português!
+                      </p>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-03"
+              },
+              {
+                id: "ms003-pro",
+                title: "Aula 06 • Pronunciation & Connected Speech (PRO)",
+                order: 6,
+                duration: "01:09",
+                description: "Musicalidade & Conexões Sonoras • Domine o ritmo falado, linking sounds e entonação de MS003.",
+                videoUrl: "assets/videos/ms003/ms003_pro.mp4",
+                thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_pro.jpg",
+                pdfUrl: "Material-PDF/MS003_Saturday_Morning_Apostila_Oficial.pdf",
+                goldenTip: "Trate verbo e direção como uma só palavra ('wakes-up', 'goes-downstairs', 'runs-out').",
+                processedContentHtml: `
+                  <div class="space-y-6">
+                    <!-- CARD 1: TEXTO INTEGRAL DA HISTÓRIA COM LINKING SOUNDS -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="volume-2" class="w-4 h-4 text-[#0D9488]"></i>
+                          Texto Integral com Conexões Consoante-Vogal (Linking Sounds)
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#0D9488] bg-teal-50 px-2 py-0.5 rounded border border-teal-200">Connected Speech</span>
+                      </div>
+
+                      <div class="space-y-3.5 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                        <p>• It's a beautiful Saturday morning in Brasília.</p>
+                        <p>• It's <span class="text-[#1A56DB] font-bold">the beginning_of</span> the fall and the weather is really nice. It's <span class="text-[#1A56DB] font-bold">not_so</span> dry and <span class="text-[#1A56DB] font-bold">not_so</span> hot.</p>
+                        <p>• Grazi <span class="text-[#1A56DB] font-bold">wakes_up</span> early and <span class="text-[#1A56DB] font-bold">goes_downstairs</span> to the kitchen to <span class="text-[#1A56DB] font-bold">make_some</span> breakfast.</p>
+                        <p>• She <span class="text-[#1A56DB] font-bold">makes_some</span> coffee. She <span class="text-[#1A56DB] font-bold">likes_it</span> black. She <span class="text-[#1A56DB] font-bold">makes_some</span> <span class="text-[#1A56DB] font-bold">toasts_and_eggs</span>.</p>
+                        <p>• She <span class="text-[#1A56DB] font-bold">picks_up</span> a <span class="text-[#1A56DB] font-bold">bottle_of_orange</span> juice and a <span class="text-[#1A56DB] font-bold">carton_of</span> milk <span class="text-[#1A56DB] font-bold">out_of the</span> fridge.</p>
+                        <p>• She <span class="text-[#1A56DB] font-bold">sets_up</span> the table with plates, cups, glasses, <span class="text-[#1A56DB] font-bold">forks, knives_and_spoons</span>.</p>
+                        <p>• It's 8:00 AM and the <span class="text-[#1A56DB] font-bold">girls_are</span> still in their bedrooms. Are they awake? Are they <span class="text-[#1A56DB] font-bold">still_asleep</span>? Grazi is not sure.</p>
+                        <p>• Grazi <span class="text-[#1A56DB] font-bold">goes_back upstairs</span>, <span class="text-[#1A56DB] font-bold">puts_on_her</span> running shoes, <span class="text-[#1A56DB] font-bold">knocks_on</span> the doors and yells: <i>"Breakfast_is ready! I'm going for_a run!"</i></p>
+                        <p>• Grazi <span class="text-[#1A56DB] font-bold">goes_downstairs</span>, <span class="text-[#1A56DB] font-bold">picks_up_her</span> water and <span class="text-[#1A56DB] font-bold">runs_out the</span> door. <span class="text-[#1A56DB] font-bold">Where_in the world_is</span> Tom?</p>
+                      </div>
+                    </div>
+
+                    <!-- CARD 2: CHAVE FONÉTICA & TREINO DE REPETIÇÃO CONTÍNUA -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="music" class="w-4 h-4 text-[#0D9488]"></i>
+                          Chave Fonética dos Principais Linkings & Treino em Loop
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-[#0D9488] bg-teal-50 px-2 py-0.5 rounded border border-teal-200">Loop Drill</span>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-800">
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">wakes up</span>
+                          <span class="text-[#1A56DB] font-mono font-bold">/wêiks âp/</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">out of the fridge</span>
+                          <span class="text-[#1A56DB] font-mono font-bold">/aut-ov dâ fridj/</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">puts on her</span>
+                          <span class="text-[#1A56DB] font-mono font-bold">/puts ôn-er/</span>
+                        </div>
+                        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#EAE5DC]">
+                          <span class="font-bold text-[#0A192F] block">runs out the door</span>
+                          <span class="text-[#1A56DB] font-mono font-bold">/rânz aut dâ dôr/</span>
+                        </div>
+                      </div>
+
+                      <p class="text-xs text-slate-600 bg-teal-50/60 p-3 rounded-xl border border-teal-200">
+                        💡 <b>Treino de Loop:</b> No Training Player na aba <b>Pronunciation</b>, use a repetição contínua para travar cada frase até a boca falar conectada sem pensar!
+                      </p>
+                    </div>
+
+                    <!-- CARD 3: A SACADA DE OURO DO PROFESSOR LEO LEITE -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#FEF3C7] border-2 border-[#F59E0B] space-y-3">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="award" class="w-5 h-5 text-[#B45309]"></i>
+                        <span class="font-black text-xs uppercase tracking-wider text-[#78350F]">A Sacada de Ouro do Professor Leonardo Leite</span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-[#78350F] italic font-semibold leading-relaxed">
+                        "O vocabulário da rotina da casa ('upstairs', 'downstairs', 'puts on', 'out of') não deve ser traduzido palavra por palavra na sua cabeça. Trate o verbo e a direção como uma única palavra musical: 'wakes-up', 'goes-downstairs', 'runs-out'. Ao treinar no Player repetindo a melodia da história, sua boca molda as conexões sonoras automaticamente. Inglês falado é reflexo mecânico!"
+                      </p>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "ms-legacy-03"
               }
             ]
           }
@@ -334,23 +1365,343 @@
     };
 
     let activeCourse = null;
+    let activeModule = null;
     let activeLesson = null;
     let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
 
+    let isLeftSidebarCollapsed = localStorage.getItem('aef_classroom_left_collapsed') === 'true';
+    let isRightSidebarCollapsed = localStorage.getItem('aef_classroom_right_collapsed') === 'true';
+
+    function showToast(msg) {
+      const toast = document.getElementById('classroom-toast');
+      const toastText = document.getElementById('classroom-toast-text');
+      if (!toast || !toastText) return;
+      toastText.innerText = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    function applySidebarStates() {
+      const leftAside = document.getElementById('classroomLeftSidebar');
+      const rightAside = document.getElementById('classroomRightSidebar');
+      const mainWorkspace = document.getElementById('classroomMainWorkspace');
+      
+      const iconLeft = document.getElementById('iconToggleLeftSidebar');
+      const iconRight = document.getElementById('iconToggleRightSidebar');
+      const btnCinema = document.getElementById('btnToggleCinemaMode');
+      const iconCinema = document.getElementById('iconCinemaMode');
+
+      // Left Sidebar
+      if (leftAside) {
+        if (isLeftSidebarCollapsed) {
+          leftAside.classList.add('w-0', 'p-0', 'border-r-0', 'opacity-0', 'pointer-events-none', 'overflow-hidden');
+          leftAside.classList.remove('w-52', 'p-6');
+          if (iconLeft) iconLeft.setAttribute('data-lucide', 'panel-left-open');
+        } else {
+          leftAside.classList.remove('w-0', 'p-0', 'border-r-0', 'opacity-0', 'pointer-events-none', 'overflow-hidden');
+          leftAside.classList.add('w-52', 'p-6');
+          if (iconLeft) iconLeft.setAttribute('data-lucide', 'panel-left-close');
+        }
+      }
+
+      // Right Sidebar
+      if (rightAside) {
+        if (isRightSidebarCollapsed) {
+          rightAside.classList.add('w-0', 'p-0', 'opacity-0', 'pointer-events-none', 'overflow-hidden');
+          rightAside.classList.remove('w-80', 'lg:w-96', 'p-6');
+          if (mainWorkspace) mainWorkspace.classList.remove('border-r');
+          if (iconRight) iconRight.setAttribute('data-lucide', 'panel-right-open');
+        } else {
+          rightAside.classList.remove('w-0', 'p-0', 'opacity-0', 'pointer-events-none', 'overflow-hidden');
+          rightAside.classList.add('w-80', 'lg:w-96', 'p-6');
+          if (mainWorkspace) mainWorkspace.classList.add('border-r');
+          if (iconRight) iconRight.setAttribute('data-lucide', 'panel-right-close');
+        }
+      }
+
+      // Cinema Mode Button Highlight
+      const isCinema = isLeftSidebarCollapsed && isRightSidebarCollapsed;
+      if (btnCinema) {
+        if (isCinema) {
+          btnCinema.className = "px-3 py-1.5 rounded-xl bg-[#0D1E36] text-amber-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs border border-amber-400/30";
+          if (iconCinema) iconCinema.setAttribute('data-lucide', 'minimize');
+        } else {
+          btnCinema.className = "px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#0D1E36] hover:text-amber-300 text-[#0A192F] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
+          if (iconCinema) iconCinema.setAttribute('data-lucide', 'maximize');
+        }
+      }
+
+      updateIcons();
+    }
+
+    window.toggleClassroomLeftSidebar = () => {
+      isLeftSidebarCollapsed = !isLeftSidebarCollapsed;
+      localStorage.setItem('aef_classroom_left_collapsed', isLeftSidebarCollapsed);
+      applySidebarStates();
+      showToast(isLeftSidebarCollapsed ? "Menu lateral recolhido" : "Menu lateral expandido");
+    };
+
+    window.toggleClassroomRightSidebar = () => {
+      isRightSidebarCollapsed = !isRightSidebarCollapsed;
+      localStorage.setItem('aef_classroom_right_collapsed', isRightSidebarCollapsed);
+      applySidebarStates();
+      showToast(isRightSidebarCollapsed ? "Navegador de aulas recolhido" : "Navegador de aulas expandido");
+    };
+
+    window.toggleCinemaMode = () => {
+      const shouldCollapse = !(isLeftSidebarCollapsed && isRightSidebarCollapsed);
+      isLeftSidebarCollapsed = shouldCollapse;
+      isRightSidebarCollapsed = shouldCollapse;
+      localStorage.setItem('aef_classroom_left_collapsed', isLeftSidebarCollapsed);
+      localStorage.setItem('aef_classroom_right_collapsed', isRightSidebarCollapsed);
+      applySidebarStates();
+      showToast(shouldCollapse ? "🎬 Modo Cinema Ativado (Telão Expandido)" : "Visualização Padrão Restaurada");
+    };
+
     document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get("curso") || "projeto-aef-2026";
+      const courseId = urlParams.get("curso") || urlParams.get("id") || "ms-legacy";
+      const targetModuleId = urlParams.get("modulo");
       const targetLessonId = urlParams.get("aula");
 
-      activeCourse = COURSE_SEEDS[courseId] || COURSE_SEEDS["projeto-aef-2026"];
-      initClassroom(targetLessonId);
+      activeCourse = COURSE_SEEDS[courseId] || COURSE_SEEDS["ms-legacy"];
+      
+      const mobileHeaderTitle = document.getElementById("mobileCourseHeaderTitle");
+      if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.innerText = activeCourse.title;
+
+      initClassroom(targetModuleId, targetLessonId);
+      applySidebarStates();
       updateIcons();
+
+      document.addEventListener("click", (e) => {
+        const dd = document.getElementById("modulePickerDropdown");
+        const btn = document.getElementById("btnModulePicker");
+        if (dd && !dd.classList.contains("hidden") && !dd.contains(e.target) && !btn.contains(e.target)) {
+          window.toggleModulePicker();
+        }
+
+        const mdd = document.getElementById("mobileModulePickerDropdown");
+        const mbtn = document.getElementById("btnMobileModulePicker");
+        if (mdd && !mdd.classList.contains("hidden") && !mdd.contains(e.target) && !mbtn.contains(e.target)) {
+          window.toggleMobileModulePicker();
+        }
+      });
     });
 
-    function initClassroom(targetLessonId) {
+    function initClassroom(targetModuleId, targetLessonId) {
       if (!activeCourse) return;
 
-      const lessons = activeCourse.modules?.[0]?.lessons || [];
+      const courseUrl = `curso.html?curso=${activeCourse.id}`;
+      const topLink = document.getElementById("topBreadcrumbCourseLink");
+      if (topLink) topLink.href = courseUrl;
+      const leftLink = document.getElementById("leftSidebarCourseLink");
+      if (leftLink) leftLink.href = courseUrl;
+      const rightLink = document.getElementById("rightSidebarCourseLink");
+      if (rightLink) rightLink.href = courseUrl;
+      const mobileLink = document.getElementById("mobileCourseHeaderLink");
+      if (mobileLink) mobileLink.href = courseUrl;
+
+      const modules = activeCourse.modules || [];
+      
+      if (targetLessonId) {
+        const parentMod = modules.find(m => (m.lessons || []).some(l => l.id === targetLessonId));
+        if (parentMod) activeModule = parentMod;
+      } else if (targetModuleId) {
+        activeModule = modules.find(m => m.id === targetModuleId);
+      }
+      
+      if (!activeModule && modules.length > 0) {
+        activeModule = modules[0];
+      }
+
+      updateModuleUI(targetLessonId);
+    }
+
+    window.toggleModulePicker = () => {
+      const dd = document.getElementById('modulePickerDropdown');
+      const chevron = document.getElementById('modulePickerChevron');
+      if (dd) {
+        dd.classList.toggle('hidden');
+        if (!dd.classList.contains('hidden')) {
+          const search = document.getElementById('moduleSearchInput');
+          if (search) {
+            search.value = '';
+            search.focus();
+            window.filterModulesList('');
+          }
+        }
+      }
+      if (chevron && dd) {
+        chevron.style.transform = dd.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+      }
+    };
+
+    window.toggleMobileModulePicker = () => {
+      const dd = document.getElementById('mobileModulePickerDropdown');
+      const chevron = document.getElementById('mobileModulePickerChevron');
+      if (dd) {
+        dd.classList.toggle('hidden');
+        if (!dd.classList.contains('hidden')) {
+          const search = document.getElementById('mobileModuleSearchInput');
+          if (search) {
+            search.value = '';
+            search.focus();
+            window.filterMobileModulesList('');
+          }
+        }
+      }
+      if (chevron && dd) {
+        chevron.style.transform = dd.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+      }
+    };
+
+    window.filterModulesList = (query) => {
+      const container = document.getElementById('modulePickerItemsList');
+      if (!container || !activeCourse) return;
+      const q = (query || '').toLowerCase().trim();
+      const modules = activeCourse.modules || [];
+      
+      const filtered = modules.filter(m => (m.title + ' ' + (m.badge || '')).toLowerCase().includes(q));
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-3 text-center text-xs text-slate-400">Nenhum módulo encontrado.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map((m, idx) => {
+        const isAct = activeModule && activeModule.id === m.id;
+        let completedCount = 0;
+        (m.lessons || []).forEach(l => { if (completedLessonIds.includes(l.id)) completedCount++; });
+        const isDone = completedCount === (m.lessons || []).length && (m.lessons || []).length > 0;
+
+        return `
+          <button onclick="switchModule('${m.id}'); window.toggleModulePicker();" class="w-full p-2 rounded-xl text-left text-xs font-bold flex items-center justify-between gap-2 transition cursor-pointer ${
+            isAct ? 'bg-[#C68A36] text-white shadow-2xs' : 'hover:bg-stone-100 text-[#0A192F]'
+          }">
+            <div class="min-w-0 truncate">
+              <span class="text-[9px] font-mono opacity-80 block">${m.badge || `MÓDULO 0${idx+1}`}</span>
+              <p class="truncate font-black text-xs">${m.title}</p>
+            </div>
+            <div class="shrink-0 flex items-center gap-1">
+              ${isDone ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold">✓</span>' : `<span class="text-[10px] font-mono opacity-70">${completedCount}/${(m.lessons||[]).length}</span>`}
+            </div>
+          </button>
+        `;
+      }).join('');
+    };
+
+    window.filterMobileModulesList = (query) => {
+      const container = document.getElementById('mobileModulePickerItemsList');
+      if (!container || !activeCourse) return;
+      const q = (query || '').toLowerCase().trim();
+      const modules = activeCourse.modules || [];
+      
+      const filtered = modules.filter(m => (m.title + ' ' + (m.badge || '')).toLowerCase().includes(q));
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="p-3 text-center text-xs text-slate-400">Nenhum módulo encontrado.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map((m, idx) => {
+        const isAct = activeModule && activeModule.id === m.id;
+        let completedCount = 0;
+        (m.lessons || []).forEach(l => { if (completedLessonIds.includes(l.id)) completedCount++; });
+        const isDone = completedCount === (m.lessons || []).length && (m.lessons || []).length > 0;
+
+        return `
+          <button onclick="switchModule('${m.id}'); window.toggleMobileModulePicker();" class="w-full p-2.5 rounded-xl text-left text-xs font-bold flex items-center justify-between gap-2 transition cursor-pointer ${
+            isAct ? 'bg-[#C68A36] text-white shadow-2xs' : 'hover:bg-stone-100 text-[#0A192F]'
+          }">
+            <div class="min-w-0 truncate">
+              <span class="text-[9px] font-mono opacity-80 block">${m.badge || `MÓDULO 0${idx+1}`}</span>
+              <p class="truncate font-black text-xs">${m.title}</p>
+            </div>
+            <div class="shrink-0 flex items-center gap-1">
+              ${isDone ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold">✓</span>' : `<span class="text-[10px] font-mono opacity-70">${completedCount}/${(m.lessons||[]).length}</span>`}
+            </div>
+          </button>
+        `;
+      }).join('');
+    };
+
+    window.switchPrevModule = () => {
+      if (!activeCourse || !activeModule) return;
+      const modules = activeCourse.modules || [];
+      const idx = modules.findIndex(m => m.id === activeModule.id);
+      if (idx > 0) {
+        switchModule(modules[idx - 1].id);
+        showToast(`Carregado: ${modules[idx - 1].title}`);
+      } else {
+        showToast("Você já está no primeiro módulo!");
+      }
+    };
+
+    window.switchNextModule = () => {
+      if (!activeCourse || !activeModule) return;
+      const modules = activeCourse.modules || [];
+      const idx = modules.findIndex(m => m.id === activeModule.id);
+      if (idx < modules.length - 1) {
+        switchModule(modules[idx + 1].id);
+        showToast(`Carregado: ${modules[idx + 1].title}`);
+      } else {
+        showToast("Você chegou ao último módulo!");
+      }
+    };
+
+    function switchModule(moduleId) {
+      if (!activeCourse) return;
+      const mod = (activeCourse.modules || []).find(m => m.id === moduleId);
+      if (!mod) return;
+
+      activeModule = mod;
+      updateModuleUI(null);
+    }
+
+    function updateModuleUI(targetLessonId) {
+      if (!activeModule || !activeCourse) return;
+
+      const lessons = activeModule.lessons || [];
+      const modules = activeCourse.modules || [];
+      const currentModIdx = modules.findIndex(m => m.id === activeModule.id);
+      const totalModules = modules.length;
+
+      // Module Index Badges
+      const modBadgeText = `MÓDULO 0${currentModIdx + 1} DE ${totalModules < 10 ? '0' + totalModules : totalModules}`;
+      
+      const desktopBadgeEl = document.getElementById("desktopModuleBadge");
+      if (desktopBadgeEl) desktopBadgeEl.innerText = modBadgeText;
+
+      const desktopNameEl = document.getElementById("desktopModuleName");
+      if (desktopNameEl) desktopNameEl.innerText = activeModule.title;
+
+      const mobileSelectedEl = document.getElementById("mobileSelectedModuleName");
+      if (mobileSelectedEl) mobileSelectedEl.innerText = activeModule.title;
+
+      const drawerBadgeEl = document.getElementById("drawerModuleBadge");
+      if (drawerBadgeEl) drawerBadgeEl.innerText = modBadgeText;
+
+      // Calculate Module Completed Lessons
+      let completedInMod = 0;
+      lessons.forEach(l => { if (completedLessonIds.includes(l.id)) completedInMod++; });
+      const modPercent = lessons.length > 0 ? Math.round((completedInMod / lessons.length) * 100) : 0;
+
+      const desktopProgBadge = document.getElementById("desktopModuleProgressBadge");
+      if (desktopProgBadge) desktopProgBadge.innerText = `${completedInMod}/${lessons.length} Aulas`;
+
+      const weeklyPercentEl = document.getElementById("moduleWeeklyProgressPercent");
+      if (weeklyPercentEl) weeklyPercentEl.innerText = `${modPercent}%`;
+
+      const weeklyBarEl = document.getElementById("moduleWeeklyProgressBar");
+      if (weeklyBarEl) weeklyBarEl.style.width = `${modPercent}%`;
+
+      // Render Module Picker Items in Dropdowns
+      window.filterModulesList('');
+      window.filterMobileModulesList('');
+
       let defaultLesson = null;
       if (targetLessonId) {
         defaultLesson = lessons.find(l => l.id === targetLessonId);
@@ -364,30 +1715,75 @@
       }
 
       updateCourseProgress();
-      renderDrawerLessons();
     }
 
     function selectLesson(lessonId) {
-      if (!activeCourse) return;
+      if (!activeModule) return;
 
-      const lessons = activeCourse.modules?.[0]?.lessons || [];
+      const lessons = activeModule.lessons || [];
       const found = lessons.find(l => l.id === lessonId);
       if (!found) return;
 
       activeLesson = found;
 
+      const topBreadcrumbCourse = document.getElementById("topBreadcrumbCourse");
+      const topBreadcrumbModule = document.getElementById("topBreadcrumbModule");
+      const topBreadcrumbLesson = document.getElementById("topBreadcrumbLesson");
+      if (topBreadcrumbCourse && activeCourse) topBreadcrumbCourse.innerText = (activeCourse.title || "Magic Stories Legacy").split('•')[0].trim();
+      if (topBreadcrumbModule && activeModule) topBreadcrumbModule.innerText = activeModule.shortTitle || activeModule.title;
+      if (topBreadcrumbLesson) topBreadcrumbLesson.innerText = found.title;
+
       document.getElementById("currentLessonTitle").innerText = found.title;
       document.getElementById("currentLessonOrderBadge").innerText = `AULA 0${found.order}`;
-      document.getElementById("currentLessonDuration").innerText = found.duration || "09:30";
+      document.getElementById("currentLessonDuration").innerText = found.duration || "05:00";
+      
+      const descEl = document.getElementById("currentLessonDescription");
+      if (descEl) {
+        descEl.innerText = found.description || "Treino prático do Método Magic Stories com o Professor Leonardo Leite.";
+      }
+
       document.getElementById("bottomTrayLessonTitle").innerText = found.title;
       document.getElementById("bottomTrayStatusLabel").innerText = `Reproduzindo - Aula ${found.order} de ${lessons.length}`;
 
-      const videoStage = document.getElementById("videoStage");
+      const currentIndex = lessons.findIndex(l => l.id === found.id);
+      const btnPrev = document.getElementById("btnPrevLesson");
+      const btnNext = document.getElementById("btnNextLesson");
 
+      if (btnPrev) {
+        if (currentIndex === 0) {
+          btnPrev.disabled = true;
+          btnPrev.classList.add("opacity-40", "cursor-not-allowed");
+          btnPrev.classList.remove("hover:bg-stone-200", "active:scale-95");
+        } else {
+          btnPrev.disabled = false;
+          btnPrev.classList.remove("opacity-40", "cursor-not-allowed");
+          btnPrev.classList.add("hover:bg-stone-200", "active:scale-95");
+        }
+      }
+
+      if (btnNext) {
+        if (currentIndex === lessons.length - 1) {
+          btnNext.disabled = true;
+          btnNext.classList.add("opacity-40", "cursor-not-allowed");
+          btnNext.classList.remove("hover:bg-stone-200", "active:scale-95");
+        } else {
+          btnNext.disabled = false;
+          btnNext.classList.remove("opacity-40", "cursor-not-allowed");
+          btnNext.classList.add("hover:bg-stone-200", "active:scale-95");
+        }
+      }
+
+      const videoStage = document.getElementById("videoStage");
       if (found.videoUrl) {
-        videoStage.innerHTML = `
-          <iframe class="w-full h-full" src="${found.videoUrl}?autoplay=0" title="${found.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        `;
+        if (found.videoUrl.includes("youtube.com") || found.videoUrl.includes("youtu.be")) {
+          videoStage.innerHTML = `
+            <iframe class="w-full h-full" src="${found.videoUrl}?autoplay=0" title="${found.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          `;
+        } else {
+          videoStage.innerHTML = `
+            <video controls playsinline poster="${found.thumbnailUrl || ''}" class="w-full h-full object-contain bg-black" src="${found.videoUrl}"></video>
+          `;
+        }
       } else {
         videoStage.innerHTML = `
           <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-4 text-center space-y-2">
@@ -396,27 +1792,19 @@
             </div>
             <h3 class="text-sm font-black text-white">${found.title}</h3>
             <p class="text-xs text-slate-300">Treino auditivo de reflexo oral.</p>
-            ${found.audioUrl ? `
-              <audio controls class="w-full max-w-xs mt-1">
-                <source src="${found.audioUrl}" type="audio/mp3">
-              </audio>
-            ` : ''}
           </div>
         `;
       }
 
-      // Render Chunks Didactic Box
-      const chunksContainer = document.getElementById("lessonChunksContainer");
-      if (found.chunks && found.chunks.length > 0) {
-        chunksContainer.innerHTML = found.chunks.map((c, idx) => `
-          <div class="p-3 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] space-y-1">
-            <div class="flex items-center justify-between text-[10px]">
-              <span class="font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-1.5 py-0.5 rounded border border-[#C68A36]/30">CHUNK #${idx+1}</span>
-            </div>
-            <p class="font-bold text-xs sm:text-sm text-[#0A192F]">"${c.en}"</p>
-            <p class="text-[11px] text-[#78350F] italic font-medium">↳ ${c.pt}</p>
-          </div>
-        `).join("");
+      const processedContainer = document.getElementById("lessonProcessedContentContainer");
+      if (processedContainer) {
+        if (found.processedContentHtml) {
+          processedContainer.innerHTML = found.processedContentHtml;
+          processedContainer.classList.remove("hidden");
+        } else {
+          processedContainer.innerHTML = "";
+          processedContainer.classList.add("hidden");
+        }
       }
 
       if (found.goldenTip) {
@@ -427,7 +1815,6 @@
         document.getElementById("pdfDownloadLink").href = found.pdfUrl;
       }
 
-      // Update Complete Button UI
       const isCompleted = completedLessonIds.includes(found.id);
       const markBtn = document.getElementById("btnMarkComplete");
       const label = document.getElementById("completeBtnLabel");
@@ -444,48 +1831,71 @@
     }
 
     function renderDrawerLessons() {
-      const container = document.getElementById("drawerLessonsList");
-      if (!container || !activeCourse) return;
+      if (!activeModule) return;
+      const lessons = activeModule.lessons || [];
 
-      const lessons = activeCourse.modules?.[0]?.lessons || [];
-
-      container.innerHTML = lessons.map((les, idx) => {
+      const renderCard = (les, idx, onClickCode) => {
         const isCurrent = activeLesson && activeLesson.id === les.id;
         const isCompleted = completedLessonIds.includes(les.id);
         return `
-          <div onclick="selectLesson('${les.id}'); window.toggleSyllabusDrawer();" class="p-3 rounded-2xl bg-white border ${isCurrent ? 'border-[#C68A36] bg-[#FDF8F0]/40' : 'border-[#EAE5DC]'} transition cursor-pointer flex items-center justify-between gap-3">
+          <div onclick="${onClickCode}" class="p-3.5 rounded-2xl transition cursor-pointer flex items-center justify-between gap-3 ${
+            isCurrent 
+              ? 'bg-[#FDF8F0] border-2 border-[#C68A36] shadow-xs' 
+              : 'bg-white border border-[#EAE5DC] hover:border-slate-300 hover:bg-stone-50/50'
+          }">
             <div class="flex items-center gap-3 min-w-0">
-              <div class="w-7 h-7 rounded-full ${isCompleted ? 'bg-emerald-500 text-white' : (isCurrent ? 'bg-[#C68A36] text-white' : 'bg-stone-100 text-slate-600')} flex items-center justify-center font-bold text-xs shrink-0">
-                ${isCompleted ? '<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>' : (idx+1)}
+              <div class="w-8 h-8 rounded-full ${
+                isCompleted 
+                  ? 'bg-emerald-500 text-white' 
+                  : (isCurrent ? 'bg-[#C68A36] text-white' : 'bg-stone-100 text-slate-600')
+              } flex items-center justify-center font-black text-xs shrink-0 shadow-2xs">
+                ${isCompleted ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : (idx+1 < 10 ? '0'+(idx+1) : (idx+1))}
               </div>
               <div class="min-w-0">
-                <h4 class="font-bold text-xs text-[#0A192F] truncate">${les.title}</h4>
-                <p class="text-[10px] text-[#7A7369]">${les.duration || '09:30'}</p>
+                <h4 class="font-bold text-xs ${isCurrent ? 'text-[#0A192F]' : 'text-slate-700'} truncate">${les.title}</h4>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="text-[10px] font-bold text-[#7A7369] flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i> ${les.duration || '05:00'}
+                  </span>
+                  ${isCompleted ? '<span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">Concluída</span>' : ''}
+                </div>
               </div>
             </div>
-            <i data-lucide="${les.videoUrl ? 'play' : 'volume-2'}" class="w-3.5 h-3.5 ${isCurrent ? 'text-[#C68A36]' : 'text-slate-400'} shrink-0"></i>
+            <div class="shrink-0 flex items-center">
+              <i data-lucide="${isCurrent ? 'play-circle' : 'play'}" class="w-4 h-4 ${isCurrent ? 'text-[#C68A36]' : 'text-slate-400'}"></i>
+            </div>
           </div>
         `;
-      }).join('');
+      };
+
+      const desktopList = document.getElementById("desktopLessonsList");
+      if (desktopList) {
+        desktopList.innerHTML = lessons.map((les, idx) => renderCard(les, idx, `selectLesson('${les.id}')`)).join('');
+      }
+
+      const drawerList = document.getElementById("drawerLessonsList");
+      if (drawerList) {
+        drawerList.innerHTML = lessons.map((les, idx) => renderCard(les, idx, `selectLesson('${les.id}'); window.toggleSyllabusDrawer();`)).join('');
+      }
 
       updateIcons();
     }
 
     function toggleLessonCompletion() {
       if (!activeLesson) return;
-      const idx = completedLessonIds.indexOf(activeLesson.id);
-      if (idx > -1) {
-        completedLessonIds.splice(idx, 1);
+      const id = activeLesson.id;
+      if (completedLessonIds.includes(id)) {
+        completedLessonIds = completedLessonIds.filter(x => x !== id);
       } else {
-        completedLessonIds.push(activeLesson.id);
+        completedLessonIds.push(id);
       }
       localStorage.setItem("aef_completed_lessons", JSON.stringify(completedLessonIds));
-      selectLesson(activeLesson.id);
+      selectLesson(id);
       updateCourseProgress();
     }
 
     function updateCourseProgress() {
-      const lessons = activeCourse?.modules?.[0]?.lessons || [];
+      const lessons = activeModule?.lessons || [];
       let completedCount = 0;
       lessons.forEach(les => {
         if (completedLessonIds.includes(les.id)) completedCount++;
@@ -500,9 +1910,18 @@
 
     function sendCurrentLessonToTrainingPlayer() {
       if (!activeLesson) return;
-      const courseId = activeCourse?.slug || activeCourse?.id || "projeto-aef-2026";
-      const trackId = activeLesson.trainingTrackId || activeLesson.id;
-      window.location.href = `treino/player.html?curso=${courseId}&aula=${activeLesson.id}&trackId=${trackId}&activity=listen_read`;
+      let trackId = "andre_graziela";
+      if (activeModule?.id === "ms002-tom") trackId = "andre_tom";
+      else if (activeModule?.id === "ms003-saturday-morning") trackId = "saturday_morning";
+      
+      let activityTab = "lr";
+      if (activeLesson.id.includes("-voc")) activityTab = "voc";
+      else if (activeLesson.id.includes("-la")) activityTab = "la";
+      else if (activeLesson.id.includes("-lrt")) activityTab = "lrt";
+      else if (activeLesson.id.includes("-lask")) activityTab = "lask";
+      else if (activeLesson.id.includes("-pro")) activityTab = "pro";
+
+      window.location.href = `player.html?track=${trackId}&tab=${activityTab}`;
     }
 
     window.toggleSyllabusDrawer = () => {
@@ -510,13 +1929,35 @@
       if (drawer) drawer.classList.toggle("hidden");
     };
 
-    window.playNextLesson = () => {
-      const lessons = activeCourse?.modules?.[0]?.lessons || [];
+    window.playPrevLesson = () => {
+      const lessons = activeModule?.lessons || [];
       if (!activeLesson || lessons.length === 0) return;
       const currentIndex = lessons.findIndex(l => l.id === activeLesson.id);
-      const nextIndex = (currentIndex + 1) % lessons.length;
-      selectLesson(lessons[nextIndex].id);
+      if (currentIndex > 0) {
+        selectLesson(lessons[currentIndex - 1].id);
+      }
     };
+
+    window.playNextLesson = () => {
+      const lessons = activeModule?.lessons || [];
+      if (!activeLesson || lessons.length === 0) return;
+      const currentIndex = lessons.findIndex(l => l.id === activeLesson.id);
+      if (currentIndex < lessons.length - 1) {
+        selectLesson(lessons[currentIndex + 1].id);
+      }
+    };
+
+    function updateIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
   </script>
+
+  <!-- Toast Notification -->
+  <div id="classroom-toast" class="fixed top-6 right-6 z-50 hidden bg-[#0D1E36] border border-[#C68A36] text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-3">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="classroom-toast-text">Notificação</span>
+  </div>
 </body>
 </html>
