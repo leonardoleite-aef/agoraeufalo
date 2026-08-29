@@ -57,40 +57,7 @@ window.AEF_REGISTRY = {
       avatarBg: "bg-amber-500/10 text-amber-500 border-amber-500/20",
       pin: "0000",
       active: true,
-      dataFile: ""
-    },
-    {
-      id: "carlos",
-      name: "Carlos",
-      badge: "VIP Mentee",
-      subtitle: "Corporate Strategy & Leadership Delivery",
-      avatarEmoji: "📊",
-      avatarBg: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-      pin: "5678",
-      active: true,
-      dataFile: ""
-    },
-    {
-      id: "marcos",
-      name: "Marcos",
-      badge: "VIP Mentee",
-      subtitle: "Tech Pitching & Global Networking",
-      avatarEmoji: "🚀",
-      avatarBg: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
-      pin: "6789",
-      active: true,
-      dataFile: ""
-    },
-    {
-      id: "patricia",
-      name: "Patrícia",
-      badge: "VIP Mentee",
-      subtitle: "Executive Negotiation & Public Speaking",
-      avatarEmoji: "🌟",
-      avatarBg: "bg-rose-500/10 text-rose-500 border-rose-500/20",
-      pin: "7890",
-      active: true,
-      dataFile: ""
+      dataFile: "data/public.js"
     }
   ]
 };
