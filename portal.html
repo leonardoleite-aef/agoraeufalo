@@ -107,6 +107,44 @@
   <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 flex-1">
 
     <!-- A. GREETING & STUDENT METRICS BAR (STATS DASHBOARD) -->
+    <!-- A0. ADMIN GOD MODE BAR (Visible only for Admins) -->
+    <section id="admin-god-mode-bar" class="hidden p-4 rounded-2xl bg-gradient-to-r from-purple-900 via-indigo-950 to-slate-900 text-white border border-purple-400/40 shadow-lg space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black text-sm shadow">
+            👑
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-black text-amber-300 uppercase tracking-wider">Modo Professor & God Mode</span>
+              <span class="px-1.5 py-0.2 rounded bg-purple-500/40 text-[9px] font-mono font-bold text-purple-200">ADMIN MASTER</span>
+            </div>
+            <p class="text-[11px] text-slate-300">Acesso livre a todo o ecossistema, backoffice, salas de aula e prescrições de mentorados.</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
+            <i data-lucide="users" class="w-3.5 h-3.5 text-amber-300"></i>
+            <span>CRM de Alunos</span>
+          </a>
+          <a href="admin-cursos.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
+            <i data-lucide="book-open" class="w-3.5 h-3.5 text-sky-300"></i>
+            <span>Course Studio</span>
+          </a>
+          <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
+            <i data-lucide="mic" class="w-3.5 h-3.5 text-rose-300"></i>
+            <span>TTS Voice Studio</span>
+          </a>
+          <a href="blog-panel.html" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
+            <i data-lucide="newspaper" class="w-3.5 h-3.5 text-emerald-300"></i>
+            <span>CMS do Blog</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- A. GREETING & STUDENT METRICS BAR (STATS DASHBOARD) -->
     <section class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#EAE5DC]">
         <div>
@@ -416,14 +454,39 @@
     };
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const studentName = localStorage.getItem("aef_user_name") || "Leonardo Leite";
-      const studentEmail = localStorage.getItem("aef_user_email") || "leonardo@agoraeufalo.com.br";
-      const enrolledProducts = JSON.parse(localStorage.getItem("aef_enrolled_products") || '["ms-legacy", "mentoria-vip-individual"]');
+      if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+
+      const studentName = localStorage.getItem("aef_user_name") || "Prof. Leonardo Leite";
+      const studentEmail = localStorage.getItem("aef_user_email") || "selexenglish@gmail.com";
+      const userRole = localStorage.getItem("aef_user_role") || "admin";
+      const userTier = localStorage.getItem("aef_user_tier") || "admin_master";
+
+      const isAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || 
+                      userRole === 'admin' || 
+                      userTier === 'admin_master' || 
+                      studentEmail.toLowerCase().includes('selexenglish@gmail.com') ||
+                      studentEmail.toLowerCase().includes('leonardo');
+
+      const enrolledProducts = JSON.parse(localStorage.getItem("aef_enrolled_products") || '["ms-legacy", "english-quickstart", "frases-prontas", "all_access_master"]');
 
       const topGreeting = document.getElementById("top-user-greeting");
       const drawerName = document.getElementById("drawer-user-name");
+      const tierBadge = document.getElementById("student-tier-badge");
+      const adminBar = document.getElementById("admin-god-mode-bar");
+
       if (topGreeting) topGreeting.innerText = studentName.split(" ")[0] || "Aluno";
       if (drawerName) drawerName.innerText = studentName;
+
+      if (isAdmin) {
+        if (adminBar) adminBar.classList.remove('hidden');
+        if (tierBadge) tierBadge.innerText = "👑 SUPER-ADMIN (GOD MODE)";
+      } else if (userTier === 'vip_mentorship' || userTier === 'vip') {
+        if (tierBadge) tierBadge.innerText = "👑 Mentorado VIP";
+      } else if (userTier === 'club_annual' || userTier === 'pro' || userTier === 'course_member') {
+        if (tierBadge) tierBadge.innerText = "🎓 Membro Club";
+      } else {
+        if (tierBadge) tierBadge.innerText = "🌱 Aluno Free";
+      }
 
       // Stats Telemetry from LocalStorage / Firestore
       const listeningSeconds = parseInt(localStorage.getItem("aef_listening_seconds") || "2880");
@@ -431,11 +494,11 @@
       const minutesEl = document.getElementById("stat-listening-minutes");
       if (minutesEl) minutesEl.innerText = listeningMinutes;
 
-      await renderCoursesShowcase(enrolledProducts);
+      await renderCoursesShowcase(enrolledProducts, isAdmin);
       updateIcons();
     });
 
-    async function renderCoursesShowcase(enrolledProducts) {
+    async function renderCoursesShowcase(enrolledProducts, isAdmin = false) {
       let courses = OFFICIAL_COURSES_MATRIX;
 
       // Busca matriz atualizada no Firestore se disponível
@@ -479,7 +542,7 @@
         // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
         if (course.published === false) continue;
 
-        const isEnrolled = enrolledProducts.includes(id);
+        const isEnrolled = isAdmin || enrolledProducts.includes(id) || enrolledProducts.includes('all_access_master');
 
         if (isEnrolled) {
           enrolledCount++;

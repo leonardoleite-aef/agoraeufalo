@@ -785,12 +785,60 @@
       showToast(`Sessão carregada: ${REAL_TRACK.title}`);
     };
 
+    window.switchVIPMentee = async (menteeId) => {
+      menteeId = (menteeId || 'estevao').toLowerCase().trim();
+      showToast(`Carregando prescrições de ${menteeId}...`);
+
+      // 1. Base mentee profiles
+      if (menteeId === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
+        state.student = window.AEF_STUDENT_ESTEVAO;
+      } else if (menteeId === 'thomas' && window.AEF_STUDENT_THOMAS) {
+        state.student = window.AEF_STUDENT_THOMAS;
+      } else if (menteeId === 'andre' && window.AEF_STUDENT_ANDRE) {
+        state.student = window.AEF_STUDENT_ANDRE;
+      } else if (menteeId === 'matheus' && window.AEF_STUDENT_MATHEUS) {
+        state.student = window.AEF_STUDENT_MATHEUS;
+      } else {
+        state.student = { id: menteeId, name: menteeId, tracks: [] };
+      }
+
+      // 2. Fetch fresh tracks from Firestore
+      try {
+        if (window.aefCloudSync) {
+          const cloudTracks = await window.aefCloudSync.getStudentCloudTracks(menteeId);
+          if (cloudTracks && cloudTracks.length > 0) {
+            state.student.tracks = cloudTracks;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not sync cloud tracks for mentee:", e);
+      }
+
+      if (state.student.tracks && state.student.tracks.length > 0) {
+        REAL_TRACK = state.student.tracks[0];
+        await loadTrackAudio(REAL_TRACK);
+      }
+
+      state.currentSentenceIndex = 0;
+      state.revealedAnswers = {};
+      state.loopingSentenceIndex = -1;
+      state.isPlaying = false;
+
+      renderSidebarTracks();
+      renderZenStage();
+      renderBottomDock();
+      updateMediaSessionMetadata();
+      showToast(`Mentorado ativo: ${state.student.name || menteeId}`);
+    };
+
     function renderSidebarTracks() {
       const container = document.getElementById('sidebar-tracks-container');
       if (!container) return;
 
       let tracksList = [];
       let playlistTitle = "Sessões Gravadas";
+
+      const isAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || localStorage.getItem('aef_user_role') === 'admin';
 
       if (state.environment === 'public') {
         tracksList = window.AEF_STUDENT_PUBLIC?.tracks || [];
@@ -800,19 +848,44 @@
         playlistTitle = "Módulos Magic Stories";
       } else if (state.environment === 'vip') {
         tracksList = state.student?.tracks || [];
-        playlistTitle = `Prescrições • ${state.student?.name || 'Aluno'}`;
+        playlistTitle = `Prescrições • ${state.student?.name || 'Mentorado'}`;
       } else if (state.environment === 'custom' || state.environment === 'custom_active') {
         tracksList = getCustomTracks();
         playlistTitle = "Meus Treinos Salvos";
       }
 
-      if (tracksList.length === 0) {
+      let menteeSelectorHtml = '';
+      if (state.environment === 'vip') {
+        const menteesList = [
+          { id: 'estevao', name: 'Estêvão Pinheiro' },
+          { id: 'thomas', name: 'Thomas' },
+          { id: 'andre', name: 'André Birchal' },
+          { id: 'matheus', name: 'Matheus' }
+        ];
+
+        menteeSelectorHtml = `
+          <div class="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200 mb-2 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono font-bold text-purple-900 uppercase">👑 SELETOR DE MENTORADO</span>
+              ${isAdmin ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-200 text-purple-950 font-mono font-black">GOD MODE</span>' : ''}
+            </div>
+            <select onchange="window.switchVIPMentee(this.value)" class="w-full bg-white border border-purple-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 font-bold focus:outline-none focus:border-purple-500 cursor-pointer">
+              ${menteesList.map(m => `
+                <option value="${m.id}" ${state.student?.id === m.id ? 'selected' : ''}>${m.name}</option>
+              `).join('')}
+            </select>
+          </div>
+        `;
+      }
+
+      if (tracksList.length === 0 && !menteeSelectorHtml) {
         container.innerHTML = '';
         return;
       }
 
       container.innerHTML = `
         <div class="pt-2.5 border-t border-[#EAE5DC] space-y-1.5 text-left">
+          ${menteeSelectorHtml}
           <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">${playlistTitle} (${tracksList.length}):</span>
           <div class="space-y-1 max-h-48 overflow-y-auto no-scrollbar">
             ${tracksList.map((t, idx) => `

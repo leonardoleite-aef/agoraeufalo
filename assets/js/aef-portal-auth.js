@@ -3,6 +3,7 @@
  * Professor Leonardo Leite
  * 
  * Manages Firebase Authentication, Student Profiles, Product Access Tiers, and Real-time Sessions.
+ * Includes Tier 0 (Admin Master / God Mode) with full ecosystem traversal and VIP mentee selector.
  */
 
 (function(window) {
@@ -16,6 +17,12 @@
     messagingSenderId: "973862553705",
     appId: "1:973862553705:web:959ea81c80c28cc1dc7af8"
   };
+
+  const MASTER_ADMIN_EMAILS = [
+    'selexenglish@gmail.com',
+    'leonardo@agoraeufalo.com.br',
+    'leo@agoraeufalo.com.br'
+  ];
 
   class AEFPortalAuth {
     constructor() {
@@ -69,6 +76,9 @@
         this.currentUser = user;
         if (user) {
           this.currentProfile = await this.getProfile(user.uid);
+          if (this.currentProfile) {
+            this._syncLocalStorage(this.currentProfile);
+          }
           window.dispatchEvent(new CustomEvent('aef:auth-changed', { detail: { user, profile: this.currentProfile } }));
         } else {
           this.currentProfile = null;
@@ -77,8 +87,25 @@
       });
     }
 
+    _syncLocalStorage(profile) {
+      if (!profile) return;
+      try {
+        localStorage.setItem('aef_user_name', profile.name || 'Aluno AgoraEuFalo');
+        localStorage.setItem('aef_user_email', profile.email || '');
+        localStorage.setItem('aef_user_tier', profile.tier || 'free');
+        localStorage.setItem('aef_user_role', profile.role || 'student');
+        localStorage.setItem('aef_enrolled_products', JSON.stringify(profile.enrolledProducts || []));
+      } catch (e) {}
+    }
+
     async ready() {
       await this._initPromise;
+    }
+
+    isMasterAdminEmail(email) {
+      if (!email) return false;
+      const clean = email.trim().toLowerCase();
+      return MASTER_ADMIN_EMAILS.some(adm => clean === adm || clean.includes('selexenglish@gmail.com'));
     }
 
     // =========================================================================
@@ -90,8 +117,8 @@
       const cred = await this.auth.createUserWithEmailAndPassword(email, password);
       const user = cred.user;
 
-      const isAdminEmail = email.toLowerCase().includes('selexenglish@gmail.com') || email.toLowerCase().includes('leonardo');
-      const finalName = isAdminEmail ? (name || 'Prof. Leonardo Leite') : name;
+      const isMasterAdmin = this.isMasterAdminEmail(email);
+      const finalName = isMasterAdmin ? (name || 'Prof. Leonardo Leite') : name;
 
       await user.updateProfile({ displayName: finalName });
 
@@ -99,9 +126,11 @@
         uid: user.uid,
         name: finalName,
         email: email,
-        tier: isAdminEmail ? 'vip_mentorship' : 'free',
-        role: isAdminEmail ? 'admin' : 'student',
-        enrolledProducts: isAdminEmail ? ['all_access_master', 'mentoria_vip', 'magic_stories_club'] : ['free_starter_pack', 'magic_stories_demo'],
+        tier: isMasterAdmin ? 'admin_master' : 'free',
+        role: isMasterAdmin ? 'admin' : 'student',
+        enrolledProducts: isMasterAdmin 
+          ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
+          : ['free_starter_pack', 'magic_stories_demo'],
         stats: {
           streakDays: 1,
           totalListeningMinutes: 0,
@@ -113,6 +142,7 @@
 
       await this.db.collection('users').doc(user.uid).set(newProfile);
       this.currentProfile = newProfile;
+      this._syncLocalStorage(newProfile);
       return { user, profile: newProfile };
     }
 
@@ -121,14 +151,16 @@
       const cred = await this.auth.signInWithEmailAndPassword(email, password);
       let profile = await this.getProfile(cred.user.uid);
       
-      const isAdminEmail = email.toLowerCase().includes('selexenglish@gmail.com') || email.toLowerCase().includes('leonardo');
+      const isMasterAdmin = this.isMasterAdminEmail(email);
 
-      if (profile && isAdminEmail && profile.role !== 'admin') {
+      if (profile && isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
         profile.role = 'admin';
-        profile.tier = 'vip_mentorship';
+        profile.tier = 'admin_master';
+        profile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
         await this.db.collection('users').doc(cred.user.uid).update({
           role: 'admin',
-          tier: 'vip_mentorship',
+          tier: 'admin_master',
+          enrolledProducts: profile.enrolledProducts,
           lastLoginAt: new Date().toISOString()
         });
       } else if (profile) {
@@ -137,6 +169,7 @@
         });
       }
       this.currentProfile = profile;
+      this._syncLocalStorage(profile);
       return { user: cred.user, profile };
     }
 
@@ -146,18 +179,20 @@
       const cred = await this.auth.signInWithPopup(provider);
       const user = cred.user;
 
-      const isAdminEmail = (user.email || '').toLowerCase().includes('selexenglish@gmail.com') || (user.email || '').toLowerCase().includes('leonardo');
+      const isMasterAdmin = this.isMasterAdminEmail(user.email);
 
       let profile = await this.getProfile(user.uid);
       if (!profile) {
         profile = {
           uid: user.uid,
-          name: isAdminEmail ? 'Prof. Leonardo Leite' : (user.displayName || 'Aluno AEF'),
+          name: isMasterAdmin ? 'Prof. Leonardo Leite' : (user.displayName || 'Aluno AgoraEuFalo'),
           email: user.email,
           avatarUrl: user.photoURL || '',
-          tier: isAdminEmail ? 'vip_mentorship' : 'free',
-          role: isAdminEmail ? 'admin' : 'student',
-          enrolledProducts: isAdminEmail ? ['all_access_master', 'mentoria_vip', 'magic_stories_club'] : ['free_starter_pack', 'magic_stories_demo'],
+          tier: isMasterAdmin ? 'admin_master' : 'free',
+          role: isMasterAdmin ? 'admin' : 'student',
+          enrolledProducts: isMasterAdmin 
+            ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
+            : ['free_starter_pack', 'magic_stories_demo'],
           stats: {
             streakDays: 1,
             totalListeningMinutes: 0,
@@ -168,13 +203,15 @@
         };
         await this.db.collection('users').doc(user.uid).set(profile);
       } else {
-        if (isAdminEmail && profile.role !== 'admin') {
+        if (isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
           profile.role = 'admin';
-          profile.tier = 'vip_mentorship';
+          profile.tier = 'admin_master';
+          profile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
         }
         const updates = {
           role: profile.role,
           tier: profile.tier,
+          enrolledProducts: profile.enrolledProducts || [],
           lastLoginAt: new Date().toISOString()
         };
         if (user.photoURL && !profile.avatarUrl) {
@@ -185,6 +222,7 @@
       }
 
       this.currentProfile = profile;
+      this._syncLocalStorage(profile);
       return { user, profile };
     }
 
@@ -221,18 +259,20 @@
           window.localStorage.removeItem('emailForSignIn');
           window.localStorage.removeItem('aef_email_for_magic_link');
           const user = cred.user;
-          const isAdminEmail = (user.email || '').toLowerCase().includes('selexenglish@gmail.com') || (user.email || '').toLowerCase().includes('leonardo');
+          const isMasterAdmin = this.isMasterAdminEmail(user.email);
 
           let profile = await this.getProfile(user.uid);
           if (!profile) {
             profile = {
               uid: user.uid,
-              name: isAdminEmail ? 'Prof. Leonardo Leite' : (user.displayName || user.email.split('@')[0]),
+              name: isMasterAdmin ? 'Prof. Leonardo Leite' : (user.displayName || user.email.split('@')[0]),
               email: user.email,
               avatarUrl: user.photoURL || '',
-              tier: isAdminEmail ? 'vip_mentorship' : 'free',
-              role: isAdminEmail ? 'admin' : 'student',
-              enrolledProducts: isAdminEmail ? ['all_access_master', 'mentoria_vip', 'magic_stories_club'] : ['free_starter_pack', 'magic_stories_demo'],
+              tier: isMasterAdmin ? 'admin_master' : 'free',
+              role: isMasterAdmin ? 'admin' : 'student',
+              enrolledProducts: isMasterAdmin 
+                ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
+                : ['free_starter_pack', 'magic_stories_demo'],
               stats: {
                 streakDays: 1,
                 totalListeningMinutes: 0,
@@ -243,9 +283,9 @@
             };
             await this.db.collection('users').doc(user.uid).set(profile);
           } else {
-            if (isAdminEmail && profile.role !== 'admin') {
+            if (isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
               profile.role = 'admin';
-              profile.tier = 'vip_mentorship';
+              profile.tier = 'admin_master';
             }
             await this.db.collection('users').doc(user.uid).update({
               role: profile.role,
@@ -254,6 +294,7 @@
             });
           }
           this.currentProfile = profile;
+          this._syncLocalStorage(profile);
           return { user, profile };
         }
       }
@@ -268,7 +309,7 @@
     }
 
     // =========================================================================
-    // USER PROFILE & PRODUCT ACCESS
+    // USER PROFILE & PRODUCT ACCESS (TIERS)
     // =========================================================================
 
     async getProfile(uid) {
@@ -289,26 +330,127 @@
       if (!this.currentUser) return;
       await this.db.collection('users').doc(this.currentUser.uid).update(data);
       this.currentProfile = { ...this.currentProfile, ...data };
+      this._syncLocalStorage(this.currentProfile);
       return this.currentProfile;
+    }
+
+    isAdmin() {
+      if (!this.currentProfile) {
+        const cachedRole = localStorage.getItem('aef_user_role');
+        const cachedEmail = localStorage.getItem('aef_user_email');
+        return cachedRole === 'admin' || this.isMasterAdminEmail(cachedEmail);
+      }
+      return this.currentProfile.role === 'admin' || 
+             this.currentProfile.tier === 'admin_master' || 
+             this.isMasterAdminEmail(this.currentProfile.email);
+    }
+
+    getActiveTier() {
+      if (this.isAdmin()) return 'admin_master';
+      if (!this.currentProfile) return localStorage.getItem('aef_user_tier') || 'free';
+      return this.currentProfile.tier || 'free';
     }
 
     // Check if user has access to a specific tier/product
     hasAccess(requiredTier) {
-      if (!this.currentProfile) return false;
-      if (this.currentProfile.role === 'admin') return true;
+      if (this.isAdmin()) return true; // God Mode: Admin passes all gates
+      if (!this.currentProfile) {
+        const cachedTier = localStorage.getItem('aef_user_tier') || 'free';
+        return this._compareTiers(cachedTier, requiredTier);
+      }
+      return this._compareTiers(this.currentProfile.tier, requiredTier);
+    }
+
+    _compareTiers(userTier, requiredTier) {
+      if (userTier === 'admin_master') return true;
 
       const tierLevels = {
         'free': 1,
         'club_monthly': 2,
         'club_annual': 3,
+        'course_member': 3,
+        'pro': 3,
         'lifetime': 4,
-        'vip_mentorship': 5
+        'vip_mentorship': 5,
+        'vip': 5,
+        'admin_master': 99
       };
 
-      const userLevel = tierLevels[this.currentProfile.tier] || 1;
+      const userLevel = tierLevels[userTier] || 1;
       const reqLevel = tierLevels[requiredTier] || 1;
 
       return userLevel >= reqLevel;
+    }
+
+    // =========================================================================
+    // CRM & ADMIN MANAGEMENT METHODS
+    // =========================================================================
+
+    async getAllUsers() {
+      await this.ready();
+      try {
+        const snapshot = await this.db.collection('users').get();
+        const users = [];
+        snapshot.forEach(doc => {
+          users.push({ id: doc.id, ...doc.data() });
+        });
+        return users;
+      } catch (e) {
+        console.warn("Could not fetch all users:", e);
+        return [];
+      }
+    }
+
+    async getAllStudentsAndMentees() {
+      await this.ready();
+      const results = {
+        users: [],
+        vipMentees: []
+      };
+
+      try {
+        // 1. Fetch from 'users' collection
+        const usersSnap = await this.db.collection('users').get();
+        usersSnap.forEach(doc => {
+          results.users.push({ id: doc.id, ...doc.data() });
+        });
+
+        // 2. Fetch from 'students' collection (VIP Mentee Profiles)
+        const menteesSnap = await this.db.collection('students').get();
+        menteesSnap.forEach(doc => {
+          results.vipMentees.push({ id: doc.id, ...doc.data() });
+        });
+      } catch (e) {
+        console.warn("Error fetching students and mentees:", e);
+      }
+
+      return results;
+    }
+
+    async updateUserTierAndRole(userId, newTier, newRole, enrolledProducts = null) {
+      await this.ready();
+      const updates = {
+        tier: newTier,
+        role: newRole,
+        updatedAt: new Date().toISOString()
+      };
+      if (enrolledProducts) {
+        updates.enrolledProducts = enrolledProducts;
+      }
+      await this.db.collection('users').doc(userId).set(updates, { merge: true });
+      return updates;
+    }
+
+    async saveMenteeDoc(menteeId, data) {
+      await this.ready();
+      const payload = {
+        ...data,
+        id: menteeId,
+        tier: 'vip_mentorship',
+        updatedAt: new Date().toISOString()
+      };
+      await this.db.collection('students').doc(menteeId).set(payload, { merge: true });
+      return payload;
     }
   }
 

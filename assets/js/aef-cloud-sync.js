@@ -207,6 +207,83 @@
     }
 
     /**
+     * Tier 3 & Admin: Gets all VIP Mentee Profiles from students collection
+     */
+    async getAllMentees() {
+      await this.init();
+      try {
+        if (this.db) {
+          const snapshot = await this.db.collection("students").get();
+          if (!snapshot.empty) {
+            const mentees = [];
+            for (const doc of snapshot.docs) {
+              const data = doc.data();
+              if (doc.id !== 'public' && data.status !== 'archived') {
+                // Get tracks count
+                let tracksCount = 0;
+                try {
+                  const tracksSnap = await this.db.collection("students").doc(doc.id).collection("tracks").get();
+                  tracksCount = tracksSnap.size;
+                } catch (te) {}
+
+                mentees.push({
+                  id: doc.id,
+                  name: data.name || doc.id,
+                  email: data.email || `${doc.id}@agoraeufalo.com.br`,
+                  badge: data.badge || "VIP Mentee",
+                  subtitle: data.subtitle || "Treino Personalizado",
+                  tier: data.tier || "vip_mentorship",
+                  avatarEmoji: data.avatarEmoji || "👑",
+                  avatarBg: data.avatarBg || "bg-amber-500/10 text-amber-500 border-amber-500/20",
+                  tracksCount: tracksCount,
+                  updatedAt: data.updatedAt || ""
+                });
+              }
+            }
+            return mentees;
+          }
+        }
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro ao buscar lista de mentorados:", err);
+      }
+      return [];
+    }
+
+    /**
+     * Tier 3: Saves a personalized VIP Audio Track for a mentee
+     */
+    async saveVIPPrescriptionTrack(menteeId, trackData) {
+      if (!menteeId) throw new Error("ID do mentorado obrigatório.");
+      await this.init();
+      const trackId = trackData.id || `track_${Date.now()}`;
+      const payload = {
+        ...trackData,
+        id: trackId,
+        assignedTo: [menteeId],
+        status: trackData.status || "active",
+        updatedAt: new Date().toISOString()
+      };
+      if (this.db) {
+        await this.db.collection("students").doc(menteeId).collection("tracks").doc(trackId).set(payload, { merge: true });
+      }
+      return payload;
+    }
+
+    /**
+     * Tier 3: Deletes a VIP prescription track
+     */
+    async deleteVIPTrack(menteeId, trackId) {
+      if (!menteeId || !trackId) return false;
+      await this.init();
+      if (this.db) {
+        await this.db.collection("students").doc(menteeId).collection("tracks").doc(trackId).delete();
+        return true;
+      }
+      return false;
+    }
+
+
+    /**
      * Tier 1: Gets all Leo's Suggestions tracks from suggestions collection
      */
     async getSuggestionsTracks() {

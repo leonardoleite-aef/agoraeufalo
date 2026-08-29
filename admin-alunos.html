@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão de Alunos & Permissões da Equipe (RBAC) | AgoraEuFalo Admin</title>
+  <title>CRM de Alunos, Tiers & Prescrições VIP | AgoraEuFalo Admin</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <meta name="theme-color" content="#F5F6FA">
@@ -31,22 +31,24 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
     
     <!-- Top Header Banner -->
-    <div class="glass-card rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-amber-200/80 bg-gradient-to-r from-amber-50/60 via-white to-amber-50/40">
+    <div class="glass-card rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-amber-200/80 bg-gradient-to-r from-amber-50/60 via-white to-amber-50/40 shadow-sm">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider mb-2 border border-amber-200">
-          <span>👥</span> <span>Gestão Central de Usuários</span>
+          <span>👥</span> <span>CRM Central de Alunos & Acesso</span>
         </div>
-        <h1 class="text-2xl font-bold font-serif text-slate-900">Alunos, Mentorados & Permissões da Equipe</h1>
-        <p class="text-xs text-slate-600 mt-0.5">Gerencie os planos de acesso dos alunos e autorize novos administradores com segurança.</p>
+        <h1 class="text-2xl font-bold font-serif text-slate-900">Gestão de Alunos, Tiers & Prescrições VIP</h1>
+        <p class="text-xs text-slate-600 mt-0.5">Controle de acessos, matrículas, prescrições de áudio 1 a 1 e permissões de equipe.</p>
       </div>
 
       <!-- Quick Tab Switcher -->
       <div class="flex items-center gap-2 bg-white/80 p-1.5 rounded-2xl border border-slate-200 shadow-sm shrink-0">
-        <button onclick="switchTab('students')" id="tab-btn-students" class="px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm">
-          🎓 Alunos & Mentorados
+        <button onclick="switchTab('students')" id="tab-btn-students" class="px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm flex items-center gap-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i>
+          <span>🎓 Alunos & Mentorados</span>
         </button>
-        <button onclick="switchTab('rbac')" id="tab-btn-rbac" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition">
-          🔐 Equipe & Admins (RBAC)
+        <button onclick="switchTab('rbac')" id="tab-btn-rbac" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5">
+          <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+          <span>🔐 Equipe & Admins</span>
         </button>
       </div>
     </div>
@@ -56,36 +58,72 @@
     <!-- ========================================================================= -->
     <section id="section-students" class="space-y-6">
       
-      <!-- Stats & Filter Bar -->
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <!-- Stats Overview Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
         <div class="glass-card p-4 rounded-2xl">
-          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Alunos</p>
-          <p class="text-2xl font-black text-slate-900 mt-1" id="stat-total-students">4</p>
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Usuários</p>
+          <p class="text-2xl font-black text-slate-900 mt-1" id="stat-total-students">0</p>
         </div>
-        <div class="glass-card p-4 rounded-2xl border-emerald-200">
-          <p class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Mentorados VIP</p>
-          <p class="text-2xl font-black text-emerald-800 mt-1" id="stat-vip-students">4</p>
+        <div class="glass-card p-4 rounded-2xl border-amber-200 bg-amber-50/30">
+          <p class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">👑 Mentorados VIP</p>
+          <p class="text-2xl font-black text-amber-900 mt-1" id="stat-vip-students">0</p>
         </div>
-        <div class="glass-card p-4 rounded-2xl border-sky-200">
-          <p class="text-[10px] text-sky-700 font-bold uppercase tracking-wider">Membros Club / Pro</p>
-          <p class="text-2xl font-black text-sky-800 mt-1" id="stat-pro-students">0</p>
+        <div class="glass-card p-4 rounded-2xl border-sky-200 bg-sky-50/30">
+          <p class="text-[10px] text-sky-800 font-bold uppercase tracking-wider">🎓 Membros Club / Cursos</p>
+          <p class="text-2xl font-black text-sky-900 mt-1" id="stat-pro-students">0</p>
         </div>
-        <div class="glass-card p-4 rounded-2xl border-amber-200">
-          <p class="text-[10px] text-amber-700 font-bold uppercase tracking-wider">Alunos Free</p>
-          <p class="text-2xl font-black text-amber-800 mt-1" id="stat-free-students">0</p>
+        <div class="glass-card p-4 rounded-2xl border-slate-200">
+          <p class="text-[10px] text-slate-600 font-bold uppercase tracking-wider">🌱 Alunos Free</p>
+          <p class="text-2xl font-black text-slate-800 mt-1" id="stat-free-students">0</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border-purple-200 bg-purple-50/30 col-span-2 sm:col-span-1">
+          <p class="text-[10px] text-purple-800 font-bold uppercase tracking-wider">🔐 Administradores</p>
+          <p class="text-2xl font-black text-purple-900 mt-1" id="stat-admin-students">0</p>
+        </div>
+      </div>
+
+      <!-- Filter and Search Bar -->
+      <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto no-scrollbar">
+          <button onclick="filterTier('all')" id="filter-btn-all" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition">
+            Todos
+          </button>
+          <button onclick="filterTier('vip')" id="filter-btn-vip" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition">
+            👑 VIPs
+          </button>
+          <button onclick="filterTier('club')" id="filter-btn-club" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-sky-50 hover:text-sky-900 border border-slate-200 transition">
+            🎓 Club / Cursos
+          </button>
+          <button onclick="filterTier('free')" id="filter-btn-free" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition">
+            🌱 Free
+          </button>
+          <button onclick="filterTier('admin')" id="filter-btn-admin" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-purple-50 hover:text-purple-900 border border-slate-200 transition">
+            🔐 Admins
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <div class="relative flex-1 sm:w-64">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+            <input type="text" id="search-input" oninput="handleSearchInput(event)" placeholder="Buscar por nome ou e-mail..." class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+          </div>
+          <button onclick="openAddStudentModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer shrink-0">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Novo Aluno</span>
+          </button>
         </div>
       </div>
 
       <!-- Students Table Card -->
       <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
-        <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
           <div class="flex items-center gap-2">
             <i data-lucide="users" class="w-5 h-5 text-amber-600"></i>
-            <h3 class="font-bold text-base text-slate-900">Base de Alunos Ativos</h3>
+            <h3 class="font-bold text-base text-slate-900">Alunos e Acessos Cadastrados</h3>
           </div>
-          <button onclick="openAddStudentModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
-            <span>Adicionar Aluno</span>
+          <button onclick="loadAllStudentsData()" class="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1 cursor-pointer">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Atualizar</span>
           </button>
         </div>
 
@@ -93,15 +131,23 @@
           <table class="w-full text-left text-xs text-slate-700">
             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
               <tr>
-                <th class="py-3 px-4">Aluno</th>
-                <th class="py-3 px-4">E-mail Cadastrado</th>
-                <th class="py-3 px-4">Nível / Plano</th>
-                <th class="py-3 px-4">Treinos Ativos</th>
-                <th class="py-3 px-4">Ações</th>
+                <th class="py-3 px-4">Aluno / Mentorado</th>
+                <th class="py-3 px-4">E-mail</th>
+                <th class="py-3 px-4">Tier / Plano</th>
+                <th class="py-3 px-4">Cursos Liberados</th>
+                <th class="py-3 px-4">Prescrições / Treinos</th>
+                <th class="py-3 px-4 text-right">Ações</th>
               </tr>
             </thead>
             <tbody id="students-table-body" class="divide-y divide-slate-100 font-medium">
-              <!-- Injected via JS -->
+              <tr>
+                <td colspan="6" class="py-8 text-center text-slate-400">
+                  <div class="flex items-center justify-center gap-2">
+                    <i data-lucide="loader" class="w-4 h-4 animate-spin text-amber-500"></i>
+                    <span>Carregando base de alunos do Firestore...</span>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -131,7 +177,7 @@
           <div>
             <label class="block text-[11px] font-bold text-slate-700 mb-1">Papel / Nível de Acesso *</label>
             <select id="admin-role-select" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-              <option value="admin">👑 Administrador Total (Acesso a Tudo)</option>
+              <option value="admin">👑 Administrador Total (God Mode)</option>
               <option value="moderator">💬 Moderador (Fórum, Suporte e Alunos)</option>
             </select>
           </div>
@@ -162,7 +208,7 @@
                 <th class="py-3 px-4">E-mail</th>
                 <th class="py-3 px-4">Papel (Role)</th>
                 <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4">Ação</th>
+                <th class="py-3 px-4 text-right">Ação</th>
               </tr>
             </thead>
             <tbody id="admins-table-body" class="divide-y divide-slate-100 font-medium">
@@ -175,12 +221,14 @@
 
   </main>
 
-  <!-- Add Student Modal -->
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: ADD NEW STUDENT                                                  -->
+  <!-- ========================================================================= -->
   <div id="add-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-bold font-serif text-slate-900">Cadastrar Novo Aluno</h3>
-        <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-900">✕</button>
+        <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-900 p-1 cursor-pointer">✕</button>
       </div>
 
       <form id="form-add-student" onsubmit="handleSaveStudent(event)" class="space-y-3">
@@ -195,25 +243,166 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Plano / Nível *</label>
           <select id="new-student-tier" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-            <option value="vip">👑 Mentorado VIP (Prescrições 1 a 1)</option>
-            <option value="club_anual">🎓 Magic Stories Club (Anual)</option>
+            <option value="vip_mentorship">👑 Mentorado VIP (Prescrições 1 a 1)</option>
+            <option value="club_annual">🎓 Magic Stories Club (Anual)</option>
             <option value="pro">🚀 Projeto 2026 Pro</option>
             <option value="free">🌱 Aluno Gratuito (Free)</option>
+            <option value="admin_master">👑 Administrador Mestre (God Mode)</option>
           </select>
         </div>
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2">
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2 cursor-pointer">
           Salvar Aluno no Firestore
         </button>
       </form>
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: EDIT STUDENT / TIERS / ENROLLED PRODUCTS                         -->
+  <!-- ========================================================================= -->
+  <div id="edit-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div>
+          <h3 class="text-lg font-bold font-serif text-slate-900" id="edit-student-title">Editar Aluno</h3>
+          <p class="text-xs text-slate-500" id="edit-student-subtitle">Alteração de planos e produtos liberados</p>
+        </div>
+        <button onclick="closeEditStudentModal()" class="text-slate-400 hover:text-slate-900 p-1 cursor-pointer">✕</button>
+      </div>
+
+      <form id="form-edit-student" onsubmit="handleUpdateStudent(event)" class="space-y-4">
+        <input type="hidden" id="edit-student-id">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Nome do Aluno</label>
+            <input type="text" id="edit-student-name" required class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">E-mail</label>
+            <input type="email" id="edit-student-email" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-500 cursor-not-allowed">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Tier / Plano de Acesso</label>
+            <select id="edit-student-tier" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-bold">
+              <option value="free">🌱 Aluno Free (Lead)</option>
+              <option value="club_annual">🎓 Magic Stories Club (Anual)</option>
+              <option value="pro">🚀 Projeto 2026 Pro</option>
+              <option value="vip_mentorship">👑 Mentoria VIP Individual</option>
+              <option value="admin_master">👑 Super-Admin (God Mode)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Papel no Sistema (Role)</label>
+            <select id="edit-student-role" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+              <option value="student">Aluno / Usuário</option>
+              <option value="moderator">Moderador</option>
+              <option value="admin">Administrador Total</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Enrolled Products Checkboxes -->
+        <div class="space-y-2 pt-2 border-t border-slate-100">
+          <label class="block text-[11px] font-bold text-slate-700">Cursos & Produtos Matriculados</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" id="chk-prod-legacy" value="ms-legacy" class="rounded text-amber-600 focus:ring-amber-500">
+              <span class="font-bold text-slate-800">Magic Stories Legacy</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" id="chk-prod-quickstart" value="english-quickstart" class="rounded text-amber-600 focus:ring-amber-500">
+              <span class="font-bold text-slate-800">English QuickStart</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" id="chk-prod-frases" value="frases-prontas" class="rounded text-amber-600 focus:ring-amber-500">
+              <span class="font-bold text-slate-800">Frases Prontas</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" id="chk-prod-all" value="all_access_master" class="rounded text-amber-600 focus:ring-amber-500">
+              <span class="font-bold text-slate-800">All Access Master</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2 cursor-pointer">
+          Salvar Alterações no Firestore
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: PRESCRIBE VIP AUDIO TRACK                                        -->
+  <!-- ========================================================================= -->
+  <div id="prescribe-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div>
+          <span class="text-[10px] font-bold font-mono text-amber-700 uppercase">PRESCRIÇÃO DE ÁUDIO 1 A 1</span>
+          <h3 class="text-lg font-bold font-serif text-slate-900" id="prescribe-mentee-name">Nova Faixa VIP</h3>
+        </div>
+        <button onclick="closePrescribeModal()" class="text-slate-400 hover:text-slate-900 p-1 cursor-pointer">✕</button>
+      </div>
+
+      <form id="form-prescribe-track" onsubmit="handleSavePrescription(event)" class="space-y-3">
+        <input type="hidden" id="prescribe-mentee-id">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Título da Faixa de Treino *</label>
+          <input type="text" id="prescribe-title" required placeholder="ex: Reunião Executiva & Small Talk Estratégico" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">URL do Áudio MP3 (128kbps) *</label>
+          <input type="url" id="prescribe-audio-url" required placeholder="https://firebasestorage.googleapis.com/.../audio.mp3" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          <p class="text-[10px] text-slate-500 mt-0.5">Dica: Você pode gerar o áudio no <a href="tts-studio.html" target="_blank" class="text-amber-600 font-bold underline">TTS Studio</a> e colar a URL aqui.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Duração Estimada</label>
+            <input type="text" id="prescribe-duration" placeholder="01:30" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Capa do Treino</label>
+            <input type="text" id="prescribe-cover" value="assets/images/cover-default-aef.jpg" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Contexto & Instruções do Leo</label>
+          <textarea id="prescribe-summary" rows="2" placeholder="Explique o propósito deste treino e em que momentos da conversa ele se aplica..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Sacada de Ouro do Leo</label>
+          <input type="text" id="prescribe-golden-tip" placeholder="ex: Solte o 't' final e conecte diretamente na vogal seguinte." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-3 cursor-pointer">
+          Publicar Prescrição no Player do Mentorado
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT CRM CONTROLLER                                                 -->
+  <!-- ========================================================================= -->
   <script>
-    const INITIAL_STUDENTS = [
-      { id: "estevao", name: "Estêvão Pinheiro", email: "estevaopin@gmail.com", tier: "vip", tracksCount: 4 },
-      { id: "thomas", name: "Thomas", email: "thomas@agoraeufalo.com.br", tier: "vip", tracksCount: 6 },
-      { id: "andre", name: "André", email: "andre@agoraeufalo.com.br", tier: "vip", tracksCount: 1 },
-      { id: "matheus", name: "Matheus", email: "matheus@agoraeufalo.com.br", tier: "vip", tracksCount: 1 }
+    let ALL_STUDENTS_LIST = [];
+    let CURRENT_FILTER = 'all';
+    let SEARCH_QUERY = '';
+
+    const INITIAL_VIP_FALLBACK = [
+      { id: "estevao", name: "Estêvão Pinheiro", email: "estevaopin@gmail.com", tier: "vip_mentorship", role: "student", tracksCount: 4, enrolledProducts: ["ms-legacy", "mentoria_vip"] },
+      { id: "thomas", name: "Thomas", email: "thomas@agoraeufalo.com.br", tier: "vip_mentorship", role: "student", tracksCount: 6, enrolledProducts: ["ms-legacy", "mentoria_vip"] },
+      { id: "andre", name: "André Birchal", email: "andre@agoraeufalo.com.br", tier: "vip_mentorship", role: "student", tracksCount: 1, enrolledProducts: ["ms-legacy", "mentoria_vip"] },
+      { id: "matheus", name: "Matheus", email: "matheus@agoraeufalo.com.br", tier: "vip_mentorship", role: "student", tracksCount: 1, enrolledProducts: ["ms-legacy", "mentoria_vip"] }
     ];
 
     const INITIAL_ADMINS = [
@@ -221,50 +410,233 @@
       { name: "Leonardo Leite (Principal)", email: "leonardo@agoraeufalo.com.br", role: "admin", isMaster: false }
     ];
 
+    function updateIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
     function switchTab(tab) {
       const isStudents = tab === 'students';
       document.getElementById('section-students').classList.toggle('hidden', !isStudents);
       document.getElementById('section-rbac').classList.toggle('hidden', isStudents);
 
       document.getElementById('tab-btn-students').className = isStudents
-        ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm'
-        : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+        ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm flex items-center gap-1.5'
+        : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5';
 
       document.getElementById('tab-btn-rbac').className = !isStudents
-        ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm'
-        : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition';
+        ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm flex items-center gap-1.5'
+        : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5';
+    }
+
+    async function loadAllStudentsData() {
+      const tbody = document.getElementById('students-table-body');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-400">
+              <div class="flex items-center justify-center gap-2">
+                <i data-lucide="loader" class="w-4 h-4 animate-spin text-amber-500"></i>
+                <span>Sincronizando com Firestore...</span>
+              </div>
+            </td>
+          </tr>
+        `;
+        updateIcons();
+      }
+
+      try {
+        if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+        
+        // 1. Fetch from Firestore users and mentees
+        const { users, vipMentees } = await window.aefPortalAuth.getAllStudentsAndMentees();
+        
+        const combined = new Map();
+
+        // Add Fallback Mentees
+        INITIAL_VIP_FALLBACK.forEach(m => combined.set(m.email.toLowerCase(), m));
+
+        // Add Firestore Mentees
+        vipMentees.forEach(m => {
+          const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase();
+          const existing = combined.get(email) || {};
+          combined.set(email, {
+            ...existing,
+            ...m,
+            id: m.id,
+            tier: 'vip_mentorship',
+            name: m.name || existing.name || m.id,
+            email: email
+          });
+        });
+
+        // Add Firestore Users
+        users.forEach(u => {
+          const email = (u.email || '').toLowerCase();
+          if (!email) return;
+          const existing = combined.get(email) || {};
+          combined.set(email, {
+            ...existing,
+            ...u,
+            id: existing.id || u.uid || email.split('@')[0],
+            name: u.name || existing.name || email.split('@')[0],
+            email: email,
+            tier: u.tier || existing.tier || 'free',
+            role: u.role || existing.role || 'student',
+            enrolledProducts: u.enrolledProducts || existing.enrolledProducts || []
+          });
+        });
+
+        ALL_STUDENTS_LIST = Array.from(combined.values());
+      } catch (err) {
+        console.warn("Could not load users from Firestore, using baseline list:", err);
+        ALL_STUDENTS_LIST = [...INITIAL_VIP_FALLBACK];
+      }
+
+      renderStudentsTable();
+      updateMetrics();
+      renderAdminsTable();
+      updateIcons();
+    }
+
+    function updateMetrics() {
+      let total = ALL_STUDENTS_LIST.length;
+      let vips = 0;
+      let clubs = 0;
+      let frees = 0;
+      let admins = 0;
+
+      ALL_STUDENTS_LIST.forEach(s => {
+        const tier = s.tier || 'free';
+        const role = s.role || 'student';
+
+        if (role === 'admin' || tier === 'admin_master') admins++;
+        if (tier === 'vip_mentorship' || tier === 'vip') vips++;
+        else if (tier === 'club_annual' || tier === 'pro' || tier === 'course_member') clubs++;
+        else if (tier === 'free') frees++;
+      });
+
+      document.getElementById('stat-total-students').innerText = total;
+      document.getElementById('stat-vip-students').innerText = vips;
+      document.getElementById('stat-pro-students').innerText = clubs;
+      document.getElementById('stat-free-students').innerText = frees;
+      document.getElementById('stat-admin-students').innerText = admins;
+    }
+
+    function filterTier(tier) {
+      CURRENT_FILTER = tier;
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition';
+      });
+      const activeBtn = document.getElementById(`filter-btn-${tier}`);
+      if (activeBtn) activeBtn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition';
+      renderStudentsTable();
+    }
+
+    function handleSearchInput(e) {
+      SEARCH_QUERY = (e.target.value || '').trim().toLowerCase();
+      renderStudentsTable();
     }
 
     function renderStudentsTable() {
       const tbody = document.getElementById('students-table-body');
       if (!tbody) return;
 
-      tbody.innerHTML = INITIAL_STUDENTS.map(s => {
-        const tierBadge = s.tier === 'vip' 
-          ? '<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-black">👑 MENTORADO VIP</span>'
-          : '<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">ALUNO FREE</span>';
+      const filtered = ALL_STUDENTS_LIST.filter(s => {
+        const matchesSearch = !SEARCH_QUERY || 
+          (s.name && s.name.toLowerCase().includes(SEARCH_QUERY)) || 
+          (s.email && s.email.toLowerCase().includes(SEARCH_QUERY));
 
-        const avatarHtml = s.avatarUrl 
-          ? `<img src="${s.avatarUrl}" alt="${s.name}" class="w-7 h-7 rounded-lg object-cover border border-slate-200">`
-          : `<div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center font-bold text-xs shrink-0">${s.name.substring(0, 2).toUpperCase()}</div>`;
+        if (!matchesSearch) return false;
+
+        const tier = s.tier || 'free';
+        const role = s.role || 'student';
+
+        if (CURRENT_FILTER === 'all') return true;
+        if (CURRENT_FILTER === 'vip') return tier === 'vip_mentorship' || tier === 'vip';
+        if (CURRENT_FILTER === 'club') return tier === 'club_annual' || tier === 'pro' || tier === 'course_member';
+        if (CURRENT_FILTER === 'free') return tier === 'free';
+        if (CURRENT_FILTER === 'admin') return role === 'admin' || tier === 'admin_master';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-400">
+              Nenhum aluno encontrado para este filtro.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(s => {
+        const tier = s.tier || 'free';
+        const role = s.role || 'student';
+
+        let tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">🌱 FREE</span>';
+        if (role === 'admin' || tier === 'admin_master') {
+          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-200 text-[10px] font-black">👑 ADMIN MESTRE</span>';
+        } else if (tier === 'vip_mentorship' || tier === 'vip') {
+          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black">👑 MENTORADO VIP</span>';
+        } else if (tier === 'club_annual' || tier === 'pro' || tier === 'course_member') {
+          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-200 text-[10px] font-bold">🎓 CLUB ANUAL</span>';
+        }
+
+        const enrolledBadges = (s.enrolledProducts || []).map(p => {
+          const names = {
+            'ms-legacy': 'Magic Stories',
+            'english-quickstart': 'QuickStart',
+            'frases-prontas': 'Frases Prontas',
+            'all_access_master': 'All Access'
+          };
+          return `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-[9px] text-slate-600 font-mono">${names[p] || p}</span>`;
+        }).join(' ') || '<span class="text-[10px] text-slate-400 italic">Nenhum</span>';
+
+        const tracksCount = s.tracksCount || (tier.includes('vip') ? 1 : 0);
+
+        const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(s.name || 'A').substring(0, 2).toUpperCase()}</div>`;
+
+        const isVIP = tier === 'vip_mentorship' || tier === 'vip';
 
         return `
-          <tr class="hover:bg-slate-50 transition">
+          <tr class="hover:bg-slate-50/80 transition">
             <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2.5">
               ${avatarHtml}
-              <span>${s.name}</span>
+              <div>
+                <p class="text-xs font-bold text-slate-900">${s.name}</p>
+                <span class="text-[10px] text-slate-400 font-mono">${s.id || ''}</span>
+              </div>
             </td>
             <td class="py-3.5 px-4 font-mono text-slate-600">${s.email}</td>
             <td class="py-3.5 px-4">${tierBadge}</td>
-            <td class="py-3.5 px-4 font-bold text-amber-700">${s.tracksCount} faixas gravadas</td>
-            <td class="py-3.5 px-4">
-              <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-700 text-[11px] font-bold transition inline-flex items-center gap-1">
-                <span>Player</span> <span>↗</span>
-              </a>
+            <td class="py-3.5 px-4 flex flex-wrap gap-1 items-center max-w-xs">${enrolledBadges}</td>
+            <td class="py-3.5 px-4 font-bold ${isVIP ? 'text-amber-800' : 'text-slate-500'}">
+              ${tracksCount > 0 ? `${tracksCount} faixas ativas` : '—'}
+            </td>
+            <td class="py-3.5 px-4 text-right">
+              <div class="flex items-center justify-end gap-1.5">
+                <button onclick="openEditStudentModal('${s.email}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>
+                ${isVIP ? `
+                  <button onclick="openPrescribeModal('${s.id}', '${s.name}')" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Prescrever Áudio VIP">
+                    <i data-lucide="mic" class="w-3 h-3 text-amber-700"></i>
+                    <span>Prescrever</span>
+                  </button>
+                  <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-[11px] font-bold transition inline-flex items-center gap-1">
+                    <span>Player</span> <span>↗</span>
+                  </a>
+                ` : ''}
+              </div>
             </td>
           </tr>
         `;
       }).join('');
+
+      updateIcons();
     }
 
     function renderAdminsTable() {
@@ -275,13 +647,13 @@
         const roleLabel = a.role === 'superadmin' 
           ? '<span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black">👑 SUPER-ADMIN MESTRE</span>'
           : (a.role === 'admin' 
-            ? '<span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200 text-[10px] font-bold">ADMIN TOTAL</span>' 
-            : '<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold">MODERADOR</span>');
+            ? '<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold">ADMIN TOTAL (GOD MODE)</span>' 
+            : '<span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200 text-[10px] font-bold">MODERADOR</span>');
 
         return `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 flex items-center justify-center font-black text-xs">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 flex items-center justify-center font-black text-xs">
                 ${a.name.substring(0, 2).toUpperCase()}
               </div>
               <span>${a.name}</span>
@@ -289,30 +661,170 @@
             <td class="py-3.5 px-4 font-mono text-slate-600">${a.email}</td>
             <td class="py-3.5 px-4">${roleLabel}</td>
             <td class="py-3.5 px-4 text-emerald-600 font-bold">● Ativo</td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 text-right">
               ${a.isMaster 
                 ? '<span class="text-[11px] text-slate-400 italic">Proprietário</span>' 
-                : `<button onclick="handleRevokeAdmin('${a.email}')" class="text-rose-600 hover:text-rose-700 text-[11px] font-bold">Revogar</button>`}
+                : `<button onclick="handleRevokeAdmin('${a.email}')" class="text-rose-600 hover:text-rose-700 text-[11px] font-bold cursor-pointer">Revogar</button>`}
             </td>
           </tr>
         `;
       }).join('');
+      updateIcons();
     }
 
+    // Modal Operations
     function openAddStudentModal() { document.getElementById('add-student-modal').classList.remove('hidden'); }
     function closeAddStudentModal() { document.getElementById('add-student-modal').classList.add('hidden'); }
 
-    function handleSaveStudent(e) {
+    function openEditStudentModal(email) {
+      const student = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email.toLowerCase());
+      if (!student) return;
+
+      document.getElementById('edit-student-id').value = student.id || student.uid || '';
+      document.getElementById('edit-student-name').value = student.name || '';
+      document.getElementById('edit-student-email').value = student.email || '';
+      document.getElementById('edit-student-tier').value = student.tier || 'free';
+      document.getElementById('edit-student-role').value = student.role || 'student';
+
+      const prods = student.enrolledProducts || [];
+      document.getElementById('chk-prod-legacy').checked = prods.includes('ms-legacy');
+      document.getElementById('chk-prod-quickstart').checked = prods.includes('english-quickstart');
+      document.getElementById('chk-prod-frases').checked = prods.includes('frases-prontas');
+      document.getElementById('chk-prod-all').checked = prods.includes('all_access_master');
+
+      document.getElementById('edit-student-modal').classList.remove('hidden');
+    }
+
+    function closeEditStudentModal() { document.getElementById('edit-student-modal').classList.add('hidden'); }
+
+    function openPrescribeModal(menteeId, menteeName) {
+      document.getElementById('prescribe-mentee-id').value = menteeId;
+      document.getElementById('prescribe-mentee-name').innerText = `Prescrição para ${menteeName}`;
+      document.getElementById('prescribe-title').value = '';
+      document.getElementById('prescribe-audio-url').value = '';
+      document.getElementById('prescribe-summary').value = '';
+      document.getElementById('prescribe-golden-tip').value = '';
+      document.getElementById('prescribe-modal').classList.remove('hidden');
+    }
+
+    function closePrescribeModal() { document.getElementById('prescribe-modal').classList.add('hidden'); }
+
+    async function handleSaveStudent(e) {
       e.preventDefault();
       const name = document.getElementById('new-student-name').value.trim();
-      const email = document.getElementById('new-student-email').value.trim();
+      const email = document.getElementById('new-student-email').value.trim().toLowerCase();
       const tier = document.getElementById('new-student-tier').value;
       const id = name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-      INITIAL_STUDENTS.unshift({ id, name, email, tier, tracksCount: 0 });
+      const isVIP = tier === 'vip_mentorship';
+      const isMaster = tier === 'admin_master';
+
+      const enrolled = isMaster || isVIP 
+        ? ['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas']
+        : (tier === 'club_annual' ? ['ms-legacy', 'english-quickstart', 'frases-prontas'] : ['ms-legacy']);
+
+      const newStudent = {
+        id,
+        uid: id,
+        name,
+        email,
+        tier,
+        role: isMaster ? 'admin' : 'student',
+        enrolledProducts: enrolled,
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.updateUserTierAndRole(id, tier, newStudent.role, enrolled);
+          if (isVIP) {
+            await window.aefPortalAuth.saveMenteeDoc(id, newStudent);
+          }
+        }
+      } catch (err) {
+        console.warn("Could not save to Firestore:", err);
+      }
+
+      ALL_STUDENTS_LIST.unshift(newStudent);
       renderStudentsTable();
+      updateMetrics();
       closeAddStudentModal();
-      alert(`✅ Aluno ${name} cadastrado com sucesso!`);
+      alert(`✅ Aluno ${name} (${email}) cadastrado com sucesso!`);
+    }
+
+    async function handleUpdateStudent(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-student-id').value;
+      const email = document.getElementById('edit-student-email').value.trim().toLowerCase();
+      const name = document.getElementById('edit-student-name').value.trim();
+      const tier = document.getElementById('edit-student-tier').value;
+      const role = document.getElementById('edit-student-role').value;
+
+      const enrolled = [];
+      if (document.getElementById('chk-prod-legacy').checked) enrolled.push('ms-legacy');
+      if (document.getElementById('chk-prod-quickstart').checked) enrolled.push('english-quickstart');
+      if (document.getElementById('chk-prod-frases').checked) enrolled.push('frases-prontas');
+      if (document.getElementById('chk-prod-all').checked) enrolled.push('all_access_master');
+
+      try {
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], tier, role, enrolled);
+          if (tier === 'vip_mentorship') {
+            await window.aefPortalAuth.saveMenteeDoc(id || email.split('@')[0], { name, email, tier, role, enrolledProducts: enrolled });
+          }
+        }
+      } catch (err) {
+        console.warn("Could not update in Firestore:", err);
+      }
+
+      const idx = ALL_STUDENTS_LIST.findIndex(s => s.email.toLowerCase() === email);
+      if (idx >= 0) {
+        ALL_STUDENTS_LIST[idx] = { ...ALL_STUDENTS_LIST[idx], name, tier, role, enrolledProducts: enrolled };
+      }
+
+      renderStudentsTable();
+      updateMetrics();
+      closeEditStudentModal();
+      alert(`✅ Aluno ${name} atualizado com sucesso!`);
+    }
+
+    async function handleSavePrescription(e) {
+      e.preventDefault();
+      const menteeId = document.getElementById('prescribe-mentee-id').value;
+      const title = document.getElementById('prescribe-title').value.trim();
+      const audioUrl = document.getElementById('prescribe-audio-url').value.trim();
+      const duration = document.getElementById('prescribe-duration').value.trim() || '01:30';
+      const coverImage = document.getElementById('prescribe-cover').value.trim() || 'assets/images/cover-default-aef.jpg';
+      const summary = document.getElementById('prescribe-summary').value.trim();
+      const goldenTip = document.getElementById('prescribe-golden-tip').value.trim();
+
+      const trackPayload = {
+        id: `vip_${menteeId}_${Date.now()}`,
+        title,
+        audioUrl,
+        duration,
+        coverImage,
+        summary,
+        goldenTip,
+        status: 'active',
+        sentences: [
+          { id: 1, start: 0.0, end: 4.0, text: title, spokenTranslation: "Treino Personalizado de Escuta e Reflexo Oral com o Professor Leo" }
+        ]
+      };
+
+      try {
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveVIPPrescriptionTrack(menteeId, trackPayload);
+        }
+        alert(`🎙️ Prescrição "${title}" publicada com sucesso para o mentorado ${menteeId}!`);
+        closePrescribeModal();
+        loadAllStudentsData();
+      } catch (err) {
+        console.error("Erro ao salvar prescrição:", err);
+        alert(`❌ Erro ao salvar prescrição: ${err.message}`);
+      }
     }
 
     function handleGrantAdmin(e) {
@@ -338,10 +850,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderStudentsTable();
-      renderAdminsTable();
-      lucide.createIcons();
+      loadAllStudentsData();
+      updateIcons();
     });
   </script>
 </body>
 </html>
+
