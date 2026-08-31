@@ -174,12 +174,25 @@
       </div>
     </section>
 
-    <!-- TAB 2: ACTIVE PUBLIC EPISODES -->
+    <!-- TAB 2: ACTIVE EPISODES (PUBLIC & VIP MENTEES) -->
     <section id="panel-episodes" class="hidden bg-[#112240] border border-white/10 rounded-2xl p-6 shadow-sm space-y-4">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-white/10">
         <div>
-          <h3 class="text-base font-bold text-white">Episódios Públicos Disponíveis</h3>
-          <p class="text-xs text-slate-400">Treinos demonstrativos exibidos no player público.</p>
+          <h3 class="text-base font-bold text-white">Faixas & Prescrições Ativas na Nuvem</h3>
+          <p class="text-xs text-slate-400">Gerencie, edite ou exclua treinos do Player Público ou de qualquer Mentorado VIP.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-bold text-slate-300">Ver Faixas de:</label>
+          <select id="filterStudentTracksSelect" onchange="loadTracksForSelectedStudent(this.value)" class="px-3.5 py-2 rounded-xl bg-[#0A192F] border border-amber-500/50 text-amber-300 font-bold text-xs outline-none cursor-pointer">
+            <option value="public">🌐 Player Público (Sugestões)</option>
+            <option value="estevao">👑 Estêvão (VIP)</option>
+            <option value="thomas">👑 Thomas (VIP)</option>
+            <option value="andre">👑 André (VIP)</option>
+            <option value="matheus">👑 Matheus (VIP)</option>
+            <option value="carlos">👑 Carlos (VIP)</option>
+            <option value="marcos">👑 Marcos (VIP)</option>
+            <option value="patricia">👑 Patrícia (VIP)</option>
+          </select>
         </div>
       </div>
 
@@ -545,40 +558,66 @@
       return path;
     }
 
-    async function renderPublicTracks() {
-      const container = document.getElementById("public-tracks-list");
-      let baseTracks = window.AEF_STUDENT_PUBLIC?.tracks || [];
+    let currentFilterStudentId = "public";
 
-      // Fetch from Firestore
+    function loadTracksForSelectedStudent(studentId) {
+      currentFilterStudentId = studentId || "public";
+      renderPublicTracks(currentFilterStudentId);
+    }
+
+    async function renderPublicTracks(targetStudentId = "public") {
+      currentFilterStudentId = targetStudentId;
+      const container = document.getElementById("public-tracks-list");
+      container.innerHTML = `<div class="py-8 text-center text-slate-400 col-span-full">Carregando faixas da nuvem (${targetStudentId})...</div>`;
+
+      let tracks = [];
+
+      // Fetch from Firestore students/{targetStudentId}/tracks
       try {
-        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/public/tracks");
-        const data = await res.json();
-        if (data.documents && data.documents.length > 0) {
-          const cloudTracks = data.documents.map(d => {
-            const f = d.fields || {};
-            return {
-              id: f.id?.stringValue || d.name.split("/").pop(),
-              title: f.title?.stringValue || "Sem Título",
-              duration: f.duration?.stringValue || "00:00",
-              coverImage: f.coverImage?.stringValue || "assets/images/cover-public-spoken-reflex.jpg",
-              audioUrl: f.audioUrl?.stringValue || "",
-              videoUrl: f.videoUrl?.stringValue || "",
-              summary: f.summary?.stringValue || "",
-              goldenTip: f.goldenTip?.stringValue || "",
-              status: f.status?.stringValue || "active",
-              studentId: "public"
-            };
-          });
-          baseTracks = cloudTracks;
+        const res = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${targetStudentId}/tracks`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.documents && data.documents.length > 0) {
+            tracks = data.documents.map(d => {
+              const f = d.fields || {};
+              return {
+                id: f.id?.stringValue || d.name.split("/").pop(),
+                title: f.title?.stringValue || "Sem Título",
+                duration: f.duration?.stringValue || "00:00",
+                coverImage: f.coverImage?.stringValue || "assets/images/cover-default-aef.jpg",
+                audioUrl: f.audioUrl?.stringValue || "",
+                videoUrl: f.videoUrl?.stringValue || "",
+                summary: f.summary?.stringValue || "",
+                goldenTip: f.goldenTip?.stringValue || "",
+                status: f.status?.stringValue || "active",
+                studentId: targetStudentId
+              };
+            });
+          }
         }
       } catch (e) {
         console.warn("Could not fetch cloud tracks:", e);
       }
 
-      currentPublicTracks = baseTracks;
-      document.getElementById("stat-total-tracks").innerText = baseTracks.length;
+      // If public and empty, fallback to local base
+      if (targetStudentId === 'public' && tracks.length === 0 && window.AEF_STUDENT_PUBLIC?.tracks) {
+        tracks = window.AEF_STUDENT_PUBLIC.tracks.map(t => ({ ...t, studentId: 'public' }));
+      } else if (targetStudentId === 'estevao' && tracks.length === 0 && window.AEF_STUDENT_ESTEVAO?.tracks) {
+        tracks = window.AEF_STUDENT_ESTEVAO.tracks.map(t => ({ ...t, studentId: 'estevao' }));
+      }
 
-      container.innerHTML = baseTracks.map((t, idx) => {
+      currentPublicTracks = tracks;
+      if (targetStudentId === 'public') {
+        const statEl = document.getElementById("stat-total-tracks");
+        if (statEl) statEl.innerText = tracks.length;
+      }
+
+      if (tracks.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-slate-400 col-span-full bg-[#0A192F] border border-white/10 rounded-2xl p-6">Nenhuma faixa encontrada na nuvem para <strong>${targetStudentId}</strong>.</div>`;
+        return;
+      }
+
+      container.innerHTML = tracks.map((t, idx) => {
         const isArchived = t.status === 'archived';
         const coverSrc = normalizeCoverPath(t.coverImage);
         return `
@@ -589,6 +628,7 @@
                 <div class="flex items-center gap-2 mb-1 flex-wrap">
                   <span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-amber-500 text-slate-950">FAIXA ${idx + 1}</span>
                   <span class="text-xs font-mono font-bold text-amber-300">${t.duration}</span>
+                  <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-400/30">${t.studentId}</span>
                   <button onclick="togglePublicTrackStatus('${t.id}')" class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded transition ${isArchived ? 'bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 hover:bg-amber-500/20 hover:text-amber-300'}" title="${isArchived ? 'Clique para colocar no Player' : 'Clique para tirar de circulação do Player (preservando na nuvem)'}">
                     ${isArchived ? '📦 Fora do Player' : '⚡ No Player (Ativo)'}
                   </button>
@@ -599,10 +639,10 @@
               </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-              <button onclick="openEditTrackModal('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar / Redistribuir Faixa">
+              <button onclick="openEditTrackModal('${t.id}', '${t.studentId}')" class="p-2 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition" title="Editar / Redistribuir Faixa">
                 <i data-lucide="edit-2" class="w-4 h-4"></i>
               </button>
-              <button onclick="deleteTrack('${t.id}', 'public')" class="p-2 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Faixa">
+              <button onclick="deleteTrack('${t.id}', '${t.studentId}')" class="p-2 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white text-rose-400 transition" title="Excluir Faixa">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
               </button>
             </div>
