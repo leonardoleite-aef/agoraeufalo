@@ -81,7 +81,7 @@ window.AEF_STUDENT_PUBLIC = {
       title: "MS004 - Grazi on the Podcast: The Right Questions about Life",
       duration: "01:31",
       coverImage: "../assets/images/cover_ms004.jpg",
-      audioUrl: "../assets/audio/ms004/audio_lr.mp3",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS004%2Faudio_lr.mp3?alt=media",
       videoUrl: "",
       summary: "Entrevista exclusiva de Graziela no podcast 'The Right Questions about Life' com a anfitriã Chloe. Treino de perguntas e respostas dinâmicas no reflexo oral.",
       goldenTip: "Em conversas cotidianas, nunca traduza palavra por palavra. Absorva o bloco musical da pergunta e responda no ritmo da respiração.",
