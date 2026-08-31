@@ -356,10 +356,21 @@
           <input type="text" id="prescribe-title" required placeholder="ex: Reunião Executiva & Small Talk Estratégico" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
         </div>
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">URL do Áudio MP3 (128kbps)</label>
+            <input type="url" id="prescribe-audio-url" placeholder="https://firebasestorage.googleapis.com/.../audio.mp3" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">URL do Vídeo do YouTube (Opcional)</label>
+            <input type="url" id="prescribe-video-url" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          </div>
+        </div>
+
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">URL do Áudio MP3 (128kbps) *</label>
-          <input type="url" id="prescribe-audio-url" required placeholder="https://firebasestorage.googleapis.com/.../audio.mp3" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
-          <p class="text-[10px] text-slate-500 mt-0.5">Dica: Você pode gerar o áudio no <a href="tts-studio.html" target="_blank" class="text-amber-600 font-bold underline">TTS Studio</a> e colar a URL aqui.</p>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Roteiro / Script em Inglês (Para Karaokê Sincronizado)</label>
+          <textarea id="prescribe-script" rows="3" placeholder="Cole aqui o diálogo ou frases do treino (uma por linha). O sistema vai gerar os blocos de karaokê automaticamente..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono leading-relaxed"></textarea>
+          <p class="text-[10px] text-slate-500 mt-0.5">Dica: Cada linha vira um card interativo no Player do aluno (com play por toque e repetição em loop 🔂).</p>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -702,12 +713,22 @@
       document.getElementById('prescribe-mentee-name').innerText = `Prescrição para ${menteeName}`;
       document.getElementById('prescribe-title').value = '';
       document.getElementById('prescribe-audio-url').value = '';
+      if (document.getElementById('prescribe-video-url')) document.getElementById('prescribe-video-url').value = '';
+      if (document.getElementById('prescribe-script')) document.getElementById('prescribe-script').value = '';
       document.getElementById('prescribe-summary').value = '';
       document.getElementById('prescribe-golden-tip').value = '';
       document.getElementById('prescribe-modal').classList.remove('hidden');
     }
 
     function closePrescribeModal() { document.getElementById('prescribe-modal').classList.add('hidden'); }
+
+    function parseDurationStringToSeconds(durStr) {
+      if (!durStr) return 90;
+      const parts = durStr.split(':').map(Number);
+      if (parts.length === 2) return (parts[0] * 60) + parts[1];
+      if (parts.length === 3) return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+      return parseFloat(durStr) || 90;
+    }
 
     async function handleSaveStudent(e) {
       e.preventDefault();
@@ -794,31 +815,68 @@
       e.preventDefault();
       const menteeId = document.getElementById('prescribe-mentee-id').value;
       const title = document.getElementById('prescribe-title').value.trim();
-      const audioUrl = document.getElementById('prescribe-audio-url').value.trim();
+      const audioUrl = document.getElementById('prescribe-audio-url')?.value.trim() || '';
+      const videoUrl = document.getElementById('prescribe-video-url')?.value.trim() || '';
+      const scriptRaw = document.getElementById('prescribe-script')?.value.trim() || '';
       const duration = document.getElementById('prescribe-duration').value.trim() || '01:30';
-      const coverImage = document.getElementById('prescribe-cover').value.trim() || 'assets/images/cover-default-aef.jpg';
+      let coverImage = document.getElementById('prescribe-cover').value.trim() || 'assets/images/cover-default-aef.jpg';
       const summary = document.getElementById('prescribe-summary').value.trim();
       const goldenTip = document.getElementById('prescribe-golden-tip').value.trim();
+
+      if (!audioUrl && !videoUrl) {
+        alert("Por favor, forneça pelo menos a URL do Áudio MP3 ou a URL do Vídeo do YouTube.");
+        return;
+      }
+
+      // Auto YouTube cover fallback
+      if (videoUrl && (!coverImage || coverImage.includes('cover-default-aef'))) {
+        const match = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        if (match && match[1]) {
+          coverImage = `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`;
+        }
+      }
+
+      const totalDurationSec = parseDurationStringToSeconds(duration);
+
+      let sentences = [];
+      if (scriptRaw && window.aefAudioHub) {
+        sentences = window.aefAudioHub.parseScriptToSentences(scriptRaw, totalDurationSec);
+      } else if (scriptRaw) {
+        const lines = scriptRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        const timePer = totalDurationSec / Math.max(1, lines.length);
+        sentences = lines.map((line, idx) => ({
+          id: idx + 1,
+          start: parseFloat((idx * timePer).toFixed(2)),
+          end: parseFloat(((idx + 1) * timePer).toFixed(2)),
+          text: line,
+          spokenTranslation: ""
+        }));
+      } else {
+        sentences = [
+          { id: 1, start: 0.0, end: parseFloat(totalDurationSec.toFixed(2)), text: title, spokenTranslation: "Treino Personalizado de Escuta e Reflexo Oral com o Professor Leo" }
+        ];
+      }
 
       const trackPayload = {
         id: `vip_${menteeId}_${Date.now()}`,
         title,
-        audioUrl,
+        audioUrl: audioUrl || (videoUrl ? "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic-01-story.mp3?alt=media" : ""),
+        videoUrl: videoUrl,
+        sourceType: videoUrl && !audioUrl ? 'youtube' : 'mp3',
         duration,
         coverImage,
         summary,
         goldenTip,
         status: 'active',
-        sentences: [
-          { id: 1, start: 0.0, end: 4.0, text: title, spokenTranslation: "Treino Personalizado de Escuta e Reflexo Oral com o Professor Leo" }
-        ]
+        scriptRaw,
+        sentences
       };
 
       try {
         if (window.aefCloudSync) {
           await window.aefCloudSync.saveVIPPrescriptionTrack(menteeId, trackPayload);
         }
-        alert(`🎙️ Prescrição "${title}" publicada com sucesso para o mentorado ${menteeId}!`);
+        alert(`🎙️ Prescrição "${title}" (${sentences.length} frases) publicada com sucesso para o mentorado ${menteeId}!`);
         closePrescribeModal();
         loadAllStudentsData();
       } catch (err) {

@@ -452,8 +452,8 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
             <span>Estimativa: <strong id="metricEstDuration" class="text-amber-400">~0s</strong></span>
           </div>
 
-          <!-- Title Input & Action Buttons (TTS vs Transcrição) -->
-          <div class="flex items-center gap-2 w-full sm:w-auto">
+          <!-- Title Input & Action Buttons (TTS vs Transcrição vs Alinhamento) -->
+          <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
             <input type="text" id="audioTitleInput" value="magic_story_reflex_01" placeholder="Nome do arquivo (slug)" class="flex-1 sm:w-48 bg-[#111726] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 font-mono outline-none">
 
             <!-- TTS Generate Button -->
@@ -462,10 +462,16 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
               <span>Gerar Áudio MP3 (Gemini TTS)</span>
             </button>
 
-            <!-- Audio Upload Transcription Button -->
-            <button id="transcribeAudioBtn" type="button" onclick="transcribeUploadedAudio()" class="hidden w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20 active:scale-95 transition-all">
+            <!-- Audio Upload: Option A - Align Script Button -->
+            <button id="alignAudioScriptBtn" type="button" onclick="alignUploadedAudioWithScript()" class="hidden w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all" title="Usa o script colado no editor para gerar as frases sincronizadas na hora sem consumir API">
+              <i data-lucide="wand-2" class="w-4 h-4"></i>
+              <span>1. Alinhar com Script (Instantâneo)</span>
+            </button>
+
+            <!-- Audio Upload: Option B - AI STT Transcription Button -->
+            <button id="transcribeAudioBtn" type="button" onclick="transcribeUploadedAudio()" class="hidden w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20 active:scale-95 transition-all" title="Transcreve o áudio automaticamente usando o Gemini 2.0 Flash (Áudios até 18MB)">
               <i data-lucide="bot" class="w-4 h-4"></i>
-              <span>Transcrever com IA (Gemini)</span>
+              <span>2. Transcrever com IA (Gemini)</span>
             </button>
           </div>
         </div>
@@ -855,11 +861,11 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         </div>
 
         <div>
-          <label for="modelSelect" class="font-semibold text-slate-300 block mb-1">Modelo Gemini para TTS</label>
+          <label for="modelSelect" class="font-semibold text-slate-300 block mb-1">Modelo Gemini para Síntese de Voz (TTS)</label>
           <select id="modelSelect" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-200 outline-none cursor-pointer">
-            <option value="gemini-2.5-flash-preview-tts">gemini-2.5-flash-preview-tts (Google AI Studio TTS Oficial)</option>
-            <option value="gemini-2.5-flash">gemini-2.5-flash (Gemini 2.5 Flash Audio & Transcrição)</option>
-            <option value="gemini-3.1-flash-tts-preview">gemini-3.1-flash-tts-preview (Gemini 3.1 Flash TTS)</option>
+            <option value="gemini-2.0-flash">gemini-2.0-flash (Recomendado • Alta Fidelidade 24kHz & TTS)</option>
+            <option value="gemini-2.5-flash">gemini-2.5-flash (Gemini 2.5 Flash)</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash (Gemini 1.5 Flash)</option>
           </select>
         </div>
       </div>
@@ -942,6 +948,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       const ttsWrapper = document.getElementById('ttsControlsWrapper');
       const uploadWrapper = document.getElementById('uploadControlsWrapper');
       const genBtn = document.getElementById('generateAudioBtn');
+      const alignBtn = document.getElementById('alignAudioScriptBtn');
       const transBtn = document.getElementById('transcribeAudioBtn');
 
       if (mode === 'upload') {
@@ -950,6 +957,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         if (ttsWrapper) ttsWrapper.classList.add('hidden');
         if (uploadWrapper) uploadWrapper.classList.remove('hidden');
         if (genBtn) genBtn.classList.add('hidden');
+        if (alignBtn) alignBtn.classList.remove('hidden');
         if (transBtn) transBtn.classList.remove('hidden');
       } else {
         if (ttsBtn) ttsBtn.className = "flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md";
@@ -957,6 +965,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         if (ttsWrapper) ttsWrapper.classList.remove('hidden');
         if (uploadWrapper) uploadWrapper.classList.add('hidden');
         if (genBtn) genBtn.classList.remove('hidden');
+        if (alignBtn) alignBtn.classList.add('hidden');
         if (transBtn) transBtn.classList.add('hidden');
       }
       if (window.lucide) lucide.createIcons();
@@ -995,6 +1004,8 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       STATE.currentAudioBlob = file;
       STATE.currentMp3Blob = file;
 
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+
       // Update UI Info Card
       const infoCard = document.getElementById('uploadedAudioInfoCard');
       const fileNameEl = document.getElementById('uploadedFileName');
@@ -1004,7 +1015,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
 
       if (infoCard) infoCard.classList.remove('hidden');
       if (fileNameEl) fileNameEl.textContent = file.name;
-      if (fileSizeEl) fileSizeEl.textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+      if (fileSizeEl) fileSizeEl.textContent = `${sizeMb} MB`;
 
       const slug = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase();
       if (titleInput && (!titleInput.value || titleInput.value === 'magic_story_reflex_01')) {
@@ -1015,14 +1026,80 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       const tempUrl = URL.createObjectURL(file);
       const tempAudio = new Audio(tempUrl);
       tempAudio.addEventListener('loadedmetadata', () => {
-        const durSec = Math.round(tempAudio.duration);
+        const durSec = Math.round(tempAudio.duration) || 60;
+        STATE.uploadedFileDuration = durSec;
         if (fileDurationEl) fileDurationEl.textContent = `Duração: ${formatTime(durSec)}`;
-        loadMasterAudio(file, slug, durSec);
-      });
+        
+        STATE.currentMeta = {
+          id: slug,
+          title: slug,
+          script: document.getElementById('scriptInput')?.value || "",
+          mode: 'single',
+          speakers: "Gravação Real do Professor",
+          model: "Upload Direto",
+          timestamp: new Date().toISOString(),
+          sizeKb: Math.round(file.size / 1024),
+          blobUrl: tempUrl,
+          sentences: []
+        };
+        loadAudioIntoPlayer(tempUrl, STATE.currentMeta);
 
-      showToast(`Áudio <strong>${file.name}</strong> carregado com sucesso! Clique em "Transcrever com IA" para gerar as frases.`, "success");
+        if (file.size > 18 * 1024 * 1024) {
+          showToast(`Áudio <strong>${file.name}</strong> (${sizeMb}MB) carregado! Cole o script no editor e clique em <strong>"1. Alinhar com Script"</strong> para gerar o karaokê instantâneo.`, "info", 8000);
+        } else {
+          showToast(`Áudio <strong>${file.name}</strong> carregado! Use <strong>"1. Alinhar com Script"</strong> se já tiver o texto, ou <strong>"2. Transcrever com IA"</strong>.`, "success", 6000);
+        }
+      });
     }
 
+    // OPÇÃO 1: ALINHAR COM SCRIPT COLADO (0 COTA / INSTANTÂNEO)
+    function alignUploadedAudioWithScript() {
+      if (!STATE.uploadedFile && !STATE.currentAudioBlob) {
+        showToast("Selecione ou arraste um arquivo de áudio antes de alinhar o script.", "warning");
+        return;
+      }
+
+      const scriptArea = document.getElementById('scriptInput');
+      const scriptText = (scriptArea?.value || "").trim();
+
+      if (!scriptText) {
+        showToast("Cole o seu script/diálogo em inglês no editor para alinhar com o áudio gravado.", "warning");
+        if (scriptArea) scriptArea.focus();
+        return;
+      }
+
+      const totalDurationSec = STATE.uploadedFileDuration || (masterAudio && masterAudio.duration) || 60;
+      const sentences = window.aefAudioHub.parseScriptToSentences(scriptText, totalDurationSec);
+
+      if (!sentences || sentences.length === 0) {
+        showToast("Não foi possível identificar frases no script fornecido.", "warning");
+        return;
+      }
+
+      const title = document.getElementById('audioTitleInput')?.value || STATE.uploadedFile?.name.replace(/\.[^/.]+$/, "") || "treino_alinhado";
+      const tempUrl = STATE.currentMeta?.blobUrl || (STATE.uploadedFile ? URL.createObjectURL(STATE.uploadedFile) : "");
+
+      STATE.currentMeta = {
+        id: title.toLowerCase().replace(/[^a-z0-9_-]/g, '_'),
+        title: title,
+        script: scriptText,
+        mode: 'single',
+        speakers: "Gravação Real (Script Alinhado)",
+        model: "Alinhamento Direto",
+        timestamp: new Date().toISOString(),
+        sizeKb: Math.round((STATE.uploadedFile?.size || 1024) / 1024),
+        blobUrl: tempUrl,
+        sentences: sentences
+      };
+
+      if (tempUrl) {
+        loadAudioIntoPlayer(tempUrl, STATE.currentMeta);
+      }
+
+      showToast(`🎉 <strong>${sentences.length} frases alinhadas com sucesso!</strong> Karaokê pronto com timestamps de 00:00 até ${formatTime(totalDurationSec)}. Pode publicar!`, "success", 7000);
+    }
+
+    // OPÇÃO 2: TRANSCRIÇÃO AUTOMÁTICA COM GEMINI STT (ÁUDIOS ATÉ 18MB)
     async function transcribeUploadedAudio() {
       if (!STATE.uploadedFile) {
         showToast("Selecione ou arraste um arquivo de áudio antes de transcrever.", "warning");
@@ -1056,7 +1133,8 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         // Format script in editor
         const scriptLines = sentences.map(s => {
           const prefix = s.notes && s.notes.includes('Speaker') ? s.notes.replace('Speaker: ', '') : 'Leo';
-          return `${prefix}: ${s.text}`;
+          const ptNote = s.spokenTranslation ? ` [pt: ${s.spokenTranslation}]` : '';
+          return `${prefix}: ${s.text}${ptNote}`;
         }).join('\n');
 
         const scriptArea = document.getElementById('scriptInput');
@@ -1078,7 +1156,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
 
       } catch (err) {
         console.error("Transcription Error:", err);
-        showToast(`Erro na transcrição por IA: ${err.message}`, "error");
+        showToast(`Erro na transcrição por IA: ${err.message}`, "error", 8000);
       } finally {
         if (btn) {
           btn.disabled = false;
@@ -1218,10 +1296,8 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       const modelsToTry = [
         preferredModel,
         'gemini-2.0-flash',
-        'gemini-2.0-flash-exp',
         'gemini-2.5-flash',
-        'gemini-2.5-flash-preview-tts',
-        'gemini-3.1-flash-tts-preview'
+        'gemini-2.0-flash-exp'
       ].filter((v, i, a) => v && a.indexOf(v) === i);
 
       let lastError = null;

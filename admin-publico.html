@@ -717,10 +717,26 @@
       const sentencesRaw = document.getElementById("track-sentences-input").value.trim();
 
       let sentences = [];
-      try {
-        sentences = sentencesRaw ? JSON.parse(sentencesRaw) : [];
-      } catch (err) {
-        return alert("O campo de frases precisa ser um JSON válido.");
+      if (sentencesRaw) {
+        if (sentencesRaw.startsWith('[') && sentencesRaw.endsWith(']')) {
+          try {
+            sentences = JSON.parse(sentencesRaw);
+          } catch (err) {
+            console.warn("JSON parse fallback to text:", err);
+          }
+        }
+        if (sentences.length === 0) {
+          const lines = sentencesRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+          const durSec = duration.includes(':') ? duration.split(':').reduce((acc, time) => (60 * acc) + +time, 0) : 60;
+          const timePer = durSec / Math.max(1, lines.length);
+          sentences = lines.map((line, idx) => ({
+            id: idx + 1,
+            start: parseFloat((idx * timePer).toFixed(2)),
+            end: parseFloat(((idx + 1) * timePer).toFixed(2)),
+            text: line,
+            spokenTranslation: ""
+          }));
+        }
       }
 
       btn.disabled = true;

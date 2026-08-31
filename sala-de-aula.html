@@ -422,6 +422,549 @@
   <!-- ========================================================================= -->
   <script>
     const COURSE_SEEDS = {
+      "english-quickstart": {
+        id: "english-quickstart",
+        title: "English QuickStart • Fundamentos da Fala",
+        modules: [
+          {
+            id: "eqs-m0",
+            title: "Comece Aqui",
+            shortTitle: "Comece Aqui",
+            badge: "MÓDULO 0 • COMECE AQUI",
+            stats: "1 Aula • 11 min",
+            lessons: [
+              {
+                id: "eqs01",
+                title: "Aula 0.1 • Como Estudar o QuickStart",
+                order: 1,
+                duration: "11:49",
+                description: "Assista ao vídeo de introdução para alinhar o método e acelerar seus resultados.",
+                videoUrl: "assets/videos/quickstart/EQS_0.mp4",
+                thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_0_1.jpg",
+                pdfUrl: "",
+                goldenTip: "O inglês não é matéria de escola; é experiência viva. Assista a este vídeo para começar do jeito certo!",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <!-- Boas-Vindas Box -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5">
+                      <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="sparkles" class="w-4 h-4 text-[#C68A36]"></i>
+                          Seja Muito Bem-Vindo ao English QuickStart!
+                        </span>
+                        <span class="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 font-bold">Comece Aqui</span>
+                      </div>
+                      <div class="text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium">
+                        <p>
+                          Hello, my dear friend! Leonardo Leite aqui. Seja muito bem-vindo, seja muito bem-vinda ao <b>English QuickStart</b>!
+                        </p>
+                        <p>
+                          Este é o seu <b>Vídeo Zero</b> — o ponto de partida onde alinhamos o método e onde eu te explico exatamente por que este curso existe e como ele vai destravar o seu aprendizado.
+                        </p>
+                        <p>
+                          O QuickStart foi desenhado sob medida para quem precisa de um <b>foco instrumental nas estruturas fundamentais</b> do idioma. Aqui, escolhi a dedo os pontos mais críticos de funcionamento do inglês para que você possa consultar, revisar e consolidar esses conceitos sempre que precisar.
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- Conceito Central Box -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="brain" class="w-4 h-4 text-[#047857]"></i>
+                          O Conceito do Comprehensible Input
+                        </span>
+                      </div>
+                      <div class="text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium">
+                        <p>
+                          Nosso treinamento é baseado no conceito de <b>Comprehensible Input</b> (assimilação de conteúdo compreensível). Tudo o que você treinar e ouvir em inglês precisa fazer sentido contextual no seu cérebro.
+                        </p>
+                        <p>
+                          Ninguém fala ou entende algo no piloto automático de imediato. A fala espontânea é fruto de <b>ouvir, compreender e repetir a mesma experiência até virar reflexo</b>. A teoria nos dá segurança e entendimento das regras; as Magic Stories nos dão a ativação real.
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- Roadmap Box -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="map" class="w-4 h-4 text-[#1A56DB]"></i>
+                          Estrutura dos 5 Módulos + Bônus
+                        </span>
+                      </div>
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800 font-medium">
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                          <span class="font-bold text-[#0A192F] block">Módulo 1: O Núcleo da Frase (Quem é e quem faz)</span>
+                          <span class="text-slate-600 block text-xs">Os pronomes sujeito, a obrigatoriedade do sujeito explícito e o verbo To Be.</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                          <span class="font-bold text-[#0A192F] block">Módulo 2: A Construção de Frase (Ação no Presente)</span>
+                          <span class="text-slate-600 block text-xs">Ações simples, cotidianas e rotinas para começar a montar suas próprias sentenças.</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                          <span class="font-bold text-[#0A192F] block">Módulo 3: O Passado e a Continuidade</span>
+                          <span class="text-slate-600 block text-xs">Marcadores de tempo (yesterday, last week), a pronúncia correta dos passados e a continuidade de ações.</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                          <span class="font-bold text-[#0A192F] block">Módulo 4: Artigo e Posse</span>
+                          <span class="text-slate-600 block text-xs">Os artigos (A, An), adjetivos possessivos (My, His, Her) e a leitura prática de números em inglês.</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                          <span class="font-bold text-[#0A192F] block">Módulo 5: Onde e Como (Conectando Ideias)</span>
+                          <span class="text-slate-600 block text-xs">Preposições na prática (com um macete imperdível!) e a introdução aos verbos modais (Can, Must).</span>
+                        </div>
+                        <div class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200/50 space-y-1">
+                          <span class="font-bold text-emerald-900 block">Módulo Bônus: Past, Present & Future</span>
+                          <span class="text-emerald-700 block text-xs">Uma Magic Story avançada integrando os três principais tempos para consolidar sua fluência.</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Desafio do Leo -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/60 border border-amber-200 shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-amber-200">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#b45309] flex items-center gap-2">
+                          <i data-lucide="message-square" class="w-4 h-4"></i>
+                          💬 Desafio de Boas-Vindas do Leo!
+                        </span>
+                      </div>
+                      <div class="text-slate-800 text-xs sm:text-sm leading-relaxed space-y-2 font-medium">
+                        <p>
+                          Quero conhecer você! Deixe aqui nos comentários da plataforma as respostas para as 4 perguntas do vídeo:
+                        </p>
+                        <ul class="list-decimal list-inside pl-2 space-y-1 text-slate-700 text-xs">
+                          <li>De onde você vem / de qual cidade você é?</li>
+                          <li>Qual é o seu nível de empolgação (excitement)?</li>
+                          <li>Por que você está aqui estudando inglês?</li>
+                          <li>O que você faz da vida?</li>
+                        </ul>
+                        <p class="font-bold text-[#b45309] mt-2">
+                          Pronto para a primeira aula? Let's go!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: ""
+              }
+            ]
+          },
+          {
+            id: "eqs-m1",
+            title: "Módulo 1 - Foundation",
+            shortTitle: "EQS M1",
+            badge: "MÓDULO 1 • FOUNDATION",
+            stats: "4 Aulas • 63 min",
+            lessons: [
+              {
+                id: "eqs11",
+                title: "Aula 1.1 • Os Pronomes Sujeito",
+                order: 1,
+                duration: "13:39",
+                description: "Entenda a obrigatoriedade do sujeito em inglês e como evitar erros cruciais de audição e fala.",
+                videoUrl: "assets/videos/quickstart/EQS_1_1.mp4",
+                thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_1.jpg",
+                pdfUrl: "Material-PDF/EQS_1_1_Pronomes_Pessoais.pdf",
+                goldenTip: "Lembre-se: em inglês, toda frase DEVE ter um sujeito explícito. Não existe sujeito oculto!",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <!-- Conceito -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="info" class="w-4 h-4 text-[#047857]"></i>
+                          O Conceito (Sujeito Obrigatório)
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Em inglês, <b>toda frase deve ter um sujeito explícito</b> (um pronome ou nome). Ao contrário do português, o inglês não aceita sujeito oculto. Nunca omita o sujeito.
+                      </p>
+                      <div class="p-2.5 bg-red-50 text-red-700 font-mono text-xs rounded border border-red-100">
+                        ❌ Is ready. (Errado) | ✅ He is ready. (Certo)
+                      </div>
+                    </div>
+
+                    <!-- Tabela -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="table" class="w-4 h-4 text-[#047857]"></i>
+                          Tabela Essencial dos Pronomes
+                        </span>
+                      </div>
+                      <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                          <thead>
+                            <tr class="bg-emerald-50 border-b border-emerald-100 text-[#047857] font-bold">
+                              <th class="p-2">Pronome (Inglês)</th>
+                              <th class="p-2">Significado (Português)</th>
+                              <th class="p-2">Exemplo Prático</th>
+                            </tr>
+                          </thead>
+                          <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <tr><td class="p-2 font-bold text-slate-900">I</td><td class="p-2">Eu (sempre em maiúscula)</td><td class="p-2">I am here.</td></tr>
+                            <tr><td class="p-2 font-bold text-slate-900">YOU</td><td class="p-2">Você / Vocês</td><td class="p-2">You are smart.</td></tr>
+                            <tr><td class="p-2 font-bold text-slate-900">HE</td><td class="p-2">Ele (masculino singular)</td><td class="p-2">He is the hero.</td></tr>
+                            <tr><td class="p-2 font-bold text-slate-900">SHE</td><td class="p-2">Ela (feminino singular)</td><td class="p-2">She is the witch.</td></tr>
+                            <tr><td class="p-2 font-bold text-slate-900">IT</td><td class="p-2">Ele / Ela (neutro/coisas/animais)</td><td class="p-2">It is the door.</td></tr>
+                            <tr><td class="p-2 font-bold text-slate-900">WE</td><td class="p-2">Nós (narrador + outros)</td><td class="p-2">We are friends.</td></tr>
+                            <tr><td class="p-2 font-bold text-slate-900">THEY</td><td class="p-2">Eles / Elas (plural de tudo)</td><td class="p-2">They run fast.</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <!-- Armadilhas -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="help-circle" class="w-4 h-4 text-[#d97706]"></i>
+                          Armadilhas Críticas da Audição
+                        </span>
+                      </div>
+                      <ul class="list-disc list-inside space-y-2 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        <li><b>O "It" de Identidade Oculta:</b> Usado para pessoas cuja identidade é desconhecida. Ex: <i>"Who is it?"</i> (Quem bate à porta?) ➔ <i>"It's me!"</i> (Sou eu!).</li>
+                        <li><b>Pluralidade do "They":</b> Serve para o plural de qualquer coisa (pessoas, animais, livros, portas). Ex: <i>"The books are on the table. They are big."</i></li>
+                      </ul>
+                    </div>
+
+                    <!-- Workbook -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/50 border border-amber-200/80 shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-amber-200">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#b45309] flex items-center gap-2">
+                          <i data-lucide="edit-3" class="w-4 h-4"></i>
+                          Prática de Workbook (Teste Rápido)
+                        </span>
+                      </div>
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800">
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">1. The robot is here. It is ready.</p>
+                          <p class="text-slate-500 mt-1">O pronome <b>It</b> substitui: ______________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">2. The phone is ringing. It's your boss.</p>
+                          <p class="text-slate-500 mt-1">Por que usamos <b>It</b> aqui? ______________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">3. My sister and I are ready. We go now.</p>
+                          <p class="text-slate-500 mt-1">O pronome <b>We</b> substitui: ______________________</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "eqs-1-1"
+              },
+              {
+                id: "eqs12",
+                title: "Aula 1.2 • O Rei dos Verbos \"To Be\" (Afirmativa)",
+                order: 2,
+                duration: "17:02",
+                description: "Domine a dupla identidade de Ser ou Estar e treine a melodia das contrações na afirmativa.",
+                videoUrl: "assets/videos/quickstart/EQS_mod_1_2_to_be.mp4",
+                thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_2.jpg",
+                pdfUrl: "Material-PDF/EQS_1_2_O_Rei_dos_Verbos_To_Be_Afirmativa.pdf",
+                goldenTip: "Não decore tabelas! Foque na sonoridade das contrações (I'm, He's, We're, They're) no player.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <!-- Conceito -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="info" class="w-4 h-4 text-[#047857]"></i>
+                          O Conceito (Ser ou Estar)
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        O Verbo <b>TO BE</b> é o único em inglês que acumula duas funções: <b>SER</b> (identidade, profissão) ou <b>ESTAR</b> (local, estado de espírito). O contexto determina qual sentido usar.
+                      </p>
+                    </div>
+
+                    <!-- As 3 Formas Básicas -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="grid" class="w-4 h-4 text-[#047857]"></i>
+                          As 3 Formas Básicas & Contrações
+                        </span>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="p-3 bg-red-50/50 rounded-xl border border-red-200">
+                          <span class="font-black text-red-700 block text-lg">AM</span>
+                          <span class="text-xs text-slate-600">Exclusivo do pronome <b>I</b>.<br/>Contração: <b>I'm</b></span>
+                        </div>
+                        <div class="p-3 bg-pink-50/50 rounded-xl border border-pink-200">
+                          <span class="font-black text-pink-700 block text-lg">IS</span>
+                          <span class="text-xs text-slate-600">Terceira Pessoa (He, She, It).<br/>Contrações: <b>He's / She's / It's</b></span>
+                        </div>
+                        <div class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200">
+                          <span class="font-black text-emerald-700 block text-lg">ARE</span>
+                          <span class="text-xs text-slate-600">Pronomes Plurais (You, We, They).<br/>Contrações: <b>You're / We're / They're</b></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Exemplos -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="repeat" class="w-4 h-4 text-[#047857]"></i>
+                          SER vs. ESTAR na Prática
+                        </span>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                          <h4 class="font-bold text-red-700 text-xs uppercase tracking-wider">SER (Identidade)</h4>
+                          <div class="p-2.5 bg-slate-50 rounded-xl text-xs space-y-1">
+                            <p class="font-bold text-slate-800">I'm a designer. <span class="text-slate-500 font-medium">(Eu sou designer)</span></p>
+                            <p class="font-bold text-slate-800">She's smart. <span class="text-slate-500 font-medium">(Ela é inteligente)</span></p>
+                            <p class="font-bold text-slate-800">They're colleagues. <span class="text-slate-500 font-medium">(Eles são colegas)</span></p>
+                          </div>
+                        </div>
+                        <div class="space-y-2">
+                          <h4 class="font-bold text-blue-700 text-xs uppercase tracking-wider">ESTAR (Local/Estado)</h4>
+                          <div class="p-2.5 bg-slate-50 rounded-xl text-xs space-y-1">
+                            <p class="font-bold text-slate-800">I'm in the office. <span class="text-slate-500 font-medium">(Eu estou no escritório)</span></p>
+                            <p class="font-bold text-slate-800">He's tired. <span class="text-slate-500 font-medium">(Ele está cansado)</span></p>
+                            <p class="font-bold text-slate-800">The reports are ready. <span class="text-slate-500 font-medium">(Os relatórios estão prontos)</span></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Workbook -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/50 border border-amber-200/80 shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-amber-200">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#b45309] flex items-center gap-2">
+                          <i data-lucide="edit-3" class="w-4 h-4"></i>
+                          Prática de Workbook (Escreva a Forma Completa & Tradução)
+                        </span>
+                      </div>
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800">
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">1. It's a strange noise.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">2. They're not home.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">3. We're late for the meeting.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">4. He's a good pilot.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "eqs-1-2"
+              },
+              {
+                id: "eqs13",
+                title: "Aula 1.3 • O Rei dos Verbos \"To Be\" (Negativa)",
+                order: 3,
+                duration: "19:23",
+                description: "Aprenda a estruturar a negação no To Be usando a partícula NOT e as contrações Isn't e Aren't.",
+                videoUrl: "assets/videos/quickstart/EQS_1_3_tobe_negtive.mp4",
+                thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_3.jpg",
+                pdfUrl: "Material-PDF/EQS_1_3_O_Rei_dos_Verbos_To_Be_Negativa.pdf",
+                goldenTip: "Em 99% das vezes você ouvirá 'isn't' e 'aren't' na conversação real. Fique atento a elas!",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <!-- Concept -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="info" class="w-4 h-4 text-[#047857]"></i>
+                          O Conceito (A Regra do NOT)
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Para negar qualquer afirmação com o Verbo To Be, basta adicionar a palavra <b>NOT</b> imediatamente após o verbo conjugado (am, is, are).
+                      </p>
+                      <div class="p-2.5 bg-emerald-50 text-[#047857] font-mono text-xs rounded border border-emerald-100">
+                        Estrutura: SUJEITO + TO BE + NOT + COMPLEMENTO
+                      </div>
+                    </div>
+
+                    <!-- Tabela Negativa -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="table" class="w-4 h-4 text-[#047857]"></i>
+                          Tabela de Negação & Contrações
+                        </span>
+                      </div>
+                      <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                          <thead>
+                            <tr class="bg-emerald-50 border-b border-emerald-100 text-[#047857] font-bold">
+                              <th class="p-2">Sujeito</th>
+                              <th class="p-2">Forma Completa</th>
+                              <th class="p-2">Contração Comum</th>
+                              <th class="p-2">Tradução Real</th>
+                            </tr>
+                          </thead>
+                          <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <tr><td class="p-2 font-bold">I</td><td class="p-2">I am not</td><td class="p-2 font-bold text-blue-600">I'm not</td><td class="p-2">Eu não sou / Eu não estou</td></tr>
+                            <tr><td class="p-2 font-bold">HE / SHE / IT</td><td class="p-2">He is not</td><td class="p-2 font-bold text-pink-600">He isn't / She isn't / It isn't</td><td class="p-2">Ele/Ela não é ou não está</td></tr>
+                            <tr><td class="p-2 font-bold">YOU / WE / THEY</td><td class="p-2">You are not</td><td class="p-2 font-bold text-emerald-600">You aren't / We aren't / They aren't</td><td class="p-2">Você/Nós/Eles não são ou não estão</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <!-- Foco -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="message-square" class="w-4 h-4 text-[#d97706]"></i>
+                          Foco nas Contrações Faladas
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Nas histórias e na fala real, você ouvirá **ISN'T** e **AREN'T** na imensa maioria das frases negativas. Lembre-se de que a primeira pessoa **I** não tem contração "amn't", usando-se apenas **I'm not**.
+                      </p>
+                    </div>
+
+                    <!-- Workbook -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/50 border border-amber-200/80 shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-amber-200">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#b45309] flex items-center gap-2">
+                          <i data-lucide="edit-3" class="w-4 h-4"></i>
+                          Prática de Workbook (Traduza e indique a Forma Completa)
+                        </span>
+                      </div>
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800">
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">1. The mission isn't impossible.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">2. They aren't telling the truth.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">3. I'm not the enemy.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">4. She isn't a part of this.</p>
+                          <p class="text-slate-500 mt-1">Forma Completa: ________________ | Tradução: ________________</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "eqs-1-3"
+              },
+              {
+                id: "eqs14",
+                title: "Aula 1.4 • Adjetivos Essenciais",
+                order: 4,
+                duration: "13:54",
+                description: "Saiba como os adjetivos são invariáveis em gênero e número e onde posicioná-los na frase.",
+                videoUrl: "assets/videos/quickstart/EQS_1_4_adjectives.mp4",
+                thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_4.jpg",
+                pdfUrl: "Material-PDF/EQS_1_4_Adjetivos_Essenciais.pdf",
+                goldenTip: "O adjetivo sempre qualifica antes do substantivo em inglês: a big house, a new friend.",
+                processedContentHtml: `
+                  <div class="space-y-4">
+                    <!-- Conceito -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="info" class="w-4 h-4 text-[#047857]"></i>
+                          O Conceito (Regra de Ouro)
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Em inglês, os adjetivos são <b>invariáveis</b> em gênero (masculino/feminino) e número (singular/plural). A única palavra que muda na frase é o substantivo!
+                      </p>
+                      <div class="p-2.5 bg-red-50 text-red-700 font-mono text-xs rounded border border-red-100">
+                        ✅ Singular: a fast car. | ✅ Plural: two fast cars. (O adjetivo 'fast' não mudou!)
+                      </div>
+                    </div>
+
+                    <!-- Posições -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="align-left" class="w-4 h-4 text-[#047857]"></i>
+                          As Duas Posições Fundamentais
+                        </span>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                          <h4 class="font-bold text-red-700 text-xs uppercase tracking-wider">1. Antes do Substantivo (Mais Comum)</h4>
+                          <div class="p-2.5 bg-slate-50 rounded-xl text-xs space-y-1">
+                            <p class="font-bold">a <span class="text-red-600">big</span> house <span class="text-slate-500 font-medium">(uma casa grande)</span></p>
+                            <p class="font-bold">need <span class="text-red-600">new</span> clients <span class="text-slate-500 font-medium">(precisam de novos clientes)</span></p>
+                            <p class="font-bold">an <span class="text-red-600">old</span> map <span class="text-slate-500 font-medium">(um mapa antigo)</span></p>
+                          </div>
+                        </div>
+                        <div class="space-y-2">
+                          <h4 class="font-bold text-blue-700 text-xs uppercase tracking-wider">2. Após o Verbo To Be</h4>
+                          <div class="p-2.5 bg-slate-50 rounded-xl text-xs space-y-1">
+                            <p class="font-bold">The dragon is <span class="text-blue-600">big</span>. <span class="text-slate-500 font-medium">(O dragão é grande)</span></p>
+                            <p class="font-bold">The meeting is <span class="text-blue-600">important</span>. <span class="text-slate-500 font-medium">(A reunião é importante)</span></p>
+                            <p class="font-bold">We are <span class="text-blue-600">ready</span>. <span class="text-slate-500 font-medium">(Estamos prontos)</span></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Ordem -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE1]">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                          <i data-lucide="layers" class="w-4 h-4 text-[#047857]"></i>
+                          Ordem Geral de Vários Adjetivos
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Ao usar múltiplos adjetivos antes de um substantivo, siga a hierarquia padrão:<br/>
+                        <b>Opinião ➔ Tamanho ➔ Idade ➔ Cor ➔ Substantivo</b>.<br/>
+                        Exemplo: <i>"a beautiful (opinião) small (tamanho) old (idade) red (cor) car"</i>.
+                      </p>
+                    </div>
+
+                    <!-- Workbook -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-amber-50/50 border border-amber-200/80 shadow-xs space-y-3">
+                      <div class="flex items-center justify-between pb-2 border-b border-amber-200">
+                        <span class="font-black text-xs uppercase tracking-wider text-[#b45309] flex items-center gap-2">
+                          <i data-lucide="edit-3" class="w-4 h-4"></i>
+                          Prática de Workbook (Traduza e explique a inversão)
+                        </span>
+                      </div>
+                      <div class="space-y-3 text-xs sm:text-sm text-slate-800">
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">1. A dark night.</p>
+                          <p class="text-slate-500 mt-1">Explicação da inversão: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">2. The warrior is tired.</p>
+                          <p class="text-slate-500 mt-1">Explicação da inversão: ________________ | Tradução: ________________</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-amber-100">
+                          <p class="font-bold">3. It's a bad decision.</p>
+                          <p class="text-slate-500 mt-1">Explicação da inversão: ________________ | Tradução: ________________</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                trainingTrackId: "eqs-1-4"
+              }
+            ]
+          }
+        ]
+      },
       "ms-legacy": {
         id: "ms-legacy",
         title: "Magic Stories Legacy • O Acervo Clássico",

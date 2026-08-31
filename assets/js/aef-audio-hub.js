@@ -354,10 +354,16 @@ class AEFAudioHub {
   }
 
   // =========================================================================
-  // 6. MULTIMODAL AUDIO TRANSCRIPTION (GEMINI 2.5 FLASH)
+  // 6. MULTIMODAL AUDIO TRANSCRIPTION (GEMINI MULTIMODAL STT)
   // =========================================================================
   async transcribeAudioWithGemini(audioBlob, apiKey, mimeType = "audio/mp3") {
     if (!apiKey) throw new Error("Chave da Gemini API não informada.");
+    if (!audioBlob) throw new Error("Nenhum arquivo de áudio fornecido para transcrição.");
+
+    const sizeMb = (audioBlob.size / (1024 * 1024)).toFixed(1);
+    if (audioBlob.size > 18 * 1024 * 1024) {
+      throw new Error(`O arquivo de áudio possui ${sizeMb} MB. O limite para envio direto à API do Google é 18 MB. Cole o script no campo de texto para alinhamento instantâneo ou divida o áudio em partes menores.`);
+    }
 
     // Convert blob to base64
     const base64Data = await new Promise((resolve, reject) => {
@@ -384,9 +390,9 @@ Return ONLY a valid JSON array of objects:
 ]`;
 
     const modelsToTry = [
-      "gemini-2.5-flash",
+      "gemini-2.0-flash",
       "gemini-1.5-flash",
-      "gemini-2.5-flash-preview-tts"
+      "gemini-2.5-flash"
     ];
 
     let lastError = null;

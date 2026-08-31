@@ -238,4 +238,14 @@ Sempre que qualquer nova interface, página, artigo de blog, player ou módulo a
 - **Mecanismo de Transcrição e Sentido (Speech-to-Text & Intelligibility Gate):**
   - O sistema transcreve o áudio do aluno e analisa se a fala formou sentido comunicativo contínuo.
 
+---
+
+## 20. Diretrizes de PDF do Módulo 2 em Diante (QuickStart & Novos Cursos)
+Qualquer novo PDF/Apostila de aula gerado a partir do Módulo 2 deve seguir estritamente as seguintes regras de estilo, diagramação e compilação:
+1. **Capa Obrigatória por Pilar:** Cada apostila deve iniciar com uma capa oficial correspondente ao pilar do curso (Foundation = Verde/Esmeralda, Immersion = Deep Navy/Cobalt, Reflex = Burgundy/Crimson, Specialty = Slate/Teal).
+2. **Tipografia Aumentada (40+):** O corpo do texto principal deve ser renderizado com tamanho de fonte de **16pt ou 17pt** (leading de 22.5pt a 24pt), garantindo conforto de leitura em telas digitais e dispositivos móveis para o público maduro.
+3. **Páginas Livres (Sem Restrição de Espaço):** O conteúdo deve fluir naturalmente em 3, 4 ou mais páginas dependendo de sua densidade, eliminando o engessamento de limites fixos. No entanto, o design deve preencher cada página de forma útil (ex: utilizando áreas de anotações e grids amplos de workbook) para evitar páginas vazias ou semipreenchidas.
+4. **Compilação Chrome Headless & Acabamento Editorial:** A compilação é feita via headless Google Chrome utilizando a flag `--no-pdf-header-footer` para eliminar data/hora/URI e inserindo cabeçalhos e rodapés de luxo diretamente no HTML/CSS de cada página.
+
+
 
