@@ -2027,6 +2027,8 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
           timestamp: new Date().toISOString(),
           sizeKb: Math.round(STATE.currentAudioBlob.size / 1024),
           blobUrl: audioUrl
+        };
+
         loadAudioIntoPlayer(audioUrl, STATE.currentMeta);
         showToast("Áudio MP3 masterizado com sucesso!", "success");
 
@@ -2632,26 +2634,6 @@ Example output format:
         alignCustomAudioWithScript();
         showToast("🎉 Prescrição gravada e transcrita com sucesso pela IA!", "success");
       }, 500);
-    }
-
-      const scriptArea = document.getElementById('scriptInput');
-      const titleInput = document.getElementById('audioTitleInput');
-
-      if (scriptArea) scriptArea.value = item.script;
-      if (titleInput) titleInput.value = item.title;
-      setSpeakerMode(item.mode || 'dual');
-
-      if (scriptArea) scriptArea.dispatchEvent(new Event('input'));
-      showToast(`Roteiro "${item.title}" carregado no editor!`, "success");
-    }
-
-    function clearHistory() {
-      if (confirm('Deseja limpar todo o histórico recente?')) {
-        STATE.history = [];
-        localStorage.removeItem('AEF_TTS_HISTORY');
-        renderHistory();
-        showToast("Histórico limpo.", "info");
-      }
     }
 
     // =========================================================================
