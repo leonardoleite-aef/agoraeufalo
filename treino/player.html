@@ -681,6 +681,13 @@
 
     async function loadTrackAudio(track) {
       if (!track) return;
+      const hasVideo = Boolean(track.videoUrl && track.videoUrl.trim().length > 0);
+      if (hasVideo) {
+        state.audio.pause();
+        state.audio.removeAttribute('src');
+        state.audio.load();
+        return;
+      }
       if (window.aefOfflineManager) {
         try {
           const offlineUrl = await window.aefOfflineManager.getOfflineAudioUrl(track.audioUrl, track.id);
@@ -693,7 +700,7 @@
           console.log("Offline audio check skip:", e);
         }
       }
-      state.audio.src = track.audioUrl;
+      state.audio.src = track.audioUrl || "";
     }
 
     window.toggleFlightModeCache = async () => {
@@ -1312,6 +1319,7 @@
 
       vid.addEventListener('play', () => {
         state.audio.pause();
+        state.audio.removeAttribute('src');
         state.isPlaying = true;
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
       });
@@ -2098,13 +2106,26 @@
     });
 
     window.togglePlayPause = () => {
-      const media = getActiveMedia();
-      if (media !== state.audio) state.audio.pause();
+      const vid = document.getElementById('zen-stage-video');
+      const hasVideo = Boolean(REAL_TRACK?.videoUrl && vid && !REAL_TRACK.videoUrl.includes('youtube'));
+
+      if (hasVideo) {
+        state.audio.pause();
+        state.audio.removeAttribute('src');
+        if (vid.paused) {
+          vid.play().then(() => { state.isPlaying = true; }).catch(e => console.log(e));
+        } else {
+          vid.pause();
+          state.isPlaying = false;
+        }
+        return;
+      }
+
       if (state.isPlaying) {
-        media.pause();
+        state.audio.pause();
         state.isPlaying = false;
       } else {
-        media.play().then(() => {
+        state.audio.play().then(() => {
           state.isPlaying = true;
         }).catch(e => console.log(e));
       }
