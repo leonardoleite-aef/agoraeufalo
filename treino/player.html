@@ -615,11 +615,29 @@
         state.activity = actParam;
       }
 
-      // Resolução de Curso & Aula da Sala de Aula (?curso=...&aula=...)
+      // 1. Resolução de Ambiente Inicial (?aluno=... -> VIP, ?curso=... -> Cursos, else -> Público)
+      const alunoParam = urlParams.get('aluno');
       const cursoParam = urlParams.get('curso') || urlParams.get('course');
       const aulaParam = urlParams.get('aula') || urlParams.get('lesson');
-      if (cursoParam) {
-        state.environment = 'course';
+      const trackParam = urlParams.get('trackId') || urlParams.get('track');
+
+      let initialEnv = 'public';
+      if (alunoParam) {
+        initialEnv = 'vip';
+        const menteeKey = alunoParam.toLowerCase();
+        if (menteeKey === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
+          state.student = window.AEF_STUDENT_ESTEVAO;
+        } else if (menteeKey === 'thomas' && window.AEF_STUDENT_THOMAS) {
+          state.student = window.AEF_STUDENT_THOMAS;
+        } else if (menteeKey === 'andre' && window.AEF_STUDENT_ANDRE) {
+          state.student = window.AEF_STUDENT_ANDRE;
+        } else if (menteeKey === 'matheus' && window.AEF_STUDENT_MATHEUS) {
+          state.student = window.AEF_STUDENT_MATHEUS;
+        } else {
+          state.student = { id: menteeKey, name: menteeKey, tracks: [] };
+        }
+      } else if (cursoParam) {
+        initialEnv = 'course';
         const returnBtn = document.getElementById('return-to-classroom-btn');
         if (returnBtn) {
           returnBtn.href = `../sala-de-aula.html?curso=${cursoParam}${aulaParam ? `&aula=${aulaParam}` : ''}`;
@@ -627,82 +645,15 @@
         }
       }
 
-      // Resolução de Aluno VIP via Query Param (?aluno=estevao, thomas, andre, matheus)
-      const alunoParam = urlParams.get('aluno');
-      if (alunoParam) {
-        if (alunoParam === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
-          state.student = window.AEF_STUDENT_ESTEVAO;
-          REAL_TRACK = window.AEF_STUDENT_ESTEVAO.tracks[0];
-          state.environment = 'vip';
-        } else if (alunoParam === 'thomas' && window.AEF_STUDENT_THOMAS) {
-          state.student = window.AEF_STUDENT_THOMAS;
-          REAL_TRACK = window.AEF_STUDENT_THOMAS.tracks[0];
-          state.environment = 'vip';
-        } else if (alunoParam === 'andre' && window.AEF_STUDENT_ANDRE) {
-          state.student = window.AEF_STUDENT_ANDRE;
-          REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
-          state.environment = 'vip';
-        } else if (alunoParam === 'matheus' && window.AEF_STUDENT_MATHEUS) {
-          state.student = window.AEF_STUDENT_MATHEUS;
-          REAL_TRACK = window.AEF_STUDENT_MATHEUS.tracks[0];
-          state.environment = 'vip';
-        }
+      // Executa a troca de ambiente para o alvo correto logo na largada
+      window.setEnvironment(initialEnv);
+
+      // Se passou trackId específico via query param
+      if (trackParam) {
+        window.selectTrack(trackParam);
       }
 
-      const trackParam = urlParams.get('trackId') || urlParams.get('track');
-      if (trackParam && state.student && state.student.tracks) {
-        const found = state.student.tracks.find(t => t.id === trackParam);
-        if (found) REAL_TRACK = found;
-      } else if (cursoParam === 'ms-legacy' && window.AEF_STUDENT_ANDRE) {
-        REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
-      } else if ((trackParam === 'ms-legacy-01' || trackParam === 'andre-ms001-story') && window.AEF_STUDENT_ANDRE) {
-        REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
-      }
-
-      // Sincroniza metadados do Sidebar
-      const sideName = document.getElementById('sidebar-activity-name');
-      if (sideName) sideName.innerText = REAL_TRACK.title;
-
-      const dockTitle = document.getElementById('dock-title-text');
-      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
-
-      const tipText = document.getElementById('sidebar-grammar-tip');
-      if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
-
-      // Busca faixas atualizadas no Google Cloud Firestore em tempo real (Single Source of Truth)
-      const currentMentee = alunoParam || 'estevao';
-      if (window.aefCloudSync) {
-        window.aefCloudSync.getStudentCloudTracks(currentMentee).then(cloudTracks => {
-          if (cloudTracks && cloudTracks.length > 0) {
-            const baseTracks = (state.student && state.student.tracks) ? state.student.tracks : (window.AEF_STUDENT_ESTEVAO?.tracks || []);
-            const merged = [...cloudTracks];
-            baseTracks.forEach(bt => {
-              if (!merged.some(ct => ct.id === bt.id)) {
-                merged.push(bt);
-              }
-            });
-            state.student = { 
-              id: currentMentee, 
-              name: state.student?.name || (currentMentee === 'estevao' ? 'Estêvão Pinheiro' : currentMentee), 
-              tracks: merged 
-            };
-            if (!trackParam && state.environment === 'vip') {
-              REAL_TRACK = merged[0];
-              loadTrackAudio(REAL_TRACK);
-            }
-            renderSidebarTracks();
-            renderZenStage();
-            renderBottomDock();
-            updateMediaSessionMetadata();
-          }
-        }).catch(err => console.log('Firestore sync fallback to registered track:', err));
-      }
-
-      loadTrackAudio(REAL_TRACK);
       initAudioEvents();
-      renderSidebarTracks();
-      renderZenStage();
-      renderBottomDock();
       setupSwipeGestures();
       updateIcons();
       window.checkFlightModeStatus();
@@ -1217,8 +1168,8 @@
         return;
       }
 
-      // CASO A: VÍDEO SEM CARDS (Vídeo já legendado / Roteiro não preenchido)
-      if (REAL_TRACK?.videoUrl && !hasValidCards) {
+      // REGRA OFICIAL DO PROFESSOR LEO: SE TEM VÍDEO ➔ NO CARDS (Modo Vídeo Cinema Puro)
+      if (REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0) {
         stage.innerHTML = `
           <div class="space-y-4 max-w-2xl mx-auto">
             <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
@@ -1234,11 +1185,12 @@
             </div>
           </div>
         `;
+        initVideoEvents(document.getElementById('zen-stage-video'));
         updateIcons();
         return;
       }
 
-      // CASO B: TREINO COM CARDS (Com ou sem vídeo)
+      // SE NÃO TEM VÍDEO ➔ YES CARDS (Modo Treino Interativo com Cards)
       stage.innerHTML = `
         <div class="space-y-4 max-w-xl mx-auto">
 
@@ -1266,17 +1218,6 @@
 
           <!-- Relatório de Diagnóstico do AI Coach (Exibido quando finalizado) -->
           ${isMagicStory && state.activity === 'look_retell' && state.evaluation ? window.AEFPlayerZenTemplate.renderEvaluationReport(state.evaluation) : ''}
-
-          <!-- VÍDEO SINCRONIZADO DO TREINO (Quando a faixa possui videoUrl no Google Cloud Storage / YouTube) -->
-          ${REAL_TRACK?.videoUrl ? `
-            <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-md aspect-video mb-3 relative group">
-              ${(REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be')) ? `
-                <iframe src="${REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              ` : `
-                <video id="zen-stage-video" src="${REAL_TRACK.videoUrl}" controls playsinline class="w-full h-full object-contain bg-black"></video>
-              `}
-            </div>
-          ` : ''}
 
           <!-- 1. O CARTÃO ÚNICO ATIVO -->
           <div id="card-stage-slot" class="w-full">
@@ -1332,6 +1273,8 @@
 
         </div>
       `;
+
+      updateIcons();
 
       initVideoEvents(document.getElementById('zen-stage-video'));
       updateIcons();
