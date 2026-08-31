@@ -1228,12 +1228,11 @@
       // Set initial Dual Speaker mode UI
       setSpeakerMode('dual');
 
-      // Restore user draft if previously typed, otherwise keep editor 100% clean and empty
+      // Ensure editor starts 100% clean and empty
+      localStorage.removeItem('AEF_SCRIPT_DRAFT');
       const scriptArea = document.getElementById('scriptInput');
-      const savedDraft = localStorage.getItem('AEF_SCRIPT_DRAFT');
-      if (scriptArea && savedDraft && savedDraft.trim()) {
-        scriptArea.value = savedDraft;
-        if (typeof updateMetrics === 'function') updateMetrics();
+      if (scriptArea) {
+        scriptArea.value = '';
       }
 
       // Close modals when clicking background backdrop
@@ -1662,11 +1661,6 @@
         document.getElementById('metricChars').textContent = chars;
         document.getElementById('metricWords').textContent = words;
         document.getElementById('metricEstDuration').textContent = `~${estSecs}s`;
-
-        // Save current draft automatically
-        if (text && text.trim()) {
-          localStorage.setItem('AEF_SCRIPT_DRAFT', text);
-        }
       };
 
       window.updateMetrics = updateMetrics;
