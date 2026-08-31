@@ -566,7 +566,17 @@
       studentAudioObj: null,
       loopingSentenceIndex: -1,
       revealedAnswers: {},
-      audio: new Audio(),
+      audio: (() => {
+        let a = document.getElementById('player-audio');
+        if (!a) {
+          a = document.createElement('audio');
+          a.id = 'player-audio';
+          a.preload = 'auto';
+          a.setAttribute('playsinline', '');
+          document.body.appendChild(a);
+        }
+        return a;
+      })(),
       playbackSpeed: 1.0,
       showTranslation: false
     };
@@ -2029,6 +2039,16 @@
           } catch(e) {}
         }
 
+        // Se a frase atual estiver em Loop contínuo (🔂), retorna ao início da frase ao atingir o final
+        if (state.loopingSentenceIndex >= 0 && state.loopingSentenceIndex === state.currentSentenceIndex) {
+          const items = getActiveItems();
+          const s = items[state.currentSentenceIndex];
+          if (s && s.end !== undefined && cur >= s.end) {
+            state.audio.currentTime = s.start || 0;
+            return;
+          }
+        }
+
         // Modo Pronunciation: Pausa obrigatória ao final da frase
         if (state.activity === 'pronunciation' && state.currentSentenceIndex >= 0) {
           const s = REAL_TRACK.sentences[state.currentSentenceIndex];
@@ -2043,7 +2063,7 @@
             }
           }
         } else {
-          // Auto-scroll contínuo pelas frases do áudio
+          // Auto-scroll contínuo pelas frases do áudio sem bloquear a thread principal
           const items = getActiveItems();
           let foundIdx = -1;
           for (let i = 0; i < items.length; i++) {
@@ -2058,9 +2078,36 @@
           }
 
           if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
-            state.revealedAnswers = {}; // Reset de blur ao avançar para a próxima frase
+            state.revealedAnswers = {};
             state.currentSentenceIndex = foundIdx;
-            renderZenStage();
+            
+            // Fast DOM update: Atualiza apenas o card e as bolinhas de paginação sem destruir o palco
+            const cardSlot = document.getElementById('card-stage-slot');
+            if (cardSlot) {
+              const currentItem = items[foundIdx] || items[0];
+              const isMagicStory = (state.environment === 'course' || state.environment === 'ms_legacy');
+              cardSlot.innerHTML = window.AEFPlayerZenTemplate.renderSingleZenCard(
+                currentItem, 
+                foundIdx, 
+                items.length, 
+                isMagicStory ? state.activity : 'listen_read', 
+                state.isPlaying, 
+                state.loopingSentenceIndex === foundIdx,
+                Boolean(state.revealedAnswers[foundIdx]),
+                Boolean(state.showTranslation)
+              );
+              const dots = document.querySelectorAll('#zen-main-stage-container button[title^="Ir para prompt"]');
+              dots.forEach((dot, dIdx) => {
+                if (dIdx === foundIdx) {
+                  dot.className = "h-2 rounded-full transition-all duration-300 cursor-pointer w-6 bg-[#C68A36]";
+                } else {
+                  dot.className = "h-2 rounded-full transition-all duration-300 cursor-pointer w-2 bg-[#D1C7B7] hover:bg-[#C68A36]/60";
+                }
+              });
+              updateIcons();
+            } else {
+              renderZenStage();
+            }
           }
         }
       });
