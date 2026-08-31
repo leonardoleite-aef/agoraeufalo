@@ -2614,6 +2614,19 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
 
         // Upload to Google Cloud Storage & Firestore based on Tier
         if (window.aefCloudSync) {
+          // If local audio blob exists and audioUrl is not a remote URL, upload audio to Firebase Storage first!
+          if (STATE.currentAudioBlob && (!trackData.audioUrl || trackData.audioUrl.startsWith('blob:'))) {
+            try {
+              if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Subindo Áudio para a Nuvem...</span>`;
+              const uploadedUrl = await window.aefCloudSync.uploadFileToStorage(STATE.currentAudioBlob, "audio/students");
+              if (uploadedUrl) {
+                trackData.audioUrl = uploadedUrl;
+              }
+            } catch (upErr) {
+              console.warn("⚠️ Upload direto para Cloud Storage falhou, prosseguindo com áudio local:", upErr);
+            }
+          }
+
           if (tier === 'tier1_suggestions') {
             if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando Sugestões do Leo...</span>`;
             await window.aefCloudSync.publishSuggestionTrack(trackData);
@@ -2621,14 +2634,8 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
             if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando em Meus Cursos...</span>`;
             await window.aefCloudSync.publishCourseTrack('public_courses', trackData);
           } else if (tier === 'tier3_vip') {
-            for (const sId of assignedTo) {
-              if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Nuvem VIP (${sId})...</span>`;
-              await window.aefCloudSync.publishTrackToCloud({
-                studentId: sId,
-                track: trackData,
-                audioBlob: STATE.currentAudioBlob
-              });
-            }
+            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando Nuvem VIP (${assignedTo.join(', ')})...</span>`;
+            await window.aefCloudSync.publishTrackToCloud(trackData, assignedTo);
           }
         }
 

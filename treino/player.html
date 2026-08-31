@@ -632,18 +632,25 @@
       if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
 
       // Busca faixas atualizadas no Google Cloud Firestore em tempo real (Single Source of Truth)
-      if (alunoParam && window.AEFCloudSync) {
-        const cloudSync = new AEFCloudSync();
-        cloudSync.getStudentCloudTracks(alunoParam).then(cloudTracks => {
+      const currentMentee = alunoParam || 'estevao';
+      if (window.aefCloudSync) {
+        window.aefCloudSync.getStudentCloudTracks(currentMentee).then(cloudTracks => {
           if (cloudTracks && cloudTracks.length > 0) {
+            const baseTracks = (state.student && state.student.tracks) ? state.student.tracks : (window.AEF_STUDENT_ESTEVAO?.tracks || []);
+            const merged = [...cloudTracks];
+            baseTracks.forEach(bt => {
+              if (!merged.some(ct => ct.id === bt.id)) {
+                merged.push(bt);
+              }
+            });
             state.student = { 
-              id: alunoParam, 
-              name: state.student?.name || alunoParam, 
-              tracks: cloudTracks 
+              id: currentMentee, 
+              name: state.student?.name || (currentMentee === 'estevao' ? 'Estêvão Pinheiro' : currentMentee), 
+              tracks: merged 
             };
-            if (!trackParam) {
-              REAL_TRACK = cloudTracks[0];
-              state.audio.src = REAL_TRACK.audioUrl;
+            if (!trackParam && state.environment === 'vip') {
+              REAL_TRACK = merged[0];
+              loadTrackAudio(REAL_TRACK);
             }
             renderSidebarTracks();
             renderZenStage();
@@ -807,7 +814,14 @@
         if (window.aefCloudSync) {
           const cloudTracks = await window.aefCloudSync.getStudentCloudTracks(menteeId);
           if (cloudTracks && cloudTracks.length > 0) {
-            state.student.tracks = cloudTracks;
+            const baseTracks = state.student.tracks || [];
+            const merged = [...cloudTracks];
+            baseTracks.forEach(bt => {
+              if (!merged.some(ct => ct.id === bt.id)) {
+                merged.push(bt);
+              }
+            });
+            state.student.tracks = merged;
           }
         }
       } catch (e) {
@@ -1345,11 +1359,8 @@
         }
       } else if (env === 'vip') {
         label = "Mentoria VIP Individual";
-        if (window.AEF_STUDENT_ESTEVAO?.tracks?.length > 0) {
-          state.student = window.AEF_STUDENT_ESTEVAO;
-          REAL_TRACK = window.AEF_STUDENT_ESTEVAO.tracks[0];
-          state.audio.src = REAL_TRACK.audioUrl;
-        }
+        const currentMentee = (state.student && state.student.id) || 'estevao';
+        window.switchVIPMentee(currentMentee);
       } else if (env === 'custom') {
         label = "Minhas Coisas (Laboratório)";
         state.audio.pause();

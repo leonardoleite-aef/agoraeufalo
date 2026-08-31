@@ -81,23 +81,35 @@
       const results = [];
       const timestamp = new Date().toISOString();
 
-      for (const studentId of studentIds) {
+      // Normalize arguments (supports both (track, ids) and ({studentId, track}))
+      let realTrack = trackData;
+      let targetIds = studentIds;
+
+      if (trackData && trackData.track) {
+        realTrack = trackData.track;
+        targetIds = trackData.studentId ? [trackData.studentId] : (trackData.studentIds || studentIds);
+      } else if (typeof studentIds === 'string') {
+        targetIds = [studentIds];
+      }
+
+      for (const studentId of targetIds) {
         const payload = {
-          id: trackData.id || `track_${Date.now()}`,
-          title: trackData.title || "Treino de Reflexo Oral",
-          duration: trackData.duration || "00:30",
-          coverImage: trackData.coverImage || "assets/images/cover-default-aef.jpg",
-          audioUrl: trackData.audioUrl || "",
-          videoUrl: trackData.videoUrl || "",
-          summary: trackData.summary || "",
-          goldenTip: trackData.goldenTip || "",
-          status: trackData.status || "active",
+          id: realTrack.id || `track_${Date.now()}`,
+          title: realTrack.title || "Treino de Reflexo Oral",
+          duration: realTrack.duration || "00:30",
+          coverImage: realTrack.coverImage || "assets/images/cover-default-aef.jpg",
+          audioUrl: realTrack.audioUrl || "",
+          videoUrl: realTrack.videoUrl || "",
+          summary: realTrack.summary || "",
+          goldenTip: realTrack.goldenTip || "",
+          status: realTrack.status || "active",
           assignedTo: [studentId],
-          sentences: (trackData.sentences || []).map((s) => ({
+          sentences: (realTrack.sentences || []).map((s) => ({
             id: s.id || 1,
             start: parseFloat(s.start) || 0.0,
             end: parseFloat(s.end) || 0.0,
             text: s.text || "",
+            spokenTranslation: s.spokenTranslation || "",
             notes: s.notes || ""
           })),
           updatedAt: timestamp,
@@ -130,11 +142,28 @@
                   goldenTip: { stringValue: payload.goldenTip },
                   status: { stringValue: payload.status },
                   assignedTo: { arrayValue: { values: [{ stringValue: studentId }] } },
+                  sentences: {
+                    arrayValue: {
+                      values: (payload.sentences || []).map(s => ({
+                        mapValue: {
+                          fields: {
+                            id: { integerValue: s.id || 1 },
+                            start: { doubleValue: parseFloat(s.start) || 0.0 },
+                            end: { doubleValue: parseFloat(s.end) || 0.0 },
+                            text: { stringValue: s.text || "" },
+                            spokenTranslation: { stringValue: s.spokenTranslation || "" },
+                            notes: { stringValue: s.notes || "" }
+                          }
+                        }
+                      }))
+                    }
+                  },
                   updatedAt: { stringValue: timestamp }
                 }
               })
             });
           }
+          console.log(`☁️ [AEFCloudSync] Faixa "${payload.title}" publicada com sucesso em students/${studentId}/tracks/${payload.id}`);
           results.push({ studentId, success: true, trackId: payload.id });
         } catch (err) {
           console.error(`❌ [AEFCloudSync] Erro ao publicar para ${studentId}:`, err);
