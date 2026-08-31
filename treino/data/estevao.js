@@ -1,7 +1,7 @@
 /**
  * Student Session: Estevao
  * Mentorship VIP - Prof. Leonardo Leite
- * Fully Synced with Firestore on 2026-08-31T18:00:39.667Z
+ * Fully Synced with Firestore on 2026-08-31T18:14:11.071Z
  */
 window.AEF_STUDENT_ESTEVAO = {
   "id": "estevao",
@@ -9,11 +9,10 @@ window.AEF_STUDENT_ESTEVAO = {
   "badge": "VIP Mentee",
   "tracks": [
     {
-      "duration": "13:46",
-      "publishedTimestamp": 1788153124872,
       "assignedTo": [
         "estevao"
       ],
+      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1788153121618_20_questions_for_estevao.mp3?alt=media",
       "sentences": [
         {
           "id": 1,
@@ -3832,21 +3831,24 @@ window.AEF_STUDENT_ESTEVAO = {
           "notes": "Speaker: We have a simple rule"
         }
       ],
-      "title": "20_questions_for_estevao",
-      "updatedAt": "2026-08-31T05:12:04.872Z",
-      "coverImage": "../assets/images/cover-default-aef.jpg",
       "id": "20_questions_for_estevao",
-      "goldenTip": "Escolha frases de suas respostas e shadow!",
-      "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      "title": "20_questions_for_estevao",
+      "duration": "13:46",
+      "updatedAt": "2026-08-31T05:12:04.872Z",
       "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fstudents%2F1788152993992_20_questions_for_estevao.mp4?alt=media",
-      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1788153121618_20_questions_for_estevao.mp3?alt=media",
-      "status": "active"
+      "coverImage": "../assets/images/cover-default-aef.jpg",
+      "goldenTip": "Escolha frases de suas respostas e shadow!",
+      "status": "active",
+      "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      "publishedTimestamp": 1788153124872
     },
     {
       "id": "estevao-01",
-      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FEstevao_presentation_leo.mp3?alt=media",
+      "coverImage": "../assets/images/cover-estevao-session01.jpg",
+      "updatedAt": "2026-08-27T18:59:46.589Z",
       "goldenTip": "Breathe naturally at comma pauses. Speech clarity comes from linking sound chunks together, not from rushing speed.",
       "title": "Session 01: UK International Keynote Presentation",
+      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FEstevao_presentation_leo.mp3?alt=media",
       "sentences": [
         {
           "start": 1.97,
@@ -4850,18 +4852,13 @@ window.AEF_STUDENT_ESTEVAO = {
           "id": 143
         }
       ],
-      "coverImage": "../assets/images/cover-estevao-session01.jpg",
-      "updatedAt": "2026-08-27T18:59:46.589Z",
-      "summary": "High-impact keynote speech coaching by Prof. Leo Leite focusing on public education policy, the Pororoca implementation model, and systemic feedback loops.",
-      "duration": "16:29"
+      "duration": "16:29",
+      "summary": "High-impact keynote speech coaching by Prof. Leo Leite focusing on public education policy, the Pororoca implementation model, and systemic feedback loops."
     },
     {
-      "summary": "Estevão's solo keynote presentation: opening remarks, Motriz NGO public education impact across 40 municipalities in 7 states, Oxford academic study reference, and systemic implementation thesis.",
-      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FOxford_Presentation_Casual.mp3?alt=media",
       "coverImage": "../assets/images/cover-estevao-oxford-presentation.jpg",
-      "id": "estevao-02",
-      "goldenTip": "Maintain a steady, confident cadence. Connect sound chunks smoothly ('pleasure to be here', 'conducted right here at Oxford') without rushing.",
-      "title": "Oxford Presentation (Casual Delivery)",
+      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FOxford_Presentation_Casual.mp3?alt=media",
+      "duration": "01:06",
       "sentences": [
         {
           "id": 1,
@@ -4934,12 +4931,17 @@ window.AEF_STUDENT_ESTEVAO = {
           "notes": "Closing cadence: confident, inspiring and resolute"
         }
       ],
+      "id": "estevao-02",
+      "summary": "Estevão's solo keynote presentation: opening remarks, Motriz NGO public education impact across 40 municipalities in 7 states, Oxford academic study reference, and systemic implementation thesis.",
+      "goldenTip": "Maintain a steady, confident cadence. Connect sound chunks smoothly ('pleasure to be here', 'conducted right here at Oxford') without rushing.",
       "updatedAt": "2026-08-27T18:59:47.122Z",
-      "duration": "01:06"
+      "title": "Oxford Presentation (Casual Delivery)"
     },
     {
-      "updatedAt": "2026-08-27T18:59:47.496Z",
+      "duration": "10:24",
       "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2Festevao_agora_fala_oxford.mp3?alt=media",
+      "id": "estevao-03",
+      "coverImage": "../assets/images/cover-estevao-agora-fala-oxford.jpg",
       "title": "Estevão Agora Fala - Oxford",
       "sentences": [
         {
@@ -5728,33 +5730,27 @@ window.AEF_STUDENT_ESTEVAO = {
         }
       ],
       "summary": "Full Oxford Keynote Speech: Motriz NGO, Brazilian public education challenges, Waterfall vs. Pororoca implementation model, predictors of learning, and Rio de Janeiro case study.",
-      "id": "estevao-03",
-      "duration": "10:24",
-      "goldenTip": "Speak with steady confidence. Emphasize key concept chunks like \"implementation infrastructure\", \"continuous feedback loop\", and \"predictors of learning\".",
-      "coverImage": "../assets/images/cover-estevao-agora-fala-oxford.jpg"
+      "updatedAt": "2026-08-27T18:59:47.496Z",
+      "goldenTip": "Speak with steady confidence. Emphasize key concept chunks like \"implementation infrastructure\", \"continuous feedback loop\", and \"predictors of learning\"."
     },
     {
-      "updatedAt": "2026-08-31T15:29:10.626Z",
-      "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
-      "duration": "06:58",
+      "sentences": [],
+      "audioUrl": "",
       "assignedTo": [
         "estevao"
       ],
-      "sentences": [],
-      "title": "estevao-respostas-chave-video",
-      "goldenTip": "Respire nas pausas e conecte os chunks.",
-      "status": "active",
-      "audioUrl": "",
-      "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fstudents%2F1788190147495_Estevao-respostas-chave.mp4?alt=media",
-      "coverImage": "../assets/images/cover-default-aef.jpg",
+      "duration": "06:58",
       "id": "estevao-respostas-chave",
-      "publishedTimestamp": 1788190150626
+      "updatedAt": "2026-08-31T15:29:10.626Z",
+      "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fstudents%2F1788190147495_Estevao-respostas-chave.mp4?alt=media",
+      "status": "active",
+      "publishedTimestamp": 1788190150626,
+      "coverImage": "../assets/images/cover-default-aef.jpg",
+      "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      "goldenTip": "Respire nas pausas e conecte os chunks.",
+      "title": "estevao-respostas-chave-video"
     },
     {
-      "title": "Sreehari Letter to Ashna",
-      "coverImage": "../assets/images/cover-estevao-sreehari-letter-to-ashna.jpg",
-      "goldenTip": "Observe como os conceitos complexos são encadeados com calma e precisão. Mantenha pausas conscientes entre as orações.",
-      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FSreehari.mp3?alt=media&token=2102d4bb-16e9-4d6a-a51a-5b974e2df596",
       "sentences": [
         {
           "id": 1,
@@ -6107,16 +6103,16 @@ window.AEF_STUDENT_ESTEVAO = {
           "spokenTranslation": "Tenha um ótimo dia!"
         }
       ],
+      "id": "estevao-sreehari-letter-to-ashna",
+      "coverImage": "../assets/images/cover-estevao-sreehari-letter-to-ashna.jpg",
+      "title": "Sreehari Letter to Ashna",
       "summary": "Carta reflexiva e estratégica sobre políticas públicas, gap de implementação e ecossistemas relacionais de aprendizagem.",
       "duration": "03:50",
-      "id": "estevao-sreehari-letter-to-ashna",
-      "updatedAt": "2026-08-27T18:59:45.874Z"
+      "goldenTip": "Observe como os conceitos complexos são encadeados com calma e precisão. Mantenha pausas conscientes entre as orações.",
+      "updatedAt": "2026-08-27T18:59:45.874Z",
+      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Festevao%2FSreehari.mp3?alt=media&token=2102d4bb-16e9-4d6a-a51a-5b974e2df596"
     },
     {
-      "coverImage": "../assets/images/cover-default-aef.jpg",
-      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1788150502135_Fala_de_Sreehari_Ravindranath.mp3?alt=media",
-      "updatedAt": "2026-08-31T04:28:25.651Z",
-      "videoUrl": "",
       "sentences": [
         {
           "id": 1,
@@ -8623,26 +8619,36 @@ window.AEF_STUDENT_ESTEVAO = {
           "notes": "Speaker: to leave you with is this"
         }
       ],
-      "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
-      "goldenTip": "sugiro fazer shadowing de frases que considere relevantes.",
+      "publishedTimestamp": 1788150505652,
+      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1788150502135_Fala_de_Sreehari_Ravindranath.mp3?alt=media",
+      "id": "fala_de_sreehari_ravindranath",
+      "duration": "09:56",
       "assignedTo": [
         "estevao"
       ],
+      "videoUrl": "",
       "title": "Fala de Sreehari Ravindranath",
-      "publishedTimestamp": 1788150505652,
-      "duration": "09:56",
+      "updatedAt": "2026-08-31T04:28:25.651Z",
+      "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+      "coverImage": "../assets/images/cover-default-aef.jpg",
       "status": "active",
-      "id": "fala_de_sreehari_ravindranath"
+      "goldenTip": "sugiro fazer shadowing de frases que considere relevantes."
     },
     {
-      "summary": "Audio com cartoes de leitura",
-      "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1788188270991_Final_Presentation.mp3?alt=media",
-      "updatedAt": "2026-08-31T14:57:54.996Z",
-      "title": "Audio + Cards",
-      "videoUrl": "",
+      "hasBlob": true,
+      "goldenTip": "Assista com foco total e observe o ritmo de fala.",
+      "scriptRaw": "",
       "assignedTo": [
         "estevao"
       ],
+      "id": "final_presentation",
+      "category": "Mentoria VIP (Vídeo Masterclass)",
+      "speakers": "Vídeo Real do Professor",
+      "published": true,
+      "durationSec": 533,
+      "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fstudents%2F1788199809613_Final_Presentation.mp4?alt=media",
+      "updatedAt": "2026-08-31T18:14:02.361Z",
+      "summary": "Vídeo de mentoria VIP do Professor Leo Leite para Estêvão.",
       "sentences": [
         {
           "id": 1,
@@ -13525,19 +13531,25 @@ window.AEF_STUDENT_ESTEVAO = {
           "notes": "Speaker: to address is"
         }
       ],
-      "goldenTip": "Este treino é apenas com os cartoes. você pode pausar, treinar, voltar, acelerar, etc. para treinar sua pronúncia",
-      "status": "active",
-      "publishedTimestamp": 1788188274996,
-      "coverImage": "../assets/images/cover-default-aef.jpg",
-      "id": "final_presentation",
+      "title": "FINAL PRESENTATION",
+      "coverImage": "../assets/images/cover-estevao-session01.jpg",
       "duration": "08:52"
     },
     {
-      "publishedTimestamp": 1788146835161,
+      "summary": "Projeção Jayshree's presentation at Oxford University",
+      "videoUrl": "",
+      "assignedTo": [
+        "estevao"
+      ],
+      "goldenTip": "Sugiro experimentar fazer shadowing",
+      "duration": "09:11",
       "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1788146831747_Projecao_Jayshree_Oberoi.mp3?alt=media",
+      "title": "Jayshree Presentation",
+      "publishedTimestamp": 1788146835161,
+      "status": "active",
       "coverImage": "../assets/images/cover-default-aef.jpg",
       "updatedAt": "2026-08-31T03:27:15.160Z",
-      "videoUrl": "",
+      "id": "projecao_jayshree_oberoi",
       "sentences": [
         {
           "id": 1,
@@ -15547,16 +15559,7 @@ window.AEF_STUDENT_ESTEVAO = {
           "spokenTranslation": "",
           "notes": "Speaker: has stayed constant"
         }
-      ],
-      "summary": "Projeção Jayshree's presentation at Oxford University",
-      "goldenTip": "Sugiro experimentar fazer shadowing",
-      "title": "Jayshree Presentation",
-      "duration": "09:11",
-      "status": "active",
-      "assignedTo": [
-        "estevao"
-      ],
-      "id": "projecao_jayshree_oberoi"
+      ]
     }
   ]
 };
