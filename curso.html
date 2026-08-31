@@ -501,8 +501,8 @@
 
             </div>
 
-            <!-- Module Lessons List (Accordion Body) -->
-            <div id="lessons-list-${mod.id}" class="p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
+            <!-- Module Lessons List (Accordion Body - Inicia Fechado) -->
+            <div id="lessons-list-${mod.id}" class="hidden p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
               ${modLessons.map((les) => {
                 const isCompleted = completedLessonIds.includes(les.id);
                 const thumbSrc = les.thumbnailUrl || les.thumbUrl || 'assets/images/leonardo-leite.png';
