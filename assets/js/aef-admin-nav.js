@@ -52,6 +52,9 @@
               <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-alunos.html') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 font-bold'}">
                 <span>👥</span> <span>Alunos & Mentoria</span>
               </a>
+              <a href="admin-ofertas.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-ofertas.html')}">
+                <span>🎯</span> <span>Ofertas & Trials</span>
+              </a>
               <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('tts-studio.html')}">
                 <span>🎙️</span> <span>TTS Studio</span>
               </a>
@@ -87,6 +90,7 @@
           <!-- Mobile Sub-Navigation Bar -->
           <div class="lg:hidden px-4 py-2 border-t border-slate-200/80 bg-white/95 flex items-center gap-2 overflow-x-auto text-[11px] scrollbar-none">
             <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html') ? 'bg-slate-900 text-white font-bold' : 'text-slate-600'}">👥 Alunos</a>
+            <a href="admin-ofertas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-ofertas.html')}">🎯 Ofertas</a>
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
             <a href="admin-publico.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-publico.html')}">🌐 Sugestões</a>

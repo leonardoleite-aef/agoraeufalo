@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Gestor de Ofertas & Entitlements • Wizard de Campanhas | AgoraEuFalo Admin</title>
+  <meta name="description" content="Gestor de ofertas dinâmicas, regras de acesso, suporte a Trials (Grátis e Test-Drive) e gerador de Landing Pages de Vendas.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#0A192F">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#C68A36',
+              'gold-light': '#F59E0B',
+              slate: '#1E293B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-offers-engine.js"></script>
+  <script src="assets/js/aef-sales-page-generator.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C68A36; }
+  </style>
+</head>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ========================================== -->
+  <!-- 1. TOP COMMAND BAR                         -->
+  <!-- ========================================== -->
+  <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-md">
+    <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <a href="admin-alunos.html" class="flex items-center gap-2">
+          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
+        </a>
+        <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
+          🎯 GESTOR DE OFERTAS & TRIALS
+        </span>
+      </div>
+
+      <!-- Center Action Button -->
+      <div class="flex items-center gap-2">
+        <button onclick="openCreateOfferModal()" class="px-3.5 py-1.5 rounded-xl bg-[#C68A36] hover:bg-amber-500 text-white hover:text-slate-950 font-black text-xs transition shadow flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>+ Criar Nova Oferta</span>
+        </button>
+      </div>
+
+      <!-- Quick Backoffice Navigation -->
+      <div class="flex items-center gap-2 text-xs">
+        <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="users" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span class="hidden md:inline">CRM Alunos</span>
+        </a>
+        <a href="admin-cursos.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="book-open" class="w-3.5 h-3.5 text-sky-300"></i>
+          <span class="hidden md:inline">Cursos</span>
+        </a>
+        <a href="portal.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Portal Aluno ↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN WORKSPACE CONTAINER                -->
+  <!-- ========================================== -->
+  <main class="max-w-[98vw] 2xl:max-w-[1920px] w-full mx-auto p-4 sm:p-6 flex-1 space-y-6">
+
+    <!-- METRICS OVERVIEW -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-black text-lg shrink-0">
+          <i data-lucide="tag" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total de Ofertas</span>
+          <p class="text-xl font-black text-white" id="metric-total-offers">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-black text-lg shrink-0">
+          <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Ofertas com Trial</span>
+          <p class="text-xl font-black text-emerald-400" id="metric-trial-offers">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center font-black text-lg shrink-0">
+          <i data-lucide="repeat" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Recorrências / Club</span>
+          <p class="text-xl font-black text-sky-400" id="metric-subscription-offers">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-black text-lg shrink-0">
+          <i data-lucide="gift" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Migrações & Resgate</span>
+          <p class="text-xl font-black text-purple-400" id="metric-migration-offers">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR & SEARCH -->
+    <div class="bg-[#0A192F] border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
+      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+        <button onclick="setFilter('all')" id="filter-btn-all" class="px-3.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition cursor-pointer">
+          Todas as Ofertas
+        </button>
+        <button onclick="setFilter('subscription')" id="filter-btn-subscription" class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition cursor-pointer">
+          Assinaturas
+        </button>
+        <button onclick="setFilter('trial')" id="filter-btn-trial" class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition cursor-pointer">
+          Período de Testes (Trials)
+        </button>
+        <button onclick="setFilter('migration')" id="filter-btn-migration" class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition cursor-pointer">
+          Resgate de Alunos Hotmart
+        </button>
+      </div>
+
+      <div class="relative w-full sm:w-72">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="offerSearchInput" oninput="handleSearch(this.value)" placeholder="Buscar por título, código ou curso..." class="w-full bg-[#112240] border border-white/10 text-white rounded-xl pl-9 pr-3 py-1.5 text-xs focus:border-amber-400 focus:outline-none">
+      </div>
+    </div>
+
+    <!-- OFFERS CARDS GRID -->
+    <section id="offersContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <!-- Injected via JavaScript -->
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: WIZARD DE CRIAÇÃO / EDIÇÃO DE OFERTA                               -->
+  <!-- ========================================================================= -->
+  <div id="offerWizardModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <!-- Wizard Modal Header -->
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">WIZARD DE OFERTAS & TRIALS</span>
+          <h3 class="text-base sm:text-lg font-black text-white" id="wizardModalTitle">Configurar Oferta Comercial</h3>
+        </div>
+        <button onclick="closeOfferWizardModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Wizard Step Indicator -->
+      <div class="px-5 py-3 bg-[#060D17] border-b border-white/10 flex items-center justify-between text-xs font-bold">
+        <button onclick="goToWizardStep(1)" id="wizard-step-btn-1" class="text-amber-400 flex items-center gap-1.5">
+          <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black flex items-center justify-center">1</span>
+          <span>Identidade & Preço</span>
+        </button>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+        <button onclick="goToWizardStep(2)" id="wizard-step-btn-2" class="text-slate-400 flex items-center gap-1.5">
+          <span class="w-5 h-5 rounded-full bg-white/10 text-slate-300 text-[10px] font-black flex items-center justify-center">2</span>
+          <span>Cursos & Acesso</span>
+        </button>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+        <button onclick="goToWizardStep(3)" id="wizard-step-btn-3" class="text-slate-400 flex items-center gap-1.5">
+          <span class="w-5 h-5 rounded-full bg-white/10 text-slate-300 text-[10px] font-black flex items-center justify-center">3</span>
+          <span>Copy & VSL</span>
+        </button>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+        <button onclick="goToWizardStep(4)" id="wizard-step-btn-4" class="text-slate-400 flex items-center gap-1.5">
+          <span class="w-5 h-5 rounded-full bg-white/10 text-slate-300 text-[10px] font-black flex items-center justify-center">4</span>
+          <span>Hotmart & LP</span>
+        </button>
+      </div>
+
+      <!-- Wizard Body Form -->
+      <form id="offerWizardForm" onsubmit="handleSaveOffer(event)" class="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-left text-xs">
+        <input type="hidden" id="wizardOfferId">
+
+        <!-- ============================================== -->
+        <!-- PASSO 1: IDENTIDADE, PREÇO & TIPO DE TRIAL     -->
+        <!-- ============================================== -->
+        <div id="wizard-step-1" class="space-y-4">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">1. Título da Oferta *</label>
+            <input type="text" id="wizardTitle" required placeholder="Ex: AgoraEuFalo Club 2026 • Assinatura Anual" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Slug da Oferta (URL)</label>
+              <input type="text" id="wizardSlug" placeholder="ex: plano-anual-2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Badge Comercial</label>
+              <input type="text" id="wizardBadge" placeholder="Ex: OFERTA OFICIAL, 7 DIAS GRÁTIS" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Modalidade de Cobrança -->
+          <div class="p-3.5 rounded-2xl bg-[#060D17] border border-white/10 space-y-3">
+            <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">Modalidade Financeira</span>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <label class="p-2.5 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="wizardBillingType" value="subscription" checked onchange="toggleBillingOptions()" class="accent-amber-400">
+                <span class="font-bold text-white">Assinatura</span>
+              </label>
+              <label class="p-2.5 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="wizardBillingType" value="one_time" onchange="toggleBillingOptions()" class="accent-amber-400">
+                <span class="font-bold text-white">Pagamento Único</span>
+              </label>
+              <label class="p-2.5 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="wizardBillingType" value="free" onchange="toggleBillingOptions()" class="accent-amber-400">
+                <span class="font-bold text-white">100% Gratuito</span>
+              </label>
+            </div>
+
+            <!-- Mecânica dos 2 Tipos de Períodos de Teste (Trials) -->
+            <div id="trialConfigBox" class="space-y-2 pt-2 border-t border-white/10">
+              <label class="block font-bold text-slate-300">Tipo de Período de Testes (Trial):</label>
+              <select id="wizardTrialMode" onchange="toggleTrialDaysInput()" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none">
+                <option value="none">Sem período de teste (Cobrança Imediata)</option>
+                <option value="free_trial">1. Trial Grátis (1ª cobrança pós-prazo e recorrências ancoradas no 1º pagamento)</option>
+                <option value="test_drive">2. Test-Drive (1ª cobrança pós-prazo e recorrências ancoradas no dia da compra)</option>
+              </select>
+
+              <div id="trialDaysBox" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label class="block text-slate-400 font-medium mb-1">Duração do Trial (Dias):</label>
+                  <input type="number" id="wizardTrialDays" value="7" min="1" max="90" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+                </div>
+                <div class="text-[11px] text-slate-400 flex items-center pt-4 leading-snug font-medium">
+                  💡 O aluno tem acesso irrestrito por este período antes da 1ª cobrança.
+                </div>
+              </div>
+            </div>
+
+            <!-- Preços e Parcelamento -->
+            <div id="pricingInputGroup" class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div>
+                <label class="block text-slate-400 font-medium mb-1">Preço Cheio (De R$):</label>
+                <input type="number" step="0.01" id="wizardFullPrice" value="997.00" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-medium mb-1">Preço Oferta (Por R$):</label>
+                <input type="number" step="0.01" id="wizardOfferPrice" value="497.00" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-medium mb-1">Texto Parcelamento:</label>
+                <input type="text" id="wizardInstallments" placeholder="12x de R$ 49,90" value="12x de R$ 49,90" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white focus:border-amber-400 focus:outline-none">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- PASSO 2: CESTA DE CURSOS & TEMPO DE ACESSO    -->
+        <!-- ============================================== -->
+        <div id="wizard-step-2" class="space-y-4 hidden">
+          <div>
+            <span class="block font-bold text-slate-300 mb-2">1. Selecione os Cursos Inclusos nesta Oferta:</span>
+            <div id="wizardCoursesCheckboxGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-56 overflow-y-auto custom-scrollbar p-2 bg-[#060D17] border border-white/10 rounded-2xl">
+              <!-- Dynamically populated from Firestore courses -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Tier / Nível Atribuído ao Aluno:</label>
+              <select id="wizardGrantedTier" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none">
+                <option value="club_annual">🎓 Membro Club (Magic Stories Anual)</option>
+                <option value="course_member">📚 Aluno de Curso Individual</option>
+                <option value="vip_mentorship">👑 Mentoria VIP Individual</option>
+                <option value="free">🌱 Aluno Free (Lead)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Duração do Acesso:</label>
+              <select id="wizardDurationPreset" onchange="handleDurationPresetChange(this.value)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none">
+                <option value="12_months">12 Meses (1 Ano)</option>
+                <option value="1_month">1 Mês (Mensal)</option>
+                <option value="3_months">3 Meses (Trimestral)</option>
+                <option value="6_months">6 Meses (Semestral)</option>
+                <option value="lifetime">💎 Acesso Vitalício (Sem Expiração)</option>
+                <option value="custom">Personalizado (Dias)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#112240] border border-white/10 flex items-center justify-between">
+            <div>
+              <span class="font-bold text-white block">Exibir Curso no Catálogo Público?</span>
+              <span class="text-[11px] text-slate-400">Se desmarcado, esta oferta funcionará como link exclusivo ou de migração oculta.</span>
+            </div>
+            <input type="checkbox" id="wizardShowOnCatalog" checked class="w-5 h-5 accent-amber-400 cursor-pointer">
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- PASSO 3: COPYWRITING & VSL                    -->
+        <!-- ============================================== -->
+        <div id="wizard-step-3" class="space-y-4 hidden">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Headline Principal da Landing Page *</label>
+            <input type="text" id="wizardMainHeadline" value="Pare de estudar regras. Repita a experiência até a fala virar reflexo." class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Público-Alvo / Dor Principal</label>
+            <textarea id="wizardTargetAudience" rows="2" class="w-full bg-[#112240] border border-white/15 rounded-xl p-3 text-white text-xs focus:border-amber-400 focus:outline-none">Profissionais que entendem inglês escrito mas travam na hora de conversar.</textarea>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Vídeo de Apresentação (YouTube / VSL)</label>
+            <input type="text" id="wizardVideoUrl" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white focus:border-amber-400 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- PASSO 4: HOTMART & GERAÇÃO DE LP               -->
+        <!-- ============================================== -->
+        <div id="wizard-step-4" class="space-y-4 hidden">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Código da Oferta Hotmart</label>
+              <input type="text" id="wizardHotmartOfferCode" placeholder="Ex: ANUAL_2026_OFF" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Link de Checkout da Hotmart</label>
+              <input type="url" id="wizardCheckoutUrl" placeholder="https://pay.hotmart.com/..." class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-300 space-y-2">
+            <span class="font-bold flex items-center gap-1.5 text-xs uppercase tracking-wider">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Agente Leo-Sales-Page-Architect
+            </span>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Ao salvar a oferta, o gerador monta a Landing Page de vendas completa em <code class="text-amber-300 font-mono">ofertas/[slug].html</code> seguindo o Design System oficial do AgoraEuFalo.
+            </p>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Wizard Modal Footer Navigation -->
+      <div class="p-4 bg-[#112240] border-t border-white/10 flex items-center justify-between">
+        <button type="button" onclick="navigateWizard(-1)" id="wizardPrevBtn" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 cursor-pointer disabled:opacity-30">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Voltar</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="navigateWizard(1)" id="wizardNextBtn" class="px-4 py-2 rounded-xl bg-[#C68A36] hover:bg-amber-500 text-white hover:text-slate-950 font-black text-xs transition flex items-center gap-1.5 cursor-pointer">
+            <span>Avançar</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+          <button type="button" onclick="document.getElementById('offerWizardForm').requestSubmit()" id="wizardSubmitBtn" class="hidden px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition flex items-center gap-1.5 shadow-lg cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Salvar Oferta</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPTS LOGIC -->
+  <script>
+    let allOffers = [];
+    let currentFilter = 'all';
+    let currentWizardStep = 1;
+    let availableCourses = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadCoursesCatalog();
+      await loadOffersData();
+      if (window.lucide) window.lucide.createIcons();
+    });
+
+    async function loadCoursesCatalog() {
+      try {
+        const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.documents) {
+            availableCourses = data.documents.map(doc => {
+              const f = doc.fields || {};
+              return {
+                id: f.id?.stringValue || doc.name.split("/").pop(),
+                title: f.title?.stringValue || "Curso",
+                coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
+                description: f.description?.stringValue || ""
+              };
+            });
+          }
+        }
+      } catch(e) {
+        availableCourses = [
+          { id: 'ms-legacy', title: 'Magic Stories Legacy • Acervo Clássico' },
+          { id: 'english-quickstart', title: 'English QuickStart • Fundamentos da Fala' },
+          { id: 'frases-prontas', title: 'Frases Prontas • Automação Oral' }
+        ];
+      }
+    }
+
+    async function loadOffersData() {
+      allOffers = await window.aefOffersEngine.getAllOffers();
+      updateMetrics();
+      renderOffersGrid();
+    }
+
+    function updateMetrics() {
+      document.getElementById('metric-total-offers').innerText = allOffers.length;
+      document.getElementById('metric-trial-offers').innerText = allOffers.filter(o => o.pricing?.trialMode && o.pricing.trialMode !== 'none').length;
+      document.getElementById('metric-subscription-offers').innerText = allOffers.filter(o => o.pricing?.billingType === 'subscription').length;
+      document.getElementById('metric-migration-offers').innerText = allOffers.filter(o => o.isMigrationClaim || o.pricing?.billingType === 'free').length;
+    }
+
+    function renderOffersGrid() {
+      const container = document.getElementById('offersContainer');
+      if (!container) return;
+
+      let filtered = allOffers;
+      if (currentFilter === 'subscription') filtered = allOffers.filter(o => o.pricing?.billingType === 'subscription');
+      else if (currentFilter === 'trial') filtered = allOffers.filter(o => o.pricing?.trialMode && o.pricing.trialMode !== 'none');
+      else if (currentFilter === 'migration') filtered = allOffers.filter(o => o.isMigrationClaim || o.pricing?.billingType === 'free');
+
+      const term = (document.getElementById('offerSearchInput')?.value || '').toLowerCase();
+      if (term) {
+        filtered = filtered.filter(o => o.title?.toLowerCase().includes(term) || o.slug?.toLowerCase().includes(term));
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-500">
+            <i data-lucide="tag" class="w-12 h-12 mx-auto mb-2 opacity-40"></i>
+            <p class="font-bold text-sm">Nenhuma oferta encontrada neste filtro.</p>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(offer => {
+        const trialMode = offer.pricing?.trialMode || 'none';
+        const trialDays = offer.pricing?.trialDays || 0;
+        let trialBadge = "";
+        if (trialMode === 'free_trial') trialBadge = `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold">🎁 TRIAL GRÁTIS (${trialDays}d)</span>`;
+        else if (trialMode === 'test_drive') trialBadge = `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold">⚡ TEST-DRIVE (${trialDays}d)</span>`;
+
+        const isSub = offer.pricing?.billingType === 'subscription';
+        const durationText = offer.accessDuration?.isLifetime ? '💎 Vitalício' : `${offer.accessDuration?.value || 12} Meses`;
+
+        return `
+          <div class="bg-[#0A192F] border border-white/10 rounded-2xl p-5 shadow-lg flex flex-col justify-between space-y-4 hover:border-amber-400/40 transition">
+            
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase">
+                  ${offer.badge || 'OFERTA'}
+                </span>
+                <div class="flex items-center gap-1.5">
+                  ${trialBadge}
+                  <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white/10 text-slate-300">
+                    ${durationText}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-bold text-sm sm:text-base text-white leading-snug">${offer.title}</h4>
+                <p class="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">${offer.salesPageData?.mainHeadline || ''}</p>
+              </div>
+
+              <!-- Courses Included Pills -->
+              <div class="pt-2 border-t border-white/10 space-y-1">
+                <span class="text-[10px] uppercase font-bold text-slate-400">Cursos Inclusos:</span>
+                <div class="flex flex-wrap gap-1">
+                  ${(offer.grantedCourses || []).map(cid => `
+                    <span class="px-2 py-0.5 rounded-lg bg-[#112240] text-slate-200 text-[10px] font-medium border border-white/10">
+                      ${cid}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Price & Installments -->
+              <div class="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+                <div>
+                  <span class="text-slate-400 text-[10px]">Valor:</span>
+                  <p class="font-black text-amber-300 text-sm">${offer.pricing?.installments || `R$ ${offer.pricing?.offerPrice || '0,00'}`}</p>
+                </div>
+                <div class="text-right">
+                  <span class="text-slate-400 text-[10px]">Hotmart Code:</span>
+                  <p class="font-mono text-slate-300 text-xs">${offer.hotmartData?.offerCode || '-'}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-3 border-t border-white/10 grid grid-cols-2 gap-2 text-xs">
+              <button onclick="handleCopyCheckoutUrl('${offer.pricing?.checkoutUrl || ''}')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer" title="Copiar Link de Checkout">
+                <i data-lucide="copy" class="w-3.5 h-3.5 text-amber-300"></i>
+                <span>Checkout</span>
+              </button>
+
+              <button onclick="handleGenerateLandingPage('${offer.id}')" class="p-2 rounded-xl bg-[#C68A36]/20 hover:bg-[#C68A36] text-amber-300 hover:text-white font-bold transition flex items-center justify-center gap-1.5 cursor-pointer" title="Gerar Landing Page">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Gerar LP</span>
+              </button>
+
+              <button onclick="openEditOfferModal('${offer.id}')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5 text-sky-300"></i>
+                <span>Editar</span>
+              </button>
+
+              <button onclick="handleDeleteOffer('${offer.id}')" class="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Excluir</span>
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function setFilter(f) {
+      currentFilter = f;
+      ['all', 'subscription', 'trial', 'migration'].forEach(k => {
+        const btn = document.getElementById(`filter-btn-${k}`);
+        if (btn) {
+          btn.className = (k === f) 
+            ? "px-3.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition cursor-pointer"
+            : "px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition cursor-pointer";
+        }
+      });
+      renderOffersGrid();
+    }
+
+    function handleSearch(val) {
+      renderOffersGrid();
+    }
+
+    function handleCopyCheckoutUrl(url) {
+      if (!url) {
+        alert('Nenhum link de checkout configurado nesta oferta.');
+        return;
+      }
+      navigator.clipboard.writeText(url);
+      alert('Link de checkout copiado com sucesso!');
+    }
+
+    function handleGenerateLandingPage(offerId) {
+      const offer = allOffers.find(o => o.id === offerId);
+      if (!offer) return;
+
+      const html = window.aefSalesPageGenerator.generateSalesPageHtml(offer, availableCourses);
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const win = window.open(url, '_blank');
+      if (!win) alert('Pop-up bloqueado pelo navegador. Autorize para visualizar o preview da Landing Page.');
+    }
+
+    // WIZARD MODAL LOGIC
+    function openCreateOfferModal() {
+      document.getElementById('wizardModalTitle').innerText = "Criar Nova Oferta Comercial";
+      document.getElementById('wizardOfferId').value = "";
+      document.getElementById('wizardTitle').value = "";
+      document.getElementById('wizardSlug').value = "";
+      document.getElementById('wizardBadge').value = "OFERTA OFICIAL";
+      document.getElementById('wizardTrialMode').value = "none";
+      document.getElementById('wizardTrialDays').value = "7";
+      document.getElementById('wizardFullPrice').value = "997.00";
+      document.getElementById('wizardOfferPrice').value = "497.00";
+      document.getElementById('wizardInstallments').value = "12x de R$ 49,90";
+      document.getElementById('wizardCheckoutUrl').value = "";
+      document.getElementById('wizardHotmartOfferCode').value = "";
+      
+      renderCoursesCheckboxes([]);
+      goToWizardStep(1);
+      document.getElementById('offerWizardModal').classList.remove('hidden');
+    }
+
+    function openEditOfferModal(offerId) {
+      const offer = allOffers.find(o => o.id === offerId);
+      if (!offer) return;
+
+      document.getElementById('wizardModalTitle').innerText = `Editar Oferta: ${offer.title}`;
+      document.getElementById('wizardOfferId').value = offer.id;
+      document.getElementById('wizardTitle').value = offer.title || "";
+      document.getElementById('wizardSlug').value = offer.slug || "";
+      document.getElementById('wizardBadge').value = offer.badge || "OFERTA";
+      document.getElementById('wizardTrialMode').value = offer.pricing?.trialMode || "none";
+      document.getElementById('wizardTrialDays').value = offer.pricing?.trialDays || 7;
+      document.getElementById('wizardFullPrice').value = offer.pricing?.fullPrice || 997;
+      document.getElementById('wizardOfferPrice').value = offer.pricing?.offerPrice || 497;
+      document.getElementById('wizardInstallments').value = offer.pricing?.installments || "";
+      document.getElementById('wizardCheckoutUrl').value = offer.pricing?.checkoutUrl || "";
+      document.getElementById('wizardHotmartOfferCode').value = offer.hotmartData?.offerCode || "";
+      document.getElementById('wizardMainHeadline').value = offer.salesPageData?.mainHeadline || "";
+      document.getElementById('wizardTargetAudience').value = offer.salesPageData?.targetAudience || "";
+      document.getElementById('wizardVideoUrl').value = offer.salesPageData?.videoEmbedUrl || "";
+
+      renderCoursesCheckboxes(offer.grantedCourses || []);
+      goToWizardStep(1);
+      document.getElementById('offerWizardModal').classList.remove('hidden');
+    }
+
+    function renderCoursesCheckboxes(selectedIds) {
+      const grid = document.getElementById('wizardCoursesCheckboxGrid');
+      if (!grid) return;
+
+      grid.innerHTML = availableCourses.map(c => `
+        <label class="p-2.5 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+          <input type="checkbox" name="wizardCourses" value="${c.id}" ${selectedIds.includes(c.id) ? 'checked' : ''} class="w-4 h-4 accent-amber-400">
+          <span class="font-bold text-white text-xs truncate">${c.title}</span>
+        </label>
+      `).join('');
+    }
+
+    function closeOfferWizardModal() {
+      document.getElementById('offerWizardModal').classList.add('hidden');
+    }
+
+    function goToWizardStep(step) {
+      currentWizardStep = step;
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById(`wizard-step-${i}`);
+        const btn = document.getElementById(`wizard-step-btn-${i}`);
+        if (el) el.classList.toggle('hidden', i !== step);
+        if (btn) {
+          btn.className = (i === step)
+            ? "text-amber-400 flex items-center gap-1.5"
+            : "text-slate-400 flex items-center gap-1.5";
+        }
+      }
+
+      document.getElementById('wizardPrevBtn').disabled = (step === 1);
+      document.getElementById('wizardNextBtn').classList.toggle('hidden', step === 4);
+      document.getElementById('wizardSubmitBtn').classList.toggle('hidden', step !== 4);
+    }
+
+    function navigateWizard(dir) {
+      const next = Math.max(1, Math.min(4, currentWizardStep + dir));
+      goToWizardStep(next);
+    }
+
+    function toggleTrialDaysInput() {
+      const mode = document.getElementById('wizardTrialMode').value;
+      document.getElementById('trialDaysBox').classList.toggle('hidden', mode === 'none');
+    }
+
+    function toggleBillingOptions() {
+      // Free / Subscription toggles
+    }
+
+    function handleDurationPresetChange(val) {
+      // Preset
+    }
+
+    async function handleSaveOffer(e) {
+      e.preventDefault();
+      const offerId = document.getElementById('wizardOfferId').value || `offer_${Date.now()}`;
+      const title = document.getElementById('wizardTitle').value.trim();
+      const slug = document.getElementById('wizardSlug').value.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const badge = document.getElementById('wizardBadge').value.trim() || "OFERTA";
+
+      const selectedCourses = Array.from(document.querySelectorAll('input[name="wizardCourses"]:checked')).map(cb => cb.value);
+      const trialMode = document.getElementById('wizardTrialMode').value;
+      const trialDays = parseInt(document.getElementById('wizardTrialDays').value || "0");
+
+      const offerData = {
+        id: offerId,
+        title: title,
+        slug: slug,
+        badge: badge,
+        status: "active",
+        grantedCourses: selectedCourses.length > 0 ? selectedCourses : ["ms-legacy"],
+        grantedTier: document.getElementById('wizardGrantedTier').value,
+        showOnCatalog: document.getElementById('wizardShowOnCatalog').checked,
+        accessDuration: {
+          type: "months",
+          value: 12,
+          isLifetime: document.getElementById('wizardDurationPreset').value === 'lifetime'
+        },
+        pricing: {
+          billingType: document.querySelector('input[name="wizardBillingType"]:checked')?.value || 'subscription',
+          trialMode: trialMode,
+          trialDays: trialMode !== 'none' ? trialDays : 0,
+          fullPrice: parseFloat(document.getElementById('wizardFullPrice').value || "997"),
+          offerPrice: parseFloat(document.getElementById('wizardOfferPrice').value || "497"),
+          installments: document.getElementById('wizardInstallments').value,
+          checkoutUrl: document.getElementById('wizardCheckoutUrl').value
+        },
+        salesPageData: {
+          mainHeadline: document.getElementById('wizardMainHeadline').value,
+          targetAudience: document.getElementById('wizardTargetAudience').value,
+          videoEmbedUrl: document.getElementById('wizardVideoUrl').value,
+          generatedPageUrl: `ofertas/${slug}.html`
+        },
+        hotmartData: {
+          offerCode: document.getElementById('wizardHotmartOfferCode').value
+        }
+      };
+
+      try {
+        await window.aefOffersEngine.saveOffer(offerData);
+        alert('Oferta salva com sucesso!');
+        closeOfferWizardModal();
+        await loadOffersData();
+      } catch (err) {
+        alert('Erro ao salvar oferta: ' + err.message);
+      }
+    }
+
+    async function handleDeleteOffer(offerId) {
+      if (!confirm('Deseja realmente excluir esta oferta?')) return;
+      await window.aefOffersEngine.deleteOffer(offerId);
+      await loadOffersData();
+    }
+  </script>
+</body>
+</html>

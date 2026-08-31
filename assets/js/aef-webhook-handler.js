@@ -103,6 +103,7 @@
       const phone = buyer.checkout_phone || buyer.phone || payload.phone || '';
       const prodName = product.name || payload.product_name || 'Magic Stories Club';
       const prodId = product.id || payload.product_id || 'MAGIC_STORIES_CLUB';
+      const offerCode = purchase.offer?.code || payload.offer_code || prodId;
 
       if (!email) {
         throw new Error('E-mail do comprador não encontrado no payload do webhook.');
@@ -114,7 +115,21 @@
                              event === 'PURCHASE_CHARGEBACK' || 
                              event === 'SUBSCRIPTION_CANCELLATION';
 
-      const mapping = this.resolveProductTier(prodName || prodId);
+      let matchedOffer = null;
+      let accessDates = null;
+      if (window.aefOffersEngine) {
+        matchedOffer = await window.aefOffersEngine.matchOfferByCodeOrName(offerCode || prodName);
+        if (matchedOffer) {
+          accessDates = window.aefOffersEngine.calculateAccessDates(matchedOffer);
+        }
+      }
+
+      const mapping = matchedOffer ? {
+        tier: matchedOffer.grantedTier || 'club_annual',
+        role: 'student',
+        enrolledProducts: matchedOffer.grantedCourses || ['ms-legacy', 'english-quickstart', 'frases-prontas'],
+        productName: matchedOffer.title || prodName
+      } : this.resolveProductTier(prodName || prodId);
 
       const studentId = email.replace(/[^a-zA-Z0-9]/g, '_');
       const nowIso = new Date().toISOString();
@@ -127,10 +142,17 @@
         tier: isCancellation ? 'free' : mapping.tier,
         role: 'student',
         enrolledProducts: isCancellation ? [] : mapping.enrolledProducts,
+        activeOffer: isCancellation ? null : {
+          offerId: matchedOffer?.id || 'standard',
+          offerTitle: mapping.productName,
+          accessDates: accessDates,
+          activatedAt: nowIso
+        },
         lastTransaction: {
           gateway: 'hotmart',
           event: event,
           productName: prodName,
+          offerCode: offerCode,
           transactionId: purchase.transaction || data.transaction || `tx_${Date.now()}`,
           processedAt: nowIso
         },
