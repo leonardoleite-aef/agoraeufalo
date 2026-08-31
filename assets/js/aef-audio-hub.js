@@ -291,64 +291,92 @@ class AEFAudioHub {
   }
 
   // =========================================================================
-  // 5. HELPER: SCRIPT PARSER TO SOUND-CHUNKS (SENTENCES ARRAY)
+  // 5. SCRIPT PARSING & SENTENCE TIMESTAMPS (SMART SLASH & LINE CHUNKER)
   // =========================================================================
   parseScriptToSentences(scriptText, totalDurationSec = 30) {
     if (!scriptText) return [];
     
-    // Split lines
-    const lines = scriptText.split('\n')
-      .map(l => l.trim())
-      .filter(l => l.length > 0);
+    // First, split into lines (to preserve speaker context across slashes)
+    const rawLines = scriptText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (rawLines.length === 0) return [];
 
-    if (lines.length === 0) return [];
+    let currentSpeaker = "Leo";
+    const chunks = [];
 
-    const totalChars = lines.reduce((acc, l) => acc + l.length, 0);
+    rawLines.forEach(line => {
+      let lineText = line;
+      let lineSpeaker = currentSpeaker;
+
+      // Extract speaker if line starts with Speaker:
+      if (lineText.includes(':')) {
+        const parts = lineText.split(':');
+        const possibleSpeaker = parts[0].trim();
+        // Avoid treating timestamps like 00:30 or http:// as speaker
+        if (!possibleSpeaker.match(/^\d+$/) && !possibleSpeaker.toLowerCase().startsWith('http')) {
+          lineSpeaker = possibleSpeaker;
+          currentSpeaker = possibleSpeaker;
+          lineText = parts.slice(1).join(':').trim();
+        }
+      }
+
+      // Now split this line by slashes "/"
+      const subSegments = lineText
+        .split(/(?:\s*\/\s*)/)
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+
+      subSegments.forEach(seg => {
+        let cleanText = seg;
+        let spokenTranslation = "";
+
+        // Check for inline spoken translation annotation e.g. "[pt: Olá pessoal]"
+        const ptMatch = cleanText.match(/\[(?:pt|trad|falado):\s*([^\]]+)\]/i);
+        if (ptMatch) {
+          spokenTranslation = ptMatch[1].trim();
+          cleanText = cleanText.replace(ptMatch[0], "").trim();
+        }
+
+        // Clean markup/tags
+        cleanText = cleanText
+          .replace(/\\?\[\s*break\s+time=[^\]]+\\?\]/gi, "")
+          .replace(/\\?\[\s*long\s+pause\s*\\?\]/gi, "")
+          .replace(/\\?\[\s*pause\s*\\?\]/gi, "")
+          .replace(/\\?\[\s*pausa[^\]]*\\?\]/gi, "")
+          .replace(/\\?\[\s*break[^\]]*\\?\]/gi, "")
+          .replace(/\\([!?.',"-])/g, "$1")
+          .replace(/\s+/g, " ")
+          .replace(/\s+([!?,.])/g, "$1")
+          .trim();
+
+        if (cleanText.length > 0) {
+          chunks.push({
+            text: cleanText,
+            speaker: lineSpeaker,
+            spokenTranslation: spokenTranslation
+          });
+        }
+      });
+    });
+
+    if (chunks.length === 0) return [];
+
+    const totalChars = chunks.reduce((acc, c) => acc + c.text.length, 0);
     let accumulatedTime = 0;
 
-    return lines.map((line, idx) => {
-      const charRatio = line.length / (totalChars || 1);
-      const segDuration = Math.max(1.8, Math.round((charRatio * totalDurationSec) * 100) / 100);
+    return chunks.map((chunk, idx) => {
+      const charRatio = chunk.text.length / (totalChars || 1);
+      const segDuration = Math.max(1.2, Math.round((charRatio * totalDurationSec) * 100) / 100);
       const start = Math.round(accumulatedTime * 100) / 100;
       const end = Math.round((accumulatedTime + segDuration) * 100) / 100;
       accumulatedTime += segDuration;
-
-      // Extract speaker if exists e.g. "Liam: Hello there"
-      let cleanText = line;
-      let notes = "";
-      let spokenTranslation = "";
-
-      // Check for inline spoken translation annotation e.g. "[pt: Olá pessoal]"
-      const ptMatch = cleanText.match(/\[(?:pt|trad|falado):\s*([^\]]+)\]/i);
-      if (ptMatch) {
-        spokenTranslation = ptMatch[1].trim();
-        cleanText = cleanText.replace(ptMatch[0], "").trim();
-      }
-
-      if (cleanText.includes(':')) {
-        const parts = cleanText.split(':');
-        notes = parts[0].trim();
-        cleanText = parts.slice(1).join(':').trim();
-      }
-
-      cleanText = (cleanText || line)
-        .replace(/\\?\[\s*break\s+time=[^\]]+\\?\]/gi, "")
-        .replace(/\\?\[\s*long\s+pause\s*\\?\]/gi, "")
-        .replace(/\\?\[\s*pause\s*\\?\]/gi, "")
-        .replace(/\\?\[\s*pausa[^\]]*\\?\]/gi, "")
-        .replace(/\\?\[\s*break[^\]]*\\?\]/gi, "")
-        .replace(/\\([!?.',"-])/g, "$1")
-        .replace(/\s+/g, " ")
-        .replace(/\s+([!?,.])/g, "$1")
-        .trim();
 
       return {
         id: idx + 1,
         start: start,
         end: end,
-        text: cleanText,
-        spokenTranslation: spokenTranslation,
-        notes: notes ? `Speaker: ${notes}` : ""
+        text: chunk.text,
+        spokenTranslation: chunk.spokenTranslation,
+        notes: chunk.speaker ? `Speaker: ${chunk.speaker}` : ""
       };
     });
   }

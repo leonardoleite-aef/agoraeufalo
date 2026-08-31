@@ -1477,7 +1477,7 @@
       });
 
       const durationSec = tempAudio.duration && !isNaN(tempAudio.duration) ? tempAudio.duration : 45;
-      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+/).filter(s => s.trim().length > 0);
+      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+|\s*\/\s*/).map(s => s.trim()).filter(s => s.length > 0);
       const count = Math.max(1, sentencesRaw.length);
       const timePerSentence = durationSec / count;
 
@@ -1526,7 +1526,7 @@
       const rawText = textInput.value.trim() || "Practice your listening reflex with this YouTube content.";
       const title = titleInput.value.trim() || generateSmartTitle(rawText);
 
-      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+/).filter(s => s.trim().length > 0);
+      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+|\s*\/\s*/).map(s => s.trim()).filter(s => s.length > 0);
       const count = Math.max(1, sentencesRaw.length);
       const durationSec = count * 6;
 
