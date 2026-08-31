@@ -220,6 +220,88 @@ window.AEF_STUDENT_PUBLIC = {
           "spokenTranslation": "Puxa, que ótimo. Muito obrigado por compartilhar um pouquinho da sua vida com a gente hoje."
         }
       ]
+    },
+    {
+      id: "ms005-sunday-brunch",
+      title: "MS005 - Sunday Brunch & The Easter Egg Hunt",
+      duration: "01:17",
+      coverImage: "../assets/images/cover_ms005.jpg",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS005%2Faudio_lr_2.mp3?alt=media",
+      videoUrl: "",
+      summary: "A história do domingo de Páscoa da Grazi e Tom: o preparo do Sunday Brunch na cozinha e a grande caçada aos ovos de Páscoa no quintal.",
+      goldenTip: "Observe pelos ouvidos! Sinta a diferença brutal entre a grafia e o som real de 'meatloaf', 'mashed potatoes' e 'secret recipe'.",
+      sentences: [
+        {
+          "id": 1,
+          "start": 0.0,
+          "end": 7.0,
+          "text": "It's Sunday! Tom is in the kitchen right now. He's helping Grazi make a special Sunday brunch.",
+          "spokenTranslation": "É domingo! O Tom tá na cozinha agora mesmo. Ele tá ajudando a Grazi a fazer um brunch de domingo especial."
+        },
+        {
+          "id": 2,
+          "start": 7.0,
+          "end": 19.0,
+          "text": "It's 9 a.m. Grazi is making some special dishes for the brunch. She's making meatloaf, mashed potatoes, green salad, and roast chicken.",
+          "spokenTranslation": "São 9h da manhã. A Grazi tá fazendo alguns pratos especiais pro brunch: falso lombo, purê de batatas, salada verde e frango assado."
+        },
+        {
+          "id": 3,
+          "start": 19.0,
+          "end": 28.0,
+          "text": "Tom is making his special recipe of a typical American chocolate brownie. Yes! Tom has a secret recipe.",
+          "spokenTranslation": "O Tom tá fazendo a receita especial dele de brownie de chocolate típico americano. Sim! O Tom tem uma receita secreta."
+        },
+        {
+          "id": 4,
+          "start": 28.0,
+          "end": 33.0,
+          "text": "They started preparing brunch on the day before. What's the day before? Saturday!",
+          "spokenTranslation": "Eles começaram a preparar o brunch no dia anterior. Qual foi o dia anterior? Sábado!"
+        },
+        {
+          "id": 5,
+          "start": 33.0,
+          "end": 39.0,
+          "text": "Yesterday they bought some chocolate eggs and some chicken eggs.",
+          "spokenTranslation": "Ontem eles compraram alguns ovos de chocolate e alguns ovos de galinha."
+        },
+        {
+          "id": 6,
+          "start": 39.0,
+          "end": 48.0,
+          "text": "Yesterday the girls painted the chicken eggs. Tom and Grazi went to the backyard to hide all the eggs in the bushes.",
+          "spokenTranslation": "Ontem as meninas pintaram os ovos de galinha. O Tom e a Grazi foram pro quintal esconder todos os ovos nos arbustos."
+        },
+        {
+          "id": 7,
+          "start": 48.0,
+          "end": 56.0,
+          "text": "Right now the girls are setting up the table for the special brunch. Today they are eating outside in the back porch.",
+          "spokenTranslation": "Agora mesmo as meninas tão arrumando a mesa pro brunch especial. Hoje eles vão comer lá fora, na varanda dos fundos."
+        },
+        {
+          "id": 8,
+          "start": 56.0,
+          "end": 65.0,
+          "text": "Anna and Flavia yell: Table is ready! Tom says: All right! Let the egg hunt begin!",
+          "spokenTranslation": "A Anna e a Flávia gritam: A mesa tá pronta! O Tom diz: Maravilha! Que comece a caça aos ovos!"
+        },
+        {
+          "id": 9,
+          "start": 65.0,
+          "end": 71.0,
+          "text": "The girls run to the backyard and start looking for the Easter eggs. That's right my friend.",
+          "spokenTranslation": "As meninas correm pro quintal e começam a procurar os ovos de Páscoa. Isso mesmo, meu amigo."
+        },
+        {
+          "id": 10,
+          "start": 71.0,
+          "end": 77.0,
+          "text": "Today is Easter Sunday. Happy Easter to you and your family!",
+          "spokenTranslation": "Hoje é Domingo de Páscoa. Feliz Páscoa pra você e pra sua família!"
+        }
+      ]
     }
   ]
 };
