@@ -850,6 +850,89 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- MODAL: CONFIRMAÇÃO DOS DADOS ANTES DE PUBLICAR NA NUVEM                   -->
+  <!-- ========================================================================= -->
+  <div id="publishConfirmationModal" class="modal-backdrop fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="modal-card bg-[#111726] border-2 border-amber-500/60 rounded-3xl max-w-lg w-full flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Header -->
+      <div class="p-5 border-b border-[#1F2B45] flex items-center justify-between bg-[#0E131F]">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 font-black text-lg">
+            🔍
+          </div>
+          <div>
+            <h3 class="font-extrabold text-white text-base">Confirmar Dados do Episódio</h3>
+            <p class="text-xs text-slate-400">Revise os detalhes antes de enviar para a nuvem</p>
+          </div>
+        </div>
+        <button onclick="closeConfirmationModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-[#1F2B45] transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Body / Review Card -->
+      <div class="p-6 space-y-4 text-xs bg-[#0B0F17]">
+        
+        <div class="p-4 rounded-2xl bg-[#161F33] border border-[#2D3D60] space-y-3">
+          
+          <!-- Título -->
+          <div class="flex items-start justify-between gap-2 pb-2.5 border-b border-[#1F2B45]">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Título do Episódio:</span>
+            <span id="confirmReviewTitle" class="text-amber-300 font-extrabold text-sm text-right">FINAL PRESENTATION</span>
+          </div>
+
+          <!-- Destino / Aluno -->
+          <div class="flex items-start justify-between gap-2 pb-2.5 border-b border-[#1F2B45]">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Destino / Alvo:</span>
+            <span id="confirmReviewTarget" class="text-purple-300 font-bold text-right">👑 Mentoria VIP (Estêvão)</span>
+          </div>
+
+          <!-- Tipo de Mídia & Duração -->
+          <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[#1F2B45]">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Formato de Mídia:</span>
+            <span id="confirmReviewMedia" class="text-sky-300 font-bold">🎬 Vídeo MP4 (08:52)</span>
+          </div>
+
+          <!-- Modo do Player -->
+          <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[#1F2B45]">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Experiência do Player:</span>
+            <span id="confirmReviewPlayerMode" class="text-emerald-300 font-bold">🎬 Modo Vídeo Cinema (Sem cards)</span>
+          </div>
+
+          <!-- Sacada de Ouro -->
+          <div class="space-y-1 pt-1">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Sacada de Ouro do Leo:</span>
+            <p id="confirmReviewTip" class="text-slate-200 italic bg-[#0B0F17] p-2.5 rounded-xl border border-[#1F2B45] text-[11px] leading-relaxed">
+              "Observe como os conceitos complexos são encadeados."
+            </p>
+          </div>
+
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] flex items-center gap-2">
+          <span>⚡</span>
+          <span>Ao confirmar, a mídia será enviada ao <strong>Firebase Storage</strong> e sincronizada no <strong>Firestore em tempo real</strong>.</span>
+        </div>
+
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="p-4 border-t border-[#1F2B45] bg-[#0E131F] flex items-center justify-between gap-3">
+        <button onclick="closeConfirmationModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition cursor-pointer flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Voltar e Ajustar</span>
+        </button>
+        <button id="btnExecuteCloudPublish" onclick="executeCloudPublish()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black flex items-center gap-2 shadow-lg shadow-amber-500/25 active:scale-95 transition cursor-pointer">
+          <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+          <span>Sim, Publicar na Nuvem!</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- MODAL: CONFIGURAÇÃO DE API KEY & MODELOS                                 -->
   <!-- ========================================================================= -->
   <div id="configModal" class="modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -2805,15 +2888,26 @@ Example output format:
       if (modal) modal.classList.remove('active');
     }
 
-    async function confirmPublishEpisode() {
-      const publishBtn = document.getElementById('confirmPublishBtn');
+    function closeConfirmationModal() {
+      const confModal = document.getElementById('publishConfirmationModal');
+      if (confModal) confModal.classList.remove('active');
+      const pubModal = document.getElementById('publishEpisodeModal');
+      if (pubModal) pubModal.classList.add('active');
+    }
+
+    function confirmPublishEpisode() {
       const title = document.getElementById('publishTitleInput')?.value.trim() || "Treino VIP";
       const category = document.getElementById('publishCategorySelect')?.value || "Magic Story";
       const summary = document.getElementById('publishSummaryInput')?.value.trim() || "";
       const goldenTip = document.getElementById('publishGoldenTipInput')?.value.trim() || "Respire nas pausas e conecte os chunks.";
       const tier = document.querySelector('input[name="publishTier"]:checked')?.value || 'tier3_vip';
+      const videoUrlInput = document.getElementById("publishVideoUrlInput")?.value.trim() || "";
+      const isVideo = Boolean(STATE.isVideo || (STATE.uploadedFile && STATE.uploadedFile.type.startsWith('video/')) || videoUrlInput);
+      const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
 
       let assignedTo = ['public'];
+      let targetLabel = "🌱 Tier 1: Sugestões do Leo (Público)";
+
       if (tier === 'tier3_vip') {
         const selectedCheckboxes = document.querySelectorAll('input[name="publishRecipient"]:checked');
         assignedTo = Array.from(selectedCheckboxes).map(cb => cb.value);
@@ -2821,45 +2915,89 @@ Example output format:
           showToast("Selecione pelo menos um mentorado VIP para o Tier 3.", "warning");
           return;
         }
+        const menteeNames = assignedTo.map(id => {
+          if (id === 'estevao') return 'Estêvão';
+          if (id === 'thomas') return 'Thomas';
+          if (id === 'andre') return 'André';
+          if (id === 'matheus') return 'Matheus';
+          return id;
+        });
+        targetLabel = `👑 Mentoria VIP (${menteeNames.join(', ')})`;
       } else if (tier === 'tier2_courses') {
         assignedTo = ['courses_all'];
-      } else {
-        assignedTo = ['public'];
+        targetLabel = "🎓 Tier 2: Cursos (Área de Membros)";
       }
 
-      if (!STATE.currentAudioBlob) {
-        showToast("Áudio não encontrado em memória. Gere novamente.", "error");
+      if (!STATE.currentAudioBlob && !STATE.uploadedFile) {
+        showToast("Nenhuma mídia em memória para publicar.", "error");
         return;
       }
 
+      STATE.pendingPublishData = {
+        title,
+        category,
+        summary,
+        goldenTip,
+        tier,
+        assignedTo,
+        targetLabel,
+        isVideo,
+        durationStr,
+        videoUrlInput
+      };
+
+      // Preenche dados no Modal de Confirmação
+      const elTitle = document.getElementById('confirmReviewTitle');
+      const elTarget = document.getElementById('confirmReviewTarget');
+      const elMedia = document.getElementById('confirmReviewMedia');
+      const elMode = document.getElementById('confirmReviewPlayerMode');
+      const elTip = document.getElementById('confirmReviewTip');
+
+      if (elTitle) elTitle.textContent = title;
+      if (elTarget) elTarget.textContent = targetLabel;
+      if (elMedia) elMedia.textContent = isVideo ? `🎬 Vídeo MP4 (${durationStr})` : `🎙️ Áudio MP3 (${durationStr})`;
+      if (elMode) elMode.textContent = isVideo ? `🎬 Modo Vídeo Cinema (Sem cards & sem playbar)` : `🎧 Modo Interativo (${currentParsedSentences.length} Frases com Karaokê)`;
+      if (elTip) elTip.textContent = `"${goldenTip}"`;
+
+      // Fecha modal de formulário e abre modal de confirmação
+      closePublishModal();
+      const confModal = document.getElementById('publishConfirmationModal');
+      if (confModal) {
+        confModal.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    async function executeCloudPublish() {
+      const publishBtn = document.getElementById('btnExecuteCloudPublish');
+      const data = STATE.pendingPublishData;
+      if (!data) return;
+
       if (publishBtn) {
         publishBtn.disabled = true;
-        publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Alinhando Fonética & Nuvem...</span>`;
+        publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Enviando para a Nuvem...</span>`;
       }
 
       try {
-        const trackId = (STATE.currentMeta?.title || 'track_' + Date.now()).toLowerCase().replace(/[^a-z0-9_-]/g, '_');
-        const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
+        const trackId = (data.title || 'track_' + Date.now()).toLowerCase().replace(/[^a-z0-9_-]/g, '_');
         const durationSec = Math.round((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
 
-        // STT Phonetic Alignment Step via Gemini 2.5 Flash if API Key is available
         let finalSentences = currentParsedSentences;
-        if (STATE.apiKey && window.aefAudioHub) {
+        if (!data.isVideo && STATE.apiKey && window.aefAudioHub) {
           try {
             if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Alinhando Timestamps IA...</span>`;
             const aligned = await window.aefAudioHub.transcribeAudioWithGemini(STATE.currentAudioBlob, STATE.apiKey);
             if (aligned && aligned.length > 0) {
               finalSentences = aligned;
-              console.log("🎯 [TTS Studio] Timestamps fonéticos e tradução falada alinhados via Gemini:", aligned);
             }
           } catch (sttErr) {
-            console.warn("⚠️ Alinhamento STT não concluído, usando fallback heurístico:", sttErr);
+            console.warn("⚠️ STT skip:", sttErr);
           }
         }
 
         let coverImg = STATE.currentMeta?.coverImage || "";
         if (!coverImg) {
-          const titleLower = (title || "").toLowerCase();
+          const titleLower = (data.title || "").toLowerCase();
           if (titleLower.includes('oxford')) coverImg = "../assets/images/cover-estevao-oxford-presentation.jpg";
           else if (titleLower.includes('morning')) coverImg = "../assets/images/cover-thomas-morning-person.jpg";
           else if (titleLower.includes('coffee') || titleLower.includes('tea') || titleLower.includes('cafe')) coverImg = "../assets/images/cover-thomas-coffee-shop-decisions.jpg";
@@ -2872,17 +3010,17 @@ Example output format:
 
         const trackData = {
           id: trackId,
-          title: title,
-          category: category,
-          duration: durationStr,
+          title: data.title,
+          category: data.category,
+          duration: data.durationStr,
           durationSec: durationSec,
-          summary: summary,
-          goldenTip: goldenTip,
-          videoUrl: document.getElementById("publishVideoUrlInput")?.value.trim() || "",
+          summary: data.summary,
+          goldenTip: data.goldenTip,
+          videoUrl: data.videoUrlInput || "",
           speakers: STATE.currentMeta?.speakers || "Gemini HD",
           scriptRaw: STATE.currentMeta?.script || "",
-          sentences: finalSentences,
-          assignedTo: assignedTo,
+          sentences: data.isVideo ? [] : finalSentences,
+          assignedTo: data.assignedTo,
           coverImage: coverImg
         };
 
@@ -2892,8 +3030,7 @@ Example output format:
 
         // Upload to Google Cloud Storage & Firestore based on Tier
         if (window.aefCloudSync) {
-          // Se for vídeo carregado localmente, envia para videos/students no Firebase Storage
-          if (STATE.isVideo && STATE.uploadedFile) {
+          if (data.isVideo && STATE.uploadedFile) {
             try {
               if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Subindo Vídeo para Firebase Storage...</span>`;
               const uploadedVideoUrl = await window.aefCloudSync.uploadFileToStorage(STATE.uploadedFile, "videos/students");
@@ -2911,36 +3048,37 @@ Example output format:
                 trackData.audioUrl = uploadedUrl;
               }
             } catch (upErr) {
-              console.warn("⚠️ Upload direto para Cloud Storage falhou, prosseguindo com áudio local:", upErr);
+              console.warn("⚠️ Upload de áudio falhou:", upErr);
             }
           }
 
-          if (tier === 'tier1_suggestions') {
-            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando Sugestões do Leo...</span>`;
+          if (data.tier === 'tier1_suggestions') {
+            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando em Sugestões do Leo...</span>`;
             await window.aefCloudSync.publishSuggestionTrack(trackData);
-          } else if (tier === 'tier2_courses') {
+          } else if (data.tier === 'tier2_courses') {
             if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando em Meus Cursos...</span>`;
             await window.aefCloudSync.publishCourseTrack('public_courses', trackData);
-          } else if (tier === 'tier3_vip') {
-            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando Nuvem VIP (${assignedTo.join(', ')})...</span>`;
-            await window.aefCloudSync.publishTrackToCloud(trackData, assignedTo);
+          } else if (data.tier === 'tier3_vip') {
+            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando Nuvem VIP (${data.assignedTo.join(', ')})...</span>`;
+            await window.aefCloudSync.publishTrackToCloud(trackData, data.assignedTo);
           }
         }
 
-        closePublishModal();
+        const confModal = document.getElementById('publishConfirmationModal');
+        if (confModal) confModal.classList.remove('active');
 
-        const targetUrl = tier === 'tier3_vip' ? `treino/player.html?aluno=${assignedTo[0]}` : `treino/player.html?aluno=public`;
+        const targetUrl = data.tier === 'tier3_vip' ? `treino/player.html?aluno=${data.assignedTo[0]}` : `treino/player.html?aluno=public`;
 
         showToast(`
           <div class="flex flex-col gap-1">
-            <span>🚀 <strong>${title}</strong> publicado com sucesso (${tier === 'tier1_suggestions' ? 'Tier 1: Sugestões' : tier === 'tier2_courses' ? 'Tier 2: Cursos' : 'Tier 3: VIP'})!</span>
-            <span class="text-[10px] text-emerald-300">Timestamps e tradução falada sincronizados na Nuvem.</span>
+            <span>🚀 <strong>${data.title}</strong> publicado com sucesso (${data.targetLabel})!</span>
+            <span class="text-[10px] text-emerald-300">Disponível em tempo real no Player do Aluno.</span>
             <a href="${targetUrl}" target="_blank" class="inline-flex items-center gap-1 text-amber-300 hover:underline font-bold text-[11px] mt-0.5">
               <span>Abrir Player de Treino</span>
               <i data-lucide="external-link" class="w-3 h-3"></i>
             </a>
           </div>
-        `, "success", 8000);
+        `, "success", 9000);
 
       } catch (err) {
         console.error("Publish Error:", err);
@@ -2948,7 +3086,7 @@ Example output format:
       } finally {
         if (publishBtn) {
           publishBtn.disabled = false;
-          publishBtn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Confirmar Publicação</span>`;
+          publishBtn.innerHTML = `<i data-lucide="upload-cloud" class="w-4 h-4"></i><span>Sim, Publicar na Nuvem!</span>`;
         }
       }
     }
