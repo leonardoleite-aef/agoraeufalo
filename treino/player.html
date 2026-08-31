@@ -944,7 +944,10 @@
               <button onclick="window.selectTrack('${t.id}')" class="w-full p-2 rounded-xl text-xs font-bold text-left transition flex items-center justify-between gap-2 cursor-pointer ${
                 REAL_TRACK.id === t.id ? 'bg-[#C68A36] text-white shadow-xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200'
               }">
-                <span class="truncate">${idx + 1}. ${t.title}</span>
+                <span class="truncate flex items-center gap-1">
+                  ${t.videoUrl ? '<span title="Possui Vídeo Integrado">🎬</span>' : ''}
+                  <span>${idx + 1}. ${t.title}</span>
+                </span>
                 <span class="text-[10px] font-mono shrink-0 opacity-80">${t.duration || ''}</span>
               </button>
             `).join('')}
@@ -1130,6 +1133,17 @@
 
           <!-- Relatório de Diagnóstico do AI Coach (Exibido quando finalizado) -->
           ${isMagicStory && state.activity === 'look_retell' && state.evaluation ? window.AEFPlayerZenTemplate.renderEvaluationReport(state.evaluation) : ''}
+
+          <!-- VÍDEO SINCRONIZADO DO TREINO (Quando a faixa possui videoUrl no Google Cloud Storage / YouTube) -->
+          ${REAL_TRACK?.videoUrl ? `
+            <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-md aspect-video mb-3 relative group">
+              ${(REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be')) ? `
+                <iframe src="${REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              ` : `
+                <video id="zen-stage-video" src="${REAL_TRACK.videoUrl}" controls playsinline class="w-full h-full object-contain bg-black"></video>
+              `}
+            </div>
+          ` : ''}
 
           <!-- 1. O CARTÃO ÚNICO ATIVO -->
           <div id="card-stage-slot" class="w-full">
