@@ -198,12 +198,12 @@
       <form id="new-public-track-form" onsubmit="handleNewPublicTrack(event)" class="space-y-4 max-w-3xl">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-300 mb-1">Título do Treino</label>
-            <input type="text" id="track-title-input" required placeholder="Ex: Master Speech: Executive Clarity" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <label class="block text-xs font-bold text-slate-300 mb-1">Título do Treino Público</label>
+            <input type="text" id="track-title-input" required placeholder="Escreva o título do treino público aqui..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-300 mb-1">Duração (mm:ss)</label>
-            <input type="text" id="track-duration-input" required placeholder="00:45" class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+            <input type="text" id="track-duration-input" required placeholder="Escreva a duração (ex: 01:45) aqui..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
           </div>
         </div>
 
@@ -211,7 +211,7 @@
           <div class="space-y-1">
             <label class="block text-xs font-bold text-slate-300">Áudio MP3 (Google Cloud Storage)</label>
             <div class="flex items-center gap-2">
-              <input type="text" id="track-audio-input" required placeholder="https://firebasestorage.googleapis.com/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+              <input type="text" id="track-audio-input" required placeholder="Cole o link do áudio MP3 aqui..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
               <button type="button" onclick="openAudioFilePicker('track-audio-input')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shrink-0 flex items-center gap-1 cursor-pointer">
                 <span>📁 FilePicker</span>
               </button>
@@ -219,9 +219,9 @@
           </div>
           
           <div class="space-y-1">
-            <label class="block text-xs font-bold text-slate-300">Vídeo Próprio (Opcional - MP4 na Nuvem)</label>
+            <label class="block text-xs font-bold text-slate-300">Vídeo Próprio (Opcional - MP4 ou YouTube)</label>
             <div class="flex items-center gap-2">
-              <input type="text" id="track-video-input" placeholder="https://firebasestorage.googleapis.com/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+              <input type="text" id="track-video-input" placeholder="Cole o link do vídeo MP4 ou YouTube aqui..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
               <button type="button" onclick="openVideoFilePicker('track-video-input')" class="px-3.5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-black shrink-0 flex items-center gap-1 cursor-pointer">
                 <span>🎬 FilePicker</span>
               </button>
@@ -241,17 +241,17 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">Resumo Pedagógico</label>
-          <input type="text" id="track-summary-input" placeholder="Treino de reflexo rápido sobre conversação cotidiana e chunks." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
+          <input type="text" id="track-summary-input" placeholder="Escreva o resumo pedagógico aqui..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs">
         </div>
 
         <div>
           <label class="block text-xs font-bold text-amber-400 mb-1">✨ Sacada de Ouro do Professor Leo (Golden Tip)</label>
-          <input type="text" id="track-goldentip-input" value="Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem traduzir palavra por palavra." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-amber-500/40 text-white text-xs">
+          <input type="text" id="track-goldentip-input" value="" placeholder="Escreva a Sacada de Ouro do Professor Leo aqui..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-amber-500/40 text-white text-xs">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">Frases e Timestamps (Array JSON)</label>
-          <textarea id="track-sentences-input" rows="6" placeholder='[{"id": 1, "start": 0.0, "end": 3.2, "text": "Good morning! How are you?", "notes": "Speaker: Sarah"}]' class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono"></textarea>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Roteiro / Frases e Timestamps</label>
+          <textarea id="track-sentences-input" rows="6" placeholder="Escreva ou cole o roteiro em inglês aqui (uma frase por linha ou separadas por /)..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono"></textarea>
         </div>
 
         <button type="submit" id="btn-save-public-track" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2 cursor-pointer">

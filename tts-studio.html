@@ -452,7 +452,7 @@
 
           <!-- Title Input & Action Buttons (TTS vs Transcrição vs Alinhamento) -->
           <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-            <input type="text" id="audioTitleInput" value="magic_story_reflex_01" placeholder="Nome do arquivo (slug)" class="flex-1 sm:w-48 bg-[#111726] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 font-mono outline-none">
+            <input type="text" id="audioTitleInput" value="" placeholder="Escreva o nome / slug do arquivo aqui..." class="flex-1 sm:w-48 bg-[#111726] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-slate-200 font-mono outline-none">
 
             <!-- TTS Generate Button -->
             <button id="generateAudioBtn" type="button" onclick="generateAudioTTS()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
@@ -750,7 +750,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="space-y-1">
             <label for="publishTitleInput" class="font-semibold text-slate-300 block">Título do Treino</label>
-            <input type="text" id="publishTitleInput" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 font-medium outline-none">
+            <input type="text" id="publishTitleInput" placeholder="Escreva o título do treino aqui..." class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 font-medium outline-none">
           </div>
           <div class="space-y-1">
             <label for="publishCategorySelect" class="font-semibold text-slate-300 block">Categoria Didática</label>
@@ -767,7 +767,7 @@
         <!-- Summary -->
         <div class="space-y-1">
           <label for="publishSummaryInput" class="font-semibold text-slate-300 block">Resumo / Contexto Pedagógico</label>
-          <textarea id="publishSummaryInput" rows="2" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl p-3 text-slate-200 outline-none leading-relaxed" placeholder="Ex: Treino de reflexo rápido sobre mudança para Londres com foco em chunks de passado."></textarea>
+          <textarea id="publishSummaryInput" rows="2" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl p-3 text-slate-200 outline-none leading-relaxed" placeholder="Escreva o resumo pedagógico ou contexto aqui..."></textarea>
         </div>
 
         <!-- Golden Tip -->
@@ -775,7 +775,7 @@
           <label for="publishGoldenTipInput" class="font-semibold text-amber-400 flex items-center gap-1.5">
             <span>✨ Sacada de Ouro do Leo (Dica de Pronúncia & Ritmo)</span>
           </label>
-          <input type="text" id="publishGoldenTipInput" value="Respire nas pausas naturais. Conecte os blocos sonoros (chunks) sem tentar traduzir palavra por palavra." class="w-full bg-[#0B0F17] border border-amber-500/40 focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
+          <input type="text" id="publishGoldenTipInput" value="" placeholder="Escreva a Sacada de Ouro do Leo aqui..." class="w-full bg-[#0B0F17] border border-amber-500/40 focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
         </div>
 
         <!-- Video URL (Optional) -->
@@ -785,7 +785,7 @@
             <span>Vídeo Próprio Hospedado (Opcional - MP4 / WebM na Nuvem)</span>
           </label>
           <div class="flex items-center gap-2">
-            <input type="text" id="publishVideoUrlInput" placeholder="https://firebasestorage.googleapis.com/..." class="flex-1 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
+            <input type="text" id="publishVideoUrlInput" placeholder="Cole o link do vídeo MP4 ou YouTube aqui..." class="flex-1 bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-100 outline-none">
             <button type="button" onclick="window.AEFFilePicker.open({ accept: 'video/*', folder: 'videos/students', title: 'Upload de Vídeo MP4 para a Nuvem', onComplete: (url) => { document.getElementById('publishVideoUrlInput').value = url; } })" class="px-3 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs shrink-0 flex items-center gap-1 cursor-pointer">
               <span>🎬 FilePicker</span>
             </button>
