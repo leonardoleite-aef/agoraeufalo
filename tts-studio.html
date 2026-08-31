@@ -1016,14 +1016,18 @@
     function handleFileSelect(files) {
       if (!files || files.length === 0) return;
       const file = files[0];
-      if (!file.type.startsWith('audio/') && !file.name.match(/\.(mp3|wav|m4a|aac|ogg)$/i)) {
-        showToast("Por favor, selecione um arquivo de áudio válido (.mp3, .wav, .m4a, .aac, .ogg).", "warning");
+      const isAudio = file.type.startsWith('audio/') || Boolean(file.name.match(/\.(mp3|wav|m4a|aac|ogg)$/i));
+      const isVideo = file.type.startsWith('video/') || Boolean(file.name.match(/\.(mp4|webm|mov|m4v|mkv)$/i));
+
+      if (!isAudio && !isVideo) {
+        showToast("Por favor, selecione um arquivo de áudio (.mp3, .wav, .m4a) ou vídeo (.mp4, .webm, .mov) válido.", "warning");
         return;
       }
 
       STATE.uploadedFile = file;
       STATE.currentAudioBlob = file;
       STATE.currentMp3Blob = file;
+      STATE.isVideo = isVideo;
 
       const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
 
@@ -1043,11 +1047,12 @@
         titleInput.value = slug;
       }
 
-      // Load into Mastering Player
+      // Load into Mastering Player (works for both audio and video files in HTML5!)
       const tempUrl = URL.createObjectURL(file);
-      const tempAudio = new Audio(tempUrl);
-      tempAudio.addEventListener('loadedmetadata', () => {
-        const durSec = Math.round(tempAudio.duration) || 60;
+      const mediaEl = document.createElement(isVideo ? 'video' : 'audio');
+      mediaEl.src = tempUrl;
+      mediaEl.addEventListener('loadedmetadata', () => {
+        const durSec = Math.round(mediaEl.duration) || 60;
         STATE.uploadedFileDuration = durSec;
         if (fileDurationEl) fileDurationEl.textContent = `Duração: ${formatTime(durSec)}`;
         
@@ -1055,17 +1060,20 @@
           id: slug,
           title: slug,
           script: document.getElementById('scriptInput')?.value || "",
-          mode: 'single',
-          speakers: "Gravação Real do Professor",
-          model: "Upload Direto",
+          mode: isVideo ? 'video' : 'single',
+          speakers: isVideo ? "Vídeo Real do Professor" : "Gravação Real do Professor",
+          model: isVideo ? "Vídeo Direto (MP4)" : "Upload Direto",
           timestamp: new Date().toISOString(),
           sizeKb: Math.round(file.size / 1024),
           blobUrl: tempUrl,
+          videoUrl: isVideo ? tempUrl : "",
           sentences: []
         };
         loadAudioIntoPlayer(tempUrl, STATE.currentMeta);
 
-        if (file.size > 18 * 1024 * 1024) {
+        if (isVideo) {
+          showToast(`🎬 Vídeo <strong>${file.name}</strong> (${sizeMb}MB) carregado com sucesso! Você pode publicar diretamente para o aluno ou transcrever/alinhar se desejar legendas.`, "success", 7000);
+        } else if (file.size > 18 * 1024 * 1024) {
           showToast(`Áudio <strong>${file.name}</strong> (${sizeMb}MB) carregado! Cole o script no editor e clique em <strong>"1. Alinhar com Script"</strong> para gerar o karaokê instantâneo.`, "info", 8000);
         } else {
           showToast(`Áudio <strong>${file.name}</strong> carregado! Use <strong>"1. Alinhar com Script"</strong> se já tiver o texto, ou <strong>"2. Transcrever com IA"</strong>.`, "success", 6000);
@@ -2884,8 +2892,18 @@ Example output format:
 
         // Upload to Google Cloud Storage & Firestore based on Tier
         if (window.aefCloudSync) {
-          // If local audio blob exists and audioUrl is not a remote URL, upload audio to Firebase Storage first!
-          if (STATE.currentAudioBlob && (!trackData.audioUrl || trackData.audioUrl.startsWith('blob:'))) {
+          // Se for vídeo carregado localmente, envia para videos/students no Firebase Storage
+          if (STATE.isVideo && STATE.uploadedFile) {
+            try {
+              if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Subindo Vídeo para Firebase Storage...</span>`;
+              const uploadedVideoUrl = await window.aefCloudSync.uploadFileToStorage(STATE.uploadedFile, "videos/students");
+              if (uploadedVideoUrl) {
+                trackData.videoUrl = uploadedVideoUrl;
+              }
+            } catch (upVidErr) {
+              console.warn("⚠️ Upload direto de vídeo falhou:", upVidErr);
+            }
+          } else if (STATE.currentAudioBlob && (!trackData.audioUrl || trackData.audioUrl.startsWith('blob:'))) {
             try {
               if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Subindo Áudio para a Nuvem...</span>`;
               const uploadedUrl = await window.aefCloudSync.uploadFileToStorage(STATE.currentAudioBlob, "audio/students");
