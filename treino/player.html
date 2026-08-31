@@ -1333,7 +1333,63 @@
         </div>
       `;
 
+      initVideoEvents(document.getElementById('zen-stage-video'));
       updateIcons();
+    }
+
+    function initVideoEvents(vid) {
+      if (!vid || vid.dataset.eventsAttached) return;
+      vid.dataset.eventsAttached = "true";
+
+      vid.addEventListener('play', () => {
+        state.audio.pause();
+        state.isPlaying = true;
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
+        renderBottomDock();
+      });
+
+      vid.addEventListener('pause', () => {
+        state.isPlaying = false;
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
+        renderBottomDock();
+      });
+
+      vid.addEventListener('timeupdate', () => {
+        if (state.activity === 'look_retell') return;
+        const cur = vid.currentTime;
+        const dur = vid.duration || 35.8;
+
+        const curTimeEl = document.getElementById('dock-current-time');
+        const totTimeEl = document.getElementById('dock-total-time');
+        if (curTimeEl) curTimeEl.innerText = formatTime(cur);
+        if (totTimeEl) totTimeEl.innerText = formatTime(dur);
+
+        const seek = document.getElementById('dock-seek-bar');
+        if (seek && dur > 0) {
+          const pct = Math.min(100, Math.max(0, (cur / dur) * 100));
+          seek.value = pct;
+          seek.style.background = `linear-gradient(to right, #F59E0B 0%, #F59E0B ${pct}%, rgba(255,255,255,0.25) ${pct}%, rgba(255,255,255,0.25) 100%)`;
+        }
+
+        const items = getActiveItems();
+        let foundIdx = -1;
+        for (let i = 0; i < items.length; i++) {
+          const it = items[i];
+          if (it.start !== undefined && it.end !== undefined) {
+            const nextStart = (i + 1 < items.length && items[i+1].start !== undefined) ? items[i+1].start : (it.end + 1.0);
+            if (cur >= (it.start - 0.05) && cur < nextStart) {
+              foundIdx = i;
+              break;
+            }
+          }
+        }
+
+        if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
+          state.revealedAnswers = {};
+          state.currentSentenceIndex = foundIdx;
+          renderZenStage();
+        }
+      });
     }
 
     /**
@@ -1426,13 +1482,22 @@
         if (seek) {
           seek.addEventListener('input', (e) => {
             const val = parseFloat(e.target.value);
-            const dur = state.audio.duration || 35.8;
-            state.audio.currentTime = (val / 100) * dur;
+            const media = getActiveMedia();
+            const dur = media.duration || 35.8;
+            media.currentTime = (val / 100) * dur;
           });
         }
       }
 
       updateIcons();
+    }
+
+    function getActiveMedia() {
+      const vid = document.getElementById('zen-stage-video');
+      if (REAL_TRACK?.videoUrl && vid && !REAL_TRACK.videoUrl.includes('youtube')) {
+        return vid;
+      }
+      return state.audio;
     }
 
     /**
@@ -1443,35 +1508,34 @@
 
       const items = getActiveItems();
       const sentence = items[index] || items[0];
+      const media = getActiveMedia();
 
       // Se clicar no card que está atualmente tocando: PAUSA NO MILISSEGUNDO EXATO
       if (state.isPlaying && state.currentSentenceIndex === index) {
-        state.audio.pause();
+        media.pause();
         state.isPlaying = false;
         renderZenStage();
         renderBottomDock();
         return;
       }
 
+      // Se for vídeo, garante que áudio MP3 paralelo esteja pausado e vice-versa
+      if (media !== state.audio) {
+        state.audio.pause();
+      }
+
       // Se clicou em outro card ou estava pausado:
       state.currentSentenceIndex = index;
 
-      if (state.activity === 'pronunciation') {
-        if (sentence.start !== undefined) {
-          state.audio.currentTime = sentence.start;
-        }
-      } else {
-        // Se o áudio está fora da faixa da frase clicada, pula para o início dela
-        if (sentence.start !== undefined && (state.audio.currentTime < sentence.start || state.audio.currentTime >= (sentence.end || 999))) {
-          state.audio.currentTime = sentence.start;
-        }
+      if (sentence.start !== undefined) {
+        media.currentTime = sentence.start;
       }
 
-      state.audio.play().then(() => {
+      media.play().then(() => {
         state.isPlaying = true;
         renderZenStage();
         renderBottomDock();
-      }).catch(err => console.log('Audio play error:', err));
+      }).catch(err => console.log('Media play error:', err));
     };
 
     window.toggleBlur = (index) => {
@@ -1484,14 +1548,15 @@
       const items = getActiveItems();
       const newIdx = Math.max(0, Math.min(items.length - 1, state.currentSentenceIndex + dir));
       state.currentSentenceIndex = newIdx;
+      const media = getActiveMedia();
       
       if (state.activity !== 'look_retell') {
         const sentence = items[newIdx];
         if (sentence && sentence.start !== undefined) {
-          state.audio.currentTime = sentence.start;
+          media.currentTime = sentence.start;
         }
         if (state.isPlaying) {
-          state.audio.play();
+          media.play().catch(() => {});
         }
       }
       renderZenStage();
@@ -1500,12 +1565,11 @@
     window.jumpToSentence = (idx) => {
       state.revealedAnswers = {}; // Reset de blur ao pular
       state.currentSentenceIndex = idx;
+      const media = getActiveMedia();
       if (state.activity !== 'look_retell') {
         const items = getActiveItems();
         const sentence = items[idx];
         if (sentence && sentence.start !== undefined) {
-          state.audio.currentTime = sentence.start;
-        }
         if (state.isPlaying) {
           state.audio.play();
         }
@@ -2073,11 +2137,13 @@
     });
 
     window.togglePlayPause = () => {
+      const media = getActiveMedia();
+      if (media !== state.audio) state.audio.pause();
       if (state.isPlaying) {
-        state.audio.pause();
+        media.pause();
         state.isPlaying = false;
       } else {
-        state.audio.play().then(() => {
+        media.play().then(() => {
           state.isPlaying = true;
         }).catch(e => console.log(e));
       }
@@ -2086,7 +2152,8 @@
     };
 
     window.seekOffset = (sec) => {
-      state.audio.currentTime = Math.max(0, state.audio.currentTime + sec);
+      const media = getActiveMedia();
+      media.currentTime = Math.max(0, media.currentTime + sec);
     };
 
     window.togglePlayerDrawer = () => {
