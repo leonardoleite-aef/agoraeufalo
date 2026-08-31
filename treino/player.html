@@ -1195,24 +1195,27 @@
 
       // REGRA OFICIAL DO PROFESSOR LEO: SE TEM VÍDEO ➔ NO CARDS & NO PLAYBAR (Modo Vídeo Cinema Puro)
       if (hasVideo) {
-        stage.innerHTML = `
-          <div class="space-y-4 max-w-2xl mx-auto">
-            <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
-              ${(REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be')) ? `
-                <iframe src="${REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              ` : `
-                <video id="zen-stage-video" src="${REAL_TRACK.videoUrl}" controls playsinline class="w-full h-full object-contain bg-black"></video>
-              `}
+        const existingVid = document.getElementById('zen-stage-video');
+        if (!existingVid || existingVid.getAttribute('src') !== REAL_TRACK.videoUrl) {
+          stage.innerHTML = `
+            <div class="space-y-4 max-w-2xl mx-auto">
+              <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
+                ${(REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be')) ? `
+                  <iframe src="${REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                ` : `
+                  <video id="zen-stage-video" src="${REAL_TRACK.videoUrl}" controls playsinline preload="auto" class="w-full h-full object-contain bg-black"></video>
+                `}
+              </div>
+              <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-center text-xs text-amber-950 flex items-center justify-center gap-2 font-medium">
+                <span>🎬</span>
+                <span><strong>Modo Vídeo Cinema:</strong> Assista à gravação do Professor Leo com foco total na apresentação.</span>
+              </div>
             </div>
-            <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-center text-xs text-amber-950 flex items-center justify-center gap-2 font-medium">
-              <span>🎬</span>
-              <span><strong>Modo Vídeo Cinema:</strong> Assista à gravação do Professor Leo com foco total na apresentação.</span>
-            </div>
-          </div>
-        `;
+          `;
+          initVideoEvents(document.getElementById('zen-stage-video'));
+          updateIcons();
+        }
         renderBottomDock();
-        initVideoEvents(document.getElementById('zen-stage-video'));
-        updateIcons();
         return;
       }
 
@@ -1301,9 +1304,6 @@
       `;
 
       updateIcons();
-
-      initVideoEvents(document.getElementById('zen-stage-video'));
-      updateIcons();
     }
 
     function initVideoEvents(vid) {
@@ -1314,50 +1314,16 @@
         state.audio.pause();
         state.isPlaying = true;
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
-        renderBottomDock();
       });
 
       vid.addEventListener('pause', () => {
         state.isPlaying = false;
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
-        renderBottomDock();
       });
 
-      vid.addEventListener('timeupdate', () => {
-        if (state.activity === 'look_retell') return;
-        const cur = vid.currentTime;
-        const dur = vid.duration || 35.8;
-
-        const curTimeEl = document.getElementById('dock-current-time');
-        const totTimeEl = document.getElementById('dock-total-time');
-        if (curTimeEl) curTimeEl.innerText = formatTime(cur);
-        if (totTimeEl) totTimeEl.innerText = formatTime(dur);
-
-        const seek = document.getElementById('dock-seek-bar');
-        if (seek && dur > 0) {
-          const pct = Math.min(100, Math.max(0, (cur / dur) * 100));
-          seek.value = pct;
-          seek.style.background = `linear-gradient(to right, #F59E0B 0%, #F59E0B ${pct}%, rgba(255,255,255,0.25) ${pct}%, rgba(255,255,255,0.25) 100%)`;
-        }
-
-        const items = getActiveItems();
-        let foundIdx = -1;
-        for (let i = 0; i < items.length; i++) {
-          const it = items[i];
-          if (it.start !== undefined && it.end !== undefined) {
-            const nextStart = (i + 1 < items.length && items[i+1].start !== undefined) ? items[i+1].start : (it.end + 1.0);
-            if (cur >= (it.start - 0.05) && cur < nextStart) {
-              foundIdx = i;
-              break;
-            }
-          }
-        }
-
-        if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
-          state.revealedAnswers = {};
-          state.currentSentenceIndex = foundIdx;
-          renderZenStage();
-        }
+      vid.addEventListener('ended', () => {
+        state.isPlaying = false;
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
       });
     }
 
@@ -2026,7 +1992,8 @@
       });
 
       state.audio.addEventListener('timeupdate', () => {
-        if (state.activity === 'look_retell') return;
+        const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
+        if (hasVideo || state.activity === 'look_retell') return;
 
         const cur = state.audio.currentTime;
         const dur = state.audio.duration || 35.8;
