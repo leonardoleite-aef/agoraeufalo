@@ -1067,10 +1067,16 @@
       const hasValidCards = items && items.length > 0 && (items.length > 1 || (items[0]?.text && items[0].text.trim().length > 0 && items[0].text !== "..."));
 
       // 1. TÍTULOS E SUBHEADS DINÂMICOS POR AMBIENTE (ADEUS AO TÍTULO FIXO DE MS EM TUDO)
+      const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
+
+      // 1. TÍTULO E SUBHEAD DINÂMICOS
       let titleSubhead = "AgoraEuFalo • Spoken Reflex Studio";
       let mainTitle = REAL_TRACK?.title || "Treino Ativo";
 
-      if (state.environment === 'public') {
+      if (hasVideo) {
+        titleSubhead = "AgoraEuFalo • Vídeo Masterclass";
+        mainTitle = REAL_TRACK?.title || "Vídeo da Lição";
+      } else if (state.environment === 'public') {
         titleSubhead = "💡 Sugestões do Leo • Free Plan";
         mainTitle = REAL_TRACK?.title || "Conversational Clarity & Small Talk";
       } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
@@ -1090,11 +1096,18 @@
       const titleEl = document.getElementById('zen-activity-title');
       if (titleEl) titleEl.innerText = mainTitle;
 
-      // 2. TOGGLE VISUAL DAS 6 ABAS DE MS vs TOOLBAR MINIMALISTA ZEN
+      // 2. TOGGLE VISUAL DAS 6 ABAS DE MS vs TOOLBAR MINIMALISTA ZEN vs VÍDEO
       const msContainer = document.getElementById('ms-tabs-container');
       const zenToolbar = document.getElementById('zen-toolbar-container');
 
-      if (isMagicStory) {
+      if (hasVideo) {
+        // Se tem vídeo: ESCONDE TUDO RELACIONADO A CARDS (Abas e Botões de Ferramentas)
+        if (msContainer) msContainer.classList.add('hidden');
+        if (zenToolbar) {
+          zenToolbar.classList.remove('flex');
+          zenToolbar.classList.add('hidden');
+        }
+      } else if (isMagicStory) {
         if (msContainer) msContainer.classList.remove('hidden');
         if (zenToolbar) {
           zenToolbar.classList.remove('flex');
@@ -1158,18 +1171,20 @@
 
       if (state.environment === 'ms_legacy') {
         stage.innerHTML = window.AEFPlayerZenTemplate.renderContinuousStoryView(REAL_TRACK, state.currentSentenceIndex);
+        renderBottomDock();
         updateIcons();
         return;
       }
 
       if (state.environment === 'custom') {
         stage.innerHTML = window.AEFPlayerZenTemplate.renderCustomTracksHub(getCustomTracks(), REAL_TRACK.id);
+        renderBottomDock();
         updateIcons();
         return;
       }
 
-      // REGRA OFICIAL DO PROFESSOR LEO: SE TEM VÍDEO ➔ NO CARDS (Modo Vídeo Cinema Puro)
-      if (REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0) {
+      // REGRA OFICIAL DO PROFESSOR LEO: SE TEM VÍDEO ➔ NO CARDS & NO PLAYBAR (Modo Vídeo Cinema Puro)
+      if (hasVideo) {
         stage.innerHTML = `
           <div class="space-y-4 max-w-2xl mx-auto">
             <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
@@ -1185,6 +1200,7 @@
             </div>
           </div>
         `;
+        renderBottomDock();
         initVideoEvents(document.getElementById('zen-stage-video'));
         updateIcons();
         return;
@@ -1339,8 +1355,16 @@
      * Renderizador do Dock Inferior Ergonômico (Player de Áudio OU Estúdio de Microfone Look & Retell)
      */
     function renderBottomDock() {
+      const dockWrapper = document.getElementById('audio-dock-container');
       const container = document.getElementById('dock-inner-content');
-      if (!container) return;
+      if (!dockWrapper || !container) return;
+
+      const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
+      if (hasVideo) {
+        dockWrapper.classList.add('hidden');
+        return;
+      }
+      dockWrapper.classList.remove('hidden');
 
       if (state.activity === 'look_retell') {
         // DOCK ERGONÔMICO DO LOOK & RETELL: Botão Circular de Microfone + Espaço Amplo para Texto
