@@ -9,7 +9,7 @@
 
   class AEFAdminNav {
     constructor() {
-      this.currentPath = window.location.pathname.split('/').pop() || 'admin.html';
+      this.currentPath = window.location.pathname.split('/').pop() || 'admin-alunos.html';
       this.init();
     }
 
@@ -39,7 +39,7 @@
             
             <!-- Left: Brand & Admin Label -->
             <div class="flex items-center gap-3 shrink-0">
-              <a href="admin.html" class="flex items-center gap-2">
+              <a href="admin-alunos.html" class="flex items-center gap-2">
                 <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 object-contain filter invert opacity-90 hover:opacity-100 transition">
               </a>
               <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-extrabold text-[10px] uppercase tracking-wider border border-amber-200">
@@ -49,8 +49,8 @@
 
             <!-- Center: Navigation Links -->
             <nav class="hidden lg:flex items-center gap-1.5 overflow-x-auto py-1">
-              <a href="admin.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin.html') && !this.currentPath.includes('admin-') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 font-bold'}">
-                <span>📊</span> <span>Visão Geral</span>
+              <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-alunos.html') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 font-bold'}">
+                <span>👥</span> <span>Alunos & Mentoria</span>
               </a>
               <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('tts-studio.html')}">
                 <span>🎙️</span> <span>TTS Studio</span>
@@ -58,14 +58,11 @@
               <a href="admin-cursos.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-cursos.html')}">
                 <span>📦</span> <span>Cursos & Módulos</span>
               </a>
-              <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-alunos.html')}">
-                <span>👥</span> <span>Alunos & Equipe</span>
+              <a href="admin-publico.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-publico.html')}">
+                <span>🌐</span> <span>Sugestões & Leads</span>
               </a>
               <a href="blog-panel.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('blog-panel.html')}">
                 <span>📝</span> <span>Blog Panel</span>
-              </a>
-              <a href="admin.html#forum" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('forum')}">
-                <span>💬</span> <span>Fórum</span>
               </a>
             </nav>
 
@@ -89,10 +86,10 @@
 
           <!-- Mobile Sub-Navigation Bar -->
           <div class="lg:hidden px-4 py-2 border-t border-slate-200/80 bg-white/95 flex items-center gap-2 overflow-x-auto text-[11px] scrollbar-none">
-            <a href="admin.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin.html') && !this.currentPath.includes('admin-') ? 'bg-slate-900 text-white font-bold' : 'text-slate-600'}">📊 Visão Geral</a>
+            <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html') ? 'bg-slate-900 text-white font-bold' : 'text-slate-600'}">👥 Alunos</a>
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
-            <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html')}">👥 Alunos</a>
+            <a href="admin-publico.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-publico.html')}">🌐 Sugestões</a>
             <a href="blog-panel.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog-panel.html')}">📝 Blog</a>
             <a href="portal.html" class="px-2.5 py-1 rounded-lg shrink-0 text-amber-700 font-bold">👁️ Aluno</a>
           </div>
