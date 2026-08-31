@@ -907,7 +907,11 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.aefPortalAuth) {
+        const authed = await window.aefPortalAuth.requireAuth({ requireAdmin: true, redirectUrl: 'login.html' });
+        if (!authed) return;
+      }
       loadAllStudentsData();
       updateIcons();
     });

@@ -454,20 +454,23 @@
     };
 
     document.addEventListener("DOMContentLoaded", async () => {
-      if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+      if (window.aefPortalAuth) {
+        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
+        if (!authed) return;
+      }
 
-      const studentName = localStorage.getItem("aef_user_name") || "Prof. Leonardo Leite";
-      const studentEmail = localStorage.getItem("aef_user_email") || "selexenglish@gmail.com";
-      const userRole = localStorage.getItem("aef_user_role") || "admin";
-      const userTier = localStorage.getItem("aef_user_tier") || "admin_master";
+      const profile = (window.aefPortalAuth && window.aefPortalAuth.currentProfile) || {};
+      const studentName = profile.name || localStorage.getItem("aef_user_name") || "Aluno";
+      const studentEmail = profile.email || localStorage.getItem("aef_user_email") || "";
+      const userRole = profile.role || localStorage.getItem("aef_user_role") || "student";
+      const userTier = profile.tier || localStorage.getItem("aef_user_tier") || "free";
 
       const isAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || 
                       userRole === 'admin' || 
                       userTier === 'admin_master' || 
-                      studentEmail.toLowerCase().includes('selexenglish@gmail.com') ||
-                      studentEmail.toLowerCase().includes('leonardo');
+                      (studentEmail && (studentEmail.toLowerCase().includes('selexenglish@gmail.com') || studentEmail.toLowerCase().includes('leonardo')));
 
-      const enrolledProducts = JSON.parse(localStorage.getItem("aef_enrolled_products") || '["ms-legacy", "english-quickstart", "frases-prontas", "all_access_master"]');
+      const enrolledProducts = profile.enrolledProducts || JSON.parse(localStorage.getItem("aef_enrolled_products") || '["ms-legacy"]');
 
       const topGreeting = document.getElementById("top-user-greeting");
       const drawerName = document.getElementById("drawer-user-name");

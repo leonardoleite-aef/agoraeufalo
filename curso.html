@@ -394,6 +394,11 @@
     let COURSE_DATA = COURSES_REGISTRY["ms-legacy"];
 
     document.addEventListener("DOMContentLoaded", async () => {
+      if (window.aefPortalAuth) {
+        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
+        if (!authed) return;
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const courseId = urlParams.get("id") || urlParams.get("curso") || "ms-legacy";
       

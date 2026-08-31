@@ -361,6 +361,49 @@
       return this._compareTiers(this.currentProfile.tier, requiredTier);
     }
 
+    /**
+     * Route Guard: Blocks unauthenticated anonymous access and redirects to login.html
+     */
+    async requireAuth({ redirectUrl = 'login.html', requiredTier = null, requireAdmin = false } = {}) {
+      await this.ready();
+      
+      // Wait briefly for auth state to resolve if not yet initialized
+      if (!this.auth.currentUser) {
+        await new Promise((resolve) => {
+          const unsubscribe = this.auth.onAuthStateChanged((user) => {
+            unsubscribe();
+            resolve(user);
+          });
+          setTimeout(() => resolve(null), 1200);
+        });
+      }
+
+      const user = this.auth.currentUser;
+      if (!user) {
+        console.warn("🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para login.html");
+        try {
+          sessionStorage.setItem('aef_redirect_after_login', window.location.href);
+        } catch(e) {}
+        window.location.replace(redirectUrl);
+        return false;
+      }
+
+      if (requireAdmin && !this.isAdmin()) {
+        console.warn("🔒 [AEFPortalAuth] Acesso negado: Requer privilégios de Administrador.");
+        alert("Acesso restrito ao Professor Leonardo Leite e Administradores.");
+        window.location.replace('portal.html');
+        return false;
+      }
+
+      if (requiredTier && !this.hasAccess(requiredTier)) {
+        console.warn(`🔒 [AEFPortalAuth] Acesso negado: Requer plano ${requiredTier}`);
+        window.location.replace('portal.html?upgrade=true');
+        return false;
+      }
+
+      return true;
+    }
+
     _compareTiers(userTier, requiredTier) {
       if (userTier === 'admin_master') return true;
 

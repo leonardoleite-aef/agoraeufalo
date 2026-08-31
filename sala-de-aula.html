@@ -37,6 +37,7 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -2000,7 +2001,12 @@
       showToast(shouldCollapse ? "🎬 Modo Cinema Ativado (Telão Expandido)" : "Visualização Padrão Restaurada");
     };
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (window.aefPortalAuth) {
+        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
+        if (!authed) return;
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const courseId = urlParams.get("curso") || urlParams.get("id") || "ms-legacy";
       const targetModuleId = urlParams.get("modulo");
