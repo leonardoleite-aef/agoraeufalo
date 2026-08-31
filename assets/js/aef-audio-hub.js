@@ -356,6 +356,10 @@ class AEFAudioHub {
 
     if (chunks.length === 0) return [];
 
+    // Determine if it's a real dialogue (2+ distinct speakers) or a monologue (1 speaker)
+    const uniqueSpeakers = new Set(chunks.map(c => c.speaker).filter(s => s && s.trim().length > 0));
+    const isMultiSpeakerDialogue = uniqueSpeakers.size >= 2;
+
     const totalChars = chunks.reduce((acc, c) => acc + c.text.length, 0);
     let accumulatedTime = 0;
 
@@ -372,7 +376,7 @@ class AEFAudioHub {
         end: end,
         text: chunk.text,
         spokenTranslation: chunk.spokenTranslation,
-        notes: chunk.speaker ? `Speaker: ${chunk.speaker}` : ""
+        notes: (isMultiSpeakerDialogue && chunk.speaker) ? `Speaker: ${chunk.speaker}` : ""
       };
     });
   }
