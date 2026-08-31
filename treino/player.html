@@ -795,12 +795,13 @@
       let track = null;
       if (state.environment === 'public') {
         track = (window.AEF_STUDENT_PUBLIC?.tracks || []).find(t => t.id === trackId);
+      } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
+        track = (window.AEF_STUDENT_ANDRE?.tracks || []).find(t => t.id === trackId);
+      } else if (state.environment === 'vip') {
+        track = (state.student?.tracks || []).find(t => t.id === trackId);
       } else if (state.environment === 'custom' || state.environment === 'custom_active') {
         track = getCustomTracks().find(t => t.id === trackId);
         if (track) state.environment = 'custom_active';
-      } else {
-        const pool = (state.student && state.student.tracks) ? state.student.tracks : (window.AEF_STUDENT_ANDRE?.tracks || []);
-        track = pool.find(t => t.id === trackId);
       }
 
       if (!track) return;
@@ -923,7 +924,7 @@
         tracksList = window.AEF_STUDENT_PUBLIC?.tracks || [];
         playlistTitle = "Episódios Sugeridos do Leo";
       } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
-        tracksList = (state.student && state.student.tracks) ? state.student.tracks : (window.AEF_STUDENT_ANDRE?.tracks || []);
+        tracksList = window.AEF_STUDENT_ANDRE?.tracks || [];
         playlistTitle = "Módulos Magic Stories";
       } else if (state.environment === 'vip') {
         tracksList = state.student?.tracks || [];
@@ -1533,13 +1534,13 @@
         label = "Sugestões do Leo (Free Plan)";
         if (window.AEF_STUDENT_PUBLIC?.tracks?.length > 0) {
           REAL_TRACK = window.AEF_STUDENT_PUBLIC.tracks[0];
-          state.audio.src = REAL_TRACK.audioUrl;
+          loadTrackAudio(REAL_TRACK);
         }
       } else if (env === 'course' || env === 'ms_legacy') {
         label = "Magic Stories (Cursos)";
         if (window.AEF_STUDENT_ANDRE?.tracks?.length > 0) {
           REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
-          state.audio.src = REAL_TRACK.audioUrl;
+          loadTrackAudio(REAL_TRACK);
         }
       } else if (env === 'vip') {
         label = "Mentoria VIP Individual";
@@ -1548,6 +1549,12 @@
       } else if (env === 'custom') {
         label = "Minhas Coisas (Laboratório)";
         state.audio.pause();
+        state.isPlaying = false;
+        const customTracks = getCustomTracks();
+        if (customTracks.length > 0) {
+          REAL_TRACK = customTracks[0];
+          loadTrackAudio(REAL_TRACK);
+        }
       }
 
       // Update Pill & Badge Styles
