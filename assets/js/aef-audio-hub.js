@@ -307,16 +307,12 @@ class AEFAudioHub {
       let lineText = line;
       let lineSpeaker = currentSpeaker;
 
-      // Extract speaker if line starts with Speaker:
-      if (lineText.includes(':')) {
-        const parts = lineText.split(':');
-        const possibleSpeaker = parts[0].trim();
-        // Avoid treating timestamps like 00:30 or http:// as speaker
-        if (!possibleSpeaker.match(/^\d+$/) && !possibleSpeaker.toLowerCase().startsWith('http')) {
-          lineSpeaker = possibleSpeaker;
-          currentSpeaker = possibleSpeaker;
-          lineText = parts.slice(1).join(':').trim();
-        }
+      // Extract speaker ONLY if line starts with a short "Speaker Name:" (max 25 chars)
+      const speakerMatch = lineText.match(/^([A-Za-zÀ-ÿ0-9\s_\-]{1,25}):\s*(.*)$/);
+      if (speakerMatch && !speakerMatch[1].match(/^\d+$/) && !speakerMatch[1].toLowerCase().startsWith('http')) {
+        lineSpeaker = speakerMatch[1].trim();
+        currentSpeaker = lineSpeaker;
+        lineText = speakerMatch[2].trim();
       }
 
       // Now split this line by slashes "/"
