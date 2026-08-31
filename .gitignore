@@ -36,5 +36,8 @@ assets/videos
 assets/videos/
 assets/audio/alunos/
 assets/audio/public/*.mp3
-Material-PDF/Agora_Eu_Falo_Ingles_Leo_Leite_2026.pdf
-Material-PDF/magic-story-*.pdf
+# Virtual Environment & Staging
+.venv/
+storage_staging/
+tmp/
+

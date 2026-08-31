@@ -95,15 +95,13 @@ Sempre que um novo conteúdo, aula de curso ou Magic Story for criado a partir d
 - **Etapa E (Look & Retell + AI Speech Coach):** Organizar as perguntas-guia visuais (**que são obrigatoriamente as mesmas perguntas trabalhadas no Listen & Answer**) e espaço de palavras-chave (*Keywords*) ➔ Configurar o prompt de inteligibilidade comunicativa (*O Teste do Gringo 0-10*) ➔ Palco de gravação no Player.
 - **Etapa F (Listen & Ask - Desafio de Perguntas sem Spoilers):** Criar frases de estímulo (afirmativas/negativas) com espaço pautado para o aluno formular a pergunta no reflexo (**sem mostrar a pergunta pronta impressa**) ➔ Síntese Gemini TTS ➔ Gera a **Página 7 do PDF (LASK)**.
 - **Etapa G (Pronunciation & Connected Speech com Texto Integral):** Inserir **o texto integral da história (LR)** com as marcações visuais de conexões consoante-vogal (*Linking Sounds*), chave fonética e ações em cadeia usando o áudio da história (LR) com cortes por sentença, pausas automáticas e botão de loop (`🔂`) ➔ Redigir a Sacada de Ouro do Leo ➔ Gera a **Página 8 do PDF (PRO)**.
-- **Etapa H (Compilação do Livro Impresso no Padrão dos 3 Arquétipos em Exatas 8 Páginas):** Compilar o PDF Oficial em `Material-PDF/[codigo]_[slug]_Apostila_Oficial.pdf` (ReportLab) estruturado rigorosamente nos 3 Arquétipos com a **Tabela Canônica de Fontes Travadas**:
-  * **P1 (Capa Deep Navy):** `Título: 26pt` • `Sub: 13pt` • `Ficha: 10.5pt` • `Sinopse: 9.5pt` • Arte 1:1 e marca d'água gigante `"01"/"02"`.
-  * **P2 (LR):** `Texto História: 16.5pt` (Leading: `23.5pt`) • `Quick Tips: 9-10pt` • 3 blocos laterais + box de treino no Player.
-  * **P3 (VOC Parte 1):** `Texto Inglês: 14.5pt` • `Tradução Falada: 12.5pt` • `Chunks: 9-10pt` • Box de fixação sem decoreba.
-  * **P4 (VOC Parte 2 - Deep Dive):** `Títulos: 14pt` • `Explicações: 12.5pt` • `Exemplos Vida Real: 12pt` • 3 cards de estrutura sem jargões.
-  * **P5 (LA Parte 1):** `Perguntas 1 a 7: 13.5pt bold` • `Linhas de Resposta (sem respostas impressas): 10.5pt` • Checklist verde e aspas monumentais.
-  * **P6 (LA Parte 2 & LRT):** `Perguntas 8 a 14: 13.5pt bold` • `Linhas de Resposta: 10.5pt` • Palco do AI Coach (*Teste do Gringo 0-10*).
-  * **P7 (LASK):** `Cabeçalho: 13.5pt` • `Estímulos: 13pt` • `Espaço de Formulação: 13pt` (sem perguntas impressas).
-  * **P8 (PRO & Sacada de Ouro):** `Texto Integral LR com Linking: 10-10.5pt` • `Chave Fonética: 12.5pt azul` • `Sacada de Ouro: 13.5-14pt bold italic` em destaque âmbar.
+- **Etapa H (Compilação do Livro Impresso no Padrão dos 3 Arquétipos — SEM LIMITE ARTIFICIAL DE PÁGINAS):**
+  * **REGRA ABSOLUTA DE EXTENSÃO:** **NÃO EXISTE LIMITE DE NÚMERO DE PÁGINAS.** Tudo o que tiver de ser dito, escrito, trabalhado e mostrado DEVE ir para o PDF sem qualquer preocupação com número fixo de páginas. Se o módulo exigir 30 páginas, serão 30 páginas; se exigir 4 páginas completas, so be it! O critério mandatório é: **TODAS AS PÁGINAS DEVEM ESTAR COM MAIS DE 70% DE PREENCHIMENTO VISUAL/PEDAGÓGICO ÚTIL** (sem páginas vazias, órfãs ou comprimidas artificialmente).
+  * Compilar o PDF Oficial em `Material-PDF/[codigo]_[slug]_Apostila_Oficial.pdf` (ReportLab) estruturado nos 3 Arquétipos com fontes confortáveis e generosas:
+    - **Capa (Deep Navy / Arquétipo 1):** Título generoso, ficha técnica, sinopse contextual e arte oficial.
+    - **Listen & Read (Arquétipo 2):** Texto da História com fonte grande e confortável (15 a 17pt, leading relaxado), tradução / quick tips e boxes explicativos.
+    - **Vocabulary Session (Arquétipo 2):** Tradução Falada Real, Matriz de Chunks, Deep Dive de estruturas sem jargões e exemplos de vida real ocupando quantas páginas forem necessárias com densidade >70%.
+    - **Practice Workbook (Arquétipo 3):** Listen & Answer completo com espaço pautado (sem respostas impressas), Look & Retell + AI Coach, Listen & Ask completo com espaço pautado (sem perguntas impressas), Pronunciation Practice com texto integral/linking e a Sacada de Ouro monumental do Leo.
   * Suporte oficial sempre via `selexenglish@gmail.com`.
 
 ---
