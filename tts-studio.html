@@ -1230,10 +1230,12 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       // Set initial Dual Speaker mode UI
       setSpeakerMode('dual');
 
-      // Load initial template if editor is empty
+      // Restore user draft if previously typed, otherwise keep editor 100% clean and empty
       const scriptArea = document.getElementById('scriptInput');
-      if (scriptArea && !scriptArea.value.trim()) {
-        loadTemplate('magic_story');
+      const savedDraft = localStorage.getItem('AEF_SCRIPT_DRAFT');
+      if (scriptArea && savedDraft && savedDraft.trim()) {
+        scriptArea.value = savedDraft;
+        if (typeof updateMetrics === 'function') updateMetrics();
       }
 
       // Close modals when clicking background backdrop
@@ -1662,8 +1664,14 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
         document.getElementById('metricChars').textContent = chars;
         document.getElementById('metricWords').textContent = words;
         document.getElementById('metricEstDuration').textContent = `~${estSecs}s`;
+
+        // Save current draft automatically
+        if (text && text.trim()) {
+          localStorage.setItem('AEF_SCRIPT_DRAFT', text);
+        }
       };
 
+      window.updateMetrics = updateMetrics;
       textarea.addEventListener('input', updateMetrics);
       updateMetrics();
     }
@@ -1717,6 +1725,7 @@ Leo: No, she didn't! She lived in São Paulo." class="w-full h-full min-h-[280px
       if (!textarea) return;
       if (confirm('Deseja limpar todo o roteiro do editor?')) {
         textarea.value = '';
+        localStorage.removeItem('AEF_SCRIPT_DRAFT');
         textarea.dispatchEvent(new Event('input'));
       }
     }
