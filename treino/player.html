@@ -1570,8 +1570,10 @@
         const items = getActiveItems();
         const sentence = items[idx];
         if (sentence && sentence.start !== undefined) {
+          media.currentTime = sentence.start;
+        }
         if (state.isPlaying) {
-          state.audio.play();
+          media.play().catch(() => {});
         }
       }
       renderZenStage();
