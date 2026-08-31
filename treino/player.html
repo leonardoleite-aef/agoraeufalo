@@ -883,6 +883,33 @@
       showToast(`Mentorado ativo: ${state.student.name || menteeId}`);
     };
 
+    function isPinnedTrack(trackId) {
+      try {
+        const pinned = JSON.parse(localStorage.getItem('aef_pinned_tracks') || '[]');
+        return pinned.includes(trackId);
+      } catch(e) { return false; }
+    }
+
+    function togglePinTrack(trackId, e) {
+      if (e) e.stopPropagation();
+      let pinned = [];
+      try {
+        pinned = JSON.parse(localStorage.getItem('aef_pinned_tracks') || '[]');
+      } catch(e) {}
+
+      const idx = pinned.indexOf(trackId);
+      if (idx >= 0) {
+        pinned.splice(idx, 1);
+        showToast("Treino desafixado do topo.");
+      } else {
+        pinned.unshift(trackId);
+        showToast("📌 Treino fixado no topo da semana!");
+      }
+      localStorage.setItem('aef_pinned_tracks', JSON.stringify(pinned));
+      renderSidebarTracks();
+    }
+    window.togglePinTrack = togglePinTrack;
+
     function renderSidebarTracks() {
       const container = document.getElementById('sidebar-tracks-container');
       if (!container) return;
@@ -935,24 +962,41 @@
         return;
       }
 
+      // Separar e ordenar: Pinned (Fixados) no topo, seguidos pelos demais
+      const pinnedTracks = [];
+      const unpinnedTracks = [];
+      tracksList.forEach(t => {
+        if (isPinnedTrack(t.id)) pinnedTracks.push(t);
+        else unpinnedTracks.push(t);
+      });
+      const sortedTracks = [...pinnedTracks, ...unpinnedTracks];
+
       container.innerHTML = `
         <div class="pt-2.5 border-t border-[#EAE5DC] space-y-1.5 text-left">
           ${menteeSelectorHtml}
-          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">${playlistTitle} (${tracksList.length}):</span>
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">${playlistTitle} (${sortedTracks.length}):</span>
+            ${pinnedTracks.length > 0 ? `<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.2 rounded">📌 ${pinnedTracks.length} fixado(s)</span>` : ''}
+          </div>
           <div class="space-y-1.5 max-h-56 overflow-y-auto no-scrollbar">
-            ${tracksList.map((t, idx) => {
+            ${sortedTracks.map((t, idx) => {
               const isOffline = isTrackOffline(t.id);
+              const isPinned = isPinnedTrack(t.id);
               const isSelected = REAL_TRACK.id === t.id;
               return `
                 <div class="w-full p-1.5 rounded-xl text-xs font-bold transition flex items-center justify-between gap-1.5 ${
-                  isSelected ? 'bg-[#C68A36] text-white shadow-xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200'
+                  isSelected ? 'bg-[#C68A36] text-white shadow-xs' : (isPinned ? 'bg-amber-50/90 text-[#0A192F] border-2 border-amber-300 shadow-2xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200')
                 }">
                   <button onclick="window.selectTrack('${t.id}')" class="flex-1 text-left truncate flex items-center gap-1.5 cursor-pointer py-1 pl-1">
+                    ${isPinned ? '<span title="Treino fixado no topo">📌</span>' : ''}
                     ${t.videoUrl ? '<span title="Possui Vídeo Integrado">🎬</span>' : ''}
                     <span class="truncate">${idx + 1}. ${t.title}</span>
                   </button>
-                  <div class="flex items-center gap-1 shrink-0">
-                    <span class="text-[10px] font-mono opacity-80">${t.duration || ''}</span>
+                  <div class="flex items-center gap-0.5 shrink-0">
+                    <span class="text-[10px] font-mono opacity-80 mr-1">${t.duration || ''}</span>
+                    <button onclick="window.togglePinTrack('${t.id}', event)" class="p-1 rounded-lg hover:bg-black/10 transition cursor-pointer text-xs ${isPinned ? 'text-amber-500' : 'opacity-40 hover:opacity-100'}" title="${isPinned ? 'Desafixar do topo' : 'Fixar no topo da semana 📌'}">
+                      <span>📌</span>
+                    </button>
                     <button onclick="window.toggleDownloadForOffline('${t.id}', event)" class="p-1 rounded-lg hover:bg-black/10 transition cursor-pointer text-xs" title="${isOffline ? 'Salvo no Modo Avião (Clique para remover)' : 'Baixar para o Modo Avião'}">
                       <span>${isOffline ? '✈️' : '📥'}</span>
                     </button>
