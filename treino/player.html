@@ -799,6 +799,10 @@
         state.student = { id: menteeId, name: menteeId, tracks: [] };
       }
 
+      if (state.student.tracks && state.student.tracks.length > 0) {
+        REAL_TRACK = state.student.tracks[0];
+      }
+
       // 2. Fetch fresh tracks from Firestore
       try {
         if (window.aefCloudSync) {
@@ -1068,6 +1072,7 @@
 
       // 1. TÍTULOS E SUBHEADS DINÂMICOS POR AMBIENTE (ADEUS AO TÍTULO FIXO DE MS EM TUDO)
       const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
+      const dockWrapper = document.getElementById('audio-dock-container');
 
       // 1. TÍTULO E SUBHEAD DINÂMICOS
       let titleSubhead = "AgoraEuFalo • Spoken Reflex Studio";
@@ -1096,23 +1101,26 @@
       const titleEl = document.getElementById('zen-activity-title');
       if (titleEl) titleEl.innerText = mainTitle;
 
+      // Sincroniza sempre o nome da faixa e sacada de ouro no painel lateral
+      const sideName = document.getElementById('sidebar-activity-name');
+      if (sideName) sideName.innerText = REAL_TRACK?.title || "Faixa Ativa";
+
+      const tipText = document.getElementById('sidebar-grammar-tip');
+      if (tipText) tipText.innerText = `"${REAL_TRACK?.goldenTip || 'Foque na escuta ativa e na melodia da fala.'}"`;
+
       // 2. TOGGLE VISUAL DAS 6 ABAS DE MS vs TOOLBAR MINIMALISTA ZEN vs VÍDEO
       const msContainer = document.getElementById('ms-tabs-container');
       const zenToolbar = document.getElementById('zen-toolbar-container');
 
       if (hasVideo) {
-        // Se tem vídeo: ESCONDE TUDO RELACIONADO A CARDS (Abas e Botões de Ferramentas)
-        if (msContainer) msContainer.classList.add('hidden');
-        if (zenToolbar) {
-          zenToolbar.classList.remove('flex');
-          zenToolbar.classList.add('hidden');
-        }
+        // Se tem vídeo: ESCONDE TUDO RELACIONADO A CARDS (Abas, Toolbar e Playbar Inferior)
+        if (msContainer) { msContainer.classList.add('hidden'); msContainer.style.setProperty('display', 'none', 'important'); }
+        if (zenToolbar) { zenToolbar.classList.remove('flex'); zenToolbar.classList.add('hidden'); zenToolbar.style.setProperty('display', 'none', 'important'); }
+        if (dockWrapper) { dockWrapper.classList.add('hidden'); dockWrapper.style.setProperty('display', 'none', 'important'); }
       } else if (isMagicStory) {
-        if (msContainer) msContainer.classList.remove('hidden');
-        if (zenToolbar) {
-          zenToolbar.classList.remove('flex');
-          zenToolbar.classList.add('hidden');
-        }
+        if (dockWrapper) { dockWrapper.classList.remove('hidden'); dockWrapper.style.display = ''; }
+        if (msContainer) { msContainer.classList.remove('hidden'); msContainer.style.display = ''; }
+        if (zenToolbar) { zenToolbar.classList.remove('flex'); zenToolbar.classList.add('hidden'); zenToolbar.style.setProperty('display', 'none', 'important'); }
 
         // Highlight da Aba Ativa de MS
         document.querySelectorAll('.act-btn').forEach(btn => {
@@ -1123,10 +1131,12 @@
           activeBtn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer";
         }
       } else {
-        if (msContainer) msContainer.classList.add('hidden');
+        if (dockWrapper) { dockWrapper.classList.remove('hidden'); dockWrapper.style.display = ''; }
+        if (msContainer) { msContainer.classList.add('hidden'); msContainer.style.setProperty('display', 'none', 'important'); }
         if (zenToolbar) {
           zenToolbar.classList.remove('hidden');
           zenToolbar.classList.add('flex');
+          zenToolbar.style.display = '';
         }
 
         // Estilo do Botão Toggle de Tradução
@@ -1362,9 +1372,11 @@
       const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
       if (hasVideo) {
         dockWrapper.classList.add('hidden');
+        dockWrapper.style.display = 'none';
         return;
       }
       dockWrapper.classList.remove('hidden');
+      dockWrapper.style.display = '';
 
       if (state.activity === 'look_retell') {
         // DOCK ERGONÔMICO DO LOOK & RETELL: Botão Circular de Microfone + Espaço Amplo para Texto
@@ -1578,6 +1590,19 @@
       } else if (env === 'vip') {
         label = "Mentoria VIP Individual";
         const currentMentee = (state.student && state.student.id) || 'estevao';
+        if (currentMentee === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
+          state.student = window.AEF_STUDENT_ESTEVAO;
+        } else if (currentMentee === 'thomas' && window.AEF_STUDENT_THOMAS) {
+          state.student = window.AEF_STUDENT_THOMAS;
+        } else if (currentMentee === 'andre' && window.AEF_STUDENT_ANDRE) {
+          state.student = window.AEF_STUDENT_ANDRE;
+        } else if (currentMentee === 'matheus' && window.AEF_STUDENT_MATHEUS) {
+          state.student = window.AEF_STUDENT_MATHEUS;
+        }
+        if (state.student?.tracks?.length > 0) {
+          REAL_TRACK = state.student.tracks[0];
+          loadTrackAudio(REAL_TRACK);
+        }
         window.switchVIPMentee(currentMentee);
       } else if (env === 'custom') {
         label = "Minhas Coisas (Laboratório)";
