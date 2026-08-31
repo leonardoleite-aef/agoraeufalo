@@ -939,22 +939,86 @@
         <div class="pt-2.5 border-t border-[#EAE5DC] space-y-1.5 text-left">
           ${menteeSelectorHtml}
           <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">${playlistTitle} (${tracksList.length}):</span>
-          <div class="space-y-1 max-h-48 overflow-y-auto no-scrollbar">
-            ${tracksList.map((t, idx) => `
-              <button onclick="window.selectTrack('${t.id}')" class="w-full p-2 rounded-xl text-xs font-bold text-left transition flex items-center justify-between gap-2 cursor-pointer ${
-                REAL_TRACK.id === t.id ? 'bg-[#C68A36] text-white shadow-xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200'
-              }">
-                <span class="truncate flex items-center gap-1">
-                  ${t.videoUrl ? '<span title="Possui Vídeo Integrado">🎬</span>' : ''}
-                  <span>${idx + 1}. ${t.title}</span>
-                </span>
-                <span class="text-[10px] font-mono shrink-0 opacity-80">${t.duration || ''}</span>
-              </button>
-            `).join('')}
+          <div class="space-y-1.5 max-h-56 overflow-y-auto no-scrollbar">
+            ${tracksList.map((t, idx) => {
+              const isOffline = isTrackOffline(t.id);
+              const isSelected = REAL_TRACK.id === t.id;
+              return `
+                <div class="w-full p-1.5 rounded-xl text-xs font-bold transition flex items-center justify-between gap-1.5 ${
+                  isSelected ? 'bg-[#C68A36] text-white shadow-xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200'
+                }">
+                  <button onclick="window.selectTrack('${t.id}')" class="flex-1 text-left truncate flex items-center gap-1.5 cursor-pointer py-1 pl-1">
+                    ${t.videoUrl ? '<span title="Possui Vídeo Integrado">🎬</span>' : ''}
+                    <span class="truncate">${idx + 1}. ${t.title}</span>
+                  </button>
+                  <div class="flex items-center gap-1 shrink-0">
+                    <span class="text-[10px] font-mono opacity-80">${t.duration || ''}</span>
+                    <button onclick="window.toggleDownloadForOffline('${t.id}', event)" class="p-1 rounded-lg hover:bg-black/10 transition cursor-pointer text-xs" title="${isOffline ? 'Salvo no Modo Avião (Clique para remover)' : 'Baixar para o Modo Avião'}">
+                      <span>${isOffline ? '✈️' : '📥'}</span>
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
       `;
     }
+
+    function isTrackOffline(trackId) {
+      try {
+        const list = JSON.parse(localStorage.getItem('aef_offline_tracks') || '[]');
+        return list.some(t => t.id === trackId);
+      } catch(e) { return false; }
+    }
+
+    async function toggleDownloadForOffline(trackId, e) {
+      if (e) e.stopPropagation();
+      const tracksList = (state.environment === 'vip' ? state.student?.tracks : (state.environment === 'public' ? window.AEF_STUDENT_PUBLIC?.tracks : getCustomTracks())) || [];
+      const track = tracksList.find(t => t.id === trackId) || REAL_TRACK;
+      if (!track) return;
+
+      let list = [];
+      try {
+        list = JSON.parse(localStorage.getItem('aef_offline_tracks') || '[]');
+      } catch(e) {}
+
+      const existingIndex = list.findIndex(t => t.id === trackId);
+
+      if (existingIndex >= 0) {
+        list.splice(existingIndex, 1);
+        localStorage.setItem('aef_offline_tracks', JSON.stringify(list));
+        if ('caches' in window) {
+          const cache = await caches.open('aef-offline-vault');
+          if (track.audioUrl) cache.delete(track.audioUrl).catch(() => {});
+          if (track.videoUrl) cache.delete(track.videoUrl).catch(() => {});
+        }
+        showToast("🗑️ Treino removido do aparelho.");
+      } else {
+        showToast("📥 Baixando mídia para o Modo Avião...");
+        try {
+          if ('caches' in window) {
+            const cache = await caches.open('aef-offline-vault');
+            if (track.audioUrl && !track.audioUrl.startsWith('blob:')) {
+              await cache.add(track.audioUrl).catch(err => console.warn("Cache audio error:", err));
+            }
+            if (track.videoUrl && !track.videoUrl.includes('youtube') && !track.videoUrl.startsWith('blob:')) {
+              await cache.add(track.videoUrl).catch(err => console.warn("Cache video error:", err));
+            }
+          }
+          list.push(track);
+          localStorage.setItem('aef_offline_tracks', JSON.stringify(list));
+          showToast("✈️ Treino salvo para o Modo Avião!");
+        } catch(dErr) {
+          list.push(track);
+          localStorage.setItem('aef_offline_tracks', JSON.stringify(list));
+          showToast("✈️ Salvo para o Modo Avião!");
+        }
+      }
+
+      renderSidebarTracks();
+    }
+    window.toggleDownloadForOffline = toggleDownloadForOffline;
 
     function switchActivity(newAct) {
       state.activity = newAct;
@@ -981,12 +1045,13 @@
     window.toggleCurrentSentenceLoop = () => {
       if (state.loopingSentenceIndex === state.currentSentenceIndex && state.loopingSentenceIndex !== -1) {
         state.loopingSentenceIndex = -1;
-        showToast('Repetição em loop desativada');
+        showToast("Loop de Frase Desativado 🔄");
       } else {
         state.loopingSentenceIndex = state.currentSentenceIndex;
-        showToast(`Loop ativado na frase #${state.currentSentenceIndex + 1}`);
+        showToast(`Loop Ativado na Frase #${state.currentSentenceIndex + 1} 🔂`);
       }
       renderZenStage();
+      renderBottomDock();
     };
 
     window.setSpeed = (speed) => {
@@ -1003,6 +1068,7 @@
       const items = getActiveItems();
       const currentItem = items[state.currentSentenceIndex] || items[0];
       const isMagicStory = (state.environment === 'course' || state.environment === 'ms_legacy');
+      const hasValidCards = items && items.length > 0 && (items.length > 1 || (items[0]?.text && items[0].text.trim().length > 0 && items[0].text !== "..."));
 
       // 1. TÍTULOS E SUBHEADS DINÂMICOS POR AMBIENTE (ADEUS AO TÍTULO FIXO DE MS EM TUDO)
       let titleSubhead = "AgoraEuFalo • Spoken Reflex Studio";
@@ -1106,6 +1172,28 @@
         return;
       }
 
+      // CASO A: VÍDEO SEM CARDS (Vídeo já legendado / Roteiro não preenchido)
+      if (REAL_TRACK?.videoUrl && !hasValidCards) {
+        stage.innerHTML = `
+          <div class="space-y-4 max-w-2xl mx-auto">
+            <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
+              ${(REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be')) ? `
+                <iframe src="${REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              ` : `
+                <video id="zen-stage-video" src="${REAL_TRACK.videoUrl}" controls playsinline class="w-full h-full object-contain bg-black"></video>
+              `}
+            </div>
+            <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-center text-xs text-amber-950 flex items-center justify-center gap-2 font-medium">
+              <span>🎬</span>
+              <span><strong>Modo Vídeo Cinema:</strong> Assista à gravação do Professor Leo com foco total na apresentação.</span>
+            </div>
+          </div>
+        `;
+        updateIcons();
+        return;
+      }
+
+      // CASO B: TREINO COM CARDS (Com ou sem vídeo)
       stage.innerHTML = `
         <div class="space-y-4 max-w-xl mx-auto">
 
