@@ -291,7 +291,7 @@ class AEFAudioHub {
   }
 
   // =========================================================================
-  // 5. SCRIPT PARSING & SENTENCE TIMESTAMPS (SMART SLASH & LINE CHUNKER)
+  // 5. SCRIPT PARSING & SENTENCE TIMESTAMPS (SMART TIMESTAMPS & ANCHORING)
   // =========================================================================
   parseScriptToSentences(scriptText, totalDurationSec = 30) {
     if (!scriptText) return [];
@@ -303,11 +303,29 @@ class AEFAudioHub {
     let currentSpeaker = "Leo";
     const chunks = [];
 
+    const parseTs = (str) => {
+      if (!str) return null;
+      const clean = str.replace(/[\[\]\(\)]/g, '').trim();
+      const parts = clean.split(':').map(Number);
+      if (parts.some(isNaN)) return null;
+      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+      if (parts.length === 2) return parts[0] * 60 + parts[1];
+      return null;
+    };
+
     rawLines.forEach(line => {
       let lineText = line;
       let lineSpeaker = currentSpeaker;
+      let lineExplicitTime = null;
 
-      // Extract speaker ONLY if line starts with a short "Speaker Name:" (max 25 chars)
+      // 1. Check for explicit timestamp at start e.g. "[01:24]" or "01:24:" or "(01:24)"
+      const tsMatch = lineText.match(/^(?:\[|\()?(\d{1,2}:\d{2}(?::\d{2})?)(?:\]|\)|\:)?\s*(.*)$/);
+      if (tsMatch) {
+        lineExplicitTime = parseTs(tsMatch[1]);
+        lineText = tsMatch[2].trim();
+      }
+
+      // 2. Extract speaker ONLY if line starts with a short "Speaker Name:" (max 25 chars)
       const speakerMatch = lineText.match(/^([A-Za-zÀ-ÿ0-9\s_\-]{1,25}):\s*(.*)$/);
       if (speakerMatch && !speakerMatch[1].match(/^\d+$/) && !speakerMatch[1].toLowerCase().startsWith('http')) {
         lineSpeaker = speakerMatch[1].trim();
@@ -315,15 +333,23 @@ class AEFAudioHub {
         lineText = speakerMatch[2].trim();
       }
 
-      // Now split this line by slashes "/"
+      // 3. Split line by slashes "/"
       const subSegments = lineText
         .split(/(?:\s*\/\s*)/)
         .map(s => s.trim())
         .filter(s => s.length > 0);
 
-      subSegments.forEach(seg => {
+      subSegments.forEach((seg, sIdx) => {
         let cleanText = seg;
         let spokenTranslation = "";
+        let segTime = (sIdx === 0) ? lineExplicitTime : null;
+
+        // Check if subsegment has its own timestamp e.g. "/ [02:15] Next chunk"
+        const subTsMatch = cleanText.match(/^(?:\[|\()?(\d{1,2}:\d{2}(?::\d{2})?)(?:\]|\)|\:)?\s*(.*)$/);
+        if (subTsMatch) {
+          segTime = parseTs(subTsMatch[1]);
+          cleanText = subTsMatch[2].trim();
+        }
 
         // Check for inline spoken translation annotation e.g. "[pt: Olá pessoal]"
         const ptMatch = cleanText.match(/\[(?:pt|trad|falado):\s*([^\]]+)\]/i);
@@ -348,7 +374,8 @@ class AEFAudioHub {
           chunks.push({
             text: cleanText,
             speaker: lineSpeaker,
-            spokenTranslation: spokenTranslation
+            spokenTranslation: spokenTranslation,
+            explicitStart: segTime
           });
         }
       });
@@ -360,6 +387,50 @@ class AEFAudioHub {
     const uniqueSpeakers = new Set(chunks.map(c => c.speaker).filter(s => s && s.trim().length > 0));
     const isMultiSpeakerDialogue = uniqueSpeakers.size >= 2;
 
+    const hasAnyExplicitTimestamps = chunks.some(c => c.explicitStart !== null);
+
+    if (hasAnyExplicitTimestamps) {
+      // Anchor-based interpolation for 100% precision
+      for (let i = 0; i < chunks.length; i++) {
+        if (chunks[i].explicitStart === null) {
+          if (i === 0) chunks[i].explicitStart = 0;
+          else {
+            // Find next anchored timestamp
+            let nextAnchorIdx = -1;
+            for (let j = i + 1; j < chunks.length; j++) {
+              if (chunks[j].explicitStart !== null) {
+                nextAnchorIdx = j;
+                break;
+              }
+            }
+            const prevTime = chunks[i - 1].explicitStart;
+            const nextTime = nextAnchorIdx !== -1 ? chunks[nextAnchorIdx].explicitStart : totalDurationSec;
+            const unanchoredCount = (nextAnchorIdx !== -1 ? nextAnchorIdx : chunks.length) - (i - 1);
+            const timeStep = Math.max(1.0, (nextTime - prevTime) / unanchoredCount);
+            chunks[i].explicitStart = Math.round((prevTime + timeStep) * 100) / 100;
+          }
+        }
+      }
+
+      return chunks.map((chunk, idx) => {
+        const start = chunk.explicitStart;
+        const nextStart = (idx + 1 < chunks.length && chunks[idx + 1].explicitStart !== null) 
+          ? chunks[idx + 1].explicitStart 
+          : totalDurationSec;
+        const end = Math.max(start + 1.2, Math.round(nextStart * 100) / 100);
+
+        return {
+          id: idx + 1,
+          start: start,
+          end: end,
+          text: chunk.text,
+          spokenTranslation: chunk.spokenTranslation,
+          notes: (isMultiSpeakerDialogue && chunk.speaker) ? `Speaker: ${chunk.speaker}` : ""
+        };
+      });
+    }
+
+    // Heuristic proportional fallback with pause compensation
     const totalChars = chunks.reduce((acc, c) => acc + c.text.length, 0);
     let accumulatedTime = 0;
 
