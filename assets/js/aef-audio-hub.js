@@ -291,91 +291,160 @@ class AEFAudioHub {
   }
 
   // =========================================================================
-  // 5. SCRIPT PARSING & SENTENCE TIMESTAMPS (SMART TIMESTAMPS & ANCHORING)
+  // 5. SCRIPT PARSING & SENTENCE TIMESTAMPS (UNIVERSAL SRT / VTT / TXT PARSER)
   // =========================================================================
   parseScriptToSentences(scriptText, totalDurationSec = 30) {
     if (!scriptText) return [];
-    
-    // First, split into lines (to preserve speaker context across slashes)
-    const rawLines = scriptText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-    if (rawLines.length === 0) return [];
-
-    let currentSpeaker = "Leo";
-    const chunks = [];
 
     const parseTs = (str) => {
       if (!str) return null;
-      const clean = str.replace(/[\[\]\(\)]/g, '').trim();
+      // Replace comma with dot e.g. "00:00:01,250" -> "00:00:01.250"
+      const clean = str.replace(/[\[\]\(\)]/g, '').replace(',', '.').trim();
       const parts = clean.split(':').map(Number);
       if (parts.some(isNaN)) return null;
-      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-      if (parts.length === 2) return parts[0] * 60 + parts[1];
+      if (parts.length === 3) return Math.round((parts[0] * 3600 + parts[1] * 60 + parts[2]) * 100) / 100;
+      if (parts.length === 2) return Math.round((parts[0] * 60 + parts[1]) * 100) / 100;
+      if (parts.length === 1) return Math.round(parts[0] * 100) / 100;
       return null;
     };
 
-    rawLines.forEach(line => {
-      let lineText = line;
-      let lineSpeaker = currentSpeaker;
-      let lineExplicitTime = null;
+    const cleanMarkup = (t) => {
+      if (!t) return "";
+      return t
+        .replace(/\\?\[\s*break\s+time=[^\]]+\\?\]/gi, "")
+        .replace(/\\?\[\s*long\s+pause\s*\\?\]/gi, "")
+        .replace(/\\?\[\s*pause\s*\\?\]/gi, "")
+        .replace(/\\?\[\s*pausa[^\]]*\\?\]/gi, "")
+        .replace(/\\?\[\s*break[^\]]*\\?\]/gi, "")
+        .replace(/<[^>]+>/g, "") // Strip HTML/VTT formatting tags like <v Speaker>, <b>, <i>
+        .replace(/\\([!?.',"-])/g, "$1")
+        .replace(/\s+/g, " ")
+        .replace(/\s+([!?,.])/g, "$1")
+        .trim();
+    };
 
-      // 1. Check for explicit timestamp at start e.g. "[01:24]" or "01:24:" or "(01:24)"
-      const tsMatch = lineText.match(/^(?:\[|\()?(\d{1,2}:\d{2}(?::\d{2})?)(?:\]|\)|\:)?\s*(.*)$/);
-      if (tsMatch) {
-        lineExplicitTime = parseTs(tsMatch[1]);
-        lineText = tsMatch[2].trim();
+    const rawLines = scriptText.split('\n').map(l => l.trim());
+    const rawBlocks = [];
+    let pendingStart = null;
+    let pendingEnd = null;
+    let pendingSpeaker = "Leo";
+    let pendingTextAccumulator = [];
+
+    const flushBlock = () => {
+      if (pendingTextAccumulator.length > 0) {
+        const joinedText = pendingTextAccumulator.join(' ').trim();
+        if (joinedText.length > 0) {
+          rawBlocks.push({
+            start: pendingStart,
+            end: pendingEnd,
+            speaker: pendingSpeaker,
+            text: joinedText
+          });
+        }
+        pendingTextAccumulator = [];
+      }
+      pendingStart = null;
+      pendingEnd = null;
+    };
+
+    for (let i = 0; i < rawLines.length; i++) {
+      const line = rawLines[i];
+      if (!line) {
+        // Blank line separates SRT/VTT blocks
+        if (pendingStart !== null && pendingTextAccumulator.length > 0) {
+          flushBlock();
+        }
+        continue;
       }
 
-      // 2. Extract speaker ONLY if line starts with a short "Speaker Name:" (max 25 chars)
-      const speakerMatch = lineText.match(/^([A-Za-zÀ-ÿ0-9\s_\-]{1,25}):\s*(.*)$/);
+      // Skip WEBVTT header or note headers
+      if (line.toUpperCase().startsWith('WEBVTT') || line.toUpperCase().startsWith('NOTE')) continue;
+
+      // Skip numeric SRT index lines (e.g. "1", "24", "102") if followed by a timestamp
+      if (/^\d+$/.test(line) && i + 1 < rawLines.length) {
+        const nextLine = rawLines[i + 1];
+        if (nextLine.includes('-->') || /^(?:\[|\()?(\d{1,2}:\d{2})/.test(nextLine)) {
+          continue;
+        }
+      }
+
+      // Check 1: SRT / VTT arrow range line: e.g. "00:00:00,200 --> 00:00:04,500" or "00:00.200 --> 00:04.500"
+      const arrowMatch = line.match(/^(\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d+)?)\s*-->\s*(\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d+)?)/);
+      if (arrowMatch) {
+        flushBlock();
+        pendingStart = parseTs(arrowMatch[1]);
+        pendingEnd = parseTs(arrowMatch[2]);
+        continue;
+      }
+
+      // Check 2: Standalone timestamp on its own line: e.g. "[00:00.2]" or "[01:24]" or "(01:24)" or "00:00:05"
+      const standaloneTsMatch = line.match(/^(?:\[|\()?\s*(\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d+)?)\s*(?:\]|\))?$/);
+      if (standaloneTsMatch) {
+        flushBlock();
+        pendingStart = parseTs(standaloneTsMatch[1]);
+        continue;
+      }
+
+      // Check 3: Inline timestamp at start of text line: e.g. "[00:00.2] Good afternoon, everyone."
+      const inlineTsMatch = line.match(/^(?:\[|\()?(\d{1,2}:\d{2}(?::\d{2})?(?:[.,]\d+)?)(?:\]|\)|\:)?\s+(.+)$/);
+      let textToProcess = line;
+      if (inlineTsMatch) {
+        flushBlock();
+        pendingStart = parseTs(inlineTsMatch[1]);
+        textToProcess = inlineTsMatch[2].trim();
+      }
+
+      // Extract speaker if line starts with Speaker Name: e.g. "Jayshree: Hello" or "Leo: ..."
+      const speakerMatch = textToProcess.match(/^([A-Za-zÀ-ÿ0-9\s_\-]{1,25}):\s*(.*)$/);
       if (speakerMatch && !speakerMatch[1].match(/^\d+$/) && !speakerMatch[1].toLowerCase().startsWith('http')) {
-        lineSpeaker = speakerMatch[1].trim();
-        currentSpeaker = lineSpeaker;
-        lineText = speakerMatch[2].trim();
+        pendingSpeaker = speakerMatch[1].trim();
+        textToProcess = speakerMatch[2].trim();
       }
 
-      // 3. Split line by slashes "/"
-      const subSegments = lineText
-        .split(/(?:\s*\/\s*)/)
-        .map(s => s.trim())
-        .filter(s => s.length > 0);
+      if (textToProcess) {
+        pendingTextAccumulator.push(textToProcess);
+      }
+    }
+    flushBlock();
 
-      subSegments.forEach((seg, sIdx) => {
+    // Now process rawBlocks and split by slashes "/" if present
+    const chunks = [];
+    rawBlocks.forEach((b) => {
+      const subSegments = b.text.split(/(?:\s*\/\s*)/).map(s => s.trim()).filter(s => s.length > 0);
+      const totalSubChars = subSegments.reduce((acc, s) => acc + s.length, 0) || 1;
+      const bDuration = (b.end !== null && b.start !== null && b.end > b.start) ? (b.end - b.start) : null;
+      let subAccum = b.start !== null ? b.start : null;
+
+      subSegments.forEach((seg) => {
         let cleanText = seg;
         let spokenTranslation = "";
-        let segTime = (sIdx === 0) ? lineExplicitTime : null;
 
-        // Check if subsegment has its own timestamp e.g. "/ [02:15] Next chunk"
-        const subTsMatch = cleanText.match(/^(?:\[|\()?(\d{1,2}:\d{2}(?::\d{2})?)(?:\]|\)|\:)?\s*(.*)$/);
-        if (subTsMatch) {
-          segTime = parseTs(subTsMatch[1]);
-          cleanText = subTsMatch[2].trim();
-        }
-
-        // Check for inline spoken translation annotation e.g. "[pt: Olá pessoal]"
+        // Check for inline spoken translation e.g. "[pt: Tradução aqui]"
         const ptMatch = cleanText.match(/\[(?:pt|trad|falado):\s*([^\]]+)\]/i);
         if (ptMatch) {
           spokenTranslation = ptMatch[1].trim();
           cleanText = cleanText.replace(ptMatch[0], "").trim();
         }
 
-        // Clean markup/tags
-        cleanText = cleanText
-          .replace(/\\?\[\s*break\s+time=[^\]]+\\?\]/gi, "")
-          .replace(/\\?\[\s*long\s+pause\s*\\?\]/gi, "")
-          .replace(/\\?\[\s*pause\s*\\?\]/gi, "")
-          .replace(/\\?\[\s*pausa[^\]]*\\?\]/gi, "")
-          .replace(/\\?\[\s*break[^\]]*\\?\]/gi, "")
-          .replace(/\\([!?.',"-])/g, "$1")
-          .replace(/\s+/g, " ")
-          .replace(/\s+([!?,.])/g, "$1")
-          .trim();
+        cleanText = cleanMarkup(cleanText);
 
         if (cleanText.length > 0) {
+          let segStart = subAccum;
+          let segEnd = null;
+
+          if (bDuration !== null && subAccum !== null) {
+            const ratio = cleanText.length / totalSubChars;
+            const subDur = Math.round(ratio * bDuration * 100) / 100;
+            segEnd = Math.round((subAccum + subDur) * 100) / 100;
+            subAccum = segEnd;
+          }
+
           chunks.push({
             text: cleanText,
-            speaker: lineSpeaker,
+            speaker: b.speaker,
             spokenTranslation: spokenTranslation,
-            explicitStart: segTime
+            start: segStart,
+            end: segEnd
           });
         }
       });
@@ -383,41 +452,40 @@ class AEFAudioHub {
 
     if (chunks.length === 0) return [];
 
-    // Determine if it's a real dialogue (2+ distinct speakers) or a monologue (1 speaker)
+    // Determine if it's a real dialogue (2+ distinct speakers) or a monologue
     const uniqueSpeakers = new Set(chunks.map(c => c.speaker).filter(s => s && s.trim().length > 0));
     const isMultiSpeakerDialogue = uniqueSpeakers.size >= 2;
 
-    const hasAnyExplicitTimestamps = chunks.some(c => c.explicitStart !== null);
+    const hasAnyTimestamps = chunks.some(c => c.start !== null);
 
-    if (hasAnyExplicitTimestamps) {
-      // Anchor-based interpolation for 100% precision
+    if (hasAnyTimestamps) {
+      // Complete unanchored timestamps via interpolation
       for (let i = 0; i < chunks.length; i++) {
-        if (chunks[i].explicitStart === null) {
-          if (i === 0) chunks[i].explicitStart = 0;
+        if (chunks[i].start === null) {
+          if (i === 0) chunks[i].start = 0;
           else {
-            // Find next anchored timestamp
             let nextAnchorIdx = -1;
             for (let j = i + 1; j < chunks.length; j++) {
-              if (chunks[j].explicitStart !== null) {
+              if (chunks[j].start !== null) {
                 nextAnchorIdx = j;
                 break;
               }
             }
-            const prevTime = chunks[i - 1].explicitStart;
-            const nextTime = nextAnchorIdx !== -1 ? chunks[nextAnchorIdx].explicitStart : totalDurationSec;
+            const prevTime = chunks[i - 1].start;
+            const nextTime = nextAnchorIdx !== -1 ? chunks[nextAnchorIdx].start : totalDurationSec;
             const unanchoredCount = (nextAnchorIdx !== -1 ? nextAnchorIdx : chunks.length) - (i - 1);
             const timeStep = Math.max(1.0, (nextTime - prevTime) / unanchoredCount);
-            chunks[i].explicitStart = Math.round((prevTime + timeStep) * 100) / 100;
+            chunks[i].start = Math.round((prevTime + timeStep) * 100) / 100;
           }
         }
       }
 
       return chunks.map((chunk, idx) => {
-        const start = chunk.explicitStart;
-        const nextStart = (idx + 1 < chunks.length && chunks[idx + 1].explicitStart !== null) 
-          ? chunks[idx + 1].explicitStart 
+        const start = chunk.start;
+        const nextStart = (idx + 1 < chunks.length && chunks[idx + 1].start !== null) 
+          ? chunks[idx + 1].start 
           : totalDurationSec;
-        const end = Math.max(start + 1.2, Math.round(nextStart * 100) / 100);
+        const end = chunk.end || Math.max(start + 1.2, Math.round(nextStart * 100) / 100);
 
         return {
           id: idx + 1,
@@ -430,12 +498,12 @@ class AEFAudioHub {
       });
     }
 
-    // Heuristic proportional fallback with pause compensation
-    const totalChars = chunks.reduce((acc, c) => acc + c.text.length, 0);
+    // Pure proportional fallback when zero timestamps are provided
+    const totalChars = chunks.reduce((acc, c) => acc + c.text.length, 0) || 1;
     let accumulatedTime = 0;
 
     return chunks.map((chunk, idx) => {
-      const charRatio = chunk.text.length / (totalChars || 1);
+      const charRatio = chunk.text.length / totalChars;
       const segDuration = Math.max(1.2, Math.round((charRatio * totalDurationSec) * 100) / 100);
       const start = Math.round(accumulatedTime * 100) / 100;
       const end = Math.round((accumulatedTime + segDuration) * 100) / 100;
