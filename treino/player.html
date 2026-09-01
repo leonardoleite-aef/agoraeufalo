@@ -948,7 +948,19 @@
           const cloudTracks = await window.aefCloudSync.getStudentCloudTracks(menteeId);
           if (cloudTracks && cloudTracks.length > 0) {
             const baseTracks = state.student.tracks || [];
-            const merged = [...cloudTracks];
+            // Merge inteligente: atualiza faixas da nuvem preservando campos locais como videoUrl se vazios
+            const merged = cloudTracks.map(ct => {
+              const localMatch = baseTracks.find(bt => bt.id === ct.id);
+              if (localMatch) {
+                return {
+                  ...localMatch,
+                  ...ct,
+                  videoUrl: (ct.videoUrl && ct.videoUrl.trim().length > 0) ? ct.videoUrl : (localMatch.videoUrl || ""),
+                  goldenTip: ct.goldenTip || localMatch.goldenTip || ""
+                };
+              }
+              return ct;
+            });
             baseTracks.forEach(bt => {
               if (!merged.some(ct => ct.id === bt.id)) {
                 merged.push(bt);
@@ -1381,24 +1393,30 @@
 
       // REGRA OFICIAL DO PROFESSOR LEO: SE TEM VÍDEO ➔ NO CARDS & NO PLAYBAR (Modo Vídeo Cinema Puro)
       if (hasVideo) {
-        const existingVid = document.getElementById('zen-stage-video');
-        if (!existingVid || existingVid.getAttribute('src') !== REAL_TRACK.videoUrl) {
+        const isYT = (REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be'));
+        const currentStageMedia = stage.querySelector('#zen-stage-video, #zen-stage-iframe');
+        const currentSrc = currentStageMedia ? (currentStageMedia.getAttribute('src') || currentStageMedia.getAttribute('data-track-url')) : null;
+
+        if (!currentStageMedia || currentSrc !== REAL_TRACK.videoUrl) {
+          const ytEmbedUrl = isYT ? REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/') : '';
           stage.innerHTML = `
             <div class="space-y-4 max-w-2xl mx-auto">
               <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
-                ${(REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be')) ? `
-                  <iframe src="${REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                ${isYT ? `
+                  <iframe id="zen-stage-iframe" data-track-url="${REAL_TRACK.videoUrl}" src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 ` : `
-                  <video id="zen-stage-video" src="${REAL_TRACK.videoUrl}" controls playsinline preload="auto" class="w-full h-full object-contain bg-black"></video>
+                  <video id="zen-stage-video" data-track-url="${REAL_TRACK.videoUrl}" src="${REAL_TRACK.videoUrl}" controls playsinline preload="auto" class="w-full h-full object-contain bg-black"></video>
                 `}
               </div>
               <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-center text-xs text-amber-950 flex items-center justify-center gap-2 font-medium">
                 <span>🎬</span>
-                <span><strong>Modo Vídeo Cinema:</strong> Assista à gravação do Professor Leo com foco total na apresentação.</span>
+                <span><strong>Modo Vídeo Cinema:</strong> Assista à gravação com foco total na apresentação.</span>
               </div>
             </div>
           `;
-          initVideoEvents(document.getElementById('zen-stage-video'));
+          if (!isYT) {
+            initVideoEvents(document.getElementById('zen-stage-video'));
+          }
           updateIcons();
         }
         renderBottomDock();

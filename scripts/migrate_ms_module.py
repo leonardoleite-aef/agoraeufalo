@@ -20,6 +20,12 @@ from PIL import Image
 import av
 from faster_whisper import WhisperModel
 
+import time
+import mimetypes
+import urllib.parse
+import urllib.request
+import urllib.error
+
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import mm
@@ -49,28 +55,151 @@ C_AMBER_TEXT   = colors.HexColor("#78350F")
 
 
 def extract_audio_to_mp3(video_path, output_mp3_path):
-    """Extrai stream de áudio do MP4 e codifica em MP3 128kbps puro via PyAV."""
-    os.makedirs(os.path.dirname(output_mp3_path), exist_ok=True)
-    input_container = av.open(video_path)
-    audio_stream = next((s for s in input_container.streams if s.type == 'audio'), None)
-    if not audio_stream:
-        input_container.close()
-        raise ValueError(f"Nenhum stream de áudio encontrado em {video_path}")
+    """
+    Extrai stream de áudio do MP4 e codifica em MP3 128kbps puro via PyAV.
 
-    output_container = av.open(output_mp3_path, mode='w', format='mp3')
-    out_stream = output_container.add_stream('mp3', rate=audio_stream.rate or 44100)
-    out_stream.bit_rate = 128000
+    Otimizações de Engenharia:
+    - Usa gerenciadores de contexto ('with av.open(...)') para garantir liberação
+      determinística de memória de todos os containers e frames, mesmo em exceções.
+    - Libera cada frame explicitamente após o encode para evitar acúmulo em RAM
+      durante processamento de vídeos de longa duração.
+    - Threads dedicadas de decodificação (threads=0 = auto) para melhor CPU usage.
+    """
+    os.makedirs(os.path.dirname(output_mp3_path) or '.', exist_ok=True)
 
-    for frame in input_container.decode(audio_stream):
-        for packet in out_stream.encode(frame):
-            output_container.mux(packet)
+    with av.open(video_path) as input_container:
+        audio_stream = next(
+            (s for s in input_container.streams if s.type == 'audio'), None
+        )
+        if not audio_stream:
+            raise ValueError(f"Nenhum stream de áudio encontrado em: {video_path}")
 
-    for packet in out_stream.encode():
-        output_container.mux(packet)
+        # Habilitar decodificação multi-thread para melhor throughput
+        audio_stream.thread_type = 'AUTO'
 
-    output_container.close()
-    input_container.close()
+        with av.open(output_mp3_path, mode='w', format='mp3') as output_container:
+            out_stream = output_container.add_stream(
+                'mp3', rate=audio_stream.sample_rate or 44100
+            )
+            out_stream.bit_rate = 128_000
+
+            for frame in input_container.decode(audio_stream):
+                # pts=None deixa o encoder calcular PTS automaticamente,
+                # evitando saltos de timestamp em streams de vídeo editados
+                frame.pts = None
+                for packet in out_stream.encode(frame):
+                    output_container.mux(packet)
+                # Liberação explícita do frame após encode — crítico em vídeos
+                # de 30+ minutos para evitar acúmulo de buffers de áudio na RAM
+                del frame
+
+            # Flush do encoder para garantir frames de cauda
+            for packet in out_stream.encode(None):
+                output_container.mux(packet)
+
     print(f"  [AUDIO] Extraído: {output_mp3_path} ({os.path.getsize(output_mp3_path)//1024} KB)")
+
+
+# Configuração Padrão Firebase Storage
+DEFAULT_FIREBASE_BUCKET = "agoraeufalo-3463a.firebasestorage.app"
+
+
+def upload_file_to_firebase_storage(
+    local_file_path,
+    cloud_storage_path,
+    bucket_name=DEFAULT_FIREBASE_BUCKET,
+    max_retries=4,
+    base_delay_seconds=2.0,
+    chunk_size_bytes=1024 * 1024  # 1MB por chunk no streaming
+):
+    """
+    Envia arquivo para o Google Cloud / Firebase Storage com Streaming Bufferizado e Retry Exponencial.
+
+    Otimizações de Engenharia de Dados:
+    1. Zero Memory Blowup: Lê o arquivo em chunks iterativos ou passa stream direto,
+       impedindo que arquivos de vídeo (100MB-1GB+) sejam carregados integralmente na RAM.
+    2. Resiliência de Rede (Exponential Backoff): Em falhas transitórias (HTTP 429, 500, 502,
+       503, 504, Connection Reset), realiza até 'max_retries' tentativas com backoff e jitter.
+    3. Content-Type Automático: Detecta mime-type exato (.mp4 -> video/mp4, .mp3 -> audio/mpeg,
+       .pdf -> application/pdf, .jpg -> image/jpeg).
+    4. Retorna a URL pública canônica com parâmetro alt=media para streaming direto.
+    """
+    if not os.path.exists(local_file_path):
+        raise FileNotFoundError(f"Arquivo local inexistente: {local_file_path}")
+
+    file_size = os.path.getsize(local_file_path)
+    content_type, _ = mimetypes.guess_type(local_file_path)
+    if not content_type:
+        if local_file_path.endswith(".mp4"):
+            content_type = "video/mp4"
+        elif local_file_path.endswith(".mp3"):
+            content_type = "audio/mpeg"
+        elif local_file_path.endswith(".pdf"):
+            content_type = "application/pdf"
+        elif local_file_path.endswith(".jpg") or local_file_path.endswith(".jpeg"):
+            content_type = "image/jpeg"
+        elif local_file_path.endswith(".json"):
+            content_type = "application/json"
+        else:
+            content_type = "application/octet-stream"
+
+    encoded_name = urllib.parse.quote(cloud_storage_path, safe='')
+    upload_url = f"https://firebasestorage.googleapis.com/v0/b/{bucket_name}/o?uploadType=media&name={encoded_name}"
+    public_url = f"https://firebasestorage.googleapis.com/v0/b/{bucket_name}/o/{encoded_name}?alt=media"
+
+    print(f"  [STORAGE UPLOAD] Iniciando: {os.path.basename(local_file_path)} ({file_size / (1024*1024):.2f} MB) -> {cloud_storage_path}")
+
+    last_exception = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            # Gerenciador de contexto para abrir o arquivo em modo binário sem carregar tudo em RAM
+            with open(local_file_path, "rb") as file_stream:
+                req = urllib.request.Request(
+                    upload_url,
+                    data=file_stream,
+                    headers={
+                        "Content-Type": content_type,
+                        "Content-Length": str(file_size)
+                    },
+                    method="POST"
+                )
+
+                # Timeout generoso para conexões mais lentas em arquivos grandes (180s)
+                with urllib.request.urlopen(req, timeout=180) as response:
+                    status_code = response.getcode()
+                    if status_code in (200, 201):
+                        resp_body = response.read().decode("utf-8")
+                        print(f"  [STORAGE OK] ✅ Enviado com sucesso (Tentativa {attempt}/{max_retries}): {public_url}")
+                        return {
+                            "success": True,
+                            "public_url": public_url,
+                            "cloud_path": cloud_storage_path,
+                            "size_bytes": file_size,
+                            "content_type": content_type
+                        }
+                    else:
+                        raise urllib.error.HTTPError(
+                            upload_url, status_code, f"Status não esperado: {status_code}", response.headers, None
+                        )
+
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ConnectionResetError, OSError) as exc:
+            last_exception = exc
+            wait_time = base_delay_seconds * (2 ** (attempt - 1))
+            is_retryable = True
+
+            # Se for HTTP 4xx definitivo (exceto 408 Timeout e 429 Too Many Requests), não tenta retry
+            if isinstance(exc, urllib.error.HTTPError) and exc.code in (400, 401, 403, 404):
+                is_retryable = False
+
+            if attempt < max_retries and is_retryable:
+                print(f"  [STORAGE WARN] ⚠️ Falha na tentativa {attempt}/{max_retries} ({exc}). Aguardando {wait_time:.1f}s antes de tentar novamente...")
+                time.sleep(wait_time)
+            else:
+                print(f"  [STORAGE ERROR] ❌ Falha definitiva após {attempt} tentativas no upload de {local_file_path}: {exc}")
+                break
+
+    raise RuntimeError(f"Erro no upload para Firebase Storage de '{local_file_path}': {last_exception}")
 
 
 def parse_docx_script(docx_path):
@@ -692,7 +821,15 @@ def build_ms004_official_pdf(doc_data, cover_art_path, output_pdf_path):
     print(f"  [PDF] Livro Oficial compilado: {output_pdf_path} ({os.path.getsize(output_pdf_path)//1024} KB)")
 
 
-def process_module_migration(source_dir, output_base_dir, course_slug="magic-stories-legacy", module_code="MS004", module_slug="MS004_grazi_podcast"):
+def process_module_migration(
+    source_dir,
+    output_base_dir,
+    course_slug="magic-stories-legacy",
+    module_code="MS004",
+    module_slug="MS004_grazi_podcast",
+    upload_to_storage=False,
+    bucket_name=DEFAULT_FIREBASE_BUCKET
+):
     """Pipeline completo de ingestão e estruturação para Firebase Storage e Firestore."""
     print(f"\n{'='*70}")
     print(f"🚀 INICIANDO MIGRAÇÃO HOTMART -> AGORAEUFALO: {module_code} ({module_slug})")
@@ -742,15 +879,44 @@ def process_module_migration(source_dir, output_base_dir, course_slug="magic-sto
     timestamps_data = []
     if 'lr' in extracted_audios:
         print("\n🧠 Executando Whisper local para alinhamento milimétrico de timestamps...")
-        model = WhisperModel('base', device='cpu', compute_type='int8')
-        segments, _ = model.transcribe(extracted_audios['lr'], language='en', word_timestamps=True)
-        for seg in segments:
+        model = WhisperModel('small', device='cpu', compute_type='int8')
+
+        # VAD (Voice Activity Detection) filter habilitado:
+        # - Elimina alucinações do Whisper em silêncios longos, vinhetas instrumentais
+        #   e ruídos de fundo que confundem o modelo com fala real.
+        # - min_silence_duration_ms=500: ignora pausas de respiro naturais do narrador
+        #   (< 500ms) mas corta silêncios de transição entre seções (≥ 500ms).
+        # - Resultado: apenas segmentos com voz ativa e conteúdo real geram timestamps,
+        #   garantindo que o karaoke do player destaque apenas frases reais.
+        segments_iter, info = model.transcribe(
+            extracted_audios['lr'],
+            language='en',
+            beam_size=5,
+            word_timestamps=True,
+            vad_filter=True,
+            vad_parameters=dict(
+                min_silence_duration_ms=500,   # pausa mínima para corte de segmento
+                speech_pad_ms=400,             # padding antes/depois da fala real
+                threshold=0.5                  # sensibilidade VAD (0.0–1.0)
+            )
+        )
+
+        print(f"  [WHISPER] Idioma detectado: {info.language} (prob={info.language_probability:.2f})")
+        print(f"  [WHISPER] Duração do áudio: {info.duration:.1f}s")
+
+        for seg in segments_iter:
+            text = seg.text.strip()
+            if not text:                        # Descarta segmentos vazios pós-VAD
+                continue
             timestamps_data.append({
+                'id': len(timestamps_data) + 1,
                 'start': round(seg.start, 2),
-                'end': round(seg.end, 2),
-                'text': seg.text.strip()
+                'end':   round(seg.end,   2),
+                'text':  text
             })
-        print(f"  [WHISPER] {len(timestamps_data)} sentenças alinhadas com sucesso.")
+            print(f"    [{seg.start:6.2f}s → {seg.end:6.2f}s] {text[:72]}{'…' if len(text)>72 else ''}")
+
+        print(f"  [WHISPER] ✅ {len(timestamps_data)} sentenças alinhadas com VAD ativo.")
 
     # 6. Compilar Apostila Oficial em PDF (ReportLab)
     pdf_out_path = os.path.join(target_module_dir, f"{module_code}_{module_slug}_Apostila_Oficial.pdf")
@@ -794,6 +960,35 @@ def process_module_migration(source_dir, output_base_dir, course_slug="magic-sto
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 
+    # 8. Upload Opcional/Automático para Firebase Storage com Streaming Bufferizado & Retry
+    if upload_to_storage:
+        print(f"\n☁️ INICIANDO UPLOAD BUFFERIZADO PARA FIREBASE STORAGE: {bucket_name}")
+        cloud_prefix = f"courses/{course_slug}/{module_slug}"
+        
+        # Coletar todos os arquivos gerados no diretório do módulo
+        uploaded_map = {}
+        for root, _, files in os.walk(target_module_dir):
+            for filename in files:
+                local_path = os.path.join(root, filename)
+                rel_path = os.path.relpath(local_path, target_module_dir)
+                cloud_dest = f"{cloud_prefix}/{rel_path}".replace("\\", "/")
+                
+                try:
+                    res = upload_file_to_firebase_storage(
+                        local_file_path=local_path,
+                        cloud_storage_path=cloud_dest,
+                        bucket_name=bucket_name
+                    )
+                    uploaded_map[rel_path] = res["public_url"]
+                except Exception as up_err:
+                    print(f"  [STORAGE ERROR] Erro ao subir {filename}: {up_err}")
+
+        # Atualizar manifesto com URLs da nuvem
+        manifest["cloud_urls"] = uploaded_map
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2, ensure_ascii=False)
+        print(f"  [MANIFEST] Manifesto atualizado com {len(uploaded_map)} URLs remotas do Storage.")
+
     print(f"\n✅ MANIFESTO DO MÓDULO GERADO: {manifest_path}")
     print(f"📦 Estrutura completa pronta para Firebase Storage em:\n   {target_module_dir}")
     print(f"{'='*70}\n")
@@ -801,11 +996,24 @@ def process_module_migration(source_dir, output_base_dir, course_slug="magic-sto
 
 
 if __name__ == '__main__':
-    src = "/Users/macbookpro/Downloads/MS_MIGRACAO/MS004_videos"
-    out_base = "storage_staging"
-    if len(sys.argv) > 1:
-        src = sys.argv[1]
-    if len(sys.argv) > 2:
-        out_base = sys.argv[2]
-    
-    process_module_migration(src, out_base)
+    import argparse
+    parser = argparse.ArgumentParser(description="AgoraEuFalo Migration & Ingestion Engine (Zero API Cost Pipeline)")
+    parser.add_argument("src", nargs="?", default="/Users/macbookpro/Downloads/MS_MIGRACAO/MS004_videos", help="Diretório de origem com os arquivos brutos")
+    parser.add_argument("out_base", nargs="?", default="storage_staging", help="Diretório base de saída")
+    parser.add_argument("--course-slug", default="magic-stories-legacy", help="Slug do curso no ecossistema")
+    parser.add_argument("--module-code", default="MS004", help="Código do módulo (ex: MS004, MS005)")
+    parser.add_argument("--module-slug", default="MS004_grazi_podcast", help="Slug único da pasta do módulo")
+    parser.add_argument("--upload", action="store_true", help="Habilitar upload bufferizado automático para o Firebase Storage")
+    parser.add_argument("--bucket", default=DEFAULT_FIREBASE_BUCKET, help="Bucket de destino no Firebase Storage")
+
+    args = parser.parse_args()
+
+    process_module_migration(
+        source_dir=args.src,
+        output_base_dir=args.out_base,
+        course_slug=args.course_slug,
+        module_code=args.module_code,
+        module_slug=args.module_slug,
+        upload_to_storage=args.upload,
+        bucket_name=args.bucket
+    )
