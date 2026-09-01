@@ -216,11 +216,25 @@
 
     <!-- Activity Title Bar with Dynamic Subhead, MS Tabs & Minimalist Toolbar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-0.5" id="zen-top-control-bar">
-      <div>
-        <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-[#C68A36] hidden sm:block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
-        <h1 class="text-base sm:text-2xl font-black tracking-tight text-[#0A192F]" id="zen-activity-title">
-          1. LISTEN AND READ
-        </h1>
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <div class="min-w-0 flex-1">
+          <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-[#C68A36] hidden sm:block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
+          <h1 class="text-base sm:text-2xl font-black tracking-tight text-[#0A192F]" id="zen-activity-title">
+            1. LISTEN AND READ
+          </h1>
+        </div>
+
+        <!-- Botão Seletor de Histórias: visível APENAS em Magic Stories (course / ms_legacy) -->
+        <button
+          id="btn-ms-story-switcher"
+          onclick="window.openMSStorySheet()"
+          class="hidden shrink-0 items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white border border-[#EAE5DC] hover:border-[#C68A36]/60 hover:bg-[#FDF8F0] text-[#0A192F] text-[11px] font-bold transition active:scale-95 cursor-pointer shadow-xs"
+          title="Trocar Magic Story"
+        >
+          <i data-lucide="book-open" class="w-3.5 h-3.5 text-[#C68A36] shrink-0"></i>
+          <span class="hidden sm:inline whitespace-nowrap">Trocar História</span>
+          <i data-lucide="chevron-down" class="w-3 h-3 text-[#7A7369] shrink-0"></i>
+        </button>
       </div>
 
       <!-- Container: Magic Stories 6 Canonical Tabs (Visible only in 'course') -->
@@ -870,7 +884,8 @@
           }
         }
         if (!track) {
-          track = (window.AEF_STUDENT_ANDRE?.tracks || []).find(t => t.id === trackId);
+          // Fallback: busca no catálogo dinâmico (acervo canônico + faixas enviadas da sala)
+          track = getMagicStoriesTracks().find(t => t.id === trackId);
         }
       } else if (state.environment === 'vip') {
         track = (state.student?.tracks || []).find(t => t.id === trackId);
@@ -1003,7 +1018,9 @@
         tracksList = window.AEF_STUDENT_PUBLIC?.tracks || [];
         playlistTitle = "Episódios Sugeridos do Leo";
       } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
-        tracksList = window.AEF_STUDENT_ANDRE?.tracks || [];
+        // Catálogo dinâmico: acervo oficial (AEF_MAGIC_STORIES) + faixas enviadas da sala de aula.
+        // Zero acoplamento a AEF_STUDENT_ANDRE.
+        tracksList = getMagicStoriesTracks();
         playlistTitle = "Módulos Magic Stories";
       } else if (state.environment === 'vip') {
         tracksList = state.student?.tracks || [];
@@ -1272,15 +1289,22 @@
       const msContainer = document.getElementById('ms-tabs-container');
       const zenToolbar = document.getElementById('zen-toolbar-container');
 
+      // Referência ao botão seletor de histórias
+      const storySwitcherBtn = document.getElementById('btn-ms-story-switcher');
+
       if (hasVideo) {
         // Se tem vídeo: ESCONDE TUDO RELACIONADO A CARDS (Abas, Toolbar e Playbar Inferior)
         if (msContainer) { msContainer.classList.add('hidden'); msContainer.style.setProperty('display', 'none', 'important'); }
         if (zenToolbar) { zenToolbar.classList.remove('flex'); zenToolbar.classList.add('hidden'); zenToolbar.style.setProperty('display', 'none', 'important'); }
         if (dockWrapper) { dockWrapper.classList.add('hidden'); dockWrapper.style.setProperty('display', 'none', 'important'); }
+        // Botão seletor de histórias: oculto quando há vídeo
+        if (storySwitcherBtn) { storySwitcherBtn.classList.add('hidden'); storySwitcherBtn.classList.remove('flex'); }
       } else if (isMagicStory) {
         if (dockWrapper) { dockWrapper.classList.remove('hidden'); dockWrapper.style.display = ''; }
         if (msContainer) { msContainer.classList.remove('hidden'); msContainer.style.display = ''; }
         if (zenToolbar) { zenToolbar.classList.remove('flex'); zenToolbar.classList.add('hidden'); zenToolbar.style.setProperty('display', 'none', 'important'); }
+        // Botão seletor de histórias: VISÍVEL e ativo em Magic Stories
+        if (storySwitcherBtn) { storySwitcherBtn.classList.remove('hidden'); storySwitcherBtn.classList.add('flex'); }
 
         // Highlight da Aba Ativa de MS
         document.querySelectorAll('.act-btn').forEach(btn => {
@@ -1298,6 +1322,8 @@
           zenToolbar.classList.add('flex');
           zenToolbar.style.display = '';
         }
+        // Botão seletor de histórias: OCULTO em Sugestões do Leo, Mentoria VIP e Minhas Coisas
+        if (storySwitcherBtn) { storySwitcherBtn.classList.add('hidden'); storySwitcherBtn.classList.remove('flex'); }
 
         // Estilo do Botão Toggle de Tradução
         const transBtn = document.getElementById('btn-toggle-translation');
@@ -1828,8 +1854,15 @@
         }
       } else if (isMagicStoriesEnv) {
         label = 'Magic Stories (Cursos)';
-        if (window.AEF_STUDENT_ANDRE?.tracks?.length > 0) {
-          REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
+        // Consome o catálogo dinâmico: acervo oficial + faixas enviadas da sala de aula.
+        // Zero acoplamento a AEF_STUDENT_ANDRE.
+        const msTracks = getMagicStoriesTracks();
+        if (msTracks.length > 0) {
+          // Tenta preservar o módulo ativo; caso contrário carrega o primeiro do catálogo.
+          const preferred = state.activeMSModuleId
+            ? msTracks.find(t => t._moduleId === state.activeMSModuleId) || msTracks[0]
+            : msTracks[0];
+          REAL_TRACK = preferred;
           await loadTrackAudio(REAL_TRACK);
         }
       } else if (env === 'vip') {
@@ -1951,6 +1984,200 @@
     function saveCustomTracksList(list) {
       localStorage.setItem('aef_custom_tracks', JSON.stringify(list));
     }
+
+    // =========================================================================
+    // CATÁLOGO DINÂMICO DE MAGIC STORIES
+    // Sem acoplamento a AEF_STUDENT_ANDRE. Consome:
+    //   1. window.AEF_MAGIC_STORIES.modules → acervo canônico oficial
+    //   2. localStorage('aef_ms_sent_tracks') → faixas enviadas pela sala de aula
+    // Retorna array plano de tracks, uma por módulo, garantindo unicidade por ID.
+    // =========================================================================
+    function getMagicStoriesTracks() {
+      const seen = new Set();
+      const result = [];
+
+      // 1. Acervo canônico: um track por módulo (o primeiro de cada módulo)
+      const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+      for (const mod of msModules) {
+        if (mod.tracks && mod.tracks.length > 0) {
+          const t = mod.tracks[0];
+          if (!seen.has(t.id)) {
+            seen.add(t.id);
+            result.push({ ...t, _moduleId: mod.id, _moduleNumber: mod.number, _moduleTitle: mod.title, _moduleSummary: mod.summary });
+          }
+        }
+      }
+
+      // 2. Faixas enviadas da sala de aula (localStorage 'aef_ms_sent_tracks')
+      let sentTracks = [];
+      try {
+        sentTracks = JSON.parse(localStorage.getItem('aef_ms_sent_tracks') || '[]');
+      } catch(e) { sentTracks = []; }
+
+      for (const t of sentTracks) {
+        if (t && t.id && !seen.has(t.id)) {
+          seen.add(t.id);
+          result.push(t);
+        }
+      }
+
+      return result;
+    }
+
+    // =========================================================================
+    // BOTTOM SHEET: MAGIC STORIES STORY SWITCHER
+    // =========================================================================
+
+    /**
+     * Abre o Bottom Sheet de seleção de histórias.
+     * Popula a lista dinamicamente via renderMSStorySheet().
+     */
+    window.openMSStorySheet = () => {
+      const isMagicEnv = (state.environment === 'course' || state.environment === 'ms_legacy');
+      if (!isMagicEnv) return; // Guarda: só abre em Magic Stories
+
+      const overlay = document.getElementById('ms-story-sheet-overlay');
+      const sheet   = document.getElementById('ms-story-sheet');
+      if (!overlay || !sheet) return;
+
+      renderMSStorySheet();
+
+      overlay.classList.remove('hidden');
+      // Força reflow para a transição CSS disparar a partir do estado inicial
+      overlay.getBoundingClientRect();
+      sheet.classList.remove('translate-y-full');
+      sheet.classList.add('translate-y-0');
+
+      updateIcons();
+    };
+
+    /**
+     * Fecha o Bottom Sheet com animação de saída suave.
+     */
+    window.closeMSStorySheet = () => {
+      const overlay = document.getElementById('ms-story-sheet-overlay');
+      const sheet   = document.getElementById('ms-story-sheet');
+      if (!overlay || !sheet) return;
+
+      sheet.classList.remove('translate-y-0');
+      sheet.classList.add('translate-y-full');
+
+      // Aguarda a transição CSS (300ms) antes de esconder o overlay
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+      }, 320);
+    };
+
+    /**
+     * Popula a lista do Bottom Sheet com cards de cada módulo / track de Magic Stories.
+     * Marca o módulo ativo com destaque âmbar.
+     */
+    function renderMSStorySheet() {
+      const list = document.getElementById('ms-story-sheet-list');
+      if (!list) return;
+
+      const tracks = getMagicStoriesTracks();
+
+      if (tracks.length === 0) {
+        list.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-10 text-center space-y-2">
+            <i data-lucide="book-open" class="w-8 h-8 text-stone-300"></i>
+            <p class="text-xs text-[#7A7369] font-medium">Nenhuma Magic Story disponível.<br>Acesse a Sala de Aula e envie uma história para o Player.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = tracks.map((track, idx) => {
+        const isActive = (REAL_TRACK.id === track.id) || (state.activeMSModuleId && state.activeMSModuleId === track._moduleId);
+        const modNum   = track._moduleNumber || String(idx + 1).padStart(2, '0');
+        const modTitle = track._moduleTitle || track.title;
+        const modSummary = track._moduleSummary || '';
+        const dur      = track.duration || '';
+
+        return `
+          <button
+            onclick="window.selectMSModule('${track._moduleId || track.id}', '${track.id}')"
+            class="w-full text-left flex items-center gap-3 p-3 rounded-2xl border transition active:scale-[0.98] cursor-pointer ${
+              isActive
+                ? 'bg-amber-50 border-amber-300 shadow-xs'
+                : 'bg-white border-[#EAE5DC] hover:border-[#C68A36]/50 hover:bg-[#FDF8F0]'
+            }"
+          >
+            <!-- Número do Módulo -->
+            <div class="w-10 h-10 rounded-xl ${isActive ? 'bg-[#C68A36]' : 'bg-[#0D1E36]'} text-white flex flex-col items-center justify-center shrink-0 shadow-sm">
+              <span class="text-[8px] font-mono font-bold opacity-70">MS</span>
+              <span class="text-xs font-black leading-none">${modNum}</span>
+            </div>
+
+            <!-- Título + Resumo -->
+            <div class="min-w-0 flex-1">
+              <p class="font-black text-xs text-[#0A192F] truncate">${modTitle}</p>
+              ${modSummary ? `<p class="text-[10px] text-[#7A7369] font-medium line-clamp-1 mt-0.5">${modSummary}</p>` : ''}
+              <div class="flex items-center gap-2 mt-1">
+                ${dur ? `<span class="text-[10px] font-mono text-[#C68A36]">${dur}</span>` : ''}
+                ${isActive ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-900 font-mono font-black">▶ ATIVA</span>` : ''}
+              </div>
+            </div>
+
+            <!-- Seta / Check -->
+            <div class="shrink-0 text-[#C68A36]">
+              <i data-lucide="${isActive ? 'check-circle' : 'chevron-right'}" class="w-4 h-4"></i>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    /**
+     * Seleciona um módulo de Magic Story a partir do Bottom Sheet.
+     * Promise-safe: aguarda qualquer play pendente antes de trocar a faixa.
+     *
+     * @param {string} moduleId - ID do módulo AEF_MAGIC_STORIES (ex: 'ms001-grazi')
+     *                            ou o próprio trackId se não houver moduleId.
+     * @param {string} trackId  - ID do track específico a carregar.
+     */
+    window.selectMSModule = async (moduleId, trackId) => {
+      window.closeMSStorySheet();
+
+      // Aguarda a animação de fechamento do sheet antes de trocar a faixa
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Tenta trocar via switchMagicStoriesModule (busca no catálogo oficial)
+      const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+      const foundMod = msModules.find(m => m.id === moduleId);
+
+      if (foundMod) {
+        await window.switchMagicStoriesModule(moduleId);
+        return;
+      }
+
+      // Fallback: track enviado pela sala de aula (não está em AEF_MAGIC_STORIES)
+      const sentTracks = getMagicStoriesTracks();
+      const fallbackTrack = sentTracks.find(t => t.id === trackId || t.id === moduleId);
+      if (fallbackTrack) {
+        // Blindagem de AbortError antes de trocar o src
+        if (state._pendingPlayPromise !== null) {
+          try { await state._pendingPlayPromise; } catch (_) {}
+          state._pendingPlayPromise = null;
+        }
+        REAL_TRACK = fallbackTrack;
+        state.activeMSModuleId = fallbackTrack._moduleId || fallbackTrack.id;
+        state.currentSentenceIndex = 0;
+        state.revealedAnswers = {};
+        state.loopingSentenceIndex = -1;
+        await loadTrackAudio(REAL_TRACK);
+        state.audio.currentTime = 0;
+        state.isPlaying = false;
+        renderSidebarTracks();
+        renderZenStage();
+        renderBottomDock();
+        updateMediaSessionMetadata();
+        showToast(`História carregada: ${REAL_TRACK.title}`);
+      }
+    };
+
+
 
     window.openCustomTrackStudio = (tab = 'mp3') => {
       const modal = document.getElementById('customTrackModal');
@@ -2550,5 +2777,53 @@
       setTimeout(() => toast.classList.add('hidden'), 3500);
     }
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- BOTTOM SHEET: MAGIC STORIES STORY SWITCHER                               -->
+  <!-- Abre somente quando environment === 'course' | 'ms_legacy'              -->
+  <!-- ========================================================================= -->
+  <div
+    id="ms-story-sheet-overlay"
+    class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden transition-opacity duration-300"
+    onclick="window.closeMSStorySheet()"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    id="ms-story-sheet"
+    class="fixed bottom-0 inset-x-0 z-50 bg-[#FFFDF9] rounded-t-3xl border-t border-[#EAE5DC] shadow-2xl
+           transform translate-y-full transition-transform duration-300 ease-out
+           max-h-[80vh] flex flex-col"
+    aria-label="Seletor de Magic Stories"
+  >
+    <!-- Handle + Header -->
+    <div class="flex flex-col items-center pt-3 pb-2 px-5 border-b border-[#EAE5DC] shrink-0">
+      <!-- Drag Handle visual -->
+      <div class="w-10 h-1 rounded-full bg-stone-300 mb-3"></div>
+      <div class="w-full flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase tracking-wider block">🎓 Magic Stories</span>
+          <h2 class="text-sm font-black text-[#0A192F]">Selecionar História</h2>
+        </div>
+        <button
+          onclick="window.closeMSStorySheet()"
+          class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[#7A7369] hover:text-[#0A192F] transition cursor-pointer"
+          title="Fechar"
+        >
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrollable List of Modules -->
+    <div id="ms-story-sheet-list" class="overflow-y-auto no-scrollbar flex-1 p-4 space-y-2.5">
+      <!-- Populado dinamicamente por renderMSStorySheet() -->
+    </div>
+
+    <!-- Safe Area padding for iOS home indicator -->
+    <div class="h-safe-bottom shrink-0 pb-4"></div>
+  </div>
+
 </body>
 </html>
+
