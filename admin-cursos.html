@@ -1578,34 +1578,32 @@
     });
 
     async function initializeStudioData() {
-      // 1. Load from Cloud Firestore
+      // 1. Base sólida com os cursos oficiais locais
+      ALL_COURSES = JSON.parse(JSON.stringify(DEFAULT_SEED_COURSES));
+
+      // 2. Mescla atualizações salvas no Cloud Firestore (apenas para cursos conhecidos ou novos criados)
       try {
         if (window.aefCloudSync) await window.aefCloudSync.init();
         const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
         const data = await res.json();
-        
-        ALL_COURSES = JSON.parse(JSON.stringify(DEFAULT_SEED_COURSES));
 
         if (data.documents && data.documents.length > 0) {
           data.documents.forEach(d => {
             const f = d.fields || {};
             const cid = f.courseId?.stringValue || f.id?.stringValue || d.name.split("/").pop();
-            const existing = ALL_COURSES[cid] || { modules: [] };
-            ALL_COURSES[cid] = {
-              id: cid,
-              title: f.title?.stringValue || "Sem Título",
-              slug: f.slug?.stringValue || cid,
-              badge: f.tierRequired?.stringValue === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO",
-              tierRequired: f.tierRequired?.stringValue || "vip",
-              coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
-              description: f.description?.stringValue || "",
-              modules: existing.modules || []
-            };
+            
+            // Ignora o documento legado de teste 'projeto-aef-2026' se vier do Firestore
+            if (cid === 'projeto-aef-2026' || cid === 'magic-stories-club') return;
+
+            if (ALL_COURSES[cid]) {
+              if (f.title?.stringValue) ALL_COURSES[cid].title = f.title.stringValue;
+              if (f.description?.stringValue) ALL_COURSES[cid].description = f.description.stringValue;
+              if (f.tierRequired?.stringValue) ALL_COURSES[cid].tierRequired = f.tierRequired.stringValue;
+            }
           });
         }
       } catch (err) {
-        console.warn("Using default seed courses:", err);
-        ALL_COURSES = JSON.parse(JSON.stringify(DEFAULT_SEED_COURSES));
+        console.warn("Using local courses seed:", err);
       }
 
       renderCourseSwitcher();

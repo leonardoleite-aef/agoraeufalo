@@ -91,6 +91,14 @@
           </button>
         </div>
 
+        <!-- Quick Dev/Test Login Button (Local Preview) -->
+        <div id="localDevBox" class="hidden mb-5">
+          <button onclick="handleDevQuickLogin()" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/20 active:scale-[0.99] cursor-pointer">
+            <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+            <span>Entrar como Professor Leo (Ambiente de Teste)</span>
+          </button>
+        </div>
+
         <!-- Google One-Click Login -->
         <button onclick="handleGoogleSignIn()" class="w-full py-3 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm border border-slate-200 cursor-pointer active:scale-[0.99] mb-5">
           <svg class="w-4 h-4" viewBox="0 0 24 24">
@@ -212,8 +220,34 @@
   <script>
     let currentMode = 'signin';
 
+    function getTargetRedirect() {
+      try {
+        const dest = sessionStorage.getItem('aef_redirect_after_login');
+        if (dest && !dest.includes('login.html')) {
+          sessionStorage.removeItem('aef_redirect_after_login');
+          return dest;
+        }
+      } catch(e) {}
+      return "sala-de-aula.html?curso=ms-legacy";
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.lucide) lucide.createIcons();
+
+      const hostname = window.location.hostname;
+      const isLocalOrDev = (
+        hostname === 'localhost' || 
+        hostname === '127.0.0.1' || 
+        hostname.startsWith('192.168.') || 
+        hostname.startsWith('10.') || 
+        window.location.protocol === 'file:'
+      );
+
+      const localBox = document.getElementById('localDevBox');
+      if (localBox && isLocalOrDev) {
+        localBox.classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+      }
 
       // Check if arriving from a Magic Link in email
       if (window.location.search.includes('apiKey=') || window.location.search.includes('magicLink=')) {
@@ -223,8 +257,8 @@
           if (magicUser) {
             showToast("Acesso autorizado com sucesso via Link Mágico!", "success");
             setTimeout(() => {
-              window.location.href = "portal.html";
-            }, 1000);
+              window.location.href = getTargetRedirect();
+            }, 800);
             return;
           }
         } catch (err) {
@@ -237,11 +271,26 @@
         if (e.detail && e.detail.user) {
           showToast("Sessão ativa detectada. Redirecionando...", "success");
           setTimeout(() => {
-            window.location.href = "portal.html";
+            window.location.href = getTargetRedirect();
           }, 800);
         }
       });
     });
+
+    window.handleDevQuickLogin = () => {
+      showToast("Acesso autorizado como Professor Leo!", "success");
+      try {
+        localStorage.setItem('aef_user_name', 'Professor Leonardo Leite');
+        localStorage.setItem('aef_user_email', 'selexenglish@gmail.com');
+        localStorage.setItem('aef_user_tier', 'admin_master');
+        localStorage.setItem('aef_user_role', 'admin');
+        localStorage.setItem('aef_enrolled_products', JSON.stringify(['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas']));
+      } catch (e) {}
+
+      setTimeout(() => {
+        window.location.href = getTargetRedirect();
+      }, 500);
+    };
 
     function switchAuthTab(mode) {
       currentMode = mode;
@@ -301,8 +350,8 @@
         }
 
         setTimeout(() => {
-          window.location.href = "portal.html";
-        }, 1000);
+          window.location.href = getTargetRedirect();
+        }, 800);
 
       } catch (err) {
         console.error("Auth Error:", err);
@@ -327,8 +376,8 @@
         await window.aefPortalAuth.signInWithGoogle();
         showToast("Login com Google concluído! Entrando...", "success");
         setTimeout(() => {
-          window.location.href = "portal.html";
-        }, 1000);
+          window.location.href = getTargetRedirect();
+        }, 800);
       } catch (err) {
         console.error("Google Auth Error:", err);
         let msg = "Não foi possível conectar com o Google.";

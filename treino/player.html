@@ -2,2775 +2,852 @@
 <html lang="pt-BR" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Training Player • Spoken Reflex Studio | AgoraEuFalo</title>
-  <meta name="description" content="Personal Training Player do AgoraEuFalo • Treine reflexo oral, compreensão e connected speech com as 6 Atividades Canônicas.">
-  
-  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
-  <meta name="theme-color" content="#FAF8F5">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Player de Treino • AgoraEuFalo</title>
+  <meta name="theme-color" content="#071224">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AEF Player">
 
-  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & Fira Code -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
-            mono: ['"Fira Code"', 'monospace']
-          },
-          colors: {
-            aef: {
-              navy: '#0A192F',
-              midnight: '#0D1E36',
-              ochre: '#C68A36',
-              'ochre-hover': '#B3792A',
-              canvas: '#FAF8F5',
-              paper: '#FFFDF9',
-              border: '#EAE5DC',
-              muted: '#7A7369'
-            }
-          }
-        }
-      }
-    }
-  </script>
 
+  <!-- Google Fonts: Plus Jakarta Sans + Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="../treino/data/registry.js"></script>
-  <script src="../treino/data/magic-stories.js"></script>
-  <script src="../treino/data/public.js"></script>
-  <script src="../treino/data/estevao.js"></script>
-  <script src="../treino/data/thomas.js"></script>
-  <script src="../treino/data/andre.js"></script>
-  <script src="../treino/data/matheus.js"></script>
-  <script src="../assets/js/aef-cloud-sync.js"></script>
-  <script src="../treino/js/offline-manager.js"></script>
-  <script src="../assets/js/templates/aef-template-player-zen.js"></script>
-  <script src="../assets/js/ai/aef-speech-coach.js"></script>
 
-  <!-- AgoraEuFalo Master Luxury Design System Core -->
-  <link rel="stylesheet" href="../assets/css/aef-luxury-system.css">
+  <!-- Dados Canônicos dos Módulos e Alunos -->
+  <script src="data/magic-stories.js"></script>
+  <script src="data/public.js"></script>
+  <script src="data/estevao.js"></script>
+  <script src="data/thomas.js"></script>
+  <script src="data/andre.js"></script>
+  <script src="data/matheus.js"></script>
 
   <style>
-    input[type=range] {
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #071224;
+      color: #F8FAFC;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .font-serif-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .font-mono-tag {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Range Scrubber Customization */
+    input[type="range"] {
       -webkit-appearance: none;
       appearance: none;
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 9999px;
+      height: 5px;
       outline: none;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: height 0.15s ease;
     }
-    input[type=range]:focus {
-      outline: none;
+    input[type="range"]:hover, input[type="range"]:active {
+      height: 7px;
     }
-    input[type=range]::-webkit-slider-runnable-track {
-      width: 100%;
-      height: 6px;
-      cursor: pointer;
-      border-radius: 9999px;
-      background: transparent;
-    }
-    input[type=range]::-moz-range-track {
-      width: 100%;
-      height: 6px;
-      cursor: pointer;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.25);
-    }
-    input[type=range]::-webkit-slider-thumb {
+    input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      height: 16px;
-      width: 16px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #F59E0B;
-      border: 2px solid #FFFFFF;
       cursor: pointer;
-      margin-top: -5px;
-      box-shadow: 0 0 8px rgba(245, 158, 11, 0.6), 0 2px 4px rgba(0,0,0,0.4);
-      transition: transform 0.15s ease, background-color 0.15s ease;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+      transition: transform 0.1s ease;
     }
-    input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.25);
-      background: #FBBF24;
+    input[type="range"]::-webkit-slider-thumb:active {
+      transform: scale(1.3);
     }
-    input[type=range]::-moz-range-thumb {
-      height: 16px;
-      width: 16px;
+    input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #F59E0B;
-      border: 2px solid #FFFFFF;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(245, 158, 11, 0.6), 0 2px 4px rgba(0,0,0,0.4);
+      border: none;
     }
+
+    /* Custom Scrollbar */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .lyrics-active {
+      color: #F59E0B;
+      font-weight: 800;
+      opacity: 1;
+      transform: scale(1.02);
+      text-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+    }
+
+    .lyrics-inactive {
+      color: #94A3B8;
+      opacity: 0.45;
+      font-weight: 500;
+    }
+    .lyrics-inactive:hover {
+      opacity: 0.85;
+    }
+
+    /* Ambient Glow Background */
+    .ambient-glow {
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(198, 138, 54, 0.18) 0%, rgba(13, 30, 54, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
   </style>
 </head>
-<body class="aef-canvas-bg text-slate-900 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-200">
+<body style="min-height: 100dvh; max-height: 100dvh; height: 100dvh;" class="flex flex-col justify-between overflow-hidden antialiased bg-[#071224] text-slate-100">
+  
+  <div class="ambient-glow"></div>
 
   <!-- ========================================================================= -->
-  <!-- 1. TOP HEADER: Navigation & Brand                                         -->
+  <!-- 1. TOP HEADER: SAIR, SELETOR DE CURSOS/CATEGORIAS & MÓDULOS                -->
   <!-- ========================================================================= -->
-  <header class="bg-white/95 backdrop-blur-md border-b border-[#EAE5DC] sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-4">
+  <header class="relative z-20 w-full max-w-lg mx-auto px-4 pt-2.5 pb-1 flex items-center justify-between gap-2 shrink-0">
+    
+    <!-- Botão Sair (Voltar ao Portal / Dashboard) -->
+    <a id="btn-exit" href="../portal.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 text-xs font-bold transition backdrop-blur-md border border-white/10 shrink-0" title="Sair para o Portal">
+      <i data-lucide="log-out" class="w-3.5 h-3.5 text-amber-400"></i>
+      <span>Sair</span>
+    </a>
+
+    <!-- Seletor Duplo: [Curso / Categoria] + [Módulo / Aluno / Faixa] -->
+    <div class="flex items-center gap-1.5 min-w-0 flex-1 justify-center">
       
-      <!-- Brand Logo + Mobile Hamburger -->
-      <div class="flex items-center gap-2.5 shrink-0">
-        <button onclick="window.togglePlayerDrawer()" class="p-1.5 rounded-xl hover:bg-stone-100 text-[#0A192F] transition cursor-pointer" title="Menu de Navegação & Ambientes">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
-
-        <a href="../portal.html" class="flex items-center gap-2.5 transition active:scale-95 group">
-          <div class="w-8 h-8 rounded-xl bg-[#C68A36]/15 border border-[#C68A36]/30 flex items-center justify-center text-[#C68A36]">
-            <i data-lucide="message-square" class="w-4 h-4"></i>
-          </div>
-          <span class="font-serif font-black text-lg tracking-tight text-[#0A192F]">
-            Agora<span class="text-[#C68A36]">EuFalo</span>
-          </span>
-        </a>
+      <!-- Dropdown 1: Menu de Cursos / Categorias -->
+      <div class="flex items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-2.5 py-1 shrink-0 max-w-[135px]">
+        <select id="course-select" onchange="window.selectCourse(this.value)" class="bg-transparent text-[11px] font-bold text-amber-300 focus:outline-none cursor-pointer truncate pr-0.5">
+          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
+          <option value="public" selected class="bg-slate-900 text-slate-100">💡 Novidades</option>
+          <option value="vip" class="bg-slate-900 text-slate-100">👑 Mentoria VIP</option>
+          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
+        </select>
       </div>
 
-      <!-- Desktop Nav Links -->
-      <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-bold">
-        <a href="../portal.html" class="text-[#7A7369] hover:text-[#0A192F] transition">Dashboard</a>
-        <a href="../sala-de-aula.html?curso=ms-legacy" class="text-[#7A7369] hover:text-[#0A192F] transition">Sala de Aula</a>
-        <a href="player.html" class="text-[#0A192F] border-b-2 border-[#0A192F] pb-1 font-black">Training Player</a>
-      </nav>
-
-      <!-- Right: In-Flight Offline Button, Classroom Return Button & Student Profile Pill -->
-      <div class="flex items-center gap-2 sm:gap-2.5">
-        <!-- In-Flight Offline Mode Button (Desktop & Mobile) -->
-        <button id="btn-flight-mode" onclick="window.toggleFlightModeCache()" class="px-3 py-1.5 rounded-full bg-[#FFFDF9] hover:bg-[#FDF8F0] border border-[#EAE5DC] hover:border-[#C68A36]/50 text-[#0A192F] text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs group" title="Baixar Playlist para Modo Avião (100% Offline)">
-          <div class="w-5 h-5 rounded-full bg-[#C68A36]/15 flex items-center justify-center text-[#C68A36] group-hover:scale-110 transition shrink-0">
-            <i data-lucide="plane" class="w-3 h-3"></i>
-          </div>
-          <span id="flight-mode-text" class="hidden sm:inline">Modo Avião</span>
-        </button>
-
-        <a id="return-to-classroom-btn" href="../sala-de-aula.html?curso=ms-legacy" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D1E36] hover:bg-[#C68A36] text-white text-xs font-bold transition shadow-xs">
-          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-          <span>Sala de Aula</span>
-        </a>
-
-        <a href="../portal.html" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FFFDF9] hover:bg-[#FDF8F0] border border-[#EAE5DC] transition text-left" title="Ir para o Portal">
-          <div class="w-7 h-7 rounded-full bg-[#C68A36] text-white flex items-center justify-center font-bold text-[10px] shrink-0" id="header-avatar-badge">
-            <span id="header-student-initials">LL</span>
-          </div>
-          <span class="text-xs font-bold text-[#0A192F] hidden sm:inline" id="header-student-name">Leonardo Leite</span>
-        </a>
+      <!-- Dropdown 2: Menu de Módulos / Alunos / Faixas -->
+      <div class="flex items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-2.5 py-1 min-w-0 flex-1 max-w-[160px]">
+        <select id="module-select" onchange="window.selectModule(this.value)" class="bg-transparent text-[11px] font-bold text-slate-100 focus:outline-none cursor-pointer truncate w-full">
+          <!-- Injetado dinamicamente via JS -->
+        </select>
       </div>
 
     </div>
+
+    <!-- Botão Gaveta da Playlist -->
+    <button onclick="window.togglePlaylistDrawer()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 transition backdrop-blur-md border border-white/10 shrink-0 relative" title="Lista de Aulas">
+      <i data-lucide="list-music" class="w-4 h-4 text-amber-400"></i>
+      <span id="playlist-count-badge" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-slate-950 font-mono text-[9px] font-black flex items-center justify-center">6</span>
+    </button>
   </header>
 
   <!-- ========================================================================= -->
-  <!-- 2. MAIN ZEN MODE WORKSPACE: TITLE BAR + PALCO ZEN & AI COACH PANEL        -->
+  <!-- 2. PALCO PRINCIPAL (HERO): ARTE 1:1 OU VÍDEO CINEMA                       -->
   <!-- ========================================================================= -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4 space-y-2.5 sm:space-y-4 pb-28 sm:pb-36">
-
-    <!-- 0. ESPAÇO DE TREINO / CATEGORY SELECTOR -->
-    <div class="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs">
-      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-        <button id="env-btn-public" onclick="window.setEnvironment('public')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
-          <span>Sugestões do Leo</span>
-          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 font-mono font-black">FREE</span>
+  <main class="relative z-10 flex-1 min-h-0 flex flex-col justify-center items-center px-4 py-1 max-w-lg mx-auto w-full">
+    
+    <!-- Seletor de Modo: Vídeo vs Áudio (Apenas se a aula possuir vídeo) -->
+    <div id="media-mode-bar" class="w-full flex items-center justify-between mb-2 px-1 shrink-0">
+      <div class="inline-flex p-0.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
+        <button id="mode-btn-audio" onclick="window.setMediaMode('audio')" class="px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-amber-500 text-slate-950 shadow-xs">
+          <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
+          <span>Ouvir</span>
         </button>
-
-        <button id="env-btn-course" onclick="window.setEnvironment('course')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0D1E36] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer shrink-0">
-          <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-300"></i>
-          <span>Magic Stories</span>
-          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-mono font-black">CURSO</span>
-        </button>
-
-        <button id="env-btn-vip" onclick="window.setEnvironment('vip')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0">
-          <i data-lucide="crown" class="w-3.5 h-3.5 text-purple-600"></i>
-          <span>Mentoria VIP</span>
-          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 font-mono font-black">1 a 1</span>
-        </button>
-
-        <button id="env-btn-custom" onclick="window.setEnvironment('custom')" class="env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0">
-          <i data-lucide="flask-conical" class="w-3.5 h-3.5 text-emerald-600"></i>
-          <span>Minhas Coisas</span>
-          <span class="env-badge text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 font-mono font-black">LAB</span>
+        <button id="mode-btn-video" onclick="window.setMediaMode('video')" class="px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white">
+          <i data-lucide="play-square" class="w-3.5 h-3.5"></i>
+          <span>Vídeo</span>
         </button>
       </div>
 
-      <button onclick="window.togglePlayerDrawer()" class="px-2.5 py-1.5 rounded-xl hover:bg-stone-100 text-[#7A7369] font-bold text-xs flex items-center gap-1 shrink-0 cursor-pointer" title="Abrir Menu de Ambientes">
-        <i data-lucide="menu" class="w-4 h-4"></i>
-        <span class="hidden sm:inline text-[11px]">Menu</span>
+      <!-- Botão Letra Rápido -->
+      <button onclick="window.toggleLyrics()" id="btn-toggle-lyrics-top" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 text-xs font-bold transition border border-white/10 flex items-center gap-1.5">
+        <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+        <span id="btn-lyrics-top-text">Ver Letra</span>
       </button>
     </div>
 
-    <!-- Activity Title Bar with Dynamic Subhead, MS Tabs & Minimalist Toolbar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-0.5" id="zen-top-control-bar">
-      <div class="flex items-center gap-2.5 min-w-0 flex-1">
-        <div class="min-w-0 flex-1">
-          <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-[#C68A36] hidden sm:block" id="zen-subhead-text">AgoraEuFalo • Spoken Reflex Studio</span>
-          <h1 class="text-base sm:text-2xl font-black tracking-tight text-[#0A192F]" id="zen-activity-title">
-            1. LISTEN AND READ
-          </h1>
+    <!-- Container da Mídia (Capa 1:1 OU Vídeo Cinema) -->
+    <div class="w-full relative flex items-center justify-center min-h-0">
+      
+      <!-- Card da Capa de Áudio (1:1 Apple Style) -->
+      <div id="stage-artwork-card" class="w-full aspect-square max-w-[220px] sm:max-w-[280px] max-h-[28vh] sm:max-h-[34vh] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-slate-900 relative group transition-transform duration-300">
+        <img id="track-cover-img" src="../assets/images/logo-fundo-escuro.png" alt="Capa da Lição" class="w-full h-full object-cover">
+        
+        <!-- Badge da Atividade no Canto -->
+        <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-slate-950/75 backdrop-blur-md border border-white/20 text-[9px] font-mono-tag font-bold text-amber-300">
+          <span id="track-badge-text">1. LISTEN & READ</span>
         </div>
 
-        <!-- Botão Seletor de Histórias: visível APENAS em Magic Stories (course / ms_legacy) -->
-        <button
-          id="btn-ms-story-switcher"
-          onclick="window.openMSStorySheet()"
-          class="hidden shrink-0 items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white border border-[#EAE5DC] hover:border-[#C68A36]/60 hover:bg-[#FDF8F0] text-[#0A192F] text-[11px] font-bold transition active:scale-95 cursor-pointer shadow-xs"
-          title="Trocar Magic Story"
-        >
-          <i data-lucide="book-open" class="w-3.5 h-3.5 text-[#C68A36] shrink-0"></i>
-          <span class="hidden sm:inline whitespace-nowrap">Trocar História</span>
-          <i data-lucide="chevron-down" class="w-3 h-3 text-[#7A7369] shrink-0"></i>
-        </button>
-      </div>
-
-      <!-- Container: Magic Stories 6 Canonical Tabs (Visible only in 'course') -->
-      <div id="ms-tabs-container" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-        <button id="act-tab-listen_read" onclick="window.switchActivity('listen_read')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
-          <span>1. Listen & Read</span>
-        </button>
-        <button id="act-tab-vocab" onclick="window.switchActivity('vocab')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-          <span>2. Vocabulary</span>
-        </button>
-        <button id="act-tab-listen_answer" onclick="window.switchActivity('listen_answer')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-          <span>3. Listen & Answer</span>
-        </button>
-        <button id="act-tab-look_retell" onclick="window.switchActivity('look_retell')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="mic" class="w-3.5 h-3.5"></i>
-          <span>4. Look & Retell</span>
-        </button>
-        <button id="act-tab-listen_ask" onclick="window.switchActivity('listen_ask')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
-          <span>5. Listen & Ask</span>
-        </button>
-        <button id="act-tab-pronunciation" onclick="window.switchActivity('pronunciation')" class="act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-          <span>6. Pronunciation</span>
-        </button>
-      </div>
-
-      <!-- Container: Minimalist Zen Toolbar (Visible in 'public', 'vip', 'custom') -->
-      <div id="zen-toolbar-container" class="hidden items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
-        <!-- Toggle Tradução -->
-        <button id="btn-toggle-translation" onclick="window.toggleTranslationMode()" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 text-[#7A7369] border-stone-200" title="Ativar/Desativar Tradução Falada">
-          <i data-lucide="languages" class="w-3.5 h-3.5"></i>
-          <span id="btn-translation-text">Tradução OFF</span>
-        </button>
-
-        <!-- Toggle Loop Frase -->
-        <button id="btn-toggle-loop" onclick="window.toggleCurrentSentenceLoop()" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 text-[#7A7369] border-stone-200" title="Repetir frase em loop">
-          <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
-          <span id="btn-loop-text">Loop</span>
-        </button>
-
-        <!-- Speed Selector Pills -->
-        <div class="flex items-center p-0.5 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-bold">
-          <button onclick="window.setSpeed(0.8)" class="speed-btn px-2 py-1 rounded-lg text-stone-600 transition cursor-pointer" id="speed-btn-08">0.8x</button>
-          <button onclick="window.setSpeed(1.0)" class="speed-btn px-2 py-1 rounded-lg bg-[#C68A36] text-white shadow-2xs transition cursor-pointer" id="speed-btn-10">1.0x</button>
-          <button onclick="window.setSpeed(1.2)" class="speed-btn px-2 py-1 rounded-lg text-stone-600 transition cursor-pointer" id="speed-btn-12">1.2x</button>
+        <!-- Indicador de Áudio Pulsante no Canto -->
+        <div id="playing-pulse-indicator" class="hidden absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-mono font-black flex items-center gap-1 shadow-lg">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+          <span>TOCANDO</span>
         </div>
       </div>
+
+      <!-- Container do Player de Vídeo Cinema (Oculto em modo áudio) -->
+      <div id="stage-video-card" class="hidden w-full aspect-video max-w-[340px] max-h-[28vh] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-black relative">
+        <video id="lesson-video" controls playsinline preload="auto" class="w-full h-full object-contain"></video>
+      </div>
+
     </div>
 
-    <!-- 2-Column Layout: Zen Stage (8 cols) + AI Coach Sidebar (4 cols) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      
-      <!-- LEFT: PALCO ZEN CENTRAL (8 cols) -->
-      <div class="lg:col-span-8 space-y-4">
-        
-        <!-- Zen Stage Container -->
-        <div id="zen-main-stage-container" class="aef-stage-zen relative p-2.5 sm:p-6 space-y-2.5 sm:space-y-4">
-          <!-- Populated Dynamically via JS -->
-        </div>
-
-      </div>
-
-      <!-- RIGHT: AI COACH SIDEBAR PANEL (4 cols) -->
-      <aside class="lg:col-span-4 space-y-4">
-        
-        <!-- Card: AI Coach & Status -->
-        <div class="aef-sidecard-zen p-5 sm:p-6 space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-[#EAE5DC]">
-            <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-xl bg-[#0D1E36] text-amber-300 flex items-center justify-center font-black text-xs shadow-xs">
-                AI
-              </div>
-              <div>
-                <h3 class="font-black text-xs text-[#0A192F] uppercase tracking-wider">AI Speech Coach</h3>
-                <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Active Listening
-                </span>
-              </div>
-            </div>
-            <span class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30" id="sidebar-score-pill">
-              8.8 / 10
-            </span>
-          </div>
-
-          <!-- Current Training Track -->
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-[#7A7369]">Faixa Ativa</span>
-            <p class="font-black text-xs sm:text-sm text-[#0A192F] leading-tight" id="sidebar-activity-name">
-              Daily Spoken Reflex: Conversational Clarity
-            </p>
-          </div>
-
-          <!-- Golden Tip Box / AI Diagnosis Container -->
-          <div id="sidebar-coach-box" class="p-3.5 rounded-2xl bg-[#FDF8F0] border border-[#C68A36]/40 space-y-1 text-left">
-            <span class="text-[10px] font-black uppercase tracking-wider text-[#C68A36] flex items-center gap-1">
-              <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Sacada do Professor Leo:
-            </span>
-            <p class="text-xs text-[#0A192F] leading-relaxed font-medium" id="sidebar-grammar-tip">
-              "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta."
-            </p>
-          </div>
-
-          <!-- Dynamic VIP Student Tracks Playlist Container -->
-          <div id="sidebar-tracks-container"></div>
-
-          <!-- Quick Return to Classroom -->
-          <div class="pt-2 border-t border-[#EAE5DC]">
-            <a href="../sala-de-aula.html?curso=projeto-aef-2026" class="w-full py-2.5 rounded-xl bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] font-bold text-xs flex items-center justify-center gap-2 border border-stone-200 transition">
-              <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#C68A36]"></i>
-              <span>Voltar para Sala de Aula</span>
-            </a>
-          </div>
-        </div>
-
-      </aside>
-
+    <!-- Título da Aula & Subtítulo do Módulo -->
+    <div class="w-full text-center mt-2 mb-0 px-2 shrink-0">
+      <h2 id="lesson-title" class="font-serif-title font-bold text-sm sm:text-base text-slate-50 truncate tracking-wide">
+        Aula 01: Listen & Read (LR)
+      </h2>
+      <p id="module-subhead" class="text-[11px] text-slate-400 font-medium mt-0.5 truncate">
+        MS001 • Grazi Wants to Change
+      </p>
     </div>
 
   </main>
 
   <!-- ========================================================================= -->
-  <!-- 3. FIXED FLOATING CONTROLLER DOCK (AUDIO PLAYER OR RADIANT MIC ISLAND)   -->
+  <!-- 3. CONTROLES DE REPRODUÇÃO (DOCK ERGONÔMICO APPLE MUSIC / SPOTIFY)        -->
   <!-- ========================================================================= -->
-  <div id="audio-dock-container" class="fixed bottom-0 sm:bottom-4 inset-x-0 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 w-full sm:w-[92%] sm:max-w-3xl bg-[#0D1E36]/95 backdrop-blur-xl sm:rounded-2xl border-t sm:border border-[#C68A36]/40 shadow-2xl z-40 py-2.5 px-4 sm:px-6 text-white transition-all">
-    <div class="w-full flex items-center justify-between gap-3" id="dock-inner-content">
-      <!-- Populated dynamically (Audio Controls or Radiant Mic Dock) -->
-    </div>
-  </div>
-
-  <!-- Slide-Over Navigation Drawer -->
-  <div id="playerDrawerOverlay" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden" onclick="window.togglePlayerDrawer()"></div>
-
-  <aside id="playerDrawerMenu" class="fixed top-0 bottom-0 left-0 w-72 max-w-[85vw] bg-[#FFFDF9] border-r border-[#EAE5DC] z-50 p-6 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
-    <div class="space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-[#EAE5DC]">
-        <span class="font-serif font-black text-lg tracking-tight text-[#0A192F]">
-          Agora<span class="text-[#C68A36]">EuFalo</span>
-        </span>
-        <button onclick="window.togglePlayerDrawer()" class="p-1 rounded-lg text-slate-500 hover:text-slate-900">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="space-y-4">
-        <span class="text-[10px] font-black uppercase tracking-widest text-[#7A7369]">Espaço de Treino</span>
-        
-        <div class="space-y-1 text-xs font-bold">
-          <button onclick="window.setEnvironment('public')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'public' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
-            <i data-lucide="sparkles" class="w-4 h-4 text-[#C68A36]"></i>
-            <span class="flex-1">Sugestões do Leo</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-mono">FREE</span>
-          </button>
-
-          <button onclick="window.setEnvironment('course')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'course' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
-            <i data-lucide="book-open" class="w-4 h-4 text-[#C68A36]"></i>
-            <span class="flex-1">Magic Stories 2026</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono">CURSO</span>
-          </button>
-
-          <button onclick="window.setEnvironment('ms_legacy')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'ms_legacy' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
-            <i data-lucide="archive" class="w-4 h-4 text-[#C68A36]"></i>
-            <span class="flex-1">MS-Legacy (Curso Clássico)</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-mono">TEXTO LIVRE</span>
-          </button>
-
-          <button onclick="window.setEnvironment('vip')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'vip' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
-            <i data-lucide="crown" class="w-4 h-4 text-[#C68A36]"></i>
-            <span class="flex-1">Mentoria VIP</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-mono">1 a 1</span>
-          </button>
-
-          <button onclick="window.setEnvironment('custom')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition ${state.environment === 'custom' ? 'bg-[#F5EFE6] text-[#0A192F] font-black border border-[#E8E0D2]' : 'text-[#7A7369] hover:bg-[#F9F6F0]'}">
-            <i data-lucide="flask-conical" class="w-4 h-4 text-[#C68A36]"></i>
-            <span class="flex-1">Minhas Coisas</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono">LAB</span>
-          </button>
-        </div>
-
-        <div class="pt-3 border-t border-[#EAE5DC]">
-          <span class="text-[10px] font-black uppercase tracking-widest text-[#7A7369] block mb-2">Navegação Geral</span>
-          <nav class="space-y-1 text-xs font-bold">
-            <a href="../portal.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-              <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#8C8275]"></i>
-              <span>Dashboard</span>
-            </a>
-            <a href="../sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-              <i data-lucide="play-circle" class="w-4 h-4 text-[#8C8275]"></i>
-              <span>Sala de Aula</span>
-            </a>
-            <a href="../blog/index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-              <i data-lucide="newspaper" class="w-4 h-4 text-[#8C8275]"></i>
-              <span>Blog do Leo</span>
-            </a>
-          </nav>
-        </div>
+  <footer class="relative z-20 w-full max-w-lg mx-auto px-5 pb-5 sm:pb-6 pt-1 space-y-2 shrink-0">
+    
+    <!-- Scrubber / Barra de Progresso de Áudio -->
+    <div class="w-full space-y-0.5">
+      <input type="range" id="audio-seek-bar" min="0" max="100" value="0" step="0.1" oninput="window.handleSeek(this.value)" class="w-full cursor-pointer">
+      <div class="flex items-center justify-between text-[10px] font-mono-tag font-medium text-slate-400 px-0.5">
+        <span id="time-current">00:00</span>
+        <span id="time-total">00:00</span>
       </div>
     </div>
 
-    <!-- Drawer Bottom: Student Profile Card -->
-    <div class="pt-4 border-t border-[#EAE5DC]">
-      <div class="flex items-center gap-3 p-2 rounded-2xl">
-        <div class="w-9 h-9 rounded-full bg-[#C68A36] text-white font-bold text-xs flex items-center justify-center shadow-xs">
-          LL
-        </div>
-        <div class="leading-tight min-w-0 flex-1">
-          <p class="font-black text-xs text-[#0A192F] truncate">Leonardo Leite</p>
-          <p class="text-[10px] font-bold text-[#8C8275] uppercase tracking-wider">Membro VIP</p>
-        </div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ========================================================================= -->
-  <!-- MODAL: LABORATÓRIO "MINHAS COISAS" (UPLOAD MP3 / YOUTUBE / TEXTO)         -->
-  <!-- ========================================================================= -->
-  <div id="customTrackModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="aef-modal-card max-w-lg w-full p-6 relative animate-in fade-in zoom-in duration-200 text-left space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <!-- Controles Principais de Reprodução (Layout Espaçoso de 5 Botões) -->
+    <div class="flex items-center justify-between px-2 pt-0.5">
       
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between pb-3 border-b border-[#EAE5DC]">
-        <div>
-          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase tracking-wider block">🧪 LABORATÓRIO DO ALUNO</span>
-          <h3 class="text-base sm:text-lg font-black text-[#0A192F]">Criar Treino Próprio</h3>
-        </div>
-        <button onclick="window.closeCustomTrackStudio()" class="p-1 rounded-lg text-slate-400 hover:text-slate-900 cursor-pointer">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
+      <!-- Aula / Faixa Anterior -->
+      <button onclick="window.playPrevLesson()" class="p-2.5 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Aula Anterior">
+        <i data-lucide="skip-back" class="w-5 h-5 fill-current"></i>
+      </button>
 
-      <!-- Studio Navigation Tabs (MP3 / YouTube / Texto) -->
-      <div class="flex p-1 rounded-2xl bg-[#FAF8F5] border border-[#EAE5DC] gap-1">
-        <button id="studio-tab-btn-mp3" onclick="window.switchStudioTab('mp3')" class="flex-1 py-2 rounded-xl bg-[#C68A36] text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
-          <i data-lucide="music" class="w-3.5 h-3.5"></i>
-          <span>1. Subir MP3</span>
-        </button>
-        <button id="studio-tab-btn-youtube" onclick="window.switchStudioTab('youtube')" class="flex-1 py-2 rounded-xl text-[#7A7369] hover:bg-stone-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer">
-          <i data-lucide="video" class="w-3.5 h-3.5"></i>
-          <span>2. YouTube</span>
-        </button>
-        <button id="studio-tab-btn-text" onclick="window.switchStudioTab('text')" class="flex-1 py-2 rounded-xl text-[#7A7369] hover:bg-stone-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer">
-          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-          <span>3. Texto</span>
-        </button>
-      </div>
+      <!-- Voltar 10s -->
+      <button onclick="window.seekOffset(-10)" class="p-2.5 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Voltar 10 segundos">
+        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+      </button>
 
-      <!-- TAB 1: UPLOAD DE ÁUDIO MP3 / M4A -->
-      <form id="studio-tab-content-mp3" onsubmit="window.handleProcessMp3Track(event)" class="space-y-3.5">
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">1. Selecione o Arquivo de Áudio *</label>
-          <input type="file" id="custom-mp3-file" accept="audio/*" required class="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#C68A36] file:text-white hover:file:bg-[#B3792A] cursor-pointer">
-          <span class="text-[10px] text-slate-500 mt-1 block">Formatos suportados: MP3, M4A, WAV (gravações de reuniões, podcasts, mensagens).</span>
-        </div>
+      <!-- Botão Central Play / Pause Master Espaçoso -->
+      <button onclick="window.togglePlayPause()" id="btn-main-play" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-xl shadow-amber-500/30 transition active:scale-90 cursor-pointer shrink-0" title="Tocar / Pausar">
+        <i data-lucide="play" class="w-7 h-7 fill-current ml-0.5" id="icon-main-play"></i>
+      </button>
 
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">2. Título do Treino (Opcional)</label>
-          <input type="text" id="custom-mp3-title" placeholder="Deixe em branco para gerarmos um título automático" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:border-[#C68A36] focus:outline-none">
-        </div>
+      <!-- Avançar 10s -->
+      <button onclick="window.seekOffset(10)" class="p-2.5 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Avançar 10 segundos">
+        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+      </button>
 
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">3. Transcrição / Diálogo em Inglês *</label>
-          <textarea id="custom-mp3-text" rows="4" required placeholder="Cole aqui o texto falado no áudio em inglês. O sistema vai quebrar em frases sincronizadas para você treinar..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-[#C68A36] focus:outline-none leading-relaxed custom-scrollbar"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Gerar Treino no Palco Zen</span>
-        </button>
-      </form>
-
-      <!-- TAB 2: IMPORTAR DO YOUTUBE -->
-      <form id="studio-tab-content-youtube" onsubmit="window.handleProcessYouTubeTrack(event)" class="space-y-3.5 hidden">
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">URL do Vídeo do YouTube *</label>
-          <input type="url" id="custom-yt-url" required placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:border-[#C68A36] focus:outline-none">
-        </div>
-
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Título do Treino (Opcional)</label>
-          <input type="text" id="custom-yt-title" placeholder="Deixe em branco para gerarmos um título automático" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:border-[#C68A36] focus:outline-none">
-        </div>
-
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Legenda / Transcrição em Inglês</label>
-          <textarea id="custom-yt-text" rows="4" placeholder="Cole as frases que você quer praticar deste vídeo..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-[#C68A36] focus:outline-none leading-relaxed custom-scrollbar"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
-          <i data-lucide="video" class="w-4 h-4"></i>
-          <span>Importar Treino do YouTube</span>
-        </button>
-      </form>
-
-      <!-- TAB 3: TEXTO DIRETO -->
-      <form id="studio-tab-content-text" onsubmit="window.handleProcessTextTrack(event)" class="space-y-3.5 hidden">
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Título do Treino (Opcional)</label>
-          <input type="text" id="custom-txt-title" placeholder="Ex: Apresentação para a Diretoria" class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:border-[#C68A36] focus:outline-none">
-        </div>
-
-        <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Texto em Inglês *</label>
-          <textarea id="custom-txt-content" rows="5" required placeholder="Cole aqui seu diálogo, e-mail de trabalho ou roteiro..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:border-[#C68A36] focus:outline-none leading-relaxed custom-scrollbar"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
-          <i data-lucide="play" class="w-4 h-4"></i>
-          <span>Criar Treino de Leitura & Reflexo</span>
-        </button>
-      </form>
+      <!-- Próxima Aula / Faixa -->
+      <button onclick="window.playNextLesson()" class="p-2.5 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Próxima Aula">
+        <i data-lucide="skip-forward" class="w-5 h-5 fill-current"></i>
+      </button>
 
     </div>
+
+    <!-- Barra Utilitária Inferior: Continuous Play e Toggle de Letra -->
+    <div class="flex items-center justify-between px-2 pt-0.5">
+      <button onclick="window.toggleContinuousPlay()" id="btn-continuous-play" class="flex items-center gap-1.5 text-[11px] font-bold text-amber-400 hover:text-amber-300 transition active:scale-95 py-1 px-3 rounded-full bg-white/5 border border-white/10" title="Alternar Reprodução Contínua">
+        <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+        <span id="text-continuous-play">Contínuo: ON</span>
+      </button>
+
+      <button onclick="window.toggleLyrics()" id="btn-lyrics-bottom" class="flex items-center gap-1.5 text-[11px] font-bold text-slate-300 hover:text-white transition active:scale-95 py-1 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15" title="Ver Letra da Aula">
+        <i data-lucide="quote" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Ver Letra</span>
+      </button>
+    </div>
+
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 4. PAINEL DE LETRA DESLIZANTE (SLIDING LYRICS VIEW - ESTILO APPLE/SPOTIFY)-->
+  <!-- ========================================================================= -->
+  <div id="lyrics-sheet" class="fixed inset-x-0 bottom-0 z-40 bg-[#071224]/95 backdrop-blur-2xl border-t border-white/10 rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[82vh] h-[82vh]">
+    
+    <!-- Puxador & Header da Letra -->
+    <div class="px-6 pt-3 pb-2.5 flex items-center justify-between border-b border-white/10 shrink-0">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+        <span class="text-xs font-mono-tag font-bold text-slate-300 uppercase">Transcrição da Aula</span>
+      </div>
+
+      <!-- Toggle Tradução Falada Real -->
+      <button onclick="window.toggleTranslation()" id="btn-lyrics-trans" class="px-3 py-1 rounded-full bg-white/10 text-[11px] font-bold text-slate-300 hover:text-white transition border border-white/10">
+        Tradução: <span id="text-trans-status" class="text-amber-400">OFF</span>
+      </button>
+
+      <!-- Fechar Letra -->
+      <button onclick="window.toggleLyrics()" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">
+        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Lista de Frases Contínuas -->
+    <div id="lyrics-scroll-container" class="flex-1 overflow-y-auto px-6 py-6 space-y-5 no-scrollbar text-left scroll-smooth">
+      <!-- Injetado dinamicamente via JS -->
+    </div>
+
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- 5. GAVETA DE PLAYLIST DE AULAS DO MÓDULO (BOTTOM SHEET / DRAWER)          -->
+  <!-- ========================================================================= -->
+  <div id="playlist-drawer-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300" onclick="window.togglePlaylistDrawer()"></div>
+  
+  <div id="playlist-drawer" class="fixed inset-x-0 bottom-0 z-50 bg-[#0A192F] border-t border-white/15 rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 max-h-[75vh] flex flex-col">
+    <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between shrink-0">
+      <div>
+        <h3 class="font-bold text-sm text-slate-100">Playlist do Módulo</h3>
+        <p id="drawer-module-subtitle" class="text-xs text-amber-400 font-mono mt-0.5">MS001 • Grazi Wants to Change</p>
+      </div>
+      <button onclick="window.togglePlaylistDrawer()" class="p-1.5 rounded-full bg-white/10 text-slate-300 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div id="playlist-items-container" class="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
+      <!-- Injetado dinamicamente via JS -->
+    </div>
+  </div>
+
+  <!-- Audio Element Oculto -->
+  <audio id="core-audio" preload="auto" playsinline></audio>
 
   <!-- Toast Notification -->
-  <div id="player-toast" class="fixed top-6 right-6 z-50 hidden bg-[#0D1E36] border border-[#C68A36] text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-3">
-    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-    <span id="player-toast-text">Notificação</span>
+  <div id="aef-toast" class="fixed bottom-24 inset-x-0 mx-auto w-max max-w-xs px-4 py-2 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs text-center shadow-2xl z-50 hidden transition-all">
+    Notificação
   </div>
 
   <!-- ========================================================================= -->
-  <!-- JAVASCRIPT PLAYER ENGINE: ERGONOMIC POCKET AI COACH CONTROLLER             -->
+  <!-- 6. ENGINE JAVASCRIPT DO UNIFIED PLAYER                                    -->
   <!-- ========================================================================= -->
   <script>
-    function updateIcons() {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
-    }
-
+    // ESTADO GLOBAL DO PLAYER
     const state = {
-      environment: 'course',
-      activity: 'listen_read',
-      currentSentenceIndex: 0,
+      courseId: "public",
+      activeModuleId: "public-demo",
+      activeLessonIndex: 0,
       isPlaying: false,
-      isRecording: false,
-      recordingSeconds: 0,
-      evaluation: null,
-      studentAudioObj: null,
-      loopingSentenceIndex: -1,
-      revealedAnswers: {},
-      audio: (() => {
-        let a = document.getElementById('player-audio');
-        if (!a) {
-          a = document.createElement('audio');
-          a.id = 'player-audio';
-          a.preload = 'auto';
-          a.setAttribute('playsinline', '');
-          document.body.appendChild(a);
-        }
-        return a;
-      })(),
-      playbackSpeed: 1.0,
+      isContinuousPlay: true,
+      mediaMode: "audio", // "audio" | "video"
+      isLyricsOpen: false,
       showTranslation: false,
-      /**
-       * Guarda a Promise mais recente de audio.play() para blindagem de AbortError.
-       * Safari iOS e Chrome mobile lançam AbortError se .pause() ou .src= é chamado
-       * enquanto uma play() Promise ainda está pendente. Seguramos esta referência
-       * para sempre encadear o pause/reset APÓS a resolução ou rejeição da Promise.
-       * @type {Promise<void> | null}
-       */
-      _pendingPlayPromise: null
+      playbackRate: 1.0,
+      currentSentenceIndex: 0,
+      audio: document.getElementById('core-audio'),
+      video: document.getElementById('lesson-video'),
+      pendingPlayPromise: null
     };
 
-    // 100% REAL SPOKEN ENGLISH TRACK FROM FIREBASE STORAGE
-    let REAL_TRACK = (window.AEF_STUDENT_PUBLIC && window.AEF_STUDENT_PUBLIC.tracks?.[0]) || {
-      id: "public-01",
-      title: "Daily Spoken Reflex: Conversational Clarity",
-      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_spoken_reflex_session01.mp3?alt=media",
-      goldenTip: "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta.",
-      sentences: [
-        { id: 1, start: 0.0, end: 3.17, text: "Hey there! How has your week been going so far?", spokenTranslation: "E aí, tudo bem? Como é que tá sendo a sua semana até agora?", speaker: "Sarah" },
-        { id: 2, start: 3.52, end: 8.25, text: "It’s been pretty busy, to be honest, but really productive. What about yours?", spokenTranslation: "Olha, tá bem corrida pra falar a verdade, mas super produtiva. E a sua?", speaker: "Mark" },
-        { id: 3, start: 8.6, end: 15.09, text: "Same here! I had back-to-back team meetings all morning, but we finally finalized the new project roadmap.", spokenTranslation: "Aqui também! Tive reunião uma atrás da outra a manhã inteira, mas finalmente fechamos o cronograma do projeto.", speaker: "Sarah" },
-        { id: 4, start: 15.44, end: 20.05, text: "That’s awesome! It must feel like a huge relief to have that off your plate.", spokenTranslation: "Que demais! Deve ser um alívio enorme tirar essa pendência da sua frente.", speaker: "Mark" },
-        { id: 5, start: 20.4, end: 24.77, text: "It definitely does. Are you doing anything special this coming weekend?", spokenTranslation: "Com certeza é! Vai fazer alguma coisa de bom agora no fim de semana?", speaker: "Sarah" },
-        { id: 6, start: 25.12, end: 30.13, text: "I’m thinking of taking a quick road trip to the coast if the weather holds up. How about you?", spokenTranslation: "Tô pensando em dar um pulo no litoral de carro se o tempo ajudar. E você?", speaker: "Mark" },
-        { id: 7, start: 30.48, end: 35.8, text: "Sounds amazing! I'll probably just relax, catch up on some reading, and recharge.", spokenTranslation: "Parece bom demais! Eu provavelmente vou só relaxar, botar as leituras em dia e recarregar as energias.", speaker: "Sarah" }
-      ]
-    };
-
-    function getActiveChunks() {
-      if (REAL_TRACK.chunks && REAL_TRACK.chunks.length > 0) {
-        return REAL_TRACK.chunks;
-      }
-      return (REAL_TRACK.sentences || []).slice(0, 6).map((s, idx) => ({
-        en: s.text,
-        pt: s.spokenTranslation || ""
-      }));
-    }
-
-    function getActiveItems() {
-      if (state.activity === 'look_retell') {
-        if (REAL_TRACK.retellPrompts && REAL_TRACK.retellPrompts.length > 0) {
-          return REAL_TRACK.retellPrompts.map(p => ({ text: p.text || p }));
-        }
-        return (REAL_TRACK.sentences || []).map((s, idx) => ({ text: `${idx + 1}. ${s.text}` }));
-      }
-      return REAL_TRACK.sentences || [];
-    }
-
+    // INICIALIZAÇÃO
     document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tabParam = urlParams.get('tab') || urlParams.get('activity');
-      if (tabParam) {
-        const tabMap = {
-          'lr': 'listen_read',
-          'listen_read': 'listen_read',
-          'voc': 'vocab',
-          'vocab': 'vocab',
-          'la': 'listen_answer',
-          'listen_answer': 'listen_answer',
-          'lrt': 'look_retell',
-          'look_retell': 'look_retell',
-          'lask': 'listen_ask',
-          'listen_ask': 'listen_ask',
-          'pro': 'pronunciation',
-          'pronunciation': 'pronunciation'
-        };
-        if (tabMap[tabParam.toLowerCase()]) {
-          state.activity = tabMap[tabParam.toLowerCase()];
-        }
-      }
-
-      // 1. Resolução de Ambiente Inicial (?aluno=... -> VIP, ?curso=... / ?modulo=... -> Cursos, else -> Público)
-      const alunoParam = urlParams.get('aluno');
-      const cursoParam = urlParams.get('curso') || urlParams.get('course');
-      const moduloParam = urlParams.get('modulo') || urlParams.get('module');
-      const aulaParam = urlParams.get('aula') || urlParams.get('lesson');
-      const trackParam = urlParams.get('trackId') || urlParams.get('track');
-
-      let initialEnv = 'public';
-      if (alunoParam) {
-        initialEnv = 'vip';
-        const menteeKey = alunoParam.toLowerCase();
-        if (menteeKey === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
-          state.student = window.AEF_STUDENT_ESTEVAO;
-        } else if (menteeKey === 'thomas' && window.AEF_STUDENT_THOMAS) {
-          state.student = window.AEF_STUDENT_THOMAS;
-        } else if (menteeKey === 'andre' && window.AEF_STUDENT_ANDRE) {
-          state.student = window.AEF_STUDENT_ANDRE;
-        } else if (menteeKey === 'matheus' && window.AEF_STUDENT_MATHEUS) {
-          state.student = window.AEF_STUDENT_MATHEUS;
-        } else {
-          state.student = { id: menteeKey, name: menteeKey, tracks: [] };
-        }
-      } else if (cursoParam || moduloParam || (trackParam && (trackParam.startsWith('ms00') || trackParam.includes('magic') || trackParam.includes('sunday') || trackParam.includes('saturday') || trackParam.includes('grazi') || trackParam.includes('tom')))) {
-        initialEnv = 'course';
-        if (moduloParam) {
-          state.activeMSModuleId = moduloParam;
-        } else if (trackParam) {
-          if (trackParam.includes('ms002') || trackParam.includes('tom')) state.activeMSModuleId = 'ms002-tom';
-          else if (trackParam.includes('ms003') || trackParam.includes('saturday')) state.activeMSModuleId = 'ms003-saturday-morning';
-          else if (trackParam.includes('ms004') || trackParam.includes('podcast')) state.activeMSModuleId = 'ms004-grazi-podcast';
-          else if (trackParam.includes('ms005') || trackParam.includes('sunday') || trackParam.includes('brunch')) state.activeMSModuleId = 'ms005-sunday-brunch';
-          else state.activeMSModuleId = 'ms001-grazi';
-        }
-        const returnBtn = document.getElementById('return-to-classroom-btn');
-        if (returnBtn) {
-          const cId = cursoParam || 'magic-stories-legacy';
-          const mId = state.activeMSModuleId || 'ms001-grazi';
-          returnBtn.href = `../sala-de-aula.html?curso=${cId}&modulo=${mId}${aulaParam ? `&aula=${aulaParam}` : ''}`;
-          returnBtn.classList.remove('hidden');
-        }
-      }
-
-      // Executa a troca de ambiente para o alvo correto logo na largada
-      window.setEnvironment(initialEnv);
-
-      // Se passou trackId específico via query param
-      if (trackParam) {
-        window.selectTrack(trackParam);
-      }
-
-      initAudioEvents();
-      setupSwipeGestures();
-      updateIcons();
-      window.checkFlightModeStatus();
+      lucide.createIcons();
+      parseUrlParams();
+      populateCourseSelect();
+      populateModuleSelect();
+      loadCurrentContent(state.activeLessonIndex);
+      setupAudioEvents();
+      setupVideoEvents();
     });
 
-    window.checkFlightModeStatus = async () => {
-      if (!window.aefOfflineManager || !REAL_TRACK?.audioUrl) return;
-      try {
-        const isCached = await window.aefOfflineManager.isTrackCached(REAL_TRACK.audioUrl);
-        const btn = document.getElementById('btn-flight-mode');
-        const text = document.getElementById('flight-mode-text');
-        if (btn && text) {
-          if (isCached) {
-            btn.className = "px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
-            text.innerText = "Modo Avião ✓";
-          } else {
-            btn.className = "px-2.5 sm:px-3 py-1.5 rounded-full bg-stone-100 hover:bg-[#FDF8F0] border border-stone-200 text-[#0A192F] text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
-            text.innerText = "Modo Avião";
-          }
-        }
-      } catch(e) {
-        console.log("Flight cache check skip:", e);
+    function parseUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const curso = params.get('curso') || params.get('category');
+      const mod = params.get('modulo') || params.get('aluno');
+      const aula = params.get('aula') || params.get('track');
+      const mode = params.get('mode');
+
+      if (curso) state.courseId = curso;
+      if (mod) state.activeModuleId = mod;
+      if (mode === 'video') state.mediaMode = 'video';
+
+      const tracks = getCurrentTracklist();
+      if (aula && tracks.length > 0) {
+        const foundIdx = tracks.findIndex(t => t.id === aula || t.id.includes(aula));
+        if (foundIdx !== -1) state.activeLessonIndex = foundIdx;
       }
-    };
-
-    /**
-     * Carrega a mídia de uma faixa no elemento <audio> de forma segura para mobile.
-     *
-     * BLINDAGEM CONTRA AbortError (Safari iOS / Chrome Mobile):
-     * O navegador lança AbortError se .pause() ou .src= é atribuído enquanto uma
-     * Promise de .play() ainda está pendente. Esta função SEMPRE aguarda a resolução
-     * ou rejeição da Promise pendente antes de pausar e trocar a fonte.
-     *
-     * @param {Object} track - Objeto de faixa com audioUrl, videoUrl, id, title.
-     * @returns {Promise<void>}
-     */
-    async function loadTrackAudio(track) {
-      if (!track) return;
-
-      // 1. AGUARDA QUALQUER PROMISE DE PLAY PENDENTE antes de pausar ou trocar src.
-      //    Sem isso, Safari iOS e Chrome Mobile lançam AbortError imediatamente.
-      if (state._pendingPlayPromise !== null) {
-        try {
-          await state._pendingPlayPromise;
-        } catch (_abortErr) {
-          // Rejeição esperada (ex: play abortado pelo próprio navegador). Seguro ignorar.
-        }
-        state._pendingPlayPromise = null;
-      }
-
-      // 2. Pausa e limpa o elemento de áudio antes de qualquer operação de src.
-      state.audio.pause();
-      state.isPlaying = false;
-
-      const hasVideo = Boolean(track.videoUrl && track.videoUrl.trim().length > 0);
-      if (hasVideo) {
-        // Faixa com vídeo: remove src do áudio MP3 paralelo para não conflitar.
-        state.audio.removeAttribute('src');
-        state.audio.load();
-        return;
-      }
-
-      // 3. Verifica cache offline (Service Worker / CacheStorage).
-      if (window.aefOfflineManager) {
-        try {
-          const offlineUrl = await window.aefOfflineManager.getOfflineAudioUrl(track.audioUrl, track.id);
-          if (offlineUrl) {
-            console.log(`✈️ [Modo Avião] Reproduzindo áudio offline da faixa "${track.title}"!`);
-            state.audio.src = offlineUrl;
-            state.audio.load();
-            return;
-          }
-        } catch (offlineErr) {
-          console.log('Offline audio check skip:', offlineErr);
-        }
-      }
-
-      // 4. Fonte remota: atribui e chama .load() explicitamente para liberar
-      //    recursos da faixa anterior antes que o browser inicie o buffer da nova.
-      state.audio.src = track.audioUrl || '';
-      state.audio.load();
     }
 
+    function populateCourseSelect() {
+      const select = document.getElementById('course-select');
+      if (select) select.value = state.courseId;
+    }
 
-    window.toggleFlightModeCache = async () => {
-      if (!window.aefOfflineManager) {
-        showToast("Gerenciador offline não disponível neste navegador.");
-        return;
-      }
-      const btn = document.getElementById('btn-flight-mode');
-      const text = document.getElementById('flight-mode-text');
+    window.selectCourse = (courseId) => {
+      state.courseId = courseId;
+      state.activeLessonIndex = 0;
       
-      const tracksToCache = (state.student && state.student.tracks && state.student.tracks.length > 1) 
-        ? state.student.tracks 
-        : [REAL_TRACK];
-
-      try {
-        const isCached = await window.aefOfflineManager.isTrackCached(REAL_TRACK.audioUrl);
-        if (isCached && tracksToCache.length === 1) {
-          showToast("✈️ Esta lição já está salva no Modo Avião (100% Offline)!");
-          return;
-        }
-
-        const msgCount = tracksToCache.length > 1 ? `todas as ${tracksToCache.length} faixas da playlist` : 'a lição';
-        showToast(`✈️ Baixando ${msgCount} para o Modo Avião...`);
-        if (btn) btn.classList.add('animate-pulse');
-
-        if (tracksToCache.length > 1) {
-          await window.aefOfflineManager.cacheAllTracks(tracksToCache, (percent, msg) => {
-            console.log(`[Offline Sync] ${percent}% - ${msg}`);
-          });
-        } else {
-          await window.aefOfflineManager.cacheWorkout(REAL_TRACK, (percent, msg) => {
-            console.log(`[Offline Sync] ${percent}% - ${msg}`);
-          });
-        }
-
-        if (btn) {
-          btn.classList.remove('animate-pulse');
-          btn.className = "px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs";
-        }
-        if (text) text.innerText = tracksToCache.length > 1 ? `Playlist Salva (${tracksToCache.length}) ✓` : "Modo Avião ✓";
-        showToast(`✅ ${tracksToCache.length > 1 ? `Todas as ${tracksToCache.length} faixas da playlist salvas!` : 'Lição salva!'} Treine 100% offline no voo.`);
-      } catch (err) {
-        console.error("Erro ao salvar offline:", err);
-        showToast("Erro ao baixar áudio para modo avião. Tente novamente.");
-        if (btn) btn.classList.remove('animate-pulse');
+      // Define o primeiro módulo/aluno padrão do curso escolhido
+      if (courseId === 'ms-legacy') {
+        state.activeModuleId = window.AEF_MAGIC_STORIES?.modules?.[0]?.id || "ms001-grazi";
+      } else if (courseId === 'vip') {
+        state.activeModuleId = "estevao";
+      } else if (courseId === 'public') {
+        state.activeModuleId = "public-demo";
+      } else if (courseId === 'custom') {
+        state.activeModuleId = "custom-lab";
       }
+
+      populateModuleSelect();
+      loadCurrentContent(0);
     };
 
-    window.switchMagicStoriesModule = async (moduleId) => {
-      state.activeMSModuleId = moduleId;
-      const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-      const mod = msModules.find(m => m.id === moduleId);
-      if (mod && mod.tracks && mod.tracks.length > 0) {
-        REAL_TRACK = mod.tracks[0];
-        state.currentSentenceIndex = 0;
-        state.revealedAnswers = {};
-        state.loopingSentenceIndex = -1;
-        await loadTrackAudio(REAL_TRACK);
-        state.audio.currentTime = 0;
-        state.isPlaying = false;
-        renderSidebarTracks();
-        renderZenStage();
-        renderBottomDock();
-        updateMediaSessionMetadata();
-        showToast(`Módulo Carregado: ${mod.title}`);
-      }
-    };
+    function populateModuleSelect() {
+      const select = document.getElementById('module-select');
+      if (!select) return;
 
-    window.selectTrack = async (trackId) => {
-      let track = null;
-      if (state.environment === 'public') {
-        track = (window.AEF_STUDENT_PUBLIC?.tracks || []).find(t => t.id === trackId);
-      } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
+      if (state.courseId === 'ms-legacy') {
         const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-        for (const m of msModules) {
-          if (m.id === trackId || (trackId.includes('ms002') && m.id === 'ms002-tom') || (trackId.includes('saturday') && m.id === 'ms003-saturday-morning') || (trackId.includes('podcast') && m.id === 'ms004-grazi-podcast') || (trackId.includes('sunday') && m.id === 'ms005-sunday-brunch') || (trackId.includes('grazi') && !trackId.includes('podcast') && m.id === 'ms001-grazi')) {
-            state.activeMSModuleId = m.id;
-            track = m.tracks[0];
-            break;
-          }
-          const found = m.tracks?.find(t => t.id === trackId);
-          if (found) {
-            state.activeMSModuleId = m.id;
-            track = found;
-            break;
-          }
-        }
-        if (!track) {
-          // Fallback: busca no catálogo dinâmico (acervo canônico + faixas enviadas da sala)
-          track = getMagicStoriesTracks().find(t => t.id === trackId);
-        }
-      } else if (state.environment === 'vip') {
-        track = (state.student?.tracks || []).find(t => t.id === trackId);
-      } else if (state.environment === 'custom' || state.environment === 'custom_active') {
-        track = getCustomTracks().find(t => t.id === trackId);
-        if (track) state.environment = 'custom_active';
+        select.innerHTML = msModules.map(m => `
+          <option value="${m.id}" ${m.id === state.activeModuleId ? 'selected' : ''} class="bg-slate-900 text-slate-100">
+            ${m.shortTitle || m.title}
+          </option>
+        `).join('');
+      } else if (state.courseId === 'vip') {
+        const mentees = [
+          { id: 'estevao', name: 'Estêvão (Executivo)' },
+          { id: 'thomas', name: 'Thomas (Tech Lead)' },
+          { id: 'andre', name: 'André (Entrevistas)' },
+          { id: 'matheus', name: 'Matheus (Fluência)' }
+        ];
+        select.innerHTML = mentees.map(m => `
+          <option value="${m.id}" ${m.id === state.activeModuleId ? 'selected' : ''} class="bg-slate-900 text-slate-100">
+            ${m.name}
+          </option>
+        `).join('');
+      } else if (state.courseId === 'public') {
+        select.innerHTML = `<option value="public-demo" selected class="bg-slate-900 text-slate-100">💡 Novidades (Free Plan)</option>`;
+      } else if (state.courseId === 'custom') {
+        select.innerHTML = `<option value="custom-lab" selected class="bg-slate-900 text-slate-100">🧪 Laboratório Pessoal</option>`;
       }
-
-      if (!track) return;
-
-      REAL_TRACK = track;
-      state.currentSentenceIndex = 0;
-      state.revealedAnswers = {};
-      state.loopingSentenceIndex = -1;
-      await loadTrackAudio(REAL_TRACK);
-      state.audio.currentTime = 0;
-      state.isPlaying = false;
-
-      const sideName = document.getElementById('sidebar-activity-name');
-      if (sideName) sideName.innerText = REAL_TRACK.title;
-
-      const dockTitle = document.getElementById('dock-title-text');
-      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
-
-      const tipText = document.getElementById('sidebar-grammar-tip');
-      if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
-
-      updateMediaSessionMetadata();
-      renderSidebarTracks();
-      renderZenStage();
-      renderBottomDock();
-      window.checkFlightModeStatus();
-      showToast(`Sessão carregada: ${REAL_TRACK.title}`);
-    };
-
-    window.switchVIPMentee = async (menteeId) => {
-      menteeId = (menteeId || 'estevao').toLowerCase().trim();
-      showToast(`Carregando prescrições de ${menteeId}...`);
-
-      // 1. Base mentee profiles
-      if (menteeId === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
-        state.student = window.AEF_STUDENT_ESTEVAO;
-      } else if (menteeId === 'thomas' && window.AEF_STUDENT_THOMAS) {
-        state.student = window.AEF_STUDENT_THOMAS;
-      } else if (menteeId === 'andre' && window.AEF_STUDENT_ANDRE) {
-        state.student = window.AEF_STUDENT_ANDRE;
-      } else if (menteeId === 'matheus' && window.AEF_STUDENT_MATHEUS) {
-        state.student = window.AEF_STUDENT_MATHEUS;
-      } else {
-        state.student = { id: menteeId, name: menteeId, tracks: [] };
-      }
-
-      if (state.student.tracks && state.student.tracks.length > 0) {
-        REAL_TRACK = state.student.tracks[0];
-      }
-
-      // 2. Fetch fresh tracks from Firestore
-      try {
-        if (window.aefCloudSync) {
-          const cloudTracks = await window.aefCloudSync.getStudentCloudTracks(menteeId);
-          if (cloudTracks && cloudTracks.length > 0) {
-            const baseTracks = state.student.tracks || [];
-            // Merge inteligente: atualiza faixas da nuvem preservando campos locais como videoUrl se vazios
-            const merged = cloudTracks.map(ct => {
-              const localMatch = baseTracks.find(bt => bt.id === ct.id);
-              if (localMatch) {
-                return {
-                  ...localMatch,
-                  ...ct,
-                  videoUrl: (ct.videoUrl && ct.videoUrl.trim().length > 0) ? ct.videoUrl : (localMatch.videoUrl || ""),
-                  goldenTip: ct.goldenTip || localMatch.goldenTip || ""
-                };
-              }
-              return ct;
-            });
-            baseTracks.forEach(bt => {
-              if (!merged.some(ct => ct.id === bt.id)) {
-                merged.push(bt);
-              }
-            });
-            state.student.tracks = merged;
-          }
-        }
-      } catch (e) {
-        console.warn("Could not sync cloud tracks for mentee:", e);
-      }
-
-      if (state.student.tracks && state.student.tracks.length > 0) {
-        REAL_TRACK = state.student.tracks[0];
-        await loadTrackAudio(REAL_TRACK);
-      }
-
-      state.currentSentenceIndex = 0;
-      state.revealedAnswers = {};
-      state.loopingSentenceIndex = -1;
-      state.isPlaying = false;
-
-      renderSidebarTracks();
-      renderZenStage();
-      renderBottomDock();
-      updateMediaSessionMetadata();
-      showToast(`Mentorado ativo: ${state.student.name || menteeId}`);
-    };
-
-    function isPinnedTrack(trackId) {
-      try {
-        const pinned = JSON.parse(localStorage.getItem('aef_pinned_tracks') || '[]');
-        return pinned.includes(trackId);
-      } catch(e) { return false; }
     }
 
-    function togglePinTrack(trackId, e) {
-      if (e) e.stopPropagation();
-      let pinned = [];
-      try {
-        pinned = JSON.parse(localStorage.getItem('aef_pinned_tracks') || '[]');
-      } catch(e) {}
+    window.selectModule = (modId) => {
+      state.activeModuleId = modId;
+      state.activeLessonIndex = 0;
+      loadCurrentContent(0);
+    };
 
-      const idx = pinned.indexOf(trackId);
-      if (idx >= 0) {
-        pinned.splice(idx, 1);
-        showToast("Treino desafixado do topo.");
-      } else {
-        pinned.unshift(trackId);
-        showToast("📌 Treino fixado no topo da semana!");
+    function getCurrentTracklist() {
+      if (state.courseId === 'ms-legacy') {
+        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+        const mod = msModules.find(m => m.id === state.activeModuleId) || msModules[0];
+        return mod?.tracks || [];
+      } else if (state.courseId === 'vip') {
+        if (state.activeModuleId === 'estevao') return window.AEF_STUDENT_ESTEVAO?.tracks || [];
+        if (state.activeModuleId === 'thomas') return window.AEF_STUDENT_THOMAS?.tracks || [];
+        if (state.activeModuleId === 'andre') return window.AEF_STUDENT_ANDRE?.tracks || [];
+        if (state.activeModuleId === 'matheus') return window.AEF_STUDENT_MATHEUS?.tracks || [];
+        return window.AEF_STUDENT_ESTEVAO?.tracks || [];
+      } else if (state.courseId === 'public') {
+        return window.AEF_STUDENT_PUBLIC?.tracks || [];
+      } else if (state.courseId === 'custom') {
+        const userCustoms = JSON.parse(localStorage.getItem('aef_custom_tracks') || '[]');
+        return userCustoms;
       }
-      localStorage.setItem('aef_pinned_tracks', JSON.stringify(pinned));
-      renderSidebarTracks();
+      return [];
     }
-    window.togglePinTrack = togglePinTrack;
 
-    function renderSidebarTracks() {
-      const container = document.getElementById('sidebar-tracks-container');
+    function getCurrentActiveTrack() {
+      const tracks = getCurrentTracklist();
+      return tracks[state.activeLessonIndex] || tracks[0];
+    }
+
+    function getCurrentModuleTitle() {
+      if (state.courseId === 'ms-legacy') {
+        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+        const mod = msModules.find(m => m.id === state.activeModuleId) || msModules[0];
+        return mod?.title || 'Magic Story';
+      } else if (state.courseId === 'vip') {
+        const names = { estevao: 'Estêvão', thomas: 'Thomas', andre: 'André', matheus: 'Matheus' };
+        return `👑 Mentoria VIP • ${names[state.activeModuleId] || 'Aluno'}`;
+      } else if (state.courseId === 'public') {
+        return '💡 Novidades • Free Plan';
+      } else if (state.courseId === 'custom') {
+        return '🧪 Minhas Coisas • Laboratório';
+      }
+      return 'AgoraEuFalo';
+    }
+
+    function loadCurrentContent(lessonIdx) {
+      state.activeLessonIndex = lessonIdx;
+      const track = getCurrentActiveTrack();
+      const moduleTitle = getCurrentModuleTitle();
+
+      // 1. Atualiza Título, Subtítulo e Capa
+      const titleEl = document.getElementById('lesson-title');
+      if (titleEl) titleEl.innerText = track?.title || (track ? `Faixa ${state.activeLessonIndex + 1}` : 'Nenhum treino selecionado');
+
+      const subheadEl = document.getElementById('module-subhead');
+      if (subheadEl) subheadEl.innerText = moduleTitle;
+
+      const badgeEl = document.getElementById('track-badge-text');
+      if (badgeEl) {
+        if (state.courseId === 'ms-legacy') {
+          badgeEl.innerText = (track?.activity || `AULA ${state.activeLessonIndex + 1}`).replace('_', ' ').toUpperCase();
+        } else if (state.courseId === 'vip') {
+          badgeEl.innerText = 'PRESCRIÇÃO VIP 1 A 1';
+        } else if (state.courseId === 'public') {
+          badgeEl.innerText = 'NOVIDADES FREE';
+        } else {
+          badgeEl.innerText = 'LABORATÓRIO';
+        }
+      }
+
+      const coverImg = document.getElementById('track-cover-img');
+      if (coverImg) coverImg.src = track?.coverImage || '../assets/images/logo-fundo-escuro.png';
+
+      // 2. Configura Mídia (Áudio / Vídeo)
+      const hasVideo = Boolean(track?.videoUrl && track.videoUrl.trim().length > 0);
+      const modeBar = document.getElementById('media-mode-bar');
+      if (modeBar) {
+        modeBar.style.display = hasVideo ? 'flex' : 'none';
+      }
+
+      // Fonte efetiva de áudio (MP3 nativo OU áudio do MP4)
+      const audioSrc = track?.audioUrl || track?.videoUrl || '';
+      state.audio.src = audioSrc;
+      state.audio.load();
+
+      if (hasVideo && state.video) {
+        state.video.src = track.videoUrl;
+        state.video.load();
+      }
+
+      // Renderiza Interface de Acordo com o Modo Ativo
+      renderMediaMode();
+      renderLyrics();
+      renderPlaylistDrawer();
+      updateMediaSession();
+      lucide.createIcons();
+    }
+
+    window.setMediaMode = (mode) => {
+      state.mediaMode = mode;
+      if (mode === 'video') {
+        state.audio.pause();
+        state.isPlaying = false;
+      } else {
+        if (state.video) state.video.pause();
+      }
+      renderMediaMode();
+      updatePlayButtonUI();
+    };
+
+    function renderMediaMode() {
+      const audioCard = document.getElementById('stage-artwork-card');
+      const videoCard = document.getElementById('stage-video-card');
+      const btnAudio = document.getElementById('mode-btn-audio');
+      const btnVideo = document.getElementById('mode-btn-video');
+
+      if (state.mediaMode === 'video') {
+        if (audioCard) audioCard.classList.add('hidden');
+        if (videoCard) videoCard.classList.remove('hidden');
+        if (btnVideo) {
+          btnVideo.className = "px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-amber-500 text-slate-950 shadow-xs";
+        }
+        if (btnAudio) {
+          btnAudio.className = "px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white";
+        }
+      } else {
+        if (videoCard) videoCard.classList.add('hidden');
+        if (audioCard) audioCard.classList.remove('hidden');
+        if (btnAudio) {
+          btnAudio.className = "px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-amber-500 text-slate-950 shadow-xs";
+        }
+        if (btnVideo) {
+          btnVideo.className = "px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer text-slate-300 hover:text-white";
+        }
+      }
+    }
+
+    function renderLyrics() {
+      const container = document.getElementById('lyrics-scroll-container');
+      const track = getCurrentActiveTrack();
       if (!container) return;
 
-      let tracksList = [];
-      let playlistTitle = "Sessões Gravadas";
-
-      const isAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || localStorage.getItem('aef_user_role') === 'admin';
-
-      if (state.environment === 'public') {
-        tracksList = window.AEF_STUDENT_PUBLIC?.tracks || [];
-        playlistTitle = "Episódios Sugeridos do Leo";
-      } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
-        // Catálogo dinâmico: acervo oficial (AEF_MAGIC_STORIES) + faixas enviadas da sala de aula.
-        // Zero acoplamento a AEF_STUDENT_ANDRE.
-        tracksList = getMagicStoriesTracks();
-        playlistTitle = "Módulos Magic Stories";
-      } else if (state.environment === 'vip') {
-        tracksList = state.student?.tracks || [];
-        playlistTitle = `Prescrições • ${state.student?.name || 'Mentorado'}`;
-      } else if (state.environment === 'custom' || state.environment === 'custom_active') {
-        tracksList = getCustomTracks();
-        playlistTitle = "Meus Treinos Salvos";
-      }
-
-      let menteeSelectorHtml = '';
-      if (state.environment === 'vip') {
-        const menteesList = [
-          { id: 'estevao', name: 'Estêvão Pinheiro' },
-          { id: 'thomas', name: 'Thomas' },
-          { id: 'andre', name: 'André Birchal' },
-          { id: 'matheus', name: 'Matheus' }
-        ];
-
-        menteeSelectorHtml = `
-          <div class="p-2.5 rounded-xl bg-purple-50/70 border border-purple-200 mb-2 space-y-1">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-mono font-bold text-purple-900 uppercase">👑 SELETOR DE MENTORADO</span>
-              ${isAdmin ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-200 text-purple-950 font-mono font-black">GOD MODE</span>' : ''}
-            </div>
-            <select onchange="window.switchVIPMentee(this.value)" class="w-full bg-white border border-purple-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 font-bold focus:outline-none focus:border-purple-500 cursor-pointer">
-              ${menteesList.map(m => `
-                <option value="${m.id}" ${state.student?.id === m.id ? 'selected' : ''}>${m.name}</option>
-              `).join('')}
-            </select>
+      const sentences = track?.sentences || [];
+      if (sentences.length === 0) {
+        container.innerHTML = `
+          <div class="text-center text-slate-400 text-sm py-12">
+            <p>Nenhuma transcrição cadastrada para esta aula.</p>
           </div>
         `;
-      }
-
-      if (tracksList.length === 0 && !menteeSelectorHtml) {
-        container.innerHTML = '';
         return;
       }
 
-      // Separar e ordenar: Pinned (Fixados) no topo, seguidos pelos demais
-      const pinnedTracks = [];
-      const unpinnedTracks = [];
-      tracksList.forEach(t => {
-        if (isPinnedTrack(t.id)) pinnedTracks.push(t);
-        else unpinnedTracks.push(t);
-      });
-      const sortedTracks = [...pinnedTracks, ...unpinnedTracks];
-
-      container.innerHTML = `
-        <div class="pt-2.5 border-t border-[#EAE5DC] space-y-1.5 text-left">
-          ${menteeSelectorHtml}
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A7369]">${playlistTitle} (${sortedTracks.length}):</span>
-            ${pinnedTracks.length > 0 ? `<span class="text-[9px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.2 rounded">📌 ${pinnedTracks.length} fixado(s)</span>` : ''}
-          </div>
-          <div class="space-y-1.5 max-h-56 overflow-y-auto no-scrollbar">
-            ${sortedTracks.map((t, idx) => {
-              const isOffline = isTrackOffline(t.id);
-              const isPinned = isPinnedTrack(t.id);
-              const isSelected = REAL_TRACK.id === t.id;
-              return `
-                <div class="w-full p-1.5 rounded-xl text-xs font-bold transition flex items-center justify-between gap-1.5 ${
-                  isSelected ? 'bg-[#C68A36] text-white shadow-xs' : (isPinned ? 'bg-amber-50/90 text-[#0A192F] border-2 border-amber-300 shadow-2xs' : 'bg-stone-100 hover:bg-[#FDF8F0] text-[#0A192F] border border-stone-200')
-                }">
-                  <button onclick="window.selectTrack('${t.id}')" class="flex-1 text-left truncate flex items-center gap-1.5 cursor-pointer py-1 pl-1">
-                    ${isPinned ? '<span title="Treino fixado no topo">📌</span>' : ''}
-                    ${t.videoUrl ? '<span title="Possui Vídeo Integrado">🎬</span>' : ''}
-                    <span class="truncate">${idx + 1}. ${t.title}</span>
-                  </button>
-                  <div class="flex items-center gap-0.5 shrink-0">
-                    <span class="text-[10px] font-mono opacity-80 mr-1">${t.duration || ''}</span>
-                    <button onclick="window.togglePinTrack('${t.id}', event)" class="p-1 rounded-lg hover:bg-black/10 transition cursor-pointer text-xs ${isPinned ? 'text-amber-500' : 'opacity-40 hover:opacity-100'}" title="${isPinned ? 'Desafixar do topo' : 'Fixar no topo da semana 📌'}">
-                      <span>📌</span>
-                    </button>
-                    <button onclick="window.toggleDownloadForOffline('${t.id}', event)" class="p-1 rounded-lg hover:bg-black/10 transition cursor-pointer text-xs" title="${isOffline ? 'Salvo no Modo Avião (Clique para remover)' : 'Baixar para o Modo Avião'}">
-                      <span>${isOffline ? '✈️' : '📥'}</span>
-                    </button>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
+      container.innerHTML = sentences.map((s, idx) => `
+        <div id="lyric-line-${idx}" onclick="window.seekToSentence(${idx})" class="lyrics-line transition-all duration-300 cursor-pointer p-2 rounded-xl hover:bg-white/5 ${idx === state.currentSentenceIndex ? 'lyrics-active' : 'lyrics-inactive'}">
+          <p class="text-base sm:text-lg leading-relaxed">${s.text}</p>
+          ${state.showTranslation && s.spokenTranslation ? `
+            <p class="text-xs sm:text-sm text-amber-200/80 font-medium mt-1 font-serif-title italic">${s.spokenTranslation}</p>
+          ` : ''}
         </div>
-      `;
+      `).join('');
     }
 
-    function isTrackOffline(trackId) {
-      try {
-        const list = JSON.parse(localStorage.getItem('aef_offline_tracks') || '[]');
-        return list.some(t => t.id === trackId);
-      } catch(e) { return false; }
-    }
+    window.toggleLyrics = () => {
+      state.isLyricsOpen = !state.isLyricsOpen;
+      const sheet = document.getElementById('lyrics-sheet');
+      const topBtnText = document.getElementById('btn-lyrics-top-text');
+      const bottomBtn = document.getElementById('btn-lyrics-bottom');
 
-    async function toggleDownloadForOffline(trackId, e) {
-      if (e) e.stopPropagation();
-      const tracksList = (state.environment === 'vip' ? state.student?.tracks : (state.environment === 'public' ? window.AEF_STUDENT_PUBLIC?.tracks : getCustomTracks())) || [];
-      const track = tracksList.find(t => t.id === trackId) || REAL_TRACK;
-      if (!track) return;
-
-      let list = [];
-      try {
-        list = JSON.parse(localStorage.getItem('aef_offline_tracks') || '[]');
-      } catch(e) {}
-
-      const existingIndex = list.findIndex(t => t.id === trackId);
-
-      if (existingIndex >= 0) {
-        list.splice(existingIndex, 1);
-        localStorage.setItem('aef_offline_tracks', JSON.stringify(list));
-        if ('caches' in window) {
-          const cache = await caches.open('aef-offline-vault');
-          if (track.audioUrl) cache.delete(track.audioUrl).catch(() => {});
-          if (track.videoUrl) cache.delete(track.videoUrl).catch(() => {});
-        }
-        showToast("🗑️ Treino removido do aparelho.");
+      if (state.isLyricsOpen) {
+        sheet?.classList.remove('translate-y-full');
+        if (topBtnText) topBtnText.innerText = "Ocultar";
+        bottomBtn?.classList.add('bg-amber-500', 'text-slate-950');
+        bottomBtn?.classList.remove('bg-white/10', 'text-slate-300');
+        scrollActiveLyricIntoView();
       } else {
-        showToast("📥 Baixando mídia para o Modo Avião...");
-        try {
-          if ('caches' in window) {
-            const cache = await caches.open('aef-offline-vault');
-            if (track.audioUrl && !track.audioUrl.startsWith('blob:')) {
-              await cache.add(track.audioUrl).catch(err => console.warn("Cache audio error:", err));
-            }
-            if (track.videoUrl && !track.videoUrl.includes('youtube') && !track.videoUrl.startsWith('blob:')) {
-              await cache.add(track.videoUrl).catch(err => console.warn("Cache video error:", err));
-            }
-          }
-          list.push(track);
-          localStorage.setItem('aef_offline_tracks', JSON.stringify(list));
-          showToast("✈️ Treino salvo para o Modo Avião!");
-        } catch(dErr) {
-          list.push(track);
-          localStorage.setItem('aef_offline_tracks', JSON.stringify(list));
-          showToast("✈️ Salvo para o Modo Avião!");
-        }
+        sheet?.classList.add('translate-y-full');
+        if (topBtnText) topBtnText.innerText = "Ver Letra";
+        bottomBtn?.classList.remove('bg-amber-500', 'text-slate-950');
+        bottomBtn?.classList.add('bg-white/10', 'text-slate-300');
       }
+    };
 
-      renderSidebarTracks();
-    }
-    window.toggleDownloadForOffline = toggleDownloadForOffline;
-
-    /**
-     * Alterna entre as 6 Atividades Canônicas do Método Magic Stories.
-     *
-     * GUARD DE CATEGORIA: As atividades canônicas (vocab, listen_answer, look_retell,
-     * listen_ask, pronunciation) só são executadas quando o ambiente é 'course' ou
-     * 'ms_legacy'. Para qualquer outro ambiente, a atividade é forçada para 'listen_read'.
-     *
-     * @param {string} newAct - Identificador da atividade canônica.
-     */
-    function switchActivity(newAct) {
-      const isMagicStoriesEnv = (state.environment === 'course' || state.environment === 'ms_legacy');
-      const canonicalActivities = ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'];
-      const isCanonicalActivity = canonicalActivities.includes(newAct);
-
-      // Fora de Magic Stories, todas as atividades canônicas colapsam para listen_read.
-      if (!isMagicStoriesEnv && isCanonicalActivity && newAct !== 'listen_read') {
-        state.activity = 'listen_read';
-        console.warn(`[AEF] Atividade '${newAct}' é exclusiva de Magic Stories. Revertendo para listen_read no ambiente '${state.environment}'.`);
-        renderZenStage();
-        renderBottomDock();
-        updateIcons();
-        return;
-      }
-
-      state.activity = newAct;
-      state.loopingSentenceIndex = -1;
-      state.currentSentenceIndex = 0;
-      state.revealedAnswers = {};
-
-      // Look & Retell: pausa segura antes de limpar o palco (zero áudio nesta atividade).
-      if (newAct === 'look_retell') {
-        if (state._pendingPlayPromise !== null) {
-          state._pendingPlayPromise
-            .catch(() => {})
-            .finally(() => {
-              state._pendingPlayPromise = null;
-              state.audio.pause();
-              state.isPlaying = false;
-            });
-        } else {
-          state.audio.pause();
-          state.isPlaying = false;
-        }
-      }
-
-      renderZenStage();
-      renderBottomDock();
-      updateIcons();
-    }
-    // Expõe switchActivity para os botões onclick do HTML e para o listener 'ended'.
-    window.switchActivity = switchActivity;
-
-    window.toggleTranslationMode = () => {
+    window.toggleTranslation = () => {
       state.showTranslation = !state.showTranslation;
-      showToast(state.showTranslation ? "Tradução Falada Ativada 👁️" : "Tradução Ocultada (Foco 100% no Inglês) 🎧");
-      renderZenStage();
+      const statusText = document.getElementById('text-trans-status');
+      if (statusText) statusText.innerText = state.showTranslation ? "ON" : "OFF";
+      renderLyrics();
+      showToast(state.showTranslation ? "Tradução Ativada" : "Tradução Ocultada");
     };
 
-    window.toggleCurrentSentenceLoop = () => {
-      if (state.loopingSentenceIndex === state.currentSentenceIndex && state.loopingSentenceIndex !== -1) {
-        state.loopingSentenceIndex = -1;
-        showToast("Loop de Frase Desativado 🔄");
-      } else {
-        state.loopingSentenceIndex = state.currentSentenceIndex;
-        showToast(`Loop Ativado na Frase #${state.currentSentenceIndex + 1} 🔂`);
-      }
-      renderZenStage();
-      renderBottomDock();
-    };
+    window.seekToSentence = (idx) => {
+      const track = getCurrentActiveTrack();
+      const sentence = track?.sentences?.[idx];
+      if (!sentence) return;
 
-    window.setSpeed = (speed) => {
-      state.playbackSpeed = speed;
-      if (state.audio) {
-        state.audio.playbackRate = speed;
-      }
-      showToast(`Velocidade alterada para ${speed}x`);
-      renderZenStage();
-    };
-
-    function renderZenStage() {
-      const stage = document.getElementById('zen-main-stage-container');
-      const items = getActiveItems();
-      const currentItem = items[state.currentSentenceIndex] || items[0];
-      const isMagicStory = (state.environment === 'course' || state.environment === 'ms_legacy');
-      const hasValidCards = items && items.length > 0 && (items.length > 1 || (items[0]?.text && items[0].text.trim().length > 0 && items[0].text !== "..."));
-
-      // 1. TÍTULOS E SUBHEADS DINÂMICOS POR AMBIENTE (ADEUS AO TÍTULO FIXO DE MS EM TUDO)
-      const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
-      const dockWrapper = document.getElementById('audio-dock-container');
-
-      // 1. TÍTULO E SUBHEAD DINÂMICOS
-      let titleSubhead = "AgoraEuFalo • Spoken Reflex Studio";
-      let mainTitle = REAL_TRACK?.title || "Treino Ativo";
-
-      if (hasVideo) {
-        titleSubhead = "AgoraEuFalo • Vídeo Masterclass";
-        mainTitle = REAL_TRACK?.title || "Vídeo da Lição";
-      } else if (state.environment === 'public') {
-        titleSubhead = "💡 Sugestões do Leo • Free Plan";
-        mainTitle = REAL_TRACK?.title || "Conversational Clarity & Small Talk";
-      } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
-        titleSubhead = "🎓 Magic Stories Legacy • Módulo Oficial";
-        mainTitle = REAL_TRACK?.title || "MS003: Saturday Morning";
-      } else if (state.environment === 'vip') {
-        titleSubhead = `👑 Mentoria VIP Individual • ${state.student?.name || 'Aluno Particular'}`;
-        mainTitle = REAL_TRACK?.title || "Prescrição Individual";
-      } else if (state.environment === 'custom') {
-        titleSubhead = "🧪 Minhas Coisas • Laboratório do Aluno";
-        mainTitle = REAL_TRACK?.title || "Treinos Próprios";
-      }
-
-      const subheadEl = document.getElementById('zen-subhead-text');
-      if (subheadEl) subheadEl.innerText = titleSubhead;
-
-      const titleEl = document.getElementById('zen-activity-title');
-      if (titleEl) titleEl.innerText = mainTitle;
-
-      // Sincroniza sempre o nome da faixa e sacada de ouro no painel lateral
-      const sideName = document.getElementById('sidebar-activity-name');
-      if (sideName) sideName.innerText = REAL_TRACK?.title || "Faixa Ativa";
-
-      const tipText = document.getElementById('sidebar-grammar-tip');
-      if (tipText) tipText.innerText = `"${REAL_TRACK?.goldenTip || 'Foque na escuta ativa e na melodia da fala.'}"`;
-
-      // 2. TOGGLE VISUAL DAS 6 ABAS DE MS vs TOOLBAR MINIMALISTA ZEN vs VÍDEO
-      const msContainer = document.getElementById('ms-tabs-container');
-      const zenToolbar = document.getElementById('zen-toolbar-container');
-
-      // Referência ao botão seletor de histórias
-      const storySwitcherBtn = document.getElementById('btn-ms-story-switcher');
-
-      if (hasVideo) {
-        // Se tem vídeo: ESCONDE TUDO RELACIONADO A CARDS (Abas, Toolbar e Playbar Inferior)
-        if (msContainer) { msContainer.classList.add('hidden'); msContainer.style.setProperty('display', 'none', 'important'); }
-        if (zenToolbar) { zenToolbar.classList.remove('flex'); zenToolbar.classList.add('hidden'); zenToolbar.style.setProperty('display', 'none', 'important'); }
-        if (dockWrapper) { dockWrapper.classList.add('hidden'); dockWrapper.style.setProperty('display', 'none', 'important'); }
-        // Botão seletor de histórias: oculto quando há vídeo
-        if (storySwitcherBtn) { storySwitcherBtn.classList.add('hidden'); storySwitcherBtn.classList.remove('flex'); }
-      } else if (isMagicStory) {
-        if (dockWrapper) { dockWrapper.classList.remove('hidden'); dockWrapper.style.display = ''; }
-        if (msContainer) { msContainer.classList.remove('hidden'); msContainer.style.display = ''; }
-        if (zenToolbar) { zenToolbar.classList.remove('flex'); zenToolbar.classList.add('hidden'); zenToolbar.style.setProperty('display', 'none', 'important'); }
-        // Botão seletor de histórias: VISÍVEL e ativo em Magic Stories
-        if (storySwitcherBtn) { storySwitcherBtn.classList.remove('hidden'); storySwitcherBtn.classList.add('flex'); }
-
-        // Highlight da Aba Ativa de MS
-        document.querySelectorAll('.act-btn').forEach(btn => {
-          btn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border border-stone-200 shrink-0 transition flex items-center gap-1.5 cursor-pointer";
-        });
-        const activeBtn = document.getElementById(`act-tab-${state.activity}`);
-        if (activeBtn) {
-          activeBtn.className = "act-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-[#C68A36] text-white shadow-sm border border-[#C68A36] shrink-0 transition flex items-center gap-1.5 cursor-pointer";
-        }
-      } else {
-        if (dockWrapper) { dockWrapper.classList.remove('hidden'); dockWrapper.style.display = ''; }
-        if (msContainer) { msContainer.classList.add('hidden'); msContainer.style.setProperty('display', 'none', 'important'); }
-        if (zenToolbar) {
-          zenToolbar.classList.remove('hidden');
-          zenToolbar.classList.add('flex');
-          zenToolbar.style.display = '';
-        }
-        // Botão seletor de histórias: OCULTO em Sugestões do Leo, Mentoria VIP e Minhas Coisas
-        if (storySwitcherBtn) { storySwitcherBtn.classList.add('hidden'); storySwitcherBtn.classList.remove('flex'); }
-
-        // Estilo do Botão Toggle de Tradução
-        const transBtn = document.getElementById('btn-toggle-translation');
-        const transText = document.getElementById('btn-translation-text');
-        if (transBtn && transText) {
-          if (state.showTranslation) {
-            transBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-[#C68A36] text-white border-[#C68A36] shadow-xs";
-            transText.innerText = "Tradução ON";
-          } else {
-            transBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border-stone-200";
-            transText.innerText = "Tradução OFF";
-          }
-        }
-
-        // Estilo do Botão Toggle de Loop
-        const loopBtn = document.getElementById('btn-toggle-loop');
-        const loopText = document.getElementById('btn-loop-text');
-        if (loopBtn && loopText) {
-          if (state.loopingSentenceIndex === state.currentSentenceIndex && state.loopingSentenceIndex !== -1) {
-            loopBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-[#0D1E36] text-amber-300 border-[#0D1E36] shadow-xs";
-            loopText.innerText = `Loop #${state.currentSentenceIndex + 1}`;
-          } else {
-            loopBtn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] border-stone-200";
-            loopText.innerText = "Loop";
-          }
-        }
-
-        // Estilo dos Botões de Velocidade
-        ['08', '10', '12'].forEach(sp => {
-          const spBtn = document.getElementById(`speed-btn-${sp}`);
-          const rateVal = sp === '08' ? 0.8 : (sp === '10' ? 1.0 : 1.2);
-          if (spBtn) {
-            if (state.playbackSpeed === rateVal) {
-              spBtn.className = "speed-btn px-2 py-1 rounded-lg bg-[#C68A36] text-white shadow-2xs transition cursor-pointer";
-            } else {
-              spBtn.className = "speed-btn px-2 py-1 rounded-lg text-stone-600 hover:bg-white transition cursor-pointer";
-            }
-          }
-        });
-      }
-
-      if (state.environment === 'ms_legacy') {
-        stage.innerHTML = window.AEFPlayerZenTemplate.renderContinuousStoryView(REAL_TRACK, state.currentSentenceIndex);
-        renderBottomDock();
-        updateIcons();
-        return;
-      }
-
-      if (state.environment === 'custom') {
-        stage.innerHTML = window.AEFPlayerZenTemplate.renderCustomTracksHub(getCustomTracks(), REAL_TRACK.id);
-        renderBottomDock();
-        updateIcons();
-        return;
-      }
-
-      // REGRA OFICIAL DO PROFESSOR LEO: SE TEM VÍDEO ➔ NO CARDS & NO PLAYBAR (Modo Vídeo Cinema Puro)
-      if (hasVideo) {
-        const isYT = (REAL_TRACK.videoUrl.includes('youtube.com') || REAL_TRACK.videoUrl.includes('youtu.be'));
-        const currentStageMedia = stage.querySelector('#zen-stage-video, #zen-stage-iframe');
-        const currentSrc = currentStageMedia ? (currentStageMedia.getAttribute('src') || currentStageMedia.getAttribute('data-track-url')) : null;
-
-        if (!currentStageMedia || currentSrc !== REAL_TRACK.videoUrl) {
-          const ytEmbedUrl = isYT ? REAL_TRACK.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/') : '';
-          stage.innerHTML = `
-            <div class="space-y-4 max-w-2xl mx-auto">
-              <div class="w-full rounded-3xl overflow-hidden bg-black border border-stone-200 shadow-xl aspect-video relative group">
-                ${isYT ? `
-                  <iframe id="zen-stage-iframe" data-track-url="${REAL_TRACK.videoUrl}" src="${ytEmbedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                ` : `
-                  <video id="zen-stage-video" data-track-url="${REAL_TRACK.videoUrl}" src="${REAL_TRACK.videoUrl}" controls playsinline preload="auto" class="w-full h-full object-contain bg-black"></video>
-                `}
-              </div>
-              <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-center text-xs text-amber-950 flex items-center justify-center gap-2 font-medium">
-                <span>🎬</span>
-                <span><strong>Modo Vídeo Cinema:</strong> Assista à gravação com foco total na apresentação.</span>
-              </div>
-            </div>
-          `;
-          if (!isYT) {
-            initVideoEvents(document.getElementById('zen-stage-video'));
-          }
-          updateIcons();
-        }
-        renderBottomDock();
-        return;
-      }
-
-      // SE NÃO TEM VÍDEO ➔ YES CARDS (Modo Treino Interativo com Cards)
-      stage.innerHTML = `
-        <div class="space-y-4 max-w-xl mx-auto">
-
-          <!-- No Desktop: Hero Box com Microfone Radiante e Medidor Circular (Apenas Magic Stories Look & Retell) -->
-          ${isMagicStory && state.activity === 'look_retell' && !state.evaluation ? `
-            <div class="hidden lg:flex p-6 rounded-3xl bg-white border border-[#EAE5DC] items-center justify-between gap-6 shadow-sm">
-              <div class="flex items-center gap-4">
-                <button onclick="window.toggleRetellRecording()" class="aef-mic-radiant active:scale-95 cursor-pointer ${state.isRecording ? 'animate-pulse ring-4 ring-rose-500/50' : ''}">
-                  <i data-lucide="${state.isRecording ? 'square' : 'mic'}" class="w-8 h-8 ${state.isRecording ? 'text-rose-600' : ''}"></i>
-                  <span class="text-[8px] font-black uppercase tracking-wider mt-0.5">
-                    ${state.isRecording ? `PARAR (${formatSec(state.recordingSeconds)})` : 'REC SPEAKING'}
-                  </span>
-                </button>
-                <div class="text-left">
-                  <h4 class="font-black text-sm text-[#0A192F]">${state.isRecording ? 'Gravando continuamente...' : 'Grave seu reconto em voz alta'}</h4>
-                  <p class="text-xs text-[#7A7369]">Pressione Espaço no teclado ou clique no botão</p>
-                </div>
-              </div>
-
-              <div>
-                ${window.AEFPlayerZenTemplate.renderCircularGauge(8.8, 10, "Score AI Coach", "EXCELENTE")}
-              </div>
-            </div>
-          ` : ''}
-
-          <!-- Relatório de Diagnóstico do AI Coach (Exibido quando finalizado) -->
-          ${isMagicStory && state.activity === 'look_retell' && state.evaluation ? window.AEFPlayerZenTemplate.renderEvaluationReport(state.evaluation) : ''}
-
-          <!-- 1. O CARTÃO ÚNICO ATIVO -->
-          <div id="card-stage-slot" class="w-full">
-            ${window.AEFPlayerZenTemplate.renderSingleZenCard(
-              currentItem, 
-              state.currentSentenceIndex, 
-              items.length, 
-              isMagicStory ? state.activity : 'listen_read', 
-              state.isPlaying, 
-              state.loopingSentenceIndex === state.currentSentenceIndex,
-              Boolean(state.revealedAnswers[state.currentSentenceIndex]),
-              Boolean(state.showTranslation)
-            )}
-          </div>
-
-          <!-- 2. CONTROLES DE NAVEGAÇÃO ENTRE PROMPTS/FRASES (Setas + Bolinhas) -->
-          <div class="p-3 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex items-center justify-between gap-3">
-            
-            <button onclick="window.navSentence(-1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Anterior">
-              <i data-lucide="chevron-left" class="w-4 h-4"></i>
-              <span class="hidden sm:inline">Anterior</span>
-            </button>
-
-            <!-- Bolinhas Interativas (1 toque pula direto para o prompt) -->
-            <div class="flex items-center justify-center gap-1.5 flex-1 overflow-x-auto no-scrollbar py-1">
-              ${items.map((_, idx) => `
-                <button onclick="window.jumpToSentence(${idx})" class="h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  state.currentSentenceIndex === idx ? 'w-6 bg-[#C68A36]' : 'w-2 bg-[#D1C7B7] hover:bg-[#C68A36]/60'
-                }" title="Ir para prompt ${idx+1}"></button>
-              `).join('')}
-            </div>
-
-            <button onclick="window.navSentence(1)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-[#C68A36] hover:text-white text-[#0A192F] font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Próximo">
-              <span class="hidden sm:inline">Próximo</span>
-              <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </button>
-
-          </div>
-
-          ${isMagicStory && state.activity === 'vocab' ? `
-            <!-- Matriz de Chunks Isolados na aba Vocabulary -->
-            <div class="pt-3 border-t border-[#F0EBE1] space-y-2.5">
-              <span class="text-xs font-black uppercase tracking-wider text-[#0A192F] flex items-center gap-1.5">
-                <i data-lucide="layers" class="w-4 h-4 text-[#C68A36]"></i> Sound Chunks Isolados da Lição:
-              </span>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                ${getActiveChunks().map((chunk, cIdx) => 
-                  window.AEFPlayerZenTemplate.renderSoundChunkCard(chunk, cIdx)
-                ).join('')}
-              </div>
-            </div>
-          ` : ''}
-
-        </div>
-      `;
-
-      updateIcons();
-    }
-
-    function initVideoEvents(vid) {
-      if (!vid || vid.dataset.eventsAttached) return;
-      vid.dataset.eventsAttached = "true";
-
-      vid.addEventListener('play', () => {
-        state.audio.pause();
-        state.audio.removeAttribute('src');
-        state.isPlaying = true;
-        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
-      });
-
-      vid.addEventListener('pause', () => {
-        state.isPlaying = false;
-        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
-      });
-
-      vid.addEventListener('ended', () => {
-        state.isPlaying = false;
-        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
-      });
-    }
-
-    /**
-     * Renderizador do Dock Inferior Ergonômico (Player de Áudio OU Estúdio de Microfone Look & Retell)
-     */
-    function renderBottomDock() {
-      const dockWrapper = document.getElementById('audio-dock-container');
-      const container = document.getElementById('dock-inner-content');
-      if (!dockWrapper || !container) return;
-
-      const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
-      if (hasVideo) {
-        dockWrapper.classList.add('hidden');
-        dockWrapper.style.display = 'none';
-        return;
-      }
-      dockWrapper.classList.remove('hidden');
-      dockWrapper.style.display = '';
-
-      if (state.activity === 'look_retell') {
-        // DOCK ERGONÔMICO DO LOOK & RETELL: Botão Circular de Microfone + Espaço Amplo para Texto
-        const items = getActiveItems();
-        container.innerHTML = `
-          <div class="w-full flex items-center justify-between gap-4">
-            
-            <!-- Left & Center: Informações Espaçosas -->
-            <div class="flex items-center gap-3 min-w-0 flex-1">
-              <div class="w-10 h-10 rounded-2xl ${state.isRecording ? 'bg-rose-500 animate-pulse ring-4 ring-rose-400/30' : 'bg-[#C68A36]'} text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md transition-all">
-                <i data-lucide="${state.isRecording ? 'radio' : 'sparkles'}" class="w-5 h-5"></i>
-              </div>
-              <div class="min-w-0 flex-1">
-                <p class="font-black text-xs sm:text-sm text-white truncate">
-                  ${state.isRecording ? `Gravando Reconto • Prompt ${state.currentSentenceIndex + 1}/${items.length}` : `Look & Retell • Speaking Autônomo`}
-                </p>
-                <p class="text-[11px] ${state.isRecording ? 'text-rose-300 font-mono font-black animate-pulse' : 'text-[#C68A36] font-medium'} truncate">
-                  ${state.isRecording ? `TEMPO DE FALA: ${formatSec(state.recordingSeconds)} (Toque no botão para finalizar)` : 'Toque no botão ao lado para começar'}
-                </p>
-              </div>
-            </div>
-
-            <!-- Right: Botão Circular Cirúrgico de Microfone (Sem espremer o texto) -->
-            <div class="shrink-0">
-              <button onclick="window.toggleRetellRecording()" class="w-12 h-12 rounded-full flex items-center justify-center shadow-xl transition-all active:scale-90 cursor-pointer ${
-                state.isRecording 
-                  ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse ring-4 ring-rose-500/40' 
-                  : 'bg-[#C68A36] hover:bg-[#B3792A] text-white ring-2 ring-[#C68A36]/60 shadow-amber-500/20'
-              }" title="${state.isRecording ? 'Finalizar Gravação' : 'Iniciar Gravação'}">
-                <i data-lucide="${state.isRecording ? 'square' : 'mic'}" class="w-5 h-5 fill-current"></i>
-              </button>
-            </div>
-
-          </div>
-        `;
-      } else {
-        // DOCK DO PLAYER DE ÁUDIO TRADICIONAL (Ilha Flutuante Compacta & Ergonômica)
-        const trackTitle = REAL_TRACK?.title || 'Faixa Ativa • AgoraEuFalo';
-        const trackDur = REAL_TRACK?.duration || '00:36';
-
-        container.innerHTML = `
-          <!-- Track Title & Progress Info -->
-          <div class="flex items-center gap-3 min-w-0 flex-1 sm:max-w-xs">
-            <div class="w-9 h-9 rounded-xl bg-[#C68A36] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-md">
-              <i data-lucide="volume-2" class="w-4 h-4"></i>
-            </div>
-            <div class="min-w-0 flex-1">
-              <p class="font-black text-xs text-white truncate" id="dock-title-text">${trackTitle}</p>
-              <div class="flex items-center gap-2 text-[10px] text-slate-300 font-mono">
-                <span id="dock-current-time">00:00</span>
-                <span>/</span>
-                <span id="dock-total-time">${trackDur}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Center Audio Timeline & Controls -->
-          <div class="flex items-center justify-end sm:justify-center gap-3 w-auto shrink-0">
-            
-            <div class="hidden sm:flex items-center gap-2 w-44 md:w-60 lg:w-80">
-              <input type="range" id="dock-seek-bar" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 cursor-pointer">
-            </div>
-
-            <div class="flex items-center gap-1.5 shrink-0">
-              <button onclick="window.seekOffset(-5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer active:scale-95" title="Voltar 5s">
-                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-              </button>
-              
-              <button id="dock-btn-play" onclick="window.togglePlayPause()" class="w-10 h-10 rounded-full bg-[#C68A36] hover:bg-[#B3792A] active:scale-90 text-white flex items-center justify-center font-black shadow-lg shadow-amber-500/20 transition cursor-pointer">
-                <i data-lucide="${state.isPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-current"></i>
-              </button>
-              
-              <button onclick="window.seekOffset(5)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer active:scale-95" title="Avançar 5s">
-                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-
-          </div>
-        `;
-
-        const seek = document.getElementById('dock-seek-bar');
-        if (seek) {
-          seek.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
-            const media = getActiveMedia();
-            const dur = media.duration || 35.8;
-            media.currentTime = (val / 100) * dur;
-          });
-        }
-      }
-
-      updateIcons();
-    }
-
-    function getActiveMedia() {
-      const vid = document.getElementById('zen-stage-video');
-      if (REAL_TRACK?.videoUrl && vid && !REAL_TRACK.videoUrl.includes('youtube')) {
-        return vid;
-      }
-      return state.audio;
-    }
-
-    /**
-     * Play / Pause ao tocar no Cartão Único
-     */
-    /**
-     * Acionado pelo toque/clique em um card de frase no Palco Zen.
-     *
-     * BLINDAGEM PROMISE (Safari iOS / Chrome Mobile):
-     * - 1º toque: move currentTime para sentence.start e dispara play(). A Promise
-     *   é armazenada em state._pendingPlayPromise.
-     * - 2º toque no mesmo card ENQUANTO tocando: aguarda a Promise antes de pausar,
-     *   eliminando o AbortError que ocorre ao chamar .pause() sobre uma Promise pendente.
-     * - Toque em card diferente: aguarda a Promise do play anterior antes de reposicionar
-     *   e disparar o novo play.
-     *
-     * @param {number} index - Índice do card/sentence clicado.
-     */
-    window.handleCardTouch = async (index) => {
-      if (state.activity === 'look_retell') return; // Zero áudio no Look & Retell
-
-      const items = getActiveItems();
-      const sentence = items[index] || items[0];
-      const media = getActiveMedia();
-
-      // Aguarda promise de play anterior antes de qualquer operação de controle.
-      if (state._pendingPlayPromise !== null) {
-        try {
-          await state._pendingPlayPromise;
-        } catch (_abortErr) {}
-        state._pendingPlayPromise = null;
-      }
-
-      // Card atualmente tocando: PAUSA NO MILISSEGUNDO EXATO.
-      if (state.isPlaying && state.currentSentenceIndex === index) {
-        media.pause();
-        state.isPlaying = false;
-        renderZenStage();
-        renderBottomDock();
-        return;
-      }
-
-      // Se o media ativo for vídeo, garante que o áudio MP3 paralelo esteja limpo.
-      if (media !== state.audio) {
-        if (state._pendingPlayPromise !== null) {
-          try { await state._pendingPlayPromise; } catch (_e) {}
-          state._pendingPlayPromise = null;
-        }
-        state.audio.pause();
-      }
-
-      state.currentSentenceIndex = index;
-
-      if (sentence && sentence.start !== undefined) {
+      const media = state.mediaMode === 'video' ? state.video : state.audio;
+      if (sentence.start !== undefined) {
         media.currentTime = sentence.start;
       }
-
-      state._pendingPlayPromise = media.play();
-      state._pendingPlayPromise
-        .then(() => {
-          state.isPlaying = true;
-          state._pendingPlayPromise = null;
-          renderZenStage();
-          renderBottomDock();
-        })
-        .catch(err => {
-          // AbortError é esperado quando o usuário troca de faixa/categoria rapidamente.
-          if (err.name !== 'AbortError') {
-            console.warn('[AEF] handleCardTouch play error:', err);
-          }
-          state.isPlaying = false;
-          state._pendingPlayPromise = null;
-          renderZenStage();
-          renderBottomDock();
-        });
-    };
-
-
-    window.toggleBlur = (index) => {
-      state.revealedAnswers[index] = !state.revealedAnswers[index];
-      renderZenStage();
-    };
-
-    /**
-     * Navega para a frase anterior (-1) ou seguinte (+1) no Palco Zen.
-     *
-     * BLINDAGEM PROMISE: Ao navegar rapidamente (swipe, botões, teclado), pode haver
-     * uma Promise de play() ainda pendente. Encadeamos o novo play() sobre a Promise
-     * anterior para garantir que o browser não receba .play() em sobreposição, o que
-     * causaria AbortError no Safari iOS.
-     *
-     * @param {number} dir - Direção: -1 (anterior) ou +1 (próxima).
-     */
-    window.navSentence = (dir) => {
-      state.revealedAnswers = {};
-      const items = getActiveItems();
-      const newIdx = Math.max(0, Math.min(items.length - 1, state.currentSentenceIndex + dir));
-      state.currentSentenceIndex = newIdx;
-      const media = getActiveMedia();
-
-      if (state.activity !== 'look_retell') {
-        const sentence = items[newIdx];
-        if (sentence && sentence.start !== undefined) {
-          media.currentTime = sentence.start;
-        }
-        if (state.isPlaying) {
-          // Encadeia o novo play APÓS a resolução da Promise anterior.
-          const safePlay = state._pendingPlayPromise
-            ? state._pendingPlayPromise.catch(() => {}).then(() => media.play())
-            : media.play();
-
-          state._pendingPlayPromise = safePlay;
-          safePlay
-            .then(() => { state._pendingPlayPromise = null; })
-            .catch(err => {
-              if (err.name !== 'AbortError') console.warn('[AEF] navSentence play error:', err);
-              state._pendingPlayPromise = null;
-            });
-        }
+      if (!state.isPlaying) {
+        window.togglePlayPause();
       }
-      renderZenStage();
-    };
-
-    /**
-     * Pula diretamente para uma frase pelo índice (paginação por pontos no Palco Zen).
-     *
-     * BLINDAGEM PROMISE: Mesmo comportamento de navSentence — encadeia sobre Promise
-     * pendente antes de disparar o novo play().
-     *
-     * @param {number} idx - Índice absoluto da frase no array de items ativos.
-     */
-    window.jumpToSentence = (idx) => {
-      state.revealedAnswers = {};
       state.currentSentenceIndex = idx;
-      const media = getActiveMedia();
-
-      if (state.activity !== 'look_retell') {
-        const items = getActiveItems();
-        const sentence = items[idx];
-        if (sentence && sentence.start !== undefined) {
-          media.currentTime = sentence.start;
-        }
-        if (state.isPlaying) {
-          const safePlay = state._pendingPlayPromise
-            ? state._pendingPlayPromise.catch(() => {}).then(() => media.play())
-            : media.play();
-
-          state._pendingPlayPromise = safePlay;
-          safePlay
-            .then(() => { state._pendingPlayPromise = null; })
-            .catch(err => {
-              if (err.name !== 'AbortError') console.warn('[AEF] jumpToSentence play error:', err);
-              state._pendingPlayPromise = null;
-            });
-        }
-      }
-      renderZenStage();
+      updateLyricsHighlight();
     };
 
-
-    window.toggleLoopSentence = (index) => {
-      if (state.loopingSentenceIndex === index) {
-        state.loopingSentenceIndex = -1;
-        showToast('Repetição em loop desativada');
-      } else {
-        state.loopingSentenceIndex = index;
-        showToast(`Loop ativado na frase #${index+1}`);
-      }
-      renderZenStage();
-    };
-
-    /**
-     * Alterna o ambiente/categoria do Training Player.
-     *
-     * ARQUITETURA DE NÃO-BLOQUEIO DA UI THREAD:
-     * Esta função é a principal responsável pelo congelamento ao trocar de categoria
-     * porque encadeava 4 renders pesados + createIcons() de forma síncrona na main thread.
-     *
-     * SOLUÇÃO APLICADA:
-     * 1. Aguarda e resolve a Promise de play() pendente ANTES de qualquer operação.
-     * 2. Força a atividade para 'listen_read' imediatamente ao sair de Magic Stories
-     *    (evita renderizar abas canônicas em ambiente não suportado).
-     * 3. Faz o feedback visual imediato (pílulas, subhead, sidebar) no frame atual.
-     * 4. Isola os renders pesados (renderSidebarTracks, renderZenStage, renderBottomDock)
-     *    em requestAnimationFrame separados, liberando a main thread entre cada frame.
-     * 5. Adia createIcons() para o último frame, impedindo re-layout prematuro.
-     * 6. checkFlightModeStatus() é disparado após o último rAF, pois é assíncrono.
-     *
-     * @param {string} env - Identificador do ambiente: 'public' | 'course' | 'ms_legacy' | 'vip' | 'custom'.
-     */
-    window.setEnvironment = async (env) => {
-      // 1. ABORTA QUALQUER PLAY PENDENTE antes de tocar no src ou no estado.
-      if (state._pendingPlayPromise !== null) {
-        try {
-          await state._pendingPlayPromise;
-        } catch (_abortErr) {}
-        state._pendingPlayPromise = null;
-      }
-
-      // 2. Reseta estado de posição e respostas.
-      state.environment = env;
-      state.currentSentenceIndex = 0;
-      state.revealedAnswers = {};
-      state.loopingSentenceIndex = -1;
-
-      // 3. GUARD DE ATIVIDADE: Fora de Magic Stories, colapsa para listen_read.
-      //    Impede que abas canônicas (vocab, listen_answer, look_retell, etc.) sejam
-      //    renderizadas em ambientes que não possuem os dados pedagógicos completos.
-      const isMagicStoriesEnv = (env === 'course' || env === 'ms_legacy');
-      if (!isMagicStoriesEnv) {
-        state.activity = 'listen_read';
-      }
-
-      // 4. Seleção de faixa e carga de mídia por ambiente.
-      let label = 'Magic Stories';
-
-      if (env === 'public') {
-        label = 'Sugestões do Leo (Free Plan)';
-        if (window.AEF_STUDENT_PUBLIC?.tracks?.length > 0) {
-          REAL_TRACK = window.AEF_STUDENT_PUBLIC.tracks[0];
-          await loadTrackAudio(REAL_TRACK);
-        }
-      } else if (isMagicStoriesEnv) {
-        label = 'Magic Stories (Cursos)';
-        // Consome o catálogo dinâmico: acervo oficial + faixas enviadas da sala de aula.
-        // Zero acoplamento a AEF_STUDENT_ANDRE.
-        const msTracks = getMagicStoriesTracks();
-        if (msTracks.length > 0) {
-          // Tenta preservar o módulo ativo; caso contrário carrega o primeiro do catálogo.
-          const preferred = state.activeMSModuleId
-            ? msTracks.find(t => t._moduleId === state.activeMSModuleId) || msTracks[0]
-            : msTracks[0];
-          REAL_TRACK = preferred;
-          await loadTrackAudio(REAL_TRACK);
-        }
-      } else if (env === 'vip') {
-        label = 'Mentoria VIP Individual';
-        const currentMentee = (state.student && state.student.id) || 'estevao';
-        if (currentMentee === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
-          state.student = window.AEF_STUDENT_ESTEVAO;
-        } else if (currentMentee === 'thomas' && window.AEF_STUDENT_THOMAS) {
-          state.student = window.AEF_STUDENT_THOMAS;
-        } else if (currentMentee === 'andre' && window.AEF_STUDENT_ANDRE) {
-          state.student = window.AEF_STUDENT_ANDRE;
-        } else if (currentMentee === 'matheus' && window.AEF_STUDENT_MATHEUS) {
-          state.student = window.AEF_STUDENT_MATHEUS;
-        }
-        if (state.student?.tracks?.length > 0) {
-          REAL_TRACK = state.student.tracks[0];
-          await loadTrackAudio(REAL_TRACK);
-        }
-        window.switchVIPMentee(currentMentee);
-      } else if (env === 'custom') {
-        label = 'Minhas Coisas (Laboratório)';
-        // loadTrackAudio já pausa e reseta o áudio internamente.
-        const customTracks = getCustomTracks();
-        if (customTracks.length > 0) {
-          REAL_TRACK = customTracks[0];
-          await loadTrackAudio(REAL_TRACK);
+    function updateLyricsHighlight() {
+      const track = getCurrentActiveTrack();
+      const sentences = track?.sentences || [];
+      sentences.forEach((_, idx) => {
+        const line = document.getElementById(`lyric-line-${idx}`);
+        if (!line) return;
+        if (idx === state.currentSentenceIndex) {
+          line.className = "lyrics-line transition-all duration-300 cursor-pointer p-2 rounded-xl hover:bg-white/5 lyrics-active";
         } else {
-          // Sem faixas customizadas: garante estado limpo sem lançar AbortError.
-          state.audio.pause();
-          state.isPlaying = false;
-        }
-      }
-
-      // 5. FEEDBACK VISUAL IMEDIATO (leve, no frame atual):
-      //    Atualiza pílulas de ambiente, subhead e sidebar sem renderizar os cards.
-      ['public', 'course', 'vip', 'custom'].forEach(e => {
-        const btn = document.getElementById(`env-btn-${e}`);
-        if (btn) {
-          const badge = btn.querySelector('.env-badge');
-          if (e === env || (e === 'course' && env === 'ms_legacy')) {
-            btn.className = 'env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0D1E36] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer shrink-0';
-            if (badge) badge.className = 'env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-mono font-black';
-          } else {
-            btn.className = 'env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0';
-            if (badge) {
-              const bgClass = e === 'public' ? 'bg-amber-100 text-amber-900'
-                : e === 'course' ? 'bg-blue-100 text-blue-900'
-                : e === 'vip' ? 'bg-purple-100 text-purple-900'
-                : 'bg-emerald-100 text-emerald-900';
-              badge.className = `env-badge text-[9px] px-1.5 py-0.2 rounded font-mono font-black ${bgClass}`;
-            }
-          }
+          line.className = "lyrics-line transition-all duration-300 cursor-pointer p-2 rounded-xl hover:bg-white/5 lyrics-inactive";
         }
       });
-
-      const subhead = document.getElementById('zen-subhead-text');
-      if (subhead) subhead.innerText = `AgoraEuFalo • ${label}`;
-
-      const sideName = document.getElementById('sidebar-activity-name');
-      if (sideName && REAL_TRACK.title) sideName.innerText = REAL_TRACK.title;
-
-      const tipText = document.getElementById('sidebar-grammar-tip');
-      if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
-
-      showToast(`Ambiente alterado para: ${label}`);
-
-      // Fecha o drawer lateral se estiver aberto.
-      const drawer = document.getElementById('playerDrawerMenu');
-      if (drawer && !drawer.classList.contains('-translate-x-full')) {
-        window.togglePlayerDrawer();
-      }
-
-      // 6. RENDERS PESADOS EM requestAnimationFrame SEQUENCIAIS:
-      //    Cada render em um frame separado → browser respira entre eles,
-      //    eliminando o congelamento de UI no mobile ao trocar de categoria.
-      requestAnimationFrame(() => {
-        renderSidebarTracks();
-
-        requestAnimationFrame(() => {
-          renderZenStage();
-
-          requestAnimationFrame(() => {
-            renderBottomDock();
-
-            // createIcons() recalcula todos os SVG Lucide injetados via innerHTML.
-            // Adiado para o último frame para não bloquear o layout dos cards.
-            if (window.lucide) window.lucide.createIcons();
-
-            // checkFlightModeStatus é assíncrono (CacheStorage) — dispara após os renders.
-            window.checkFlightModeStatus();
-          });
-        });
-      });
-    };
-
-
-    window.playChunkAudio = (url, index) => {
-      showToast(`Tocando áudio do Chunk #${index+1}`);
-    };
-
-    // =========================================================================
-    // LABORATÓRIO "MINHAS COISAS" (UPLOAD MP3 / YOUTUBE / TEXTO)
-    // =========================================================================
-    function generateSmartTitle(text) {
-      if (!text || !text.trim()) return "Meu Treino Personalizado";
-      const clean = text.replace(/[\r\n]+/g, ' ').trim();
-      const words = clean.split(/\s+/).slice(0, 5).join(' ');
-      return `Prática: ${words}...`;
+      scrollActiveLyricIntoView();
     }
 
-    function getCustomTracks() {
-      try {
-        return JSON.parse(localStorage.getItem('aef_custom_tracks') || '[]');
-      } catch(e) {
-        return [];
+    function scrollActiveLyricIntoView() {
+      if (!state.isLyricsOpen) return;
+      const activeLine = document.getElementById(`lyric-line-${state.currentSentenceIndex}`);
+      const container = document.getElementById('lyrics-scroll-container');
+      if (activeLine && container) {
+        const offset = activeLine.offsetTop - container.offsetTop - (container.clientHeight / 2) + 40;
+        container.scrollTo({ top: offset, behavior: 'smooth' });
       }
     }
 
-    function saveCustomTracksList(list) {
-      localStorage.setItem('aef_custom_tracks', JSON.stringify(list));
-    }
-
-    // =========================================================================
-    // CATÁLOGO DINÂMICO DE MAGIC STORIES
-    // Sem acoplamento a AEF_STUDENT_ANDRE. Consome:
-    //   1. window.AEF_MAGIC_STORIES.modules → acervo canônico oficial
-    //   2. localStorage('aef_ms_sent_tracks') → faixas enviadas pela sala de aula
-    // Retorna array plano de tracks, uma por módulo, garantindo unicidade por ID.
-    // =========================================================================
-    function getMagicStoriesTracks() {
-      const seen = new Set();
-      const result = [];
-
-      // 1. Acervo canônico: um track por módulo (o primeiro de cada módulo)
-      const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-      for (const mod of msModules) {
-        if (mod.tracks && mod.tracks.length > 0) {
-          const t = mod.tracks[0];
-          if (!seen.has(t.id)) {
-            seen.add(t.id);
-            result.push({ ...t, _moduleId: mod.id, _moduleNumber: mod.number, _moduleTitle: mod.title, _moduleSummary: mod.summary });
-          }
-        }
-      }
-
-      // 2. Faixas enviadas da sala de aula (localStorage 'aef_ms_sent_tracks')
-      let sentTracks = [];
-      try {
-        sentTracks = JSON.parse(localStorage.getItem('aef_ms_sent_tracks') || '[]');
-      } catch(e) { sentTracks = []; }
-
-      for (const t of sentTracks) {
-        if (t && t.id && !seen.has(t.id)) {
-          seen.add(t.id);
-          result.push(t);
-        }
-      }
-
-      return result;
-    }
-
-    // =========================================================================
-    // BOTTOM SHEET: MAGIC STORIES STORY SWITCHER
-    // =========================================================================
-
-    /**
-     * Abre o Bottom Sheet de seleção de histórias.
-     * Popula a lista dinamicamente via renderMSStorySheet().
-     */
-    window.openMSStorySheet = () => {
-      const isMagicEnv = (state.environment === 'course' || state.environment === 'ms_legacy');
-      if (!isMagicEnv) return; // Guarda: só abre em Magic Stories
-
-      const overlay = document.getElementById('ms-story-sheet-overlay');
-      const sheet   = document.getElementById('ms-story-sheet');
-      if (!overlay || !sheet) return;
-
-      renderMSStorySheet();
-
-      overlay.classList.remove('hidden');
-      // Força reflow para a transição CSS disparar a partir do estado inicial
-      overlay.getBoundingClientRect();
-      sheet.classList.remove('translate-y-full');
-      sheet.classList.add('translate-y-0');
-
-      updateIcons();
-    };
-
-    /**
-     * Fecha o Bottom Sheet com animação de saída suave.
-     */
-    window.closeMSStorySheet = () => {
-      const overlay = document.getElementById('ms-story-sheet-overlay');
-      const sheet   = document.getElementById('ms-story-sheet');
-      if (!overlay || !sheet) return;
-
-      sheet.classList.remove('translate-y-0');
-      sheet.classList.add('translate-y-full');
-
-      // Aguarda a transição CSS (300ms) antes de esconder o overlay
-      setTimeout(() => {
-        overlay.classList.add('hidden');
-      }, 320);
-    };
-
-    /**
-     * Popula a lista do Bottom Sheet com cards de cada módulo / track de Magic Stories.
-     * Marca o módulo ativo com destaque âmbar.
-     */
-    function renderMSStorySheet() {
-      const list = document.getElementById('ms-story-sheet-list');
-      if (!list) return;
-
-      const tracks = getMagicStoriesTracks();
-
-      if (tracks.length === 0) {
-        list.innerHTML = `
-          <div class="flex flex-col items-center justify-center py-10 text-center space-y-2">
-            <i data-lucide="book-open" class="w-8 h-8 text-stone-300"></i>
-            <p class="text-xs text-[#7A7369] font-medium">Nenhuma Magic Story disponível.<br>Acesse a Sala de Aula e envie uma história para o Player.</p>
-          </div>
-        `;
-        return;
-      }
-
-      list.innerHTML = tracks.map((track, idx) => {
-        const isActive = (REAL_TRACK.id === track.id) || (state.activeMSModuleId && state.activeMSModuleId === track._moduleId);
-        const modNum   = track._moduleNumber || String(idx + 1).padStart(2, '0');
-        const modTitle = track._moduleTitle || track.title;
-        const modSummary = track._moduleSummary || '';
-        const dur      = track.duration || '';
-
-        return `
-          <button
-            onclick="window.selectMSModule('${track._moduleId || track.id}', '${track.id}')"
-            class="w-full text-left flex items-center gap-3 p-3 rounded-2xl border transition active:scale-[0.98] cursor-pointer ${
-              isActive
-                ? 'bg-amber-50 border-amber-300 shadow-xs'
-                : 'bg-white border-[#EAE5DC] hover:border-[#C68A36]/50 hover:bg-[#FDF8F0]'
-            }"
-          >
-            <!-- Número do Módulo -->
-            <div class="w-10 h-10 rounded-xl ${isActive ? 'bg-[#C68A36]' : 'bg-[#0D1E36]'} text-white flex flex-col items-center justify-center shrink-0 shadow-sm">
-              <span class="text-[8px] font-mono font-bold opacity-70">MS</span>
-              <span class="text-xs font-black leading-none">${modNum}</span>
-            </div>
-
-            <!-- Título + Resumo -->
-            <div class="min-w-0 flex-1">
-              <p class="font-black text-xs text-[#0A192F] truncate">${modTitle}</p>
-              ${modSummary ? `<p class="text-[10px] text-[#7A7369] font-medium line-clamp-1 mt-0.5">${modSummary}</p>` : ''}
-              <div class="flex items-center gap-2 mt-1">
-                ${dur ? `<span class="text-[10px] font-mono text-[#C68A36]">${dur}</span>` : ''}
-                ${isActive ? `<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-900 font-mono font-black">▶ ATIVA</span>` : ''}
-              </div>
-            </div>
-
-            <!-- Seta / Check -->
-            <div class="shrink-0 text-[#C68A36]">
-              <i data-lucide="${isActive ? 'check-circle' : 'chevron-right'}" class="w-4 h-4"></i>
-            </div>
-          </button>
-        `;
-      }).join('');
-    }
-
-    /**
-     * Seleciona um módulo de Magic Story a partir do Bottom Sheet.
-     * Promise-safe: aguarda qualquer play pendente antes de trocar a faixa.
-     *
-     * @param {string} moduleId - ID do módulo AEF_MAGIC_STORIES (ex: 'ms001-grazi')
-     *                            ou o próprio trackId se não houver moduleId.
-     * @param {string} trackId  - ID do track específico a carregar.
-     */
-    window.selectMSModule = async (moduleId, trackId) => {
-      window.closeMSStorySheet();
-
-      // Aguarda a animação de fechamento do sheet antes de trocar a faixa
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Tenta trocar via switchMagicStoriesModule (busca no catálogo oficial)
-      const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-      const foundMod = msModules.find(m => m.id === moduleId);
-
-      if (foundMod) {
-        await window.switchMagicStoriesModule(moduleId);
-        return;
-      }
-
-      // Fallback: track enviado pela sala de aula (não está em AEF_MAGIC_STORIES)
-      const sentTracks = getMagicStoriesTracks();
-      const fallbackTrack = sentTracks.find(t => t.id === trackId || t.id === moduleId);
-      if (fallbackTrack) {
-        // Blindagem de AbortError antes de trocar o src
-        if (state._pendingPlayPromise !== null) {
-          try { await state._pendingPlayPromise; } catch (_) {}
-          state._pendingPlayPromise = null;
-        }
-        REAL_TRACK = fallbackTrack;
-        state.activeMSModuleId = fallbackTrack._moduleId || fallbackTrack.id;
-        state.currentSentenceIndex = 0;
-        state.revealedAnswers = {};
-        state.loopingSentenceIndex = -1;
-        await loadTrackAudio(REAL_TRACK);
-        state.audio.currentTime = 0;
-        state.isPlaying = false;
-        renderSidebarTracks();
-        renderZenStage();
-        renderBottomDock();
-        updateMediaSessionMetadata();
-        showToast(`História carregada: ${REAL_TRACK.title}`);
-      }
-    };
-
-
-
-    window.openCustomTrackStudio = (tab = 'mp3') => {
-      const modal = document.getElementById('customTrackModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        window.switchStudioTab(tab);
-      }
-    };
-
-    window.closeCustomTrackStudio = () => {
-      const modal = document.getElementById('customTrackModal');
-      if (modal) modal.classList.add('hidden');
-    };
-
-    window.switchStudioTab = (tab) => {
-      ['mp3', 'youtube', 'text'].forEach(t => {
-        const el = document.getElementById(`studio-tab-content-${t}`);
-        const btn = document.getElementById(`studio-tab-btn-${t}`);
-        if (el) el.classList.toggle('hidden', t !== tab);
-        if (btn) {
-          if (t === tab) {
-            btn.className = "flex-1 py-2 rounded-xl bg-[#C68A36] text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 cursor-pointer";
-          } else {
-            btn.className = "flex-1 py-2 rounded-xl text-[#7A7369] hover:bg-stone-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer";
-          }
-        }
-      });
-    };
-
-    window.handleProcessMp3Track = async (e) => {
-      e.preventDefault();
-      const fileInput = document.getElementById('custom-mp3-file');
-      const titleInput = document.getElementById('custom-mp3-title');
-      const textInput = document.getElementById('custom-mp3-text');
-
-      const file = fileInput.files[0];
-      if (!file) {
-        showToast('Selecione um arquivo de áudio MP3/M4A.');
-        return;
-      }
-
-      const rawText = textInput.value.trim() || "Listen to this audio carefully and practice your spoken reflex.";
-      const title = titleInput.value.trim() || generateSmartTitle(rawText);
-
-      const audioBlobUrl = URL.createObjectURL(file);
-      const tempAudio = new Audio(audioBlobUrl);
-      
-      await new Promise((resolve) => {
-        tempAudio.onloadedmetadata = resolve;
-        tempAudio.onerror = resolve;
-        setTimeout(resolve, 1200);
-      });
-
-      const durationSec = tempAudio.duration && !isNaN(tempAudio.duration) ? tempAudio.duration : 45;
-      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+|\s*\/\s*/).map(s => s.trim()).filter(s => s.length > 0);
-      const count = Math.max(1, sentencesRaw.length);
-      const timePerSentence = durationSec / count;
-
-      const sentences = sentencesRaw.map((s, idx) => ({
-        id: idx + 1,
-        start: parseFloat((idx * timePerSentence).toFixed(2)),
-        end: parseFloat(((idx + 1) * timePerSentence).toFixed(2)),
-        text: s.trim(),
-        spokenTranslation: ""
-      }));
-
-      const trackId = `custom-mp3-${Date.now()}`;
-      const newTrack = {
-        id: trackId,
-        title: title,
-        sourceType: 'mp3',
-        audioUrl: audioBlobUrl,
-        duration: formatSec(durationSec),
-        coverImage: '../assets/images/cover-default-aef.jpg',
-        goldenTip: "Ouça o áudio prestando atenção no ritmo e musicalidade, e responda aos prompts em voz alta.",
-        sentences: sentences
-      };
-
-      const currentList = getCustomTracks();
-      currentList.unshift(newTrack);
-      saveCustomTracksList(currentList);
-
-      window.closeCustomTrackStudio();
-      showToast(`Treino criado: ${title}`);
-      window.playCustomTrack(trackId);
-    };
-
-    window.handleProcessYouTubeTrack = (e) => {
-      e.preventDefault();
-      const urlInput = document.getElementById('custom-yt-url');
-      const titleInput = document.getElementById('custom-yt-title');
-      const textInput = document.getElementById('custom-yt-text');
-
-      const url = urlInput.value.trim();
-      if (!url) return;
-
-      let ytId = "";
-      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-      if (match && match[1]) ytId = match[1];
-
-      const rawText = textInput.value.trim() || "Practice your listening reflex with this YouTube content.";
-      const title = titleInput.value.trim() || generateSmartTitle(rawText);
-
-      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+|\s*\/\s*/).map(s => s.trim()).filter(s => s.length > 0);
-      const count = Math.max(1, sentencesRaw.length);
-      const durationSec = count * 6;
-
-      const sentences = sentencesRaw.map((s, idx) => ({
-        id: idx + 1,
-        start: idx * 6,
-        end: (idx + 1) * 6,
-        text: s.trim(),
-        spokenTranslation: ""
-      }));
-
-      const trackId = `custom-yt-${Date.now()}`;
-      const newTrack = {
-        id: trackId,
-        title: title,
-        sourceType: 'youtube',
-        audioUrl: REAL_TRACK.audioUrl,
-        duration: formatSec(durationSec),
-        coverImage: ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : '../assets/images/cover-default-aef.jpg',
-        goldenTip: "Assista ao vídeo e repita as frases conectando o som sem tradução mental.",
-        sentences: sentences
-      };
-
-      const currentList = getCustomTracks();
-      currentList.unshift(newTrack);
-      saveCustomTracksList(currentList);
-
-      window.closeCustomTrackStudio();
-      showToast(`Treino do YouTube criado: ${title}`);
-      window.playCustomTrack(trackId);
-    };
-
-    window.handleProcessTextTrack = (e) => {
-      e.preventDefault();
-      const titleInput = document.getElementById('custom-txt-title');
-      const textInput = document.getElementById('custom-txt-content');
-
-      const rawText = textInput.value.trim();
-      if (!rawText) return;
-
-      const title = titleInput.value.trim() || generateSmartTitle(rawText);
-      const sentencesRaw = rawText.split(/(?<=[.?!])\s+|\n+/).filter(s => s.trim().length > 0);
-      const count = Math.max(1, sentencesRaw.length);
-      const durationSec = count * 5;
-
-      const sentences = sentencesRaw.map((s, idx) => ({
-        id: idx + 1,
-        start: idx * 5,
-        end: (idx + 1) * 5,
-        text: s.trim(),
-        spokenTranslation: ""
-      }));
-
-      const trackId = `custom-txt-${Date.now()}`;
-      const newTrack = {
-        id: trackId,
-        title: title,
-        sourceType: 'text',
-        audioUrl: REAL_TRACK.audioUrl,
-        duration: formatSec(durationSec),
-        coverImage: '../assets/images/cover-default-aef.jpg',
-        goldenTip: "Leia as frases em voz alta conectando o ritmo da fala.",
-        sentences: sentences
-      };
-
-      const currentList = getCustomTracks();
-      currentList.unshift(newTrack);
-      saveCustomTracksList(currentList);
-
-      window.closeCustomTrackStudio();
-      showToast(`Treino criado: ${title}`);
-      window.playCustomTrack(trackId);
-    };
-
-    window.playCustomTrack = (trackId) => {
-      const tracks = getCustomTracks();
-      const found = tracks.find(t => t.id === trackId);
-      if (!found) return;
-
-      state.environment = 'custom_active';
-      REAL_TRACK = found;
-      state.currentSentenceIndex = 0;
-      state.revealedAnswers = {};
-      state.loopingSentenceIndex = -1;
-      state.audio.src = REAL_TRACK.audioUrl;
-      state.isPlaying = false;
-
-      const sideName = document.getElementById('sidebar-activity-name');
-      if (sideName) sideName.innerText = REAL_TRACK.title;
-      const dockTitle = document.getElementById('dock-title-text');
-      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
-      const tipText = document.getElementById('sidebar-grammar-tip');
-      if (tipText) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
-
-      renderZenStage();
-      renderBottomDock();
-      updateMediaSessionMetadata();
-      showToast(`Carregado: ${REAL_TRACK.title}`);
-    };
-
-    window.deleteCustomTrack = (trackId) => {
-      let list = getCustomTracks().filter(t => t.id !== trackId);
-      saveCustomTracksList(list);
-      showToast('Treino removido com sucesso.');
-      renderZenStage();
-    };
-
-    /**
-     * Microfone Radiante Ergonômico: Gravação e Avaliação de Fala
-     */
-    window.toggleRetellRecording = async () => {
-      if (!state.isRecording) {
-        state.evaluation = null;
-        state.recordingSeconds = 0;
-        const res = await window.AEFSpeechCoach.startRecording((sec) => {
-          state.recordingSeconds = sec;
-          renderBottomDock();
-        });
-
-        if (res.success) {
-          state.isRecording = true;
-          showToast('Microfone ativo no rodapé! Responda aos prompts.');
-          renderZenStage();
-          renderBottomDock();
-        } else {
-          showToast(`Erro: ${res.error || 'Microfone indisponível'}`);
-        }
-      } else {
-        state.isRecording = false;
-        showToast('Diagnosticando sua fala com o AI Speech Coach...');
-
-        const stopRes = await window.AEFSpeechCoach.stopRecording();
-        if (stopRes.success) {
-          const evalResult = await window.AEFSpeechCoach.evaluateSpeaking(REAL_TRACK, { 
-            durationSec: stopRes.durationSec, 
-            transcript: stopRes.transcript 
-          });
-          state.evaluation = evalResult;
-
-          // Atualiza Sidebar do AI Coach
-          const scorePill = document.getElementById('sidebar-score-pill');
-          if (scorePill) scorePill.innerText = `${evalResult.score.toFixed(1)} / 10`;
-
-          const tipText = document.getElementById('sidebar-grammar-tip');
-          if (tipText) tipText.innerText = `"${evalResult.leoTip}"`;
-
-          showToast(`O Teste do Gringo: ${evalResult.gringoBadge}`);
-          renderZenStage();
-          renderBottomDock();
-        }
-      }
-    };
-
-    window.playStudentRecording = (url) => {
-      if (state.studentAudioObj) {
-        state.studentAudioObj.pause();
-      }
-      state.studentAudioObj = new Audio(url);
-      state.studentAudioObj.play();
-      showToast('Reproduzindo a sua gravação de voz...');
-    };
-
-    function setupSwipeGestures() {
-      let touchStartX = 0;
-      let touchEndX = 0;
-
-      document.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-      }, { passive: true });
-
-      document.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        const diff = touchEndX - touchStartX;
-        if (Math.abs(diff) > 50) {
-          if (diff < 0) {
-            window.navSentence(1);
-          } else {
-            window.navSentence(-1);
-          }
-        }
-      }, { passive: true });
-    }
-
-    function updateMediaSessionMetadata() {
-      if (!('mediaSession' in navigator)) return;
-
-      const coverUrl = new URL('../assets/images/cover-public-spoken-reflex.jpg', window.location.href).href;
-
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: REAL_TRACK.title,
-        artist: "Professor Leonardo Leite",
-        album: "AgoraEuFalo • Magic Stories",
-        artwork: [
-          { src: coverUrl, sizes: "96x96", type: "image/jpeg" },
-          { src: coverUrl, sizes: "128x128", type: "image/jpeg" },
-          { src: coverUrl, sizes: "192x192", type: "image/jpeg" },
-          { src: coverUrl, sizes: "256x256", type: "image/jpeg" },
-          { src: coverUrl, sizes: "384x384", type: "image/jpeg" },
-          { src: coverUrl, sizes: "512x512", type: "image/jpeg" }
-        ]
-      });
-
-      const handlers = [
-        ['play', () => window.togglePlayPause()],
-        ['pause', () => window.togglePlayPause()],
-        ['previoustrack', () => window.navSentence(-1)],
-        ['nexttrack', () => window.navSentence(1)],
-        ['seekbackward', () => window.seekOffset(-5)],
-        ['seekforward', () => window.seekOffset(5)],
-        ['seekto', (details) => {
-          if (details.seekTime !== undefined) {
-            state.audio.currentTime = details.seekTime;
-          }
-        }]
-      ];
-
-      handlers.forEach(([action, handler]) => {
-        try {
-          navigator.mediaSession.setActionHandler(action, handler);
-        } catch(e) {}
-      });
-    }
-
-    function initAudioEvents() {
-      updateMediaSessionMetadata();
-
-      state.audio.addEventListener('play', () => {
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.playbackState = 'playing';
-        }
-      });
-
-      state.audio.addEventListener('pause', () => {
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.playbackState = 'paused';
-        }
-      });
-
-      state.audio.addEventListener('timeupdate', () => {
-        const hasVideo = Boolean(REAL_TRACK?.videoUrl && REAL_TRACK.videoUrl.trim().length > 0);
-        if (hasVideo || state.activity === 'look_retell') return;
-
-        const cur = state.audio.currentTime;
-        const dur = state.audio.duration || 35.8;
-
-        const curTimeEl = document.getElementById('dock-current-time');
-        const totTimeEl = document.getElementById('dock-total-time');
-        if (curTimeEl) curTimeEl.innerText = formatTime(cur);
-        if (totTimeEl) totTimeEl.innerText = formatTime(dur);
-
-        const seek = document.getElementById('dock-seek-bar');
-        if (seek && dur > 0) {
-          const pct = Math.min(100, Math.max(0, (cur / dur) * 100));
-          seek.value = pct;
-          seek.style.background = `linear-gradient(to right, #F59E0B 0%, #F59E0B ${pct}%, rgba(255,255,255,0.25) ${pct}%, rgba(255,255,255,0.25) 100%)`;
-        }
-
-        // Atualiza posição na tela de bloqueio
-        if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession && state.audio.duration && !isNaN(state.audio.duration)) {
-          try {
-            navigator.mediaSession.setPositionState({
-              duration: state.audio.duration,
-              playbackRate: state.audio.playbackRate || 1.0,
-              position: Math.min(state.audio.currentTime, state.audio.duration)
-            });
-          } catch(e) {}
-        }
-
-        // Se a frase atual estiver em Loop contínuo (🔂), retorna ao início da frase ao atingir o final
-        if (state.loopingSentenceIndex >= 0 && state.loopingSentenceIndex === state.currentSentenceIndex) {
-          const items = getActiveItems();
-          const s = items[state.currentSentenceIndex];
-          if (s && s.end !== undefined && cur >= s.end) {
-            state.audio.currentTime = s.start || 0;
-            return;
-          }
-        }
-
-        // Modo Pronunciation: Pausa obrigatória ao final da frase
-        if (state.activity === 'pronunciation' && state.currentSentenceIndex >= 0) {
-          const s = REAL_TRACK.sentences[state.currentSentenceIndex];
-          if (s && cur >= s.end) {
-            if (state.loopingSentenceIndex === state.currentSentenceIndex) {
-              state.audio.currentTime = s.start;
-            } else {
-              state.audio.pause();
-              state.isPlaying = false;
-              renderZenStage();
-              renderBottomDock();
-            }
-          }
-        } else {
-          // Auto-scroll contínuo pelas frases do áudio sem bloquear a thread principal
-          const items = getActiveItems();
-          let foundIdx = -1;
-          for (let i = 0; i < items.length; i++) {
-            const it = items[i];
-            if (it.start !== undefined && it.end !== undefined) {
-              const nextStart = (i + 1 < items.length && items[i+1].start !== undefined) ? items[i+1].start : (it.end + 1.0);
-              if (cur >= (it.start - 0.05) && cur < nextStart) {
-                foundIdx = i;
-                break;
-              }
-            }
-          }
-
-          if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
-            state.revealedAnswers = {};
-            state.currentSentenceIndex = foundIdx;
-            
-            // Fast DOM update: Atualiza apenas o card e as bolinhas de paginação sem destruir o palco
-            const cardSlot = document.getElementById('card-stage-slot');
-            if (cardSlot) {
-              const currentItem = items[foundIdx] || items[0];
-              const isMagicStory = (state.environment === 'course' || state.environment === 'ms_legacy');
-              cardSlot.innerHTML = window.AEFPlayerZenTemplate.renderSingleZenCard(
-                currentItem, 
-                foundIdx, 
-                items.length, 
-                isMagicStory ? state.activity : 'listen_read', 
-                state.isPlaying, 
-                state.loopingSentenceIndex === foundIdx,
-                Boolean(state.revealedAnswers[foundIdx]),
-                Boolean(state.showTranslation)
-              );
-              const dots = document.querySelectorAll('#zen-main-stage-container button[title^="Ir para prompt"]');
-              dots.forEach((dot, dIdx) => {
-                if (dIdx === foundIdx) {
-                  dot.className = "h-2 rounded-full transition-all duration-300 cursor-pointer w-6 bg-[#C68A36]";
-                } else {
-                  dot.className = "h-2 rounded-full transition-all duration-300 cursor-pointer w-2 bg-[#D1C7B7] hover:bg-[#C68A36]/60";
-                }
-              });
-              updateIcons();
-            } else {
-              renderZenStage();
-            }
-          }
-        }
-      });
-
-      // 2. Transição Contínua entre Atividades em Background (Pulando Look & Retell)
-      state.audio.addEventListener('ended', () => {
-        state.isPlaying = false;
-        
-        // Auto-chaining de escuta em tela bloqueada / fone:
-        if (state.activity === 'listen_read') {
-          showToast('Avançando para 2. Vocabulary & Chunks...');
-          window.switchActivity('vocab');
-          window.togglePlayPause();
-        } else if (state.activity === 'vocab') {
-          showToast('Avançando para 3. Listen & Answer...');
-          window.switchActivity('listen_answer');
-          window.togglePlayPause();
-        } else if (state.activity === 'listen_answer') {
-          showToast('Avançando para 5. Listen & Ask (Pulando Look & Retell)...');
-          window.switchActivity('listen_ask');
-          window.togglePlayPause();
-        } else if (state.activity === 'listen_ask') {
-          showToast('Avançando para 6. Pronunciation Practice...');
-          window.switchActivity('pronunciation');
-          window.togglePlayPause();
-        } else {
-          renderZenStage();
-          renderBottomDock();
-        }
-      });
-    }
-
-    // Atalho de Teclado (Espaço)
-    document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-        e.preventDefault();
-        if (state.activity === 'look_retell') {
-          window.toggleRetellRecording();
-        } else {
-          window.togglePlayPause();
-        }
-      }
-    });
-
-    /**
-     * Alterna entre play e pause no dock inferior e na lockscreen (MediaSession).
-     *
-     * BLINDAGEM PROMISE (Safari iOS / Chrome Mobile):
-     * - PAUSE: Antes de chamar .pause(), aguarda a resolução da Promise de play() pendente.
-     *   Safari iOS lança AbortError se .pause() for chamado sobre uma Promise não resolvida.
-     * - PLAY: Registra a nova Promise em state._pendingPlayPromise para que
-     *   loadTrackAudio() e setEnvironment() possam encadear sobre ela com segurança.
-     * - VÍDEO: Aplica a mesma blindagem ao elemento <video> do Palco Zen.
-     */
+    // CONTROLES DE ÁUDIO & PLAY/PAUSE
     window.togglePlayPause = async () => {
-      const vid = document.getElementById('zen-stage-video');
-      const hasVideo = Boolean(REAL_TRACK?.videoUrl && vid && !REAL_TRACK.videoUrl.includes('youtube'));
+      const media = state.mediaMode === 'video' ? state.video : state.audio;
 
-      if (hasVideo) {
-        // Vídeo nativo: garante que o áudio MP3 paralelo esteja limpo.
-        if (state._pendingPlayPromise !== null) {
-          try { await state._pendingPlayPromise; } catch (_e) {}
-          state._pendingPlayPromise = null;
-        }
-        state.audio.pause();
-        state.audio.removeAttribute('src');
-
-        if (vid.paused) {
-          const vidPromise = vid.play();
-          vidPromise
-            .then(() => { state.isPlaying = true; renderZenStage(); renderBottomDock(); })
-            .catch(err => {
-              if (err.name !== 'AbortError') console.warn('[AEF] togglePlayPause video error:', err);
-              state.isPlaying = false;
-            });
-        } else {
-          vid.pause();
-          state.isPlaying = false;
-          renderZenStage();
-          renderBottomDock();
-        }
-        return;
-      }
-
-      // Áudio MP3 padrão.
       if (state.isPlaying) {
-        // PAUSE SEGURO: aguarda promise pendente antes de pausar.
-        if (state._pendingPlayPromise !== null) {
-          try { await state._pendingPlayPromise; } catch (_e) {}
-          state._pendingPlayPromise = null;
+        if (state.pendingPlayPromise !== null) {
+          try { await state.pendingPlayPromise; } catch (_e) {}
+          state.pendingPlayPromise = null;
         }
-        state.audio.pause();
+        media.pause();
         state.isPlaying = false;
-        renderZenStage();
-        renderBottomDock();
       } else {
-        // PLAY SEGURO: registra a Promise para blindagem futura.
-        state._pendingPlayPromise = state.audio.play();
-        state._pendingPlayPromise
+        state.pendingPlayPromise = media.play();
+        state.pendingPlayPromise
           .then(() => {
             state.isPlaying = true;
-            state._pendingPlayPromise = null;
-            renderZenStage();
-            renderBottomDock();
+            state.pendingPlayPromise = null;
+            updatePlayButtonUI();
           })
           .catch(err => {
-            if (err.name !== 'AbortError') console.warn('[AEF] togglePlayPause play error:', err);
+            if (err.name !== 'AbortError') console.warn('[AEF] play error:', err);
             state.isPlaying = false;
-            state._pendingPlayPromise = null;
-            renderZenStage();
-            renderBottomDock();
+            state.pendingPlayPromise = null;
+            updatePlayButtonUI();
           });
       }
+      updatePlayButtonUI();
     };
 
+    function updatePlayButtonUI() {
+      const icon = document.getElementById('icon-main-play');
+      const pulse = document.getElementById('playing-pulse-indicator');
+      if (icon) {
+        icon.setAttribute('data-lucide', state.isPlaying ? 'pause' : 'play');
+        lucide.createIcons();
+      }
+      if (pulse) {
+        if (state.isPlaying && state.mediaMode !== 'video') {
+          pulse.classList.remove('hidden');
+        } else {
+          pulse.classList.add('hidden');
+        }
+      }
+    }
+
     window.seekOffset = (sec) => {
-      const media = getActiveMedia();
+      const media = state.mediaMode === 'video' ? state.video : state.audio;
       media.currentTime = Math.max(0, media.currentTime + sec);
     };
 
-    window.togglePlayerDrawer = () => {
-      const overlay = document.getElementById('playerDrawerOverlay');
-      const menu = document.getElementById('playerDrawerMenu');
-      if (!overlay || !menu) return;
-
-      const isClosed = menu.classList.contains('-translate-x-full');
-      if (isClosed) {
-        overlay.classList.remove('hidden');
-        menu.classList.remove('-translate-x-full');
-      } else {
-        overlay.classList.add('hidden');
-        menu.classList.add('-translate-x-full');
+    window.handleSeek = (pct) => {
+      const media = state.mediaMode === 'video' ? state.video : state.audio;
+      const dur = media.duration;
+      if (dur > 0) {
+        media.currentTime = (pct / 100) * dur;
       }
     };
+
+    window.playNextLesson = () => {
+      const tracks = getCurrentTracklist();
+      if (state.activeLessonIndex < tracks.length - 1) {
+        loadCurrentContent(state.activeLessonIndex + 1);
+        window.togglePlayPause();
+      } else {
+        // Se for Magic Stories, tenta avançar para o próximo módulo
+        if (state.courseId === 'ms-legacy') {
+          const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+          const curModIdx = msModules.findIndex(m => m.id === state.activeModuleId);
+          if (curModIdx !== -1 && curModIdx < msModules.length - 1) {
+            state.activeModuleId = msModules[curModIdx + 1].id;
+            populateModuleSelect();
+            loadCurrentContent(0);
+            window.togglePlayPause();
+            showToast(`Avançando para ${msModules[curModIdx + 1].shortTitle || msModules[curModIdx + 1].title}`);
+            return;
+          }
+        }
+        showToast('Fim da playlist!');
+      }
+    };
+
+    window.playPrevLesson = () => {
+      if (state.activeLessonIndex > 0) {
+        loadCurrentContent(state.activeLessonIndex - 1);
+        window.togglePlayPause();
+      }
+    };
+
+    window.toggleContinuousPlay = () => {
+      state.isContinuousPlay = !state.isContinuousPlay;
+      const text = document.getElementById('text-continuous-play');
+      const btn = document.getElementById('btn-continuous-play');
+      if (state.isContinuousPlay) {
+        if (text) text.innerText = 'Contínuo: ON';
+        btn?.classList.add('text-amber-400');
+        btn?.classList.remove('text-slate-400');
+        showToast('Reprodução Contínua ON');
+      } else {
+        if (text) text.innerText = 'Contínuo: OFF';
+        btn?.classList.remove('text-amber-400');
+        btn?.classList.add('text-slate-400');
+        showToast('Reprodução Contínua OFF');
+      }
+    };
+
+    function setupAudioEvents() {
+      state.audio.addEventListener('timeupdate', handleTimeUpdate);
+      state.audio.addEventListener('ended', handleTrackEnded);
+      state.audio.addEventListener('play', () => { state.isPlaying = true; updatePlayButtonUI(); });
+      state.audio.addEventListener('pause', () => { state.isPlaying = false; updatePlayButtonUI(); });
+    }
+
+    function setupVideoEvents() {
+      if (!state.video) return;
+      state.video.addEventListener('timeupdate', handleTimeUpdate);
+      state.video.addEventListener('ended', handleTrackEnded);
+      state.video.addEventListener('play', () => { state.isPlaying = true; updatePlayButtonUI(); });
+      state.video.addEventListener('pause', () => { state.isPlaying = false; updatePlayButtonUI(); });
+    }
+
+    function handleTimeUpdate() {
+      const media = state.mediaMode === 'video' ? state.video : state.audio;
+      const cur = media.currentTime;
+      const dur = media.duration || 0;
+
+      // Atualiza Scrubber e Timers
+      const curTimeEl = document.getElementById('time-current');
+      const totTimeEl = document.getElementById('time-total');
+      const seekBar = document.getElementById('audio-seek-bar');
+
+      if (curTimeEl) curTimeEl.innerText = formatTime(cur);
+      if (totTimeEl) totTimeEl.innerText = formatTime(dur);
+
+      if (seekBar && dur > 0) {
+        const pct = (cur / dur) * 100;
+        seekBar.value = pct;
+        seekBar.style.background = `linear-gradient(to right, #F59E0B 0%, #F59E0B ${pct}%, rgba(255,255,255,0.15) ${pct}%, rgba(255,255,255,0.15) 100%)`;
+      }
+
+      // Sincroniza Linha Ativa da Letra
+      const track = getCurrentActiveTrack();
+      const sentences = track?.sentences || [];
+      let foundIdx = -1;
+      for (let i = 0; i < sentences.length; i++) {
+        const s = sentences[i];
+        if (s.start !== undefined && s.end !== undefined) {
+          const nextStart = (i + 1 < sentences.length && sentences[i+1].start !== undefined) ? sentences[i+1].start : (s.end + 1.0);
+          if (cur >= (s.start - 0.05) && cur < nextStart) {
+            foundIdx = i;
+            break;
+          }
+        }
+      }
+
+      if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
+        state.currentSentenceIndex = foundIdx;
+        updateLyricsHighlight();
+      }
+    }
+
+    function handleTrackEnded() {
+      state.isPlaying = false;
+      updatePlayButtonUI();
+      if (state.isContinuousPlay) {
+        window.playNextLesson();
+      }
+    }
 
     function formatTime(sec) {
       if (isNaN(sec) || sec < 0) return "00:00";
@@ -2779,69 +856,98 @@
       return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
-    function formatSec(sec) {
-      if (isNaN(sec) || sec < 0) return "00:00";
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    // PLAYLIST DRAWER
+    window.togglePlaylistDrawer = () => {
+      const overlay = document.getElementById('playlist-drawer-overlay');
+      const drawer = document.getElementById('playlist-drawer');
+      if (!overlay || !drawer) return;
+
+      const isClosed = overlay.classList.contains('hidden');
+      if (isClosed) {
+        overlay.classList.remove('hidden');
+        drawer.classList.remove('translate-y-full');
+      } else {
+        overlay.classList.add('hidden');
+        drawer.classList.add('translate-y-full');
+      }
+    };
+
+    function renderPlaylistDrawer() {
+      const tracks = getCurrentTracklist();
+      const moduleTitle = getCurrentModuleTitle();
+      const container = document.getElementById('playlist-items-container');
+      const badge = document.getElementById('playlist-count-badge');
+      const sub = document.getElementById('drawer-module-subtitle');
+
+      if (sub) sub.innerText = moduleTitle;
+      if (badge) badge.innerText = tracks.length;
+      if (!container) return;
+
+      if (tracks.length === 0) {
+        container.innerHTML = `
+          <div class="text-center text-slate-400 text-xs py-8">
+            <p>Nenhuma faixa disponível nesta categoria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = tracks.map((t, idx) => `
+        <div onclick="window.selectLessonFromDrawer(${idx})" class="p-3 rounded-2xl flex items-center justify-between gap-3 cursor-pointer transition ${
+          idx === state.activeLessonIndex ? 'bg-amber-500 text-slate-950 font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-slate-200'
+        }">
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="text-xs font-mono opacity-60">${String(idx + 1).padStart(2, '0')}</span>
+            <div class="truncate">
+              <p class="text-xs font-bold truncate">${t.title}</p>
+              <p class="text-[10px] font-mono opacity-80">${t.duration || ''}</p>
+            </div>
+          </div>
+          <div class="shrink-0">
+            <i data-lucide="${idx === state.activeLessonIndex ? 'volume-2' : 'play'}" class="w-4 h-4"></i>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    window.selectLessonFromDrawer = (idx) => {
+      loadCurrentContent(idx);
+      window.togglePlaylistDrawer();
+      window.togglePlayPause();
+    };
+
+    // MEDIASESSION (LOCKSCREEN CONTROLS)
+    function updateMediaSession() {
+      if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
+      const track = getCurrentActiveTrack();
+      const moduleTitle = getCurrentModuleTitle();
+      const coverUrl = new URL(track?.coverImage || '../assets/images/logo-fundo-escuro.png', window.location.href).href;
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track?.title || 'AgoraEuFalo',
+        artist: 'Prof. Leonardo Leite • AgoraEuFalo',
+        album: moduleTitle,
+        artwork: [
+          { src: coverUrl, sizes: '512x512', type: 'image/jpeg' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => window.togglePlayPause());
+      navigator.mediaSession.setActionHandler('pause', () => window.togglePlayPause());
+      navigator.mediaSession.setActionHandler('nexttrack', () => window.playNextLesson());
+      navigator.mediaSession.setActionHandler('previoustrack', () => window.playPrevLesson());
+      navigator.mediaSession.setActionHandler('seekbackward', () => window.seekOffset(-10));
+      navigator.mediaSession.setActionHandler('seekforward', () => window.seekOffset(10));
     }
 
     function showToast(msg) {
-      const toast = document.getElementById('player-toast');
-      const text = document.getElementById('player-toast-text');
-      if (!toast || !text) return;
-      text.innerText = msg;
+      const toast = document.getElementById('aef-toast');
+      if (!toast) return;
+      toast.innerText = msg;
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 3500);
+      setTimeout(() => toast.classList.add('hidden'), 2800);
     }
   </script>
-
-  <!-- ========================================================================= -->
-  <!-- BOTTOM SHEET: MAGIC STORIES STORY SWITCHER                               -->
-  <!-- Abre somente quando environment === 'course' | 'ms_legacy'              -->
-  <!-- ========================================================================= -->
-  <div
-    id="ms-story-sheet-overlay"
-    class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden transition-opacity duration-300"
-    onclick="window.closeMSStorySheet()"
-    aria-hidden="true"
-  ></div>
-
-  <div
-    id="ms-story-sheet"
-    class="fixed bottom-0 inset-x-0 z-50 bg-[#FFFDF9] rounded-t-3xl border-t border-[#EAE5DC] shadow-2xl
-           transform translate-y-full transition-transform duration-300 ease-out
-           max-h-[80vh] flex flex-col"
-    aria-label="Seletor de Magic Stories"
-  >
-    <!-- Handle + Header -->
-    <div class="flex flex-col items-center pt-3 pb-2 px-5 border-b border-[#EAE5DC] shrink-0">
-      <!-- Drag Handle visual -->
-      <div class="w-10 h-1 rounded-full bg-stone-300 mb-3"></div>
-      <div class="w-full flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase tracking-wider block">🎓 Magic Stories</span>
-          <h2 class="text-sm font-black text-[#0A192F]">Selecionar História</h2>
-        </div>
-        <button
-          onclick="window.closeMSStorySheet()"
-          class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-[#7A7369] hover:text-[#0A192F] transition cursor-pointer"
-          title="Fechar"
-        >
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Scrollable List of Modules -->
-    <div id="ms-story-sheet-list" class="overflow-y-auto no-scrollbar flex-1 p-4 space-y-2.5">
-      <!-- Populado dinamicamente por renderMSStorySheet() -->
-    </div>
-
-    <!-- Safe Area padding for iOS home indicator -->
-    <div class="h-safe-bottom shrink-0 pb-4"></div>
-  </div>
-
 </body>
 </html>
-

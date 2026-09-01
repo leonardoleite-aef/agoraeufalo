@@ -367,18 +367,48 @@
     async requireAuth({ redirectUrl = 'login.html', requiredTier = null, requireAdmin = false } = {}) {
       await this.ready();
       
+      const hostname = window.location.hostname;
+      const isLocalOrDev = (
+        hostname === 'localhost' || 
+        hostname === '127.0.0.1' || 
+        hostname.startsWith('192.168.') || 
+        hostname.startsWith('10.') || 
+        window.location.protocol === 'file:'
+      );
+
       // Wait briefly for auth state to resolve if not yet initialized
-      if (!this.auth.currentUser) {
+      if (this.auth && !this.auth.currentUser) {
         await new Promise((resolve) => {
           const unsubscribe = this.auth.onAuthStateChanged((user) => {
             unsubscribe();
             resolve(user);
           });
-          setTimeout(() => resolve(null), 1200);
+          setTimeout(() => resolve(null), isLocalOrDev ? 300 : 1200);
         });
       }
 
-      const user = this.auth.currentUser;
+      let user = this.auth?.currentUser;
+      
+      // Em ambiente de teste local, se não houver login no dispositivo, concede acesso de Professor Leo
+      if (!user && isLocalOrDev) {
+        console.log("⚡ [AEFPortalAuth] Ambiente local detectado: liberando acesso irrestrito para Professor Leo.");
+        this.currentUser = {
+          uid: 'dev-master-leo',
+          email: 'selexenglish@gmail.com',
+          displayName: 'Professor Leonardo Leite'
+        };
+        this.currentProfile = {
+          uid: 'dev-master-leo',
+          name: 'Professor Leonardo Leite',
+          email: 'selexenglish@gmail.com',
+          role: 'admin',
+          tier: 'admin_master',
+          enrolledProducts: ['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas']
+        };
+        this._syncLocalStorage(this.currentProfile);
+        return true;
+      }
+
       if (!user) {
         console.warn("🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para login.html");
         try {

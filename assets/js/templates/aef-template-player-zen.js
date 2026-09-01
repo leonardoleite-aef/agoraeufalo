@@ -223,54 +223,6 @@ window.AEFPlayerZenTemplate = {
   },
 
   /**
-   * Renderiza a História no Modo Transcrição Corrida Contínua (MS-Legacy & Leitura Livre)
-   */
-  renderContinuousStoryView: function(track, activeIndex = 0) {
-    const sentences = track.sentences || [];
-    return `
-      <div class="p-6 sm:p-8 rounded-[28px] bg-[#FFFDF9] border border-[#EAE5DC] shadow-xl space-y-6 text-left animate-in fade-in duration-300">
-        
-        <!-- Header da História Legada -->
-        <div class="flex items-center justify-between pb-4 border-b border-[#EAE5DC]">
-          <div>
-            <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase tracking-wider block">MS-Legacy • Curso Clássico</span>
-            <h2 class="text-base sm:text-xl font-serif font-black text-[#0A192F]">${track.title}</h2>
-          </div>
-          <span class="px-3 py-1 rounded-full bg-[#F5EFE6] text-[#2C2416] text-xs font-mono font-bold border border-[#E8E0D2]">
-            ${sentences.length} Frases
-          </span>
-        </div>
-
-        <!-- Texto da História em Rolagem Contínua com Destaque Ativo -->
-        <div class="space-y-3.5 leading-relaxed text-sm sm:text-base text-[#0A192F]">
-          ${sentences.map((s, idx) => {
-            const isActive = (idx === activeIndex);
-            return `
-              <div id="story-sentence-${idx}" 
-                   onclick="window.handleCardTouch(${idx})" 
-                   class="p-3 rounded-2xl transition-all duration-200 cursor-pointer select-none ${
-                     isActive 
-                       ? 'bg-[#FDF8F0] border-l-4 border-[#C68A36] shadow-sm text-[#0A192F] font-bold' 
-                       : 'hover:bg-stone-50 text-slate-700'
-                   }">
-                <p class="leading-relaxed">
-                  <span class="text-[10px] font-mono font-bold text-[#C68A36] mr-2">${s.speaker ? `${s.speaker}:` : `${idx+1}.`}</span>
-                  "${s.text}"
-                </p>
-              </div>
-            `;
-          }).join('')}
-        </div>
-
-        <div class="pt-3 border-t border-[#EAE5DC] text-center">
-          <span class="text-xs text-[#7A7369] italic">Toque em qualquer parágrafo para pular o áudio para aquele ponto</span>
-        </div>
-
-      </div>
-    `;
-  },
-
-  /**
    * Renderiza o Hub do Laboratório "Minhas Coisas" (Faixas Próprias do Aluno)
    */
   renderCustomTracksHub: function(customTracks = [], activeTrackId = '') {
