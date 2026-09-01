@@ -43,9 +43,9 @@
     }
   </script>
 
-  <!-- Lucide Vector Icons & Real Registry SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../treino/data/registry.js"></script>
+  <script src="../treino/data/magic-stories.js"></script>
   <script src="../treino/data/public.js"></script>
   <script src="../treino/data/estevao.js"></script>
   <script src="../treino/data/thomas.js"></script>
@@ -578,7 +578,15 @@
         return a;
       })(),
       playbackSpeed: 1.0,
-      showTranslation: false
+      showTranslation: false,
+      /**
+       * Guarda a Promise mais recente de audio.play() para blindagem de AbortError.
+       * Safari iOS e Chrome mobile lançam AbortError se .pause() ou .src= é chamado
+       * enquanto uma play() Promise ainda está pendente. Seguramos esta referência
+       * para sempre encadear o pause/reset APÓS a resolução ou rejeição da Promise.
+       * @type {Promise<void> | null}
+       */
+      _pendingPlayPromise: null
     };
 
     // 100% REAL SPOKEN ENGLISH TRACK FROM FIREBASE STORAGE
@@ -620,14 +628,31 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const actParam = urlParams.get('activity');
-      if (actParam && ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'].includes(actParam)) {
-        state.activity = actParam;
+      const tabParam = urlParams.get('tab') || urlParams.get('activity');
+      if (tabParam) {
+        const tabMap = {
+          'lr': 'listen_read',
+          'listen_read': 'listen_read',
+          'voc': 'vocab',
+          'vocab': 'vocab',
+          'la': 'listen_answer',
+          'listen_answer': 'listen_answer',
+          'lrt': 'look_retell',
+          'look_retell': 'look_retell',
+          'lask': 'listen_ask',
+          'listen_ask': 'listen_ask',
+          'pro': 'pronunciation',
+          'pronunciation': 'pronunciation'
+        };
+        if (tabMap[tabParam.toLowerCase()]) {
+          state.activity = tabMap[tabParam.toLowerCase()];
+        }
       }
 
-      // 1. Resolução de Ambiente Inicial (?aluno=... -> VIP, ?curso=... -> Cursos, else -> Público)
+      // 1. Resolução de Ambiente Inicial (?aluno=... -> VIP, ?curso=... / ?modulo=... -> Cursos, else -> Público)
       const alunoParam = urlParams.get('aluno');
       const cursoParam = urlParams.get('curso') || urlParams.get('course');
+      const moduloParam = urlParams.get('modulo') || urlParams.get('module');
       const aulaParam = urlParams.get('aula') || urlParams.get('lesson');
       const trackParam = urlParams.get('trackId') || urlParams.get('track');
 
@@ -646,11 +671,22 @@
         } else {
           state.student = { id: menteeKey, name: menteeKey, tracks: [] };
         }
-      } else if (cursoParam) {
+      } else if (cursoParam || moduloParam || (trackParam && (trackParam.startsWith('ms00') || trackParam.includes('magic') || trackParam.includes('sunday') || trackParam.includes('saturday') || trackParam.includes('grazi') || trackParam.includes('tom')))) {
         initialEnv = 'course';
+        if (moduloParam) {
+          state.activeMSModuleId = moduloParam;
+        } else if (trackParam) {
+          if (trackParam.includes('ms002') || trackParam.includes('tom')) state.activeMSModuleId = 'ms002-tom';
+          else if (trackParam.includes('ms003') || trackParam.includes('saturday')) state.activeMSModuleId = 'ms003-saturday-morning';
+          else if (trackParam.includes('ms004') || trackParam.includes('podcast')) state.activeMSModuleId = 'ms004-grazi-podcast';
+          else if (trackParam.includes('ms005') || trackParam.includes('sunday') || trackParam.includes('brunch')) state.activeMSModuleId = 'ms005-sunday-brunch';
+          else state.activeMSModuleId = 'ms001-grazi';
+        }
         const returnBtn = document.getElementById('return-to-classroom-btn');
         if (returnBtn) {
-          returnBtn.href = `../sala-de-aula.html?curso=${cursoParam}${aulaParam ? `&aula=${aulaParam}` : ''}`;
+          const cId = cursoParam || 'magic-stories-legacy';
+          const mId = state.activeMSModuleId || 'ms001-grazi';
+          returnBtn.href = `../sala-de-aula.html?curso=${cId}&modulo=${mId}${aulaParam ? `&aula=${aulaParam}` : ''}`;
           returnBtn.classList.remove('hidden');
         }
       }
@@ -689,29 +725,64 @@
       }
     };
 
+    /**
+     * Carrega a mídia de uma faixa no elemento <audio> de forma segura para mobile.
+     *
+     * BLINDAGEM CONTRA AbortError (Safari iOS / Chrome Mobile):
+     * O navegador lança AbortError se .pause() ou .src= é atribuído enquanto uma
+     * Promise de .play() ainda está pendente. Esta função SEMPRE aguarda a resolução
+     * ou rejeição da Promise pendente antes de pausar e trocar a fonte.
+     *
+     * @param {Object} track - Objeto de faixa com audioUrl, videoUrl, id, title.
+     * @returns {Promise<void>}
+     */
     async function loadTrackAudio(track) {
       if (!track) return;
+
+      // 1. AGUARDA QUALQUER PROMISE DE PLAY PENDENTE antes de pausar ou trocar src.
+      //    Sem isso, Safari iOS e Chrome Mobile lançam AbortError imediatamente.
+      if (state._pendingPlayPromise !== null) {
+        try {
+          await state._pendingPlayPromise;
+        } catch (_abortErr) {
+          // Rejeição esperada (ex: play abortado pelo próprio navegador). Seguro ignorar.
+        }
+        state._pendingPlayPromise = null;
+      }
+
+      // 2. Pausa e limpa o elemento de áudio antes de qualquer operação de src.
+      state.audio.pause();
+      state.isPlaying = false;
+
       const hasVideo = Boolean(track.videoUrl && track.videoUrl.trim().length > 0);
       if (hasVideo) {
-        state.audio.pause();
+        // Faixa com vídeo: remove src do áudio MP3 paralelo para não conflitar.
         state.audio.removeAttribute('src');
         state.audio.load();
         return;
       }
+
+      // 3. Verifica cache offline (Service Worker / CacheStorage).
       if (window.aefOfflineManager) {
         try {
           const offlineUrl = await window.aefOfflineManager.getOfflineAudioUrl(track.audioUrl, track.id);
           if (offlineUrl) {
             console.log(`✈️ [Modo Avião] Reproduzindo áudio offline da faixa "${track.title}"!`);
             state.audio.src = offlineUrl;
+            state.audio.load();
             return;
           }
-        } catch(e) {
-          console.log("Offline audio check skip:", e);
+        } catch (offlineErr) {
+          console.log('Offline audio check skip:', offlineErr);
         }
       }
-      state.audio.src = track.audioUrl || "";
+
+      // 4. Fonte remota: atribui e chama .load() explicitamente para liberar
+      //    recursos da faixa anterior antes que o browser inicie o buffer da nova.
+      state.audio.src = track.audioUrl || '';
+      state.audio.load();
     }
+
 
     window.toggleFlightModeCache = async () => {
       if (!window.aefOfflineManager) {
@@ -759,12 +830,48 @@
       }
     };
 
+    window.switchMagicStoriesModule = async (moduleId) => {
+      state.activeMSModuleId = moduleId;
+      const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+      const mod = msModules.find(m => m.id === moduleId);
+      if (mod && mod.tracks && mod.tracks.length > 0) {
+        REAL_TRACK = mod.tracks[0];
+        state.currentSentenceIndex = 0;
+        state.revealedAnswers = {};
+        state.loopingSentenceIndex = -1;
+        await loadTrackAudio(REAL_TRACK);
+        state.audio.currentTime = 0;
+        state.isPlaying = false;
+        renderSidebarTracks();
+        renderZenStage();
+        renderBottomDock();
+        updateMediaSessionMetadata();
+        showToast(`Módulo Carregado: ${mod.title}`);
+      }
+    };
+
     window.selectTrack = async (trackId) => {
       let track = null;
       if (state.environment === 'public') {
         track = (window.AEF_STUDENT_PUBLIC?.tracks || []).find(t => t.id === trackId);
       } else if (state.environment === 'course' || state.environment === 'ms_legacy') {
-        track = (window.AEF_STUDENT_ANDRE?.tracks || []).find(t => t.id === trackId);
+        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+        for (const m of msModules) {
+          if (m.id === trackId || (trackId.includes('ms002') && m.id === 'ms002-tom') || (trackId.includes('saturday') && m.id === 'ms003-saturday-morning') || (trackId.includes('podcast') && m.id === 'ms004-grazi-podcast') || (trackId.includes('sunday') && m.id === 'ms005-sunday-brunch') || (trackId.includes('grazi') && !trackId.includes('podcast') && m.id === 'ms001-grazi')) {
+            state.activeMSModuleId = m.id;
+            track = m.tracks[0];
+            break;
+          }
+          const found = m.tracks?.find(t => t.id === trackId);
+          if (found) {
+            state.activeMSModuleId = m.id;
+            track = found;
+            break;
+          }
+        }
+        if (!track) {
+          track = (window.AEF_STUDENT_ANDRE?.tracks || []).find(t => t.id === trackId);
+        }
       } else if (state.environment === 'vip') {
         track = (state.student?.tracks || []).find(t => t.id === trackId);
       } else if (state.environment === 'custom' || state.environment === 'custom_active') {
@@ -1037,21 +1144,57 @@
     }
     window.toggleDownloadForOffline = toggleDownloadForOffline;
 
+    /**
+     * Alterna entre as 6 Atividades Canônicas do Método Magic Stories.
+     *
+     * GUARD DE CATEGORIA: As atividades canônicas (vocab, listen_answer, look_retell,
+     * listen_ask, pronunciation) só são executadas quando o ambiente é 'course' ou
+     * 'ms_legacy'. Para qualquer outro ambiente, a atividade é forçada para 'listen_read'.
+     *
+     * @param {string} newAct - Identificador da atividade canônica.
+     */
     function switchActivity(newAct) {
+      const isMagicStoriesEnv = (state.environment === 'course' || state.environment === 'ms_legacy');
+      const canonicalActivities = ['listen_read', 'vocab', 'listen_answer', 'look_retell', 'listen_ask', 'pronunciation'];
+      const isCanonicalActivity = canonicalActivities.includes(newAct);
+
+      // Fora de Magic Stories, todas as atividades canônicas colapsam para listen_read.
+      if (!isMagicStoriesEnv && isCanonicalActivity && newAct !== 'listen_read') {
+        state.activity = 'listen_read';
+        console.warn(`[AEF] Atividade '${newAct}' é exclusiva de Magic Stories. Revertendo para listen_read no ambiente '${state.environment}'.`);
+        renderZenStage();
+        renderBottomDock();
+        updateIcons();
+        return;
+      }
+
       state.activity = newAct;
       state.loopingSentenceIndex = -1;
       state.currentSentenceIndex = 0;
       state.revealedAnswers = {};
-      
-      if (state.activity === 'look_retell') {
-        state.audio.pause();
-        state.isPlaying = false;
+
+      // Look & Retell: pausa segura antes de limpar o palco (zero áudio nesta atividade).
+      if (newAct === 'look_retell') {
+        if (state._pendingPlayPromise !== null) {
+          state._pendingPlayPromise
+            .catch(() => {})
+            .finally(() => {
+              state._pendingPlayPromise = null;
+              state.audio.pause();
+              state.isPlaying = false;
+            });
+        } else {
+          state.audio.pause();
+          state.isPlaying = false;
+        }
       }
 
       renderZenStage();
       renderBottomDock();
       updateIcons();
     }
+    // Expõe switchActivity para os botões onclick do HTML e para o listener 'ended'.
+    window.switchActivity = switchActivity;
 
     window.toggleTranslationMode = () => {
       state.showTranslation = !state.showTranslation;
@@ -1466,14 +1609,35 @@
     /**
      * Play / Pause ao tocar no Cartão Único
      */
-    window.handleCardTouch = (index) => {
+    /**
+     * Acionado pelo toque/clique em um card de frase no Palco Zen.
+     *
+     * BLINDAGEM PROMISE (Safari iOS / Chrome Mobile):
+     * - 1º toque: move currentTime para sentence.start e dispara play(). A Promise
+     *   é armazenada em state._pendingPlayPromise.
+     * - 2º toque no mesmo card ENQUANTO tocando: aguarda a Promise antes de pausar,
+     *   eliminando o AbortError que ocorre ao chamar .pause() sobre uma Promise pendente.
+     * - Toque em card diferente: aguarda a Promise do play anterior antes de reposicionar
+     *   e disparar o novo play.
+     *
+     * @param {number} index - Índice do card/sentence clicado.
+     */
+    window.handleCardTouch = async (index) => {
       if (state.activity === 'look_retell') return; // Zero áudio no Look & Retell
 
       const items = getActiveItems();
       const sentence = items[index] || items[0];
       const media = getActiveMedia();
 
-      // Se clicar no card que está atualmente tocando: PAUSA NO MILISSEGUNDO EXATO
+      // Aguarda promise de play anterior antes de qualquer operação de controle.
+      if (state._pendingPlayPromise !== null) {
+        try {
+          await state._pendingPlayPromise;
+        } catch (_abortErr) {}
+        state._pendingPlayPromise = null;
+      }
+
+      // Card atualmente tocando: PAUSA NO MILISSEGUNDO EXATO.
       if (state.isPlaying && state.currentSentenceIndex === index) {
         media.pause();
         state.isPlaying = false;
@@ -1482,53 +1646,100 @@
         return;
       }
 
-      // Se for vídeo, garante que áudio MP3 paralelo esteja pausado e vice-versa
+      // Se o media ativo for vídeo, garante que o áudio MP3 paralelo esteja limpo.
       if (media !== state.audio) {
+        if (state._pendingPlayPromise !== null) {
+          try { await state._pendingPlayPromise; } catch (_e) {}
+          state._pendingPlayPromise = null;
+        }
         state.audio.pause();
       }
 
-      // Se clicou em outro card ou estava pausado:
       state.currentSentenceIndex = index;
 
-      if (sentence.start !== undefined) {
+      if (sentence && sentence.start !== undefined) {
         media.currentTime = sentence.start;
       }
 
-      media.play().then(() => {
-        state.isPlaying = true;
-        renderZenStage();
-        renderBottomDock();
-      }).catch(err => console.log('Media play error:', err));
+      state._pendingPlayPromise = media.play();
+      state._pendingPlayPromise
+        .then(() => {
+          state.isPlaying = true;
+          state._pendingPlayPromise = null;
+          renderZenStage();
+          renderBottomDock();
+        })
+        .catch(err => {
+          // AbortError é esperado quando o usuário troca de faixa/categoria rapidamente.
+          if (err.name !== 'AbortError') {
+            console.warn('[AEF] handleCardTouch play error:', err);
+          }
+          state.isPlaying = false;
+          state._pendingPlayPromise = null;
+          renderZenStage();
+          renderBottomDock();
+        });
     };
+
 
     window.toggleBlur = (index) => {
       state.revealedAnswers[index] = !state.revealedAnswers[index];
       renderZenStage();
     };
 
+    /**
+     * Navega para a frase anterior (-1) ou seguinte (+1) no Palco Zen.
+     *
+     * BLINDAGEM PROMISE: Ao navegar rapidamente (swipe, botões, teclado), pode haver
+     * uma Promise de play() ainda pendente. Encadeamos o novo play() sobre a Promise
+     * anterior para garantir que o browser não receba .play() em sobreposição, o que
+     * causaria AbortError no Safari iOS.
+     *
+     * @param {number} dir - Direção: -1 (anterior) ou +1 (próxima).
+     */
     window.navSentence = (dir) => {
-      state.revealedAnswers = {}; // Reset de blur ao navegar
+      state.revealedAnswers = {};
       const items = getActiveItems();
       const newIdx = Math.max(0, Math.min(items.length - 1, state.currentSentenceIndex + dir));
       state.currentSentenceIndex = newIdx;
       const media = getActiveMedia();
-      
+
       if (state.activity !== 'look_retell') {
         const sentence = items[newIdx];
         if (sentence && sentence.start !== undefined) {
           media.currentTime = sentence.start;
         }
         if (state.isPlaying) {
-          media.play().catch(() => {});
+          // Encadeia o novo play APÓS a resolução da Promise anterior.
+          const safePlay = state._pendingPlayPromise
+            ? state._pendingPlayPromise.catch(() => {}).then(() => media.play())
+            : media.play();
+
+          state._pendingPlayPromise = safePlay;
+          safePlay
+            .then(() => { state._pendingPlayPromise = null; })
+            .catch(err => {
+              if (err.name !== 'AbortError') console.warn('[AEF] navSentence play error:', err);
+              state._pendingPlayPromise = null;
+            });
         }
       }
       renderZenStage();
     };
 
+    /**
+     * Pula diretamente para uma frase pelo índice (paginação por pontos no Palco Zen).
+     *
+     * BLINDAGEM PROMISE: Mesmo comportamento de navSentence — encadeia sobre Promise
+     * pendente antes de disparar o novo play().
+     *
+     * @param {number} idx - Índice absoluto da frase no array de items ativos.
+     */
     window.jumpToSentence = (idx) => {
-      state.revealedAnswers = {}; // Reset de blur ao pular
+      state.revealedAnswers = {};
       state.currentSentenceIndex = idx;
       const media = getActiveMedia();
+
       if (state.activity !== 'look_retell') {
         const items = getActiveItems();
         const sentence = items[idx];
@@ -1536,11 +1747,22 @@
           media.currentTime = sentence.start;
         }
         if (state.isPlaying) {
-          media.play().catch(() => {});
+          const safePlay = state._pendingPlayPromise
+            ? state._pendingPlayPromise.catch(() => {}).then(() => media.play())
+            : media.play();
+
+          state._pendingPlayPromise = safePlay;
+          safePlay
+            .then(() => { state._pendingPlayPromise = null; })
+            .catch(err => {
+              if (err.name !== 'AbortError') console.warn('[AEF] jumpToSentence play error:', err);
+              state._pendingPlayPromise = null;
+            });
         }
       }
       renderZenStage();
     };
+
 
     window.toggleLoopSentence = (index) => {
       if (state.loopingSentenceIndex === index) {
@@ -1553,26 +1775,65 @@
       renderZenStage();
     };
 
-    window.setEnvironment = (env) => {
+    /**
+     * Alterna o ambiente/categoria do Training Player.
+     *
+     * ARQUITETURA DE NÃO-BLOQUEIO DA UI THREAD:
+     * Esta função é a principal responsável pelo congelamento ao trocar de categoria
+     * porque encadeava 4 renders pesados + createIcons() de forma síncrona na main thread.
+     *
+     * SOLUÇÃO APLICADA:
+     * 1. Aguarda e resolve a Promise de play() pendente ANTES de qualquer operação.
+     * 2. Força a atividade para 'listen_read' imediatamente ao sair de Magic Stories
+     *    (evita renderizar abas canônicas em ambiente não suportado).
+     * 3. Faz o feedback visual imediato (pílulas, subhead, sidebar) no frame atual.
+     * 4. Isola os renders pesados (renderSidebarTracks, renderZenStage, renderBottomDock)
+     *    em requestAnimationFrame separados, liberando a main thread entre cada frame.
+     * 5. Adia createIcons() para o último frame, impedindo re-layout prematuro.
+     * 6. checkFlightModeStatus() é disparado após o último rAF, pois é assíncrono.
+     *
+     * @param {string} env - Identificador do ambiente: 'public' | 'course' | 'ms_legacy' | 'vip' | 'custom'.
+     */
+    window.setEnvironment = async (env) => {
+      // 1. ABORTA QUALQUER PLAY PENDENTE antes de tocar no src ou no estado.
+      if (state._pendingPlayPromise !== null) {
+        try {
+          await state._pendingPlayPromise;
+        } catch (_abortErr) {}
+        state._pendingPlayPromise = null;
+      }
+
+      // 2. Reseta estado de posição e respostas.
       state.environment = env;
       state.currentSentenceIndex = 0;
       state.revealedAnswers = {};
-      
-      let label = "Magic Stories";
+      state.loopingSentenceIndex = -1;
+
+      // 3. GUARD DE ATIVIDADE: Fora de Magic Stories, colapsa para listen_read.
+      //    Impede que abas canônicas (vocab, listen_answer, look_retell, etc.) sejam
+      //    renderizadas em ambientes que não possuem os dados pedagógicos completos.
+      const isMagicStoriesEnv = (env === 'course' || env === 'ms_legacy');
+      if (!isMagicStoriesEnv) {
+        state.activity = 'listen_read';
+      }
+
+      // 4. Seleção de faixa e carga de mídia por ambiente.
+      let label = 'Magic Stories';
+
       if (env === 'public') {
-        label = "Sugestões do Leo (Free Plan)";
+        label = 'Sugestões do Leo (Free Plan)';
         if (window.AEF_STUDENT_PUBLIC?.tracks?.length > 0) {
           REAL_TRACK = window.AEF_STUDENT_PUBLIC.tracks[0];
-          loadTrackAudio(REAL_TRACK);
+          await loadTrackAudio(REAL_TRACK);
         }
-      } else if (env === 'course' || env === 'ms_legacy') {
-        label = "Magic Stories (Cursos)";
+      } else if (isMagicStoriesEnv) {
+        label = 'Magic Stories (Cursos)';
         if (window.AEF_STUDENT_ANDRE?.tracks?.length > 0) {
           REAL_TRACK = window.AEF_STUDENT_ANDRE.tracks[0];
-          loadTrackAudio(REAL_TRACK);
+          await loadTrackAudio(REAL_TRACK);
         }
       } else if (env === 'vip') {
-        label = "Mentoria VIP Individual";
+        label = 'Mentoria VIP Individual';
         const currentMentee = (state.student && state.student.id) || 'estevao';
         if (currentMentee === 'estevao' && window.AEF_STUDENT_ESTEVAO) {
           state.student = window.AEF_STUDENT_ESTEVAO;
@@ -1585,43 +1846,48 @@
         }
         if (state.student?.tracks?.length > 0) {
           REAL_TRACK = state.student.tracks[0];
-          loadTrackAudio(REAL_TRACK);
+          await loadTrackAudio(REAL_TRACK);
         }
         window.switchVIPMentee(currentMentee);
       } else if (env === 'custom') {
-        label = "Minhas Coisas (Laboratório)";
-        state.audio.pause();
-        state.isPlaying = false;
+        label = 'Minhas Coisas (Laboratório)';
+        // loadTrackAudio já pausa e reseta o áudio internamente.
         const customTracks = getCustomTracks();
         if (customTracks.length > 0) {
           REAL_TRACK = customTracks[0];
-          loadTrackAudio(REAL_TRACK);
+          await loadTrackAudio(REAL_TRACK);
+        } else {
+          // Sem faixas customizadas: garante estado limpo sem lançar AbortError.
+          state.audio.pause();
+          state.isPlaying = false;
         }
       }
 
-      // Update Pill & Badge Styles
+      // 5. FEEDBACK VISUAL IMEDIATO (leve, no frame atual):
+      //    Atualiza pílulas de ambiente, subhead e sidebar sem renderizar os cards.
       ['public', 'course', 'vip', 'custom'].forEach(e => {
         const btn = document.getElementById(`env-btn-${e}`);
         if (btn) {
           const badge = btn.querySelector('.env-badge');
           if (e === env || (e === 'course' && env === 'ms_legacy')) {
-            btn.className = "env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0D1E36] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer shrink-0";
-            if (badge) badge.className = "env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-mono font-black";
+            btn.className = 'env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0D1E36] text-white shadow-xs transition flex items-center gap-1.5 cursor-pointer shrink-0';
+            if (badge) badge.className = 'env-badge text-[9px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-mono font-black';
           } else {
-            btn.className = "env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0";
+            btn.className = 'env-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-[#FDF8F0] text-[#7A7369] transition flex items-center gap-1.5 cursor-pointer shrink-0';
             if (badge) {
-              const bgClass = e === 'public' ? 'bg-amber-100 text-amber-900' : (e === 'course' ? 'bg-blue-100 text-blue-900' : (e === 'vip' ? 'bg-purple-100 text-purple-900' : 'bg-emerald-100 text-emerald-900'));
+              const bgClass = e === 'public' ? 'bg-amber-100 text-amber-900'
+                : e === 'course' ? 'bg-blue-100 text-blue-900'
+                : e === 'vip' ? 'bg-purple-100 text-purple-900'
+                : 'bg-emerald-100 text-emerald-900';
               badge.className = `env-badge text-[9px] px-1.5 py-0.2 rounded font-mono font-black ${bgClass}`;
             }
           }
         }
       });
 
-      // Update Subhead Text
       const subhead = document.getElementById('zen-subhead-text');
       if (subhead) subhead.innerText = `AgoraEuFalo • ${label}`;
 
-      // Update Sidebar Track Info
       const sideName = document.getElementById('sidebar-activity-name');
       if (sideName && REAL_TRACK.title) sideName.innerText = REAL_TRACK.title;
 
@@ -1629,18 +1895,36 @@
       if (tipText && REAL_TRACK.goldenTip) tipText.innerText = `"${REAL_TRACK.goldenTip}"`;
 
       showToast(`Ambiente alterado para: ${label}`);
-      
-      const drawer = document.getElementById("playerDrawerMenu");
-      if (drawer && !drawer.classList.contains("-translate-x-full")) {
+
+      // Fecha o drawer lateral se estiver aberto.
+      const drawer = document.getElementById('playerDrawerMenu');
+      if (drawer && !drawer.classList.contains('-translate-x-full')) {
         window.togglePlayerDrawer();
       }
 
-      renderSidebarTracks();
-      renderZenStage();
-      renderBottomDock();
-      window.checkFlightModeStatus();
-      if (window.lucide) window.lucide.createIcons();
+      // 6. RENDERS PESADOS EM requestAnimationFrame SEQUENCIAIS:
+      //    Cada render em um frame separado → browser respira entre eles,
+      //    eliminando o congelamento de UI no mobile ao trocar de categoria.
+      requestAnimationFrame(() => {
+        renderSidebarTracks();
+
+        requestAnimationFrame(() => {
+          renderZenStage();
+
+          requestAnimationFrame(() => {
+            renderBottomDock();
+
+            // createIcons() recalcula todos os SVG Lucide injetados via innerHTML.
+            // Adiado para o último frame para não bloquear o layout dos cards.
+            if (window.lucide) window.lucide.createIcons();
+
+            // checkFlightModeStatus é assíncrono (CacheStorage) — dispara após os renders.
+            window.checkFlightModeStatus();
+          });
+        });
+      });
     };
+
 
     window.playChunkAudio = (url, index) => {
       showToast(`Tocando áudio do Chunk #${index+1}`);
@@ -2152,32 +2436,75 @@
       }
     });
 
-    window.togglePlayPause = () => {
+    /**
+     * Alterna entre play e pause no dock inferior e na lockscreen (MediaSession).
+     *
+     * BLINDAGEM PROMISE (Safari iOS / Chrome Mobile):
+     * - PAUSE: Antes de chamar .pause(), aguarda a resolução da Promise de play() pendente.
+     *   Safari iOS lança AbortError se .pause() for chamado sobre uma Promise não resolvida.
+     * - PLAY: Registra a nova Promise em state._pendingPlayPromise para que
+     *   loadTrackAudio() e setEnvironment() possam encadear sobre ela com segurança.
+     * - VÍDEO: Aplica a mesma blindagem ao elemento <video> do Palco Zen.
+     */
+    window.togglePlayPause = async () => {
       const vid = document.getElementById('zen-stage-video');
       const hasVideo = Boolean(REAL_TRACK?.videoUrl && vid && !REAL_TRACK.videoUrl.includes('youtube'));
 
       if (hasVideo) {
+        // Vídeo nativo: garante que o áudio MP3 paralelo esteja limpo.
+        if (state._pendingPlayPromise !== null) {
+          try { await state._pendingPlayPromise; } catch (_e) {}
+          state._pendingPlayPromise = null;
+        }
         state.audio.pause();
         state.audio.removeAttribute('src');
+
         if (vid.paused) {
-          vid.play().then(() => { state.isPlaying = true; }).catch(e => console.log(e));
+          const vidPromise = vid.play();
+          vidPromise
+            .then(() => { state.isPlaying = true; renderZenStage(); renderBottomDock(); })
+            .catch(err => {
+              if (err.name !== 'AbortError') console.warn('[AEF] togglePlayPause video error:', err);
+              state.isPlaying = false;
+            });
         } else {
           vid.pause();
           state.isPlaying = false;
+          renderZenStage();
+          renderBottomDock();
         }
         return;
       }
 
+      // Áudio MP3 padrão.
       if (state.isPlaying) {
+        // PAUSE SEGURO: aguarda promise pendente antes de pausar.
+        if (state._pendingPlayPromise !== null) {
+          try { await state._pendingPlayPromise; } catch (_e) {}
+          state._pendingPlayPromise = null;
+        }
         state.audio.pause();
         state.isPlaying = false;
+        renderZenStage();
+        renderBottomDock();
       } else {
-        state.audio.play().then(() => {
-          state.isPlaying = true;
-        }).catch(e => console.log(e));
+        // PLAY SEGURO: registra a Promise para blindagem futura.
+        state._pendingPlayPromise = state.audio.play();
+        state._pendingPlayPromise
+          .then(() => {
+            state.isPlaying = true;
+            state._pendingPlayPromise = null;
+            renderZenStage();
+            renderBottomDock();
+          })
+          .catch(err => {
+            if (err.name !== 'AbortError') console.warn('[AEF] togglePlayPause play error:', err);
+            state.isPlaying = false;
+            state._pendingPlayPromise = null;
+            renderZenStage();
+            renderBottomDock();
+          });
       }
-      renderZenStage();
-      renderBottomDock();
     };
 
     window.seekOffset = (sec) => {
