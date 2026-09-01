@@ -302,6 +302,81 @@ window.AEF_STUDENT_PUBLIC = {
           "spokenTranslation": "Hoje é Domingo de Páscoa. Feliz Páscoa pra você e pra sua família!"
         }
       ]
+    },
+    {
+      id: "ms006-how-they-met",
+      title: "MS006 - How They Met: The First Encounter in NY",
+      duration: "01:59",
+      coverImage: "../assets/images/cover_ms006.jpg",
+      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Faudio_lr_5.mp3?alt=media",
+      videoUrl: "",
+      summary: "A história do primeiro encontro de Tom e Grazi em Nova York: o bar da conferência, o grupo animado de brasileiros e a revelação inesperada do Tom.",
+      goldenTip: "Observe a oposição de estados: 'by himself' (sozinho) e 'loud friends' (amigos animados). Sinta a pronúncia suave dos passados regulares.",
+      sentences: [
+        {
+          "id": 1,
+          "start": 0.0,
+          "end": 7.5,
+          "text": "Tom and Grazi met at a business conference in New York ten years ago. It was a cold evening in November.",
+          "spokenTranslation": "O Tom e a Grazi se conheceram numa conferência de negócios em Nova York dez anos atrás. Era uma noite fria em novembro."
+        },
+        {
+          "id": 2,
+          "start": 7.5,
+          "end": 14.5,
+          "text": "Tom was sitting at the bar by himself, having a drink after a long day at the conference.",
+          "spokenTranslation": "O Tom tava sentado no bar sozinho, tomando um drinque depois de um longo dia de conferência."
+        },
+        {
+          "id": 3,
+          "start": 14.5,
+          "end": 22.0,
+          "text": "Grazi’s English wasn’t very good then, but that wasn’t a problem for her.",
+          "spokenTranslation": "O inglês da Grazi não era muito bom naquela época, mas isso não era um problema pra ela."
+        },
+        {
+          "id": 4,
+          "start": 22.0,
+          "end": 31.0,
+          "text": "Grazi and her friends were having a good time at the bar. They were talking and laughing in Portuguese.",
+          "spokenTranslation": "A Grazi e as amigas tavam se divertindo no bar. Elas tavam conversando e rindo em português."
+        },
+        {
+          "id": 5,
+          "start": 31.0,
+          "end": 39.0,
+          "text": "Tom noticed the group of loud Brazilian friends and started paying attention.",
+          "spokenTranslation": "O Tom notou o grupo de amigos brasileiros animados e começou a prestar atenção."
+        },
+        {
+          "id": 6,
+          "start": 39.0,
+          "end": 48.0,
+          "text": "A friend of Grazi’s notices Tom and says: 'Hey Grazi, there’s a handsome guy all by himself sitting right behind you!'",
+          "spokenTranslation": "Uma amiga da Grazi nota o Tom e diz: 'Ei Grazi, tem um cara bonito sozinho sentado bem atrás de você!'"
+        },
+        {
+          "id": 7,
+          "start": 48.0,
+          "end": 57.0,
+          "text": "Grazi quietly turned around and looked over to Tom. She said: 'You’re right, he is cute. But he’s probably married.'",
+          "spokenTranslation": "A Grazi virou de mansinho e deu uma olhada pro Tom. Ela disse: 'Tem razão, ele é bonitinho. Mas provavelmente é casado.'"
+        },
+        {
+          "id": 8,
+          "start": 57.0,
+          "end": 64.0,
+          "text": "Tom left and went to the restroom. Grazi and her friends continued talking and laughing.",
+          "spokenTranslation": "O Tom saiu e foi ao banheiro. A Grazi e as amigas continuaram conversando e rindo."
+        },
+        {
+          "id": 9,
+          "start": 64.0,
+          "end": 77.0,
+          "text": "A few minutes later, Tom came back, approached the Brazilians and said: 'Good evening! Excuse me... Hi, I’m Tom. I speak Portuguese, and I’m NOT married!'",
+          "spokenTranslation": "Alguns minutos depois, o Tom voltou, se aproximou dos brasileiros e disse: 'Boa noite! Com licença... Oi, eu sou o Tom. Eu falo português, e NÃO sou casado!'"
+        }
+      ]
     }
   ]
 };
