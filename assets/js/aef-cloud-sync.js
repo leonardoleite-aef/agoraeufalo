@@ -812,12 +812,171 @@
 
     /**
      * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
+    /**
+     * Helper to format JavaScript objects to Firestore REST format
+     */
+    _toFirestoreRestFields(obj) {
+      const fields = {};
+      for (const [k, v] of Object.entries(obj)) {
+        if (v === undefined || typeof v === 'function' || k === 'modules' || k === 'lessons') continue;
+        if (typeof v === 'string') fields[k] = { stringValue: v };
+        else if (typeof v === 'number') fields[k] = Number.isInteger(v) ? { integerValue: v.toString() } : { doubleValue: v };
+        else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
+        else if (Array.isArray(v)) {
+          fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
+        }
+      }
+      return fields;
+    }
+
+    /**
+     * Saves a Course document to Firestore (SDK + REST Fallback)
+     */
+    async saveCourse(courseData) {
+      if (!courseData || !courseData.id) throw new Error("ID do curso obrigatório.");
+      await this.init();
+      const cid = courseData.id;
+      const payload = {
+        id: cid,
+        title: courseData.title || cid,
+        slug: courseData.slug || cid,
+        badge: courseData.badge || "CURSO LIBERADO",
+        tierRequired: courseData.tierRequired || "vip",
+        themeColor: courseData.themeColor || "amber",
+        coverImageUrl: courseData.coverImageUrl || "assets/images/cover-default-aef.jpg",
+        description: courseData.description || "",
+        published: courseData.published !== false,
+        updatedAt: new Date().toISOString()
+      };
+
+      let saved = false;
+      if (this.db) {
+        try {
+          await this.db.collection("courses").doc(cid).set(payload, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("Firestore SDK saveCourse error, trying REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}`;
+        const res = await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: this._toFirestoreRestFields(payload) })
+        });
+        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+      }
+
+      console.log(`☁️ [AEFCloudSync] Curso "${payload.title}" salvo com sucesso no Firestore!`);
+      return payload;
+    }
+
+    /**
+     * Saves a Module document to Firestore (SDK + REST Fallback)
+     */
+    async saveModule(courseId, moduleData) {
+      if (!courseId || !moduleData || !moduleData.id) throw new Error("CourseId e ModuleId obrigatórios.");
+      await this.init();
+      const mid = moduleData.id;
+      const payload = {
+        id: mid,
+        courseId: courseId,
+        title: moduleData.title || mid,
+        order: parseInt(moduleData.order) || 1,
+        description: moduleData.description || "",
+        published: moduleData.published !== false,
+        badge: moduleData.badge || "",
+        stats: moduleData.stats || "",
+        updatedAt: new Date().toISOString()
+      };
+
+      let saved = false;
+      if (this.db) {
+        try {
+          await this.db.collection("courses").doc(courseId).collection("modules").doc(mid).set(payload, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("Firestore SDK saveModule error, trying REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}`;
+        const res = await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: this._toFirestoreRestFields(payload) })
+        });
+        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+      }
+
+      console.log(`☁️ [AEFCloudSync] Módulo "${payload.title}" salvo com sucesso em courses/${courseId}/modules/${mid}`);
+      return payload;
+    }
+
+    /**
+     * Saves a Lesson document to Firestore (SDK + REST Fallback)
+     */
+    async saveLesson(courseId, moduleId, lessonData) {
+      if (!courseId || !moduleId || !lessonData || !lessonData.id) throw new Error("CourseId, ModuleId e LessonId obrigatórios.");
+      await this.init();
+      const lid = lessonData.id;
+      const payload = {
+        id: lid,
+        courseId: courseId,
+        moduleId: moduleId,
+        title: lessonData.title || "Aula sem título",
+        order: parseInt(lessonData.order) || 1,
+        videoUrl: lessonData.videoUrl || "",
+        audioUrl: lessonData.audioUrl || "",
+        pdfUrl: lessonData.pdfUrl || "",
+        artworkUrl: lessonData.artworkUrl || "",
+        thumbnailUrl: lessonData.thumbnailUrl || "",
+        goldenTip: lessonData.goldenTip || "",
+        hasTrainingTrack: lessonData.hasTrainingTrack !== false,
+        published: lessonData.published !== false,
+        rawScript: lessonData.rawScript || "",
+        processedContentHtml: lessonData.processedContentHtml || "",
+        aiStatus: lessonData.aiStatus || "draft_pending",
+        updatedAt: new Date().toISOString()
+      };
+
+      let saved = false;
+      if (this.db) {
+        try {
+          await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lid).set(payload, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("Firestore SDK saveLesson error, trying REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lid}`;
+        const res = await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: this._toFirestoreRestFields(payload) })
+        });
+        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+      }
+
+      console.log(`☁️ [AEFCloudSync] Aula "${payload.title}" salva com sucesso em courses/${courseId}/modules/${moduleId}/lessons/${lid}`);
+      return payload;
+    }
+
+    /**
+     * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
      * Merges Base Canonical Registry with Google Cloud Firestore Subcollections in parallel
      */
     async getCoursesHierarchy(baseRegistry = null) {
       await this.init();
       const courses = JSON.parse(JSON.stringify(baseRegistry || (window.AEF_COURSES_REGISTRY || {})));
 
+      // 1. Try SDK Fetch
+      let sdkSuccess = false;
       try {
         if (this.db) {
           const coursesSnap = await this.db.collection("courses").get();
@@ -832,6 +991,7 @@
               if (cData.description !== undefined) courses[cid].description = cData.description;
               if (cData.coverImageUrl) courses[cid].coverImageUrl = cData.coverImageUrl;
               if (cData.tierRequired) courses[cid].tierRequired = cData.tierRequired;
+              if (cData.themeColor) courses[cid].themeColor = cData.themeColor;
               if (cData.badge) courses[cid].badge = cData.badge;
               if (cData.published !== undefined) courses[cid].published = cData.published;
               if (cData.slug) courses[cid].slug = cData.slug;
@@ -885,10 +1045,100 @@
               }
             });
             await Promise.all(coursePromises);
+            sdkSuccess = true;
           }
         }
       } catch (err) {
-        console.warn("⚠️ [AEFCloudSync] Erro ao carregar hierarquia dinâmica do Firestore:", err);
+        console.warn("⚠️ [AEFCloudSync] Erro no SDK Firestore, executando REST fallback:", err);
+      }
+
+      // 2. REST Fallback (executes if SDK fetch didn't run or returned nothing)
+      if (!sdkSuccess) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.documents) {
+              for (const doc of data.documents) {
+                const cid = doc.name.split("/").pop();
+                const f = doc.fields || {};
+                if (!courses[cid]) {
+                  courses[cid] = { id: cid, title: f.title?.stringValue || cid, modules: [] };
+                }
+                if (f.title?.stringValue) courses[cid].title = f.title.stringValue;
+                if (f.description?.stringValue !== undefined) courses[cid].description = f.description.stringValue;
+                if (f.coverImageUrl?.stringValue) courses[cid].coverImageUrl = f.coverImageUrl.stringValue;
+                if (f.tierRequired?.stringValue) courses[cid].tierRequired = f.tierRequired.stringValue;
+                if (f.themeColor?.stringValue) courses[cid].themeColor = f.themeColor.stringValue;
+                if (f.badge?.stringValue) courses[cid].badge = f.badge.stringValue;
+                if (f.published?.booleanValue !== undefined) courses[cid].published = f.published.booleanValue;
+                if (f.slug?.stringValue) courses[cid].slug = f.slug.stringValue;
+                courses[cid].modules = courses[cid].modules || [];
+
+                // REST fetch modules
+                try {
+                  const mRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules`);
+                  if (mRes.ok) {
+                    const mData = await mRes.json();
+                    if (mData && mData.documents) {
+                      for (const mDoc of mData.documents) {
+                        const mid = mDoc.name.split("/").pop();
+                        const mf = mDoc.fields || {};
+                        let mObj = courses[cid].modules.find(m => m.id === mid);
+                        if (!mObj) {
+                          mObj = { id: mid, title: mf.title?.stringValue || mid, order: parseInt(mf.order?.integerValue) || (courses[cid].modules.length + 1), lessons: [] };
+                          courses[cid].modules.push(mObj);
+                        }
+                        if (mf.title?.stringValue) mObj.title = mf.title.stringValue;
+                        if (mf.description?.stringValue) mObj.description = mf.description.stringValue;
+                        if (mf.published?.booleanValue !== undefined) mObj.published = mf.published.booleanValue;
+                        mObj.lessons = mObj.lessons || [];
+
+                        // REST fetch lessons
+                        try {
+                          const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules/${mid}/lessons`);
+                          if (lRes.ok) {
+                            const lData = await lRes.json();
+                            if (lData && lData.documents) {
+                              for (const lDoc of lData.documents) {
+                                const lid = lDoc.name.split("/").pop();
+                                const lf = lDoc.fields || {};
+                                let lObj = mObj.lessons.find(l => l.id === lid);
+                                if (!lObj) {
+                                  lObj = { id: lid, title: lf.title?.stringValue || lid, order: parseInt(lf.order?.integerValue) || (mObj.lessons.length + 1) };
+                                  mObj.lessons.push(lObj);
+                                }
+                                if (lf.title?.stringValue) lObj.title = lf.title.stringValue;
+                                if (lf.videoUrl?.stringValue) lObj.videoUrl = lf.videoUrl.stringValue;
+                                if (lf.audioUrl?.stringValue) lObj.audioUrl = lf.audioUrl.stringValue;
+                                if (lf.pdfUrl?.stringValue) lObj.pdfUrl = lf.pdfUrl.stringValue;
+                                if (lf.goldenTip?.stringValue) lObj.goldenTip = lf.goldenTip.stringValue;
+                                if (lf.artworkUrl?.stringValue) lObj.artworkUrl = lf.artworkUrl.stringValue;
+                                if (lf.thumbnailUrl?.stringValue) lObj.thumbnailUrl = lf.thumbnailUrl.stringValue;
+                                if (lf.published?.booleanValue !== undefined) lObj.published = lf.published.booleanValue;
+                                if (lf.hasTrainingTrack?.booleanValue !== undefined) lObj.hasTrainingTrack = lf.hasTrainingTrack.booleanValue;
+                                if (lf.rawScript?.stringValue) lObj.rawScript = lf.rawScript.stringValue;
+                                if (lf.processedContentHtml?.stringValue) lObj.processedContentHtml = lf.processedContentHtml.stringValue;
+                              }
+                              mObj.lessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                            }
+                          }
+                        } catch (le) {
+                          console.warn(`REST lessons error (${cid}/${mid}):`, le);
+                        }
+                      }
+                      courses[cid].modules.sort((a, b) => (a.order || 0) - (b.order || 0));
+                    }
+                  }
+                } catch (me) {
+                  console.warn(`REST modules error (${cid}):`, me);
+                }
+              }
+            }
+          }
+        } catch (re) {
+          console.warn("REST hierarchy error:", re);
+        }
       }
 
       return courses;

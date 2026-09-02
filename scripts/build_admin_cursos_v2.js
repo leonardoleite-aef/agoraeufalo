@@ -602,15 +602,15 @@ const completeHtml = `<!DOCTYPE html>
   <script>
     // In-memory Course Hierarchy Store
     let ALL_COURSES = {};
-    let activeCourseId = "ms-legacy";
+    let activeCourseId = "aef-experience";
     let activeModuleId = null;
     let activeLessonId = null;
     let currentAiTab = "raw";
     let LAST_GENERATED_PDF_HTML = "";
 
     document.addEventListener("DOMContentLoaded", async () => {
-      // 1. Inicializa a UI imediatamente com o registro canônico local
-      initializeStudioData();
+      // 1. Inicializa os dados com prioridade para cache local e sincronização remota imediata
+      await initializeStudioData();
 
       // 2. Cria ícones Lucide
       if (window.lucide) lucide.createIcons();
@@ -629,26 +629,39 @@ const completeHtml = `<!DOCTYPE html>
       // 1. Renderiza INSTANTANEAMENTE com a base local para ZERO atraso visual
       ALL_COURSES = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY || {}));
       
-      const keys = Object.keys(ALL_COURSES);
-      if (!keys.includes(activeCourseId) && keys.length > 0) {
-        activeCourseId = keys[0];
+      const savedCourseId = localStorage.getItem('aef_admin_active_course_id');
+      if (savedCourseId && ALL_COURSES[savedCourseId]) {
+        activeCourseId = savedCourseId;
+      } else {
+        const keys = Object.keys(ALL_COURSES);
+        if (!keys.includes(activeCourseId) && keys.length > 0) {
+          activeCourseId = keys[0];
+        }
       }
 
       renderCourseSwitcher();
       renderHierarchyTree();
 
-      // 2. Busca atualizações do Firestore em segundo plano (assíncrono em paralelo)
+      // 2. Busca atualizações do Firestore em tempo real (SDK + REST)
       try {
         if (window.aefCloudSync) {
+          await window.aefCloudSync.init();
           const remoteHierarchy = await window.aefCloudSync.getCoursesHierarchy(ALL_COURSES);
           if (remoteHierarchy && Object.keys(remoteHierarchy).length > 0) {
             ALL_COURSES = remoteHierarchy;
+            const currentSaved = localStorage.getItem('aef_admin_active_course_id');
+            if (currentSaved && ALL_COURSES[currentSaved]) {
+              activeCourseId = currentSaved;
+            } else if (!ALL_COURSES[activeCourseId]) {
+              const rKeys = Object.keys(ALL_COURSES);
+              if (rKeys.length > 0) activeCourseId = rKeys[0];
+            }
             renderCourseSwitcher();
             renderHierarchyTree();
           }
         }
       } catch (err) {
-        console.warn("⚠️ Aviso na atualização remota em background:", err);
+        console.warn("⚠️ Aviso na atualização remota:", err);
       }
     }
 
@@ -667,6 +680,7 @@ const completeHtml = `<!DOCTYPE html>
 
     function handleSelectCourse(cid) {
       activeCourseId = cid;
+      localStorage.setItem('aef_admin_active_course_id', cid);
       activeModuleId = null;
       activeLessonId = null;
       renderHierarchyTree();
@@ -847,12 +861,8 @@ const completeHtml = `<!DOCTYPE html>
       updateLessonPublishedUi(les.published);
 
       try {
-        if (window.aefCloudSync && window.aefCloudSync.db) {
-          await window.aefCloudSync.db
-            .collection("courses").doc(activeCourseId)
-            .collection("modules").doc(activeModuleId)
-            .collection("lessons").doc(activeLessonId)
-            .set({ published: les.published, updatedAt: new Date().toISOString() }, { merge: true });
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveLesson(activeCourseId, activeModuleId, les);
         }
       } catch (err) {
         console.warn("Firestore sync lesson status:", err);
@@ -869,11 +879,8 @@ const completeHtml = `<!DOCTYPE html>
       course.published = course.published === false ? true : false;
 
       try {
-        if (window.aefCloudSync && window.aefCloudSync.db) {
-          await window.aefCloudSync.db.collection("courses").doc(activeCourseId).set({
-            published: course.published,
-            updatedAt: new Date().toISOString()
-          }, { merge: true });
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveCourse(course);
         }
       } catch (err) {
         console.warn("Firestore sync course status:", err);
@@ -894,11 +901,8 @@ const completeHtml = `<!DOCTYPE html>
       mod.published = mod.published === false ? true : false;
 
       try {
-        if (window.aefCloudSync && window.aefCloudSync.db) {
-          await window.aefCloudSync.db
-            .collection("courses").doc(activeCourseId)
-            .collection("modules").doc(moduleId)
-            .set({ published: mod.published, updatedAt: new Date().toISOString() }, { merge: true });
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveModule(activeCourseId, mod);
         }
       } catch (err) {
         console.warn("Firestore sync module status:", err);
@@ -992,22 +996,19 @@ const completeHtml = `<!DOCTYPE html>
       foundLesson.aiStatus = document.getElementById("lessonAiStatusSelect").value;
       foundLesson.updatedAt = new Date().toISOString();
 
-      // Persist to Cloud Firestore
+      renderHierarchyTree();
+      updatePreviewHtml();
+
+      // Persist to Cloud Firestore with SDK + REST fallback
       try {
-        if (window.aefCloudSync && window.aefCloudSync.db) {
-          await window.aefCloudSync.db
-            .collection("courses").doc(activeCourseId)
-            .collection("modules").doc(moduleId)
-            .collection("lessons").doc(lessonId)
-            .set(foundLesson, { merge: true });
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveLesson(activeCourseId, moduleId, foundLesson);
         }
       } catch (err) {
         console.warn("Firestore sync lesson:", err);
       }
 
-      renderHierarchyTree();
-      updatePreviewHtml();
-      showToast("🚀 Aula salva com sucesso!");
+      showToast("🚀 Aula salva com sucesso no Firestore!");
     }
 
     async function handleDeleteCurrentLesson() {
@@ -1326,19 +1327,22 @@ const completeHtml = `<!DOCTYPE html>
 
       ALL_COURSES[id] = courseObj;
       activeCourseId = id;
+      localStorage.setItem('aef_admin_active_course_id', id);
 
+      closeCourseModal();
+      renderCourseSwitcher();
+      renderHierarchyTree();
+
+      // Persist to Cloud Firestore with SDK + REST fallback
       try {
-        if (window.aefCloudSync && window.aefCloudSync.db) {
-          await window.aefCloudSync.db.collection("courses").doc(id).set(courseObj, { merge: true });
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveCourse(courseObj);
         }
       } catch (err) {
         console.warn("Firestore sync course:", err);
       }
 
-      closeCourseModal();
-      renderCourseSwitcher();
-      renderHierarchyTree();
-      showToast(published ? "🟢 Curso salvo como PUBLICADO!" : "🟡 Curso salvo como RASCUNHO!");
+      showToast(published ? "🟢 Curso salvo no Firestore como PUBLICADO!" : "🟡 Curso salvo no Firestore como RASCUNHO!");
     }
 
     function openModuleModal() {
@@ -1403,20 +1407,18 @@ const completeHtml = `<!DOCTYPE html>
 
       course.modules.sort((a, b) => (a.order || 0) - (b.order || 0));
 
+      closeModuleModal();
+      renderHierarchyTree();
+
       try {
-        if (window.aefCloudSync && window.aefCloudSync.db) {
-          await window.aefCloudSync.db
-            .collection("courses").doc(activeCourseId)
-            .collection("modules").doc(modId)
-            .set(existingMod, { merge: true });
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveModule(activeCourseId, existingMod);
         }
       } catch (err) {
         console.warn("Firestore sync module:", err);
       }
 
-      closeModuleModal();
-      renderHierarchyTree();
-      showToast(published ? "🟢 Módulo salvo como PUBLICADO!" : "🟡 Módulo salvo como RASCUNHO!");
+      showToast(published ? \`🟢 Módulo "\${title}" salvo no Firestore!\` : \`🟡 Módulo "\${title}" salvo como RASCUNHO!\`);
     }
 
     async function handleDeleteCurrentModule() {
@@ -1459,48 +1461,15 @@ const completeHtml = `<!DOCTYPE html>
 
         for (const cid of coursesKeys) {
           const course = ALL_COURSES[cid];
-          const coursePayload = {
-            id: course.id || cid,
-            title: course.title || cid,
-            slug: course.slug || course.id || cid,
-            badge: course.badge || "CURSO LIBERADO",
-            tierRequired: course.tierRequired || "vip",
-            themeColor: course.themeColor || "amber",
-            coverImageUrl: course.coverImageUrl || "assets/images/cover-default-aef.jpg",
-            description: course.description || "",
-            published: course.published !== false,
-            updatedAt: new Date().toISOString()
-          };
+          await window.aefCloudSync.saveCourse(course);
 
-          if (window.aefCloudSync.db) {
-            await window.aefCloudSync.db.collection("courses").doc(cid).set(coursePayload, { merge: true });
+          for (const mod of (course.modules || [])) {
+            totalMods++;
+            await window.aefCloudSync.saveModule(cid, mod);
 
-            for (const mod of (course.modules || [])) {
-              totalMods++;
-              const modPayload = {
-                id: mod.id,
-                courseId: cid,
-                title: mod.title || mod.id,
-                order: mod.order || 1,
-                description: mod.description || "",
-                published: mod.published !== false,
-                badge: mod.badge || "",
-                stats: mod.stats || "",
-                updatedAt: new Date().toISOString()
-              };
-              await window.aefCloudSync.db.collection("courses").doc(cid).collection("modules").doc(mod.id).set(modPayload, { merge: true });
-
-              for (const les of (mod.lessons || [])) {
-                totalLessons++;
-                const lesPayload = {
-                  ...les,
-                  courseId: cid,
-                  moduleId: mod.id,
-                  published: les.published !== false,
-                  updatedAt: new Date().toISOString()
-                };
-                await window.aefCloudSync.db.collection("courses").doc(cid).collection("modules").doc(mod.id).collection("lessons").doc(les.id).set(lesPayload, { merge: true });
-              }
+            for (const les of (mod.lessons || [])) {
+              totalLessons++;
+              await window.aefCloudSync.saveLesson(cid, mod.id, les);
             }
           }
         }
@@ -1529,4 +1498,4 @@ const completeHtml = `<!DOCTYPE html>
 `;
 
 fs.writeFileSync('admin-cursos.html', completeHtml, 'utf8');
-console.log('✅ admin-cursos.html compiled with PDF generator & Course Theme Palette! Total lines:', completeHtml.split('\n').length);
+console.log('✅ admin-cursos.html compiled with robust Cloud Sync & active course persistence! Total lines:', completeHtml.split('\n').length);

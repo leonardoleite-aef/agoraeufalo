@@ -32976,6 +32976,3421 @@ window.AEF_MAGIC_STORIES = {
           ]
         }
       ]
+    },
+    {
+      "id": "ms014-jeremy-goes-to-town",
+      "number": "14",
+      "title": "MS014 - Jeremy Goes to Town",
+      "shortTitle": "MS014 • Goes to Town",
+      "badge": "MÓDULO MS014 • JEREMY GOES TO TOWN",
+      "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_lr.jpg",
+      "summary": "Jeremy compra sua picape, curte a noite com os amigos no Red Robin's em Seattle e vive um momento cômico ao descobrir que a garota com quem conversava tem 21 anos.",
+      "goldenTip": "Ligue 'I gotta get going' e 'grab a bite' com a naturalidade do inglês falado.",
+      "tracks": [
+        {
+          "id": "ms014-lr",
+          "moduleId": "ms014-jeremy-goes-to-town",
+          "title": "Aula 01 • Listen & Read (LR)",
+          "activity": "listen_read",
+          "duration": "04:30",
+          "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS014%2FMS014_LR_1.mp4?alt=media",
+          "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS014%2Faudio_ms014_lr.mp3?alt=media",
+          "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_lr.jpg",
+          "goldenTip": "Acompanhe a história e ative o reflexo sem tradução mental.",
+          "sentences": [
+            {
+              "id": 1,
+              "start": 0,
+              "end": 33.72,
+              "text": "Então, relaxe aproveite este primeiro contato, vou fazer duas leituras que, em seguida,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 2,
+              "start": 33.72,
+              "end": 40.04,
+              "text": "eu vou explicando vocabulário e tudo mais que você precisa saber sobre o contexto, alright?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 3,
+              "start": 40.04,
+              "end": 51.66,
+              "text": "Here we go. Jeremy, Jeremy goes to town. Jeremy bought a car last week and he bought a pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 4,
+              "start": 51.66,
+              "end": 61.82,
+              "text": "How did he buy his car? Well, he has saved money for two years now and his parents helped",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 5,
+              "start": 61.82,
+              "end": 69.82,
+              "text": "him a little bit. From now on, no more school buzzes.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 6,
+              "start": 69.82,
+              "end": 75.22,
+              "text": "It was a Friday evening and Jeremy was very excited.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 7,
+              "start": 75.22,
+              "end": 81.05,
+              "text": "Why? He and his friends were going to have a night on the town.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 8,
+              "start": 81.05,
+              "end": 91.45,
+              "text": "First, they went to a football game at school. Jeremy saw a beautiful girl, Becky.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 9,
+              "start": 91.45,
+              "end": 101.77,
+              "text": "He invited her to grab a bite after the game. So, Jeremy, Becky, and some friends went",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 10,
+              "start": 101.77,
+              "end": 107.58,
+              "text": "to Red Robbins in Seattle. It's a great place, it's a restaurant.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 11,
+              "start": 107.58,
+              "end": 118.62,
+              "text": "They all had chicken wings, steak and baked potato. Jeremy and Becky talked and had fun together.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 12,
+              "start": 118.62,
+              "end": 127.9,
+              "text": "At 11pm, Jeremy said, I got to get going. I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 13,
+              "start": 127.9,
+              "end": 135.45,
+              "text": "And Becky said, so soon, stick around, have a beer with me.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 14,
+              "start": 135.45,
+              "end": 141.26,
+              "text": "And Jeremy got surprised and asked, what do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 15,
+              "start": 141.26,
+              "end": 147.9,
+              "text": "What do you mean? How old are you? And Becky answered, 21.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 16,
+              "start": 147.9,
+              "end": 157.08,
+              "text": "What about you? And Jeremy got embarrassed and said, 16.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 17,
+              "start": 157.08,
+              "end": 167.12,
+              "text": "Is Jeremy too young for Becky? Is Jeremy too old for Jeremy?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 18,
+              "start": 167.12,
+              "end": 175.28,
+              "text": "You tell me. All right, very simple, very fun and very easy.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 19,
+              "start": 175.28,
+              "end": 179.2,
+              "text": "Let's do this again.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 20,
+              "start": 179.2,
+              "end": 190.64,
+              "text": "Here goes to town. Jeremy bought a car last week, and he bought a pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 21,
+              "start": 190.64,
+              "end": 197.88,
+              "text": "How did he buy his car? Well, he has saved money for about two years now, and his parents",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 22,
+              "start": 197.88,
+              "end": 206.9,
+              "text": "helped him a little bit. From now on, no more school buses.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 23,
+              "start": 206.9,
+              "end": 213.38,
+              "text": "It was a Friday evening, and Jeremy was very excited. He and his friends were going",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 24,
+              "start": 213.38,
+              "end": 220.55,
+              "text": "to have a night on the town. First, they went to a football game at school.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 25,
+              "start": 220.55,
+              "end": 230.31,
+              "text": "Jeremy saw a beautiful girl, Becky, and he invited her to grab a bite after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 26,
+              "start": 230.31,
+              "end": 236.17,
+              "text": "So Jeremy, Becky and some friends went to Red Robbins in Seattle. It's a great place.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 27,
+              "start": 236.17,
+              "end": 244.42,
+              "text": "They all had chicken wings, steak, and baked potato. Jeremy and Becky talked and had fun",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 28,
+              "start": 244.42,
+              "end": 251.94,
+              "text": "together. At 11 p.m., Jeremy said, I got to get going. I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 29,
+              "start": 251.94,
+              "end": 259.14,
+              "text": "And Becky said, so soon, stick around. Have a beer with me. And Jeremy got surprised,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 30,
+              "start": 259.14,
+              "end": 268.66,
+              "text": "and asked, what do you mean? How old are you? And back he answered, 21. What about you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 31,
+              "start": 268.66,
+              "end": 283.4,
+              "text": "And Jeremy got embarrassed and said, 16. 16. Is Jeremy too young for Becky, or is",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 32,
+              "start": 283.4,
+              "end": 293.28,
+              "text": "Becky too old for Jeremy? You, my friend, tell me. All right, good.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 33,
+              "start": 293.28,
+              "end": 304.09,
+              "text": "So this was the read and listen. Go back, listen more times, and read, inseguida, para",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 34,
+              "start": 304.09,
+              "end": 314.14,
+              "text": "um pouco de ler. E simplesmente, listen, vamos agora, next to the vocabulary session.",
+              "spokenTranslation": ""
+            }
+          ]
+        },
+        {
+          "id": "ms014-voc",
+          "moduleId": "ms014-jeremy-goes-to-town",
+          "title": "Aula 02 • Vocabulary Session (VOC)",
+          "activity": "vocab",
+          "duration": "04:30",
+          "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS014%2FMS014_VOC_1.mp4?alt=media",
+          "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS014%2Faudio_ms014_voc.mp3?alt=media",
+          "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_voc.jpg",
+          "goldenTip": "Acompanhe a história e ative o reflexo sem tradução mental.",
+          "sentences": [
+            {
+              "id": 1,
+              "start": 0,
+              "end": 19.5,
+              "text": "Alright, good. In the vocabulary session, I am going to explain everything that I believe you need to understand the context of the story and some vocabulary, some useful phrases.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 2,
+              "start": 19.5,
+              "end": 20.5,
+              "text": "Here we go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 3,
+              "start": 20.5,
+              "end": 29.3,
+              "text": "Jeremy bought a car last weekend and he bought a pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 4,
+              "start": 29.3,
+              "end": 34.36,
+              "text": "A pickup truck. And what came your niche? That's a pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 5,
+              "start": 34.36,
+              "end": 43.61,
+              "text": "And the question is, how did he buy his car? How did he buy a pickup truck? How?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 6,
+              "start": 43.61,
+              "end": 50.78,
+              "text": "I mean, who paid for it? Here's the explanation.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 7,
+              "start": 50.78,
+              "end": 60.14,
+              "text": "Well, he has saved money for about two years now and his parents helped him a little bit.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 8,
+              "start": 60.14,
+              "end": 67.38,
+              "text": "No, this is important. He has saved money for about two years.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 9,
+              "start": 67.38,
+              "end": 71.38,
+              "text": "This phrase is in the present perfect.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 10,
+              "start": 71.38,
+              "end": 80.93,
+              "text": "And I know you already worked a lot with the present perfect in the Magic Story 13 in 13.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 11,
+              "start": 80.93,
+              "end": 90.27,
+              "text": "And probably you should already imagine this phrase here.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 12,
+              "start": 90.27,
+              "end": 95.27,
+              "text": "In the opposite of the examples I gave in the Magic Story 13,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 13,
+              "start": 95.27,
+              "end": 99.27,
+              "text": "she talks about something in the past.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 14,
+              "start": 99.27,
+              "end": 108.34,
+              "text": "Because in the Magic Story 13, I showed you how phrases that we speak before Portuguese",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 15,
+              "start": 108.34,
+              "end": 115.39,
+              "text": "we speak in the present, but in English we have to use the present.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 16,
+              "start": 115.39,
+              "end": 117.39,
+              "text": "Everything is fine, but the present is perfect.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 17,
+              "start": 117.39,
+              "end": 121.49,
+              "text": "And this generates a confusion, as for example.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 18,
+              "start": 121.49,
+              "end": 126.49,
+              "text": "I have been a teacher for 20 years.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 19,
+              "start": 126.49,
+              "end": 134.1,
+              "text": "Now, here in the case Jeremy has saved money for about two years now.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 20,
+              "start": 134.1,
+              "end": 140.1,
+              "text": "That is, in Portuguese, this phrase means that he has been together for two years",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 21,
+              "start": 140.1,
+              "end": 141.1,
+              "text": "until now.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 22,
+              "start": 141.1,
+              "end": 152.02,
+              "text": "He has been together for two years.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 23,
+              "start": 152.02,
+              "end": 156.34,
+              "text": "For two years he has been together for two years.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 24,
+              "start": 156.34,
+              "end": 163.34,
+              "text": "For you to say that in English, it is just to use the present perfect that you are already using with him.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 25,
+              "start": 163.34,
+              "end": 174.41,
+              "text": "So, we are going to focus a lot on the phrases that I have already met,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 26,
+              "start": 174.41,
+              "end": 182.14,
+              "text": "or have already met during the last so much time.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 27,
+              "start": 182.14,
+              "end": 184.14,
+              "text": "And this is the sentence.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 28,
+              "start": 184.14,
+              "end": 189.14,
+              "text": "He has saved money for about two years now.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 29,
+              "start": 189.14,
+              "end": 193.78,
+              "text": "And his parents helped him a little bit.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 30,
+              "start": 193.78,
+              "end": 196.78,
+              "text": "Many will ask, but it is.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 31,
+              "start": 196.78,
+              "end": 200.1,
+              "text": "I could say,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 32,
+              "start": 200.1,
+              "end": 202.83,
+              "text": "Received money.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 33,
+              "start": 202.83,
+              "end": 206.4,
+              "text": "Received money.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 34,
+              "start": 206.4,
+              "end": 210.4,
+              "text": "And also, his parents helped him a little bit.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 35,
+              "start": 210.4,
+              "end": 217.4,
+              "text": "But, no, no one uses received money for about two years.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 36,
+              "start": 217.4,
+              "end": 226.46,
+              "text": "Every time you use it for about some time, you will use the present.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 37,
+              "start": 226.46,
+              "end": 233.9,
+              "text": "If you don't need to say how much time he did that, and use the past,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 38,
+              "start": 233.9,
+              "end": 234.9,
+              "text": "no problem.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 39,
+              "start": 234.9,
+              "end": 235.9,
+              "text": "Here I use it.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 40,
+              "start": 235.9,
+              "end": 239.51,
+              "text": "Experience helped him a little bit.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 41,
+              "start": 239.51,
+              "end": 240.7,
+              "text": "Okay?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 42,
+              "start": 240.7,
+              "end": 243.7,
+              "text": "The parents helped him a little bit.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 43,
+              "start": 243.7,
+              "end": 248.7,
+              "text": "From now on, no more school buses.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 44,
+              "start": 248.7,
+              "end": 253.7,
+              "text": "Now, as I said before, as the other magic story, no more school buses.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 45,
+              "start": 253.7,
+              "end": 255.7,
+              "text": "And here it begins.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 46,
+              "start": 255.7,
+              "end": 260.93,
+              "text": "The narrative of a story that happened in a Friday evening.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 47,
+              "start": 260.93,
+              "end": 265.38,
+              "text": "So, it was a Friday evening, it was a Friday evening, it was a Friday night.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 48,
+              "start": 265.38,
+              "end": 268.38,
+              "text": "And Jeremy was very excited.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 49,
+              "start": 268.38,
+              "end": 269.6,
+              "text": "Why?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 50,
+              "start": 269.6,
+              "end": 275.6,
+              "text": "He and his friends were going to have a night on the town.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 51,
+              "start": 275.6,
+              "end": 278.66,
+              "text": "Were going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 52,
+              "start": 278.66,
+              "end": 280.69,
+              "text": "Why did they use were going?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 53,
+              "start": 280.69,
+              "end": 284.69,
+              "text": "Because I'm transporting the future to the past.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 54,
+              "start": 284.69,
+              "end": 285.69,
+              "text": "Ah, we were going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 55,
+              "start": 285.69,
+              "end": 288.69,
+              "text": "It's the same thing we were going to do.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 56,
+              "start": 288.69,
+              "end": 290.69,
+              "text": "We were going to do that.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 57,
+              "start": 290.69,
+              "end": 294.69,
+              "text": "Because it was an expression of the future in that Friday evening.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 58,
+              "start": 294.69,
+              "end": 295.69,
+              "text": "All right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 59,
+              "start": 295.69,
+              "end": 296.69,
+              "text": "That's all.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 60,
+              "start": 296.69,
+              "end": 305.01,
+              "text": "Have a night on the town means to go out with your friends and have fun.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 61,
+              "start": 305.01,
+              "end": 306.23,
+              "text": "That's it.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 62,
+              "start": 306.23,
+              "end": 310.23,
+              "text": "Have a night on the town means to go out with your friends.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 63,
+              "start": 310.23,
+              "end": 311.23,
+              "text": "That's it.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 64,
+              "start": 311.23,
+              "end": 314.16,
+              "text": "Have a night on the town.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 65,
+              "start": 314.16,
+              "end": 319.06,
+              "text": "First, they went to a football game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 66,
+              "start": 319.06,
+              "end": 323.06,
+              "text": "To a football, which is very common.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 67,
+              "start": 323.06,
+              "end": 331.79,
+              "text": "When you study in a high school every Friday night,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 68,
+              "start": 331.79,
+              "end": 333.79,
+              "text": "there is a game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 69,
+              "start": 333.79,
+              "end": 343.72,
+              "text": "So, they went to a football game at school.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 70,
+              "start": 343.72,
+              "end": 346.04,
+              "text": "And Jeremy saw.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 71,
+              "start": 346.04,
+              "end": 358.5,
+              "text": "And Jeremy invited Becky to grab a bite after.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 72,
+              "start": 358.5,
+              "end": 360.82,
+              "text": "Grab a bite.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 73,
+              "start": 360.82,
+              "end": 362.89,
+              "text": "Let's eat something.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 74,
+              "start": 362.89,
+              "end": 364.89,
+              "text": "Let's eat something after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 75,
+              "start": 364.89,
+              "end": 366.95,
+              "text": "Ah, let's take it.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 76,
+              "start": 366.95,
+              "end": 367.95,
+              "text": "Let's eat something.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 77,
+              "start": 367.95,
+              "end": 368.95,
+              "text": "Let's eat something.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 78,
+              "start": 368.95,
+              "end": 369.95,
+              "text": "Grab a bite.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 79,
+              "start": 369.95,
+              "end": 370.98,
+              "text": "Grab a bite.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 80,
+              "start": 370.98,
+              "end": 375.18,
+              "text": "So, he invited her to grab a bite after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 81,
+              "start": 375.18,
+              "end": 380.18,
+              "text": "So, Jeremy, Becky and some friends went to red robins",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 82,
+              "start": 380.18,
+              "end": 382.18,
+              "text": "in Seattle.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 83,
+              "start": 382.18,
+              "end": 391.62,
+              "text": "Red Robbins is a very nice restaurant that teenagers love to go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 84,
+              "start": 391.62,
+              "end": 401.62,
+              "text": "It's a great place.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 85,
+              "start": 401.62,
+              "end": 409.1,
+              "text": "And they all had chicken wings, steak and baked potato.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 86,
+              "start": 409.1,
+              "end": 413.1,
+              "text": "Which is the most common food of the red robins.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 87,
+              "start": 413.1,
+              "end": 415.1,
+              "text": "Chicken wings.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 88,
+              "start": 415.1,
+              "end": 418.1,
+              "text": "If you translate or ask for the letter,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 89,
+              "start": 418.1,
+              "end": 420.1,
+              "text": "it's a little bit of bread.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 90,
+              "start": 420.1,
+              "end": 422.1,
+              "text": "But it's not a little bit.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 91,
+              "start": 422.1,
+              "end": 425.1,
+              "text": "We usually eat churrasco here in Brazil.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 92,
+              "start": 425.1,
+              "end": 427.1,
+              "text": "It looks like a little bread.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 93,
+              "start": 427.1,
+              "end": 430.1,
+              "text": "It's a little bit of bread.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 94,
+              "start": 430.1,
+              "end": 432.1,
+              "text": "People call it chicken wings.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 95,
+              "start": 432.1,
+              "end": 435.1,
+              "text": "So, a lot of Brazilians can come to eat chicken wings",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 96,
+              "start": 435.1,
+              "end": 437.1,
+              "text": "and wait for the wings.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 97,
+              "start": 437.1,
+              "end": 463.4,
+              "text": "So, Jeremy and Becky talk and have fun together.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 98,
+              "start": 463.4,
+              "end": 466.62,
+              "text": "Have fun.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 99,
+              "start": 466.62,
+              "end": 469.13,
+              "text": "Have fun.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 100,
+              "start": 470.13,
+              "end": 476.27,
+              "text": "At 11 p.m. Jeremy said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 101,
+              "start": 476.27,
+              "end": 478.3,
+              "text": "I gotta get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 102,
+              "start": 478.3,
+              "end": 481.3,
+              "text": "I gotta get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 103,
+              "start": 481.3,
+              "end": 482.3,
+              "text": "I gotta get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 104,
+              "start": 482.3,
+              "end": 485.3,
+              "text": "It's a very common phrase.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 105,
+              "start": 485.3,
+              "end": 492.26,
+              "text": "I have to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 106,
+              "start": 492.26,
+              "end": 495.26,
+              "text": "I've got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 107,
+              "start": 495.26,
+              "end": 498.3,
+              "text": "I gotta get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 108,
+              "start": 498.3,
+              "end": 501.78,
+              "text": "Which means I have to go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 109,
+              "start": 501.78,
+              "end": 503.78,
+              "text": "And Becky said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 110,
+              "start": 503.78,
+              "end": 505.78,
+              "text": "So soon.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 111,
+              "start": 505.78,
+              "end": 507.78,
+              "text": "So soon.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 112,
+              "start": 507.78,
+              "end": 509.78,
+              "text": "Stick around.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 113,
+              "start": 509.78,
+              "end": 513.78,
+              "text": "Stick around means don't go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 114,
+              "start": 513.78,
+              "end": 514.78,
+              "text": "Stay.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 115,
+              "start": 514.78,
+              "end": 515.78,
+              "text": "Stick around.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 116,
+              "start": 515.78,
+              "end": 517.84,
+              "text": "Stick around.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 117,
+              "start": 517.84,
+              "end": 519.84,
+              "text": "Have a beer with me.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 118,
+              "start": 519.84,
+              "end": 520.84,
+              "text": "Stay.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 119,
+              "start": 520.84,
+              "end": 521.84,
+              "text": "Stick around.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 120,
+              "start": 521.84,
+              "end": 522.84,
+              "text": "It's the same thing.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 121,
+              "start": 522.84,
+              "end": 523.84,
+              "text": "Stay.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 122,
+              "start": 523.84,
+              "end": 528.79,
+              "text": "And have a beer with me.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 123,
+              "start": 528.79,
+              "end": 531.5,
+              "text": "But I have a beer with me.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 124,
+              "start": 531.5,
+              "end": 534.5,
+              "text": "And I've got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 125,
+              "start": 534.5,
+              "end": 537.5,
+              "text": "What do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 126,
+              "start": 537.5,
+              "end": 540.98,
+              "text": "What do you mean, what do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 127,
+              "start": 540.98,
+              "end": 543.07,
+              "text": "What do you mean.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 128,
+              "start": 543.07,
+              "end": 545.07,
+              "text": "It's a very common phrase.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 129,
+              "start": 545.07,
+              "end": 547.07,
+              "text": "What do you mean.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 130,
+              "start": 547.07,
+              "end": 549.33,
+              "text": "It's a very common phrase.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 131,
+              "start": 549.33,
+              "end": 552.62,
+              "text": "Because it's our famous how it is.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 132,
+              "start": 552.62,
+              "end": 555.03,
+              "text": "Like this.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 133,
+              "start": 555.03,
+              "end": 558.03,
+              "text": "You understood what that person said",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 134,
+              "start": 558.03,
+              "end": 560.03,
+              "text": "but not understand.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 135,
+              "start": 560.03,
+              "end": 562.22,
+              "text": "So, what do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 136,
+              "start": 562.22,
+              "end": 569.22,
+              "text": "So, all the time that you don't understand anything that a person says, but you know what he said.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 137,
+              "start": 569.22,
+              "end": 571.22,
+              "text": "But you don't understand a meaning.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 138,
+              "start": 571.22,
+              "end": 573.9,
+              "text": "You ask, what do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 139,
+              "start": 573.9,
+              "end": 574.9,
+              "text": "What do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 140,
+              "start": 574.9,
+              "end": 576.73,
+              "text": "Have a beer.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 141,
+              "start": 576.73,
+              "end": 577.73,
+              "text": "What do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 142,
+              "start": 577.73,
+              "end": 580.02,
+              "text": "How old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 143,
+              "start": 580.02,
+              "end": 583.24,
+              "text": "That's why he asked, how old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 144,
+              "start": 583.24,
+              "end": 591.1,
+              "text": "Because in the United States, you can only drink.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 145,
+              "start": 591.1,
+              "end": 592.1,
+              "text": "What do you mean, boys?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 146,
+              "start": 592.1,
+              "end": 594.25,
+              "text": "Give us a little secret.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 147,
+              "start": 594.25,
+              "end": 596.25,
+              "text": "Deng Vincere Wands.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 148,
+              "start": 596.25,
+              "end": 598.38,
+              "text": "21 years old.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 149,
+              "start": 598.38,
+              "end": 602.18,
+              "text": "And he isn't 21 years old.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 150,
+              "start": 602.18,
+              "end": 607.65,
+              "text": "So, Jeremy got surprised.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 151,
+              "start": 607.65,
+              "end": 608.65,
+              "text": "How old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 152,
+              "start": 608.65,
+              "end": 610.65,
+              "text": "You have a beer, you have a beer.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 153,
+              "start": 610.65,
+              "end": 613.19,
+              "text": "21.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 154,
+              "start": 613.19,
+              "end": 614.19,
+              "text": "What about you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 155,
+              "start": 614.19,
+              "end": 616.19,
+              "text": "What about you, Oh, Mizmiki?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 156,
+              "start": 616.19,
+              "end": 617.77,
+              "text": "And you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 157,
+              "start": 617.77,
+              "end": 618.77,
+              "text": "I'm 21.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 158,
+              "start": 618.77,
+              "end": 622.02,
+              "text": "What about you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 159,
+              "start": 622.02,
+              "end": 625.66,
+              "text": "And Jeremy got embarrassed.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 160,
+              "start": 625.66,
+              "end": 631.3,
+              "text": "to get embarrassed if he can't be here going out in the past got in there",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 161,
+              "start": 631.82,
+              "end": 634.46,
+              "text": "Jeremy got in there and said",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 162,
+              "start": 637.14,
+              "end": 642.09,
+              "text": "16 I mean his 16 he can drive",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 163,
+              "start": 643.14,
+              "end": 647.7,
+              "text": "His 16 he can't drink alcohol",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 164,
+              "start": 648.68,
+              "end": 655.56,
+              "text": "All right, he can't drink but Becky is 21 she can drive and she can drink and",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 165,
+              "start": 656.66,
+              "end": 659.38,
+              "text": "And my question to you is",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 166,
+              "start": 660.65,
+              "end": 667.61,
+              "text": "Is Jeremy too young for Becky or is Becky too old for Jeremy?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 167,
+              "start": 668.41,
+              "end": 670.57,
+              "text": "Too young for Becky",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 168,
+              "start": 671.58,
+              "end": 673.58,
+              "text": "A joven demais pra Becky",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 169,
+              "start": 674.06,
+              "end": 675.82,
+              "text": "Too old for Jeremy",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 170,
+              "start": 676.54,
+              "end": 678.54,
+              "text": "A velha demais",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 171,
+              "start": 678.54,
+              "end": 683.9,
+              "text": "for Jeremy talk about how you learn the phrase too young for blah blah blah",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 172,
+              "start": 684.46,
+              "end": 686.46,
+              "text": "Too old blah blah",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 173,
+              "start": 686.7,
+              "end": 689.9,
+              "text": "One of the biggest bubbles that I hear from some students is",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 174,
+              "start": 690.46,
+              "end": 694.14,
+              "text": "I am too old to learn English",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 175,
+              "start": 694.3,
+              "end": 697.34,
+              "text": "Why do I say too old to learn and not for?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 176,
+              "start": 697.98,
+              "end": 701.34,
+              "text": "Because Jeremy is not a verb, Jeremy is a person",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 177,
+              "start": 701.58,
+              "end": 703.58,
+              "text": "It's a constant, proper",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 178,
+              "start": 703.9,
+              "end": 708.86,
+              "text": "Okay, if you use a verb, you change it for and put it to",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 179,
+              "start": 709.82,
+              "end": 716.3,
+              "text": "For example, I am too old for English learning",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 180,
+              "start": 716.86,
+              "end": 721.9,
+              "text": "Okay, or I'm too old for learning English",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 181,
+              "start": 725.26,
+              "end": 730.62,
+              "text": "I am too old to learn English, which is a tremendous stupid",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 182,
+              "start": 731.61,
+              "end": 733.61,
+              "text": "All right, good",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 183,
+              "start": 734.26,
+              "end": 738.74,
+              "text": "This last phrase here is for you to tell me",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 184,
+              "start": 740.1,
+              "end": 743.26,
+              "text": "or in the comments",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 185,
+              "start": 743.42,
+              "end": 748.62,
+              "text": "Jeremy is Jeremy too young for Becky or is Becky too old for Jeremy?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 186,
+              "start": 749.34,
+              "end": 750.78,
+              "text": "All right",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 187,
+              "start": 750.78,
+              "end": 756.22,
+              "text": "Good, let's move on to listen and answer good here we go",
+              "spokenTranslation": ""
+            }
+          ]
+        },
+        {
+          "id": "ms014-la",
+          "moduleId": "ms014-jeremy-goes-to-town",
+          "title": "Aula 03 • Listen & Answer (LA)",
+          "activity": "listen_answer",
+          "duration": "04:30",
+          "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS014%2FMS014_LA_1.mp4?alt=media",
+          "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS014%2Faudio_ms014_la.mp3?alt=media",
+          "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_la.jpg",
+          "goldenTip": "Acompanhe a história e ative o reflexo sem tradução mental.",
+          "sentences": [
+            {
+              "id": 1,
+              "start": 0.02,
+              "end": 7.14,
+              "text": "Ok, good, this is lesson and answer activity.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 2,
+              "start": 7.14,
+              "end": 13.64,
+              "text": "In this activity, all you have to do is listen and talk to me.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 3,
+              "start": 13.64,
+              "end": 21.94,
+              "text": "Aqui é o momento onde você vai escutar e aproveitar o tempo que eu te dou",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 4,
+              "start": 21.94,
+              "end": 28.35,
+              "text": "para responder de volta para mim, de acordo com o que você se lembra da história.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 5,
+              "start": 28.35,
+              "end": 30.35,
+              "text": "E é importante você lembrar o seguinte,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 6,
+              "start": 30.35,
+              "end": 33.35,
+              "text": "quando você faz essa atividade pela primeira vez,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 7,
+              "start": 33.35,
+              "end": 40.54,
+              "text": "prou um pouco desconfortável, porque você não está acostumado ou acostumada",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 8,
+              "start": 40.54,
+              "end": 44.54,
+              "text": "com a história ainda, então vá devagar.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 9,
+              "start": 44.54,
+              "end": 47.54,
+              "text": "For example, está aqui lesson and answer, right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 10,
+              "start": 47.54,
+              "end": 49.54,
+              "text": "The first question is,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 11,
+              "start": 49.54,
+              "end": 52.54,
+              "text": "what did Jeremy buy last week?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 12,
+              "start": 52.54,
+              "end": 55.08,
+              "text": "And then you think,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 13,
+              "start": 55.08,
+              "end": 62.62,
+              "text": "ok, pronto, você me escuta e diz, ok,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 14,
+              "start": 62.62,
+              "end": 67.62,
+              "text": "ok, quando você fizer a atividade pela segunda vez,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 15,
+              "start": 67.62,
+              "end": 73.82,
+              "text": "você já pode já riscar uma frase um pouquinho mais complexa.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 16,
+              "start": 73.82,
+              "end": 78.03,
+              "text": "For example, rebar a car,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 17,
+              "start": 78.03,
+              "end": 81.03,
+              "text": "ou então rebar a car last weekend,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 18,
+              "start": 81.03,
+              "end": 83.03,
+              "text": "por exemplo, alright,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 19,
+              "start": 83.03,
+              "end": 85.16,
+              "text": "good, are you ready?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 20,
+              "start": 85.16,
+              "end": 88.58,
+              "text": "3, 2, 1, here we go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 21,
+              "start": 88.58,
+              "end": 91.58,
+              "text": "What did Jeremy buy last week,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 22,
+              "start": 91.58,
+              "end": 93.58,
+              "text": "or last weekend?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 23,
+              "start": 93.58,
+              "end": 95.83,
+              "text": "Go, say it,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 24,
+              "start": 95.83,
+              "end": 102.83,
+              "text": "very good, he bought a car last week,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 25,
+              "start": 102.83,
+              "end": 104.83,
+              "text": "or last weekend, right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 26,
+              "start": 104.83,
+              "end": 109.89,
+              "text": "And this question is very simple,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 27,
+              "start": 109.89,
+              "end": 112.89,
+              "text": "who bought a car last week?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 28,
+              "start": 112.89,
+              "end": 114.02,
+              "text": "Amanda,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 29,
+              "start": 114.02,
+              "end": 118.71,
+              "text": "who bought the car last week?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 30,
+              "start": 118.71,
+              "end": 123.34,
+              "text": "Jeremy, alright, Jeremy did.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 31,
+              "start": 123.34,
+              "end": 125.34,
+              "text": "Jeremy bought a car.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 32,
+              "start": 125.34,
+              "end": 126.57,
+              "text": "Good.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 33,
+              "start": 126.57,
+              "end": 132.21,
+              "text": "And what kind of car did Jeremy buy?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 34,
+              "start": 132.21,
+              "end": 136.07,
+              "text": "What kind of car did Jeremy buy?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 35,
+              "start": 136.07,
+              "end": 140.88,
+              "text": "A pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 36,
+              "start": 140.88,
+              "end": 142.88,
+              "text": "He bought a pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 37,
+              "start": 142.88,
+              "end": 144.88,
+              "text": "Alright.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 38,
+              "start": 144.88,
+              "end": 153.25,
+              "text": "How long has Jeremy saved money to buy his car?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 39,
+              "start": 153.25,
+              "end": 156.34,
+              "text": "How long has he saved money for?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 40,
+              "start": 156.34,
+              "end": 163.14,
+              "text": "Two years.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 41,
+              "start": 163.14,
+              "end": 167.14,
+              "text": "He has saved money for two years to buy that car.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 42,
+              "start": 167.14,
+              "end": 175.76,
+              "text": "Now, we in exactly was Jeremy very excited.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 43,
+              "start": 175.76,
+              "end": 178.92,
+              "text": "Remember, was it a Monday evening?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 44,
+              "start": 178.92,
+              "end": 179.92,
+              "text": "No.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 45,
+              "start": 179.92,
+              "end": 180.92,
+              "text": "When?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 46,
+              "start": 180.92,
+              "end": 184.9,
+              "text": "He was excited on Friday evening.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 47,
+              "start": 184.9,
+              "end": 188.9,
+              "text": "It was a Friday evening, right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 48,
+              "start": 188.9,
+              "end": 192.32,
+              "text": "And why was he so excited?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 49,
+              "start": 193.86,
+              "end": 195.86,
+              "text": "Why was he so excited?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 50,
+              "start": 195.86,
+              "end": 209.05,
+              "text": "Because he and his friends were going to have a night on the town.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 51,
+              "start": 209.05,
+              "end": 212.05,
+              "text": "Because he and his friends were going out.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 52,
+              "start": 212.05,
+              "end": 216.64,
+              "text": "Where?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 53,
+              "start": 216.64,
+              "end": 222.57,
+              "text": "Did Jeremy and his friends go last Friday?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 54,
+              "start": 222.57,
+              "end": 227.86,
+              "text": "Where did they go?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 55,
+              "start": 227.86,
+              "end": 228.86,
+              "text": "They went out.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 56,
+              "start": 228.86,
+              "end": 230.86,
+              "text": "Alright, they went out.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 57,
+              "start": 230.86,
+              "end": 235.24,
+              "text": "They were going to have a night on the town.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 58,
+              "start": 235.24,
+              "end": 238.24,
+              "text": "Now, where did they go first?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 59,
+              "start": 238.24,
+              "end": 243.02,
+              "text": "Football game?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 60,
+              "start": 243.02,
+              "end": 246.02,
+              "text": "They went to the football game first.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 61,
+              "start": 246.02,
+              "end": 251.17,
+              "text": "Who did Jeremy see at the game?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 62,
+              "start": 251.17,
+              "end": 257.87,
+              "text": "Beautiful girl.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 63,
+              "start": 257.87,
+              "end": 258.87,
+              "text": "Alright.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 64,
+              "start": 258.87,
+              "end": 261.87,
+              "text": "A beautiful girl named Becky.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 65,
+              "start": 261.94,
+              "end": 268.21,
+              "text": "So, he saw this beautiful girl named Becky.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 66,
+              "start": 268.21,
+              "end": 273.88,
+              "text": "And what did Jeremy invite Becky to do?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 67,
+              "start": 273.88,
+              "end": 276.88,
+              "text": "What did he invite her to do?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 68,
+              "start": 276.88,
+              "end": 282.82,
+              "text": "To grab a bite after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 69,
+              "start": 282.82,
+              "end": 285.82,
+              "text": "He invited her to grab a bite after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 70,
+              "start": 285.82,
+              "end": 291.71,
+              "text": "And where did they go after the game?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 71,
+              "start": 291.71,
+              "end": 296.71,
+              "text": "Becky, Jeremy, and his friends.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 72,
+              "start": 296.71,
+              "end": 298.8,
+              "text": "Remember?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 73,
+              "start": 298.8,
+              "end": 303.14,
+              "text": "To red robins in Seattle.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 74,
+              "start": 303.14,
+              "end": 304.14,
+              "text": "Alright.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 75,
+              "start": 304.14,
+              "end": 308.61,
+              "text": "It's a great place.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 76,
+              "start": 308.61,
+              "end": 310.61,
+              "text": "And what did they eat?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 77,
+              "start": 310.61,
+              "end": 312.86,
+              "text": "What did they have for dinner?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 78,
+              "start": 312.86,
+              "end": 313.86,
+              "text": "Remember?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 79,
+              "start": 313.86,
+              "end": 323.09,
+              "text": "Chicken wings, steak, and baked potato.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 80,
+              "start": 323.09,
+              "end": 324.09,
+              "text": "Baked potato.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 81,
+              "start": 324.09,
+              "end": 325.34,
+              "text": "Alright.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 82,
+              "start": 325.34,
+              "end": 328.34,
+              "text": "Chicken wings, steak, and baked potato.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 83,
+              "start": 328.34,
+              "end": 330.78,
+              "text": "Good.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 84,
+              "start": 330.78,
+              "end": 334.78,
+              "text": "And what did Jeremy and Becky do at red robins?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 85,
+              "start": 334.78,
+              "end": 339.8,
+              "text": "Blah, blah, blah, blah, blah.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 86,
+              "start": 339.8,
+              "end": 343.8,
+              "text": "They talked and they had fun.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 87,
+              "start": 343.8,
+              "end": 349.59,
+              "text": "They talked, they had fun.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 88,
+              "start": 349.59,
+              "end": 356.89,
+              "text": "And at 11 p.m., what did Jeremy say?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 89,
+              "start": 356.89,
+              "end": 358.89,
+              "text": "I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 90,
+              "start": 358.89,
+              "end": 359.89,
+              "text": "I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 91,
+              "start": 359.89,
+              "end": 361.89,
+              "text": "I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 92,
+              "start": 361.89,
+              "end": 362.89,
+              "text": "I got to go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 93,
+              "start": 362.89,
+              "end": 363.89,
+              "text": "I have to go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 94,
+              "start": 363.89,
+              "end": 365.89,
+              "text": "I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 95,
+              "start": 365.89,
+              "end": 370.13,
+              "text": "I got to get going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 96,
+              "start": 370.13,
+              "end": 373.61,
+              "text": "And what did Becky say?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 97,
+              "start": 373.61,
+              "end": 379.04,
+              "text": "So soon.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 98,
+              "start": 379.04,
+              "end": 381.26,
+              "text": "Stick around.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 99,
+              "start": 381.26,
+              "end": 383.26,
+              "text": "Have a beer with me.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 100,
+              "start": 383.26,
+              "end": 385.33,
+              "text": "Stick around.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 101,
+              "start": 385.33,
+              "end": 387.33,
+              "text": "Let's have some beer.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 102,
+              "start": 392.42,
+              "end": 395.42,
+              "text": "And how did Jeremy respond?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 103,
+              "start": 395.42,
+              "end": 400.18,
+              "text": "How did he feel embarrassed?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 104,
+              "start": 400.18,
+              "end": 401.18,
+              "text": "Right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 105,
+              "start": 401.18,
+              "end": 402.18,
+              "text": "Yes.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 106,
+              "start": 402.18,
+              "end": 404.79,
+              "text": "He was embarrassed.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 107,
+              "start": 404.79,
+              "end": 407.4,
+              "text": "And he said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 108,
+              "start": 407.4,
+              "end": 410.23,
+              "text": "What do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 109,
+              "start": 410.23,
+              "end": 412.74,
+              "text": "How old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 110,
+              "start": 412.74,
+              "end": 413.74,
+              "text": "What do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 111,
+              "start": 413.74,
+              "end": 416,
+              "text": "How old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 112,
+              "start": 416,
+              "end": 422.71,
+              "text": "What do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 113,
+              "start": 422.71,
+              "end": 424.71,
+              "text": "And how old is Becky?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 114,
+              "start": 424.71,
+              "end": 427.93,
+              "text": "What did you say?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 115,
+              "start": 427.93,
+              "end": 428.93,
+              "text": "21.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 116,
+              "start": 428.93,
+              "end": 430.18,
+              "text": "Right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 117,
+              "start": 430.18,
+              "end": 432.18,
+              "text": "He said, Well, I'm 21.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 118,
+              "start": 432.18,
+              "end": 433.38,
+              "text": "What about you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 119,
+              "start": 433.38,
+              "end": 438.13,
+              "text": "How old is Jeremy?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 120,
+              "start": 438.13,
+              "end": 439.13,
+              "text": "16.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 121,
+              "start": 439.13,
+              "end": 442.09,
+              "text": "That's it.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 122,
+              "start": 442.09,
+              "end": 443.09,
+              "text": "All right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 123,
+              "start": 443.09,
+              "end": 444.09,
+              "text": "That's it.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 124,
+              "start": 444.09,
+              "end": 446.02,
+              "text": "So,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 125,
+              "start": 446.02,
+              "end": 448.11,
+              "text": "What is your objective here?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 126,
+              "start": 448.11,
+              "end": 450.66,
+              "text": "Is to go back",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 127,
+              "start": 450.66,
+              "end": 452.66,
+              "text": "and do again",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 128,
+              "start": 452.66,
+              "end": 455.66,
+              "text": "training the answer quickly.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 129,
+              "start": 455.66,
+              "end": 457.66,
+              "text": "That's why it's important",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 130,
+              "start": 457.66,
+              "end": 460.82,
+              "text": "to do several times",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 131,
+              "start": 460.82,
+              "end": 462.82,
+              "text": "so that you respond",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 132,
+              "start": 462.82,
+              "end": 464.85,
+              "text": "like you can remember.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 133,
+              "start": 464.85,
+              "end": 466.85,
+              "text": "Remember.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 134,
+              "start": 466.85,
+              "end": 469.85,
+              "text": "It's not for you memorize the story.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 135,
+              "start": 469.85,
+              "end": 472.88,
+              "text": "Through you hear the questions,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 136,
+              "start": 472.88,
+              "end": 475.88,
+              "text": "you respond that you can.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 137,
+              "start": 475.88,
+              "end": 477.88,
+              "text": "What you can't say is,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 138,
+              "start": 477.88,
+              "end": 478.88,
+              "text": "I don't know.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 139,
+              "start": 478.88,
+              "end": 480.88,
+              "text": "And then you'll listen to the answer.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 140,
+              "start": 480.88,
+              "end": 482.88,
+              "text": "I'll show you the answer.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 141,
+              "start": 482.88,
+              "end": 484.88,
+              "text": "And then you do again.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 142,
+              "start": 484.88,
+              "end": 485.98,
+              "text": "In the second time,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 143,
+              "start": 485.98,
+              "end": 486.98,
+              "text": "you'll remember more.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 144,
+              "start": 486.98,
+              "end": 487.98,
+              "text": "In the third time,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 145,
+              "start": 487.98,
+              "end": 489.98,
+              "text": "you'll remember more.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 146,
+              "start": 489.98,
+              "end": 492.98,
+              "text": "It's not from the history of the heart.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 147,
+              "start": 492.98,
+              "end": 493.98,
+              "text": "And then,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 148,
+              "start": 493.98,
+              "end": 494.98,
+              "text": "a practice",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 149,
+              "start": 494.98,
+              "end": 495.98,
+              "text": "to listen to",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 150,
+              "start": 495.98,
+              "end": 498.98,
+              "text": "and respond to",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 151,
+              "start": 498.98,
+              "end": 501.01,
+              "text": "all in English.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 152,
+              "start": 501.01,
+              "end": 502.01,
+              "text": "A practice.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 153,
+              "start": 502.01,
+              "end": 504.3,
+              "text": "This train.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 154,
+              "start": 504.3,
+              "end": 507.3,
+              "text": "He's listening to a physical train",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 155,
+              "start": 507.3,
+              "end": 510.74,
+              "text": "and says,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 156,
+              "start": 510.74,
+              "end": 513.06,
+              "text": "All right?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 157,
+              "start": 513.06,
+              "end": 514.06,
+              "text": "Good. Don't forget.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 158,
+              "start": 514.06,
+              "end": 516.06,
+              "text": "Go back and do it again.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 159,
+              "start": 516.06,
+              "end": 519.54,
+              "text": "Now let's move on to",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 160,
+              "start": 519.54,
+              "end": 521.54,
+              "text": "retailing the story.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 161,
+              "start": 521.54,
+              "end": 522.54,
+              "text": "Vamos!",
+              "spokenTranslation": ""
+            }
+          ]
+        },
+        {
+          "id": "ms014-lrt",
+          "moduleId": "ms014-jeremy-goes-to-town",
+          "title": "Aula 04 • Look & Retell (LRT)",
+          "activity": "look_retell",
+          "duration": "04:30",
+          "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS014%2FMS014_LRT_1.mp4?alt=media",
+          "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS014%2Faudio_ms014_lrt.mp3?alt=media",
+          "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_lrt.jpg",
+          "goldenTip": "Acompanhe a história e ative o reflexo sem tradução mental.",
+          "sentences": [
+            {
+              "id": 1,
+              "start": 0.88,
+              "end": 2.28,
+              "text": "Alright, good!",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 2,
+              "start": 2.28,
+              "end": 7.28,
+              "text": "Now, let's move on to look and retail activity.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 3,
+              "start": 7.28,
+              "end": 13.14,
+              "text": "In this activity, you are going to speak.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 4,
+              "start": 13.14,
+              "end": 16.28,
+              "text": "É a prática da sua fala.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 5,
+              "start": 16.28,
+              "end": 18.38,
+              "text": "Como que você vai fazer isso?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 6,
+              "start": 18.38,
+              "end": 25.61,
+              "text": "Você vai lembrar da atividade que você acabou de fazer e acabou de fazer várias vezes,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 7,
+              "start": 25.61,
+              "end": 28.51,
+              "text": "que é o Listen and Answer.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 8,
+              "start": 28.51,
+              "end": 31.61,
+              "text": "Vai lembrar das respostas que você deu",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 9,
+              "start": 31.61,
+              "end": 38.31,
+              "text": "e vai transformar essas respostas que você deu em uma em um relato da história",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 10,
+              "start": 38.31,
+              "end": 41.31,
+              "text": "e uma narrativa da história que você acabou de aprender.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 11,
+              "start": 41.31,
+              "end": 43.52,
+              "text": "Vou dar um exemplo.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 12,
+              "start": 43.52,
+              "end": 47.52,
+              "text": "The first question is what did Jeremy buy last week?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 13,
+              "start": 47.52,
+              "end": 53.6,
+              "text": "Então, você olha para essa resposta, desculpa para essa pergunta",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 14,
+              "start": 53.6,
+              "end": 58.8,
+              "text": "e ao invés de você simplesmente responder igual a você fez na atividade anterior,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 15,
+              "start": 58.8,
+              "end": 61.9,
+              "text": "você vai começar a recontar a história olhando para ela.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 16,
+              "start": 62,
+              "end": 72.62,
+              "text": "Por exemplo, well, last week Jeremy bought a car.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 17,
+              "start": 72.62,
+              "end": 75.32,
+              "text": "Essa aqui já responde, ok?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 18,
+              "start": 75.32,
+              "end": 78.42,
+              "text": "Então, você vai olhar, who bought a car last week, você vai repetir.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 19,
+              "start": 78.42,
+              "end": 79.72,
+              "text": "Jeremy bought a car.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 20,
+              "start": 79.72,
+              "end": 82.42,
+              "text": "Ok, se você quiser, pode, no problem.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 21,
+              "start": 82.42,
+              "end": 84.42,
+              "text": "Eu faria da seguinte forma.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 22,
+              "start": 88.46,
+              "end": 93.1,
+              "text": "Last week Jeremy bought a car.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 23,
+              "start": 93.2,
+              "end": 96.71,
+              "text": "He bought a pickup truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 24,
+              "start": 96.71,
+              "end": 100.23,
+              "text": "Jeremy bought a pickup truck last week.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 25,
+              "start": 100.23,
+              "end": 104.43,
+              "text": "E, well, how did he buy that car?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 26,
+              "start": 104.43,
+              "end": 109.7,
+              "text": "Well, Jeremy has saved money for 2 years now",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 27,
+              "start": 109.7,
+              "end": 114.06,
+              "text": "e he had a little help from his parents, too.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 28,
+              "start": 114.06,
+              "end": 120.47,
+              "text": "One Friday, evening, Jeremy was very excited",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 29,
+              "start": 120.57,
+              "end": 126.37,
+              "text": "porque ele e os seus amigos vão ter uma noite na cidade.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 30,
+              "start": 126.37,
+              "end": 132.13,
+              "text": "E então, eles decidiram ir.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 31,
+              "start": 132.13,
+              "end": 137.02,
+              "text": "E a primeira vez que eles voltam, era um game de football.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 32,
+              "start": 137.02,
+              "end": 140.52,
+              "text": "Então eles voltam a game de game de game de game de game de game de game de game de game de game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 33,
+              "start": 140.52,
+              "end": 144.75,
+              "text": "E, nesse game de game de game de game de game de game de game de game,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 34,
+              "start": 144.75,
+              "end": 149.75,
+              "text": "Jeremy saw, um pequeno girl, Becky.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 35,
+              "start": 150.8,
+              "end": 156.33,
+              "text": "E then Jeremy invited Becky",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 36,
+              "start": 156.33,
+              "end": 161.46,
+              "text": "to grab a bite after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 37,
+              "start": 161.46,
+              "end": 164.46,
+              "text": "Oh, would you like to grab a bite with me after the game",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 38,
+              "start": 164.46,
+              "end": 167.19,
+              "text": "with me and my friends after the game?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 39,
+              "start": 167.19,
+              "end": 172.99,
+              "text": "And so they all went to Red Robbins after the game.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 40,
+              "start": 172.99,
+              "end": 178.49,
+              "text": "Red Robbins is a nice restaurant in Seattle.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 41,
+              "start": 178.59,
+              "end": 185.59,
+              "text": "E eles voltam a chicanwings, baked potatoes, steak e Jeremy",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 42,
+              "start": 185.59,
+              "end": 191.09,
+              "text": "e Becky talked a lot and they had fun",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 43,
+              "start": 191.09,
+              "end": 195.33,
+              "text": "and at 11 pm, Jeremy said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 44,
+              "start": 195.33,
+              "end": 198.68,
+              "text": "I got a gat going.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 45,
+              "start": 198.68,
+              "end": 202.72,
+              "text": "And Becky said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 46,
+              "start": 202.72,
+              "end": 210.08,
+              "text": "oh, so soon, stick around, have a beer with me",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 47,
+              "start": 210.18,
+              "end": 215.94,
+              "text": "and Jeremy was very embarrassed",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 48,
+              "start": 215.94,
+              "end": 217.04,
+              "text": "and he said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 49,
+              "start": 217.04,
+              "end": 219.73,
+              "text": "what do you mean?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 50,
+              "start": 219.73,
+              "end": 222.14,
+              "text": "How old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 51,
+              "start": 222.14,
+              "end": 224.3,
+              "text": "And Becky said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 52,
+              "start": 224.3,
+              "end": 226.26,
+              "text": "21,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 53,
+              "start": 226.26,
+              "end": 228.02,
+              "text": "what about you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 54,
+              "start": 228.02,
+              "end": 229.62,
+              "text": "And Jeremy said,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 55,
+              "start": 229.62,
+              "end": 235.66,
+              "text": "oh, I'm 21.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 56,
+              "start": 235.66,
+              "end": 237.26,
+              "text": "E neste momento,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 57,
+              "start": 237.26,
+              "end": 240.26,
+              "text": "você pode dizer a sua opinião.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 58,
+              "start": 240.26,
+              "end": 247.54,
+              "text": "Well, I think Becky is too old for Jeremy",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 59,
+              "start": 247.54,
+              "end": 255.27,
+              "text": "or I think Jeremy is too young for Becky.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 60,
+              "start": 255.27,
+              "end": 256.27,
+              "text": "All right.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 61,
+              "start": 256.27,
+              "end": 258.72,
+              "text": "E aí, você diz o porquê?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 62,
+              "start": 258.72,
+              "end": 260.02,
+              "text": "All right, good.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 63,
+              "start": 260.02,
+              "end": 262.43,
+              "text": "Esta atividade,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 64,
+              "start": 262.43,
+              "end": 265.83,
+              "text": "é a atividade que você vai gravar",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 65,
+              "start": 265.83,
+              "end": 267.53,
+              "text": "no Magic Story Lab.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 66,
+              "start": 267.53,
+              "end": 271.09,
+              "text": "Portanto, treine esta atividade bastante.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 67,
+              "start": 271.09,
+              "end": 274.34,
+              "text": "Olhe pra pergunta",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 68,
+              "start": 274.34,
+              "end": 276.34,
+              "text": "e vai recontando a história,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 69,
+              "start": 276.34,
+              "end": 279.95,
+              "text": "vai treinando contar aquela história.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 70,
+              "start": 279.95,
+              "end": 280.95,
+              "text": "All right,",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 71,
+              "start": 280.95,
+              "end": 283.95,
+              "text": "good, go back and start practicing.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 72,
+              "start": 283.95,
+              "end": 287.95,
+              "text": "Now let's move on to listen and ask.",
+              "spokenTranslation": ""
+            }
+          ]
+        },
+        {
+          "id": "ms014-lask",
+          "moduleId": "ms014-jeremy-goes-to-town",
+          "title": "Aula 05 • Listen & Ask (LASK)",
+          "activity": "listen_ask",
+          "duration": "04:30",
+          "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS014%2FMS014_LASK_1.mp4?alt=media",
+          "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS014%2Faudio_ms014_lask.mp3?alt=media",
+          "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_lask.jpg",
+          "goldenTip": "Acompanhe a história e ative o reflexo sem tradução mental.",
+          "sentences": [
+            {
+              "id": 1,
+              "start": 0.05,
+              "end": 16.53,
+              "text": "Listen and ask. Listen and ask. É talvez a atividade que você mais precisa fazer, porque você precisa treinar, fazer questions.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 2,
+              "start": 16.53,
+              "end": 29.91,
+              "text": "Então você vai escutar e eu dizendo, frase da história, e eu vou dizer question and then you ask me the question.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 3,
+              "start": 29.91,
+              "end": 56.54,
+              "text": "All right, it is Jeremy bought a car last weekend question what did Jeremy buy last week, what did Jeremy buy last week he bought a car, he bought a car.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 4,
+              "start": 56.54,
+              "end": 95.51,
+              "text": "Now Jeremy, not Amanda bought a car Jeremy bought a car question who bought a car last week very good will Jeremy bought a pick up truck question what kind of car did Jeremy buy all right what kind of car did Jeremy buy, what kind of car did Jeremy buy a pick up truck.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 5,
+              "start": 95.51,
+              "end": 138.55,
+              "text": "Jeremy has saved money for two years question how long has Jeremy saved money or how long has Jeremy saved money to buy his car Jeremy was excited on Friday evening he was very excited very excited on on Friday evening question when was Jeremy very excited he was very excited because he and his friends",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 6,
+              "start": 138.55,
+              "end": 187.94,
+              "text": "we're going to have a night on the town question why was he so excited why was Jeremy so excited because he and his friends were going to have a night on the town they went out on Friday question what did they do all right what where did they go right first they went to a football game question where did they go.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 7,
+              "start": 187.94,
+              "end": 233.77,
+              "text": "They go first where did they go first to a football game at the football game he saw a beautiful girl named Becky question who did Jeremy see at the girl at the girl at the game who did Jeremy see at the game Becky this beautiful girl Jeremy invited her to grab a bite after the game question what.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 8,
+              "start": 233.97,
+              "end": 272.88,
+              "text": "Did Jeremy invite Becky to do what did Jeremy invite Becky to do again what did Jeremy invite Becky to do to grab a bite they went to red robins after the game question where did they go after the game to red robins they had chicken wings",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 9,
+              "start": 272.88,
+              "end": 310.98,
+              "text": "steak and baked potato question what did they have for dinner what did they eat chicken wings steak and baked potato Jeremy and Becky talked a lot and they had fun at red robins question what did Becky and Jeremy do at red robins well they talked and they had fun",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 10,
+              "start": 310.98,
+              "end": 349.34,
+              "text": "Jeremy said I gotta get going question what did Jeremy say at 11 right what did Jeremy say at 11 o'clock I gotta get going and Becky said so soon stick around have a beer with me question what did Becky say well she said stick around have a beer with me",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 11,
+              "start": 349.34,
+              "end": 388.65,
+              "text": "Jeremy was embarrassed he was very embarrassed and he said what do you mean how old are you question what did Jeremy say it's okay how did Jeremy feel put sita me how did Jeremy feel and what did Jeremy say how did Jeremy respond how did Jeremy respond what did he say how did he feel well",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 12,
+              "start": 388.65,
+              "end": 427.22,
+              "text": "embarrassed and he said what do you mean how old are you well Becky is 21 question very good how old is Becky right and she said and she asked what about you Jeremy what's the question how old is Jeremy very good Jeremy 16 all right this activity has to be done many times",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 13,
+              "start": 427.22,
+              "end": 447.21,
+              "text": "for you to train to do the questions there's no idea you'll just do it once it's necessary that you go back and do it again okay good all right",
+              "spokenTranslation": ""
+            }
+          ]
+        },
+        {
+          "id": "ms014-pro",
+          "moduleId": "ms014-jeremy-goes-to-town",
+          "title": "Aula 06 • Pronunciation & Connected Speech",
+          "activity": "pronunciation",
+          "duration": "04:30",
+          "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS014%2FMS014_PRO_1.mp4?alt=media",
+          "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS014%2Faudio_ms014_pro.mp3?alt=media",
+          "coverImage": "../assets/images/thumbs/ms014/thumb_ms014_pro.jpg",
+          "goldenTip": "Acompanhe a história e ative o reflexo sem tradução mental.",
+          "sentences": [
+            {
+              "id": 1,
+              "start": 1.65,
+              "end": 24.47,
+              "text": "Hello and welcome to the pronunciation practice of magic story number 14. Jeremy goes to town in this session you were going to listen to me reading the story to you in your goal is to repeat after me in this session.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 2,
+              "start": 24.47,
+              "end": 55.74,
+              "text": "Your goal is to model your pronunciation is to copy the way I say the sentences. All right. Here we go. Jeremy bought a car last weekend. He bought a pickup truck. How did he buy his car?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 3,
+              "start": 55.74,
+              "end": 91.79,
+              "text": "Well, he has saved money for about two years now and his parents helped him a little bit from now on no more school buses. It was a Friday evening and Jeremy was very excited.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 4,
+              "start": 91.79,
+              "end": 122.73,
+              "text": "He and his friends were going to have a night on the town. First, they went to a football game at school. Jeremy saw a beautiful girl Becky.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 5,
+              "start": 122.73,
+              "end": 158.11,
+              "text": "He invited her to grab a bite after the game. So Jeremy, Becky and some friends went to red robins in Seattle. It's a great place. They all had chicken wings, steak and baked potato.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 6,
+              "start": 158.11,
+              "end": 209.71,
+              "text": "Jeremy and Becky talked and had fun together at 11 p.m. Jeremy said, I got to get going. And Becky said, so soon stick around and have a beer with me. Jeremy got surprised and asked, what do you mean? How old are you?",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 7,
+              "start": 225.14,
+              "end": 276.33,
+              "text": "Becky answered, 21. What about you? Jeremy got embarrassed and said, 16. Is Jeremy too young for Becky? Is Becky too old for Jeremy? All right. Good. Go back, listen again and repeat improving your pronunciation. Thank you very much for listening. I'll see you next session.",
+              "spokenTranslation": ""
+            },
+            {
+              "id": 8,
+              "start": 276.33,
+              "end": 297.57,
+              "text": "This content in audio is protected by copyrights, being the reproduction, distribution or commercialization of any material or content of it, without the previa and express authorization of Leonardo Lente.",
+              "spokenTranslation": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 };
