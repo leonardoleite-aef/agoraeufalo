@@ -19,18 +19,13 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 
 ---
 
-## 🎙️ 2. English Personal Training Player & Treinadores Interativos (SaaS 4 Abas)
+## 🎙️ 2. Player Universal AgoraEuFalo (Escutar no Celular / On the Go)
 
 | Interface | URL Produção | Arquivo Local | Descrição |
 | :--- | :--- | :--- | :--- |
-| **Player Universal (Root SaaS)** | [agoraeufalo.com.br/player.html](https://agoraeufalo.com.br/player.html) | [`player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/player.html) | Rota canônica universal do SaaS Player com Smart Welcome, PWA e direcionamento por Tier. |
-| **Magic Stories Player (Dedicado de Curso)** | [agoraeufalo.com.br/treino/magic-stories.html](https://agoraeufalo.com.br/treino/magic-stories.html) | [`treino/magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/magic-stories.html) | Player dedicado estilo Apple Music / Spotify com seletor de módulos (MS001 a MS030), playlist de aulas, letra karaokê deslizante contínua, continuous play automático e suporte a lockscreen. |
-| **Personal Training Player Unificado (AEF GO)** | [agoraeufalo.com.br/treino/player.html](https://agoraeufalo.com.br/treino/player.html) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player SaaS com 3 Ambientes (*Novidades*, *Mentoria VIP*, *Minhas Coisas*), MediaSession API com capa 512x512 de alta definição na lockscreen do celular/AirPlay e continuous play. |
-| **Player VIP: Estêvão** | [agoraeufalo.com.br/treino/player.html?aluno=estevao](https://agoraeufalo.com.br/treino/player.html?aluno=estevao) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP Estêvão com prescrições 1 a 1 e badge VIP. |
-| **Player VIP: Thomas** | [agoraeufalo.com.br/treino/player.html?aluno=thomas](https://agoraeufalo.com.br/treino/player.html?aluno=thomas) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP Thomas com diálogos executivos e badge VIP. |
-| **Player VIP: André** | [agoraeufalo.com.br/treino/player.html?aluno=andre](https://agoraeufalo.com.br/treino/player.html?aluno=andre) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP André com treinos de entrevistas e badge VIP. |
-| **Player VIP: Matheus** | [agoraeufalo.com.br/treino/player.html?aluno=matheus](https://agoraeufalo.com.br/treino/player.html?aluno=matheus) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player personalizado do mentorado VIP Matheus com connected speech e badge VIP. |
-| **Portal de Treinos** | [agoraeufalo.com.br/treino/index.html](https://agoraeufalo.com.br/treino/index.html) | [`treino/index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/index.html) | Seletor e portal de sessões de treino para alunos. |
+| **Player Universal AEF (Single Source of Truth)** | [agoraeufalo.com.br/treino/player.html](https://agoraeufalo.com.br/treino/player.html) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player de áudio puro universal estilo Apple Music / Spotify com seletor de Cursos (*Magic Stories*, *English QuickStart*), Novidades, Mentoria VIP e Minhas Coisas, letra sincronizada deslizante, controle de velocidade (0.75x a 1.5x) e continuous play. |
+| **Magic Stories Alias Redirect** | [agoraeufalo.com.br/treino/magic-stories.html](https://agoraeufalo.com.br/treino/magic-stories.html) | [`treino/magic-stories.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/magic-stories.html) | Redirecionamento suave e transparente para `player.html?curso=ms-legacy`. |
+| **Player Root SaaS** | [agoraeufalo.com.br/player.html](https://agoraeufalo.com.br/player.html) | [`player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/player.html) | Ponto de entrada com Smart Welcome redirecionando para `treino/player.html`. |
 
 ---
 

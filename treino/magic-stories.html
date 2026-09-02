@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Player AgoraEuFalo</title>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('curso')) {
+      params.set('curso', 'ms-legacy');
+    }
+    window.location.replace('player.html?' + params.toString());
+  </script>
+</head>
+<body style="background:#071224; color:#F8FAFC; display:flex; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
+  <p>Carregando Player AgoraEuFalo...</p>
+</body>
+</html>
