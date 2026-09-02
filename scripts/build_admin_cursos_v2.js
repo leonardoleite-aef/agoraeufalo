@@ -43,13 +43,13 @@ const completeHtml = `<!DOCTYPE html>
     }
   </script>
 
-  <!-- Lucide Icons & Core Cloud SDKs -->
+  <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-courses-registry.js"></script>
-  <script src="assets/js/aef-cloud-sync.js"></script>
-  <script src="assets/js/aef-filepicker.js"></script>
-  <script src="assets/js/aef-pdf-generator.js"></script>
-  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260902_0140"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -608,6 +608,76 @@ const completeHtml = `<!DOCTYPE html>
     let currentAiTab = "raw";
     let LAST_GENERATED_PDF_HTML = "";
 
+    // Resilient Direct REST + SDK Persistence Wrappers
+    async function directSaveCourseCloud(courseObj) {
+      if (window.aefCloudSync && typeof window.aefCloudSync.saveCourse === 'function') {
+        return await window.aefCloudSync.saveCourse(courseObj);
+      }
+      const cid = courseObj.id;
+      const restUrl = "https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/" + cid;
+      const fields = {};
+      for (const [k, v] of Object.entries(courseObj)) {
+        if (k === 'modules' || k === 'lessons' || v === undefined) continue;
+        if (typeof v === 'string') fields[k] = { stringValue: v };
+        else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
+        else if (typeof v === 'number') fields[k] = { integerValue: String(v) };
+      }
+      fields.updatedAt = { stringValue: new Date().toISOString() };
+      const res = await fetch(restUrl, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields })
+      });
+      return await res.json();
+    }
+
+    async function directSaveModuleCloud(courseId, modObj) {
+      if (window.aefCloudSync && typeof window.aefCloudSync.saveModule === 'function') {
+        return await window.aefCloudSync.saveModule(courseId, modObj);
+      }
+      const mid = modObj.id;
+      const restUrl = "https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/" + courseId + "/modules/" + mid;
+      const fields = {};
+      for (const [k, v] of Object.entries(modObj)) {
+        if (k === 'lessons' || v === undefined) continue;
+        if (typeof v === 'string') fields[k] = { stringValue: v };
+        else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
+        else if (typeof v === 'number') fields[k] = { integerValue: String(v) };
+      }
+      fields.courseId = { stringValue: courseId };
+      fields.updatedAt = { stringValue: new Date().toISOString() };
+      const res = await fetch(restUrl, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields })
+      });
+      return await res.json();
+    }
+
+    async function directSaveLessonCloud(courseId, moduleId, lesObj) {
+      if (window.aefCloudSync && typeof window.aefCloudSync.saveLesson === 'function') {
+        return await window.aefCloudSync.saveLesson(courseId, moduleId, lesObj);
+      }
+      const lid = lesObj.id;
+      const restUrl = "https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/" + courseId + "/modules/" + moduleId + "/lessons/" + lid;
+      const fields = {};
+      for (const [k, v] of Object.entries(lesObj)) {
+        if (v === undefined) continue;
+        if (typeof v === 'string') fields[k] = { stringValue: v };
+        else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
+        else if (typeof v === 'number') fields[k] = { integerValue: String(v) };
+      }
+      fields.courseId = { stringValue: courseId };
+      fields.moduleId = { stringValue: moduleId };
+      fields.updatedAt = { stringValue: new Date().toISOString() };
+      const res = await fetch(restUrl, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields })
+      });
+      return await res.json();
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
       // 1. Inicializa os dados com prioridade para cache local e sincronização remota imediata
       await initializeStudioData();
@@ -861,9 +931,7 @@ const completeHtml = `<!DOCTYPE html>
       updateLessonPublishedUi(les.published);
 
       try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.saveLesson(activeCourseId, activeModuleId, les);
-        }
+        await directSaveLessonCloud(activeCourseId, activeModuleId, les);
       } catch (err) {
         console.warn("Firestore sync lesson status:", err);
       }
@@ -879,9 +947,7 @@ const completeHtml = `<!DOCTYPE html>
       course.published = course.published === false ? true : false;
 
       try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.saveCourse(course);
-        }
+        await directSaveCourseCloud(course);
       } catch (err) {
         console.warn("Firestore sync course status:", err);
       }
@@ -901,9 +967,7 @@ const completeHtml = `<!DOCTYPE html>
       mod.published = mod.published === false ? true : false;
 
       try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.saveModule(activeCourseId, mod);
-        }
+        await directSaveModuleCloud(activeCourseId, mod);
       } catch (err) {
         console.warn("Firestore sync module status:", err);
       }
@@ -1001,9 +1065,7 @@ const completeHtml = `<!DOCTYPE html>
 
       // Persist to Cloud Firestore with SDK + REST fallback
       try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.saveLesson(activeCourseId, moduleId, foundLesson);
-        }
+        await directSaveLessonCloud(activeCourseId, moduleId, foundLesson);
       } catch (err) {
         console.warn("Firestore sync lesson:", err);
       }
@@ -1335,9 +1397,7 @@ const completeHtml = `<!DOCTYPE html>
 
       // Persist to Cloud Firestore with SDK + REST fallback
       try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.saveCourse(courseObj);
-        }
+        await directSaveCourseCloud(courseObj);
       } catch (err) {
         console.warn("Firestore sync course:", err);
       }
@@ -1411,9 +1471,7 @@ const completeHtml = `<!DOCTYPE html>
       renderHierarchyTree();
 
       try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.saveModule(activeCourseId, existingMod);
-        }
+        await directSaveModuleCloud(activeCourseId, existingMod);
       } catch (err) {
         console.warn("Firestore sync module:", err);
       }
@@ -1452,8 +1510,9 @@ const completeHtml = `<!DOCTYPE html>
       showToast("Iniciando sincronização completa de cursos, módulos e aulas com o Firestore...");
 
       try {
-        if (!window.aefCloudSync) throw new Error("CloudSync não disponível");
-        await window.aefCloudSync.init();
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.init();
+        }
 
         const coursesKeys = Object.keys(ALL_COURSES);
         let totalMods = 0;
@@ -1461,20 +1520,20 @@ const completeHtml = `<!DOCTYPE html>
 
         for (const cid of coursesKeys) {
           const course = ALL_COURSES[cid];
-          await window.aefCloudSync.saveCourse(course);
+          await directSaveCourseCloud(course);
 
           for (const mod of (course.modules || [])) {
             totalMods++;
-            await window.aefCloudSync.saveModule(cid, mod);
+            await directSaveModuleCloud(cid, mod);
 
             for (const les of (mod.lessons || [])) {
               totalLessons++;
-              await window.aefCloudSync.saveLesson(cid, mod.id, les);
+              await directSaveLessonCloud(cid, mod.id, les);
             }
           }
         }
 
-        showToast(\`✅ Sincronização concluída: \${coursesKeys.length} cursos, \${totalMods} módulos e \${totalLessons} aulas no Firestore!\`);
+        showToast(\`✅ \${coursesKeys.length} cursos, \${totalMods} módulos e \${totalLessons} aulas sincronizados na nuvem Firestore!\`);
       } catch (e) {
         console.error("Erro na sincronização:", e);
         showToast("❌ Erro na sincronização: " + e.message);
@@ -1498,4 +1557,4 @@ const completeHtml = `<!DOCTYPE html>
 `;
 
 fs.writeFileSync('admin-cursos.html', completeHtml, 'utf8');
-console.log('✅ admin-cursos.html compiled with robust Cloud Sync & active course persistence! Total lines:', completeHtml.split('\n').length);
+console.log('✅ admin-cursos.html compiled with directSaveCourseCloud resilience & cache-busting! Total lines:', completeHtml.split('\n').length);
