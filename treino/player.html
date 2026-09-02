@@ -371,7 +371,19 @@
       const aula = params.get('aula') || params.get('track');
 
       if (curso) state.courseId = curso;
-      if (mod) state.activeModuleId = mod;
+      if (mod) {
+        state.activeModuleId = mod;
+      } else if (aula) {
+        if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
+          const eqsModules = window.AEF_QUICKSTART?.modules || [];
+          const foundMod = eqsModules.find(m => (m.tracks || []).some(t => t.id === aula || t.id.includes(aula)));
+          if (foundMod) state.activeModuleId = foundMod.id;
+        } else if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
+          const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+          const foundMod = msModules.find(m => (m.tracks || []).some(t => t.id === aula || t.id.includes(aula)));
+          if (foundMod) state.activeModuleId = foundMod.id;
+        }
+      }
 
       const tracks = getCurrentTracklist();
       if (aula && tracks.length > 0) {
