@@ -392,6 +392,31 @@
       }
     }
 
+    function getAllModulesForCurrentCourse() {
+      if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
+        return window.AEF_MAGIC_STORIES?.modules || [];
+      } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
+        return window.AEF_QUICKSTART?.modules || [];
+      } else if (state.courseId === 'vip') {
+        return [
+          { id: 'estevao', title: 'Estêvão (Executivo)', shortTitle: 'Estêvão', tracks: window.AEF_STUDENT_ESTEVAO?.tracks || [] },
+          { id: 'thomas', title: 'Thomas (Tech Lead)', shortTitle: 'Thomas', tracks: window.AEF_STUDENT_THOMAS?.tracks || [] },
+          { id: 'andre', title: 'André (Entrevistas)', shortTitle: 'André', tracks: window.AEF_STUDENT_ANDRE?.tracks || [] },
+          { id: 'matheus', title: 'Matheus (Fluência)', shortTitle: 'Matheus', tracks: window.AEF_STUDENT_MATHEUS?.tracks || [] }
+        ];
+      } else if (state.courseId === 'public') {
+        return [
+          { id: 'public-demo', title: 'Novidades Free', shortTitle: 'Novidades', tracks: window.AEF_STUDENT_PUBLIC?.tracks || [] }
+        ];
+      } else if (state.courseId === 'custom') {
+        const userCustoms = JSON.parse(localStorage.getItem('aef_custom_tracks') || '[]');
+        return [
+          { id: 'custom-lab', title: 'Laboratório Pessoal', shortTitle: 'Minhas Coisas', tracks: userCustoms }
+        ];
+      }
+      return [];
+    }
+
     function populateCourseSelect() {
       const select = document.getElementById('course-select');
       if (select) select.value = state.courseId;
@@ -401,18 +426,8 @@
       state.courseId = courseId;
       state.activeLessonIndex = 0;
       
-      // Define o primeiro módulo/aluno padrão do curso escolhido
-      if (courseId === 'ms-legacy' || courseId === 'magic-stories') {
-        state.activeModuleId = window.AEF_MAGIC_STORIES?.modules?.[0]?.id || "ms001-grazi";
-      } else if (courseId === 'english-quickstart' || courseId === 'eqs') {
-        state.activeModuleId = window.AEF_QUICKSTART?.modules?.[0]?.id || "eqs-m0";
-      } else if (courseId === 'vip') {
-        state.activeModuleId = "estevao";
-      } else if (courseId === 'public') {
-        state.activeModuleId = "public-demo";
-      } else if (courseId === 'custom') {
-        state.activeModuleId = "custom-lab";
-      }
+      const allMods = getAllModulesForCurrentCourse();
+      state.activeModuleId = allMods[0]?.id || "";
 
       populateModuleSelect();
       loadCurrentContent(0);
@@ -422,37 +437,13 @@
       const select = document.getElementById('module-select');
       if (!select) return;
 
-      if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
-        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-        select.innerHTML = msModules.map(m => `
-          <option value="${m.id}" ${m.id === state.activeModuleId ? 'selected' : ''} class="bg-slate-900 text-slate-100">
-            ${m.shortTitle || m.title}
-          </option>
-        `).join('');
-      } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
-        const eqsModules = window.AEF_QUICKSTART?.modules || [];
-        select.innerHTML = eqsModules.map(m => `
-          <option value="${m.id}" ${m.id === state.activeModuleId ? 'selected' : ''} class="bg-slate-900 text-slate-100">
-            ${m.shortTitle || m.title}
-          </option>
-        `).join('');
-      } else if (state.courseId === 'vip') {
-        const mentees = [
-          { id: 'estevao', name: 'Estêvão (Executivo)' },
-          { id: 'thomas', name: 'Thomas (Tech Lead)' },
-          { id: 'andre', name: 'André (Entrevistas)' },
-          { id: 'matheus', name: 'Matheus (Fluência)' }
-        ];
-        select.innerHTML = mentees.map(m => `
-          <option value="${m.id}" ${m.id === state.activeModuleId ? 'selected' : ''} class="bg-slate-900 text-slate-100">
-            ${m.name}
-          </option>
-        `).join('');
-      } else if (state.courseId === 'public') {
-        select.innerHTML = `<option value="public-demo" selected class="bg-slate-900 text-slate-100">💡 Novidades (Free Plan)</option>`;
-      } else if (state.courseId === 'custom') {
-        select.innerHTML = `<option value="custom-lab" selected class="bg-slate-900 text-slate-100">🧪 Laboratório Pessoal</option>`;
-      }
+      const allMods = getAllModulesForCurrentCourse();
+      select.innerHTML = allMods.map(m => `
+        <option value="${m.id}" ${m.id === state.activeModuleId ? 'selected' : ''} class="bg-slate-900 text-slate-100">
+          ${m.shortTitle || m.title}
+        </option>
+      `).join('');
+      select.value = state.activeModuleId;
     }
 
     window.selectModule = (modId) => {
@@ -462,27 +453,9 @@
     };
 
     function getCurrentTracklist() {
-      if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
-        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-        const mod = msModules.find(m => m.id === state.activeModuleId) || msModules[0];
-        return mod?.tracks || [];
-      } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
-        const eqsModules = window.AEF_QUICKSTART?.modules || [];
-        const mod = eqsModules.find(m => m.id === state.activeModuleId) || eqsModules[0];
-        return mod?.tracks || [];
-      } else if (state.courseId === 'vip') {
-        if (state.activeModuleId === 'estevao') return window.AEF_STUDENT_ESTEVAO?.tracks || [];
-        if (state.activeModuleId === 'thomas') return window.AEF_STUDENT_THOMAS?.tracks || [];
-        if (state.activeModuleId === 'andre') return window.AEF_STUDENT_ANDRE?.tracks || [];
-        if (state.activeModuleId === 'matheus') return window.AEF_STUDENT_MATHEUS?.tracks || [];
-        return window.AEF_STUDENT_ESTEVAO?.tracks || [];
-      } else if (state.courseId === 'public') {
-        return window.AEF_STUDENT_PUBLIC?.tracks || [];
-      } else if (state.courseId === 'custom') {
-        const userCustoms = JSON.parse(localStorage.getItem('aef_custom_tracks') || '[]');
-        return userCustoms;
-      }
-      return [];
+      const allMods = getAllModulesForCurrentCourse();
+      const mod = allMods.find(m => m.id === state.activeModuleId) || allMods[0];
+      return mod?.tracks || [];
     }
 
     function getCurrentActiveTrack() {
@@ -491,23 +464,9 @@
     }
 
     function getCurrentModuleTitle() {
-      if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
-        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-        const mod = msModules.find(m => m.id === state.activeModuleId) || msModules[0];
-        return mod?.title || 'Magic Story';
-      } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
-        const eqsModules = window.AEF_QUICKSTART?.modules || [];
-        const mod = eqsModules.find(m => m.id === state.activeModuleId) || eqsModules[0];
-        return mod?.title || 'English QuickStart';
-      } else if (state.courseId === 'vip') {
-        const names = { estevao: 'Estêvão', thomas: 'Thomas', andre: 'André', matheus: 'Matheus' };
-        return `👑 Mentoria VIP • ${names[state.activeModuleId] || 'Aluno'}`;
-      } else if (state.courseId === 'public') {
-        return '💡 Novidades • Free Plan';
-      } else if (state.courseId === 'custom') {
-        return '🧪 Minhas Coisas • Laboratório';
-      }
-      return 'AgoraEuFalo';
+      const allMods = getAllModulesForCurrentCourse();
+      const mod = allMods.find(m => m.id === state.activeModuleId) || allMods[0];
+      return mod?.title || 'Treinamento AgoraEuFalo';
     }
 
     function loadCurrentContent(lessonIdx) {
@@ -726,33 +685,48 @@
       if (state.activeLessonIndex < tracks.length - 1) {
         loadCurrentContent(state.activeLessonIndex + 1);
         window.playAudio();
-      } else {
-        // Se for Magic Stories ou EQS, tenta avançar para o próximo módulo
-        let modulesList = [];
-        if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
-          modulesList = window.AEF_MAGIC_STORIES?.modules || [];
-        } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
-          modulesList = window.AEF_QUICKSTART?.modules || [];
-        }
-
-        const curModIdx = modulesList.findIndex(m => m.id === state.activeModuleId);
-        if (curModIdx !== -1 && curModIdx < modulesList.length - 1) {
-          state.activeModuleId = modulesList[curModIdx + 1].id;
-          populateModuleSelect();
-          loadCurrentContent(0);
-          window.playAudio();
-          showToast(`Avançando para ${modulesList[curModIdx + 1].shortTitle || modulesList[curModIdx + 1].title}`);
-          return;
-        }
-        showToast('Fim da playlist!');
+        return;
       }
+
+      // Avança para o próximo módulo do curso
+      const allMods = getAllModulesForCurrentCourse();
+      const curModIdx = allMods.findIndex(m => m.id === state.activeModuleId);
+      if (curModIdx !== -1 && curModIdx < allMods.length - 1) {
+        const nextMod = allMods[curModIdx + 1];
+        state.activeModuleId = nextMod.id;
+        populateModuleSelect();
+        loadCurrentContent(0);
+        window.playAudio();
+        showToast(`Avançando para ${nextMod.shortTitle || nextMod.title}`);
+        return;
+      }
+      showToast('Fim do curso!');
     };
 
     window.playPrevLesson = () => {
       if (state.activeLessonIndex > 0) {
         loadCurrentContent(state.activeLessonIndex - 1);
         window.playAudio();
+        return;
       }
+
+      // Retrocede para a última aula do módulo anterior
+      const allMods = getAllModulesForCurrentCourse();
+      const curModIdx = allMods.findIndex(m => m.id === state.activeModuleId);
+      if (curModIdx > 0) {
+        const prevMod = allMods[curModIdx - 1];
+        state.activeModuleId = prevMod.id;
+        populateModuleSelect();
+        const prevTracks = prevMod.tracks || [];
+        const targetIdx = Math.max(0, prevTracks.length - 1);
+        loadCurrentContent(targetIdx);
+        window.playAudio();
+        showToast(`Voltando para ${prevMod.shortTitle || prevMod.title}`);
+        return;
+      }
+
+      state.audio.currentTime = 0;
+      showToast('Início do curso');
     };
 
     window.toggleContinuousPlay = () => {
