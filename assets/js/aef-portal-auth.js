@@ -108,6 +108,17 @@
       return MASTER_ADMIN_EMAILS.some(adm => clean === adm || clean.includes('selexenglish@gmail.com'));
     }
 
+    isVipMenteeEmail(email) {
+      if (!email) return false;
+      const clean = email.trim().toLowerCase();
+      // Checa se o email confere com André ou se existe no registry
+      if (clean === 'andrebarrote1992@gmail.com') return true;
+      if (window.AEF_COURSES_REGISTRY) {
+        return Object.values(window.AEF_COURSES_REGISTRY).some(c => (c.studentEmail || '').toLowerCase() === clean);
+      }
+      return false;
+    }
+
     // =========================================================================
     // AUTHENTICATION METHODS
     // =========================================================================
@@ -118,7 +129,8 @@
       const user = cred.user;
 
       const isMasterAdmin = this.isMasterAdminEmail(email);
-      const finalName = isMasterAdmin ? (name || 'Prof. Leonardo Leite') : name;
+      const isVipMentee = this.isVipMenteeEmail(email);
+      const finalName = isMasterAdmin ? (name || 'Prof. Leonardo Leite') : (isVipMentee ? (name || 'André Barrote') : name);
 
       await user.updateProfile({ displayName: finalName });
 
@@ -126,11 +138,11 @@
         uid: user.uid,
         name: finalName,
         email: email,
-        tier: isMasterAdmin ? 'admin_master' : 'free',
-        role: isMasterAdmin ? 'admin' : 'student',
+        tier: isMasterAdmin ? 'admin_master' : (isVipMentee ? 'vip' : 'free'),
+        role: isMasterAdmin ? 'admin' : (isVipMentee ? 'vip_mentee' : 'student'),
         enrolledProducts: isMasterAdmin 
           ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
-          : ['free_starter_pack', 'magic_stories_demo'],
+          : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart', 'free_starter_pack'] : ['free_starter_pack', 'magic_stories_demo']),
         stats: {
           streakDays: 1,
           totalListeningMinutes: 0,
@@ -152,6 +164,7 @@
       let profile = await this.getProfile(cred.user.uid);
       
       const isMasterAdmin = this.isMasterAdminEmail(email);
+      const isVipMentee = this.isVipMenteeEmail(email);
 
       if (profile && isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
         profile.role = 'admin';
@@ -160,6 +173,16 @@
         await this.db.collection('users').doc(cred.user.uid).update({
           role: 'admin',
           tier: 'admin_master',
+          enrolledProducts: profile.enrolledProducts,
+          lastLoginAt: new Date().toISOString()
+        });
+      } else if (profile && isVipMentee && (profile.tier !== 'vip' || !profile.enrolledProducts?.includes('mentoria-andre'))) {
+        profile.tier = 'vip';
+        if (!profile.enrolledProducts) profile.enrolledProducts = [];
+        if (!profile.enrolledProducts.includes('mentoria-andre')) profile.enrolledProducts.push('mentoria-andre');
+        if (!profile.enrolledProducts.includes('ms-legacy')) profile.enrolledProducts.push('ms-legacy');
+        await this.db.collection('users').doc(cred.user.uid).update({
+          tier: 'vip',
           enrolledProducts: profile.enrolledProducts,
           lastLoginAt: new Date().toISOString()
         });
@@ -180,19 +203,20 @@
       const user = cred.user;
 
       const isMasterAdmin = this.isMasterAdminEmail(user.email);
+      const isVipMentee = this.isVipMenteeEmail(user.email);
 
       let profile = await this.getProfile(user.uid);
       if (!profile) {
         profile = {
           uid: user.uid,
-          name: isMasterAdmin ? 'Prof. Leonardo Leite' : (user.displayName || 'Aluno AgoraEuFalo'),
+          name: isMasterAdmin ? 'Prof. Leonardo Leite' : (user.displayName || (isVipMentee ? 'André Barrote' : 'Aluno AgoraEuFalo')),
           email: user.email,
           avatarUrl: user.photoURL || '',
-          tier: isMasterAdmin ? 'admin_master' : 'free',
-          role: isMasterAdmin ? 'admin' : 'student',
+          tier: isMasterAdmin ? 'admin_master' : (isVipMentee ? 'vip' : 'free'),
+          role: isMasterAdmin ? 'admin' : (isVipMentee ? 'vip_mentee' : 'student'),
           enrolledProducts: isMasterAdmin 
             ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
-            : ['free_starter_pack', 'magic_stories_demo'],
+            : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart', 'free_starter_pack'] : ['free_starter_pack', 'magic_stories_demo']),
           stats: {
             streakDays: 1,
             totalListeningMinutes: 0,
@@ -207,6 +231,11 @@
           profile.role = 'admin';
           profile.tier = 'admin_master';
           profile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+        } else if (isVipMentee && (profile.tier !== 'vip' || !profile.enrolledProducts?.includes('mentoria-andre'))) {
+          profile.tier = 'vip';
+          if (!profile.enrolledProducts) profile.enrolledProducts = [];
+          if (!profile.enrolledProducts.includes('mentoria-andre')) profile.enrolledProducts.push('mentoria-andre');
+          if (!profile.enrolledProducts.includes('ms-legacy')) profile.enrolledProducts.push('ms-legacy');
         }
         const updates = {
           role: profile.role,
@@ -260,19 +289,20 @@
           window.localStorage.removeItem('aef_email_for_magic_link');
           const user = cred.user;
           const isMasterAdmin = this.isMasterAdminEmail(user.email);
+          const isVipMentee = this.isVipMenteeEmail(user.email);
 
           let profile = await this.getProfile(user.uid);
           if (!profile) {
             profile = {
               uid: user.uid,
-              name: isMasterAdmin ? 'Prof. Leonardo Leite' : (user.displayName || user.email.split('@')[0]),
+              name: isMasterAdmin ? 'Prof. Leonardo Leite' : (user.displayName || (isVipMentee ? 'André Barrote' : user.email.split('@')[0])),
               email: user.email,
               avatarUrl: user.photoURL || '',
-              tier: isMasterAdmin ? 'admin_master' : 'free',
-              role: isMasterAdmin ? 'admin' : 'student',
+              tier: isMasterAdmin ? 'admin_master' : (isVipMentee ? 'vip' : 'free'),
+              role: isMasterAdmin ? 'admin' : (isVipMentee ? 'vip_mentee' : 'student'),
               enrolledProducts: isMasterAdmin 
                 ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
-                : ['free_starter_pack', 'magic_stories_demo'],
+                : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart', 'free_starter_pack'] : ['free_starter_pack', 'magic_stories_demo']),
               stats: {
                 streakDays: 1,
                 totalListeningMinutes: 0,
@@ -286,10 +316,17 @@
             if (isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
               profile.role = 'admin';
               profile.tier = 'admin_master';
+              profile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+            } else if (isVipMentee && (profile.tier !== 'vip' || !profile.enrolledProducts?.includes('mentoria-andre'))) {
+              profile.tier = 'vip';
+              if (!profile.enrolledProducts) profile.enrolledProducts = [];
+              if (!profile.enrolledProducts.includes('mentoria-andre')) profile.enrolledProducts.push('mentoria-andre');
+              if (!profile.enrolledProducts.includes('ms-legacy')) profile.enrolledProducts.push('ms-legacy');
             }
             await this.db.collection('users').doc(user.uid).update({
               role: profile.role,
               tier: profile.tier,
+              enrolledProducts: profile.enrolledProducts || [],
               lastLoginAt: new Date().toISOString()
             });
           }

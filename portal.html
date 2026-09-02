@@ -47,6 +47,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -496,17 +497,33 @@
       }
 
       // Stats Telemetry from LocalStorage / Firestore
-      const listeningSeconds = parseInt(localStorage.getItem("aef_listening_seconds") || "2880");
-      const listeningMinutes = Math.round(listeningSeconds / 60);
-      const minutesEl = document.getElementById("stat-listening-minutes");
-      if (minutesEl) minutesEl.innerText = listeningMinutes;
+      // Setup Hero Card adaptativo para Aluno VIP / Mentorado
+      const isMentee = (userTier === 'vip' || userTier === 'vip_mentorship') || 
+                       (studentEmail && studentEmail.toLowerCase().includes('andrebarrote'));
 
-      await renderCoursesShowcase(enrolledProducts, isAdmin);
+      if (isMentee) {
+        const heroTag = document.getElementById("hero-course-tag");
+        const heroTitle = document.getElementById("hero-lesson-title");
+        const heroDesc = document.getElementById("hero-lesson-desc");
+        const heroCtaClass = document.getElementById("hero-cta-class");
+        const heroCtaTrain = document.getElementById("hero-cta-train");
+        const heroThumb = document.querySelector("#hero-lesson-title")?.closest("section")?.querySelector("img");
+
+        if (heroTag) heroTag.innerText = "Mentoria VIP • André Barrote";
+        if (heroTitle) heroTitle.innerText = "Welcome André! • Aula 01 • Welcome";
+        if (heroDesc) heroDesc.innerText = "Sua jornada executiva personalizada com o Professor Leo. Diagnóstico inicial e primeiro ciclo de conversação.";
+        if (heroCtaClass) heroCtaClass.href = "sala-de-aula.html?curso=mentoria-andre&modulo=mod-welcome-andre&aula=andre-l01-welcome";
+        if (heroCtaTrain) heroCtaTrain.href = "treino/player.html?aluno=andre";
+        if (heroThumb) heroThumb.src = "assets/images/cover-andre-barrote.jpg";
+      }
+
+      await renderCoursesShowcase(enrolledProducts, isAdmin, studentEmail, userTier);
       updateIcons();
     });
 
-    async function renderCoursesShowcase(enrolledProducts, isAdmin = false) {
-      let courses = OFFICIAL_COURSES_MATRIX;
+    async function renderCoursesShowcase(enrolledProducts, isAdmin = false, currentEmail = '', currentTier = 'free') {
+      const baseMatrix = window.AEF_COURSES_REGISTRY || OFFICIAL_COURSES_MATRIX;
+      let courses = Object.assign({}, baseMatrix);
 
       // Busca matriz atualizada no Firestore se disponível
       try {
@@ -525,12 +542,14 @@
                 slug: f.slug?.stringValue || id,
                 badge: f.badge?.stringValue || "CURSO",
                 tierRequired: f.tierRequired?.stringValue || "club_anual",
+                studentEmail: f.studentEmail?.stringValue || "",
+                studentId: f.studentId?.stringValue || "",
                 published: f.published?.booleanValue ?? true,
                 coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
                 description: f.description?.stringValue || ""
               };
             });
-            courses = Object.assign({}, OFFICIAL_COURSES_MATRIX, cloudCourses);
+            courses = Object.assign({}, baseMatrix, cloudCourses);
           }
         }
       } catch (err) {
@@ -545,15 +564,32 @@
       let availableHtml = "";
       let enrolledCount = 0;
 
+      const normalizedCurrentEmail = (currentEmail || '').trim().toLowerCase();
+
       for (const [id, course] of Object.entries(courses)) {
         // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
         if (course.published === false) continue;
 
-        const isEnrolled = isAdmin || enrolledProducts.includes(id) || enrolledProducts.includes('all_access_master');
+        // Se for um curso VIP de outro mentorado e o usuário não for admin nem o dono, não exibe
+        const isMentorshipCourse = course.tierRequired === 'vip' || id.startsWith('mentoria-');
+        const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
+        const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
+
+        if (isMentorshipCourse && !isAdmin && !isOwner) {
+          // Isolamento de privacidade: mentorias são 100% privadas do mentorado
+          continue;
+        }
+
+        const isEnrolled = isAdmin || 
+                           isOwner || 
+                           enrolledProducts.includes(id) || 
+                           enrolledProducts.includes('all_access_master') ||
+                           ((currentTier === 'vip' || currentTier === 'vip_mentorship') && isOwner);
 
         if (isEnrolled) {
           enrolledCount++;
-          const progressPercent = course.totalLessons ? Math.round(((course.completedLessons || 0) / course.totalLessons) * 100) : 33;
+          const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 5);
+          const progressPercent = totalLessons ? Math.round(((course.completedLessons || 0) / totalLessons) * 100) : 25;
 
           enrolledHtml += `
             <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-[#C68A36]/60 transition flex flex-col justify-between">
@@ -561,16 +597,16 @@
               <div>
                 <!-- Course Cover Image -->
                 <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                  <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover">
-                  <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-[#C68A36] text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
-                    ${course.badge || 'CURSO ATIVO'}
+                  <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover">
+                  <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
+                    ${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'CURSO ATIVO')}
                   </span>
                 </div>
 
                 <!-- Course Body -->
                 <div class="p-4 sm:p-5 space-y-2">
                   <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description}</p>
+                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
                 </div>
               </div>
 
@@ -586,7 +622,7 @@
                   </div>
                 </div>
 
-                <a href="curso.html?id=${course.slug || course.id}" class="w-full py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs">
+                <a href="curso.html?curso=${course.slug || course.id}" class="w-full py-2.5 rounded-xl ${isMentorshipCourse ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-[#0D1E36] hover:bg-[#C68A36]'} text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs">
                   <span>Acessar Módulos</span>
                   <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
@@ -595,13 +631,16 @@
             </div>
           `;
         } else {
+          // Mentoria não aparece na vitrine de cursos abertos para compra geral
+          if (isMentorshipCourse) continue;
+
           availableHtml += `
             <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between">
               
               <div>
                 <!-- Course Cover Image -->
                 <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                  <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover opacity-90">
+                  <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-90">
                   <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
                     DISPONÍVEL
                   </span>
@@ -610,7 +649,7 @@
                 <!-- Course Body -->
                 <div class="p-4 sm:p-5 space-y-2">
                   <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description}</p>
+                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
                 </div>
               </div>
 
