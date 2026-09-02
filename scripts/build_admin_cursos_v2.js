@@ -48,6 +48,7 @@ const completeHtml = `<!DOCTYPE html>
   <script src="assets/js/aef-courses-registry.js"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-filepicker.js"></script>
+  <script src="assets/js/aef-pdf-generator.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
 
   <style>
@@ -136,7 +137,7 @@ const completeHtml = `<!DOCTYPE html>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
           <button onclick="toggleCurrentCoursePublished()" id="coursePublishBadgeBtn" class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase transition flex items-center gap-1 cursor-pointer" title="Clique para alternar o status do Curso">
-            <!-- Injected via JS (🟢 Publicado / 🟡 Rascunho) -->
+            <!-- Injected via JS -->
           </button>
           <button onclick="editCurrentCourse()" class="text-xs text-slate-400 hover:text-amber-400 p-1" title="Editar Metadados do Curso">
             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
@@ -372,21 +373,24 @@ const completeHtml = `<!DOCTYPE html>
     <!-- ======================================================== -->
     <section class="lg:col-span-4 bg-[#0A192F] border border-white/10 rounded-2xl p-4 flex flex-col h-[calc(100vh-80px)] overflow-hidden shadow-xl">
       
-      <!-- Studio Tabs -->
+      <!-- Studio Tabs (Agora com Aba PDF!) -->
       <div class="pb-3 border-b border-white/10 flex items-center justify-between gap-2">
-        <div class="flex rounded-xl bg-white/5 p-1 border border-white/10 text-xs">
-          <button onclick="switchAiTab('raw')" id="tabBtnRaw" class="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition">
-            🤖 Roteiro IA (Bruto)
+        <div class="flex rounded-xl bg-white/5 p-1 border border-white/10 text-xs overflow-x-auto custom-scrollbar">
+          <button onclick="switchAiTab('raw')" id="tabBtnRaw" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition whitespace-nowrap">
+            🤖 Roteiro IA
           </button>
-          <button onclick="switchAiTab('processed')" id="tabBtnProcessed" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition">
-            ✨ HTML Polido
+          <button onclick="switchAiTab('processed')" id="tabBtnProcessed" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
+            ✨ HTML
           </button>
-          <button onclick="switchAiTab('preview')" id="tabBtnPreview" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition">
+          <button onclick="switchAiTab('preview')" id="tabBtnPreview" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
             👁️ Preview
+          </button>
+          <button onclick="switchAiTab('pdf')" id="tabBtnPdf" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
+            📄 Apostila PDF
           </button>
         </div>
 
-        <select id="lessonAiStatusSelect" onchange="handleAiStatusChange(this.value)" class="bg-[#112240] border border-amber-400/40 text-amber-300 font-black text-[10px] uppercase rounded-lg px-2 py-1 focus:outline-none">
+        <select id="lessonAiStatusSelect" onchange="handleAiStatusChange(this.value)" class="bg-[#112240] border border-amber-400/40 text-amber-300 font-black text-[10px] uppercase rounded-lg px-2 py-1 focus:outline-none shrink-0">
           <option value="draft_pending">🟡 IA: Pendente</option>
           <option value="ai_reviewed">🔵 IA: Revisado</option>
           <option value="published">🟢 Publicado</option>
@@ -418,6 +422,53 @@ const completeHtml = `<!DOCTYPE html>
       <div id="aiTabPreview" class="hidden flex-1 flex flex-col pt-3 overflow-y-auto custom-scrollbar">
         <div class="p-4 rounded-xl bg-amber-50/95 border-2 border-amber-200 text-slate-900 shadow text-xs space-y-3" id="previewContainer">
           <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- TAB 4: GERADOR DE APOSTILA EM PDF COM CORES DO CURSO -->
+      <div id="aiTabPdf" class="hidden flex-1 flex flex-col pt-3 overflow-y-auto custom-scrollbar space-y-3">
+        <div class="p-3 bg-white/5 border border-white/10 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              <span>Gerador de Apostila (A4)</span>
+            </span>
+            <span id="pdfCourseThemeIndicator" class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-amber-300 font-bold">Paleta: Âmbar</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Modelo da Apostila</label>
+              <select id="pdfTemplateTypeSelect" class="w-full bg-[#112240] border border-white/20 text-white font-bold text-xs rounded-lg p-2 focus:outline-none">
+                <option value="generic">📘 Curso Geral (2 a N págs)</option>
+                <option value="magic_story">✨ Magic Story (3 Arquétipos)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Ação</label>
+              <button type="button" onclick="generateLessonPdfPreview()" class="w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase flex items-center justify-center gap-1.5 shadow cursor-pointer">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Gerar Apostila</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar: Print / Link -->
+        <div class="flex items-center justify-between gap-2 pt-1">
+          <button type="button" onclick="printGeneratedPdf()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+            <span>Visualizar / Imprimir</span>
+          </button>
+          <button type="button" onclick="linkGeneratedPdfToLesson()" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>Vincular na Aula</span>
+          </button>
+        </div>
+
+        <!-- Preview Box -->
+        <div id="pdfPreviewContainer" class="p-4 bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 min-h-[320px] text-xs">
+          <p class="text-slate-500 italic text-center py-8">Clique em "Gerar Apostila" para diagramar o roteiro desta aula no padrão A4 com a paleta do curso.</p>
         </div>
       </div>
 
@@ -455,6 +506,21 @@ const completeHtml = `<!DOCTYPE html>
             </select>
           </div>
         </div>
+
+        <!-- Paleta de Cores Temática do Curso -->
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Cor Tema do Curso (Paleta da Apostila em PDF)</label>
+          <div class="grid grid-cols-6 gap-1.5 mb-2">
+            <button type="button" onclick="selectCoursePalette('cobalt', '#1A56DB')" class="h-7 rounded-lg bg-[#1A56DB] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Azul Cobalto">Cobalto</button>
+            <button type="button" onclick="selectCoursePalette('emerald', '#047857')" class="h-7 rounded-lg bg-[#047857] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Verde Esmeralda">Verde</button>
+            <button type="button" onclick="selectCoursePalette('amber', '#C68A36')" class="h-7 rounded-lg bg-[#C68A36] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Âmbar / Ouro">Âmbar</button>
+            <button type="button" onclick="selectCoursePalette('ruby', '#E11D48')" class="h-7 rounded-lg bg-[#E11D48] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Rubi Quente">Rubi</button>
+            <button type="button" onclick="selectCoursePalette('indigo', '#6366F1')" class="h-7 rounded-lg bg-[#6366F1] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Índigo">Índigo</button>
+            <button type="button" onclick="selectCoursePalette('slate', '#1E293B')" class="h-7 rounded-lg bg-[#1E293B] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Deep Slate">Slate</button>
+          </div>
+          <input type="text" id="courseModalThemeColorInput" value="amber" placeholder="amber ou #1A56DB" class="w-full px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+        </div>
+
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa do Curso</label>
           <div class="flex items-center gap-2">
@@ -540,6 +606,7 @@ const completeHtml = `<!DOCTYPE html>
     let activeModuleId = null;
     let activeLessonId = null;
     let currentAiTab = "raw";
+    let LAST_GENERATED_PDF_HTML = "";
 
     document.addEventListener("DOMContentLoaded", async () => {
       // 1. Inicializa a UI imediatamente com o registro canônico local
@@ -622,6 +689,12 @@ const completeHtml = `<!DOCTYPE html>
         publishBtn.innerHTML = isPub ? '<span>🟢</span><span>Publicado</span>' : '<span>🟡</span><span>Rascunho</span>';
       }
 
+      const themeInd = document.getElementById("pdfCourseThemeIndicator");
+      if (themeInd) {
+        const pal = window.AEFPdfGenerator ? window.AEFPdfGenerator.resolvePalette(course.themeColor) : { name: 'Âmbar' };
+        themeInd.innerText = \`Paleta: \${pal.name || course.themeColor || 'Âmbar'}\`;
+      }
+
       const container = document.getElementById("hierarchyTreeContainer");
       const modules = course.modules || [];
 
@@ -680,6 +753,7 @@ const completeHtml = `<!DOCTYPE html>
                     <div class="flex items-center gap-1 shrink-0 text-[10px]">
                       \${les.videoUrl ? '<i data-lucide="video" class="w-3 h-3"></i>' : ''}
                       \${les.audioUrl ? '<i data-lucide="volume-2" class="w-3 h-3"></i>' : ''}
+                      \${les.pdfUrl ? '<i data-lucide="file-text" class="w-3 h-3 text-amber-400"></i>' : ''}
                     </div>
                   </div>
                 \`;
@@ -1096,12 +1170,15 @@ const completeHtml = `<!DOCTYPE html>
       document.getElementById("aiTabRaw").classList.toggle("hidden", tab !== "raw");
       document.getElementById("aiTabProcessed").classList.toggle("hidden", tab !== "processed");
       document.getElementById("aiTabPreview").classList.toggle("hidden", tab !== "preview");
+      document.getElementById("aiTabPdf").classList.toggle("hidden", tab !== "pdf");
 
-      document.getElementById("tabBtnRaw").className = tab === "raw" ? "px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-3 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
-      document.getElementById("tabBtnProcessed").className = tab === "processed" ? "px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-3 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
-      document.getElementById("tabBtnPreview").className = tab === "preview" ? "px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-3 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
+      document.getElementById("tabBtnRaw").className = tab === "raw" ? "px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
+      document.getElementById("tabBtnProcessed").className = tab === "processed" ? "px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
+      document.getElementById("tabBtnPreview").className = tab === "preview" ? "px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
+      document.getElementById("tabBtnPdf").className = tab === "pdf" ? "px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition" : "px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition";
 
       if (tab === "preview") updatePreviewHtml();
+      if (tab === "pdf") generateLessonPdfPreview();
     }
 
     function updateRawCounter() {
@@ -1134,6 +1211,59 @@ const completeHtml = `<!DOCTYPE html>
       \`;
     }
 
+    // ==========================================
+    // PDF GENERATOR CONTROLLER
+    // ==========================================
+    function generateLessonPdfPreview() {
+      const course = ALL_COURSES[activeCourseId];
+      if (!course) return;
+
+      const mod = (course.modules || []).find(m => m.id === activeModuleId);
+      const les = (mod?.lessons || []).find(l => l.id === activeLessonId) || {
+        title: document.getElementById("lessonTitleInput")?.value || "Aula de Treino",
+        goldenTip: document.getElementById("lessonGoldenTipInput")?.value || ""
+      };
+
+      const rawScript = document.getElementById("lessonRawScriptInput")?.value || "";
+
+      if (window.AEFPdfGenerator) {
+        LAST_GENERATED_PDF_HTML = window.AEFPdfGenerator.generatePrintableHtml(course, mod, les, rawScript);
+        
+        const previewBox = document.getElementById("pdfPreviewContainer");
+        if (previewBox) {
+          previewBox.innerHTML = \`
+            <div class="space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                <span class="font-bold text-slate-700 text-xs">Prévia da Apostila (Layout Dinâmico A4)</span>
+                <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">Pronto para Impressão</span>
+              </div>
+              <iframe id="pdfPreviewIframe" class="w-full h-80 rounded-xl border border-slate-300 bg-white" srcdoc="\${LAST_GENERATED_PDF_HTML.replace(/"/g, '&quot;')}"></iframe>
+            </div>
+          \`;
+        }
+      }
+    }
+
+    function printGeneratedPdf() {
+      if (!LAST_GENERATED_PDF_HTML) {
+        generateLessonPdfPreview();
+      }
+      if (window.AEFPdfGenerator && LAST_GENERATED_PDF_HTML) {
+        window.AEFPdfGenerator.printDocument(LAST_GENERATED_PDF_HTML);
+      }
+    }
+
+    async function linkGeneratedPdfToLesson() {
+      const course = ALL_COURSES[activeCourseId];
+      const lessonTitle = document.getElementById("lessonTitleInput")?.value?.trim() || "aula";
+      const cleanSlug = lessonTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      const filename = \`Apostila_\${activeCourseId}_\${cleanSlug}.pdf\`;
+
+      const generatedUrl = \`Material-PDF/\${filename}\`;
+      document.getElementById("lessonPdfUrlInput").value = generatedUrl;
+      showToast(\`✅ Link da Apostila salvo na aula: \${generatedUrl}\`);
+    }
+
     // Modal Helpers (Course & Module)
     function openCourseModal() {
       document.getElementById("courseModalTitle").innerText = "Novo Curso";
@@ -1141,12 +1271,18 @@ const completeHtml = `<!DOCTYPE html>
       document.getElementById("courseModalTitleInput").value = "";
       document.getElementById("courseModalSlugInput").value = "";
       document.getElementById("courseModalDescInput").value = "";
+      document.getElementById("courseModalThemeColorInput").value = "amber";
       document.getElementById("courseModalPublishedInput").checked = true;
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
     function closeCourseModal() {
       document.getElementById("courseModal").classList.add("hidden");
+    }
+
+    function selectCoursePalette(name, hex) {
+      document.getElementById("courseModalThemeColorInput").value = name;
+      showToast(\`Paleta temática selecionada: \${name.toUpperCase()} (\${hex})\`);
     }
 
     function editCurrentCourse() {
@@ -1158,6 +1294,7 @@ const completeHtml = `<!DOCTYPE html>
       document.getElementById("courseModalSlugInput").value = course.slug || course.id;
       document.getElementById("courseModalDescInput").value = course.description || "";
       document.getElementById("courseModalCoverInput").value = course.coverImageUrl || "";
+      document.getElementById("courseModalThemeColorInput").value = course.themeColor || "amber";
       document.getElementById("courseModalTierInput").value = course.tierRequired || "vip";
       document.getElementById("courseModalPublishedInput").checked = course.published !== false;
       document.getElementById("courseModal").classList.remove("hidden");
@@ -1171,6 +1308,7 @@ const completeHtml = `<!DOCTYPE html>
       const title = rawTitle || "Novo Curso";
       const slug = rawSlug || id;
       const tier = document.getElementById("courseModalTierInput").value;
+      const themeColor = document.getElementById("courseModalThemeColorInput").value.trim() || "amber";
       const cover = document.getElementById("courseModalCoverInput").value.trim() || "assets/images/cover-default-aef.jpg";
       const desc = document.getElementById("courseModalDescInput").value.trim();
       const published = document.getElementById("courseModalPublishedInput").checked;
@@ -1180,6 +1318,7 @@ const completeHtml = `<!DOCTYPE html>
       courseObj.title = title;
       courseObj.slug = slug;
       courseObj.tierRequired = tier;
+      courseObj.themeColor = themeColor;
       courseObj.badge = tier === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO";
       courseObj.coverImageUrl = cover;
       courseObj.description = desc;
@@ -1326,6 +1465,7 @@ const completeHtml = `<!DOCTYPE html>
             slug: course.slug || course.id || cid,
             badge: course.badge || "CURSO LIBERADO",
             tierRequired: course.tierRequired || "vip",
+            themeColor: course.themeColor || "amber",
             coverImageUrl: course.coverImageUrl || "assets/images/cover-default-aef.jpg",
             description: course.description || "",
             published: course.published !== false,
@@ -1389,4 +1529,4 @@ const completeHtml = `<!DOCTYPE html>
 `;
 
 fs.writeFileSync('admin-cursos.html', completeHtml, 'utf8');
-console.log('✅ admin-cursos.html V2 written with 3-level Published Toggles! Total lines:', completeHtml.split('\n').length);
+console.log('✅ admin-cursos.html compiled with PDF generator & Course Theme Palette! Total lines:', completeHtml.split('\n').length);

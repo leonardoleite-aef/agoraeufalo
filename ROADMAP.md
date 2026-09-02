@@ -4,7 +4,26 @@ Este documento registra os marcos arquiteturais, funcionalidades planejadas e d�
 
 ---
 
-## 📌 1. Backlog Prioritário & Automação de Infraestrutura
+## 🚨 1. URGENTE & ALTA PRIORIDADE (Backlog Imediato)
+
+### [URGENTE-01] Micro-Servidor Local no Mac para Automação Inteligente de Mídia & Player de Áudio
+- **Status:** 🔴 **URGENTE / ALTA PRIORIDADE**
+- **Objetivo:** Criar um micro-servidor local em segundo plano no Mac (`http://localhost:3000` / `localhost:8000`) para processamento automatizado de áudio/vídeo e sincronização contínua com a Sala de Aula e Training Player.
+- **Regras & Fluxos de Automação:**
+  1. **Cenário A — Vídeo Subido sem Áudio (Extração + Transcrição + Karaokê Automático):**
+     - Ao fazer upload de um vídeo `.mp4` no Studio (`admin-cursos.html`) sem fornecer faixa de áudio manual:
+     - O micro-servidor local no Mac extrai a trilha de áudio em MP3 128kbps puro (`ffmpeg` / `PyAV`).
+     - Executa o motor de transcrição e alinhamento milimétrico de timestamps (`Faster-Whisper` CPU/INT8 local).
+     - Gera a letra sincronizada estilo Karaokê com marcação de blocos para o Training Player (`treino/data/magic-stories.js` e Firestore).
+     - Faz o upload dos arquivos gerados (`.mp3` e `.json`) para o Firebase Storage e atualiza a aula no Firestore.
+  2. **Cenário B — Áudio Subido sem Vídeo (Player Imersivo na Sala de Aula):**
+     - Caso o usuário suba apenas o arquivo de áudio (`.mp3`) sem fornecer vídeo:
+     - O micro-servidor processa a transcrição e sincronização para o Player de Treino.
+     - A **Sala de Aula (`sala-de-aula.html`)** detecta a ausência de vídeo e renderiza automaticamente um **Stage de Áudio Imersivo** (com Capa 1:1, visualizador sonoro, título da aula e player de áudio responsivo integrado) garantindo experiência de listening completa sem travar ou exigir vídeo.
+
+---
+
+## 📌 2. Backlog de Engenharia & Automação de Infraestrutura
 
 ### [ROADMAP-01] Esteira Local Autônoma no Painel Admin (`admin-cursos.html`)
 - **Status:** ⏳ Planejado / Na Fila

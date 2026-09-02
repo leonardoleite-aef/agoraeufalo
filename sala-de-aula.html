@@ -3878,6 +3878,29 @@
             <video controls playsinline poster="${found.thumbnailUrl || ''}" class="w-full h-full object-contain bg-black" src="${found.videoUrl}"></video>
           `;
         }
+      } else if (found.audioUrl) {
+        const coverImg = found.artworkUrl || found.thumbnailUrl || 'assets/images/cover-default-aef.jpg';
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] via-[#0A192F] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-3.5">
+            <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden shadow-2xl border-2 border-[#C68A36]/40">
+              <img src="${coverImg}" alt="${found.title}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-[#C68A36] text-white flex items-center justify-center shadow-lg">
+                  <i data-lucide="volume-2" class="w-5 h-5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-1 max-w-md">
+              <span class="px-2.5 py-0.5 rounded-full bg-[#C68A36]/20 text-[#C68A36] border border-[#C68A36]/30 font-black text-[10px] uppercase tracking-wider">
+                Áudio de Imersão & Reflexo
+              </span>
+              <h3 class="text-sm sm:text-base font-black text-white leading-tight font-serif">${found.title}</h3>
+            </div>
+            <div class="w-full max-w-md bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-xl">
+              <audio controls playsinline class="w-full" src="${found.audioUrl}"></audio>
+            </div>
+          </div>
+        `;
       } else {
         videoStage.innerHTML = `
           <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-4 text-center space-y-2">
@@ -3885,7 +3908,7 @@
               <i data-lucide="headphones" class="w-6 h-6 text-[#C68A36]"></i>
             </div>
             <h3 class="text-sm font-black text-white">${found.title}</h3>
-            <p class="text-xs text-slate-300">Treino auditivo de reflexo oral.</p>
+            <p class="text-xs text-slate-300">Treino didático & leitura de conteúdo.</p>
           </div>
         `;
       }
