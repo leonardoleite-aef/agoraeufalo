@@ -581,6 +581,44 @@
     }
 
     /**
+     * Deletes a file permanently from Google Cloud Storage
+     * @param {string} fileUrl Full Firebase Storage URL or relative path
+     * @returns {Promise<boolean>}
+     */
+    async deleteFileFromStorage(fileUrl) {
+      if (!fileUrl) return false;
+      const bucket = FIREBASE_CONFIG.storageBucket;
+      
+      let encodedName = "";
+      if (fileUrl.includes(`/b/${bucket}/o/`)) {
+        const parts = fileUrl.split(`/b/${bucket}/o/`)[1];
+        encodedName = parts.split("?")[0];
+      } else if (fileUrl.startsWith("http")) {
+        const match = fileUrl.match(/\/o\/([^?]+)/);
+        if (match) encodedName = match[1];
+      } else {
+        encodedName = encodeURIComponent(fileUrl);
+      }
+
+      if (!encodedName) return false;
+
+      const deleteUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodedName}`;
+      try {
+        const res = await fetch(deleteUrl, { method: "DELETE" });
+        if (res.ok || res.status === 404 || res.status === 204) {
+          console.log(`☁️ [AEFCloudSync] Arquivo "${decodeURIComponent(encodedName)}" excluído do Google Cloud Storage com sucesso!`);
+          return true;
+        } else {
+          console.warn(`[AEFCloudSync] Delete storage status: ${res.status}`);
+          return false;
+        }
+      } catch (err) {
+        console.warn("[AEFCloudSync] Erro ao deletar arquivo do Storage:", err);
+        return false;
+      }
+    }
+
+    /**
      * Records listening time seconds and calculates streaks (Local + Firestore)
      */
     async recordListeningSession(studentId, additionalSeconds) {

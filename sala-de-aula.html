@@ -3874,8 +3874,46 @@
         document.getElementById("lessonGoldenTipText").innerText = `"${found.goldenTip}"`;
       }
 
-      if (found.pdfUrl) {
-        document.getElementById("pdfDownloadLink").href = found.pdfUrl;
+      // Fallback Hierárquico do PDF (Aula -> Livreto do Módulo -> Irmãos do Módulo -> Curso)
+      let resolvedPdf = (found.pdfUrl && found.pdfUrl.trim() !== "") ? found.pdfUrl.trim() : "";
+      let isModuleBooklet = false;
+
+      if (!resolvedPdf && activeModule) {
+        if (activeModule.pdfUrl && activeModule.pdfUrl.trim() !== "") {
+          resolvedPdf = activeModule.pdfUrl.trim();
+          isModuleBooklet = true;
+        } else if (Array.isArray(activeModule.lessons)) {
+          const siblingWithPdf = activeModule.lessons.find(l => l.pdfUrl && l.pdfUrl.trim() !== "");
+          if (siblingWithPdf) {
+            resolvedPdf = siblingWithPdf.pdfUrl.trim();
+            isModuleBooklet = true;
+          }
+        }
+      }
+
+      if (!resolvedPdf && activeCourse && activeCourse.pdfUrl && activeCourse.pdfUrl.trim() !== "") {
+        resolvedPdf = activeCourse.pdfUrl.trim();
+        isModuleBooklet = true;
+      }
+
+      const pdfLink = document.getElementById("pdfDownloadLink");
+      const pdfBtnLabel = document.getElementById("pdfBtnLabel");
+      if (pdfLink) {
+        if (resolvedPdf) {
+          pdfLink.href = resolvedPdf;
+          pdfLink.target = "_blank";
+          pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
+          if (pdfBtnLabel) {
+            pdfBtnLabel.innerText = isModuleBooklet ? "Livreto do Módulo (PDF)" : "Apostila da Aula (PDF)";
+          }
+          pdfLink.title = isModuleBooklet ? "Baixar Livreto Completo do Módulo" : "Baixar Apostila desta Aula";
+        } else {
+          pdfLink.href = "javascript:void(0)";
+          pdfLink.removeAttribute("target");
+          pdfLink.classList.add("opacity-40", "pointer-events-none", "cursor-not-allowed");
+          if (pdfBtnLabel) pdfBtnLabel.innerText = "Material em Preparação";
+          pdfLink.title = "Nenhum PDF disponível no momento";
+        }
       }
 
       const isCompleted = completedLessonIds.includes(found.id);

@@ -205,16 +205,20 @@
             <span id="videoUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum vídeo</span>
           </div>
 
-          <!-- Direct Upload Button & Manual URL Button -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <label class="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
+          <!-- Direct Upload Button, Manual URL Button & Delete from Cloud -->
+          <div class="grid grid-cols-12 gap-2">
+            <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
               <i data-lucide="upload" class="w-4 h-4"></i>
               <span>Subir Vídeo (Mac / PC)</span>
               <input type="file" accept="video/mp4,video/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'video')">
             </label>
-            <button type="button" onclick="toggleManualUrl('video')" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1.5">
+            <button type="button" onclick="toggleManualUrl('video')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
               <i data-lucide="link" class="w-3.5 h-3.5"></i>
-              <span>URL Manual / Link</span>
+              <span>URL</span>
+            </button>
+            <button type="button" onclick="handleDeleteMediaFromStorage('video')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir arquivo permanentemente do Storage e limpar da aula">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Excluir</span>
             </button>
           </div>
 
@@ -250,16 +254,20 @@
             <span id="audioUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum áudio</span>
           </div>
 
-          <!-- Direct Upload Button & Manual URL Button -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <label class="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
+          <!-- Direct Upload Button, Manual URL Button & Delete from Cloud -->
+          <div class="grid grid-cols-12 gap-2">
+            <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
               <i data-lucide="upload" class="w-4 h-4"></i>
               <span>Subir Áudio (Mac / PC)</span>
               <input type="file" accept="audio/mp3,audio/mpeg,audio/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'audio')">
             </label>
-            <button type="button" onclick="toggleManualUrl('audio')" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1.5">
+            <button type="button" onclick="toggleManualUrl('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
               <i data-lucide="link" class="w-3.5 h-3.5"></i>
-              <span>URL Manual / Link</span>
+              <span>URL</span>
+            </button>
+            <button type="button" onclick="handleDeleteMediaFromStorage('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir áudio permanentemente do Storage e limpar da aula">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Excluir</span>
             </button>
           </div>
 
@@ -290,10 +298,13 @@
           
           <!-- PDF -->
           <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
-            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
-              <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
-              <span>Apostila (PDF)</span>
-            </label>
+            <div class="flex items-center justify-between">
+              <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                <span>Apostila (PDF)</span>
+              </label>
+              <button type="button" onclick="handleDeleteMediaFromStorage('pdf')" class="text-slate-400 hover:text-rose-400 p-0.5" title="Excluir PDF da Nuvem"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+            </div>
             <label class="w-full py-2 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer border border-white/10 transition">
               <i data-lucide="upload" class="w-3.5 h-3.5"></i>
               <span>Upload PDF</span>
@@ -304,10 +315,13 @@
 
           <!-- Capa 1:1 -->
           <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
-            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
-              <i data-lucide="image" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
-              <span>Capa 1:1</span>
-            </label>
+            <div class="flex items-center justify-between">
+              <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
+                <i data-lucide="image" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                <span>Capa 1:1</span>
+              </label>
+              <button type="button" onclick="handleDeleteMediaFromStorage('artwork')" class="text-slate-400 hover:text-rose-400 p-0.5" title="Excluir Capa da Nuvem"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+            </div>
             <label class="w-full py-2 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer border border-white/10 transition">
               <i data-lucide="upload" class="w-3.5 h-3.5"></i>
               <span>Upload Capa</span>
@@ -318,10 +332,13 @@
 
           <!-- Thumb 16:9 -->
           <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
-            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
-              <i data-lucide="film" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
-              <span>Thumb 16:9</span>
-            </label>
+            <div class="flex items-center justify-between">
+              <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
+                <i data-lucide="film" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                <span>Thumb 16:9</span>
+              </label>
+              <button type="button" onclick="handleDeleteMediaFromStorage('thumbnail')" class="text-slate-400 hover:text-rose-400 p-0.5" title="Excluir Thumb da Nuvem"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+            </div>
             <label class="w-full py-2 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer border border-white/10 transition">
               <i data-lucide="upload" class="w-3.5 h-3.5"></i>
               <span>Upload Thumb</span>
@@ -568,6 +585,17 @@
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Ordem</label>
             <input type="number" id="moduleModalOrderInput" value="1" min="1" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-bold text-center focus:outline-none">
           </div>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Apostila Principal / Livreto do Módulo (PDF Fallback)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="moduleModalPdfUrlInput" placeholder="https://firebasestorage... ou Material-PDF/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+            <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shrink-0">
+              <span>Upload PDF</span>
+              <input type="file" accept="application/pdf" class="hidden" onchange="handleModulePdfUpload(this.files[0])">
+            </label>
+          </div>
+          <p class="text-[9px] text-slate-400 mt-1">Este PDF será o padrão de todas as aulas deste módulo que ainda não tiverem um PDF específico.</p>
         </div>
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição</label>
@@ -1172,6 +1200,43 @@
       }
     }
 
+    async function handleDeleteMediaFromStorage(type) {
+      let inputId = '';
+      let label = '';
+      if (type === 'video') { inputId = 'lessonVideoUrlInput'; label = 'o vídeo'; }
+      else if (type === 'audio') { inputId = 'lessonAudioUrlInput'; label = 'o áudio'; }
+      else if (type === 'pdf') { inputId = 'lessonPdfUrlInput'; label = 'a apostila PDF'; }
+      else if (type === 'artwork') { inputId = 'lessonArtworkUrlInput'; label = 'a capa 1:1'; }
+      else if (type === 'thumbnail') { inputId = 'lessonThumbnailUrlInput'; label = 'a thumb 16:9'; }
+
+      const input = document.getElementById(inputId);
+      const url = input ? input.value.trim() : '';
+
+      if (!url) {
+        showToast(`Nenhum arquivo ativo para excluir em ${label}.`);
+        return;
+      }
+
+      if (!confirm(`Tem certeza que deseja EXCLUIR ${label} permanentemente da Nuvem (Google Cloud Storage) e limpar desta aula?`)) {
+        return;
+      }
+
+      showToast(`🗑️ Excluindo ${label} da Nuvem...`);
+
+      try {
+        if (window.aefCloudSync && typeof window.aefCloudSync.deleteFileFromStorage === 'function') {
+          await window.aefCloudSync.deleteFileFromStorage(url);
+        }
+        input.value = '';
+        updateMediaPreviews();
+        await handleSaveLesson();
+        showToast(`✅ ${label.charAt(0).toUpperCase() + label.slice(1)} foi excluído da Nuvem e desvinculado com sucesso!`);
+      } catch (err) {
+        console.error("Erro ao excluir arquivo:", err);
+        showToast(`❌ Erro ao excluir: ${err.message}`);
+      }
+    }
+
     async function handleModalCoverUpload(file) {
       if (!file) return;
       showToast(`Enviando capa "${file.name}"...`);
@@ -1409,6 +1474,7 @@
       document.getElementById("moduleModalTitleInput").value = "";
       document.getElementById("moduleModalIdInput").value = `ciclo-0${(ALL_COURSES[activeCourseId]?.modules || []).length + 1}`;
       document.getElementById("moduleModalOrderInput").value = (ALL_COURSES[activeCourseId]?.modules || []).length + 1;
+      document.getElementById("moduleModalPdfUrlInput").value = "";
       document.getElementById("moduleModalDescInput").value = "";
       document.getElementById("moduleModalPublishedInput").checked = true;
       const btnDel = document.getElementById("btnDeleteModule");
@@ -1418,6 +1484,20 @@
 
     function closeModuleModal() {
       document.getElementById("moduleModal").classList.add("hidden");
+    }
+
+    async function handleModulePdfUpload(file) {
+      if (!file) return;
+      showToast(`Enviando Livreto do Módulo "${file.name}" para a Nuvem...`);
+      try {
+        if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
+        await window.aefCloudSync.init();
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, `courses/${activeCourseId}/booklets`);
+        document.getElementById("moduleModalPdfUrlInput").value = downloadUrl;
+        showToast("✅ Livreto do Módulo enviado com sucesso!");
+      } catch (e) {
+        showToast("❌ Erro no upload do PDF: " + e.message);
+      }
     }
 
     function editModule(moduleId) {
@@ -1430,6 +1510,7 @@
       document.getElementById("moduleModalTitleInput").value = mod.title || "";
       document.getElementById("moduleModalIdInput").value = mod.id;
       document.getElementById("moduleModalOrderInput").value = mod.order || 1;
+      document.getElementById("moduleModalPdfUrlInput").value = mod.pdfUrl || "";
       document.getElementById("moduleModalDescInput").value = mod.description || "";
       document.getElementById("moduleModalPublishedInput").checked = mod.published !== false;
       const btnDel = document.getElementById("btnDeleteModule");
@@ -1447,6 +1528,7 @@
       const modId = document.getElementById("moduleModalId").value.trim() || rawId || `modulo-${Date.now()}`;
       const title = rawTitle || "Novo Módulo";
       const order = parseInt(document.getElementById("moduleModalOrderInput").value) || 1;
+      const pdfUrl = document.getElementById("moduleModalPdfUrlInput").value.trim();
       const desc = document.getElementById("moduleModalDescInput").value.trim();
       const published = document.getElementById("moduleModalPublishedInput").checked;
 
@@ -1454,11 +1536,12 @@
       let existingMod = course.modules.find(m => m.id === modId);
 
       if (!existingMod) {
-        existingMod = { id: modId, courseId: activeCourseId, title, order, description: desc, published, lessons: [] };
+        existingMod = { id: modId, courseId: activeCourseId, title, order, pdfUrl, description: desc, published, lessons: [] };
         course.modules.push(existingMod);
       } else {
         existingMod.title = title;
         existingMod.order = order;
+        existingMod.pdfUrl = pdfUrl;
         existingMod.description = desc;
         existingMod.published = published;
       }
@@ -1505,7 +1588,6 @@
     async function handleSyncAllToFirestore() {
       const btn = document.getElementById("btnSyncCloud");
       if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Sincronizando...`;
-      showToast("Iniciando sincronização completa de cursos, módulos e aulas com o Firestore...");
 
       try {
         if (window.aefCloudSync) {
@@ -1513,25 +1595,40 @@
         }
 
         const coursesKeys = Object.keys(ALL_COURSES);
+        const tasks = [];
         let totalMods = 0;
         let totalLessons = 0;
 
         for (const cid of coursesKeys) {
           const course = ALL_COURSES[cid];
-          await directSaveCourseCloud(course);
+          tasks.push(() => directSaveCourseCloud(course));
 
           for (const mod of (course.modules || [])) {
             totalMods++;
-            await directSaveModuleCloud(cid, mod);
+            tasks.push(() => directSaveModuleCloud(cid, mod));
 
             for (const les of (mod.lessons || [])) {
               totalLessons++;
-              await directSaveLessonCloud(cid, mod.id, les);
+              tasks.push(() => directSaveLessonCloud(cid, mod.id, les));
             }
           }
         }
 
-        showToast(`✅ ${coursesKeys.length} cursos, ${totalMods} módulos e ${totalLessons} aulas sincronizados na nuvem Firestore!`);
+        const totalTasks = tasks.length;
+        let completed = 0;
+        showToast(`⚡ Sincronizando ${totalTasks} itens em paralelo com a Nuvem...`);
+
+        // Executa em lotes paralelos de 15 conexões simultâneas
+        const BATCH_SIZE = 15;
+        for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
+          const chunk = tasks.slice(i, i + BATCH_SIZE);
+          await Promise.all(chunk.map(fn => fn()));
+          completed += chunk.length;
+          const pct = Math.min(100, Math.round((completed / totalTasks) * 100));
+          if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> ${pct}%`;
+        }
+
+        showToast(`⚡ Sincronização concluída em alta velocidade! (${coursesKeys.length} cursos, ${totalMods} módulos, ${totalLessons} aulas)`);
       } catch (e) {
         console.error("Erro na sincronização:", e);
         showToast("❌ Erro na sincronização: " + e.message);
