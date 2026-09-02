@@ -54,17 +54,21 @@ for (const [courseId, course] of Object.entries(realCourses)) {
   };
 }
 
-// 3. Atualiza o admin-cursos.html
-let adminHtml = fs.readFileSync('admin-cursos.html', 'utf8');
+// 3. Atualiza o assets/js/aef-courses-registry.js
+const registryContent = `/**
+ * AgoraEuFalo - Master Canonical Courses Registry (Single Source of Truth)
+ * Professor Leonardo Leite
+ * Fully structured hierarchy: Courses > Modules > Lessons
+ */
+const AEF_COURSES_DATA = ${JSON.stringify(adminSeed, null, 2)};
 
-// Substitui activeCourseId inicial
-adminHtml = adminHtml.replace(/let activeCourseId = "[^"]+";/, 'let activeCourseId = "ms-legacy";');
+if (typeof window !== "undefined") {
+  window.AEF_COURSES_REGISTRY = AEF_COURSES_DATA;
+}
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = AEF_COURSES_DATA;
+}
+`;
 
-// Substitui DEFAULT_SEED_COURSES
-const seedPattern = /const DEFAULT_SEED_COURSES = \{[\s\S]*?\n\s*\};/;
-const newSeedCode = `const DEFAULT_SEED_COURSES = ${JSON.stringify(adminSeed, null, 2)};`;
-
-adminHtml = adminHtml.replace(seedPattern, newSeedCode);
-
-fs.writeFileSync('admin-cursos.html', adminHtml, 'utf8');
-console.log("admin-cursos.html atualizado com sucesso com todos os dados reais!");
+fs.writeFileSync('assets/js/aef-courses-registry.js', registryContent, 'utf8');
+console.log("✅ assets/js/aef-courses-registry.js sincronizado com sucesso a partir de sala-de-aula.html!");

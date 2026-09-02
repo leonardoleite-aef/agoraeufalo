@@ -809,6 +809,124 @@
       }
       return post;
     }
+
+    /**
+     * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
+     * Merges Base Canonical Registry with Google Cloud Firestore Subcollections
+     */
+    async getCoursesHierarchy(baseRegistry = null) {
+      await this.init();
+      const courses = JSON.parse(JSON.stringify(baseRegistry || (window.AEF_COURSES_REGISTRY || {})));
+
+      try {
+        if (this.db) {
+          const coursesSnap = await this.db.collection("courses").get();
+          if (!coursesSnap.empty) {
+            for (const cDoc of coursesSnap.docs) {
+              const cid = cDoc.id;
+              const cData = cDoc.data();
+              if (!courses[cid]) {
+                courses[cid] = { id: cid, title: cData.title || cid, modules: [] };
+              }
+              if (cData.title) courses[cid].title = cData.title;
+              if (cData.description !== undefined) courses[cid].description = cData.description;
+              if (cData.coverImageUrl) courses[cid].coverImageUrl = cData.coverImageUrl;
+              if (cData.tierRequired) courses[cid].tierRequired = cData.tierRequired;
+              if (cData.badge) courses[cid].badge = cData.badge;
+              if (cData.published !== undefined) courses[cid].published = cData.published;
+              if (cData.slug) courses[cid].slug = cData.slug;
+              courses[cid].modules = courses[cid].modules || [];
+
+              // Fetch Modules Subcollection
+              try {
+                const modulesSnap = await this.db.collection("courses").doc(cid).collection("modules").get();
+                if (!modulesSnap.empty) {
+                  for (const mDoc of modulesSnap.docs) {
+                    const mid = mDoc.id;
+                    const mData = mDoc.data();
+                    let mObj = courses[cid].modules.find(m => m.id === mid);
+                    if (!mObj) {
+                      mObj = { id: mid, title: mData.title || mid, order: mData.order || (courses[cid].modules.length + 1), lessons: [] };
+                      courses[cid].modules.push(mObj);
+                    }
+                    if (mData.title) mObj.title = mData.title;
+                    if (mData.order !== undefined) mObj.order = mData.order;
+                    if (mData.description !== undefined) mObj.description = mData.description;
+                    if (mData.published !== undefined) mObj.published = mData.published;
+                    if (mData.badge) mObj.badge = mData.badge;
+                    if (mData.stats) mObj.stats = mData.stats;
+                    mObj.lessons = mObj.lessons || [];
+
+                    // Fetch Lessons Subcollection
+                    try {
+                      const lessonsSnap = await this.db.collection("courses").doc(cid).collection("modules").doc(mid).collection("lessons").get();
+                      if (!lessonsSnap.empty) {
+                        for (const lDoc of lessonsSnap.docs) {
+                          const lid = lDoc.id;
+                          const lData = lDoc.data();
+                          let lObj = mObj.lessons.find(l => l.id === lid);
+                          if (!lObj) {
+                            lObj = { id: lid, title: lData.title || lid, order: lData.order || (mObj.lessons.length + 1) };
+                            mObj.lessons.push(lObj);
+                          }
+                          Object.assign(lObj, lData);
+                        }
+                        mObj.lessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                      }
+                    } catch (le) {
+                      console.warn(`Firestore lessons subcollection fetch (${cid}/${mid}):`, le);
+                    }
+                  }
+                  courses[cid].modules.sort((a, b) => (a.order || 0) - (b.order || 0));
+                }
+              } catch (me) {
+                console.warn(`Firestore modules subcollection fetch (${cid}):`, me);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro ao carregar hierarquia dinâmica do Firestore:", err);
+      }
+
+      return courses;
+    }
+
+    /**
+     * Deletes a module and its nested lessons from Firestore
+     */
+    async deleteModuleFromCloud(courseId, moduleId) {
+      if (!courseId || !moduleId) return false;
+      await this.init();
+      if (!this.db) return false;
+      try {
+        const lessonsSnap = await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").get();
+        const batch = this.db.batch();
+        lessonsSnap.forEach(doc => batch.delete(doc.ref));
+        batch.delete(this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId));
+        await batch.commit();
+        return true;
+      } catch (e) {
+        console.warn("Error deleting module from cloud:", e);
+        return false;
+      }
+    }
+
+    /**
+     * Deletes a single lesson from Firestore
+     */
+    async deleteLessonFromCloud(courseId, moduleId, lessonId) {
+      if (!courseId || !moduleId || !lessonId) return false;
+      await this.init();
+      if (!this.db) return false;
+      try {
+        await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lessonId).delete();
+        return true;
+      } catch (e) {
+        console.warn("Error deleting lesson from cloud:", e);
+        return false;
+      }
+    }
   }
 
   // Global Singleton
