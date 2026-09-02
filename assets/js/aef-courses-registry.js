@@ -4410,6 +4410,56 @@ var AEF_COURSES_DATA = {
         ]
       }
     ]
+  },
+  "mentoria-andre": {
+    "id": "mentoria-andre",
+    "title": "Mentoria VIP • André Barrote",
+    "slug": "mentoria-andre",
+    "badge": "MENTORIA VIP",
+    "studentId": "andre",
+    "studentEmail": "andrebarrote1992@gmail.com",
+    "tierRequired": "vip",
+    "themeColor": "emerald",
+    "coverImageUrl": "assets/images/cover-andre-barrote.jpg",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/kvu-upgw-osv",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-andre",
+        "courseId": "mentoria-andre",
+        "title": "Welcome André!",
+        "order": 1,
+        "badge": "CICLO 01",
+        "coverImageUrl": "assets/images/cover-andre-barrote.jpg",
+        "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico de pronúncia, alinhamento de metas e primeiras histórias ativas.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "andre-l01-welcome",
+            "moduleId": "mod-welcome-andre",
+            "courseId": "mentoria-andre",
+            "title": "Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP!",
+            "order": 1,
+            "duration": "05:12",
+            "description": "Alinhamento individual do plano de mentoria, método de ativação oral e rotina de treino diário no celular.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2Fandre%2FGraziela_movie_V2.mp3?alt=media",
+            "thumbnailUrl": "assets/images/thumbs/andre/thumb_welcome.jpg",
+            "artworkUrl": "assets/images/cover-andre-barrote.jpg",
+            "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "rawScript": "",
+            "processedContentHtml": "\n        <div class=\"space-y-4\">\n          <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n            <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n              <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                Seja Muito Bem-Vindo, André!\n              </span>\n              <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n            </div>\n            <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n              <p>\n                Fala, <b>André</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.\n              </p>\n              <p>\n                Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas especificamente para destravar sua fala e automatizar seu reflexo.\n              </p>\n            </div>\n          </div>\n        </div>\n      ",
+            "aiStatus": "published",
+            "hasTrainingTrack": true,
+            "trainingTrackId": "andre-ms001-story",
+            "published": true
+          }
+        ]
+      }
+    ]
   }
 };
 

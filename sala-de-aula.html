@@ -3484,12 +3484,23 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get("curso") || urlParams.get("id") || "ms-legacy";
+      let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno") || "ms-legacy";
+      let courseId = rawParam;
       const targetModuleId = urlParams.get("modulo");
       const targetLessonId = urlParams.get("aula");
 
       // 1. Renderização imediata da base local para zero atraso visual
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
+
+      if (!baseCourses[courseId] && baseCourses[`mentoria-${courseId}`]) {
+        courseId = `mentoria-${courseId}`;
+      } else if (urlParams.get("curso") === "mentoria" && urlParams.get("aluno")) {
+        const menteeSlug = urlParams.get("aluno");
+        if (baseCourses[`mentoria-${menteeSlug}`]) {
+          courseId = `mentoria-${menteeSlug}`;
+        }
+      }
+
       activeCourse = baseCourses[courseId] || COURSE_SEEDS[courseId] || baseCourses["ms-legacy"] || COURSE_SEEDS["ms-legacy"];
       
       const mobileHeaderTitle = document.getElementById("mobileCourseHeaderTitle");
@@ -3504,8 +3515,8 @@
         if (window.aefCloudSync) {
           await window.aefCloudSync.init();
           const liveCourses = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
-          if (liveCourses && liveCourses[courseId]) {
-            activeCourse = liveCourses[courseId];
+          if (liveCourses && (liveCourses[courseId] || liveCourses[`mentoria-${rawParam}`])) {
+            activeCourse = liveCourses[courseId] || liveCourses[`mentoria-${rawParam}`];
             COURSE_SEEDS[courseId] = activeCourse;
             if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.innerText = activeCourse.title;
             initClassroom(targetModuleId, targetLessonId);
@@ -4021,7 +4032,13 @@
       else if (activeLesson.id.includes("-pro") || activeLesson.id.includes("pro")) activityTab = "pronunciation";
 
       const courseId = activeCourse?.id || "ms-legacy";
-      window.location.href = `treino/player.html?curso=${courseId}&modulo=${activeModule.id}&aula=${activeLesson.id}`;
+      const studentId = activeCourse?.studentId || (courseId.startsWith("mentoria-") ? courseId.replace("mentoria-", "") : "");
+
+      if (studentId) {
+        window.location.href = `treino/player.html?aluno=${studentId}&aula=${activeLesson.id}&activity=${activityTab}`;
+      } else {
+        window.location.href = `treino/player.html?curso=${courseId}&modulo=${activeModule.id}&aula=${activeLesson.id}&activity=${activityTab}`;
+      }
     }
 
     window.toggleSyllabusDrawer = () => {

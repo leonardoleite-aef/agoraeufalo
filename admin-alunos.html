@@ -107,7 +107,11 @@
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
             <input type="text" id="search-input" oninput="handleSearchInput(event)" placeholder="Buscar por nome ou e-mail..." class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
           </div>
-          <button onclick="openAddStudentModal()" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer shrink-0">
+          <button onclick="openCreateVipSpaceModal()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer shrink-0" title="Criar Sala de Aula & Curso Individual para Mentorado VIP">
+            <i data-lucide="crown" class="w-4 h-4"></i>
+            <span>+ Novo Espaço VIP</span>
+          </button>
+          <button onclick="openAddStudentModal()" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer shrink-0">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             <span>Novo Aluno</span>
           </button>
@@ -402,6 +406,82 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- MODAL: CRIAR NOVO ESPAÇO DE MENTORIA VIP (1-CLICK WIZARD)                 -->
+  <!-- ========================================================================= -->
+  <div id="vip-space-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 border-amber-300 relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-900 border border-amber-300 flex items-center justify-center font-bold text-xs">
+            👑
+          </span>
+          <div>
+            <h3 class="font-bold text-base text-slate-900">Novo Espaço de Mentoria VIP</h3>
+            <p class="text-[10px] text-slate-500">Cria a Sala de Aula Master individual e matricula o aluno no Tier 3.</p>
+          </div>
+        </div>
+        <button onclick="closeCreateVipSpaceModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <form id="form-vip-space" onsubmit="handleSaveVipSpace(event)" class="space-y-3.5">
+        
+        <!-- Student Name & Slug -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nome do Mentorado</label>
+            <input type="text" id="vip-space-name" required placeholder="Ex: André Barrote" oninput="handleVipNameInput(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Identificador / Slug</label>
+            <input type="text" id="vip-space-slug" required placeholder="andre" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-mono focus:border-amber-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Student Email -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">E-mail do Mentorado (Acesso ao Portal)</label>
+          <input type="email" id="vip-space-email" required placeholder="andrebarrote1992@gmail.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+        </div>
+
+        <!-- Custom Cover Photo -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Capa / Foto do Mentorado</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="vip-space-cover" placeholder="assets/images/cover-andre-barrote.jpg" class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+            <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shrink-0">
+              <span>Upload Foto</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleVipCoverUpload(this.files[0])">
+            </label>
+          </div>
+        </div>
+
+        <!-- Initial Module Title -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Título do Módulo Inicial</label>
+            <input type="text" id="vip-space-module-title" value="Welcome André!" placeholder="Welcome André!" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Sala Google Meet</label>
+            <input type="text" id="vip-space-meet-url" value="https://meet.google.com/kvu-upgw-osv" placeholder="https://meet.google.com/..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          </div>
+        </div>
+
+        <!-- Action Submit -->
+        <div class="pt-2">
+          <button type="submit" id="btn-submit-vip-space" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Criar Espaço & Sala de Aula VIP</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- JAVASCRIPT CRM CONTROLLER                                                 -->
   <!-- ========================================================================= -->
   <script>
@@ -410,9 +490,9 @@
     let SEARCH_QUERY = '';
 
     const INITIAL_VIP_FALLBACK = [
+      { id: "andre", name: "André Barrote", email: "andrebarrote1992@gmail.com", tier: "vip_mentorship", role: "student", tracksCount: 1, enrolledProducts: ["ms-legacy", "mentoria_vip", "mentoria-andre"] },
       { id: "estevao", name: "Estêvão Pinheiro", email: "estevaopin@gmail.com", tier: "vip_mentorship", role: "student", tracksCount: 4, enrolledProducts: ["ms-legacy", "mentoria_vip"] },
       { id: "thomas", name: "Thomas", email: "thomas@agoraeufalo.com.br", tier: "vip_mentorship", role: "student", tracksCount: 6, enrolledProducts: ["ms-legacy", "mentoria_vip"] },
-      { id: "andre", name: "André Birchal", email: "andre@agoraeufalo.com.br", tier: "vip_mentorship", role: "student", tracksCount: 1, enrolledProducts: ["ms-legacy", "mentoria_vip"] },
       { id: "matheus", name: "Matheus", email: "matheus@agoraeufalo.com.br", tier: "vip_mentorship", role: "student", tracksCount: 1, enrolledProducts: ["ms-legacy", "mentoria_vip"] }
     ];
 
@@ -637,7 +717,14 @@
                     <i data-lucide="mic" class="w-3 h-3 text-amber-700"></i>
                     <span>Prescrever</span>
                   </button>
-                  <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-[11px] font-bold transition inline-flex items-center gap-1">
+                  <a href="curso.html?curso=mentoria-${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500 hover:text-slate-950 text-amber-900 border border-amber-300 text-[11px] font-bold transition inline-flex items-center gap-1" title="Ver Vitrine do Curso do Mentorado">
+                    <i data-lucide="book-open" class="w-3 h-3"></i>
+                    <span>Sala VIP</span> <span>↗</span>
+                  </a>
+                  <a href="admin-cursos.html?curso=mentoria-${s.id}" target="_blank" class="p-1.5 rounded-lg bg-white/80 hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 transition" title="Editar Aulas & Módulos no Course Studio">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                  </a>
+                  <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-[11px] font-bold transition inline-flex items-center gap-1" title="Abrir Player no Celular">
                     <span>Player</span> <span>↗</span>
                   </a>
                 ` : ''}
@@ -904,6 +991,179 @@
         INITIAL_ADMINS.splice(idx, 1);
         renderAdminsTable();
         alert(`🔒 Acesso administrativo de ${email} revogado.`);
+      }
+    }
+
+    function openCreateVipSpaceModal(menteeId, menteeName, menteeEmail) {
+      if (menteeId) {
+        document.getElementById('vip-space-name').value = menteeName || menteeId;
+        document.getElementById('vip-space-slug').value = menteeId;
+        document.getElementById('vip-space-email').value = menteeEmail || '';
+        document.getElementById('vip-space-module-title').value = `Welcome ${menteeName || menteeId}!`;
+      } else {
+        document.getElementById('vip-space-name').value = '';
+        document.getElementById('vip-space-slug').value = '';
+        document.getElementById('vip-space-email').value = '';
+        document.getElementById('vip-space-module-title').value = 'Welcome!';
+      }
+      document.getElementById('vip-space-modal').classList.remove('hidden');
+    }
+
+    function closeCreateVipSpaceModal() {
+      document.getElementById('vip-space-modal').classList.add('hidden');
+    }
+
+    function handleVipNameInput(name) {
+      const slug = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "-").replace(/^-+|-+$/g, "");
+      document.getElementById('vip-space-slug').value = slug;
+      document.getElementById('vip-space-module-title').value = `Welcome ${name}!`;
+    }
+
+    async function handleVipCoverUpload(file) {
+      if (!file) return;
+      const btn = document.getElementById('btn-submit-vip-space');
+      if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Enviando foto...`;
+      try {
+        if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
+        await window.aefCloudSync.init();
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, `covers/mentoria`);
+        document.getElementById('vip-space-cover').value = downloadUrl;
+        alert("✅ Foto/Capa enviada com sucesso para a Nuvem!");
+      } catch (e) {
+        alert("❌ Erro no upload da foto: " + e.message);
+      } finally {
+        if (btn) btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Criar Espaço & Sala de Aula VIP</span>`;
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    async function handleSaveVipSpace(e) {
+      e.preventDefault();
+      const name = document.getElementById('vip-space-name').value.trim();
+      const rawSlug = document.getElementById('vip-space-slug').value.trim();
+      const email = document.getElementById('vip-space-email').value.trim().toLowerCase();
+      const cover = document.getElementById('vip-space-cover').value.trim() || 'assets/images/cover-default-aef.jpg';
+      const modTitle = document.getElementById('vip-space-module-title').value.trim() || `Welcome ${name}!`;
+      const meetUrl = document.getElementById('vip-space-meet-url').value.trim() || 'https://meet.google.com/kvu-upgw-osv';
+
+      const studentId = rawSlug || name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const courseId = `mentoria-${studentId}`;
+
+      const btn = document.getElementById('btn-submit-vip-space');
+      if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Criando Espaço VIP...`;
+
+      try {
+        // 1. Matricular / Atualizar Aluno no CRM
+        const studentPayload = {
+          id: studentId,
+          uid: studentId,
+          name: name,
+          email: email,
+          tier: 'vip_mentorship',
+          role: 'student',
+          enrolledProducts: ['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas', courseId],
+          photoUrl: cover,
+          meetUrl: meetUrl,
+          active: true,
+          updatedAt: new Date().toISOString()
+        };
+
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.init();
+          await window.aefCloudSync.saveStudentCloud(studentPayload);
+        }
+
+        // 2. Criar Objeto do Curso VIP
+        const coursePayload = {
+          id: courseId,
+          title: `Mentoria VIP • ${name}`,
+          slug: courseId,
+          badge: 'MENTORIA VIP',
+          studentId: studentId,
+          studentEmail: email,
+          tierRequired: 'vip',
+          themeColor: 'emerald',
+          coverImageUrl: cover,
+          meetUrl: meetUrl,
+          description: `Espaço individual de mentoria executiva e imersão acelerada de ${name} com o Professor Leonardo Leite.`,
+          published: true
+        };
+
+        // 3. Criar Módulo 1 Inicial
+        const modulePayload = {
+          id: `mod-welcome-${studentId}`,
+          courseId: courseId,
+          title: modTitle,
+          order: 1,
+          badge: 'CICLO 01',
+          coverImageUrl: cover,
+          description: `Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de ${name}.`,
+          published: true
+        };
+
+        // 4. Criar Aula 1 de Boas-Vindas
+        const lessonPayload = {
+          id: `${studentId}-l01-welcome`,
+          moduleId: modulePayload.id,
+          courseId: courseId,
+          title: `Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP, ${name}!`,
+          order: 1,
+          duration: '05:00',
+          description: 'Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.',
+          videoUrl: 'https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media',
+          audioUrl: '',
+          thumbnailUrl: cover,
+          artworkUrl: cover,
+          pdfUrl: 'Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf',
+          goldenTip: 'O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!',
+          processedContentHtml: `
+            <div class="space-y-4">
+              <div class="p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5">
+                <div class="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
+                  <span class="font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2">
+                    <i data-lucide="crown" class="w-4 h-4 text-[#C68A36]"></i>
+                    Seja Muito Bem-Vindo, ${name}!
+                  </span>
+                  <span class="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">Plano VIP Individual</span>
+                </div>
+                <div class="text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium">
+                  <p>Fala, <b>${name}</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>
+                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>
+                </div>
+              </div>
+            </div>
+          `,
+          aiStatus: 'published',
+          hasTrainingTrack: true,
+          trainingTrackId: '',
+          published: true
+        };
+
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.saveCourse(coursePayload);
+          await window.aefCloudSync.saveModule(courseId, modulePayload);
+          await window.aefCloudSync.saveLesson(courseId, modulePayload.id, lessonPayload);
+        }
+
+        // 5. Atualiza lista local
+        const existIdx = ALL_STUDENTS_LIST.findIndex(s => s.id === studentId || s.email === email);
+        if (existIdx >= 0) {
+          ALL_STUDENTS_LIST[existIdx] = { ...ALL_STUDENTS_LIST[existIdx], ...studentPayload };
+        } else {
+          ALL_STUDENTS_LIST.unshift(studentPayload);
+        }
+
+        closeCreateVipSpaceModal();
+        renderStudentsTable();
+        updateMetrics();
+
+        alert(`✨ Espaço de Mentoria VIP para ${name} criado com sucesso!\n\nLink da Sala: curso.html?curso=${courseId}`);
+      } catch (err) {
+        console.error("Erro ao criar espaço VIP:", err);
+        alert(`❌ Erro ao criar espaço VIP: ${err.message}`);
+      } finally {
+        if (btn) btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Criar Espaço & Sala de Aula VIP</span>`;
+        if (window.lucide) lucide.createIcons();
       }
     }
 

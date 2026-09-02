@@ -117,7 +117,15 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 | **MS002: Tom (CEO)** | [`assets/images/thumbs/ms002/`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/images/thumbs/ms002/) | • `thumb_ms002_lr.jpg` (Aula 01 • Listen & Read - Cobalto)<br/>• `thumb_ms002_voc.jpg` (Aula 02 • Vocabulary - Esmeralda)<br/>• `thumb_ms002_la.jpg` (Aula 03 • Listen & Answer - Âmbar)<br/>• `thumb_ms002_lrt.jpg` (Aula 04 • Look & Retell - Rubi)<br/>• `thumb_ms002_lask.jpg` (Aula 05 • Listen & Ask - Índigo)<br/>• `thumb_ms002_pro.jpg` (Aula 06 • Pronunciation - Teal) |
 | **MS003: Saturday Morning** | [`assets/images/thumbs/ms003/`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/images/thumbs/ms003/) | • `thumb_ms003_lr.jpg` (Aula 01 • Listen & Read - Cobalto)<br/>• `thumb_ms003_voc.jpg` (Aula 02 • Vocabulary - Esmeralda)<br/>• `thumb_ms003_la.jpg` (Aula 03 • Listen & Answer - Âmbar)<br/>• `thumb_ms003_lrt.jpg` (Aula 04 • Look & Retell - Rubi)<br/>• `thumb_ms003_lask.jpg` (Aula 05 • Listen & Ask - Índigo)<br/>• `thumb_ms003_pro.jpg` (Aula 06 • Pronunciation - Teal) |
 | **EQS Módulo 1: Foundation** | [`assets/images/thumbs/eqs/`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/images/thumbs/eqs/) | • `thumb_eqs_1_1.jpg` (Aula 1.1 • Pronomes Sujeito - Esmeralda)<br/>• `thumb_eqs_1_2.jpg` (Aula 1.2 • To Be Afirmativa - Cobalto)<br/>• `thumb_eqs_1_3.jpg` (Aula 1.3 • To Be Negativa - Âmbar)<br/>• `thumb_eqs_1_4.jpg` (Aula 1.4 • Adjetivos Essenciais - Rubi) |
+| **Mentoria VIP: André Barrote** | [`assets/images/thumbs/andre/`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/images/thumbs/andre/) | • `cover-andre-barrote.jpg` (Capa Oficial do Curso & Mentoria VIP)<br/>• `thumb_welcome.jpg` (Miniatura 16:9 do Módulo 01 • Welcome André!) |
 
+---
 
+## 👑 10. Espaços de Mentoria VIP & Salas de Aula Master (`curso.html?curso=mentoria-[slug]`)
 
-
+| Mentorado VIP | URL Vitrine do Curso | URL Sala de Aula Master | E-mail Cadastrado |
+| :--- | :--- | :--- | :--- |
+| **André Barrote** | [curso.html?curso=mentoria-andre](curso.html?curso=mentoria-andre) | [sala-de-aula.html?curso=mentoria-andre](sala-de-aula.html?curso=mentoria-andre) | `andrebarrote1992@gmail.com` |
+| **Estêvão Pinheiro** | [curso.html?curso=mentoria-estevao](curso.html?curso=mentoria-estevao) | [sala-de-aula.html?curso=mentoria-estevao](sala-de-aula.html?curso=mentoria-estevao) | `estevaopin@gmail.com` |
+| **Thomas** | [curso.html?curso=mentoria-thomas](curso.html?curso=mentoria-thomas) | [sala-de-aula.html?curso=mentoria-thomas](sala-de-aula.html?curso=mentoria-thomas) | `thomas@agoraeufalo.com.br` |
+| **Matheus** | [curso.html?curso=mentoria-matheus](curso.html?curso=mentoria-matheus) | [sala-de-aula.html?curso=mentoria-matheus](sala-de-aula.html?curso=mentoria-matheus) | `matheus@agoraeufalo.com.br` |

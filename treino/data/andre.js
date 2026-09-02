@@ -4,7 +4,8 @@
  */
 window.AEF_STUDENT_ANDRE = {
   "id": "andre",
-  "name": "André Birchal",
+  "name": "André Barrote",
+  "email": "andrebarrote1992@gmail.com",
   "badge": "VIP Mentee",
   "tracks": [
     {

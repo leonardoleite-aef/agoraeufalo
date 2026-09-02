@@ -198,11 +198,32 @@
         <div class="p-5 sm:p-6 rounded-[28px] bg-white border border-[#EAE5DC] shadow-sm space-y-4">
           
           <div class="space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30" id="sidebarMemberBadge">
               Membros AgoraEuFalo
             </span>
-            <h3 class="font-black text-sm text-[#0A192F]">Seu próximo aprendizado está aqui!</h3>
+            <h3 class="font-black text-sm text-[#0A192F]" id="sidebarNextTitle">Seu próximo aprendizado está aqui!</h3>
             <p class="text-xs text-[#7A7369]">Mais de 35 anos de sala de aula e método de fala espontânea.</p>
+          </div>
+
+          <!-- VIP Google Meet Live Session Card (Displayed dynamically for VIP mentes) -->
+          <div id="vipMeetSidebarCard" class="hidden p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-emerald-50 border border-emerald-300 space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
+                <i data-lucide="video" class="w-6 h-6"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span class="text-[10px] font-mono font-bold text-emerald-800 uppercase">Sala Individual</span>
+                </div>
+                <h4 class="font-bold text-xs text-slate-900 truncate">Encontro com o Leo</h4>
+                <p class="text-[10px] text-slate-600">Google Meet 1 a 1</p>
+              </div>
+            </div>
+            <a id="btnJoinVipMeet" href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+              <i data-lucide="video" class="w-3.5 h-3.5"></i>
+              <span>Entrar no Google Meet</span>
+            </a>
           </div>
 
           <!-- Training Player Promo Card -->
@@ -1975,6 +1996,20 @@
       const badgeEl = document.getElementById("courseHeroBadge");
       if (badgeEl && COURSE_DATA.badge) badgeEl.innerText = COURSE_DATA.badge;
 
+      // Suporte a Google Meet e Mentoria VIP na barra lateral
+      const isVIP = COURSE_DATA.tierRequired === 'vip' || COURSE_DATA.id.startsWith('mentoria-') || (COURSE_DATA.badge && COURSE_DATA.badge.includes('VIP'));
+      const meetCard = document.getElementById("vipMeetSidebarCard");
+      const meetBtn = document.getElementById("btnJoinVipMeet");
+      const memberBadge = document.getElementById("sidebarMemberBadge");
+      const nextTitle = document.getElementById("sidebarNextTitle");
+
+      if (isVIP && meetCard) {
+        meetCard.classList.remove("hidden");
+        if (meetBtn && COURSE_DATA.meetUrl) meetBtn.href = COURSE_DATA.meetUrl;
+        if (memberBadge) memberBadge.innerText = "MENTORIA VIP INDIVIDUAL";
+        if (nextTitle) nextTitle.innerText = "Espaço Exclusivo com o Leo";
+      }
+
       const firstLesson = COURSE_DATA.modules?.[0]?.lessons?.[0];
       const continueBtn = document.getElementById("btnContinueWatching");
       if (continueBtn && firstLesson) {
@@ -1982,8 +2017,13 @@
       }
 
       const playerBtn = document.getElementById("btnPraticarPlayer");
-      if (playerBtn && firstLesson) {
-        playerBtn.href = `treino/player.html?curso=${COURSE_DATA.id}&aula=${firstLesson.id}&activity=listen_read`;
+      if (playerBtn) {
+        const studentId = COURSE_DATA.studentId || (COURSE_DATA.id.startsWith("mentoria-") ? COURSE_DATA.id.replace("mentoria-", "") : "");
+        if (studentId) {
+          playerBtn.href = `treino/player.html?aluno=${studentId}`;
+        } else if (firstLesson) {
+          playerBtn.href = `treino/player.html?curso=${COURSE_DATA.id}&aula=${firstLesson.id}&activity=listen_read`;
+        }
       }
 
       renderCourseAccordion();
@@ -1997,9 +2037,21 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get("id") || urlParams.get("curso") || "ms-legacy";
-      
+      let rawParam = urlParams.get("id") || urlParams.get("curso") || urlParams.get("aluno") || "ms-legacy";
+      let courseId = rawParam;
+
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSES_REGISTRY);
+
+      // Resolução inteligente: se passar ?aluno=andre ou ?curso=andre, resolve para mentoria-andre
+      if (!baseCourses[courseId] && baseCourses[`mentoria-${courseId}`]) {
+        courseId = `mentoria-${courseId}`;
+      } else if (urlParams.get("curso") === "mentoria" && urlParams.get("aluno")) {
+        const menteeSlug = urlParams.get("aluno");
+        if (baseCourses[`mentoria-${menteeSlug}`]) {
+          courseId = `mentoria-${menteeSlug}`;
+        }
+      }
+      
       COURSE_DATA = baseCourses[courseId] || COURSES_REGISTRY[courseId] || baseCourses["ms-legacy"] || COURSES_REGISTRY["ms-legacy"];
 
       updateCourseUi();
@@ -2009,8 +2061,8 @@
         if (window.aefCloudSync) {
           await window.aefCloudSync.init();
           const liveHierarchy = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
-          if (liveHierarchy && liveHierarchy[courseId]) {
-            COURSE_DATA = liveHierarchy[courseId];
+          if (liveHierarchy && (liveHierarchy[courseId] || liveHierarchy[`mentoria-${rawParam}`])) {
+            COURSE_DATA = liveHierarchy[courseId] || liveHierarchy[`mentoria-${rawParam}`];
             updateCourseUi();
           }
         }

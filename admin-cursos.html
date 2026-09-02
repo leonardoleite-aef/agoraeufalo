@@ -598,6 +598,16 @@
           <p class="text-[9px] text-slate-400 mt-1">Este PDF será o padrão de todas as aulas deste módulo que ainda não tiverem um PDF específico.</p>
         </div>
         <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa / Arte do Módulo (Opcional)</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="moduleModalCoverUrlInput" placeholder="assets/images/cover-... ou https://..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+            <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shrink-0">
+              <span>Upload Capa</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleModuleCoverUpload(this.files[0])">
+            </label>
+          </div>
+        </div>
+        <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição</label>
           <textarea id="moduleModalDescInput" rows="2" class="w-full p-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:outline-none"></textarea>
         </div>
@@ -725,8 +735,13 @@
       // 1. Renderiza INSTANTANEAMENTE com a base local para ZERO atraso visual
       ALL_COURSES = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY || {}));
       
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryCourse = urlParams.get('curso') || urlParams.get('id') || urlParams.get('aluno');
+
       const savedCourseId = localStorage.getItem('aef_admin_active_course_id');
-      if (savedCourseId && ALL_COURSES[savedCourseId]) {
+      if (queryCourse && (ALL_COURSES[queryCourse] || ALL_COURSES[`mentoria-${queryCourse}`])) {
+        activeCourseId = ALL_COURSES[queryCourse] ? queryCourse : `mentoria-${queryCourse}`;
+      } else if (savedCourseId && ALL_COURSES[savedCourseId]) {
         activeCourseId = savedCourseId;
       } else {
         const keys = Object.keys(ALL_COURSES);
@@ -767,11 +782,37 @@
       const keys = Object.keys(ALL_COURSES);
       if (!keys.includes(activeCourseId) && keys.length > 0) activeCourseId = keys[0];
 
-      select.innerHTML = keys.map(k => {
+      const generalCourses = [];
+      const vipCourses = [];
+
+      keys.forEach(k => {
         const c = ALL_COURSES[k];
-        const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
-        return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>${pubIcon} ${c.title || c.id}</option>`;
-      }).join("");
+        const isVIP = c.tierRequired === 'vip' || k.startsWith('mentoria-') || (c.badge && c.badge.includes('VIP'));
+        if (isVIP) vipCourses.push(c);
+        else generalCourses.push(c);
+      });
+
+      let html = '';
+
+      if (generalCourses.length > 0) {
+        html += '<optgroup label="📦 Cursos Gerais & Formações">';
+        html += generalCourses.map(c => {
+          const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
+          return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>${pubIcon} ${c.title || c.id}</option>`;
+        }).join("");
+        html += '</optgroup>';
+      }
+
+      if (vipCourses.length > 0) {
+        html += '<optgroup label="👑 Mentorados VIP (Tier 3)">';
+        html += vipCourses.map(c => {
+          const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
+          return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>👑 ${pubIcon} ${c.title || c.id}</option>`;
+        }).join("");
+        html += '</optgroup>';
+      }
+
+      select.innerHTML = html;
     }
 
     function handleSelectCourse(cid) {
@@ -1500,6 +1541,20 @@
       }
     }
 
+    async function handleModuleCoverUpload(file) {
+      if (!file) return;
+      showToast(`Enviando Capa do Módulo "${file.name}" para a Nuvem...`);
+      try {
+        if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
+        await window.aefCloudSync.init();
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, `courses/${activeCourseId}/covers`);
+        document.getElementById("moduleModalCoverUrlInput").value = downloadUrl;
+        showToast("✅ Capa do Módulo enviada com sucesso!");
+      } catch (e) {
+        showToast("❌ Erro no upload da capa: " + e.message);
+      }
+    }
+
     function editModule(moduleId) {
       const course = ALL_COURSES[activeCourseId];
       const mod = (course?.modules || []).find(m => m.id === moduleId);
@@ -1511,6 +1566,7 @@
       document.getElementById("moduleModalIdInput").value = mod.id;
       document.getElementById("moduleModalOrderInput").value = mod.order || 1;
       document.getElementById("moduleModalPdfUrlInput").value = mod.pdfUrl || "";
+      document.getElementById("moduleModalCoverUrlInput").value = mod.coverImageUrl || mod.thumbnailUrl || "";
       document.getElementById("moduleModalDescInput").value = mod.description || "";
       document.getElementById("moduleModalPublishedInput").checked = mod.published !== false;
       const btnDel = document.getElementById("btnDeleteModule");
@@ -1529,6 +1585,7 @@
       const title = rawTitle || "Novo Módulo";
       const order = parseInt(document.getElementById("moduleModalOrderInput").value) || 1;
       const pdfUrl = document.getElementById("moduleModalPdfUrlInput").value.trim();
+      const coverUrl = document.getElementById("moduleModalCoverUrlInput").value.trim();
       const desc = document.getElementById("moduleModalDescInput").value.trim();
       const published = document.getElementById("moduleModalPublishedInput").checked;
 
@@ -1536,12 +1593,13 @@
       let existingMod = course.modules.find(m => m.id === modId);
 
       if (!existingMod) {
-        existingMod = { id: modId, courseId: activeCourseId, title, order, pdfUrl, description: desc, published, lessons: [] };
+        existingMod = { id: modId, courseId: activeCourseId, title, order, pdfUrl, coverImageUrl: coverUrl, description: desc, published, lessons: [] };
         course.modules.push(existingMod);
       } else {
         existingMod.title = title;
         existingMod.order = order;
         existingMod.pdfUrl = pdfUrl;
+        existingMod.coverImageUrl = coverUrl;
         existingMod.description = desc;
         existingMod.published = published;
       }

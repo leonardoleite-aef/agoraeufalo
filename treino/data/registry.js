@@ -28,9 +28,10 @@ window.AEF_REGISTRY = {
     },
     {
       id: "andre",
-      name: "André Birchal",
+      name: "André Barrote",
+      email: "andrebarrote1992@gmail.com",
       badge: "VIP Mentee",
-      subtitle: "Professional Storytelling & Global Interviews",
+      subtitle: "Professional Storytelling & Executive Fluency",
       avatarEmoji: "💼",
       avatarBg: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
       pin: "3456",
