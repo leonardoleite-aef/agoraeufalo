@@ -812,7 +812,7 @@
 
     /**
      * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
-     * Merges Base Canonical Registry with Google Cloud Firestore Subcollections
+     * Merges Base Canonical Registry with Google Cloud Firestore Subcollections in parallel
      */
     async getCoursesHierarchy(baseRegistry = null) {
       await this.init();
@@ -822,7 +822,7 @@
         if (this.db) {
           const coursesSnap = await this.db.collection("courses").get();
           if (!coursesSnap.empty) {
-            for (const cDoc of coursesSnap.docs) {
+            const coursePromises = coursesSnap.docs.map(async (cDoc) => {
               const cid = cDoc.id;
               const cData = cDoc.data();
               if (!courses[cid]) {
@@ -837,11 +837,11 @@
               if (cData.slug) courses[cid].slug = cData.slug;
               courses[cid].modules = courses[cid].modules || [];
 
-              // Fetch Modules Subcollection
+              // Fetch Modules Subcollection in parallel
               try {
                 const modulesSnap = await this.db.collection("courses").doc(cid).collection("modules").get();
                 if (!modulesSnap.empty) {
-                  for (const mDoc of modulesSnap.docs) {
+                  const modulePromises = modulesSnap.docs.map(async (mDoc) => {
                     const mid = mDoc.id;
                     const mData = mDoc.data();
                     let mObj = courses[cid].modules.find(m => m.id === mid);
@@ -857,7 +857,7 @@
                     if (mData.stats) mObj.stats = mData.stats;
                     mObj.lessons = mObj.lessons || [];
 
-                    // Fetch Lessons Subcollection
+                    // Fetch Lessons Subcollection in parallel
                     try {
                       const lessonsSnap = await this.db.collection("courses").doc(cid).collection("modules").doc(mid).collection("lessons").get();
                       if (!lessonsSnap.empty) {
@@ -876,13 +876,15 @@
                     } catch (le) {
                       console.warn(`Firestore lessons subcollection fetch (${cid}/${mid}):`, le);
                     }
-                  }
+                  });
+                  await Promise.all(modulePromises);
                   courses[cid].modules.sort((a, b) => (a.order || 0) - (b.order || 0));
                 }
               } catch (me) {
                 console.warn(`Firestore modules subcollection fetch (${cid}):`, me);
               }
-            }
+            });
+            await Promise.all(coursePromises);
           }
         }
       } catch (err) {

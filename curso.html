@@ -722,11 +722,24 @@
       const container = document.getElementById("courseModulesAccordion");
       if (!container) return;
 
+      const isAdminView = window.location.search.includes('admin=true');
+      const visibleModules = (COURSE_DATA.modules || []).filter(m => isAdminView || m.published !== false);
+
+      if (visibleModules.length === 0) {
+        container.innerHTML = `
+          <div class="text-center p-8 bg-white border border-[#EAE5DC] rounded-2xl text-slate-500 space-y-2 shadow-xs">
+            <p class="text-sm font-bold text-[#0A192F]">🟡 Conteúdo em Preparação</p>
+            <p class="text-xs text-slate-600">Este curso ainda não possui módulos públicos. Em breve novas aulas serão liberadas!</p>
+          </div>
+        `;
+        return;
+      }
+
       let totalLessons = 0;
       let totalCompleted = 0;
 
-      container.innerHTML = COURSE_DATA.modules.map((mod, mIdx) => {
-        const modLessons = mod.lessons || [];
+      container.innerHTML = visibleModules.map((mod, mIdx) => {
+        const modLessons = (mod.lessons || []).filter(l => isAdminView || l.published !== false);
         totalLessons += modLessons.length;
         
         let modCompleted = 0;
@@ -738,7 +751,7 @@
         });
 
         const modPercent = modLessons.length > 0 ? Math.round((modCompleted / modLessons.length) * 100) : 0;
-        const isModComplete = modPercent === 100;
+        const isModComplete = modPercent === 100 && modLessons.length > 0;
 
         return `
           <div class="border border-[#EAE5DC] rounded-2xl bg-white overflow-hidden shadow-xs">
@@ -765,7 +778,7 @@
 
             <!-- Module Lessons List (Accordion Body - Inicia Fechado) -->
             <div id="lessons-list-${mod.id}" class="hidden p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
-              ${modLessons.map((les) => {
+              ${modLessons.length === 0 ? '<p class="text-xs text-slate-500 p-3 italic">Nenhuma aula pública disponível neste módulo.</p>' : modLessons.map((les) => {
                 const isCompleted = completedLessonIds.includes(les.id);
                 const thumbSrc = les.thumbnailUrl || les.thumbUrl || 'assets/images/leonardo-leite.png';
                 return `

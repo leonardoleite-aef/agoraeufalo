@@ -3926,7 +3926,8 @@
 
     function renderDrawerLessons() {
       if (!activeModule) return;
-      const lessons = activeModule.lessons || [];
+      const isAdminView = window.location.search.includes('admin=true');
+      const lessons = (activeModule.lessons || []).filter(l => isAdminView || l.published !== false);
 
       const renderCard = (les, idx, onClickCode) => {
         const isCurrent = activeLesson && activeLesson.id === les.id;

@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+const completeHtml = `<!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
   <meta charset="UTF-8">
@@ -592,7 +594,7 @@
       select.innerHTML = keys.map(k => {
         const c = ALL_COURSES[k];
         const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
-        return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>${pubIcon} ${c.title || c.id}</option>`;
+        return \`<option value="\${c.id}" \${c.id === activeCourseId ? 'selected' : ''}>\${pubIcon} \${c.title || c.id}</option>\`;
       }).join("");
     }
 
@@ -624,40 +626,40 @@
       const modules = course.modules || [];
 
       if (modules.length === 0) {
-        container.innerHTML = `
+        container.innerHTML = \`
           <div class="text-center p-6 border border-dashed border-white/10 rounded-2xl text-slate-400 space-y-2">
             <p class="text-xs">Nenhum módulo criado neste curso.</p>
             <button onclick="openModuleModal()" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 text-[11px] font-black uppercase">
               + Criar 1º Módulo
             </button>
           </div>
-        `;
+        \`;
         return;
       }
 
       container.innerHTML = modules.map((mod, mIdx) => {
         const lessons = mod.lessons || [];
         const isModPub = mod.published !== false;
-        return `
+        return \`
           <div class="border border-white/10 rounded-xl bg-white/5 overflow-hidden">
             <!-- Module Header -->
             <div class="p-2.5 bg-white/5 flex items-center justify-between gap-2 border-b border-white/5">
               <div class="flex items-center gap-2 truncate flex-1">
                 <span class="w-5 h-5 rounded bg-amber-500/20 text-amber-400 font-bold text-[10px] flex items-center justify-center shrink-0">
-                  ${mIdx + 1}
+                  \${mIdx + 1}
                 </span>
-                <h4 class="font-bold text-xs ${isModPub ? 'text-amber-300' : 'text-slate-400'} truncate">${mod.title || mod.id}</h4>
+                <h4 class="font-bold text-xs \${isModPub ? 'text-amber-300' : 'text-slate-400'} truncate">\${mod.title || mod.id}</h4>
               </div>
 
               <!-- Module Status & Actions -->
               <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="event.stopPropagation(); toggleModulePublished('${mod.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 ${isModPub ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}" title="Clique para alternar o status do Módulo">
-                  ${isModPub ? '🟢' : '🟡'}
+                <button onclick="event.stopPropagation(); toggleModulePublished('\${mod.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 \${isModPub ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}" title="Clique para alternar o status do Módulo">
+                  \${isModPub ? '🟢' : '🟡'}
                 </button>
-                <button onclick="openNewLessonForModule('${mod.id}')" class="p-1 px-1.5 rounded bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition text-[10px] font-bold" title="Adicionar Aula neste Módulo">
+                <button onclick="openNewLessonForModule('\${mod.id}')" class="p-1 px-1.5 rounded bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition text-[10px] font-bold" title="Adicionar Aula neste Módulo">
                   + Aula
                 </button>
-                <button onclick="editModule('${mod.id}')" class="p-1 text-slate-400 hover:text-white" title="Editar Módulo">
+                <button onclick="editModule('\${mod.id}')" class="p-1 text-slate-400 hover:text-white" title="Editar Módulo">
                   <i data-lucide="settings" class="w-3 h-3"></i>
                 </button>
               </div>
@@ -665,27 +667,27 @@
 
             <!-- Lessons List -->
             <div class="p-1.5 space-y-1">
-              ${lessons.map(les => {
+              \${lessons.map(les => {
                 const isSelected = les.id === activeLessonId;
                 const isLesPub = les.published !== false;
                 const statusDot = isLesPub ? '🟢' : '🟡';
-                return `
-                  <div onclick="selectLessonForEdit('${les.id}', '${mod.id}')" class="p-2 rounded-lg ${isSelected ? 'bg-amber-500 text-slate-950 font-bold' : 'hover:bg-white/10 text-slate-200'} transition cursor-pointer flex items-center justify-between gap-2 text-xs">
+                return \`
+                  <div onclick="selectLessonForEdit('\${les.id}', '\${mod.id}')" class="p-2 rounded-lg \${isSelected ? 'bg-amber-500 text-slate-950 font-bold' : 'hover:bg-white/10 text-slate-200'} transition cursor-pointer flex items-center justify-between gap-2 text-xs">
                     <div class="truncate flex items-center gap-1.5">
-                      <span class="text-[10px]" title="${isLesPub ? 'Aula Publicada' : 'Aula em Rascunho (Despublicada)'}">${statusDot}</span>
-                      <span class="truncate text-[11px] ${!isLesPub && !isSelected ? 'text-slate-400 italic' : ''}">${les.title || 'Aula sem título'}</span>
+                      <span class="text-[10px]" title="\${isLesPub ? 'Aula Publicada' : 'Aula em Rascunho (Despublicada)'}">\${statusDot}</span>
+                      <span class="truncate text-[11px] \${!isLesPub && !isSelected ? 'text-slate-400 italic' : ''}">\${les.title || 'Aula sem título'}</span>
                     </div>
                     <div class="flex items-center gap-1 shrink-0 text-[10px]">
-                      ${les.videoUrl ? '<i data-lucide="video" class="w-3 h-3"></i>' : ''}
-                      ${les.audioUrl ? '<i data-lucide="volume-2" class="w-3 h-3"></i>' : ''}
+                      \${les.videoUrl ? '<i data-lucide="video" class="w-3 h-3"></i>' : ''}
+                      \${les.audioUrl ? '<i data-lucide="volume-2" class="w-3 h-3"></i>' : ''}
                     </div>
                   </div>
-                `;
+                \`;
               }).join("")}
-              ${lessons.length === 0 ? '<p class="text-[10px] text-slate-500 p-2 italic">Nenhuma aula neste módulo.</p>' : ''}
+              \${lessons.length === 0 ? '<p class="text-[10px] text-slate-500 p-2 italic">Nenhuma aula neste módulo.</p>' : ''}
             </div>
           </div>
-        `;
+        \`;
       }).join("");
 
       if (window.lucide) lucide.createIcons();
@@ -829,12 +831,12 @@
       }
 
       renderHierarchyTree();
-      showToast(mod.published ? `🟢 Módulo "${mod.title}" PUBLICADO!` : `🟡 Módulo "${mod.title}" em RASCUNHO!`);
+      showToast(mod.published ? \`🟢 Módulo "\${mod.title}" PUBLICADO!\` : \`🟡 Módulo "\${mod.title}" em RASCUNHO!\`);
     }
 
     function openNewLessonForModule(moduleId) {
       activeModuleId = moduleId;
-      activeLessonId = `aula-${Date.now()}`;
+      activeLessonId = \`aula-\${Date.now()}\`;
       const course = ALL_COURSES[activeCourseId];
       const mod = (course?.modules || []).find(m => m.id === moduleId);
       const nextOrder = ((mod?.lessons || []).length) + 1;
@@ -843,7 +845,7 @@
         id: activeLessonId,
         moduleId: moduleId,
         courseId: activeCourseId,
-        title: `Nova Aula ${nextOrder}`,
+        title: \`Nova Aula \${nextOrder}\`,
         order: nextOrder,
         videoUrl: "",
         audioUrl: "",
@@ -878,7 +880,7 @@
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 
-      const lessonId = document.getElementById("lessonIdInput").value || `aula-${Date.now()}`;
+      const lessonId = document.getElementById("lessonIdInput").value || \`aula-\${Date.now()}\`;
       const moduleId = document.getElementById("lessonModuleIdInput").value || (course.modules?.[0]?.id || 'modulo-1');
 
       let foundLesson = null;
@@ -960,7 +962,7 @@
     async function handleDirectFileUpload(file, type) {
       if (!file) return;
 
-      const folder = `courses/${activeCourseId || 'general'}/${activeModuleId || 'media'}`;
+      const folder = \`courses/\${activeCourseId || 'general'}/\${activeModuleId || 'media'}\`;
       
       let barContId = null;
       let barId = null;
@@ -991,7 +993,7 @@
       if (barContId) {
         document.getElementById(barContId)?.classList.remove('hidden');
       }
-      showToast(`Enviando "${file.name}" (${(file.size / (1024*1024)).toFixed(1)} MB) para a Nuvem...`);
+      showToast(\`Enviando "\${file.name}" (\${(file.size / (1024*1024)).toFixed(1)} MB) para a Nuvem...\`);
 
       try {
         if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
@@ -1011,7 +1013,7 @@
             }
             if (statusId) {
               const el = document.getElementById(statusId);
-              if (el) el.innerText = `Enviando (${pct}%)...`;
+              if (el) el.innerText = \`Enviando (\${pct}%)...\`;
             }
           }
         );
@@ -1022,10 +1024,10 @@
         }
 
         updateMediaPreviews();
-        showToast(`✅ "${file.name}" enviado com sucesso!`);
+        showToast(\`✅ "\${file.name}" enviado com sucesso!\`);
       } catch (err) {
         console.error("Erro no upload:", err);
-        showToast(`❌ Erro no upload: ${err.message}`);
+        showToast(\`❌ Erro no upload: \${err.message}\`);
       } finally {
         if (barContId) {
           setTimeout(() => {
@@ -1037,7 +1039,7 @@
 
     async function handleModalCoverUpload(file) {
       if (!file) return;
-      showToast(`Enviando capa "${file.name}"...`);
+      showToast(\`Enviando capa "\${file.name}"...\`);
       try {
         if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
         await window.aefCloudSync.init();
@@ -1104,11 +1106,11 @@
 
     function updateRawCounter() {
       const text = document.getElementById("lessonRawScriptInput").value || "";
-      document.getElementById("rawCharCounter").innerText = `${text.length} caracteres • ${text.trim().split(/\s+/).filter(Boolean).length} palavras`;
+      document.getElementById("rawCharCounter").innerText = \`\${text.length} caracteres • \${text.trim().split(/\\s+/).filter(Boolean).length} palavras\`;
     }
 
     function handleAiStatusChange(val) {
-      showToast(`Status do Agente de IA alterado para: ${val}`);
+      showToast(\`Status do Agente de IA alterado para: \${val}\`);
     }
 
     function updatePreviewHtml() {
@@ -1117,19 +1119,19 @@
       const golden = document.getElementById("lessonGoldenTipInput")?.value || "Sacada de ouro do Leo.";
       const processed = document.getElementById("lessonProcessedHtmlInput")?.value || "";
 
-      preview.innerHTML = `
+      preview.innerHTML = \`
         <div class="border-b border-amber-300 pb-2">
           <span class="text-[10px] font-black uppercase text-amber-800 tracking-wider">Visualização Pedagógica</span>
-          <h3 class="font-bold text-base text-amber-950 font-serif">${title}</h3>
+          <h3 class="font-bold text-base text-amber-950 font-serif">\${title}</h3>
         </div>
         <div class="p-3 bg-white rounded-xl border border-amber-200 space-y-1">
           <p class="font-bold text-amber-900 text-xs">💡 Sacada de Ouro do Professor Leo:</p>
-          <p class="text-xs text-slate-800 italic leading-relaxed">"${golden}"</p>
+          <p class="text-xs text-slate-800 italic leading-relaxed">"\${golden}"</p>
         </div>
         <div class="prose prose-sm text-slate-900 leading-relaxed">
-          ${processed || '<p class="text-slate-500 italic text-[11px]">Nenhum conteúdo HTML processado pelo Agente de IA ainda. O aluno verá o roteiro ou masterclass.</p>'}
+          \${processed || '<p class="text-slate-500 italic text-[11px]">Nenhum conteúdo HTML processado pelo Agente de IA ainda. O aluno verá o roteiro ou masterclass.</p>'}
         </div>
-      `;
+      \`;
     }
 
     // Modal Helpers (Course & Module)
@@ -1165,7 +1167,7 @@
       if (e) e.preventDefault();
       const rawTitle = document.getElementById("courseModalTitleInput").value.trim();
       const rawSlug = document.getElementById("courseModalSlugInput").value.trim();
-      const id = document.getElementById("courseModalId").value.trim() || rawSlug || `curso-${Date.now()}`;
+      const id = document.getElementById("courseModalId").value.trim() || rawSlug || \`curso-\${Date.now()}\`;
       const title = rawTitle || "Novo Curso";
       const slug = rawSlug || id;
       const tier = document.getElementById("courseModalTierInput").value;
@@ -1204,7 +1206,7 @@
       document.getElementById("moduleModalTitle").innerText = "Novo Módulo / Ciclo";
       document.getElementById("moduleModalId").value = "";
       document.getElementById("moduleModalTitleInput").value = "";
-      document.getElementById("moduleModalIdInput").value = `ciclo-0${(ALL_COURSES[activeCourseId]?.modules || []).length + 1}`;
+      document.getElementById("moduleModalIdInput").value = \`ciclo-0\${(ALL_COURSES[activeCourseId]?.modules || []).length + 1}\`;
       document.getElementById("moduleModalOrderInput").value = (ALL_COURSES[activeCourseId]?.modules || []).length + 1;
       document.getElementById("moduleModalDescInput").value = "";
       document.getElementById("moduleModalPublishedInput").checked = true;
@@ -1241,7 +1243,7 @@
 
       const rawTitle = document.getElementById("moduleModalTitleInput").value.trim();
       const rawId = document.getElementById("moduleModalIdInput").value.trim();
-      const modId = document.getElementById("moduleModalId").value.trim() || rawId || `modulo-${Date.now()}`;
+      const modId = document.getElementById("moduleModalId").value.trim() || rawId || \`modulo-\${Date.now()}\`;
       const title = rawTitle || "Novo Módulo";
       const order = parseInt(document.getElementById("moduleModalOrderInput").value) || 1;
       const desc = document.getElementById("moduleModalDescInput").value.trim();
@@ -1281,7 +1283,7 @@
     async function handleDeleteCurrentModule() {
       const modId = document.getElementById("moduleModalId").value;
       if (!modId) return;
-      if (!confirm(`Tem certeza que deseja excluir o módulo "${modId}" e todas as suas aulas?`)) return;
+      if (!confirm(\`Tem certeza que deseja excluir o módulo "\${modId}" e todas as suas aulas?\`)) return;
 
       const course = ALL_COURSES[activeCourseId];
       if (course) {
@@ -1305,7 +1307,7 @@
 
     async function handleSyncAllToFirestore() {
       const btn = document.getElementById("btnSyncCloud");
-      if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Sincronizando...`;
+      if (btn) btn.innerHTML = \`<span class="animate-spin">⏳</span> Sincronizando...\`;
       showToast("Iniciando sincronização completa de cursos, módulos e aulas com o Firestore...");
 
       try {
@@ -1363,12 +1365,12 @@
           }
         }
 
-        showToast(`✅ Sincronização concluída: ${coursesKeys.length} cursos, ${totalMods} módulos e ${totalLessons} aulas no Firestore!`);
+        showToast(\`✅ Sincronização concluída: \${coursesKeys.length} cursos, \${totalMods} módulos e \${totalLessons} aulas no Firestore!\`);
       } catch (e) {
         console.error("Erro na sincronização:", e);
         showToast("❌ Erro na sincronização: " + e.message);
       } finally {
-        if (btn) btn.innerHTML = `<i data-lucide="cloud" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Sincronizar Cloud</span>`;
+        if (btn) btn.innerHTML = \`<i data-lucide="cloud" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Sincronizar Cloud</span>\`;
         if (window.lucide) lucide.createIcons();
       }
     }
@@ -1384,3 +1386,7 @@
   </script>
 </body>
 </html>
+`;
+
+fs.writeFileSync('admin-cursos.html', completeHtml, 'utf8');
+console.log('✅ admin-cursos.html V2 written with 3-level Published Toggles! Total lines:', completeHtml.split('\n').length);
