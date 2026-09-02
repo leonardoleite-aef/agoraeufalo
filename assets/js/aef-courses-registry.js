@@ -3,7 +3,7 @@
  * Professor Leonardo Leite
  * Fully structured hierarchy: Courses > Modules > Lessons
  */
-const AEF_COURSES_DATA = {
+var AEF_COURSES_DATA = {
   "english-quickstart": {
     "id": "english-quickstart",
     "title": "English QuickStart • Fundamentos da Fala",
@@ -965,11 +965,11 @@ const AEF_COURSES_DATA = {
             "order": 1,
             "duration": "04:54",
             "description": "Entrada & Imersão Auditiva • Como Grazi e Tom se conheceram no bar da conferência.",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2FMS006_LR_1.mp4?alt=media",
-            "audioUrl": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2Fms006-how-they-met%2F1788380567057_MS006_LR_1.mp4?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Faudio_lr_4.mp3?alt=media",
             "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_4.jpg?alt=media",
             "artworkUrl": "assets/images/cover-default-aef.jpg",
-            "pdfUrl": "",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2Fms006-how-they-met%2F1788380588981_MS_006_How_they_met.pdf?alt=media",
             "goldenTip": "Observe a oposição de estados: Tom estava sozinho ('by himself') e Grazi com amigos animados ('loud Brazilian friends').",
             "rawScript": "",
             "processedContentHtml": "\n                  <div class=\"space-y-4\">\n                    <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-4\">\n                      <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                        <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                          <i data-lucide=\"book-open\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                          Texto da História (Listen & Read)\n                        </span>\n                        <span class=\"text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30\">Imersão Sonora</span>\n                      </div>\n                      <div class=\"space-y-2.5 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium\">\n                        <p>Tom and Grazi met at a business conference in New York ten years ago. It was a cold evening in November.</p>\n                        <p>Tom was sitting at the bar by himself, having a drink after a long day at the conference.</p>\n                        <p>Grazi’s English wasn’t very good then, but that wasn’t a problem for her. Grazi and her friends were having a good time at the bar. They were talking and laughing in Portuguese.</p>\n                        <p>Tom noticed the group of loud Brazilian friends and started paying attention.</p>\n                        <p>A friend of Grazi’s notices Tom and says: <i>\"Hey Grazi, there’s a handsome guy all by himself sitting right behind you!\"</i></p>\n                        <p>Grazi quietly turned around and looked over to Tom. She said: <i>\"You’re right, he is cute. But he’s probably married.\"</i></p>\n                        <p>Tom left and went to the restroom. A few minutes later, Tom came back, approached the Brazilians and said: <i>\"Good evening! Excuse me... Hi, I’m Tom. I speak Portuguese, and I’m NOT married!\"</i></p>\n                      </div>\n                    </div>\n                  </div>\n                ",

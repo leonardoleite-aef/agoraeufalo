@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-[#080D1A] text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Factory Studio • Laboratório Editorial & Construtor Modular | AgoraEuFalo</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            factory: {
+              bg: '#080D1A',
+              sidebar: '#0D1527',
+              panel: '#111C33',
+              card: '#162340',
+              border: '#1E3056',
+              borderLight: '#2D4577',
+              gold: '#C68A36',
+              amber: '#F59E0B'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF.js CDN (Client-side Legacy PDF Ingestion) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Core App Scripts -->
+  <script src="assets/js/aef-courses-registry.js?v=20260902_0200"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260902_0200"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260902_0200"></script>
+  <script src="assets/js/aef-pdf-factory-engine.js?v=20260902_0200"></script>
+  <script src="assets/js/aef-admin-nav.js?v=20260902_0200"></script>
+
+  <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(13, 21, 39, 0.6); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E3056; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+  </style>
+</head>
+<body class="h-full bg-[#080D1A] text-slate-100 flex flex-col font-sans antialiased overflow-hidden selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Container for Unified Admin Nav -->
+  <div id="aef-admin-header-container"></div>
+
+  <!-- Sub-Header: Studio Command Bar -->
+  <div class="bg-[#0D1527] border-b border-[#1E3056] px-4 py-2 flex items-center justify-between gap-3 shrink-0 z-20">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center font-black shadow-md">
+        <i data-lucide="file-text" class="w-4 h-4"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-sm font-black text-white tracking-wide">PDF FACTORY STUDIO</h1>
+          <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">LABORATÓRIO EDITORIAL</span>
+        </div>
+        <p class="text-[10px] text-slate-400">Ingestão de PDFs Legados, Edição em Blocos, Depósito Cloud & Densidade 85% A4</p>
+      </div>
+    </div>
+
+    <!-- Right Controls: Palette & Actions -->
+    <div class="flex items-center gap-2">
+      <!-- Active Palette Badge -->
+      <div class="hidden sm:flex items-center gap-1.5 bg-[#111C33] border border-[#1E3056] px-2.5 py-1 rounded-lg text-xs">
+        <span class="text-[10px] text-slate-400 font-bold uppercase">Paleta:</span>
+        <span id="activePaletteLabel" class="font-bold text-amber-400 flex items-center gap-1">
+          <span id="activePaletteDot" class="w-2.5 h-2.5 rounded-full bg-[#C68A36]"></span>
+          <span>Âmbar Real</span>
+        </span>
+      </div>
+
+      <!-- Quick Template Select -->
+      <select id="quickTemplateSelect" onchange="handleTemplateChange(this.value)" class="bg-[#111C33] border border-[#1E3056] text-white font-bold text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500">
+        <option value="magic_story">✨ Magic Story (8 Páginas)</option>
+        <option value="quick_course">📘 Curso Rápido (2 Páginas)</option>
+        <option value="custom">🧩 Construtor Híbrido Livre</option>
+      </select>
+
+      <!-- Save to Cloud Vault Button -->
+      <button type="button" onclick="openCloudSaveModal()" class="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 shadow cursor-pointer transition">
+        <i data-lucide="cloud-upload" class="w-3.5 h-3.5"></i>
+        <span>Salvar na Nuvem</span>
+      </button>
+
+      <!-- Print Button -->
+      <button type="button" onclick="printPdfDocument()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 shadow cursor-pointer transition">
+        <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+        <span>Imprimir / Salvar PDF</span>
+      </button>
+
+      <!-- Link to Lesson Button -->
+      <button type="button" onclick="openLinkModal()" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 shadow cursor-pointer transition">
+        <i data-lucide="link" class="w-3.5 h-3.5"></i>
+        <span>Vincular na Aula</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN STUDIO WORKSPACE (3-COLUMN LAYOUT) -->
+  <main class="flex-1 flex overflow-hidden">
+
+    <!-- ========================================== -->
+    <!-- COLUMN 1: INGESTOR, SETTINGS & CLOUD VAULT -->
+    <!-- ========================================== -->
+    <aside class="w-80 bg-[#0D1527] border-r border-[#1E3056] flex flex-col shrink-0 overflow-y-auto custom-scrollbar">
+      
+      <!-- Studio Tabs (3 Tabs: Ingestor, Vault, Settings) -->
+      <div class="flex border-b border-[#1E3056] p-1.5 gap-1 bg-[#0A101F]">
+        <button id="tabBtnIngest" onclick="switchLeftTab('ingest')" class="flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold bg-amber-500 text-slate-950 transition flex items-center justify-center gap-1">
+          <i data-lucide="upload-cloud" class="w-3 h-3"></i>
+          <span>Ingestão</span>
+        </button>
+        <button id="tabBtnVault" onclick="switchLeftTab('vault')" class="flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1">
+          <i data-lucide="folder-git-2" class="w-3 h-3"></i>
+          <span>Depósito Cloud</span>
+        </button>
+        <button id="tabBtnSettings" onclick="switchLeftTab('settings')" class="flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1">
+          <i data-lucide="palette" class="w-3 h-3"></i>
+          <span>Design</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: INGESTION -->
+      <div id="leftTabIngest" class="p-3.5 space-y-4">
+        
+        <!-- Puxar do Acervo Existente (Cursos / Módulos / Aulas) -->
+        <div class="bg-[#111C33] border border-amber-500/40 rounded-xl p-3 space-y-2.5 shadow-md">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
+              <i data-lucide="library" class="w-3.5 h-3.5"></i>
+              <span>Puxar do Acervo Existente</span>
+            </span>
+            <span id="courseLessonCountBadge" class="text-[9px] font-mono font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30">CARREGANDO...</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div>
+              <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">1. Curso</label>
+              <select id="importCourseSelect" onchange="handleImportCourseChange(this.value)" class="w-full bg-[#0A101F] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-amber-500 cursor-pointer text-xs"></select>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">2. Módulo (MS001 a MS030...)</label>
+              <select id="importModuleSelect" onchange="handleImportModuleChange(this.value)" class="w-full bg-[#0A101F] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-amber-500 cursor-pointer text-xs"></select>
+            </div>
+
+            <button type="button" onclick="loadSelectedModuleToStudio()" class="w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase flex items-center justify-center gap-1.5 shadow transition cursor-pointer mt-1">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>📂 Carregar Módulo no Estúdio</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dropzone: Legacy PDF Ingestion -->
+        <div class="bg-[#111C33] border-2 border-dashed border-[#1E3056] hover:border-amber-500/60 rounded-xl p-4 text-center transition cursor-pointer relative group" onclick="document.getElementById('legacyPdfInput').click()">
+          <input type="file" id="legacyPdfInput" accept="application/pdf" class="hidden" onchange="handleLegacyPdfUpload(this.files[0])">
+          <div class="w-10 h-10 rounded-full bg-amber-500/10 text-amber-400 mx-auto flex items-center justify-center mb-2 group-hover:scale-110 transition">
+            <i data-lucide="file-up" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-xs font-black text-white mb-0.5">Ingerir Arquivo PDF Externo</h3>
+          <p class="text-[10px] text-slate-400 leading-tight">Solte uma MS antiga, FirstSteps ou AEFclub para extrair e reestilizar em blocos.</p>
+          <span id="pdfIngestStatus" class="inline-block mt-2 text-[9px] font-mono px-2 py-0.5 rounded bg-white/5 text-amber-300">Pronto para ingestão</span>
+        </div>
+
+        <!-- Smart Paste / Raw Script Decomposer -->
+        <div class="bg-[#111C33] border border-[#1E3056] rounded-xl p-3 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i data-lucide="clipboard-paste" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Smart Paste (Texto Cru)</span>
+            </span>
+          </div>
+          <textarea id="rawScriptInput" rows="5" placeholder="Cole o texto copiado do PDF legado ou roteiro cru aqui...
+Ex:
+Listen & Read:
+Rodrigo was at the office...
+
+Chunks:
+every single day -> todo santo dia
+works as an executive -> trabalha como executiva
+
+Listen & Answer:
+1. Where was Rodrigo yesterday?
+
+Sacada de Ouro:
+Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border-[#1E3056] text-white text-[11px] font-mono p-2.5 rounded-lg focus:outline-none focus:border-amber-500 custom-scrollbar leading-relaxed"></textarea>
+          
+          <button type="button" onclick="decomposeRawScript()" class="w-full py-2 px-3 rounded-lg bg-[#1E3056] hover:bg-amber-500 hover:text-slate-950 text-white font-bold text-xs uppercase flex items-center justify-center gap-1.5 transition cursor-pointer">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400 group-hover:text-slate-950"></i>
+            <span>✨ Decompor em Blocos</span>
+          </button>
+        </div>
+
+        <!-- Canonical Templates Quick Selector -->
+        <div class="bg-[#111C33] border border-[#1E3056] rounded-xl p-3 space-y-2">
+          <span class="text-xs font-bold text-slate-300 block uppercase tracking-wider text-[10px]">Modelos Oficiais do Ecossistema</span>
+          <div class="space-y-1.5">
+            <button type="button" onclick="loadCanonicalTemplate('magic_story')" class="w-full text-left p-2 rounded-lg bg-[#162340] hover:bg-amber-500/20 border border-[#1E3056] hover:border-amber-500/40 text-xs transition flex items-center justify-between">
+              <div>
+                <div class="font-bold text-white">✨ Magic Story (3 Arquétipos)</div>
+                <div class="text-[10px] text-slate-400">P1 Capa, P2-P4 LR/VOC, P5-P8 LA/LRT/PRO</div>
+              </div>
+              <span class="text-[10px] font-mono text-amber-400 font-bold">8 Págs</span>
+            </button>
+
+            <button type="button" onclick="loadCanonicalTemplate('quick_course')" class="w-full text-left p-2 rounded-lg bg-[#162340] hover:bg-sky-500/20 border border-[#1E3056] hover:border-sky-500/40 text-xs transition flex items-center justify-between">
+              <div>
+                <div class="font-bold text-white">📘 Curso Rápido / Guia</div>
+                <div class="text-[10px] text-slate-400">Header, Conceito, Chunks, LA & QR Code</div>
+              </div>
+              <span class="text-[10px] font-mono text-sky-400 font-bold">2 Págs</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: CLOUD VAULT (PROJETOS NA NUVEM) -->
+      <div id="leftTabVault" class="hidden p-3.5 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="cloud" class="w-3.5 h-3.5 text-sky-400"></i>
+            <span>Depósito de Apostilas</span>
+          </span>
+          <button type="button" onclick="refreshCloudVaultList()" class="p-1 rounded bg-[#162340] hover:bg-sky-500 text-slate-400 hover:text-slate-950 transition" title="Atualizar Lista">
+            <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+          </button>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex gap-1 overflow-x-auto custom-scrollbar pb-1 text-[10px]">
+          <button type="button" onclick="filterVault('all')" class="vaultFilterBtn px-2 py-0.5 rounded bg-sky-500 text-slate-950 font-bold">Todos</button>
+          <button type="button" onclick="filterVault('testing')" class="vaultFilterBtn px-2 py-0.5 rounded bg-[#162340] text-slate-400 font-bold hover:text-white">🧪 Testes</button>
+          <button type="button" onclick="filterVault('approved')" class="vaultFilterBtn px-2 py-0.5 rounded bg-[#162340] text-slate-400 font-bold hover:text-white">🌟 Aprovados</button>
+          <button type="button" onclick="filterVault('canonical')" class="vaultFilterBtn px-2 py-0.5 rounded bg-[#162340] text-slate-400 font-bold hover:text-white">🏛️ Oficiais</button>
+        </div>
+
+        <!-- Recipes List Container -->
+        <div id="cloudVaultListContainer" class="space-y-2 max-h-[calc(100vh-230px)] overflow-y-auto custom-scrollbar pr-1">
+          <p class="text-slate-500 italic text-[11px] text-center py-6">Carregando projetos da nuvem...</p>
+        </div>
+      </div>
+
+      <!-- TAB 3: DESIGN & PALETTES -->
+      <div id="leftTabSettings" class="hidden p-3.5 space-y-4">
+        
+        <!-- Palette Selector (Stock) -->
+        <div class="bg-[#111C33] border border-[#1E3056] rounded-xl p-3 space-y-2.5">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="palette" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Paletas em Estoque</span>
+          </span>
+
+          <div class="grid grid-cols-2 gap-1.5" id="paletteButtonsContainer">
+            <!-- Injected via JS -->
+          </div>
+
+          <!-- Custom HEX -->
+          <div class="pt-2 border-t border-[#1E3056] flex items-center gap-2">
+            <label class="text-[10px] font-bold text-slate-400 uppercase">HEX Custom:</label>
+            <input type="color" id="customHexColor" value="#C68A36" onchange="setCustomColor(this.value)" class="w-6 h-6 rounded border-0 bg-transparent cursor-pointer">
+            <input type="text" id="customHexText" value="#C68A36" onchange="setCustomColor(this.value)" class="flex-1 bg-[#0A101F] border border-[#1E3056] text-white text-[10px] font-mono px-2 py-1 rounded focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Typography & Global Settings -->
+        <div class="bg-[#111C33] border border-[#1E3056] rounded-xl p-3 space-y-3">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="type" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Tipografia & Layout</span>
+          </span>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tamanho Base da Fonte</label>
+            <div class="grid grid-cols-4 gap-1">
+              <button type="button" onclick="setFontSize('14pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">14pt</button>
+              <button type="button" onclick="setFontSize('15pt')" class="fontSizeBtn py-1 rounded text-xs font-black bg-amber-500 text-slate-950 border border-amber-400">15pt</button>
+              <button type="button" onclick="setFontSize('16pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">16pt</button>
+              <button type="button" onclick="setFontSize('17pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">17pt</button>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-[#1E3056]">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Título da Apostila</label>
+              <input type="text" id="docTitleInput" oninput="updateDocMeta()" class="w-full bg-[#0A101F] border border-[#1E3056] text-white text-xs px-2.5 py-1.5 rounded-lg focus:outline-none focus:border-amber-500">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Subtítulo / Módulo</label>
+              <input type="text" id="docSubtitleInput" oninput="updateDocMeta()" class="w-full bg-[#0A101F] border border-[#1E3056] text-white text-xs px-2.5 py-1.5 rounded-lg focus:outline-none focus:border-amber-500">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- COLUMN 2: MODULAR BLOCK BUILDER PER PAGE   -->
+    <!-- ========================================== -->
+    <section class="w-96 bg-[#0B1021] border-r border-[#1E3056] flex flex-col shrink-0 overflow-hidden">
+      
+      <!-- Pages Tabs Navigation Bar -->
+      <div class="bg-[#0D1527] border-b border-[#1E3056] p-2 flex items-center justify-between gap-1 overflow-x-auto custom-scrollbar shrink-0">
+        <div class="flex items-center gap-1" id="pagesTabsList">
+          <!-- Injected via JS -->
+        </div>
+        <button type="button" onclick="addNewPage()" class="p-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 text-xs font-bold transition shrink-0" title="Adicionar Nova Página A4">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Page Status Bar & 85% Ideal Density Meter -->
+      <div class="p-3 bg-[#111C33] border-b border-[#1E3056] shrink-0 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span id="activePageHeader">Página 1</span>
+          </span>
+          <span id="densityBadge" class="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-emerald-500 text-slate-950">
+            85% Ideal
+          </span>
+        </div>
+
+        <!-- Density Progress Bar (Ideal = 85%) -->
+        <div class="space-y-1">
+          <div class="w-full h-2 rounded-full bg-[#0A101F] overflow-hidden relative">
+            <!-- 85% Target Marker -->
+            <div class="absolute top-0 bottom-0 left-[85%] w-0.5 bg-amber-300 z-10" title="Meta: 85% Ideal"></div>
+            <div id="densityProgressBar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 85%;"></div>
+          </div>
+          <div class="flex items-center justify-between text-[9px] text-slate-400">
+            <span id="densityTip">Distribuição pedagógica perfeita.</span>
+            <span class="font-mono font-bold text-amber-300">Meta: 85%</span>
+          </div>
+        </div>
+
+        <!-- Add Block Dropdown Action -->
+        <div class="pt-1 flex items-center gap-1.5">
+          <div class="relative flex-1">
+            <select id="addBlockSelect" class="w-full bg-[#162340] border border-[#1E3056] text-white font-bold text-xs rounded-lg p-2 focus:outline-none focus:border-amber-500 cursor-pointer">
+              <option value="">➕ Escolha um Bloco para Adicionar...</option>
+              <optgroup label="Estrutura & Identidade">
+                <option value="cover">🏛️ Capa Deep Navy (Arquétipo 1)</option>
+                <option value="header_banner">🏷️ Cabeçalho da Lição</option>
+                <option value="explainer">✦ Conceito Central / Explainer</option>
+              </optgroup>
+              <optgroup label="História & Vocabulário">
+                <option value="listen_read">🎧 Listen & Read (LR - 16pt)</option>
+                <option value="vocab_chunks">📖 Vocabulary Session & Chunks</option>
+              </optgroup>
+              <optgroup label="Treino Ativo (Practice Workbook)">
+                <option value="listen_answer">⚡ Listen & Answer (LA)</option>
+                <option value="look_retell">🎙️ Look & Retell (LRT)</option>
+                <option value="listen_ask">❓ Listen & Ask (LASK)</option>
+                <option value="connected_speech">🎵 Connected Speech & Pronúncia</option>
+                <option value="golden_tip">💡 Sacada de Ouro do Leo</option>
+                <option value="handwriting_lines">📝 Pautas de Caligrafia / Anotações</option>
+                <option value="qr_code">📱 QR Code Interativo</option>
+              </optgroup>
+            </select>
+          </div>
+          <button type="button" onclick="handleAddSelectedBlock()" class="py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase transition shrink-0">
+            Inserir
+          </button>
+        </div>
+      </div>
+
+      <!-- Blocks List Container -->
+      <div id="blocksListContainer" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2.5">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Page Action Footer -->
+      <div class="p-2.5 bg-[#0D1527] border-t border-[#1E3056] flex items-center justify-between shrink-0 text-xs">
+        <button type="button" onclick="deleteActivePage()" class="text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>Excluir Página</span>
+        </button>
+        <span id="pageBlocksCount" class="text-[10px] text-slate-400 font-mono">4 blocos</span>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- COLUMN 3: LIVE A4 PREVIEW CANVAS           -->
+    <!-- ========================================== -->
+    <section class="flex-1 bg-[#060A14] flex flex-col overflow-hidden relative">
+      
+      <!-- Canvas Control Toolbar -->
+      <div class="bg-[#0D1527] border-b border-[#1E3056] px-4 py-2 flex items-center justify-between shrink-0 z-10">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Visualizador A4 ao Vivo</span>
+          </span>
+          <span id="canvasPageIndicator" class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#111C33] text-slate-300">Páginas: 2</span>
+        </div>
+
+        <!-- Zoom Controls & JSON Tools -->
+        <div class="flex items-center gap-2">
+          <div class="flex items-center bg-[#111C33] border border-[#1E3056] rounded-lg p-0.5 text-xs">
+            <button type="button" onclick="setZoom(0.6)" class="zoomBtn px-2 py-1 rounded text-slate-400 hover:text-white font-bold">60%</button>
+            <button type="button" onclick="setZoom(0.8)" class="zoomBtn px-2 py-1 rounded text-slate-400 hover:text-white font-bold">80%</button>
+            <button type="button" onclick="setZoom(1.0)" class="zoomBtn px-2 py-1 rounded bg-amber-500 text-slate-950 font-black">100%</button>
+            <button type="button" onclick="setZoom(1.15)" class="zoomBtn px-2 py-1 rounded text-slate-400 hover:text-white font-bold">115%</button>
+          </div>
+
+          <button type="button" onclick="exportRecipeJson()" class="p-1.5 rounded-lg bg-[#111C33] hover:bg-white/10 text-slate-300 hover:text-white border border-[#1E3056] text-xs font-bold transition" title="Exportar Receita JSON">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          </button>
+          <button type="button" onclick="document.getElementById('importJsonInput').click()" class="p-1.5 rounded-lg bg-[#111C33] hover:bg-white/10 text-slate-300 hover:text-white border border-[#1E3056] text-xs font-bold transition" title="Importar Receita JSON">
+            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+          </button>
+          <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importRecipeJson(this.files[0])">
+        </div>
+      </div>
+
+      <!-- Canvas Scroll Area -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar p-6 flex justify-center items-start bg-[#060A14]" id="canvasWrapper">
+        <iframe id="pdfCanvasIframe" class="w-[210mm] min-h-[297mm] shadow-2xl rounded border border-[#1E3056] bg-white transition-transform duration-200 origin-top"></iframe>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CLOUD VAULT SAVE                    -->
+  <!-- ========================================== -->
+  <div id="cloudSaveModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0D1527] border border-[#1E3056] rounded-2xl w-full max-w-md shadow-2xl p-5 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#1E3056]">
+        <h3 class="text-sm font-black text-white flex items-center gap-2">
+          <i data-lucide="cloud-upload" class="w-4 h-4 text-sky-400"></i>
+          <span>Salvar no Depósito Cloud</span>
+        </h3>
+        <button type="button" onclick="closeCloudSaveModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Nome / Título do Projeto</label>
+          <input type="text" id="vaultProjectNameInput" placeholder="Ex: MS001_Grazi_Versao_8P_Ambar" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-sky-500">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Etiqueta de Status</label>
+          <select id="vaultProjectStatusSelect" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-sky-500">
+            <option value="testing">🧪 Em Teste / Rascunho</option>
+            <option value="approved">🌟 Aprovado para Uso</option>
+            <option value="canonical">🏛️ Canônico Oficial</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Notas de Experimento (Opcional)</label>
+          <textarea id="vaultProjectNotesInput" rows="2" placeholder="Ex: Testando densidade de 85% com 14 chunks e novas perguntas de LA..." class="w-full bg-[#111C33] border border-[#1E3056] text-white p-2 rounded-lg focus:outline-none focus:border-sky-500"></textarea>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-[#1E3056]">
+        <button type="button" onclick="closeCloudSaveModal()" class="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold text-xs">Cancelar</button>
+        <button type="button" onclick="confirmSaveToCloudVault()" class="px-4 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs uppercase shadow flex items-center gap-1.5">
+          <i data-lucide="cloud-check" class="w-3.5 h-3.5"></i>
+          <span>Salvar no Cofre</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: EDIT BLOCK (DYNAMIC FORM)           -->
+  <!-- ========================================== -->
+  <div id="editBlockModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0D1527] border border-[#1E3056] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-[#1E3056] flex items-center justify-between bg-[#111C33]">
+        <div class="flex items-center gap-2">
+          <span id="modalBlockIcon" class="text-amber-400 font-bold"></span>
+          <h3 id="modalBlockTitle" class="text-sm font-black text-white">Editar Bloco</h3>
+        </div>
+        <button type="button" onclick="closeEditBlockModal()" class="text-slate-400 hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="modalBlockFormContainer" class="p-4 overflow-y-auto custom-scrollbar space-y-3 flex-1 text-xs">
+        <!-- Form injected dynamically based on block type -->
+      </div>
+
+      <div class="p-3 border-t border-[#1E3056] bg-[#0A101F] flex justify-end gap-2">
+        <button type="button" onclick="closeEditBlockModal()" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs">Cancelar</button>
+        <button type="button" onclick="saveBlockModalData()" class="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase shadow">Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: LINK PDF TO COURSE LESSON           -->
+  <!-- ========================================== -->
+  <div id="linkCourseModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0D1527] border border-[#1E3056] rounded-2xl w-full max-w-lg shadow-2xl p-5 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#1E3056]">
+        <h3 class="text-sm font-black text-white flex items-center gap-2">
+          <i data-lucide="link" class="w-4 h-4 text-emerald-400"></i>
+          <span>Vincular Apostila na Aula</span>
+        </h3>
+        <button type="button" onclick="closeLinkModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Selecione o Curso</label>
+          <select id="linkCourseSelect" onchange="populateModuleSelect(this.value)" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-emerald-500"></select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Selecione o Módulo</label>
+          <select id="linkModuleSelect" onchange="populateLessonSelect(this.value)" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-emerald-500"></select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Selecione a Aula</label>
+          <select id="linkLessonSelect" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-emerald-500"></select>
+        </div>
+
+        <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-1">
+          <span class="text-[11px] font-bold text-emerald-300 block">Caminho Canônico Gerado:</span>
+          <span id="canonicalPdfFilename" class="text-[10px] font-mono text-white block">Material-PDF/Apostila_...pdf</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-[#1E3056]">
+        <button type="button" onclick="closeLinkModal()" class="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold text-xs">Cancelar</button>
+        <button type="button" onclick="confirmLinkToLesson()" class="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase shadow">Confirmar & Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- JAVASCRIPT CONTROLLER -->
+  <script>
+    let activePageIndex = 0;
+    let editingBlockId = null;
+    let currentZoom = 1.0;
+    let allVaultRecipes = [];
+    let currentVaultFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initPalettesUI();
+      initDocInputs();
+      initImportSelects();
+      renderPagesTabs();
+      renderBlocksList();
+      updateCanvasPreview();
+      loadCloudVaultList();
+
+      // Listen for engine state changes
+      window.AEFPdfFactoryEngine.subscribe((state) => {
+        renderPagesTabs();
+        renderBlocksList();
+        updateDensityMeter();
+        updateCanvasPreview();
+      });
+    });
+
+    // ----------------------------------------------------
+    // IMPORT FROM REAL CLOUD / REGISTRY ACERVO
+    // ----------------------------------------------------
+    let AEF_ALL_COURSES_MAP = {};
+
+    async function initImportSelects() {
+      const cSelect = document.getElementById("importCourseSelect");
+      if (!cSelect) return;
+
+      // 1. Resolução resiliente da fonte de dados local (window.AEF_COURSES_DATA / window.AEF_COURSES_REGISTRY / fallback global)
+      const localSource = (typeof window !== 'undefined' && (window.AEF_COURSES_DATA || window.AEF_COURSES_REGISTRY)) 
+        || (typeof AEF_COURSES_DATA !== 'undefined' ? AEF_COURSES_DATA : null);
+
+      if (localSource && Object.keys(localSource).length > 0) {
+        AEF_ALL_COURSES_MAP = JSON.parse(JSON.stringify(localSource));
+        populateCourseSelect();
+      } else {
+        // Retry breve caso o script aef-courses-registry.js demore 50ms para avaliar
+        setTimeout(() => {
+          const retrySource = window.AEF_COURSES_DATA || window.AEF_COURSES_REGISTRY || (typeof AEF_COURSES_DATA !== 'undefined' ? AEF_COURSES_DATA : null);
+          if (retrySource) {
+            AEF_ALL_COURSES_MAP = JSON.parse(JSON.stringify(retrySource));
+            populateCourseSelect();
+          }
+        }, 100);
+      }
+
+      // 2. Sincroniza em background com o Cloud Firestore
+      if (window.aefCloudSync) {
+        try {
+          await window.aefCloudSync.init();
+          const remoteMap = await window.aefCloudSync.getCoursesHierarchy(AEF_ALL_COURSES_MAP);
+          if (remoteMap && Object.keys(remoteMap).length > 0) {
+            AEF_ALL_COURSES_MAP = remoteMap;
+            populateCourseSelect();
+          }
+        } catch (e) {
+          console.warn("Aviso ao sincronizar catálogo do Cloud:", e);
+        }
+      }
+    }
+
+    function populateCourseSelect() {
+      const cSelect = document.getElementById("importCourseSelect");
+      if (!cSelect || !AEF_ALL_COURSES_MAP) return;
+
+      const keys = Object.keys(AEF_ALL_COURSES_MAP);
+      if (keys.length === 0) return;
+
+      const prevVal = cSelect.value;
+      cSelect.innerHTML = keys.map(k => `
+        <option value="${k}" ${k === prevVal || (k === 'ms-legacy' && !prevVal) ? 'selected' : ''}>
+          ${AEF_ALL_COURSES_MAP[k].title || k}
+        </option>
+      `).join('');
+
+      handleImportCourseChange(cSelect.value);
+    }
+
+    function handleImportCourseChange(courseId) {
+      const mSelect = document.getElementById("importModuleSelect");
+      const course = AEF_ALL_COURSES_MAP[courseId];
+      if (!mSelect || !course) return;
+
+      const modules = course.modules || [];
+      mSelect.innerHTML = modules.map((m, idx) => `
+        <option value="${m.id}">${m.title || `Módulo ${idx + 1}`}</option>
+      `).join('');
+
+      // Atualiza badge de contagem de aulas dinamicamente
+      updateCourseLessonsCounter(course);
+    }
+
+    function handleImportModuleChange(moduleId) {
+      // Pronto para prévias dinâmicas se necessário
+    }
+
+    function updateCourseLessonsCounter(course) {
+      const badge = document.getElementById("courseLessonCountBadge");
+      if (!badge || !course) return;
+      let count = 0;
+      (course.modules || []).forEach(m => {
+        count += (m.lessons || []).length;
+      });
+      badge.innerText = `${count} AULAS`;
+    }
+
+    function extractTextFromHtml(html) {
+      if (!html) return "";
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      return div.textContent || div.innerText || "";
+    }
+
+    function loadSelectedModuleToStudio() {
+      const courseId = document.getElementById("importCourseSelect").value;
+      const moduleId = document.getElementById("importModuleSelect").value;
+
+      const course = AEF_ALL_COURSES_MAP[courseId];
+      const mod = (course?.modules || []).find(m => m.id === moduleId);
+      if (!mod) {
+        alert("Módulo não encontrado no acervo selecionado.");
+        return;
+      }
+
+      const lessons = mod.lessons || [];
+
+      // MÓDULO MAGIC STORIES (8 Páginas Canônicas com Conteúdo Real)
+      if (courseId === 'ms-legacy' || mod.id.startsWith('ms')) {
+        const lrLesson = lessons.find(l => l.id.endsWith('-lr') || l.order === 1);
+        const vocLesson = lessons.find(l => l.id.endsWith('-voc') || l.order === 2);
+        const laLesson = lessons.find(l => l.id.endsWith('-la') || l.order === 3);
+        const lrtLesson = lessons.find(l => l.id.endsWith('-lrt') || l.order === 4);
+        const laskLesson = lessons.find(l => l.id.endsWith('-lask') || l.order === 5);
+        const proLesson = lessons.find(l => l.id.endsWith('-pro') || l.order === 6);
+
+        window.AEFPdfFactoryEngine.loadTemplate('magic_story');
+        window.AEFPdfFactoryEngine.state.title = `${mod.title} • Apostila Oficial`;
+        window.AEFPdfFactoryEngine.state.subtitle = course.title || 'Magic Stories Legacy';
+        window.AEFPdfFactoryEngine.state.courseId = courseId;
+        window.AEFPdfFactoryEngine.state.moduleId = moduleId;
+
+        // P1: Cover (Arquétipo 1)
+        const covBlock = window.AEFPdfFactoryEngine.state.pages[0]?.blocks[0];
+        if (covBlock && covBlock.type === 'cover') {
+          covBlock.data.courseTitle = course.title || 'Magic Stories';
+          covBlock.data.moduleTitle = mod.title;
+          covBlock.data.lessonTitle = lrLesson?.title || mod.title;
+          covBlock.data.watermark = mod.title.split('-')[0].trim() || 'MS';
+          if (lrLesson?.description) covBlock.data.synopsis = lrLesson.description;
+          if (lrLesson?.artworkUrl && lrLesson.artworkUrl !== 'assets/images/cover-default-aef.jpg') {
+            covBlock.data.artworkUrl = lrLesson.artworkUrl;
+          }
+        }
+
+        // P2: Listen & Read
+        if (lrLesson) {
+          const lrHeader = window.AEFPdfFactoryEngine.state.pages[1]?.blocks[0];
+          if (lrHeader) {
+            lrHeader.data.courseTitle = `${course.title} • ${mod.title}`;
+            lrHeader.data.lessonTitle = lrLesson.title || '1. Listen & Read (LR)';
+          }
+
+          // Se tiver processedContentHtml ou rawScript, extrai sentenças
+          const lrHtml = lrLesson.processedContentHtml || lrLesson.rawScript || "";
+          if (lrHtml) {
+            const parser = document.createElement("div");
+            parser.innerHTML = lrHtml;
+            const paragraphs = Array.from(parser.querySelectorAll("p")).map(p => p.innerText.trim()).filter(Boolean);
+            if (paragraphs.length > 0) {
+              const lrBlock = window.AEFPdfFactoryEngine.state.pages[1]?.blocks.find(b => b.type === 'listen_read');
+              if (lrBlock) {
+                lrBlock.data.sentences = paragraphs.map(p => ({
+                  speaker: 'Leo',
+                  en: p,
+                  pt: ''
+                }));
+              }
+            }
+          }
+
+          // Sacada de Ouro do LR
+          if (lrLesson.goldenTip) {
+            const goldBlock = window.AEFPdfFactoryEngine.state.pages[1]?.blocks.find(b => b.type === 'golden_tip');
+            if (goldBlock) goldBlock.data.content = lrLesson.goldenTip;
+          }
+        }
+
+        // P3: Vocabulary Session
+        if (vocLesson) {
+          const vocHeader = window.AEFPdfFactoryEngine.state.pages[2]?.blocks[0];
+          if (vocHeader) {
+            vocHeader.data.courseTitle = `${course.title} • ${mod.title}`;
+            vocHeader.data.lessonTitle = vocLesson.title || '2. Vocabulary Session (VOC)';
+          }
+          if (vocLesson.goldenTip) {
+            const goldBlock = window.AEFPdfFactoryEngine.state.pages[2]?.blocks.find(b => b.type === 'golden_tip');
+            if (goldBlock) goldBlock.data.content = vocLesson.goldenTip;
+          }
+        }
+
+        // P5: Listen & Answer
+        if (laLesson) {
+          const laHeader = window.AEFPdfFactoryEngine.state.pages[4]?.blocks[0];
+          if (laHeader) {
+            laHeader.data.courseTitle = `${course.title} • ${mod.title}`;
+            laHeader.data.lessonTitle = laLesson.title || '3. Listen & Answer (LA)';
+          }
+          // Extrai perguntas do HTML se houver
+          const laHtml = laLesson.processedContentHtml || "";
+          if (laHtml) {
+            const parser = document.createElement("div");
+            parser.innerHTML = laHtml;
+            const qDivs = Array.from(parser.querySelectorAll("div.p-3")).map(d => d.innerText.trim()).filter(Boolean);
+            if (qDivs.length > 0) {
+              const laBlock = window.AEFPdfFactoryEngine.state.pages[4]?.blocks.find(b => b.type === 'listen_answer');
+              if (laBlock) {
+                laBlock.data.items = qDivs.map((q, idx) => ({
+                  q: q.replace(/^\d+[\.\-\s]+/, ''),
+                  a: ''
+                }));
+              }
+            }
+          }
+        }
+
+        // Atualiza campos de cabeçalho do documento
+        document.getElementById("docTitleInput").value = window.AEFPdfFactoryEngine.state.title;
+        document.getElementById("docSubtitleInput").value = window.AEFPdfFactoryEngine.state.subtitle;
+
+        activePageIndex = 0;
+        window.AEFPdfFactoryEngine.notify();
+        showToast(`🎉 "${mod.title}" carregado no estúdio em 8 páginas canônicas!`);
+      } else {
+        // CURSO RÁPIDO / GERAL (QuickStart, AEF Experience, First Steps, etc.)
+        window.AEFPdfFactoryEngine.loadTemplate('quick_course');
+        window.AEFPdfFactoryEngine.state.title = `${mod.title} • Guia Prático`;
+        window.AEFPdfFactoryEngine.state.subtitle = course.title;
+        window.AEFPdfFactoryEngine.state.courseId = courseId;
+        window.AEFPdfFactoryEngine.state.moduleId = moduleId;
+
+        const firstLesson = lessons[0];
+        if (firstLesson) {
+          const banner = window.AEFPdfFactoryEngine.state.pages[0]?.blocks[0];
+          if (banner) {
+            banner.data.courseTitle = course.title;
+            banner.data.lessonTitle = firstLesson.title || mod.title;
+          }
+
+          if (firstLesson.goldenTip) {
+            const gold = window.AEFPdfFactoryEngine.state.pages[0]?.blocks.find(b => b.type === 'golden_tip');
+            if (gold) gold.data.content = firstLesson.goldenTip;
+          }
+        }
+
+        document.getElementById("docTitleInput").value = window.AEFPdfFactoryEngine.state.title;
+        document.getElementById("docSubtitleInput").value = window.AEFPdfFactoryEngine.state.subtitle;
+
+        activePageIndex = 0;
+        window.AEFPdfFactoryEngine.notify();
+        showToast(`📘 "${mod.title}" (${course.title}) carregado no estúdio!`);
+      }
+    }
+
+    // ----------------------------------------------------
+    // PALETTES & SETTINGS CONTROLLER
+    // ----------------------------------------------------
+    function initPalettesUI() {
+      const container = document.getElementById("paletteButtonsContainer");
+      if (!container) return;
+      const pals = window.AEFPdfFactoryEngine.palettes;
+      container.innerHTML = Object.keys(pals).map(key => {
+        const p = pals[key];
+        return `
+          <button type="button" onclick="selectPalette('${p.id}')" class="p-2 rounded-lg bg-[#162340] hover:scale-102 border border-[#1E3056] text-left transition flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full shrink-0 shadow-sm" style="background:${p.primary}"></span>
+            <span class="text-[11px] font-bold text-slate-200 truncate">${p.name.split(' ')[0]}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectPalette(paletteId) {
+      window.AEFPdfFactoryEngine.setPalette(paletteId);
+      const pal = window.AEFPdfFactoryEngine.getPalette();
+      document.getElementById("activePaletteLabel").innerHTML = `
+        <span class="w-2.5 h-2.5 rounded-full" style="background:${pal.primary}"></span>
+        <span>${pal.name.split(' ')[0]}</span>
+      `;
+      showToast(`Paleta aplicada: ${pal.name}`);
+    }
+
+    function setCustomColor(hex) {
+      document.getElementById("customHexColor").value = hex;
+      document.getElementById("customHexText").value = hex;
+      window.AEFPdfFactoryEngine.setPalette('custom', hex);
+    }
+
+    function setFontSize(size) {
+      window.AEFPdfFactoryEngine.state.fontSize = size;
+      document.querySelectorAll(".fontSizeBtn").forEach(btn => {
+        btn.className = btn.innerText === size 
+          ? "fontSizeBtn py-1 rounded text-xs font-black bg-amber-500 text-slate-950 border border-amber-400"
+          : "fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]";
+      });
+      window.AEFPdfFactoryEngine.notify();
+    }
+
+    function initDocInputs() {
+      document.getElementById("docTitleInput").value = window.AEFPdfFactoryEngine.state.title;
+      document.getElementById("docSubtitleInput").value = window.AEFPdfFactoryEngine.state.subtitle;
+    }
+
+    function updateDocMeta() {
+      window.AEFPdfFactoryEngine.state.title = document.getElementById("docTitleInput").value;
+      window.AEFPdfFactoryEngine.state.subtitle = document.getElementById("docSubtitleInput").value;
+      window.AEFPdfFactoryEngine.notify();
+    }
+
+    function switchLeftTab(tab) {
+      document.getElementById("leftTabIngest").classList.toggle("hidden", tab !== 'ingest');
+      document.getElementById("leftTabVault").classList.toggle("hidden", tab !== 'vault');
+      document.getElementById("leftTabSettings").classList.toggle("hidden", tab !== 'settings');
+
+      document.getElementById("tabBtnIngest").className = tab === 'ingest'
+        ? "flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold bg-amber-500 text-slate-950 transition flex items-center justify-center gap-1"
+        : "flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1";
+
+      document.getElementById("tabBtnVault").className = tab === 'vault'
+        ? "flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold bg-sky-500 text-slate-950 transition flex items-center justify-center gap-1"
+        : "flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1";
+
+      document.getElementById("tabBtnSettings").className = tab === 'settings'
+        ? "flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold bg-amber-500 text-slate-950 transition flex items-center justify-center gap-1"
+        : "flex-1 py-1 px-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1";
+
+      if (tab === 'vault') {
+        loadCloudVaultList();
+      }
+    }
+
+    // ----------------------------------------------------
+    // INGESTION: PDF.JS & SMART PASTE
+    // ----------------------------------------------------
+    async function handleLegacyPdfUpload(file) {
+      if (!file) return;
+      const statusEl = document.getElementById("pdfIngestStatus");
+      statusEl.innerText = "Lendo PDF antigo...";
+      statusEl.className = "inline-block mt-2 text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300";
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = "";
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(" ");
+          fullText += `\n--- PÁGINA ${i} ---\n` + pageText;
+        }
+
+        statusEl.innerText = `✅ Extraídas ${pdf.numPages} páginas com sucesso!`;
+        statusEl.className = "inline-block mt-2 text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300";
+        document.getElementById("rawScriptInput").value = fullText;
+
+        window.AEFPdfFactoryEngine.parseRawTextToBlocks(fullText);
+        showToast(`🎉 PDF Legado "${file.name}" ingerido e reestilizado em ${window.AEFPdfFactoryEngine.state.pages.length} páginas!`);
+      } catch (err) {
+        console.error(err);
+        statusEl.innerText = "❌ Erro ao ler PDF";
+        statusEl.className = "inline-block mt-2 text-[9px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300";
+        alert("Erro ao extrair texto do PDF legado: " + err.message);
+      }
+    }
+
+    function decomposeRawScript() {
+      const text = document.getElementById("rawScriptInput").value;
+      if (!text.trim()) {
+        alert("Cole o texto do roteiro antes de decompor.");
+        return;
+      }
+      window.AEFPdfFactoryEngine.parseRawTextToBlocks(text);
+      showToast("✨ Roteiro decomposto em blocos pedagógicos com sucesso!");
+    }
+
+    function loadCanonicalTemplate(type) {
+      window.AEFPdfFactoryEngine.loadTemplate(type);
+      activePageIndex = 0;
+      showToast(`Modelo carregado: ${type === 'magic_story' ? 'Magic Story (8 Págs)' : 'Curso Rápido (2 Págs)'}`);
+    }
+
+    function handleTemplateChange(type) {
+      if (type !== 'custom') {
+        loadCanonicalTemplate(type);
+      }
+    }
+
+    // ----------------------------------------------------
+    // CLOUD VAULT CONTROLLER
+    // ----------------------------------------------------
+    function openCloudSaveModal() {
+      const title = window.AEFPdfFactoryEngine.state.title || "Apostila";
+      document.getElementById("vaultProjectNameInput").value = title;
+      document.getElementById("vaultProjectStatusSelect").value = window.AEFPdfFactoryEngine.state.status || 'testing';
+      document.getElementById("cloudSaveModal").classList.remove("hidden");
+    }
+
+    function closeCloudSaveModal() {
+      document.getElementById("cloudSaveModal").classList.add("hidden");
+    }
+
+    async function confirmSaveToCloudVault() {
+      const name = document.getElementById("vaultProjectNameInput").value.trim() || "Apostila";
+      const status = document.getElementById("vaultProjectStatusSelect").value;
+      const notes = document.getElementById("vaultProjectNotesInput").value.trim();
+
+      await window.AEFPdfFactoryEngine.saveToCloudVault(name, status, notes);
+      closeCloudSaveModal();
+      showToast(`☁️ Projeto "${name}" salvo com sucesso no Depósito Cloud!`);
+      loadCloudVaultList();
+    }
+
+    async function loadCloudVaultList() {
+      const container = document.getElementById("cloudVaultListContainer");
+      if (!container) return;
+
+      container.innerHTML = `<p class="text-slate-500 italic text-[11px] text-center py-4">Buscando receitas na nuvem...</p>`;
+
+      try {
+        allVaultRecipes = await window.AEFPdfFactoryEngine.fetchCloudVaultRecipes();
+        renderVaultRecipes();
+      } catch (err) {
+        container.innerHTML = `<p class="text-rose-400 text-[11px] text-center py-4">Erro ao buscar projetos: ${err.message}</p>`;
+      }
+    }
+
+    function refreshCloudVaultList() {
+      loadCloudVaultList();
+      showToast("Lista da nuvem atualizada.");
+    }
+
+    function filterVault(filter) {
+      currentVaultFilter = filter;
+      document.querySelectorAll(".vaultFilterBtn").forEach(btn => {
+        const matches = (filter === 'all' && btn.innerText === 'Todos') ||
+                        (filter === 'testing' && btn.innerText.includes('Testes')) ||
+                        (filter === 'approved' && btn.innerText.includes('Aprovados')) ||
+                        (filter === 'canonical' && btn.innerText.includes('Oficiais'));
+        btn.className = matches
+          ? "vaultFilterBtn px-2 py-0.5 rounded bg-sky-500 text-slate-950 font-bold"
+          : "vaultFilterBtn px-2 py-0.5 rounded bg-[#162340] text-slate-400 font-bold hover:text-white";
+      });
+      renderVaultRecipes();
+    }
+
+    function renderVaultRecipes() {
+      const container = document.getElementById("cloudVaultListContainer");
+      if (!container) return;
+
+      let filtered = allVaultRecipes;
+      if (currentVaultFilter !== 'all') {
+        filtered = allVaultRecipes.filter(r => (r.status || 'testing') === currentVaultFilter);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center border border-dashed border-[#1E3056] rounded-xl text-slate-500 space-y-1">
+            <i data-lucide="cloud-off" class="w-6 h-6 mx-auto text-slate-600"></i>
+            <p class="text-[11px]">Nenhum projeto encontrado nesta categoria.</p>
+            <p class="text-[9px]">Clique em "Salvar na Nuvem" para arquivar este projeto.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(recipe => {
+        const pal = window.AEFPdfFactoryEngine.palettes[recipe.paletteId] || { primary: '#C68A36', name: 'Âmbar' };
+        const statusBadge = recipe.status === 'canonical'
+          ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">🏛️ Oficial</span>'
+          : (recipe.status === 'approved'
+            ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">🌟 Aprovado</span>'
+            : '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40">🧪 Teste</span>');
+
+        const dateStr = recipe.updatedAt ? new Date(recipe.updatedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'Recente';
+
+        return `
+          <div class="bg-[#111C33] border border-[#1E3056] hover:border-sky-500/50 rounded-xl p-2.5 space-y-2 transition group shadow-sm">
+            <div class="flex items-start justify-between gap-1.5">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${pal.primary}"></span>
+                  <h4 class="text-xs font-bold text-white truncate" title="${recipe.title}">${recipe.title}</h4>
+                </div>
+                <div class="flex items-center gap-1.5 text-[9px] text-slate-400 font-mono">
+                  <span>${recipe.pageCount || (recipe.pages||[]).length} Páginas</span>
+                  <span>•</span>
+                  <span>${dateStr}</span>
+                </div>
+              </div>
+              <div class="shrink-0">
+                ${statusBadge}
+              </div>
+            </div>
+
+            ${recipe.notes ? `<p class="text-[10px] text-slate-300 italic bg-[#0A101F] p-1.5 rounded border border-[#1E3056] line-clamp-1">"${recipe.notes}"</p>` : ''}
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-1 border-t border-[#1E3056] text-[11px]">
+              <button type="button" onclick="openVaultRecipe('${recipe.id}')" class="px-2 py-1 rounded bg-sky-500/20 hover:bg-sky-500 text-sky-300 hover:text-slate-950 font-bold transition flex items-center gap-1">
+                <i data-lucide="folder-open" class="w-3 h-3"></i>
+                <span>Abrir</span>
+              </button>
+
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="duplicateVaultRecipe('${recipe.id}')" class="p-1 text-slate-400 hover:text-white" title="Duplicar">
+                  <i data-lucide="copy" class="w-3 h-3"></i>
+                </button>
+                <button type="button" onclick="deleteVaultRecipe('${recipe.id}')" class="p-1 text-rose-400 hover:text-rose-300" title="Excluir">
+                  <i data-lucide="trash-2" class="w-3 h-3"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function openVaultRecipe(recipeId) {
+      const recipe = allVaultRecipes.find(r => r.id === recipeId);
+      if (recipe) {
+        window.AEFPdfFactoryEngine.loadRecipe(recipe);
+        document.getElementById("docTitleInput").value = recipe.title || '';
+        document.getElementById("docSubtitleInput").value = recipe.subtitle || '';
+        activePageIndex = 0;
+        showToast(`📂 Projeto "${recipe.title}" carregado para reedição!`);
+      }
+    }
+
+    async function duplicateVaultRecipe(recipeId) {
+      const recipe = allVaultRecipes.find(r => r.id === recipeId);
+      if (!recipe) return;
+
+      const clone = JSON.parse(JSON.stringify(recipe));
+      clone.id = `recipe_${Date.now()}`;
+      clone.title = `${recipe.title} (Cópia)`;
+      clone.status = 'testing';
+      clone.updatedAt = new Date().toISOString();
+
+      await window.AEFPdfFactoryEngine.saveToCloudVault(clone.title, 'testing', `Cópia de ${recipe.title}`);
+      loadCloudVaultList();
+      showToast(`📋 Cópia "${clone.title}" criada no Depósito!`);
+    }
+
+    async function deleteVaultRecipe(recipeId) {
+      if (confirm("Deseja realmente excluir este projeto do Depósito Cloud?")) {
+        await window.AEFPdfFactoryEngine.deleteCloudRecipe(recipeId);
+        loadCloudVaultList();
+        showToast("Projeto excluído da nuvem.");
+      }
+    }
+
+    // ----------------------------------------------------
+    // PAGES & BLOCKS UI CONTROLLER
+    // ----------------------------------------------------
+    function renderPagesTabs() {
+      const container = document.getElementById("pagesTabsList");
+      if (!container) return;
+      const pages = window.AEFPdfFactoryEngine.state.pages;
+
+      if (activePageIndex >= pages.length) activePageIndex = Math.max(0, pages.length - 1);
+
+      container.innerHTML = pages.map((p, idx) => {
+        const isActive = idx === activePageIndex;
+        return `
+          <button type="button" onclick="selectActivePage(${idx})" class="px-2.5 py-1 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${isActive ? 'bg-amber-500 text-slate-950 shadow' : 'bg-[#162340] text-slate-400 hover:text-white'}">
+            <span>Pág ${p.number}</span>
+            <span class="text-[9px] opacity-75 font-mono">(${p.blocks.length})</span>
+          </button>
+        `;
+      }).join('');
+
+      document.getElementById("activePageHeader").innerText = `Página ${activePageIndex + 1} de ${pages.length}`;
+      document.getElementById("canvasPageIndicator").innerText = `Páginas: ${pages.length}`;
+    }
+
+    function selectActivePage(idx) {
+      activePageIndex = idx;
+      renderPagesTabs();
+      renderBlocksList();
+      updateDensityMeter();
+    }
+
+    function addNewPage() {
+      const newIdx = window.AEFPdfFactoryEngine.addPage();
+      activePageIndex = newIdx;
+      showToast(`Página ${newIdx + 1} adicionada.`);
+    }
+
+    function deleteActivePage() {
+      if (confirm(`Excluir a Página ${activePageIndex + 1}?`)) {
+        window.AEFPdfFactoryEngine.removePage(activePageIndex);
+        if (activePageIndex > 0) activePageIndex--;
+      }
+    }
+
+    function updateDensityMeter() {
+      const density = window.AEFPdfFactoryEngine.calculatePageDensity(activePageIndex);
+      const evalData = window.AEFPdfFactoryEngine.getDensityEvaluation(density);
+
+      const badge = document.getElementById("densityBadge");
+      const bar = document.getElementById("densityProgressBar");
+      const tip = document.getElementById("densityTip");
+
+      if (badge) {
+        badge.className = `text-[10px] font-mono px-2 py-0.5 rounded ${evalData.badge}`;
+        badge.innerText = `${density}% (${density === 85 ? '⭐ 85% Ideal' : evalData.label})`;
+      }
+
+      if (bar) {
+        bar.style.width = `${Math.min(100, density)}%`;
+        bar.className = `h-full transition-all duration-300 ${density >= 80 && density <= 90 ? 'bg-emerald-500' : (density > 95 ? 'bg-rose-500' : (density > 90 ? 'bg-amber-500' : 'bg-sky-500'))}`;
+      }
+
+      if (tip) tip.innerText = evalData.tip;
+    }
+
+    function renderBlocksList() {
+      const container = document.getElementById("blocksListContainer");
+      if (!container) return;
+
+      const page = window.AEFPdfFactoryEngine.state.pages[activePageIndex];
+      if (!page || !page.blocks || page.blocks.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center border border-dashed border-[#1E3056] rounded-xl text-slate-500 space-y-2">
+            <i data-lucide="layers" class="w-8 h-8 mx-auto text-slate-600"></i>
+            <p class="text-xs">Esta página está vazia.</p>
+            <p class="text-[10px]">Escolha um bloco no menu acima para começar.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        document.getElementById("pageBlocksCount").innerText = "0 blocos";
+        updateDensityMeter();
+        return;
+      }
+
+      document.getElementById("pageBlocksCount").innerText = `${page.blocks.length} bloco${page.blocks.length > 1 ? 's' : ''}`;
+
+      container.innerHTML = page.blocks.map((block, bIdx) => {
+        const def = window.AEFPdfFactoryEngine.blockTypes[block.type] || { name: block.type, icon: 'box' };
+        const isFirst = bIdx === 0;
+        const isLast = bIdx === page.blocks.length - 1;
+
+        return `
+          <div class="bg-[#162340] border border-[#1E3056] hover:border-amber-500/40 rounded-xl p-3 space-y-2 transition group shadow-sm">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400">
+                  <i data-lucide="${def.icon || 'box'}" class="w-3.5 h-3.5"></i>
+                </span>
+                <span class="text-xs font-bold text-white truncate max-w-[170px]">${def.name}</span>
+              </div>
+              
+              <!-- Block Actions -->
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="moveBlock(${bIdx}, 'up')" ${isFirst ? 'disabled class="opacity-20"' : 'class="p-1 hover:text-amber-400 text-slate-400"'} title="Subir">
+                  <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="moveBlock(${bIdx}, 'down')" ${isLast ? 'disabled class="opacity-20"' : 'class="p-1 hover:text-amber-400 text-slate-400"'} title="Descer">
+                  <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="openEditBlockModal('${block.id}')" class="p-1 text-sky-400 hover:text-sky-300 font-bold" title="Editar">
+                  <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="duplicateBlock('${block.id}')" class="p-1 text-slate-400 hover:text-white" title="Duplicar">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" onclick="deleteBlock('${block.id}')" class="p-1 text-rose-400 hover:text-rose-300" title="Excluir">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Snippet -->
+            <div class="text-[10px] text-slate-300 bg-[#0A101F] p-2 rounded border border-[#1E3056] font-mono line-clamp-2 leading-relaxed">
+              ${getBlockPreviewSnippet(block)}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+      updateDensityMeter();
+    }
+
+    function getBlockPreviewSnippet(block) {
+      const d = block.data || {};
+      if (block.type === 'cover') return `Capa: "${d.lessonTitle || ''}" • ${d.courseTitle || ''}`;
+      if (block.type === 'header_banner') return `Banner: "${d.lessonTitle || ''}"`;
+      if (block.type === 'listen_read') return `Sentenças (${(d.sentences||[]).length}): ${(d.sentences||[]).map(s=>s.en).join(' • ')}`;
+      if (block.type === 'vocab_chunks') return `Chunks (${(d.chunks||[]).length}): ${(d.chunks||[]).map(c=>c.en).join(' • ')}`;
+      if (block.type === 'listen_answer') return `Perguntas (${(d.questions||[]).length}): ${(d.questions||[]).join(' • ')}`;
+      if (block.type === 'golden_tip') return `"${d.content || ''}"`;
+      if (block.type === 'explainer') return d.content || 'Conceito didático';
+      return JSON.stringify(d);
+    }
+
+    function handleAddSelectedBlock() {
+      const select = document.getElementById("addBlockSelect");
+      const blockType = select.value;
+      if (!blockType) {
+        alert("Selecione um bloco na lista para adicionar.");
+        return;
+      }
+      window.AEFPdfFactoryEngine.addBlock(activePageIndex, blockType);
+      select.value = "";
+      showToast(`Bloco adicionado à Página ${activePageIndex + 1}.`);
+    }
+
+    function moveBlock(blockIdx, direction) {
+      const page = window.AEFPdfFactoryEngine.state.pages[activePageIndex];
+      const block = page.blocks[blockIdx];
+      if (block) window.AEFPdfFactoryEngine.moveBlock(activePageIndex, block.id, direction);
+    }
+
+    function duplicateBlock(blockId) {
+      window.AEFPdfFactoryEngine.duplicateBlock(activePageIndex, blockId);
+      showToast("Bloco duplicado com sucesso.");
+    }
+
+    function deleteBlock(blockId) {
+      if (confirm("Deseja excluir este bloco?")) {
+        window.AEFPdfFactoryEngine.removeBlock(activePageIndex, blockId);
+      }
+    }
+
+    // ----------------------------------------------------
+    // BLOCK EDIT MODAL (DYNAMIC FORM GENERATOR)
+    // ----------------------------------------------------
+    function openEditBlockModal(blockId) {
+      editingBlockId = blockId;
+      const page = window.AEFPdfFactoryEngine.state.pages[activePageIndex];
+      const block = page.blocks.find(b => b.id === blockId);
+      if (!block) return;
+
+      const def = window.AEFPdfFactoryEngine.blockTypes[block.type] || { name: block.type };
+      document.getElementById("modalBlockTitle").innerText = `Editar: ${def.name}`;
+      
+      const formContainer = document.getElementById("modalBlockFormContainer");
+      const d = block.data || {};
+
+      let formHtml = '';
+
+      if (block.type === 'cover') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Tag Superior</label><input type="text" id="m_tag" value="${d.tag || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Curso</label><input type="text" id="m_course" value="${d.courseTitle || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título da Aula</label><input type="text" id="m_lesson" value="${d.lessonTitle || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-bold"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Marca d'água</label><input type="text" id="m_watermark" value="${d.watermark || '01/02'}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Sinopse Pedagógica</label><textarea id="m_synopsis" rows="3" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white">${d.synopsis || ''}</textarea></div>
+          </div>
+        `;
+      } else if (block.type === 'golden_tip') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Conselho do Professor Leo</label><textarea id="m_content" rows="4" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-serif leading-relaxed">${d.content || ''}</textarea></div>
+          </div>
+        `;
+      } else if (block.type === 'listen_read') {
+        const sentencesStr = (d.sentences || []).map(s => {
+          if (typeof s === 'string') return s;
+          return `${s.speaker ? s.speaker + ': ' : ''}${s.en || ''}`;
+        }).join('\n');
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Instrução / Legenda</label><input type="text" id="m_instruction" value="${d.instruction || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">Texto da História / Sentenças (Texto Livre)</label>
+              <textarea id="m_sentences" rows="8" placeholder="Digite ou cole o texto livremente aqui..." class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-sans text-xs leading-relaxed">${sentencesStr}</textarea>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">✍️ Texto 100% livre: você pode colar parágrafos contínuos, diálogos ou frases linha por linha.</span>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'vocab_chunks') {
+        const chunksStr = (d.chunks || []).map(c => {
+          if (typeof c === 'string') return c;
+          return c.pt ? `${c.en} -> ${c.pt}` : c.en;
+        }).join('\n');
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Instrução / Legenda</label><input type="text" id="m_instruction" value="${d.instruction || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">Lista de Chunks / Vocabulário (Texto Livre)</label>
+              <textarea id="m_chunks" rows="8" placeholder="Cole chunks em inglês, ou use 'chunk -> tradução' se desejar tradução falada" class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-sans text-xs leading-relaxed">${chunksStr}</textarea>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'listen_answer') {
+        const qStr = (d.questions || []).map(q => (typeof q === 'string' ? q : (q.q || ''))).join('\n');
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Instrução / Legenda</label><input type="text" id="m_instruction" value="${d.instruction || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">Perguntas (Texto Livre - 1 por linha)</label>
+              <textarea id="m_questions" rows="8" placeholder="1. Where does she live?\n2. What does she do?" class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-sans text-xs leading-relaxed">${qStr}</textarea>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <input type="checkbox" id="m_showLines" ${d.showLines !== false ? 'checked' : ''} class="w-4 h-4 accent-amber-500 rounded">
+              <label for="m_showLines" class="font-bold text-slate-300 text-xs">Exibir linhas pautadas para caligrafia / anotações do aluno</label>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'qr_code') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Subtítulo / Instrução</label><input type="text" id="m_subtitle" value="${d.subtitle || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">URL Alvo do QR Code (Link do Player ou Aula)</label>
+              <input type="text" id="m_targetUrl" value="${d.targetUrl || 'https://agoraeufalo.com.br/player.html'}" placeholder="https://agoraeufalo.com.br/player.html?course=...&lesson=..." class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-sky-400 font-mono text-[11px]">
+              <span class="text-[10px] text-slate-400 mt-1 block">📱 O QR Code gerado é 100% real e será escaneável pela câmera de qualquer celular.</span>
+            </div>
+          </div>
+        `;
+      } else if (block.type === 'connected_speech') {
+        const tipsStr = (d.tips || []).join('\n');
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Instrução / Legenda</label><input type="text" id="m_instruction" value="${d.instruction || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Texto com Conexões (Texto Livre - Use &lt;span class="linking"&gt;palavra_palavra&lt;/span&gt; se desejar destaque)</label><textarea id="m_content" rows="6" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs leading-relaxed">${d.content || ''}</textarea></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Dicas Fonéticas de Ligação (1 por linha)</label><textarea id="m_tips" rows="3" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs">${tipsStr}</textarea></div>
+          </div>
+        `;
+      } else if (block.type === 'look_retell') {
+        const promptsStr = (d.prompts || []).join('\n');
+        const kwStr = (d.keywords || []).join(', ');
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Instrução / Legenda</label><input type="text" id="m_instruction" value="${d.instruction || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Perguntas-Guia / Prompts (1 por linha)</label><textarea id="m_prompts" rows="6" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs leading-relaxed">${promptsStr}</textarea></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Keywords / Palavras-Chave (separadas por vírgula ou livres)</label><input type="text" id="m_keywords" value="${kwStr}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs"></div>
+          </div>
+        `;
+      } else if (block.type === 'handwriting_lines') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Quantidade de Linhas Pautadas</label><input type="number" id="m_lineCount" value="${d.lineCount || 4}" min="1" max="12" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+          </div>
+        `;
+      } else {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Conteúdo (Texto Livre)</label><textarea id="m_content" rows="8" class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-sans text-xs leading-relaxed">${d.content || ''}</textarea></div>
+          </div>
+        `;
+      }
+
+      formContainer.innerHTML = formHtml;
+      document.getElementById("editBlockModal").classList.remove("hidden");
+    }
+
+    function closeEditBlockModal() {
+      document.getElementById("editBlockModal").classList.add("hidden");
+      editingBlockId = null;
+    }
+
+    function saveBlockModalData() {
+      if (!editingBlockId) return;
+      const page = window.AEFPdfFactoryEngine.state.pages[activePageIndex];
+      const block = page.blocks.find(b => b.id === editingBlockId);
+      if (!block) return;
+
+      const newData = {};
+
+      if (block.type === 'cover') {
+        newData.tag = document.getElementById("m_tag")?.value;
+        newData.courseTitle = document.getElementById("m_course")?.value;
+        newData.lessonTitle = document.getElementById("m_lesson")?.value;
+        newData.watermark = document.getElementById("m_watermark")?.value;
+        newData.synopsis = document.getElementById("m_synopsis")?.value;
+      } else if (block.type === 'golden_tip') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.content = document.getElementById("m_content")?.value;
+      } else if (block.type === 'qr_code') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.subtitle = document.getElementById("m_subtitle")?.value;
+        newData.targetUrl = document.getElementById("m_targetUrl")?.value.trim();
+      } else if (block.type === 'connected_speech') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.instruction = document.getElementById("m_instruction")?.value;
+        newData.content = document.getElementById("m_content")?.value;
+        newData.tips = (document.getElementById("m_tips")?.value || '').split('\n').filter(Boolean);
+      } else if (block.type === 'look_retell') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.instruction = document.getElementById("m_instruction")?.value;
+        newData.prompts = (document.getElementById("m_prompts")?.value || '').split('\n').filter(Boolean);
+        newData.keywords = (document.getElementById("m_keywords")?.value || '').split(',').map(s => s.trim()).filter(Boolean);
+      } else if (block.type === 'handwriting_lines') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.lineCount = parseInt(document.getElementById("m_lineCount")?.value || '4', 10);
+      } else if (block.type === 'listen_read') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.instruction = document.getElementById("m_instruction")?.value;
+        // Salva exatamente como o usuário digitou, sem forçar prefixos
+        const rawText = document.getElementById("m_sentences")?.value || '';
+        newData.sentences = rawText.split('\n').filter(l => l.trim().length > 0).map(l => {
+          // Se tiver speaker explícito "Nome: Texto", preserva; caso contrário, preserva a linha como está
+          if (l.includes(':')) {
+            const p = l.split(':');
+            return { speaker: p[0].trim(), en: p.slice(1).join(':').trim(), pt: '' };
+          }
+          return { speaker: '', en: l.trim(), pt: '' };
+        });
+      } else if (block.type === 'vocab_chunks') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.instruction = document.getElementById("m_instruction")?.value;
+        const rawText = document.getElementById("m_chunks")?.value || '';
+        newData.chunks = rawText.split('\n').filter(l => l.trim().length > 0).map(l => {
+          if (l.includes('->') || l.includes(' - ')) {
+            const p = l.split(/->|-/);
+            return { en: p[0].trim(), pt: (p[1] || '').trim(), soundTag: '' };
+          }
+          return { en: l.trim(), pt: '', soundTag: '' };
+        });
+      } else if (block.type === 'listen_answer') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.instruction = document.getElementById("m_instruction")?.value;
+        newData.questions = (document.getElementById("m_questions")?.value || '').split('\n').filter(Boolean);
+        newData.showLines = document.getElementById("m_showLines")?.checked;
+      } else {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.content = document.getElementById("m_content")?.value;
+      }
+
+      window.AEFPdfFactoryEngine.updateBlockData(activePageIndex, editingBlockId, newData);
+      closeEditBlockModal();
+      showToast("Bloco atualizado com sucesso!");
+    }
+
+    // ----------------------------------------------------
+    // LIVE A4 CANVAS PREVIEW & ZOOM
+    // ----------------------------------------------------
+    function updateCanvasPreview() {
+      const iframe = document.getElementById("pdfCanvasIframe");
+      if (!iframe) return;
+      const html = window.AEFPdfFactoryEngine.generateCompleteHtml(false);
+      iframe.srcdoc = html;
+    }
+
+    function setZoom(zoom) {
+      currentZoom = zoom;
+      const iframe = document.getElementById("pdfCanvasIframe");
+      if (iframe) {
+        iframe.style.transform = `scale(${zoom})`;
+      }
+      document.querySelectorAll(".zoomBtn").forEach(btn => {
+        const text = btn.innerText;
+        btn.className = (text === `${Math.round(zoom * 100)}%`)
+          ? "zoomBtn px-2 py-1 rounded bg-amber-500 text-slate-950 font-black"
+          : "zoomBtn px-2 py-1 rounded text-slate-400 hover:text-white font-bold";
+      });
+    }
+
+    function printPdfDocument() {
+      window.AEFPdfFactoryEngine.print();
+    }
+
+    // ----------------------------------------------------
+    // JSON RECIPE IMPORT / EXPORT
+    // ----------------------------------------------------
+    function exportRecipeJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.AEFPdfFactoryEngine.state, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `AEF_Apostila_Receita_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("📥 Receita JSON da apostila exportada!");
+    }
+
+    async function importRecipeJson(file) {
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const state = JSON.parse(text);
+        if (state && state.pages) {
+          window.AEFPdfFactoryEngine.state = state;
+          window.AEFPdfFactoryEngine.notify();
+          showToast(`📂 Receita "${file.name}" importada com sucesso!`);
+        }
+      } catch (err) {
+        alert("Erro ao importar JSON: " + err.message);
+      }
+    }
+
+    // ----------------------------------------------------
+    // LINK TO COURSE & LESSON MODAL
+    // ----------------------------------------------------
+    function openLinkModal() {
+      const select = document.getElementById("linkCourseSelect");
+      if (!select || !window.AEF_COURSES_DATA) return;
+
+      const courses = window.AEF_COURSES_DATA;
+      select.innerHTML = Object.keys(courses).map(k => `
+        <option value="${k}">${courses[k].title || k}</option>
+      `).join('');
+
+      populateModuleSelect(select.value);
+      document.getElementById("linkCourseModal").classList.remove("hidden");
+    }
+
+    function populateModuleSelect(courseId) {
+      const select = document.getElementById("linkModuleSelect");
+      const course = window.AEF_COURSES_DATA[courseId];
+      if (!select || !course) return;
+
+      select.innerHTML = (course.modules || []).map(m => `
+        <option value="${m.id}">${m.title || m.id}</option>
+      `).join('');
+
+      populateLessonSelect(select.value);
+    }
+
+    function populateLessonSelect(moduleId) {
+      const select = document.getElementById("linkLessonSelect");
+      const courseId = document.getElementById("linkCourseSelect").value;
+      const course = window.AEF_COURSES_DATA[courseId];
+      const mod = (course?.modules || []).find(m => m.id === moduleId);
+      if (!select || !mod) return;
+
+      select.innerHTML = (mod.lessons || []).map(l => `
+        <option value="${l.id}">${l.title || l.id}</option>
+      `).join('');
+
+      updateCanonicalPdfFilename();
+    }
+
+    function updateCanonicalPdfFilename() {
+      const courseId = document.getElementById("linkCourseSelect")?.value || 'curso';
+      const lessonSelect = document.getElementById("linkLessonSelect");
+      const lessonTitle = lessonSelect?.options[lessonSelect.selectedIndex]?.text || 'aula';
+      const cleanSlug = lessonTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      document.getElementById("canonicalPdfFilename").innerText = `Material-PDF/Apostila_${courseId}_${cleanSlug}.pdf`;
+    }
+
+    function closeLinkModal() {
+      document.getElementById("linkCourseModal").classList.add("hidden");
+    }
+
+    function confirmLinkToLesson() {
+      const courseId = document.getElementById("linkCourseSelect").value;
+      const modId = document.getElementById("linkModuleSelect").value;
+      const lesId = document.getElementById("linkLessonSelect").value;
+      const generatedUrl = document.getElementById("canonicalPdfFilename").innerText;
+
+      const course = window.AEF_COURSES_DATA[courseId];
+      const mod = (course?.modules || []).find(m => m.id === modId);
+      const les = (mod?.lessons || []).find(l => l.id === lesId);
+
+      if (les) {
+        les.pdfUrl = generatedUrl;
+        showToast(`✅ Apostila vinculada na aula: ${les.title}`);
+        closeLinkModal();
+      }
+    }
+
+    // ----------------------------------------------------
+    // TOAST NOTIFICATIONS
+    // ----------------------------------------------------
+    function showToast(msg) {
+      const container = document.getElementById("toastContainer");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = "bg-slate-900/95 border border-amber-500/40 text-white px-4 py-2.5 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 backdrop-blur animate-bounce-short";
+      toast.innerHTML = `<span>✨</span> <span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

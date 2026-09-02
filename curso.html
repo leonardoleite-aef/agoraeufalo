@@ -43,8 +43,10 @@
     }
   </script>
 
-  <!-- Lucide Vector Icons CDN -->
+  <!-- Lucide Vector Icons CDN & Cloud SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260902_0140"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
@@ -1951,20 +1953,8 @@
     let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
     let COURSE_DATA = COURSES_REGISTRY["ms-legacy"];
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      if (window.aefPortalAuth) {
-        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
-        if (!authed) return;
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get("id") || urlParams.get("curso") || "ms-legacy";
-      
-      if (COURSES_REGISTRY[courseId]) {
-        COURSE_DATA = COURSES_REGISTRY[courseId];
-      } else {
-        COURSE_DATA = COURSES_REGISTRY["ms-legacy"];
-      }
+    function updateCourseUi() {
+      if (!COURSE_DATA) return;
 
       // Atualiza Link da Sala de Aula no Navbar
       const navClassLink = document.getElementById("navbarClassroomLink");
@@ -1998,6 +1988,35 @@
 
       renderCourseAccordion();
       updateIcons();
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (window.aefPortalAuth) {
+        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
+        if (!authed) return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get("id") || urlParams.get("curso") || "ms-legacy";
+      
+      let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSES_REGISTRY);
+      COURSE_DATA = baseCourses[courseId] || COURSES_REGISTRY[courseId] || baseCourses["ms-legacy"] || COURSES_REGISTRY["ms-legacy"];
+
+      updateCourseUi();
+
+      // Busca Firestore em tempo real
+      try {
+        if (window.aefCloudSync) {
+          await window.aefCloudSync.init();
+          const liveHierarchy = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
+          if (liveHierarchy && liveHierarchy[courseId]) {
+            COURSE_DATA = liveHierarchy[courseId];
+            updateCourseUi();
+          }
+        }
+      } catch (err) {
+        console.warn("⚠️ Live Firestore Sync in curso.html:", err);
+      }
     });
 
     function renderCourseAccordion() {

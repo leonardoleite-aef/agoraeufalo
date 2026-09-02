@@ -1,0 +1,1691 @@
+/**
+ * AgoraEuFalo - PDF Factory Studio Engine & State Manager
+ * Professor Leonardo Leite
+ * 
+ * Comprehensive block-based document engine for:
+ * 1. Legacy PDF Ingestion (PDF.js text extraction + heuristic parsing)
+ * 2. Modular Page & Block Architecture (11 pedagogical block types)
+ * 3. Exact 85% Ideal Density Meter per A4 Page
+ * 4. 6 Official Color Palettes (Amber, Cobalt, Emerald, Ruby, Indigo, Slate, Custom)
+ * 5. 100% Real & Scannable QR Codes for Training Player
+ * 6. Cloud Vault (Firestore `pdf_recipes` & Local Backup Storage)
+ * 7. Instant Print/Export & Course Registry Linking
+ */
+
+(function (window) {
+  'use strict';
+
+  // 1. Official Color Palettes in Stock
+  const PALETTES = {
+    amber: {
+      id: 'amber',
+      name: 'Âmbar Real / Ouro Master',
+      primary: '#C68A36',
+      primaryDark: '#B45309',
+      primaryLight: '#FFFBEB',
+      border: '#FDE68A',
+      badgeBg: '#FEF3C7',
+      badgeText: '#92400E',
+      headerBg: 'linear-gradient(135deg, #C68A36, #0A192F)',
+      dotColor: '#C68A36'
+    },
+    cobalt: {
+      id: 'cobalt',
+      name: 'Azul Cobalto (Fundamentos)',
+      primary: '#1A56DB',
+      primaryDark: '#1E40AF',
+      primaryLight: '#EFF6FF',
+      border: '#BFDBFE',
+      badgeBg: '#DBEAFE',
+      badgeText: '#1E40AF',
+      headerBg: 'linear-gradient(135deg, #1A56DB, #0A192F)',
+      dotColor: '#1A56DB'
+    },
+    emerald: {
+      id: 'emerald',
+      name: 'Verde Esmeralda (Vocabulário)',
+      primary: '#047857',
+      primaryDark: '#065F46',
+      primaryLight: '#ECFDF5',
+      border: '#A7F3D0',
+      badgeBg: '#D1FAE5',
+      badgeText: '#065F46',
+      headerBg: 'linear-gradient(135deg, #047857, #0A192F)',
+      dotColor: '#047857'
+    },
+    ruby: {
+      id: 'ruby',
+      name: 'Rubi Quente / Coral (Speaking)',
+      primary: '#E11D48',
+      primaryDark: '#BE123C',
+      primaryLight: '#FFF1F2',
+      border: '#FECDD3',
+      badgeBg: '#FFE4E6',
+      badgeText: '#9F1239',
+      headerBg: 'linear-gradient(135deg, #E11D48, #0A192F)',
+      dotColor: '#E11D48'
+    },
+    indigo: {
+      id: 'indigo',
+      name: 'Índigo Violeta (Questions)',
+      primary: '#6366F1',
+      primaryDark: '#4338CA',
+      primaryLight: '#EEF2FF',
+      border: '#C7D2FE',
+      badgeBg: '#E0E7FF',
+      badgeText: '#3730A3',
+      headerBg: 'linear-gradient(135deg, #6366F1, #0A192F)',
+      dotColor: '#6366F1'
+    },
+    slate: {
+      id: 'slate',
+      name: 'Deep Slate (Executivo)',
+      primary: '#1E293B',
+      primaryDark: '#0F172A',
+      primaryLight: '#F8FAFC',
+      border: '#E2E8F0',
+      badgeBg: '#F1F5F9',
+      badgeText: '#1E293B',
+      headerBg: 'linear-gradient(135deg, #1E293B, #0A192F)',
+      dotColor: '#475569'
+    }
+  };
+
+  // Block definitions and metadata
+  const BLOCK_TYPES = {
+    cover: {
+      id: 'cover',
+      name: 'Capa Deep Navy (Arquétipo 1)',
+      icon: 'sparkles',
+      category: 'Estrutura',
+      defaultWeight: 100,
+      defaultData: () => ({
+        tag: '✦ AgoraEuFalo • Professor Leonardo Leite',
+        courseTitle: 'English QuickStart • Fundamentos da Fala',
+        moduleTitle: 'Módulo 1 • O Núcleo da Frase',
+        lessonTitle: 'Aula 1.2 • O Rei dos Verbos (To Be)',
+        watermark: '01/02',
+        synopsis: 'Aprenda a dominar o uso natural das estruturas fundamentais e automatize suas respostas até a fala virar reflexo.',
+        stats: 'Duração: 14 min • 12 Chunks Sonoros • Treino Completo LA/LRT',
+        artworkUrl: 'assets/images/cover-default-aef.jpg'
+      })
+    },
+    header_banner: {
+      id: 'header_banner',
+      name: 'Cabeçalho da Lição',
+      icon: 'bookmark',
+      category: 'Estrutura',
+      defaultWeight: 18,
+      defaultData: () => ({
+        tag: '✦ AgoraEuFalo • Professor Leonardo Leite',
+        courseTitle: 'English QuickStart',
+        lessonTitle: 'Aula 1.2 • O Rei dos Verbos'
+      })
+    },
+    listen_read: {
+      id: 'listen_read',
+      name: 'Listen & Read (LR)',
+      icon: 'headphones',
+      category: 'História & Entrada',
+      defaultWeight: 45,
+      defaultData: () => ({
+        title: 'Listen & Read • Imersão Auditiva Real',
+        instruction: 'Observe muito mais PELOS OUVIDOS do que pelos olhos. Sinta a melodia natural e a cadência da frase.',
+        sentences: [
+          { speaker: 'Leo', en: 'Rodrigo was at the office yesterday morning.', pt: '' },
+          { speaker: 'Leo', en: 'He was trying to finish the quarterly report before noon.', pt: '' },
+          { speaker: 'Leo', en: 'Were they ready for the big meeting with the client?', pt: '' },
+          { speaker: 'Leo', en: 'Yes, they were completely prepared and confident.', pt: '' }
+        ]
+      })
+    },
+    vocab_chunks: {
+      id: 'vocab_chunks',
+      name: 'Vocabulary Session & Chunks',
+      icon: 'book-open',
+      category: 'Vocabulário',
+      defaultWeight: 45,
+      defaultData: () => ({
+        title: 'Vocabulary Session • Matriz de Chunks Sonoros',
+        instruction: 'Vocabulário ativo é aquele que sai no piloto automático. Fixe os blocos inteiros com sua tradução falada real.',
+        chunks: [
+          { en: 'I was there yesterday', pt: 'Eu tava lá ontem', soundTag: 'Passado' },
+          { en: 'She was about to leave', pt: 'Ela tava quase saindo', soundTag: 'Conexão' },
+          { en: 'We were talking about you', pt: 'A gente tava falando de você', soundTag: 'Conversa' },
+          { en: 'Were they ready?', pt: 'Eles tavam prontos?', soundTag: 'Pergunta' }
+        ]
+      })
+    },
+    listen_answer: {
+      id: 'listen_answer',
+      name: 'Listen & Answer (LA)',
+      icon: 'zap',
+      category: 'Treino Ativo',
+      defaultWeight: 45,
+      defaultData: () => ({
+        title: 'Listen & Answer • Velocidade de Resposta no Diálogo',
+        instruction: 'Responda curto e rápido no reflexo. Proibido respostas prontas: use o espaço pautado para praticar.',
+        questions: [
+          'Where was Rodrigo yesterday morning?',
+          'What was he trying to finish before noon?',
+          'Were they ready for the client meeting?',
+          'How did they feel about the presentation?'
+        ],
+        showLines: true
+      })
+    },
+    look_retell: {
+      id: 'look_retell',
+      name: 'Look & Retell (LRT)',
+      icon: 'mic',
+      category: 'Treino Ativo',
+      defaultWeight: 40,
+      defaultData: () => ({
+        title: 'Look & Retell + AI Coach • Produção Própria',
+        instruction: 'Reconte a história com o seu inglês de hoje. Use as perguntas-guia e as palavras-chave como mapa mental.',
+        prompts: [
+          'Who was at the office and what was he doing?',
+          'What were they preparing for?',
+          'What was the final outcome?'
+        ],
+        keywords: ['yesterday morning', 'quarterly report', 'client meeting', 'confident']
+      })
+    },
+    listen_ask: {
+      id: 'listen_ask',
+      name: 'Listen & Ask (LASK)',
+      icon: 'help-circle',
+      category: 'Treino Ativo',
+      defaultWeight: 40,
+      defaultData: () => ({
+        title: 'Listen & Ask • Formulação Rápida de Perguntas',
+        instruction: 'Ao ouvir o estímulo afirmativo ou negativo, formule de imediato a pergunta correspondente.',
+        items: [
+          { statement: 'Rodrigo was at the office yesterday.', prompt: 'Pergunte onde ele estava ontem:' },
+          { statement: 'They were preparing the quarterly report.', prompt: 'Pergunte o que eles estavam preparando:' },
+          { statement: 'The meeting was very successful.', prompt: 'Pergunte como foi a reunião:' }
+        ],
+        showLines: true
+      })
+    },
+    connected_speech: {
+      id: 'connected_speech',
+      name: 'Connected Speech & Pronúncia (PRO)',
+      icon: 'music',
+      category: 'Musicalidade',
+      defaultWeight: 40,
+      defaultData: () => ({
+        title: 'Pronunciation & Connected Speech • Ritmo Mecânico',
+        instruction: 'Treine as conexões consoante-vogal em azul cobalto. Fale sem tropeçar até soar natural.',
+        content: 'Rodrigo <span class="linking">was_at</span> the office yesterday morning. He <span class="linking">was_about_to</span> leave when the phone rang.',
+        tips: [
+          'was at ➔ pronuncia-se /wə-zæt/ conectado sem pausa',
+          'about to ➔ o /t/ faz ponte suave com o /t/ seguinte'
+        ]
+      })
+    },
+    golden_tip: {
+      id: 'golden_tip',
+      name: 'Sacada de Ouro do Leo',
+      icon: 'lightbulb',
+      category: 'Pedagógico',
+      defaultWeight: 20,
+      defaultData: () => ({
+        title: 'Sacada de Ouro do Professor Leo',
+        content: 'Não tente traduzir palavra por palavra: was e were são o sentimento da frase! Sinta quem está falando antes de pensar em gramática.'
+      })
+    },
+    explainer: {
+      id: 'explainer',
+      name: 'Conceito Central / Explainer',
+      icon: 'file-text',
+      category: 'Pedagógico',
+      defaultWeight: 25,
+      defaultData: () => ({
+        title: 'Conceito Central da Aula',
+        content: 'O verbo To Be no passado expressa tanto o estado permanente quanto a continuidade de uma ação no momento em que ela acontecia.'
+      })
+    },
+    handwriting_lines: {
+      id: 'handwriting_lines',
+      name: 'Pautas de Caligrafia / Anotações',
+      icon: 'edit-3',
+      category: 'Prática Manual',
+      defaultWeight: 20,
+      defaultData: () => ({
+        title: 'Suas Anotações de Treino Oral & Reflexo',
+        lineCount: 4
+      })
+    },
+    qr_code: {
+      id: 'qr_code',
+      name: 'QR Code Interativo do Player',
+      icon: 'qr-code',
+      category: 'Multimídia',
+      defaultWeight: 15,
+      defaultData: () => ({
+        title: 'Toque o Áudio Desta Aula no Celular',
+        subtitle: 'Aponte a câmera para abrir o Training Player diretamente nesta lição.',
+        targetUrl: 'https://agoraeufalo.com.br/player.html?course=english-quickstart&lesson=eqs12'
+      })
+    }
+  };
+
+  class AEFPdfFactoryEngine {
+    constructor() {
+      this.palettes = PALETTES;
+      this.blockTypes = BLOCK_TYPES;
+      this.IDEAL_DENSITY = 85;
+
+      this.state = {
+        activeRecipeId: null,
+        title: 'Apostila Oficial',
+        subtitle: 'Material Pedagógico de Apoio',
+        courseId: 'english-quickstart',
+        moduleId: 'eqs-m1',
+        lessonId: 'eqs12',
+        paletteId: 'amber',
+        customHex: '#C68A36',
+        fontSize: '15pt',
+        showFooter: true,
+        templateType: 'generic',
+        status: 'testing',
+        pages: [
+          {
+            id: 'page_1',
+            number: 1,
+            blocks: [
+              { id: 'b_header', type: 'header_banner', data: BLOCK_TYPES.header_banner.defaultData() },
+              { id: 'b_explainer', type: 'explainer', data: BLOCK_TYPES.explainer.defaultData() },
+              { id: 'b_chunks', type: 'vocab_chunks', data: BLOCK_TYPES.vocab_chunks.defaultData() },
+              { id: 'b_golden', type: 'golden_tip', data: BLOCK_TYPES.golden_tip.defaultData() }
+            ]
+          },
+          {
+            id: 'page_2',
+            number: 2,
+            blocks: [
+              { id: 'b_la', type: 'listen_answer', data: BLOCK_TYPES.listen_answer.defaultData() },
+              { id: 'b_lines', type: 'handwriting_lines', data: BLOCK_TYPES.handwriting_lines.defaultData() },
+              { id: 'b_qr', type: 'qr_code', data: BLOCK_TYPES.qr_code.defaultData() }
+            ]
+          }
+        ]
+      };
+
+      this.listeners = [];
+    }
+
+    subscribe(callback) {
+      this.listeners.push(callback);
+    }
+
+    notify() {
+      this.listeners.forEach(cb => cb(this.state));
+    }
+
+    // ==========================================
+    // PALETTE RESOLVER
+    // ==========================================
+    getPalette() {
+      if (this.state.paletteId === 'custom') {
+        const hex = this.state.customHex || '#C68A36';
+        return {
+          id: 'custom',
+          name: 'Customizada',
+          primary: hex,
+          primaryDark: hex,
+          primaryLight: '#FAF8F5',
+          border: '#EAE5DC',
+          badgeBg: '#F3EFEA',
+          badgeText: '#1E293B',
+          headerBg: `linear-gradient(135deg, ${hex}, #0A192F)`,
+          dotColor: hex
+        };
+      }
+      return this.palettes[this.state.paletteId] || this.palettes.amber;
+    }
+
+    setPalette(paletteId, customHex = null) {
+      this.state.paletteId = paletteId;
+      if (customHex) this.state.customHex = customHex;
+      this.notify();
+    }
+
+    // ==========================================
+    // DENSITY CALCULATOR (TARGET: 85%)
+    // ==========================================
+    calculatePageDensity(pageIndex) {
+      const page = this.state.pages[pageIndex];
+      if (!page || !page.blocks || page.blocks.length === 0) return 0;
+
+      let totalWeight = 0;
+      page.blocks.forEach(block => {
+        const def = this.blockTypes[block.type];
+        if (!def) return;
+
+        let weight = def.defaultWeight;
+
+        if (block.type === 'listen_read') {
+          const sentences = block.data.sentences || [];
+          weight = 15 + sentences.length * 8;
+        } else if (block.type === 'vocab_chunks') {
+          const chunks = block.data.chunks || [];
+          weight = 15 + chunks.length * 7;
+        } else if (block.type === 'listen_answer') {
+          const questions = block.data.questions || [];
+          weight = 15 + questions.length * (block.data.showLines ? 12 : 6);
+        } else if (block.type === 'listen_ask') {
+          const items = block.data.items || [];
+          weight = 15 + items.length * (block.data.showLines ? 14 : 7);
+        } else if (block.type === 'handwriting_lines') {
+          weight = 8 + (block.data.lineCount || 4) * 4;
+        } else if (block.type === 'explainer') {
+          const text = block.data.content || '';
+          weight = 12 + Math.min(40, Math.floor(text.length / 50) * 4);
+        }
+
+        totalWeight += weight;
+      });
+
+      const fontMultiplier = this.state.fontSize === '17pt' ? 1.15 : (this.state.fontSize === '16pt' ? 1.08 : 1.0);
+      const density = Math.round(totalWeight * fontMultiplier);
+      return Math.min(130, density);
+    }
+
+    getDensityEvaluation(density) {
+      if (density >= 80 && density <= 90) {
+        return {
+          status: 'ideal',
+          label: 'Densidade Ideal (85%)',
+          color: 'text-emerald-400',
+          bg: 'bg-emerald-500/20 border-emerald-500/40',
+          badge: 'bg-emerald-500 text-slate-950 font-black',
+          icon: 'check-circle-2',
+          tip: 'Distribuição visual e pedagógica perfeita.'
+        };
+      } else if (density > 90 && density <= 98) {
+        return {
+          status: 'high',
+          label: 'Preenchimento Alto',
+          color: 'text-amber-400',
+          bg: 'bg-amber-500/20 border-amber-500/40',
+          badge: 'bg-amber-500 text-slate-950 font-bold',
+          icon: 'alert-triangle',
+          tip: 'Muito próximo do limite. Verifique se não haverá quebra de página.'
+        };
+      } else if (density > 98) {
+        return {
+          status: 'overflow',
+          label: 'Risco de Transbordamento',
+          color: 'text-rose-400',
+          bg: 'bg-rose-500/20 border-rose-500/40',
+          badge: 'bg-rose-500 text-white font-bold',
+          icon: 'alert-octagon',
+          tip: 'Atenção: o conteúdo provavelmente vai vazar para a próxima folha. Mova um bloco para a página seguinte.'
+        };
+      } else if (density >= 65 && density < 80) {
+        return {
+          status: 'moderate',
+          label: 'Preenchimento Médio',
+          color: 'text-sky-400',
+          bg: 'bg-sky-500/20 border-sky-500/40',
+          badge: 'bg-sky-500 text-slate-950 font-bold',
+          icon: 'info',
+          tip: 'Abaixo da meta de 85%. Sugestão: adicione mais chunks, exercícios ou aumente a fonte.'
+        };
+      } else {
+        return {
+          status: 'low',
+          label: 'Preenchimento Baixo (<65%)',
+          color: 'text-slate-400',
+          bg: 'bg-slate-500/20 border-slate-500/40',
+          badge: 'bg-slate-500 text-white font-bold',
+          icon: 'minimize-2',
+          tip: 'Página quase vazia. Adicione blocos para atingir mais de 70-85% de ocupação útil.'
+        };
+      }
+    }
+
+    // ==========================================
+    // PAGE & BLOCK OPERATIONS
+    // ==========================================
+    addPage() {
+      const newPageNum = this.state.pages.length + 1;
+      this.state.pages.push({
+        id: `page_${Date.now()}`,
+        number: newPageNum,
+        blocks: []
+      });
+      this.renumberPages();
+      this.notify();
+      return this.state.pages.length - 1;
+    }
+
+    removePage(pageIndex) {
+      if (this.state.pages.length <= 1) {
+        alert("A apostila precisa ter pelo menos 1 página.");
+        return;
+      }
+      this.state.pages.splice(pageIndex, 1);
+      this.renumberPages();
+      this.notify();
+    }
+
+    renumberPages() {
+      this.state.pages.forEach((p, idx) => {
+        p.number = idx + 1;
+      });
+    }
+
+    addBlock(pageIndex, blockType) {
+      const page = this.state.pages[pageIndex];
+      if (!page) return;
+
+      const def = this.blockTypes[blockType];
+      if (!def) return;
+
+      const newBlock = {
+        id: `block_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+        type: blockType,
+        data: def.defaultData()
+      };
+
+      page.blocks.push(newBlock);
+      this.notify();
+      return newBlock;
+    }
+
+    updateBlockData(pageIndex, blockId, newData) {
+      const page = this.state.pages[pageIndex];
+      if (!page) return;
+      const block = page.blocks.find(b => b.id === blockId);
+      if (block) {
+        block.data = { ...block.data, ...newData };
+        this.notify();
+      }
+    }
+
+    removeBlock(pageIndex, blockId) {
+      const page = this.state.pages[pageIndex];
+      if (!page) return;
+      page.blocks = page.blocks.filter(b => b.id !== blockId);
+      this.notify();
+    }
+
+    moveBlock(pageIndex, blockId, direction) {
+      const page = this.state.pages[pageIndex];
+      if (!page) return;
+      const idx = page.blocks.findIndex(b => b.id === blockId);
+      if (idx === -1) return;
+
+      if (direction === 'up' && idx > 0) {
+        const temp = page.blocks[idx - 1];
+        page.blocks[idx - 1] = page.blocks[idx];
+        page.blocks[idx] = temp;
+      } else if (direction === 'down' && idx < page.blocks.length - 1) {
+        const temp = page.blocks[idx + 1];
+        page.blocks[idx + 1] = page.blocks[idx];
+        page.blocks[idx] = temp;
+      }
+      this.notify();
+    }
+
+    moveBlockToPage(fromPageIndex, blockId, toPageIndex) {
+      const fromPage = this.state.pages[fromPageIndex];
+      const toPage = this.state.pages[toPageIndex];
+      if (!fromPage || !toPage) return;
+
+      const idx = fromPage.blocks.findIndex(b => b.id === blockId);
+      if (idx === -1) return;
+
+      const [block] = fromPage.blocks.splice(idx, 1);
+      toPage.blocks.push(block);
+      this.notify();
+    }
+
+    duplicateBlock(pageIndex, blockId) {
+      const page = this.state.pages[pageIndex];
+      if (!page) return;
+      const block = page.blocks.find(b => b.id === blockId);
+      if (!block) return;
+
+      const clone = {
+        id: `block_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+        type: block.type,
+        data: JSON.parse(JSON.stringify(block.data))
+      };
+
+      const idx = page.blocks.findIndex(b => b.id === blockId);
+      page.blocks.splice(idx + 1, 0, clone);
+      this.notify();
+    }
+
+    // ==========================================
+    // CANONICAL PRESETS LOADER
+    // ==========================================
+    loadTemplate(templateId) {
+      if (templateId === 'magic_story') {
+        this.state.templateType = 'magic_story';
+        this.state.paletteId = 'amber';
+        this.state.fontSize = '16pt';
+        this.state.pages = [
+          // P1: Cover Archetype 1
+          {
+            id: 'p1_cover',
+            number: 1,
+            blocks: [{
+              id: 'b_ms_cov',
+              type: 'cover',
+              data: {
+                tag: '✦ MAGIC STORIES • SÉRIE OFICIAL 2026',
+                courseTitle: 'Magic Story 01',
+                moduleTitle: 'Fundamentos de Conversação Real',
+                lessonTitle: 'Grazi Wants to Change Her Routine',
+                watermark: 'MS • 01',
+                synopsis: 'Acompanhe a jornada da Grazi em busca de novos hábitos. Treine seu ouvido, ative seus reflexos de resposta e domine as conexões sonoras naturais do inglês cotidiano.',
+                stats: '8 Atividades Canônicas • 14 Chunks Vivos • Treino de Reflexo LA/LRT',
+                artworkUrl: 'assets/images/cover-default-aef.jpg'
+              }
+            }]
+          },
+          // P2: Listen & Read
+          {
+            id: 'p2_lr',
+            number: 2,
+            blocks: [
+              { id: 'b_ms_h2', type: 'header_banner', data: { tag: '✦ Magic Stories • Treino Auditivo', courseTitle: 'MS 01 • Grazi Routine', lessonTitle: '1. Listen & Read (LR)' } },
+              {
+                id: 'b_ms_lr',
+                type: 'listen_read',
+                data: {
+                  title: 'Listen & Read • Imersão Auditiva Real',
+                  instruction: 'Observe muito mais PELOS OUVIDOS do que pelos olhos. Sinta a melodia natural e a cadência da frase.',
+                  sentences: [
+                    { speaker: 'Leo', en: 'Grazi wakes up at six in the morning every single day.', pt: '' },
+                    { speaker: 'Leo', en: 'She works as an executive at a large technology company.', pt: '' },
+                    { speaker: 'Leo', en: 'She is completely exhausted because she works twelve hours a day.', pt: '' },
+                    { speaker: 'Leo', en: 'She wants to change her routine and live a healthier life.', pt: '' }
+                  ]
+                }
+              },
+              {
+                id: 'b_ms_gold2',
+                type: 'golden_tip',
+                data: {
+                  title: 'Sacada de Ouro do Professor Leo',
+                  content: 'Escutar e ler uma única vez não funciona: o cérebro desliga os ouvidos para focar nos olhos. Repita até a escuta virar reflexo!'
+                }
+              }
+            ]
+          },
+          // P3: Vocabulary Session
+          {
+            id: 'p3_voc',
+            number: 3,
+            blocks: [
+              { id: 'b_ms_h3', type: 'header_banner', data: { tag: '✦ Magic Stories • Vocabulário Ativo', courseTitle: 'MS 01 • Grazi Routine', lessonTitle: '2. Vocabulary Session (VOC)' } },
+              {
+                id: 'b_ms_voc',
+                type: 'vocab_chunks',
+                data: {
+                  title: 'Vocabulary Session • Matriz de Chunks Sonoros',
+                  instruction: 'Vocabulário ativo é aquele que sai no piloto automático. Fixe os blocos inteiros com sua tradução falada real.',
+                  chunks: [
+                    { en: 'every single day', pt: 'todo santo dia', soundTag: 'Rotina' },
+                    { en: 'works as an executive', pt: 'trabalha como executiva', soundTag: 'Profissão' },
+                    { en: 'completely exhausted', pt: 'completamente exausta / morta', soundTag: 'Estado' },
+                    { en: 'wants to change her routine', pt: 'quer mudar de rotina', soundTag: 'Desejo' }
+                  ]
+                }
+              }
+            ]
+          },
+          // P4: Listen & Answer
+          {
+            id: 'p4_la',
+            number: 4,
+            blocks: [
+              { id: 'b_ms_h4', type: 'header_banner', data: { tag: '✦ Magic Stories • Reflexo de Fala', courseTitle: 'MS 01 • Grazi Routine', lessonTitle: '3. Listen & Answer (LA)' } },
+              {
+                id: 'b_ms_la',
+                type: 'listen_answer',
+                data: {
+                  title: 'Listen & Answer • Velocidade de Resposta no Diálogo',
+                  instruction: 'Responda no reflexo imediato. Sem respostas prontas para eliminar muletas visuais.',
+                  questions: [
+                    'What time does Grazi wake up every single day?',
+                    'What does she do for a living?',
+                    'Why is she completely exhausted?',
+                    'What does she want to do about her routine?'
+                  ],
+                  showLines: true
+                }
+              }
+            ]
+          },
+          // P5: Look & Retell + Listen & Ask
+          {
+            id: 'p5_lrt_lask',
+            number: 5,
+            blocks: [
+              { id: 'b_ms_h5', type: 'header_banner', data: { tag: '✦ Magic Stories • Fala Ativa & Formulação', courseTitle: 'MS 01 • Grazi Routine', lessonTitle: '4. Look & Retell & 5. Listen & Ask' } },
+              {
+                id: 'b_ms_lrt',
+                type: 'look_retell',
+                data: {
+                  title: 'Look & Retell • Produção Própria',
+                  instruction: 'Reconte com o seu inglês de hoje. Responda oralmente no seu próprio ritmo.',
+                  prompts: ['What time does Grazi wake up?', 'What does she do?', 'Why is she exhausted?'],
+                  keywords: ['six in the morning', 'executive', 'exhausted', 'change routine']
+                }
+              },
+              {
+                id: 'b_ms_lask',
+                type: 'listen_ask',
+                data: {
+                  title: 'Listen & Ask • Desafio de Perguntas',
+                  instruction: 'Ouça o estímulo e formule a pergunta correspondente no reflexo.',
+                  items: [
+                    { statement: 'Grazi wakes up at six in the morning.', prompt: 'Pergunte a que horas ela acorda:' },
+                    { statement: 'She works twelve hours a day.', prompt: 'Pergunte quantas horas ela trabalha:' }
+                  ],
+                  showLines: true
+                }
+              }
+            ]
+          },
+          // P6: Connected Speech & Sacada de Ouro
+          {
+            id: 'p6_pro',
+            number: 6,
+            blocks: [
+              { id: 'b_ms_h6', type: 'header_banner', data: { tag: '✦ Magic Stories • Musicalidade & Fechamento', courseTitle: 'MS 01 • Grazi Routine', lessonTitle: '6. Connected Speech & Sacada Final' } },
+              {
+                id: 'b_ms_conn',
+                type: 'connected_speech',
+                data: {
+                  title: 'Pronunciation & Connected Speech • Ritmo Mecânico',
+                  instruction: 'Treine a musculatura da boca e as ligações sonoras em destaque.',
+                  content: 'Grazi <span class="linking">wakes_up_at</span> six in the morning. She works <span class="linking">as_an</span> executive.',
+                  tips: [
+                    'wakes up at ➔ pronuncia-se /weɪk-sʌ-pæt/ conectado sem trancos',
+                    'as an ➔ o /z/ conecta direto na vogal /æ/'
+                  ]
+                }
+              },
+              {
+                id: 'b_ms_gold_fin',
+                type: 'golden_tip',
+                data: {
+                  title: 'Sacada de Ouro do Professor Leo',
+                  content: 'Inglês não se decora em regras gramaticais: inglês se assimila repetindo a melodia da história até a fala fluir sem tradução mental!'
+                }
+              },
+              { id: 'b_ms_qr', type: 'qr_code', data: { title: 'Toque o Áudio Desta Aula no Celular', subtitle: 'Aponte a câmera para treinar a pronúncia desta lição no Training Player.', targetUrl: 'https://agoraeufalo.com.br/player.html?course=ms-legacy&lesson=ms001' } }
+            ]
+          }
+        ];
+      } else if (templateId === 'quick_course') {
+        this.state.templateType = 'quick_course';
+        this.state.paletteId = 'cobalt';
+        this.state.fontSize = '15pt';
+        this.state.pages = [
+          {
+            id: 'p1_quick',
+            number: 1,
+            blocks: [
+              { id: 'b_q_h', type: 'header_banner', data: { tag: '✦ English QuickStart • Guia de Estrutura', courseTitle: 'English QuickStart', lessonTitle: 'Aula 1.2 • O Rei dos Verbos (To Be)' } },
+              { id: 'b_q_exp', type: 'explainer', data: { title: 'Conceito Central da Aula', content: 'O verbo To Be (am, is, are / was, were) expressa identidade, estado e presença. Em inglês, toda frase precisa obrigatoriamente de um sujeito explícito!' } },
+              { id: 'b_q_voc', type: 'vocab_chunks', data: BLOCK_TYPES.vocab_chunks.defaultData() },
+              { id: 'b_q_gold', type: 'golden_tip', data: BLOCK_TYPES.golden_tip.defaultData() }
+            ]
+          },
+          {
+            id: 'p2_quick',
+            number: 2,
+            blocks: [
+              { id: 'b_q_la', type: 'listen_answer', data: BLOCK_TYPES.listen_answer.defaultData() },
+              { id: 'b_q_lines', type: 'handwriting_lines', data: { title: 'Anotações & Exemplos Pessoais', lineCount: 5 } },
+              { id: 'b_q_qr', type: 'qr_code', data: { title: 'Treine a Fala Ativa no Celular', subtitle: 'Aponte a câmera para abrir o Training Player diretamente nesta lição.', targetUrl: 'https://agoraeufalo.com.br/player.html?course=english-quickstart&lesson=eqs12' } }
+            ]
+          }
+        ];
+      }
+      this.renumberPages();
+      this.notify();
+    }
+
+    // ==========================================
+    // LEGACY PDF & TEXT HEURISTIC PARSER
+    // ==========================================
+    parseRawTextToBlocks(rawText) {
+      const text = (rawText || '').trim();
+      if (!text) return;
+
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+      const parsedBlocks = [];
+
+      let currentMode = 'general';
+      let currentLines = [];
+
+      const flushCurrent = () => {
+        if (currentLines.length === 0) return;
+
+        if (currentMode === 'lr') {
+          const sentences = currentLines.map(l => {
+            if (l.includes(':')) {
+              const parts = l.split(':');
+              return { speaker: parts[0].trim(), en: parts.slice(1).join(':').trim(), pt: '' };
+            }
+            return { speaker: 'Narrador', en: l, pt: '' };
+          });
+          parsedBlocks.push({
+            id: `b_lr_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'listen_read',
+            data: {
+              title: 'Listen & Read • Imersão Auditiva Real',
+              instruction: 'Observe pelos ouvidos. Sinta a melodia natural e a cadência da frase.',
+              sentences
+            }
+          });
+        } else if (currentMode === 'chunks') {
+          const chunks = currentLines.map(l => {
+            if (l.includes('->') || l.includes(' - ') || l.includes('=')) {
+              const parts = l.split(/->|-|=/);
+              return { en: parts[0].trim(), pt: (parts[1] || '').trim(), soundTag: 'Chunk' };
+            }
+            return { en: l, pt: '', soundTag: 'Expressão' };
+          });
+          parsedBlocks.push({
+            id: `b_voc_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'vocab_chunks',
+            data: {
+              title: 'Vocabulary Session • Matriz de Chunks Sonoros',
+              instruction: 'Fixe os blocos inteiros com sua tradução falada real.',
+              chunks
+            }
+          });
+        } else if (currentMode === 'la') {
+          parsedBlocks.push({
+            id: `b_la_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'listen_answer',
+            data: {
+              title: 'Listen & Answer • Velocidade de Resposta',
+              instruction: 'Responda no reflexo imediato. Sem respostas prontas.',
+              questions: currentLines.map(l => l.replace(/^[0-9]+[\.\)\-]\s*/, '')),
+              showLines: true
+            }
+          });
+        } else if (currentMode === 'gold') {
+          parsedBlocks.push({
+            id: `b_gold_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'golden_tip',
+            data: {
+              title: 'Sacada de Ouro do Professor Leo',
+              content: currentLines.join(' ')
+            }
+          });
+        } else {
+          parsedBlocks.push({
+            id: `b_exp_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'explainer',
+            data: {
+              title: 'Conceito & Roteiro da Aula',
+              content: currentLines.join('\n\n')
+            }
+          });
+        }
+        currentLines = [];
+      };
+
+      lines.forEach(line => {
+        const lower = line.toLowerCase();
+        if (lower.startsWith('listen & read') || lower.startsWith('história') || lower.startsWith('story:')) {
+          flushCurrent();
+          currentMode = 'lr';
+        } else if (lower.startsWith('vocabulary') || lower.startsWith('chunks:') || lower.startsWith('vocabulário:')) {
+          flushCurrent();
+          currentMode = 'chunks';
+        } else if (lower.startsWith('listen & answer') || lower.startsWith('perguntas:') || lower.startsWith('questions:')) {
+          flushCurrent();
+          currentMode = 'la';
+        } else if (lower.startsWith('sacada de ouro') || lower.startsWith('golden tip')) {
+          flushCurrent();
+          currentMode = 'gold';
+        } else {
+          currentLines.push(line);
+        }
+      });
+      flushCurrent();
+
+      this.distributeBlocksIntoPages(parsedBlocks);
+      this.notify();
+    }
+
+    distributeBlocksIntoPages(blocksList) {
+      const pages = [];
+      let currentPage = {
+        id: `page_1`,
+        number: 1,
+        blocks: [
+          { id: 'b_hdr_auto', type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Apostila Reestilizada', courseTitle: this.state.title, lessonTitle: this.state.subtitle } }
+        ]
+      };
+
+      let currentWeight = 18;
+
+      blocksList.forEach(block => {
+        const def = this.blockTypes[block.type];
+        const weight = def ? def.defaultWeight : 30;
+
+        if (currentWeight + weight > 90) {
+          pages.push(currentPage);
+          currentPage = {
+            id: `page_${pages.length + 1}`,
+            number: pages.length + 1,
+            blocks: [
+              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Continuação', courseTitle: this.state.title, lessonTitle: this.state.subtitle } }
+            ]
+          };
+          currentWeight = 18;
+        }
+
+        currentPage.blocks.push(block);
+        currentWeight += weight;
+      });
+
+      pages.push(currentPage);
+      this.state.pages = pages;
+      this.renumberPages();
+    }
+
+    // ==========================================
+    // CLOUD VAULT: FIRESTORE & LOCALSTORAGE
+    // ==========================================
+    async saveToCloudVault(projectName, status = 'testing', notes = '') {
+      const recipeId = this.state.activeRecipeId || `recipe_${Date.now()}`;
+      const payload = {
+        id: recipeId,
+        title: projectName || this.state.title || 'Apostila Sem Título',
+        subtitle: this.state.subtitle || '',
+        templateType: this.state.templateType || 'generic',
+        paletteId: this.state.paletteId || 'amber',
+        customHex: this.state.customHex || '#C68A36',
+        fontSize: this.state.fontSize || '15pt',
+        showFooter: this.state.showFooter !== false,
+        status: status,
+        notes: notes,
+        pageCount: this.state.pages.length,
+        pages: this.state.pages,
+        updatedAt: new Date().toISOString(),
+        createdAt: this.state.createdAt || new Date().toISOString(),
+        author: 'Professor Leonardo Leite'
+      };
+
+      try {
+        const localVault = JSON.parse(localStorage.getItem('aef_pdf_vault') || '{}');
+        localVault[recipeId] = payload;
+        localStorage.setItem('aef_pdf_vault', JSON.stringify(localVault));
+      } catch (e) {
+        console.warn("Erro ao salvar no LocalStorage:", e);
+      }
+
+      if (window.aefCloudSync) {
+        try {
+          await window.aefCloudSync.init();
+          if (window.aefCloudSync.db) {
+            await window.aefCloudSync.db.collection('pdf_recipes').doc(recipeId).set(payload, { merge: true });
+          }
+        } catch (err) {
+          console.warn("Aviso Firestore Sync:", err);
+        }
+      }
+
+      this.state.activeRecipeId = recipeId;
+      this.state.status = status;
+      this.notify();
+      return payload;
+    }
+
+    async fetchCloudVaultRecipes() {
+      const recipes = [];
+      const seenIds = new Set();
+
+      if (window.aefCloudSync) {
+        try {
+          await window.aefCloudSync.init();
+          if (window.aefCloudSync.db) {
+            const snap = await window.aefCloudSync.db.collection('pdf_recipes').orderBy('updatedAt', 'desc').get();
+            snap.forEach(doc => {
+              const data = doc.data();
+              recipes.push(data);
+              seenIds.add(data.id);
+            });
+          }
+        } catch (err) {
+          console.warn("Aviso ao buscar do Firestore:", err);
+        }
+      }
+
+      try {
+        const localVault = JSON.parse(localStorage.getItem('aef_pdf_vault') || '{}');
+        Object.keys(localVault).forEach(id => {
+          if (!seenIds.has(id)) {
+            recipes.push(localVault[id]);
+          }
+        });
+      } catch (e) {}
+
+      recipes.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+      return recipes;
+    }
+
+    loadRecipe(recipeData) {
+      if (!recipeData || !recipeData.pages) return;
+      this.state = {
+        activeRecipeId: recipeData.id,
+        title: recipeData.title || 'Apostila',
+        subtitle: recipeData.subtitle || '',
+        courseId: recipeData.courseId || 'english-quickstart',
+        moduleId: recipeData.moduleId || 'eqs-m1',
+        lessonId: recipeData.lessonId || 'eqs12',
+        paletteId: recipeData.paletteId || 'amber',
+        customHex: recipeData.customHex || '#C68A36',
+        fontSize: recipeData.fontSize || '15pt',
+        showFooter: recipeData.showFooter !== false,
+        templateType: recipeData.templateType || 'generic',
+        status: recipeData.status || 'testing',
+        pages: JSON.parse(JSON.stringify(recipeData.pages))
+      };
+      this.renumberPages();
+      this.notify();
+    }
+
+    async deleteCloudRecipe(recipeId) {
+      try {
+        const localVault = JSON.parse(localStorage.getItem('aef_pdf_vault') || '{}');
+        delete localVault[recipeId];
+        localStorage.setItem('aef_pdf_vault', JSON.stringify(localVault));
+      } catch (e) {}
+
+      if (window.aefCloudSync) {
+        try {
+          await window.aefCloudSync.init();
+          if (window.aefCloudSync.db) {
+            await window.aefCloudSync.db.collection('pdf_recipes').doc(recipeId).delete();
+          }
+        } catch (err) {
+          console.warn("Erro ao deletar no Firestore:", err);
+        }
+      }
+
+      if (this.state.activeRecipeId === recipeId) {
+        this.state.activeRecipeId = null;
+      }
+      this.notify();
+    }
+
+    // ==========================================
+    // HTML RENDERING ENGINE (A4 PRINT & CANVAS)
+    // ==========================================
+    generateCompleteHtml(forPrint = false) {
+      const pal = this.getPalette();
+      const fontSize = this.state.fontSize || '15pt';
+
+      const renderBlock = (block) => {
+        const d = block.data || {};
+        switch (block.type) {
+          case 'cover':
+            return `
+              <div class="aef-cover-archetype">
+                <div class="cover-watermark">${d.watermark || '01/02'}</div>
+                <div class="cover-tag">${d.tag || '✦ AGORAEUFALO • PROFESSOR LEONARDO LEITE'}</div>
+                <div class="cover-course">${d.courseTitle || ''} • ${d.moduleTitle || ''}</div>
+                <h1 class="cover-lesson-title">${d.lessonTitle || ''}</h1>
+                <div class="cover-card">
+                  <div class="cover-synopsis-label">Sinopse Pedagógica & Treino de Fala:</div>
+                  <div class="cover-synopsis-text">${d.synopsis || ''}</div>
+                  <div class="cover-stats">${d.stats || ''}</div>
+                </div>
+                <div class="cover-footer">AgoraEuFalo Ecossistema Digital • Material Exclusivo para Alunos</div>
+              </div>
+            `;
+
+          case 'header_banner':
+            return `
+              <div class="aef-header-banner" style="background:${pal.headerBg};">
+                <div class="hdr-tag">${d.tag || '✦ AgoraEuFalo • Professor Leonardo Leite'}</div>
+                <div class="hdr-course">${d.courseTitle || ''}</div>
+                <h2 class="hdr-title">${d.lessonTitle || ''}</h2>
+              </div>
+            `;
+
+          case 'listen_read':
+            const sList = (d.sentences || []).map(s => {
+              if (typeof s === 'string') {
+                return `<div class="lr-sentence-row"><span class="lr-en">${s}</span></div>`;
+              }
+              return `
+                <div class="lr-sentence-row">
+                  ${s.speaker ? `<span class="lr-speaker">${s.speaker}:</span>` : ''}
+                  <span class="lr-en">${s.en || ''}</span>
+                </div>
+              `;
+            }).join('');
+            return `
+              <div class="aef-box lr-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>🎧 ${d.title || 'Listen & Read'}</span>
+                </div>
+                ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
+                <div class="lr-content">${sList}</div>
+              </div>
+            `;
+
+          case 'vocab_chunks':
+            const cList = (d.chunks || []).map(c => `
+              <div class="chunk-card">
+                <div class="chunk-en-row">
+                  <span class="chunk-en">${c.en || ''}</span>
+                  ${c.soundTag ? `<span class="chunk-tag" style="background:${pal.badgeBg}; color:${pal.badgeText};">${c.soundTag}</span>` : ''}
+                </div>
+                ${c.pt ? `<div class="chunk-pt">↳ ${c.pt}</div>` : ''}
+              </div>
+            `).join('');
+            return `
+              <div class="aef-box vocab-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>📖 ${d.title || 'Vocabulary Session'}</span>
+                </div>
+                ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
+                <div class="chunks-grid">${cList}</div>
+              </div>
+            `;
+
+          case 'listen_answer':
+            const qList = (d.questions || []).map((q, i) => `
+              <div class="la-question-item">
+                <div class="la-question-text"><span class="q-num">${i + 1}.</span> ${q}</div>
+                ${d.showLines ? `
+                  <div class="handwriting-line" style="border-color:${pal.dotColor};"></div>
+                  <div class="handwriting-line secondary" style="border-color:#EAE5DC;"></div>
+                ` : ''}
+              </div>
+            `).join('');
+            return `
+              <div class="aef-box la-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>⚡ ${d.title || 'Listen & Answer'}</span>
+                </div>
+                ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
+                <div class="la-list">${qList}</div>
+              </div>
+            `;
+
+          case 'look_retell':
+            const pList = (d.prompts || []).map(p => `<li>${p}</li>`).join('');
+            const kwList = (d.keywords || []).map(k => `<span class="kw-badge">${k}</span>`).join('');
+            return `
+              <div class="aef-box lrt-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>🎙️ ${d.title || 'Look & Retell + AI Coach'}</span>
+                </div>
+                ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
+                <ul class="lrt-prompts">${pList}</ul>
+                <div class="lrt-kw-box">
+                  <span class="kw-label">Keywords / Palavras-Chave:</span>
+                  <div class="kw-container">${kwList}</div>
+                </div>
+              </div>
+            `;
+
+          case 'listen_ask':
+            const askList = (d.items || []).map((item, i) => `
+              <div class="lask-item">
+                <div class="lask-statement"><b>${i + 1}. Estímulo:</b> "${item.statement}"</div>
+                <div class="lask-prompt">${item.prompt}</div>
+                ${d.showLines ? `
+                  <div class="handwriting-line" style="border-color:${pal.dotColor};"></div>
+                ` : ''}
+              </div>
+            `).join('');
+            return `
+              <div class="aef-box lask-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>❓ ${d.title || 'Listen & Ask'}</span>
+                </div>
+                ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
+                <div class="lask-list">${askList}</div>
+              </div>
+            `;
+
+          case 'connected_speech':
+            const tList = (d.tips || []).map(t => `<li>${t}</li>`).join('');
+            return `
+              <div class="aef-box conn-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>🎵 ${d.title || 'Connected Speech & Pronúncia'}</span>
+                </div>
+                ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
+                <div class="conn-text-box">${d.content || ''}</div>
+                ${tList ? `<ul class="conn-tips">${tList}</ul>` : ''}
+              </div>
+            `;
+
+          case 'golden_tip':
+            return `
+              <div class="aef-golden-box">
+                <div class="golden-title">💡 ${d.title || 'Sacada de Ouro do Professor Leo'}</div>
+                <div class="golden-content">"${d.content || ''}"</div>
+              </div>
+            `;
+
+          case 'explainer':
+            return `
+              <div class="aef-box explainer-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>✦ ${d.title || 'Conceito Central'}</span>
+                </div>
+                <div class="explainer-content">${d.content || ''}</div>
+              </div>
+            `;
+
+          case 'handwriting_lines':
+            let linesHtml = '';
+            for (let i = 0; i < (d.lineCount || 4); i++) {
+              linesHtml += `<div class="handwriting-line" style="border-color:${pal.dotColor}; height:24px; margin-bottom:8px;"></div>`;
+            }
+            return `
+              <div class="aef-box lines-box" style="border-left-color:${pal.primary};">
+                <div class="box-title" style="color:${pal.primary};">
+                  <span>📝 ${d.title || 'Anotações de Treino Oral'}</span>
+                </div>
+                <div class="lines-container" style="padding-top:10px;">${linesHtml}</div>
+              </div>
+            `;
+
+          case 'qr_code':
+            // 100% Real & Scannable QR Code URL
+            const targetUrl = d.targetUrl || 'https://agoraeufalo.com.br/player.html';
+            const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(targetUrl)}&margin=2&color=0A192F`;
+            
+            return `
+              <div class="aef-qr-box" style="border-color:${pal.border}; background:${pal.primaryLight};">
+                <div class="qr-info">
+                  <div class="qr-title" style="color:${pal.primaryDark};">📱 ${d.title || 'Treino Interativo no Training Player'}</div>
+                  <div class="qr-sub">${d.subtitle || 'Aponte a câmera do celular para ouvir a lição e treinar a fala ativa.'}</div>
+                  <div class="qr-action-row" style="margin-top:6px;">
+                    <a href="${targetUrl}" target="_blank" class="qr-click-btn" style="background:${pal.primary}; color:#FFFFFF; text-decoration:none; display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:6px; font-size:8pt; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 1px 2px rgba(0,0,0,0.1);">
+                      <span>▶ Abrir no Training Player</span>
+                    </a>
+                    <span style="font-size:7.5pt; color:#64748B; font-weight:600; margin-left:6px;">(ou clique para abrir na sua tela)</span>
+                  </div>
+                </div>
+                <div class="qr-img-wrapper" style="background:#FFFFFF; padding:4px; border-radius:8px; border:1.5px solid ${pal.border}; shrink-0;">
+                  <a href="${targetUrl}" target="_blank" title="Clique para abrir no Player">
+                    <img src="${qrImageUrl}" alt="QR Code" width="68" height="68" style="display:block; border-radius:4px;" crossorigin="anonymous">
+                  </a>
+                </div>
+              </div>
+            `;
+
+          default:
+            return '';
+        }
+      };
+
+      const pagesHtml = this.state.pages.map((page, idx) => {
+        const blocksContent = page.blocks.map(renderBlock).join('');
+        return `
+          <div class="aef-a4-page ${forPrint ? 'page-print' : ''}" data-page="${idx + 1}">
+            <div class="a4-inner-content">
+              ${blocksContent}
+            </div>
+            ${this.state.showFooter ? `
+              <div class="a4-running-footer">
+                <span class="f-left">✦ AgoraEuFalo • Professor Leonardo Leite</span>
+                <span class="f-mid">selexenglish@gmail.com</span>
+                <span class="f-right">Página ${page.number} de ${this.state.pages.length}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>${this.state.title} • Apostila Oficial | AgoraEuFalo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm 12mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #0F172A;
+      background: ${forPrint ? '#FFFFFF' : '#0B0F17'};
+      font-size: ${fontSize};
+      line-height: 1.55;
+    }
+
+    /* A4 Page Container */
+    .aef-a4-page {
+      width: 210mm;
+      min-height: 297mm;
+      height: ${forPrint ? '297mm' : 'auto'};
+      background: #FFFFFF;
+      margin: ${forPrint ? '0 auto' : '20px auto'};
+      padding: 14mm 16mm 14mm 16mm;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      break-after: page;
+      box-shadow: ${forPrint ? 'none' : '0 20px 40px rgba(0,0,0,0.5)'};
+      border-radius: ${forPrint ? '0' : '8px'};
+    }
+
+    .a4-inner-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Running Footer */
+    .a4-running-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #E2E8F0;
+      padding-top: 8px;
+      margin-top: 14px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #64748B;
+      page-break-inside: avoid;
+    }
+
+    /* Archetype 1: Deep Navy Cover */
+    .aef-cover-archetype {
+      background: linear-gradient(145deg, #0A192F 0%, #060D17 100%);
+      color: #FFFFFF;
+      border-radius: 18px;
+      padding: 36px 30px;
+      min-height: 255mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(198, 138, 54, 0.4);
+      page-break-inside: avoid;
+    }
+    .cover-watermark {
+      position: absolute;
+      right: -10px;
+      bottom: -20px;
+      font-size: 110pt;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.03);
+      line-height: 1;
+      user-select: none;
+      font-family: 'Playfair Display', serif;
+    }
+    .cover-tag {
+      font-size: 9pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #F59E0B;
+    }
+    .cover-course {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #E2E8F0;
+      margin-top: 6px;
+    }
+    .cover-lesson-title {
+      font-size: 26pt;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.2;
+      margin: 12px 0 24px 0;
+      font-family: 'Playfair Display', serif;
+    }
+    .cover-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      backdrop-blur: 10px;
+    }
+    .cover-synopsis-label {
+      font-size: 9.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #FDE68A;
+      margin-bottom: 8px;
+    }
+    .cover-synopsis-text {
+      font-size: 13pt;
+      line-height: 1.6;
+      color: #F1F5F9;
+      font-weight: 500;
+    }
+    .cover-stats {
+      margin-top: 14px;
+      font-size: 9pt;
+      font-weight: 800;
+      color: #60A5FA;
+      border-top: 1px dashed rgba(255,255,255,0.15);
+      padding-top: 10px;
+    }
+    .cover-footer {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 12px;
+    }
+
+    /* Header Banner */
+    .aef-header-banner {
+      color: #FFFFFF;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 6px;
+      page-break-inside: avoid;
+    }
+    .hdr-tag {
+      font-size: 7.5pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #FDE68A;
+      margin-bottom: 2px;
+    }
+    .hdr-course {
+      font-size: 10pt;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+    .hdr-title {
+      font-size: 15pt;
+      font-weight: 900;
+      margin: 2px 0 0 0;
+      line-height: 1.2;
+    }
+
+    /* Pedagogical Boxes */
+    .aef-box {
+      background: #FAF8F5;
+      border: 1.5px solid #EAE5DC;
+      border-left: 5px solid ${pal.primary};
+      border-radius: 12px;
+      padding: 14px 18px;
+      page-break-inside: avoid;
+    }
+    .box-title {
+      font-size: 10.5pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .box-instruction {
+      font-size: 9.5pt;
+      color: #475569;
+      font-style: italic;
+      margin-bottom: 10px;
+      border-bottom: 1px dashed #E2E8F0;
+      padding-bottom: 6px;
+    }
+
+    /* Listen & Read */
+    .lr-sentence-row {
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .lr-speaker {
+      font-weight: 900;
+      color: ${pal.primaryDark};
+      min-width: 45px;
+    }
+    .lr-en {
+      font-weight: 600;
+      color: #0F172A;
+      font-size: 1.05em;
+    }
+
+    /* Chunks Grid */
+    .chunks-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .chunk-card {
+      background: #FFFFFF;
+      border: 1.2px solid #EAE5DC;
+      border-radius: 9px;
+      padding: 8px 12px;
+    }
+    .chunk-en-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .chunk-en {
+      font-weight: 800;
+      color: #0A192F;
+      font-size: 1.05em;
+    }
+    .chunk-tag {
+      font-size: 7.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+    .chunk-pt {
+      font-size: 9.5pt;
+      color: #047857;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    /* Listen & Answer */
+    .la-question-item {
+      margin-bottom: 12px;
+    }
+    .la-question-text {
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 6px;
+      font-size: 1.02em;
+    }
+    .q-num {
+      color: ${pal.primary};
+      font-weight: 900;
+    }
+    .handwriting-line {
+      border-bottom: 1.5px dashed;
+      height: 18px;
+      margin-bottom: 4px;
+    }
+
+    /* Look & Retell */
+    .lrt-prompts {
+      margin: 0 0 10px 18px;
+      padding: 0;
+      color: #1E293B;
+      font-weight: 600;
+    }
+    .lrt-prompts li { margin-bottom: 4px; }
+    .lrt-kw-box {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .kw-label {
+      font-size: 8pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #64748B;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .kw-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .kw-badge {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 9pt;
+      font-weight: 700;
+    }
+
+    /* Listen & Ask */
+    .lask-item {
+      margin-bottom: 12px;
+    }
+    .lask-statement {
+      font-size: 1.02em;
+      color: #0F172A;
+      margin-bottom: 2px;
+    }
+    .lask-prompt {
+      font-size: 9pt;
+      color: #475569;
+      font-style: italic;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* Connected Speech */
+    .conn-text-box {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 1.08em;
+      line-height: 1.7;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .linking {
+      color: #1A56DB;
+      text-decoration: underline wavy #3B82F6;
+      font-weight: 800;
+    }
+    .conn-tips {
+      margin: 0 0 0 18px;
+      padding: 0;
+      font-size: 9.5pt;
+      color: #047857;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    /* Golden Tip */
+    .aef-golden-box {
+      background: #FFFBEB;
+      border: 2px solid #F59E0B;
+      border-radius: 12px;
+      padding: 14px 18px;
+      page-break-inside: avoid;
+    }
+    .golden-title {
+      font-size: 10pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #B45309;
+      margin-bottom: 4px;
+    }
+    .golden-content {
+      font-size: 1.05em;
+      font-style: italic;
+      color: #78350F;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* QR Code Interactive */
+    .aef-qr-box {
+      border: 1.5px solid;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      page-break-inside: avoid;
+    }
+    .qr-title {
+      font-size: 9.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .qr-sub {
+      font-size: 8.5pt;
+      color: #475569;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  ${pagesHtml}
+</body>
+</html>`;
+    }
+
+    print() {
+      const html = this.generateCompleteHtml(true);
+      const printWindow = window.open('', '_blank', 'width=900,height=1000');
+      if (!printWindow) {
+        alert("Permita popups para abrir a janela de impressão da apostila em PDF.");
+        return;
+      }
+      printWindow.document.open();
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+      }, 600);
+    }
+  }
+
+  // Global Singleton Export
+  window.AEFPdfFactoryEngine = new AEFPdfFactoryEngine();
+})(window);

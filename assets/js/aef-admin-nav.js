@@ -58,6 +58,9 @@
               <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('tts-studio.html')}">
                 <span>🎙️</span> <span>TTS Studio</span>
               </a>
+              <a href="admin-pdf-factory.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-pdf-factory.html')}">
+                <span>📄</span> <span>PDF Factory</span>
+              </a>
               <a href="admin-cursos.html" class="px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 ${active('admin-cursos.html')}">
                 <span>📦</span> <span>Cursos & Módulos</span>
               </a>
@@ -92,6 +95,7 @@
             <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html') ? 'bg-slate-900 text-white font-bold' : 'text-slate-600'}">👥 Alunos</a>
             <a href="admin-ofertas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-ofertas.html')}">🎯 Ofertas</a>
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
+            <a href="admin-pdf-factory.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-pdf-factory.html')}">📄 PDF Factory</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
             <a href="admin-publico.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-publico.html')}">🌐 Sugestões</a>
             <a href="blog-panel.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog-panel.html')}">📝 Blog</a>
