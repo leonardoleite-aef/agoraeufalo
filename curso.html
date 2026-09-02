@@ -307,414 +307,1646 @@
     }
 
     const COURSES_REGISTRY = {
-      "english-quickstart": {
-        id: "english-quickstart",
-        title: "English QuickStart • Fundamentos da Fala",
-        badge: "MÓDULO 1 LIVE",
-        coverImageUrl: "assets/images/cover-english-quickstart.jpg",
-        description: "O acelerador de fundamentos para destravar a escuta e a produção de fala inicial sem bloqueios.",
-        modules: [
+  "english-quickstart": {
+    "id": "english-quickstart",
+    "title": "English QuickStart • Fundamentos da Fala",
+    "badge": "MÓDULO 1 LIVE",
+    "coverImageUrl": "assets/images/cover-english-quickstart.jpg",
+    "description": "O acelerador de fundamentos para destravar a escuta e a produção de fala inicial sem bloqueios.",
+    "modules": [
+      {
+        "id": "eqs-m0",
+        "order": 0,
+        "title": "Comece Aqui",
+        "description": "Assista à aula de introdução para alinhar o método e acelerar seus resultados.",
+        "lessons": [
           {
-            id: "eqs-m0",
-            order: 0,
-            title: "Comece Aqui",
-            description: "Assista à aula de introdução para alinhar o método e acelerar seus resultados.",
-            lessons: [
-              { id: "eqs01", order: 1, title: "Aula 0.1: Como Estudar o QuickStart", duration: "11:49", thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_0_1.jpg" }
-            ]
-          },
-          {
-            id: "eqs-m1",
-            order: 1,
-            title: "Módulo 1: Foundation",
-            description: "Os blocos de construção essenciais da fala em inglês: pronomes sujeito, conjugações básicas do To Be e adjetivos invariáveis.",
-            lessons: [
-              { id: "eqs11", order: 1, title: "Aula 1.1: Os Pronomes Sujeito", duration: "13:39", thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_1.jpg" },
-              { id: "eqs12", order: 2, title: "Aula 1.2: O Rei dos Verbos \"To Be\" (Afirmativa)", duration: "17:02", thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_2.jpg" },
-              { id: "eqs13", order: 3, title: "Aula 1.3: O Rei dos Verbos \"To Be\" (Negativa)", duration: "19:23", thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_3.jpg" },
-              { id: "eqs14", order: 4, title: "Aula 1.4: Adjetivos Essenciais", duration: "13:54", thumbnailUrl: "assets/images/thumbs/eqs/thumb_eqs_1_4.jpg" }
-            ]
+            "id": "eqs01",
+            "order": 1,
+            "title": "Aula 0.1: Como Estudar o QuickStart",
+            "duration": "11:49",
+            "thumbnailUrl": "assets/images/thumbs/eqs/thumb_eqs_0_1.jpg"
           }
         ]
       },
-      "ms-legacy": {
-        id: "ms-legacy",
-        title: "Magic Stories Legacy • O Acervo Clássico",
-        badge: "LEGACY CLUB",
-        coverImageUrl: "assets/images/cover-andre-graziela.jpg",
-        description: "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas diagramadas em PDF.",
-        modules: [
+      {
+        "id": "eqs-m1",
+        "order": 1,
+        "title": "Módulo 1: Foundation",
+        "description": "Os blocos de construção essenciais da fala em inglês: pronomes sujeito, conjugações básicas do To Be e adjetivos invariáveis.",
+        "lessons": [
           {
-            id: "ms001-grazi",
-            order: 1,
-            title: "MS001 - Grazi",
-            description: "História completa de Graziela: rotina em Brasília, paradoxos humanos, vida ao ar livre e reflexo falado.",
-            lessons: [
-              { id: "ms001-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "03:39", thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_lr.jpg" },
-              { id: "ms001-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "09:34", thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_voc.jpg" },
-              { id: "ms001-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "06:37", thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_la.jpg" },
-              { id: "ms001-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "03:24", thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_lrt.jpg" },
-              { id: "ms001-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "06:09", thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_lask.jpg" },
-              { id: "ms001-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "10:52", thumbnailUrl: "assets/images/thumbs/ms001/thumb_ms001_pro.jpg" }
-            ]
+            "id": "eqs11",
+            "order": 1,
+            "title": "Aula 1.1: Os Pronomes Sujeito",
+            "duration": "13:39",
+            "thumbnailUrl": "assets/images/thumbs/eqs/thumb_eqs_1_1.jpg"
           },
           {
-            id: "ms002-tom",
-            order: 2,
-            title: "MS002 - Tom",
-            description: "História completa do Tom: rotina de CEO em Brasília, viagens mensais aos EUA, casamento de 18 anos e Present Perfect contínuo.",
-            lessons: [
-              { id: "ms002-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "04:09", thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_lr.jpg" },
-              { id: "ms002-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "07:43", thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_voc.jpg" },
-              { id: "ms002-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "06:38", thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_la.jpg" },
-              { id: "ms002-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "03:46", thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_lrt.jpg" },
-              { id: "ms002-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "06:13", thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_lask.jpg" },
-              { id: "ms002-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "04:09", thumbnailUrl: "assets/images/thumbs/ms002/thumb_ms002_pro.jpg" }
-            ]
+            "id": "eqs12",
+            "order": 2,
+            "title": "Aula 1.2: O Rei dos Verbos \"To Be\" (Afirmativa)",
+            "duration": "17:02",
+            "thumbnailUrl": "assets/images/thumbs/eqs/thumb_eqs_1_2.jpg"
           },
           {
-            id: "ms003-saturday-morning",
-            order: 3,
-            title: "MS003 - Saturday Morning",
-            description: "A manhã de sábado da Grazi em Brasília: café da manhã em família, estações do ano, adjetivos de clima e a pergunta: Onde está o Tom?",
-            lessons: [
-              { id: "ms003-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "04:14", thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_lr.jpg" },
-              { id: "ms003-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "09:42", thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_voc.jpg" },
-              { id: "ms003-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "05:25", thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_la.jpg" },
-              { id: "ms003-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "02:52", thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_lrt.jpg" },
-              { id: "ms003-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "04:03", thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_lask.jpg" },
-              { id: "ms003-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "01:09", thumbnailUrl: "assets/images/thumbs/ms003/thumb_ms003_pro.jpg" }
-            ]
+            "id": "eqs13",
+            "order": 3,
+            "title": "Aula 1.3: O Rei dos Verbos \"To Be\" (Negativa)",
+            "duration": "19:23",
+            "thumbnailUrl": "assets/images/thumbs/eqs/thumb_eqs_1_3.jpg"
           },
           {
-            id: "ms004-grazi-podcast",
-            order: 4,
-            title: "MS004 - Grazi on the Podcast",
-            description: "Entrevista exclusiva de Graziela no podcast 'The Right Questions about Life' com a anfitriã Chloe.",
-            lessons: [
-              { id: "ms004-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "01:31", thumbnailUrl: "assets/images/thumbs/ms004/thumb_ms004_lr.jpg" },
-              { id: "ms004-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "06:15", thumbnailUrl: "assets/images/thumbs/ms004/thumb_ms004_voc.jpg" },
-              { id: "ms004-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "02:08", thumbnailUrl: "assets/images/thumbs/ms004/thumb_ms004_la.jpg" },
-              { id: "ms004-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "01:31", thumbnailUrl: "assets/images/thumbs/ms004/thumb_ms004_lrt.jpg" },
-              { id: "ms004-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "02:37", thumbnailUrl: "assets/images/thumbs/ms004/thumb_ms004_lask.jpg" },
-              { id: "ms004-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "06:10", thumbnailUrl: "assets/images/thumbs/ms004/thumb_ms004_pro.jpg" }
-            ]
-          },
-          {
-            id: "ms005-sunday-brunch",
-            order: 5,
-            title: "MS005 - Sunday Brunch & The Easter Egg Hunt",
-            description: "O Domingo de Páscoa da família de Grazi e Tom: preparo do brunch na cozinha, receita secreta de brownies e a grande caçada aos ovos no quintal.",
-            lessons: [
-              { id: "ms005-lr-1", order: 1, title: "Aula 01.1: Listen & Read (LR Legacy)", duration: "03:55", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lr_1.jpg?alt=media&v=1788208887745" },
-              { id: "ms005-lr-2", order: 2, title: "Aula 01.2: Listen & Read (LR Extended)", duration: "01:17", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lr_2.jpg?alt=media&v=1788208887746" },
-              { id: "ms005-voc-1", order: 3, title: "Aula 02.1: Vocabulary Master (VOC Legacy)", duration: "07:43", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_voc_1.jpg?alt=media&v=1788208887747" },
-              { id: "ms005-voc-2", order: 4, title: "Aula 02.2: Explainer em Português 🇧🇷", duration: "04:30", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_voc_port_2.jpg?alt=media&v=1788208887748" },
-              { id: "ms005-voc-3", order: 5, title: "Aula 02.3: Deep Dive in English 🇬🇧", duration: "06:05", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_voc_eng_3.jpg?alt=media&v=1788208887748" },
-              { id: "ms005-la-1", order: 6, title: "Aula 03.1: Listen & Answer (LA Legacy)", duration: "05:28", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_la_1.jpg?alt=media&v=1788208887741" },
-              { id: "ms005-la-2", order: 7, title: "Aula 03.2: Listen & Answer (LA Extended)", duration: "03:40", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_la_2.jpg?alt=media&v=1788208887743" },
-              { id: "ms005-lrt-1", order: 8, title: "Aula 04.1: Look & Retell (LRT Legacy)", duration: "03:00", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lrt_1.jpg?alt=media&v=1788208887746" },
-              { id: "ms005-lrt-2", order: 9, title: "Aula 04.2: Look & Retell (LRT Guided)", duration: "06:10", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lrt_2.jpg?alt=media&v=1788208887746" },
-              { id: "ms005-lask-1", order: 10, title: "Aula 05.1: Listen & Ask (LASK Legacy)", duration: "08:45", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lask_1.jpg?alt=media&v=1788208887744" },
-              { id: "ms005-lask-2", order: 11, title: "Aula 05.2: Listen & Ask (LASK Extended)", duration: "05:30", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lask_2.jpg?alt=media&v=1788208887744" },
-              { id: "ms005-pro-1", order: 12, title: "Aula 06: Pronunciation & Connected Speech", duration: "02:44", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_pro_1.jpg?alt=media&v=1788208887747" }
-            ]
-          },
-          {
-            id: "ms006-how-they-met",
-            order: 6,
-            title: "MS006 - How They Met",
-            description: "A história de como Grazi e Tom se conheceram em um bar de conferência: Simple Past, Past Continuous, o timing de 'last night / then' e a pronúncia das terminações -ED.",
-            lessons: [
-              { id: "ms006-lr-1", order: 1, title: "Aula 01.1: Listen & Read (LR Legacy)", duration: "04:54", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_4.jpg?alt=media" },
-              { id: "ms006-lr-2", order: 2, title: "Aula 01.2: Listen & Read (LR Guided)", duration: "01:59", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_5.jpg?alt=media" },
-              { id: "ms006-voc-1", order: 3, title: "Aula 02: Vocabulary Session (VOC)", duration: "09:37", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_voc_7.jpg?alt=media" },
-              { id: "ms006-la-1", order: 4, title: "Aula 03.1: Listen & Answer (LA Legacy)", duration: "06:06", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_la_2.jpg?alt=media" },
-              { id: "ms006-lrt-1", order: 5, title: "Aula 04: Look & Retell (LRT)", duration: "04:06", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_3.jpg?alt=media" },
-              { id: "ms006-lask-1", order: 6, title: "Aula 05: Listen & Ask (LASK)", duration: "07:38", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_la_1.jpg?alt=media" },
-              { id: "ms006-pro-1", order: 7, title: "Aula 06: Pronunciation Practice (PRO)", duration: "05:48", thumbnailUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_pro_6.jpg?alt=media" }
-            ]
-          },
-          {
-            id: "ms007-anna-decision",
-            order: 7,
-            title: "MS007 - Anna's Decision",
-            description: "A encruzilhada de Anna: largar a faculdade no Brasil e recomeçar nos EUA do zero, ou concluir mais 3 anos em Brasília antes de fazer pós-graduação na América.",
-            lessons: [
-              { id: "ms007-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "03:32", thumbnailUrl: "assets/images/thumbs/ms007/thumb_ms007_lr.jpg" },
-              { id: "ms007-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "10:24", thumbnailUrl: "assets/images/thumbs/ms007/thumb_ms007_voc.jpg" },
-              { id: "ms007-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "05:14", thumbnailUrl: "assets/images/thumbs/ms007/thumb_ms007_la.jpg" },
-              { id: "ms007-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "03:32", thumbnailUrl: "assets/images/thumbs/ms007/thumb_ms007_lrt.jpg" },
-              { id: "ms007-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "06:15", thumbnailUrl: "assets/images/thumbs/ms007/thumb_ms007_lask.jpg" },
-              { id: "ms007-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "03:47", thumbnailUrl: "assets/images/thumbs/ms007/thumb_ms007_pro.jpg" }
-            ]
-          },
-          {
-          "id": "ms008-back-in-1999",
-          "order": 8,
-          "title": "MS008 - Back in 1999",
-          "description": "A história do início do namoro de Grazi e Tom nos EUA em 1999, casamento em Cleveland, gravidez e a decisão de morar no Brasil.",
-          "lessons": [
-                    {
-                              "id": "ms008-lr",
-                              "order": 1,
-                              "title": "Aula 01: Listen & Read (LR)",
-                              "duration": "06:10",
-                              "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_lr.jpg"
-                    },
-                    {
-                              "id": "ms008-voc",
-                              "order": 2,
-                              "title": "Aula 02: Vocabulary Session (VOC)",
-                              "duration": "08:53",
-                              "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_voc.jpg"
-                    },
-                    {
-                              "id": "ms008-la",
-                              "order": 3,
-                              "title": "Aula 03: Listen & Answer (LA)",
-                              "duration": "08:22",
-                              "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_la.jpg"
-                    },
-                    {
-                              "id": "ms008-lrt",
-                              "order": 4,
-                              "title": "Aula 04: Look & Retell (LRT)",
-                              "duration": "07:33",
-                              "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_lrt.jpg"
-                    },
-                    {
-                              "id": "ms008-lask",
-                              "order": 5,
-                              "title": "Aula 05: Listen & Ask (LASK)",
-                              "duration": "10:09",
-                              "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_lask.jpg"
-                    },
-                    {
-                              "id": "ms008-pro",
-                              "order": 6,
-                              "title": "Aula 06: Pronunciation & Connected Speech",
-                              "duration": "04:17",
-                              "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_pro.jpg"
-                    }
-          ]
-},
-          {
-            id: "ms009-grammar-practice",
-            order: 9,
-            title: "MS009 - Grammar Practice (The Story in 5 Years)",
-            description: "Projeção da história 5 anos no futuro: domínio de Will, Is going to, Gonna e a musicalidade de planos e previsões.",
-            lessons: [
-              { id: "ms009-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "05:07", thumbnailUrl: "assets/images/thumbs/ms009/thumb_ms009_lr.jpg" },
-              { id: "ms009-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "06:55", thumbnailUrl: "assets/images/thumbs/ms009/thumb_ms009_voc.jpg" },
-              { id: "ms009-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "07:50", thumbnailUrl: "assets/images/thumbs/ms009/thumb_ms009_la.jpg" },
-              { id: "ms009-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "04:54", thumbnailUrl: "assets/images/thumbs/ms009/thumb_ms009_lrt.jpg" },
-              { id: "ms009-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "09:08", thumbnailUrl: "assets/images/thumbs/ms009/thumb_ms009_lask.jpg" },
-              { id: "ms009-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "05:24", thumbnailUrl: "assets/images/thumbs/ms009/thumb_ms009_pro.jpg" }
-            ]
-          },
-          {
-          "id": "ms010-an-english-student",
-          "order": 10,
-          "title": "MS010 - An English Student",
-          "description": "A história de Carlos: apresentação pessoal, carreira, rotina e o plano de aprender inglês para ser promovido e morar temporariamente nos EUA.",
-          "lessons": [
-                    {
-                              "id": "ms010-lr-1",
-                              "order": 1,
-                              "title": "Aula 01.1: Listen & Read (LR Legacy)",
-                              "duration": "38:45",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lr_1.jpg"
-                    },
-                    {
-                              "id": "ms010-lr-2",
-                              "order": 2,
-                              "title": "Aula 01.2: Listen & Read (LR Extended)",
-                              "duration": "04:32",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lr_2.jpg"
-                    },
-                    {
-                              "id": "ms010-voc",
-                              "order": 3,
-                              "title": "Aula 02: Vocabulary Session (VOC)",
-                              "duration": "09:19",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_voc.jpg"
-                    },
-                    {
-                              "id": "ms010-la",
-                              "order": 4,
-                              "title": "Aula 03: Listen & Answer (LA)",
-                              "duration": "05:28",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_la.jpg"
-                    },
-                    {
-                              "id": "ms010-lrt",
-                              "order": 5,
-                              "title": "Aula 04: Look & Retell (LRT)",
-                              "duration": "08:59",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lrt.jpg"
-                    },
-                    {
-                              "id": "ms010-lask",
-                              "order": 6,
-                              "title": "Aula 05: Listen & Ask (LASK)",
-                              "duration": "07:00",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lask.jpg"
-                    },
-                    {
-                              "id": "ms010-pro",
-                              "order": 7,
-                              "title": "Aula 06: Pronunciation & Connected Speech",
-                              "duration": "06:19",
-                              "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_pro.jpg"
-                    }
-          ]
-},
-          {
-            id: "ms011-meet-jeremy",
-            order: 11,
-            title: "MS011 - Meet Jeremy",
-            description: "A vida de Jeremy, um típico adolescente americano de 16 anos em Des Moines WA: família, High School, time de basquete JV e rotina diária.",
-            lessons: [
-              { id: "ms011-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "03:23", thumbnailUrl: "assets/images/thumbs/ms011/thumb_ms011_lr.jpg" },
-              { id: "ms011-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "13:58", thumbnailUrl: "assets/images/thumbs/ms011/thumb_ms011_voc.jpg" },
-              { id: "ms011-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "06:42", thumbnailUrl: "assets/images/thumbs/ms011/thumb_ms011_la.jpg" },
-              { id: "ms011-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "12:43", thumbnailUrl: "assets/images/thumbs/ms011/thumb_ms011_lrt.jpg" },
-              { id: "ms011-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "10:03", thumbnailUrl: "assets/images/thumbs/ms011/thumb_ms011_lask.jpg" },
-              { id: "ms011-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "04:47", thumbnailUrl: "assets/images/thumbs/ms011/thumb_ms011_pro.jpg" }
-            ]
-          },
-          {
-          "id": "ms012-drivers-license",
-          "order": 12,
-          "title": "MS012 - Driver's License",
-          "description": "A conquista da CNH americana por Jeremy aos 16 anos: Driver's Ed, prova de direção, a compra do carro e o adeus definitivo ao ônibus escolar.",
-          "lessons": [
-                    {
-                              "id": "ms012-lr-1",
-                              "order": 1,
-                              "title": "Aula 01.1: Listen & Read (LR Legacy)",
-                              "duration": "28:39",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lr_1.jpg"
-                    },
-                    {
-                              "id": "ms012-lr-2",
-                              "order": 2,
-                              "title": "Aula 01.2: Listen & Read (LR Extended)",
-                              "duration": "02:54",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lr_2.jpg"
-                    },
-                    {
-                              "id": "ms012-voc",
-                              "order": 3,
-                              "title": "Aula 02: Vocabulary Session (VOC)",
-                              "duration": "09:53",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_voc.jpg"
-                    },
-                    {
-                              "id": "ms012-la",
-                              "order": 4,
-                              "title": "Aula 03: Listen & Answer (LA)",
-                              "duration": "03:52",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_la.jpg"
-                    },
-                    {
-                              "id": "ms012-lrt",
-                              "order": 5,
-                              "title": "Aula 04: Look & Retell (LRT)",
-                              "duration": "03:17",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lrt.jpg"
-                    },
-                    {
-                              "id": "ms012-lask",
-                              "order": 6,
-                              "title": "Aula 05: Listen & Ask (LASK)",
-                              "duration": "04:23",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lask.jpg"
-                    },
-                    {
-                              "id": "ms012-pro-1",
-                              "order": 7,
-                              "title": "Aula 06.1: Pronunciation & Connected Speech",
-                              "duration": "03:06",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_pro_1.jpg"
-                    },
-                    {
-                              "id": "ms012-pro-2",
-                              "order": 8,
-                              "title": "Aula 06.2: Pronunciation Deep Dive",
-                              "duration": "06:54",
-                              "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_pro_2.jpg"
-                    }
-          ]
-},
-          {
-            id: "ms013-verb-tense-practice",
-            order: 13,
-            title: "MS013 - Verb Tense Practice (Present Perfect)",
-            description: "Domínio prático de Present Perfect e Present Perfect Continuous com a história de Jeremy: 'has lived for 10 years', 'has been practicing' e perguntas de duração.",
-            lessons: [
-              { id: "ms013-lr", order: 1, title: "Aula 01: Listen & Read (LR)", duration: "03:15", thumbnailUrl: "assets/images/thumbs/ms013/thumb_ms013_lr.jpg" },
-              { id: "ms013-voc", order: 2, title: "Aula 02: Vocabulary Session (VOC)", duration: "13:45", thumbnailUrl: "assets/images/thumbs/ms013/thumb_ms013_voc.jpg" },
-              { id: "ms013-la", order: 3, title: "Aula 03: Listen & Answer (LA)", duration: "08:18", thumbnailUrl: "assets/images/thumbs/ms013/thumb_ms013_la.jpg" },
-              { id: "ms013-lrt", order: 4, title: "Aula 04: Look & Retell (LRT)", duration: "05:47", thumbnailUrl: "assets/images/thumbs/ms013/thumb_ms013_lrt.jpg" },
-              { id: "ms013-lask", order: 5, title: "Aula 05: Listen & Ask (LASK)", duration: "16:40", thumbnailUrl: "assets/images/thumbs/ms013/thumb_ms013_lask.jpg" },
-              { id: "ms013-pro", order: 6, title: "Aula 06: Pronunciation Practice (PRO)", duration: "05:40", thumbnailUrl: "assets/images/thumbs/ms013/thumb_ms013_pro.jpg" }
-            ]
-          },
-          {
-          "id": "ms014-jeremy-goes-to-town",
-          "order": 14,
-          "title": "MS014 - Jeremy Goes to Town",
-          "description": "A noite de Jeremy após comprar sua picape: o jogo de futebol da escola, o encontro com Becky no Red Robin's em Seattle e a divertida confusão das idades (16 vs 21).",
-          "lessons": [
-                    {
-                              "id": "ms014-lr",
-                              "order": 1,
-                              "title": "Aula 01: Listen & Read (LR)",
-                              "duration": "05:14",
-                              "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_lr.jpg"
-                    },
-                    {
-                              "id": "ms014-voc",
-                              "order": 2,
-                              "title": "Aula 02: Vocabulary Session (VOC)",
-                              "duration": "12:36",
-                              "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_voc.jpg"
-                    },
-                    {
-                              "id": "ms014-la",
-                              "order": 3,
-                              "title": "Aula 03: Listen & Answer (LA)",
-                              "duration": "08:42",
-                              "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_la.jpg"
-                    },
-                    {
-                              "id": "ms014-lrt",
-                              "order": 4,
-                              "title": "Aula 04: Look & Retell (LRT)",
-                              "duration": "04:47",
-                              "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_lrt.jpg"
-                    },
-                    {
-                              "id": "ms014-lask",
-                              "order": 5,
-                              "title": "Aula 05: Listen & Ask (LASK)",
-                              "duration": "07:27",
-                              "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_lask.jpg"
-                    },
-                    {
-                              "id": "ms014-pro",
-                              "order": 6,
-                              "title": "Aula 06: Pronunciation & Connected Speech",
-                              "duration": "05:00",
-                              "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_pro.jpg"
-                    }
-          ]
-}
+            "id": "eqs14",
+            "order": 4,
+            "title": "Aula 1.4: Adjetivos Essenciais",
+            "duration": "13:54",
+            "thumbnailUrl": "assets/images/thumbs/eqs/thumb_eqs_1_4.jpg"
+          }
         ]
       }
-    };
+    ]
+  },
+  "ms-legacy": {
+    "id": "ms-legacy",
+    "title": "Magic Stories Legacy • O Acervo Clássico",
+    "badge": "LEGACY CLUB",
+    "coverImageUrl": "assets/images/cover-andre-graziela.jpg",
+    "description": "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas diagramadas em PDF.",
+    "modules": [
+      {
+        "id": "ms001-grazi",
+        "order": 1,
+        "title": "MS001 - Grazi",
+        "description": "História completa de Graziela: rotina em Brasília, paradoxos humanos, vida ao ar livre e reflexo falado.",
+        "lessons": [
+          {
+            "id": "ms001-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "03:39",
+            "thumbnailUrl": "assets/images/thumbs/ms001/thumb_ms001_lr.jpg"
+          },
+          {
+            "id": "ms001-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:34",
+            "thumbnailUrl": "assets/images/thumbs/ms001/thumb_ms001_voc.jpg"
+          },
+          {
+            "id": "ms001-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "06:37",
+            "thumbnailUrl": "assets/images/thumbs/ms001/thumb_ms001_la.jpg"
+          },
+          {
+            "id": "ms001-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "03:24",
+            "thumbnailUrl": "assets/images/thumbs/ms001/thumb_ms001_lrt.jpg"
+          },
+          {
+            "id": "ms001-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "06:09",
+            "thumbnailUrl": "assets/images/thumbs/ms001/thumb_ms001_lask.jpg"
+          },
+          {
+            "id": "ms001-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "10:52",
+            "thumbnailUrl": "assets/images/thumbs/ms001/thumb_ms001_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms002-tom",
+        "order": 2,
+        "title": "MS002 - Tom",
+        "description": "História completa do Tom: rotina de CEO em Brasília, viagens mensais aos EUA, casamento de 18 anos e Present Perfect contínuo.",
+        "lessons": [
+          {
+            "id": "ms002-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "04:09",
+            "thumbnailUrl": "assets/images/thumbs/ms002/thumb_ms002_lr.jpg"
+          },
+          {
+            "id": "ms002-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "07:43",
+            "thumbnailUrl": "assets/images/thumbs/ms002/thumb_ms002_voc.jpg"
+          },
+          {
+            "id": "ms002-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "06:38",
+            "thumbnailUrl": "assets/images/thumbs/ms002/thumb_ms002_la.jpg"
+          },
+          {
+            "id": "ms002-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "03:46",
+            "thumbnailUrl": "assets/images/thumbs/ms002/thumb_ms002_lrt.jpg"
+          },
+          {
+            "id": "ms002-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "06:13",
+            "thumbnailUrl": "assets/images/thumbs/ms002/thumb_ms002_lask.jpg"
+          },
+          {
+            "id": "ms002-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "04:09",
+            "thumbnailUrl": "assets/images/thumbs/ms002/thumb_ms002_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms003-saturday-morning",
+        "order": 3,
+        "title": "MS003 - Saturday Morning",
+        "description": "A manhã de sábado da Grazi em Brasília: café da manhã em família, estações do ano, adjetivos de clima e a pergunta: Onde está o Tom?",
+        "lessons": [
+          {
+            "id": "ms003-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "04:14",
+            "thumbnailUrl": "assets/images/thumbs/ms003/thumb_ms003_lr.jpg"
+          },
+          {
+            "id": "ms003-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:42",
+            "thumbnailUrl": "assets/images/thumbs/ms003/thumb_ms003_voc.jpg"
+          },
+          {
+            "id": "ms003-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "05:25",
+            "thumbnailUrl": "assets/images/thumbs/ms003/thumb_ms003_la.jpg"
+          },
+          {
+            "id": "ms003-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "02:52",
+            "thumbnailUrl": "assets/images/thumbs/ms003/thumb_ms003_lrt.jpg"
+          },
+          {
+            "id": "ms003-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "04:03",
+            "thumbnailUrl": "assets/images/thumbs/ms003/thumb_ms003_lask.jpg"
+          },
+          {
+            "id": "ms003-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "01:09",
+            "thumbnailUrl": "assets/images/thumbs/ms003/thumb_ms003_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms004-grazi-podcast",
+        "order": 4,
+        "title": "MS004 - Grazi on the Podcast",
+        "description": "Entrevista exclusiva de Graziela no podcast 'The Right Questions about Life' com a anfitriã Chloe.",
+        "lessons": [
+          {
+            "id": "ms004-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "01:31",
+            "thumbnailUrl": "assets/images/thumbs/ms004/thumb_ms004_lr.jpg"
+          },
+          {
+            "id": "ms004-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "06:15",
+            "thumbnailUrl": "assets/images/thumbs/ms004/thumb_ms004_voc.jpg"
+          },
+          {
+            "id": "ms004-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "02:08",
+            "thumbnailUrl": "assets/images/thumbs/ms004/thumb_ms004_la.jpg"
+          },
+          {
+            "id": "ms004-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "01:31",
+            "thumbnailUrl": "assets/images/thumbs/ms004/thumb_ms004_lrt.jpg"
+          },
+          {
+            "id": "ms004-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "02:37",
+            "thumbnailUrl": "assets/images/thumbs/ms004/thumb_ms004_lask.jpg"
+          },
+          {
+            "id": "ms004-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "06:10",
+            "thumbnailUrl": "assets/images/thumbs/ms004/thumb_ms004_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms005-sunday-brunch",
+        "order": 5,
+        "title": "MS005 - Sunday Brunch & The Easter Egg Hunt",
+        "description": "O Domingo de Páscoa da família de Grazi e Tom: preparo do brunch na cozinha, receita secreta de brownies e a grande caçada aos ovos no quintal.",
+        "lessons": [
+          {
+            "id": "ms005-lr-1",
+            "order": 1,
+            "title": "Aula 01.1: Listen & Read (LR Legacy)",
+            "duration": "03:55",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lr_1.jpg?alt=media&v=1788208887745"
+          },
+          {
+            "id": "ms005-lr-2",
+            "order": 2,
+            "title": "Aula 01.2: Listen & Read (LR Extended)",
+            "duration": "01:17",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lr_2.jpg?alt=media&v=1788208887746"
+          },
+          {
+            "id": "ms005-voc-1",
+            "order": 3,
+            "title": "Aula 02.1: Vocabulary Master (VOC Legacy)",
+            "duration": "07:43",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_voc_1.jpg?alt=media&v=1788208887747"
+          },
+          {
+            "id": "ms005-voc-2",
+            "order": 4,
+            "title": "Aula 02.2: Explainer em Português 🇧🇷",
+            "duration": "04:30",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_voc_port_2.jpg?alt=media&v=1788208887748"
+          },
+          {
+            "id": "ms005-voc-3",
+            "order": 5,
+            "title": "Aula 02.3: Deep Dive in English 🇬🇧",
+            "duration": "06:05",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_voc_eng_3.jpg?alt=media&v=1788208887748"
+          },
+          {
+            "id": "ms005-la-1",
+            "order": 6,
+            "title": "Aula 03.1: Listen & Answer (LA Legacy)",
+            "duration": "05:28",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_la_1.jpg?alt=media&v=1788208887741"
+          },
+          {
+            "id": "ms005-la-2",
+            "order": 7,
+            "title": "Aula 03.2: Listen & Answer (LA Extended)",
+            "duration": "03:40",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_la_2.jpg?alt=media&v=1788208887743"
+          },
+          {
+            "id": "ms005-lrt-1",
+            "order": 8,
+            "title": "Aula 04.1: Look & Retell (LRT Legacy)",
+            "duration": "03:00",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lrt_1.jpg?alt=media&v=1788208887746"
+          },
+          {
+            "id": "ms005-lrt-2",
+            "order": 9,
+            "title": "Aula 04.2: Look & Retell (LRT Guided)",
+            "duration": "06:10",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lrt_2.jpg?alt=media&v=1788208887746"
+          },
+          {
+            "id": "ms005-lask-1",
+            "order": 10,
+            "title": "Aula 05.1: Listen & Ask (LASK Legacy)",
+            "duration": "08:45",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lask_1.jpg?alt=media&v=1788208887744"
+          },
+          {
+            "id": "ms005-lask-2",
+            "order": 11,
+            "title": "Aula 05.2: Listen & Ask (LASK Extended)",
+            "duration": "05:30",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_lask_2.jpg?alt=media&v=1788208887744"
+          },
+          {
+            "id": "ms005-pro-1",
+            "order": 12,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "02:44",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/thumbs%2Fms005%2Fthumb_ms005_pro_1.jpg?alt=media&v=1788208887747"
+          }
+        ]
+      },
+      {
+        "id": "ms006-how-they-met",
+        "order": 6,
+        "title": "MS006 - How They Met",
+        "description": "A história de como Grazi e Tom se conheceram em um bar de conferência: Simple Past, Past Continuous, o timing de 'last night / then' e a pronúncia das terminações -ED.",
+        "lessons": [
+          {
+            "id": "ms006-lr-1",
+            "order": 1,
+            "title": "Aula 01.1: Listen & Read (LR Legacy)",
+            "duration": "04:54",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_4.jpg?alt=media"
+          },
+          {
+            "id": "ms006-lr-2",
+            "order": 2,
+            "title": "Aula 01.2: Listen & Read (LR Guided)",
+            "duration": "01:59",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_5.jpg?alt=media"
+          },
+          {
+            "id": "ms006-voc-1",
+            "order": 3,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:37",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_voc_7.jpg?alt=media"
+          },
+          {
+            "id": "ms006-la-1",
+            "order": 4,
+            "title": "Aula 03.1: Listen & Answer (LA Legacy)",
+            "duration": "06:06",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_la_2.jpg?alt=media"
+          },
+          {
+            "id": "ms006-lrt-1",
+            "order": 5,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "04:06",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_lr_3.jpg?alt=media"
+          },
+          {
+            "id": "ms006-lask-1",
+            "order": 6,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "07:38",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_la_1.jpg?alt=media"
+          },
+          {
+            "id": "ms006-pro-1",
+            "order": 7,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "05:48",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Fthumb_pro_6.jpg?alt=media"
+          }
+        ]
+      },
+      {
+        "id": "ms007-anna-decision",
+        "order": 7,
+        "title": "MS007 - Anna's Decision",
+        "description": "A encruzilhada de Anna: largar a faculdade no Brasil e recomeçar nos EUA do zero, ou concluir mais 3 anos em Brasília antes de fazer pós-graduação na América.",
+        "lessons": [
+          {
+            "id": "ms007-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "03:32",
+            "thumbnailUrl": "assets/images/thumbs/ms007/thumb_ms007_lr.jpg"
+          },
+          {
+            "id": "ms007-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "10:24",
+            "thumbnailUrl": "assets/images/thumbs/ms007/thumb_ms007_voc.jpg"
+          },
+          {
+            "id": "ms007-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "05:14",
+            "thumbnailUrl": "assets/images/thumbs/ms007/thumb_ms007_la.jpg"
+          },
+          {
+            "id": "ms007-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "03:32",
+            "thumbnailUrl": "assets/images/thumbs/ms007/thumb_ms007_lrt.jpg"
+          },
+          {
+            "id": "ms007-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "06:15",
+            "thumbnailUrl": "assets/images/thumbs/ms007/thumb_ms007_lask.jpg"
+          },
+          {
+            "id": "ms007-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "03:47",
+            "thumbnailUrl": "assets/images/thumbs/ms007/thumb_ms007_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms008-back-in-1999",
+        "order": 8,
+        "title": "MS008 - Back in 1999",
+        "description": "A história do início do namoro de Grazi e Tom nos EUA em 1999, casamento em Cleveland, gravidez e a decisão de morar no Brasil.",
+        "lessons": [
+          {
+            "id": "ms008-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "06:10",
+            "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_lr.jpg"
+          },
+          {
+            "id": "ms008-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "08:53",
+            "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_voc.jpg"
+          },
+          {
+            "id": "ms008-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "08:22",
+            "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_la.jpg"
+          },
+          {
+            "id": "ms008-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "07:33",
+            "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_lrt.jpg"
+          },
+          {
+            "id": "ms008-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "10:09",
+            "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_lask.jpg"
+          },
+          {
+            "id": "ms008-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "04:17",
+            "thumbnailUrl": "assets/images/thumbs/ms008/thumb_ms008_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms009-grammar-practice",
+        "order": 9,
+        "title": "MS009 - Grammar Practice (The Story in 5 Years)",
+        "description": "Projeção da história 5 anos no futuro: domínio de Will, Is going to, Gonna e a musicalidade de planos e previsões.",
+        "lessons": [
+          {
+            "id": "ms009-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "05:07",
+            "thumbnailUrl": "assets/images/thumbs/ms009/thumb_ms009_lr.jpg"
+          },
+          {
+            "id": "ms009-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "06:55",
+            "thumbnailUrl": "assets/images/thumbs/ms009/thumb_ms009_voc.jpg"
+          },
+          {
+            "id": "ms009-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "07:50",
+            "thumbnailUrl": "assets/images/thumbs/ms009/thumb_ms009_la.jpg"
+          },
+          {
+            "id": "ms009-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "04:54",
+            "thumbnailUrl": "assets/images/thumbs/ms009/thumb_ms009_lrt.jpg"
+          },
+          {
+            "id": "ms009-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "09:08",
+            "thumbnailUrl": "assets/images/thumbs/ms009/thumb_ms009_lask.jpg"
+          },
+          {
+            "id": "ms009-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "05:24",
+            "thumbnailUrl": "assets/images/thumbs/ms009/thumb_ms009_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms010-an-english-student",
+        "order": 10,
+        "title": "MS010 - An English Student",
+        "description": "A história de Carlos: apresentação pessoal, carreira, rotina e o plano de aprender inglês para ser promovido e morar temporariamente nos EUA.",
+        "lessons": [
+          {
+            "id": "ms010-lr-1",
+            "order": 1,
+            "title": "Aula 01.1: Listen & Read (LR Legacy)",
+            "duration": "38:45",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lr_1.jpg"
+          },
+          {
+            "id": "ms010-lr-2",
+            "order": 2,
+            "title": "Aula 01.2: Listen & Read (LR Extended)",
+            "duration": "04:32",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lr_2.jpg"
+          },
+          {
+            "id": "ms010-voc",
+            "order": 3,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:19",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_voc.jpg"
+          },
+          {
+            "id": "ms010-la",
+            "order": 4,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "05:28",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_la.jpg"
+          },
+          {
+            "id": "ms010-lrt",
+            "order": 5,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "08:59",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lrt.jpg"
+          },
+          {
+            "id": "ms010-lask",
+            "order": 6,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "07:00",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_lask.jpg"
+          },
+          {
+            "id": "ms010-pro",
+            "order": 7,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "06:19",
+            "thumbnailUrl": "assets/images/thumbs/ms010/thumb_ms010_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms011-meet-jeremy",
+        "order": 11,
+        "title": "MS011 - Meet Jeremy",
+        "description": "A vida de Jeremy, um típico adolescente americano de 16 anos em Des Moines WA: família, High School, time de basquete JV e rotina diária.",
+        "lessons": [
+          {
+            "id": "ms011-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "03:23",
+            "thumbnailUrl": "assets/images/thumbs/ms011/thumb_ms011_lr.jpg"
+          },
+          {
+            "id": "ms011-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "13:58",
+            "thumbnailUrl": "assets/images/thumbs/ms011/thumb_ms011_voc.jpg"
+          },
+          {
+            "id": "ms011-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "06:42",
+            "thumbnailUrl": "assets/images/thumbs/ms011/thumb_ms011_la.jpg"
+          },
+          {
+            "id": "ms011-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "12:43",
+            "thumbnailUrl": "assets/images/thumbs/ms011/thumb_ms011_lrt.jpg"
+          },
+          {
+            "id": "ms011-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "10:03",
+            "thumbnailUrl": "assets/images/thumbs/ms011/thumb_ms011_lask.jpg"
+          },
+          {
+            "id": "ms011-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "04:47",
+            "thumbnailUrl": "assets/images/thumbs/ms011/thumb_ms011_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms012-drivers-license",
+        "order": 12,
+        "title": "MS012 - Driver's License",
+        "description": "A conquista da CNH americana por Jeremy aos 16 anos: Driver's Ed, prova de direção, a compra do carro e o adeus definitivo ao ônibus escolar.",
+        "lessons": [
+          {
+            "id": "ms012-lr-1",
+            "order": 1,
+            "title": "Aula 01.1: Listen & Read (LR Legacy)",
+            "duration": "28:39",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lr_1.jpg"
+          },
+          {
+            "id": "ms012-lr-2",
+            "order": 2,
+            "title": "Aula 01.2: Listen & Read (LR Extended)",
+            "duration": "02:54",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lr_2.jpg"
+          },
+          {
+            "id": "ms012-voc",
+            "order": 3,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:53",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_voc.jpg"
+          },
+          {
+            "id": "ms012-la",
+            "order": 4,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "03:52",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_la.jpg"
+          },
+          {
+            "id": "ms012-lrt",
+            "order": 5,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "03:17",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lrt.jpg"
+          },
+          {
+            "id": "ms012-lask",
+            "order": 6,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "04:23",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_lask.jpg"
+          },
+          {
+            "id": "ms012-pro-1",
+            "order": 7,
+            "title": "Aula 06.1: Pronunciation & Connected Speech",
+            "duration": "03:06",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_pro_1.jpg"
+          },
+          {
+            "id": "ms012-pro-2",
+            "order": 8,
+            "title": "Aula 06.2: Pronunciation Deep Dive",
+            "duration": "06:54",
+            "thumbnailUrl": "assets/images/thumbs/ms012/thumb_ms012_pro_2.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms013-verb-tense-practice",
+        "order": 13,
+        "title": "MS013 - Verb Tense Practice (Present Perfect)",
+        "description": "Domínio prático de Present Perfect e Present Perfect Continuous com a história de Jeremy: 'has lived for 10 years', 'has been practicing' e perguntas de duração.",
+        "lessons": [
+          {
+            "id": "ms013-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "03:15",
+            "thumbnailUrl": "assets/images/thumbs/ms013/thumb_ms013_lr.jpg"
+          },
+          {
+            "id": "ms013-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "13:45",
+            "thumbnailUrl": "assets/images/thumbs/ms013/thumb_ms013_voc.jpg"
+          },
+          {
+            "id": "ms013-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "08:18",
+            "thumbnailUrl": "assets/images/thumbs/ms013/thumb_ms013_la.jpg"
+          },
+          {
+            "id": "ms013-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "05:47",
+            "thumbnailUrl": "assets/images/thumbs/ms013/thumb_ms013_lrt.jpg"
+          },
+          {
+            "id": "ms013-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "16:40",
+            "thumbnailUrl": "assets/images/thumbs/ms013/thumb_ms013_lask.jpg"
+          },
+          {
+            "id": "ms013-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation Practice (PRO)",
+            "duration": "05:40",
+            "thumbnailUrl": "assets/images/thumbs/ms013/thumb_ms013_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms014-jeremy-goes-to-town",
+        "order": 14,
+        "title": "MS014 - Jeremy Goes to Town",
+        "description": "A noite de Jeremy após comprar sua picape: o jogo de futebol da escola, o encontro com Becky no Red Robin's em Seattle e a divertida confusão das idades (16 vs 21).",
+        "lessons": [
+          {
+            "id": "ms014-lr",
+            "order": 1,
+            "title": "Aula 01: Listen & Read (LR)",
+            "duration": "05:14",
+            "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_lr.jpg"
+          },
+          {
+            "id": "ms014-voc",
+            "order": 2,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "12:36",
+            "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_voc.jpg"
+          },
+          {
+            "id": "ms014-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "08:42",
+            "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_la.jpg"
+          },
+          {
+            "id": "ms014-lrt",
+            "order": 4,
+            "title": "Aula 04: Look & Retell (LRT)",
+            "duration": "04:47",
+            "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_lrt.jpg"
+          },
+          {
+            "id": "ms014-lask",
+            "order": 5,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "07:27",
+            "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_lask.jpg"
+          },
+          {
+            "id": "ms014-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "05:00",
+            "thumbnailUrl": "assets/images/thumbs/ms014/thumb_ms014_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms015-steve-and-anna",
+        "order": 15,
+        "title": "MS015 - Steve and Anna",
+        "description": "Módulo oficial MS015: Steve and Anna.",
+        "lessons": [
+          {
+            "id": "ms015-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "05:51",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_lask_1.jpg"
+          },
+          {
+            "id": "ms015-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "05:34",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_la.jpg"
+          },
+          {
+            "id": "ms015-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:00",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_lr_1.jpg"
+          },
+          {
+            "id": "ms015-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "31:27",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_lr_1.jpg"
+          },
+          {
+            "id": "ms015-lr-2",
+            "order": 5,
+            "title": "Aula 01.2: Listen & Read (Part 2)",
+            "duration": "04:31",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_lr_2.jpg"
+          },
+          {
+            "id": "ms015-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "04:49",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_pro.jpg"
+          },
+          {
+            "id": "ms015-voc",
+            "order": 7,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "11:54",
+            "thumbnailUrl": "assets/images/thumbs/ms015/thumb_ms015_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms016-talk-about-yourself",
+        "order": 16,
+        "title": "MS016 - Talk About Yourself",
+        "description": "Módulo oficial MS016: Talk About Yourself.",
+        "lessons": [
+          {
+            "id": "ms016-lr-1",
+            "order": 1,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "13:08",
+            "thumbnailUrl": "assets/images/thumbs/ms016/thumb_ms016_lr_1.jpg"
+          },
+          {
+            "id": "ms016-lr-2",
+            "order": 2,
+            "title": "Aula 01.2: Listen & Read (Part 2)",
+            "duration": "09:27",
+            "thumbnailUrl": "assets/images/thumbs/ms016/thumb_ms016_lr_2.jpg"
+          },
+          {
+            "id": "ms016-lr-3",
+            "order": 3,
+            "title": "Aula 01.3: Listen & Read (Part 3)",
+            "duration": "09:10",
+            "thumbnailUrl": "assets/images/thumbs/ms016/thumb_ms016_lr_3.jpg"
+          },
+          {
+            "id": "ms016-lr-4",
+            "order": 4,
+            "title": "Aula 01.4: Listen & Read (Part 4)",
+            "duration": "04:50",
+            "thumbnailUrl": "assets/images/thumbs/ms016/thumb_ms016_lr_4.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms017-meet-josh",
+        "order": 17,
+        "title": "MS017 - Meet Josh",
+        "description": "Módulo oficial MS017: Meet Josh.",
+        "lessons": [
+          {
+            "id": "ms017-la",
+            "order": 1,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "07:47",
+            "thumbnailUrl": "assets/images/thumbs/ms017/thumb_ms017_la.jpg"
+          },
+          {
+            "id": "ms017-lr-1",
+            "order": 2,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:13",
+            "thumbnailUrl": "assets/images/thumbs/ms017/thumb_ms017_lr_1.jpg"
+          },
+          {
+            "id": "ms017-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:28",
+            "thumbnailUrl": "assets/images/thumbs/ms017/thumb_ms017_lr_1.jpg"
+          },
+          {
+            "id": "ms017-pro",
+            "order": 4,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "05:37",
+            "thumbnailUrl": "assets/images/thumbs/ms017/thumb_ms017_pro.jpg"
+          },
+          {
+            "id": "ms017-voc",
+            "order": 5,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "41:06",
+            "thumbnailUrl": "assets/images/thumbs/ms017/thumb_ms017_voc.jpg"
+          },
+          {
+            "id": "ms017-lask-1",
+            "order": 6,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "09:03",
+            "thumbnailUrl": "assets/images/thumbs/ms017/thumb_ms017_lask_1.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms018-meet-josh-part-2",
+        "order": 18,
+        "title": "MS018 - Meet Josh (Part 2)",
+        "description": "Módulo oficial MS018: Meet Josh Part 2.",
+        "lessons": [
+          {
+            "id": "ms018-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "06:45",
+            "thumbnailUrl": "assets/images/thumbs/ms018/thumb_ms018_lask_1.jpg"
+          },
+          {
+            "id": "ms018-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "06:58",
+            "thumbnailUrl": "assets/images/thumbs/ms018/thumb_ms018_la.jpg"
+          },
+          {
+            "id": "ms018-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "03:27",
+            "thumbnailUrl": "assets/images/thumbs/ms018/thumb_ms018_lr_1.jpg"
+          },
+          {
+            "id": "ms018-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "05:22",
+            "thumbnailUrl": "assets/images/thumbs/ms018/thumb_ms018_lr_1.jpg"
+          },
+          {
+            "id": "ms018-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "04:20",
+            "thumbnailUrl": "assets/images/thumbs/ms018/thumb_ms018_pro.jpg"
+          },
+          {
+            "id": "ms018-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:19",
+            "thumbnailUrl": "assets/images/thumbs/ms018/thumb_ms018_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms019-meet-josh-part-3",
+        "order": 19,
+        "title": "MS019 - Meet Josh (Part 3)",
+        "description": "Módulo oficial MS019: Meet Josh Part 3.",
+        "lessons": [
+          {
+            "id": "ms019-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "05:32",
+            "thumbnailUrl": "assets/images/thumbs/ms019/thumb_ms019_lask_1.jpg"
+          },
+          {
+            "id": "ms019-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "05:10",
+            "thumbnailUrl": "assets/images/thumbs/ms019/thumb_ms019_la.jpg"
+          },
+          {
+            "id": "ms019-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "02:40",
+            "thumbnailUrl": "assets/images/thumbs/ms019/thumb_ms019_lr_1.jpg"
+          },
+          {
+            "id": "ms019-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:59",
+            "thumbnailUrl": "assets/images/thumbs/ms019/thumb_ms019_lr_1.jpg"
+          },
+          {
+            "id": "ms019-voc",
+            "order": 5,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "03:41",
+            "thumbnailUrl": "assets/images/thumbs/ms019/thumb_ms019_voc.jpg"
+          },
+          {
+            "id": "ms019-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "03:38",
+            "thumbnailUrl": "assets/images/thumbs/ms019/thumb_ms019_pro.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms020-lets-talk-about-amanda",
+        "order": 20,
+        "title": "MS020 - Lets Talk About Amanda",
+        "description": "Módulo oficial MS020: Lets Talk About Amanda.",
+        "lessons": [
+          {
+            "id": "ms020-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "03:52",
+            "thumbnailUrl": "assets/images/thumbs/ms020/thumb_ms020_lask_1.jpg"
+          },
+          {
+            "id": "ms020-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "03:54",
+            "thumbnailUrl": "assets/images/thumbs/ms020/thumb_ms020_la.jpg"
+          },
+          {
+            "id": "ms020-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:05",
+            "thumbnailUrl": "assets/images/thumbs/ms020/thumb_ms020_lr_1.jpg"
+          },
+          {
+            "id": "ms020-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "02:53",
+            "thumbnailUrl": "assets/images/thumbs/ms020/thumb_ms020_lr_1.jpg"
+          },
+          {
+            "id": "ms020-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "03:54",
+            "thumbnailUrl": "assets/images/thumbs/ms020/thumb_ms020_pro.jpg"
+          },
+          {
+            "id": "ms020-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "08:30",
+            "thumbnailUrl": "assets/images/thumbs/ms020/thumb_ms020_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms021-finding-your-way",
+        "order": 21,
+        "title": "MS021 - Finding Your Way",
+        "description": "Módulo oficial MS021: Finding Your Way.",
+        "lessons": [
+          {
+            "id": "ms021-lask",
+            "order": 1,
+            "title": "Aula 05: Listen & Ask (LASK)",
+            "duration": "10:15",
+            "thumbnailUrl": "assets/images/thumbs/ms021/thumb_ms021_lask.jpg"
+          },
+          {
+            "id": "ms021-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "04:43",
+            "thumbnailUrl": "assets/images/thumbs/ms021/thumb_ms021_la.jpg"
+          },
+          {
+            "id": "ms021-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "02:48",
+            "thumbnailUrl": "assets/images/thumbs/ms021/thumb_ms021_lr_1.jpg"
+          },
+          {
+            "id": "ms021-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "02:37",
+            "thumbnailUrl": "assets/images/thumbs/ms021/thumb_ms021_lr_1.jpg"
+          },
+          {
+            "id": "ms021-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "02:32",
+            "thumbnailUrl": "assets/images/thumbs/ms021/thumb_ms021_pro.jpg"
+          },
+          {
+            "id": "ms021-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "13:47",
+            "thumbnailUrl": "assets/images/thumbs/ms021/thumb_ms021_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms022-a-day-out-in-the-park-part-1",
+        "order": 22,
+        "title": "MS022 - A Day Out in the Park (Part 1)",
+        "description": "Módulo oficial MS022: A Day Out in the Park Part 1.",
+        "lessons": [
+          {
+            "id": "ms022-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "04:28",
+            "thumbnailUrl": "assets/images/thumbs/ms022/thumb_ms022_lask_1.jpg"
+          },
+          {
+            "id": "ms022-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "05:49",
+            "thumbnailUrl": "assets/images/thumbs/ms022/thumb_ms022_la.jpg"
+          },
+          {
+            "id": "ms022-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "05:23",
+            "thumbnailUrl": "assets/images/thumbs/ms022/thumb_ms022_lr_1.jpg"
+          },
+          {
+            "id": "ms022-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:48",
+            "thumbnailUrl": "assets/images/thumbs/ms022/thumb_ms022_lr_1.jpg"
+          },
+          {
+            "id": "ms022-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "04:57",
+            "thumbnailUrl": "assets/images/thumbs/ms022/thumb_ms022_pro.jpg"
+          },
+          {
+            "id": "ms022-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "10:49",
+            "thumbnailUrl": "assets/images/thumbs/ms022/thumb_ms022_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms023-a-day-out-in-the-park-part-2",
+        "order": 23,
+        "title": "MS023 - A Day Out in the Park (Part 2)",
+        "description": "Módulo oficial MS023: A Day Out in the Park Part 2.",
+        "lessons": [
+          {
+            "id": "ms023-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "05:02",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_lask_1.jpg"
+          },
+          {
+            "id": "ms023-lask-2",
+            "order": 2,
+            "title": "Aula 05.2: Listen & Ask (Part 2)",
+            "duration": "08:25",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_lask_2.jpg"
+          },
+          {
+            "id": "ms023-la",
+            "order": 3,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "07:01",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_la.jpg"
+          },
+          {
+            "id": "ms023-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "22:52",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_lr_1.jpg"
+          },
+          {
+            "id": "ms023-lr-1",
+            "order": 5,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "03:14",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_lr_1.jpg"
+          },
+          {
+            "id": "ms023-pro",
+            "order": 6,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "12:11",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_pro.jpg"
+          },
+          {
+            "id": "ms023-voc",
+            "order": 7,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "12:21",
+            "thumbnailUrl": "assets/images/thumbs/ms023/thumb_ms023_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms024-a-day-out-in-the-park-part-3",
+        "order": 24,
+        "title": "MS024 - A Day Out in the Park (Part 3)",
+        "description": "Módulo oficial MS024: A Day Out in the Park Part 3.",
+        "lessons": [
+          {
+            "id": "ms024-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "04:11",
+            "thumbnailUrl": "assets/images/thumbs/ms024/thumb_ms024_lask_1.jpg"
+          },
+          {
+            "id": "ms024-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "04:34",
+            "thumbnailUrl": "assets/images/thumbs/ms024/thumb_ms024_la.jpg"
+          },
+          {
+            "id": "ms024-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "05:52",
+            "thumbnailUrl": "assets/images/thumbs/ms024/thumb_ms024_lr_1.jpg"
+          },
+          {
+            "id": "ms024-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "03:54",
+            "thumbnailUrl": "assets/images/thumbs/ms024/thumb_ms024_lr_1.jpg"
+          },
+          {
+            "id": "ms024-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "05:36",
+            "thumbnailUrl": "assets/images/thumbs/ms024/thumb_ms024_pro.jpg"
+          },
+          {
+            "id": "ms024-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "12:38",
+            "thumbnailUrl": "assets/images/thumbs/ms024/thumb_ms024_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms025-a-trip-to-vegas",
+        "order": 25,
+        "title": "MS025 - A Trip to Vegas",
+        "description": "Módulo oficial MS025: A Trip to Vegas.",
+        "lessons": [
+          {
+            "id": "ms025-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "07:59",
+            "thumbnailUrl": "assets/images/thumbs/ms025/thumb_ms025_lask_1.jpg"
+          },
+          {
+            "id": "ms025-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "10:52",
+            "thumbnailUrl": "assets/images/thumbs/ms025/thumb_ms025_la.jpg"
+          },
+          {
+            "id": "ms025-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:15",
+            "thumbnailUrl": "assets/images/thumbs/ms025/thumb_ms025_lr_1.jpg"
+          },
+          {
+            "id": "ms025-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "02:54",
+            "thumbnailUrl": "assets/images/thumbs/ms025/thumb_ms025_lr_1.jpg"
+          },
+          {
+            "id": "ms025-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "05:33",
+            "thumbnailUrl": "assets/images/thumbs/ms025/thumb_ms025_pro.jpg"
+          },
+          {
+            "id": "ms025-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "09:12",
+            "thumbnailUrl": "assets/images/thumbs/ms025/thumb_ms025_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms026-jack-and-carol",
+        "order": 26,
+        "title": "MS026 - Jack and Carol",
+        "description": "Módulo oficial MS026: Jack and Carol.",
+        "lessons": [
+          {
+            "id": "ms026-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "06:28",
+            "thumbnailUrl": "assets/images/thumbs/ms026/thumb_ms026_lask_1.jpg"
+          },
+          {
+            "id": "ms026-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "07:45",
+            "thumbnailUrl": "assets/images/thumbs/ms026/thumb_ms026_la.jpg"
+          },
+          {
+            "id": "ms026-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "03:07",
+            "thumbnailUrl": "assets/images/thumbs/ms026/thumb_ms026_lr_1.jpg"
+          },
+          {
+            "id": "ms026-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:56",
+            "thumbnailUrl": "assets/images/thumbs/ms026/thumb_ms026_lr_1.jpg"
+          },
+          {
+            "id": "ms026-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "07:15",
+            "thumbnailUrl": "assets/images/thumbs/ms026/thumb_ms026_pro.jpg"
+          },
+          {
+            "id": "ms026-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "08:48",
+            "thumbnailUrl": "assets/images/thumbs/ms026/thumb_ms026_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms027-jack-and-carol-in-the-past",
+        "order": 27,
+        "title": "MS027 - Jack and Carol in the Past",
+        "description": "Módulo oficial MS027: Jack and Carol in the Past.",
+        "lessons": [
+          {
+            "id": "ms027-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "09:09",
+            "thumbnailUrl": "assets/images/thumbs/ms027/thumb_ms027_lask_1.jpg"
+          },
+          {
+            "id": "ms027-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "10:15",
+            "thumbnailUrl": "assets/images/thumbs/ms027/thumb_ms027_la.jpg"
+          },
+          {
+            "id": "ms027-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "05:38",
+            "thumbnailUrl": "assets/images/thumbs/ms027/thumb_ms027_lr_1.jpg"
+          },
+          {
+            "id": "ms027-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "09:21",
+            "thumbnailUrl": "assets/images/thumbs/ms027/thumb_ms027_lr_1.jpg"
+          },
+          {
+            "id": "ms027-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "07:36",
+            "thumbnailUrl": "assets/images/thumbs/ms027/thumb_ms027_pro.jpg"
+          },
+          {
+            "id": "ms027-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "06:34",
+            "thumbnailUrl": "assets/images/thumbs/ms027/thumb_ms027_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms028-jack-and-carol-in-the-future",
+        "order": 28,
+        "title": "MS028 - Jack and Carol in the Future",
+        "description": "Módulo oficial MS028: Jack and Carol in the Future.",
+        "lessons": [
+          {
+            "id": "ms028-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "11:13",
+            "thumbnailUrl": "assets/images/thumbs/ms028/thumb_ms028_lask_1.jpg"
+          },
+          {
+            "id": "ms028-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "08:41",
+            "thumbnailUrl": "assets/images/thumbs/ms028/thumb_ms028_la.jpg"
+          },
+          {
+            "id": "ms028-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "03:40",
+            "thumbnailUrl": "assets/images/thumbs/ms028/thumb_ms028_lr_1.jpg"
+          },
+          {
+            "id": "ms028-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "08:41",
+            "thumbnailUrl": "assets/images/thumbs/ms028/thumb_ms028_lr_1.jpg"
+          },
+          {
+            "id": "ms028-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "04:20",
+            "thumbnailUrl": "assets/images/thumbs/ms028/thumb_ms028_pro.jpg"
+          },
+          {
+            "id": "ms028-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "04:19",
+            "thumbnailUrl": "assets/images/thumbs/ms028/thumb_ms028_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms029-jack-and-carol-present-perfect",
+        "order": 29,
+        "title": "MS029 - Jack and Carol (Present Perfect)",
+        "description": "Módulo oficial MS029: Jack and Carol Present Perfect.",
+        "lessons": [
+          {
+            "id": "ms029-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "07:49",
+            "thumbnailUrl": "assets/images/thumbs/ms029/thumb_ms029_lask_1.jpg"
+          },
+          {
+            "id": "ms029-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "10:06",
+            "thumbnailUrl": "assets/images/thumbs/ms029/thumb_ms029_la.jpg"
+          },
+          {
+            "id": "ms029-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "05:52",
+            "thumbnailUrl": "assets/images/thumbs/ms029/thumb_ms029_lr_1.jpg"
+          },
+          {
+            "id": "ms029-lr-1",
+            "order": 4,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "06:33",
+            "thumbnailUrl": "assets/images/thumbs/ms029/thumb_ms029_lr_1.jpg"
+          },
+          {
+            "id": "ms029-pro",
+            "order": 5,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "04:20",
+            "thumbnailUrl": "assets/images/thumbs/ms029/thumb_ms029_pro.jpg"
+          },
+          {
+            "id": "ms029-voc",
+            "order": 6,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "04:19",
+            "thumbnailUrl": "assets/images/thumbs/ms029/thumb_ms029_voc.jpg"
+          }
+        ]
+      },
+      {
+        "id": "ms030-the-exchange-student",
+        "order": 30,
+        "title": "MS030 - The Exchange Student",
+        "description": "Módulo oficial MS030: The Exchange Student.",
+        "lessons": [
+          {
+            "id": "ms030-lask-1",
+            "order": 1,
+            "title": "Aula 05.1: Listen & Ask (Part 1)",
+            "duration": "10:32",
+            "thumbnailUrl": "assets/images/thumbs/ms030/thumb_ms030_lask_1.jpg"
+          },
+          {
+            "id": "ms030-la",
+            "order": 2,
+            "title": "Aula 03: Listen & Answer (LA)",
+            "duration": "06:44",
+            "thumbnailUrl": "assets/images/thumbs/ms030/thumb_ms030_la.jpg"
+          },
+          {
+            "id": "ms030-lr-1",
+            "order": 3,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "05:20",
+            "thumbnailUrl": "assets/images/thumbs/ms030/thumb_ms030_lr_1.jpg"
+          },
+          {
+            "id": "ms030-pro",
+            "order": 4,
+            "title": "Aula 06: Pronunciation & Connected Speech",
+            "duration": "05:00",
+            "thumbnailUrl": "assets/images/thumbs/ms030/thumb_ms030_pro.jpg"
+          },
+          {
+            "id": "ms030-voc",
+            "order": 5,
+            "title": "Aula 02: Vocabulary Session (VOC)",
+            "duration": "13:22",
+            "thumbnailUrl": "assets/images/thumbs/ms030/thumb_ms030_voc.jpg"
+          },
+          {
+            "id": "ms030-lr-1",
+            "order": 6,
+            "title": "Aula 01.1: Listen & Read (Part 1)",
+            "duration": "04:22",
+            "thumbnailUrl": "assets/images/thumbs/ms030/thumb_ms030_lr_1.jpg"
+          }
+        ]
+      }
+    ]
+  }
+};
 
     let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
     let COURSE_DATA = COURSES_REGISTRY["ms-legacy"];
