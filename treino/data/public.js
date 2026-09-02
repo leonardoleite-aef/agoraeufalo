@@ -6,377 +6,912 @@
 window.AEF_STUDENT_PUBLIC = {
   id: "public",
   name: "English Personal Trainer (Acesso Aberto)",
-  badge: "Acesso Aberto",
-  tracks: [
+  badge: "Acesso Aberto",,
+{
+  "id": "eqs-1-1",
+  "title": "English QuickStart • Aula 1.1 • Os Pronomes Sujeito",
+  "duration": "15:00",
+  "coverImage": "../assets/images/thumbs/eqs/thumb_eqs_1_1.jpg",
+  "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_1_1.mp3?alt=media",
+  "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_1_1.mp4?alt=media",
+  "summary": "Aula prática de fundamentos do inglês falado com Prof. Leonardo Leite.",
+  "goldenTip": "Acompanhe a melodia das frases em tempo real. Repita em voz alta para ativar o reflexo falado.",
+  "sentences": [
     {
-      id: "public-01",
-      title: "Daily Spoken Reflex: Conversational Clarity & Small Talk",
-      duration: "00:36",
-      coverImage: "../assets/images/cover-public-spoken-reflex.jpg",
-      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fpublic%2Fpublic_spoken_reflex_session01.mp3?alt=media",
-      videoUrl: "",
-      summary: "Treino demonstrativo prático de conversação natural, conexões sonoras (chunks) e reflexo oral coached por Prof. Leonardo Leite.",
-      goldenTip: "Respire nas pausas naturais. Toque nas frases para ouvir novamente e utilize o botão Loop para fixar a musicalidade de cada resposta.",
-      sentences: [
-        {
-          "id": 1,
-          "start": 0.0,
-          "end": 3.17,
-          "text": "Hey there! How has your week been going so far?",
-          "spokenTranslation": "E aí, tudo bem? Como é que tá sendo a sua semana até agora?",
-          "notes": "Speaker: Sarah (Casual greeting & rising pitch)"
-        },
-        {
-          "id": 2,
-          "start": 3.52,
-          "end": 8.25,
-          "text": "It’s been pretty busy, to be honest, but really productive. What about yours?",
-          "spokenTranslation": "Olha, tá bem corrida pra falar a verdade, mas super produtiva. E a sua?",
-          "notes": "Speaker: Mark (Conversational pause: 'to be honest')"
-        },
-        {
-          "id": 3,
-          "start": 8.6,
-          "end": 15.09,
-          "text": "Same here! I had back-to-back team meetings all morning, but we finally finalized the new project roadmap.",
-          "spokenTranslation": "Aqui também! Tive reunião uma atrás da outra a manhã inteira, mas finalmente fechamos o cronograma do projeto.",
-          "notes": "Speaker: Sarah (Business chunk: 'back-to-back team meetings')"
-        },
-        {
-          "id": 4,
-          "start": 15.44,
-          "end": 20.05,
-          "text": "That’s awesome! It must feel like a huge relief to have that off your plate.",
-          "spokenTranslation": "Que demais! Deve ser um alívio enorme tirar essa pendência da sua frente.",
-          "notes": "Speaker: Mark (Idiomatic reflex: 'off your plate')"
-        },
-        {
-          "id": 5,
-          "start": 20.4,
-          "end": 24.77,
-          "text": "It definitely does. Are you doing anything special this coming weekend?",
-          "spokenTranslation": "Com certeza é! Vai fazer alguma coisa de bom agora no fim de semana?",
-          "notes": "Speaker: Sarah (Friendly rhythm: 'this coming weekend')"
-        },
-        {
-          "id": 6,
-          "start": 25.12,
-          "end": 30.13,
-          "text": "I’m thinking of taking a quick road trip to the coast if the weather holds up. How about you?",
-          "spokenTranslation": "Tô pensando em dar um pulo no litoral de carro se o tempo ajudar. E você?",
-          "notes": "Speaker: Mark (Connected speech: 'thinking of taking a')"
-        },
-        {
-          "id": 7,
-          "start": 30.48,
-          "end": 35.8,
-          "text": "Sounds amazing! I'll probably just relax, catch up on some reading, and recharge.",
-          "spokenTranslation": "Parece bom demais! Eu provavelmente vou só relaxar, botar as leituras em dia e recarregar as energias.",
-          "notes": "Speaker: Sarah (Conversational closing: 'catch up on')"
-        }
-      ]
+      "id": 1,
+      "start": 0.24,
+      "end": 7.24,
+      "text": "All right, good. Welcome to module 1, class number 1.",
+      "spokenTranslation": ""
     },
     {
-      id: "ms004-grazi-podcast",
-      title: "MS004 - Grazi on the Podcast: The Right Questions about Life",
-      duration: "01:31",
-      coverImage: "../assets/images/cover_ms004.jpg",
-      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS004%2Faudio_lr.mp3?alt=media",
-      videoUrl: "",
-      summary: "Entrevista exclusiva de Graziela no podcast 'The Right Questions about Life' com a anfitriã Chloe. Treino de perguntas e respostas dinâmicas no reflexo oral.",
-      goldenTip: "Em conversas cotidianas, nunca traduza palavra por palavra. Absorva o bloco musical da pergunta e responda no ritmo da respiração.",
-      sentences: [
-        {
-          "id": 1,
-          "start": 0.0,
-          "end": 6.92,
-          "text": "Hello, everyone, and welcome to the right questions about life, the podcast where we ask the things that really matter.",
-          "spokenTranslation": "Olá a todos e bem-vindos ao 'The Right Questions about Life', o podcast onde a gente pergunta o que realmente importa."
-        },
-        {
-          "id": 2,
-          "start": 7.46,
-          "end": 11.62,
-          "text": "Today, we have a very special guest, Graziella. Thank you for being here, Grazi.",
-          "spokenTranslation": "Hoje temos uma convidada super especial, Graziela. Muito obrigado por estar aqui, Grazi."
-        },
-        {
-          "id": 3,
-          "start": 11.98,
-          "end": 14.3,
-          "text": "Thanks for having me, Chloe. I'm happy to be here.",
-          "spokenTranslation": "Obrigado pelo convite, Chloe! Tô muito feliz de estar aqui."
-        },
-        {
-          "id": 4,
-          "start": 14.68,
-          "end": 18.62,
-          "text": "Grazi, let's start with a few questions about your personal life.",
-          "spokenTranslation": "Grazi, vamos começar com algumas perguntas sobre a sua vida pessoal."
-        },
-        {
-          "id": 5,
-          "start": 19.0,
-          "end": 21.82,
-          "text": "You're from Brasília, right? And you're married to Tom?",
-          "spokenTranslation": "Você é de Brasília, né? E é casada com o Tom?"
-        },
-        {
-          "id": 6,
-          "start": 22.12,
-          "end": 23.14,
-          "text": "Yes, that's right.",
-          "spokenTranslation": "Sim, isso mesmo."
-        },
-        {
-          "id": 7,
-          "start": 23.38,
-          "end": 27.2,
-          "text": "I live here with my husband and our two daughters, Anna and Flavia.",
-          "spokenTranslation": "Moro aqui com meu marido e nossas duas filhas, Anna e Flávia."
-        },
-        {
-          "id": 8,
-          "start": 27.2,
-          "end": 33.14,
-          "text": "That's lovely. So, Tom is an executive, correct? He works a lot, right?",
-          "spokenTranslation": "Que maravilha. Então, o Tom é executivo, correto? Ele trabalha pra caramba, né?"
-        },
-        {
-          "id": 9,
-          "start": 33.58,
-          "end": 40.12,
-          "text": "He does. He is a workaholic. He works many hours a week and sometimes on weekends.",
-          "spokenTranslation": "Trabalha sim. Ele é viciado em trabalho. Trabalha muitas horas por semana e às vezes até nos fins de semana."
-        },
-        {
-          "id": 10,
-          "start": 40.84,
-          "end": 45.1,
-          "text": "Wow, that sounds intense. Does that mean he travels for work?",
-          "spokenTranslation": "Uau, isso soa puxado. Quer dizer que ele viaja a trabalho?"
-        },
-        {
-          "id": 11,
-          "start": 45.44,
-          "end": 51.38,
-          "text": "Yes, he has to fly to the USA every single month and stay there for about a week.",
-          "spokenTranslation": "Sim, ele tem que voar pros EUA todo santo mês e ficar lá por cerca de uma semana."
-        },
-        {
-          "id": 12,
-          "start": 51.72,
-          "end": 54.46,
-          "text": "I see. And what about your routine?",
-          "spokenTranslation": "Entendi. E sobre a sua rotina?"
-        },
-        {
-          "id": 13,
-          "start": 54.46,
-          "end": 56.72,
-          "text": "I heard you wake up early. Is that true?",
-          "spokenTranslation": "Ouvi dizer que você acorda cedinho. É verdade?"
-        },
-        {
-          "id": 14,
-          "start": 57.0,
-          "end": 59.82,
-          "text": "Yes. Every day at around 7 a.m.",
-          "spokenTranslation": "Sim. Todo dia por volta das 7 da manhã."
-        },
-        {
-          "id": 15,
-          "start": 60.24,
-          "end": 62.98,
-          "text": "And after running, what do you do? I'm curious.",
-          "spokenTranslation": "E depois de correr, o que você faz? Fiquei curiosa."
-        },
-        {
-          "id": 16,
-          "start": 63.4,
-          "end": 68.46,
-          "text": "I jump in the pool, take a shower, have some breakfast, and then go to work at 9.",
-          "spokenTranslation": "Pulo na piscina, tomo banho, tomo café e aí vou pro trabalho às 9h."
-        },
-        {
-          "id": 17,
-          "start": 69.08,
-          "end": 74.6,
-          "text": "Interesting. I know a little about you, but not about the girls. How old are they?",
-          "spokenTranslation": "Que legal. Já sei um pouco sobre você, mas não das meninas. Quantos anos elas têm?"
-        },
-        {
-          "id": 18,
-          "start": 74.94,
-          "end": 78.2,
-          "text": "Anna is 19 and Flavia is 15.",
-          "spokenTranslation": "A Anna tem 19 e a Flávia tem 15."
-        },
-        {
-          "id": 19,
-          "start": 78.68,
-          "end": 83.3,
-          "text": "Wow, that's great. Thank you so much for sharing a bit of your life with us today.",
-          "spokenTranslation": "Puxa, que ótimo. Muito obrigado por compartilhar um pouquinho da sua vida com a gente hoje."
-        }
-      ]
+      "id": 2,
+      "start": 7.24,
+      "end": 12.5,
+      "text": "Muito bem vindo, muito bem vinda ao módulo 1, aula 1.",
+      "spokenTranslation": ""
     },
     {
-      id: "ms005-sunday-brunch",
-      title: "MS005 - Sunday Brunch & The Easter Egg Hunt",
-      duration: "01:17",
-      coverImage: "../assets/images/cover_ms005.jpg",
-      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmagic-stories-legacy%2FMS005%2Faudio_lr_2.mp3?alt=media",
-      videoUrl: "",
-      summary: "A história do domingo de Páscoa da Grazi e Tom: o preparo do Sunday Brunch na cozinha e a grande caçada aos ovos de Páscoa no quintal.",
-      goldenTip: "Observe pelos ouvidos! Sinta a diferença brutal entre a grafia e o som real de 'meatloaf', 'mashed potatoes' e 'secret recipe'.",
-      sentences: [
-        {
-          "id": 1,
-          "start": 0.0,
-          "end": 7.0,
-          "text": "It's Sunday! Tom is in the kitchen right now. He's helping Grazi make a special Sunday brunch.",
-          "spokenTranslation": "É domingo! O Tom tá na cozinha agora mesmo. Ele tá ajudando a Grazi a fazer um brunch de domingo especial."
-        },
-        {
-          "id": 2,
-          "start": 7.0,
-          "end": 19.0,
-          "text": "It's 9 a.m. Grazi is making some special dishes for the brunch. She's making meatloaf, mashed potatoes, green salad, and roast chicken.",
-          "spokenTranslation": "São 9h da manhã. A Grazi tá fazendo alguns pratos especiais pro brunch: falso lombo, purê de batatas, salada verde e frango assado."
-        },
-        {
-          "id": 3,
-          "start": 19.0,
-          "end": 28.0,
-          "text": "Tom is making his special recipe of a typical American chocolate brownie. Yes! Tom has a secret recipe.",
-          "spokenTranslation": "O Tom tá fazendo a receita especial dele de brownie de chocolate típico americano. Sim! O Tom tem uma receita secreta."
-        },
-        {
-          "id": 4,
-          "start": 28.0,
-          "end": 33.0,
-          "text": "They started preparing brunch on the day before. What's the day before? Saturday!",
-          "spokenTranslation": "Eles começaram a preparar o brunch no dia anterior. Qual foi o dia anterior? Sábado!"
-        },
-        {
-          "id": 5,
-          "start": 33.0,
-          "end": 39.0,
-          "text": "Yesterday they bought some chocolate eggs and some chicken eggs.",
-          "spokenTranslation": "Ontem eles compraram alguns ovos de chocolate e alguns ovos de galinha."
-        },
-        {
-          "id": 6,
-          "start": 39.0,
-          "end": 48.0,
-          "text": "Yesterday the girls painted the chicken eggs. Tom and Grazi went to the backyard to hide all the eggs in the bushes.",
-          "spokenTranslation": "Ontem as meninas pintaram os ovos de galinha. O Tom e a Grazi foram pro quintal esconder todos os ovos nos arbustos."
-        },
-        {
-          "id": 7,
-          "start": 48.0,
-          "end": 56.0,
-          "text": "Right now the girls are setting up the table for the special brunch. Today they are eating outside in the back porch.",
-          "spokenTranslation": "Agora mesmo as meninas tão arrumando a mesa pro brunch especial. Hoje eles vão comer lá fora, na varanda dos fundos."
-        },
-        {
-          "id": 8,
-          "start": 56.0,
-          "end": 65.0,
-          "text": "Anna and Flavia yell: Table is ready! Tom says: All right! Let the egg hunt begin!",
-          "spokenTranslation": "A Anna e a Flávia gritam: A mesa tá pronta! O Tom diz: Maravilha! Que comece a caça aos ovos!"
-        },
-        {
-          "id": 9,
-          "start": 65.0,
-          "end": 71.0,
-          "text": "The girls run to the backyard and start looking for the Easter eggs. That's right my friend.",
-          "spokenTranslation": "As meninas correm pro quintal e começam a procurar os ovos de Páscoa. Isso mesmo, meu amigo."
-        },
-        {
-          "id": 10,
-          "start": 71.0,
-          "end": 77.0,
-          "text": "Today is Easter Sunday. Happy Easter to you and your family!",
-          "spokenTranslation": "Hoje é Domingo de Páscoa. Feliz Páscoa pra você e pra sua família!"
-        }
-      ]
+      "id": 3,
+      "start": 12.5,
+      "end": 18.3,
+      "text": "Nesta aula, nós vamos falar sobre os personal pronouns, os pronomes pessoais.",
+      "spokenTranslation": ""
     },
     {
-      id: "ms006-how-they-met",
-      title: "MS006 - How They Met: The First Encounter in NY",
-      duration: "01:59",
-      coverImage: "../assets/images/cover_ms006.jpg",
-      audioUrl: "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2FMS006%2Faudio_lr_5.mp3?alt=media",
-      videoUrl: "",
-      summary: "A história do primeiro encontro de Tom e Grazi em Nova York: o bar da conferência, o grupo animado de brasileiros e a revelação inesperada do Tom.",
-      goldenTip: "Observe a oposição de estados: 'by himself' (sozinho) e 'loud friends' (amigos animados). Sinta a pronúncia suave dos passados regulares.",
-      sentences: [
-        {
-          "id": 1,
-          "start": 0.0,
-          "end": 7.5,
-          "text": "Tom and Grazi met at a business conference in New York ten years ago. It was a cold evening in November.",
-          "spokenTranslation": "O Tom e a Grazi se conheceram numa conferência de negócios em Nova York dez anos atrás. Era uma noite fria em novembro."
-        },
-        {
-          "id": 2,
-          "start": 7.5,
-          "end": 14.5,
-          "text": "Tom was sitting at the bar by himself, having a drink after a long day at the conference.",
-          "spokenTranslation": "O Tom tava sentado no bar sozinho, tomando um drinque depois de um longo dia de conferência."
-        },
-        {
-          "id": 3,
-          "start": 14.5,
-          "end": 22.0,
-          "text": "Grazi’s English wasn’t very good then, but that wasn’t a problem for her.",
-          "spokenTranslation": "O inglês da Grazi não era muito bom naquela época, mas isso não era um problema pra ela."
-        },
-        {
-          "id": 4,
-          "start": 22.0,
-          "end": 31.0,
-          "text": "Grazi and her friends were having a good time at the bar. They were talking and laughing in Portuguese.",
-          "spokenTranslation": "A Grazi e as amigas tavam se divertindo no bar. Elas tavam conversando e rindo em português."
-        },
-        {
-          "id": 5,
-          "start": 31.0,
-          "end": 39.0,
-          "text": "Tom noticed the group of loud Brazilian friends and started paying attention.",
-          "spokenTranslation": "O Tom notou o grupo de amigos brasileiros animados e começou a prestar atenção."
-        },
-        {
-          "id": 6,
-          "start": 39.0,
-          "end": 48.0,
-          "text": "A friend of Grazi’s notices Tom and says: 'Hey Grazi, there’s a handsome guy all by himself sitting right behind you!'",
-          "spokenTranslation": "Uma amiga da Grazi nota o Tom e diz: 'Ei Grazi, tem um cara bonito sozinho sentado bem atrás de você!'"
-        },
-        {
-          "id": 7,
-          "start": 48.0,
-          "end": 57.0,
-          "text": "Grazi quietly turned around and looked over to Tom. She said: 'You’re right, he is cute. But he’s probably married.'",
-          "spokenTranslation": "A Grazi virou de mansinho e deu uma olhada pro Tom. Ela disse: 'Tem razão, ele é bonitinho. Mas provavelmente é casado.'"
-        },
-        {
-          "id": 8,
-          "start": 57.0,
-          "end": 64.0,
-          "text": "Tom left and went to the restroom. Grazi and her friends continued talking and laughing.",
-          "spokenTranslation": "O Tom saiu e foi ao banheiro. A Grazi e as amigas continuaram conversando e rindo."
-        },
-        {
-          "id": 9,
-          "start": 64.0,
-          "end": 77.0,
-          "text": "A few minutes later, Tom came back, approached the Brazilians and said: 'Good evening! Excuse me... Hi, I’m Tom. I speak Portuguese, and I’m NOT married!'",
-          "spokenTranslation": "Alguns minutos depois, o Tom voltou, se aproximou dos brasileiros e disse: 'Boa noite! Com licença... Oi, eu sou o Tom. Eu falo português, e NÃO sou casado!'"
-        }
-      ]
+      "id": 4,
+      "start": 18.3,
+      "end": 23.3,
+      "text": "Sim, parece muito fácil, todo mundo já ouviu falar,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 5,
+      "start": 23.3,
+      "end": 32.3,
+      "text": "mas na verdade, no verdadeiro, uso ao escutar e entender, não é tão simples assim,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 6,
+      "start": 32.3,
+      "end": 37.3,
+      "text": "porque você não está acostumado ou acostumada.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 7,
+      "start": 37.3,
+      "end": 40.3,
+      "text": "Na hora que a gente está leindo, na hora que a gente está venda,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 8,
+      "start": 40.3,
+      "end": 45.3,
+      "text": "é muito fácil saber o que é IU, Richie, Etwi, Youday.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 9,
+      "start": 45.3,
+      "end": 52.36,
+      "text": "Mas o uso natural desses pronomes, que são super importantes na construção básica,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 10,
+      "start": 52.36,
+      "end": 59.36,
+      "text": "de frases em inglês, na hora da gente usar, na hora da gente compreender, entender,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 11,
+      "start": 59.36,
+      "end": 66.36,
+      "text": "repetir e imitar, treinar pronúncia, treinar resposta, falha,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 12,
+      "start": 66.36,
+      "end": 70.36,
+      "text": "porque falta realmente conhecimento e treino.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 13,
+      "start": 70.36,
+      "end": 78.36,
+      "text": "Eu vou passar aqui alguns macetes que ninguém ensina sobre os personal pronouns,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 14,
+      "start": 78.36,
+      "end": 81.36,
+      "text": "que são os personal pronouns, os pronomes pessoais.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 15,
+      "start": 81.36,
+      "end": 86.36,
+      "text": "São as palavras que substituem ou sujeito, o sujeito da frase.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 16,
+      "start": 86.36,
+      "end": 90.36,
+      "text": "Então, por exemplo, sujeito da frase, por exemplo, a gente pega e fala assim,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 17,
+      "start": 90.36,
+      "end": 93.36,
+      "text": "a Maria mora em São Paulo.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 18,
+      "start": 93.36,
+      "end": 100.36,
+      "text": "Maria, o sujeito, mora, verbo, em proposição, São Paulo, local, de verba de lugar.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 19,
+      "start": 100.36,
+      "end": 105.36,
+      "text": "Estamos falando gramatiqueza aqui, certo? Maria mora em São Paulo.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 20,
+      "start": 105.36,
+      "end": 109.36,
+      "text": "Só que quando você fica falando Maria mora em São Paulo na hora que você vai dizer",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 21,
+      "start": 109.36,
+      "end": 113.36,
+      "text": "alguma coisa sobre a Maria, se você não soubeu o personal pronoun,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 22,
+      "start": 113.36,
+      "end": 117.36,
+      "text": "você vai ter que continuar falando Maria. Maria mora em São Paulo,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 23,
+      "start": 117.36,
+      "end": 124.36,
+      "text": "Maria é casada, Maria trabalha no hospital, a Maria gosta de comida, italiana,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 24,
+      "start": 124.36,
+      "end": 127.36,
+      "text": "a Maria... Você tem que ficar falando Maria, Maria, Maria, Maria, Maria, Maria, Maria, Maria,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 25,
+      "start": 127.36,
+      "end": 132.36,
+      "text": "Maria o tempo inteiro, ok? O personal pronoun é certo pra você substituir,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 26,
+      "start": 132.36,
+      "end": 137.36,
+      "text": "então você pega e fala, Maria mora em São Paulo, ela trabalha no hospital,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 27,
+      "start": 137.36,
+      "end": 142.36,
+      "text": "ela gosta de comida, entende? É isso e é fazer essa transição,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 28,
+      "start": 142.36,
+      "end": 147.36,
+      "text": "é fazer essa transição automática que as pessoas se perdem.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 29,
+      "start": 147.36,
+      "end": 153.4,
+      "text": "Saber que aí eu, eu, eu você, ri ela,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 30,
+      "start": 153.4,
+      "end": 159.4,
+      "text": "xi, ri ele, desculpa,xi ela, it é homicógnita, né?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 31,
+      "start": 159.4,
+      "end": 162.4,
+      "text": "Nós vamos descobrir que o grande segredo do it.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 32,
+      "start": 162.4,
+      "end": 169.49,
+      "text": "E eu, a gente, o brasileiro português esquece que eu também pode ser plural,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 33,
+      "start": 169.49,
+      "end": 175.49,
+      "text": "ok, e dei eles. O brasileiro e o falante de português, português também,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 34,
+      "start": 175.49,
+      "end": 181.49,
+      "text": "eles esquece que dei, serve pra o que for no plural, então por exemplo,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 35,
+      "start": 181.49,
+      "end": 186.49,
+      "text": "ah, os livros, os livros estão sobre a mesa,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 36,
+      "start": 186.49,
+      "end": 191.49,
+      "text": "The books are on the table, they are big books, they are thick books,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 37,
+      "start": 191.49,
+      "end": 195.49,
+      "text": "and so on. O falante de português esquece que",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 38,
+      "start": 195.49,
+      "end": 202.49,
+      "text": "The books are day, the cars are day, the people are day.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 39,
+      "start": 202.49,
+      "end": 206.49,
+      "text": "Ok, então é aqui que eu vou mostrar pra você como é que você pode",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 40,
+      "start": 206.49,
+      "end": 212.49,
+      "text": "acimilar isso e treinar, treinar cinco minutinhos ali com os exercícios que eu",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 41,
+      "start": 212.49,
+      "end": 217.29,
+      "text": "vou passar pra você aqui. All right, vamos lá.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 42,
+      "start": 217.29,
+      "end": 223.55,
+      "text": "Bom, lembrando que todo esse material que você tá vendo aqui está",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 43,
+      "start": 223.55,
+      "end": 228.55,
+      "text": "ir disponível pra você em PDF. E mais, eu preparei um PDF,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 44,
+      "start": 228.55,
+      "end": 233.55,
+      "text": "mais simples, como um guia rápido, interessante você baixá-lo também,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 45,
+      "start": 233.55,
+      "end": 238.55,
+      "text": "ou guardá-lo em algum lugar que você possa fazer revisões rapidamente.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 46,
+      "start": 238.55,
+      "end": 243.55,
+      "text": "Tá tudo aqui, materiais disponíveis, materiais pra dar um load tá aqui embaixo.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 47,
+      "start": 243.55,
+      "end": 246.55,
+      "text": "All right, então quais são os personal pronouns?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 48,
+      "start": 246.55,
+      "end": 253.55,
+      "text": "I, you, he, she, it, we, e aqui, dei.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 49,
+      "start": 253.55,
+      "end": 258.55,
+      "text": "Eu até esqueci de colocar aqui o you plural, na pena verdade eu já coloquei aqui,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 50,
+      "start": 258.55,
+      "end": 263.55,
+      "text": "você ou você. Então, you pode ser tanto no singular quanto plural,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 51,
+      "start": 263.55,
+      "end": 265.55,
+      "text": "certo? Qual que é a função?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 52,
+      "start": 265.55,
+      "end": 270.77,
+      "text": "I, ou narrador, you, a quem tá ouvindo, certo?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 53,
+      "start": 270.77,
+      "end": 277.77,
+      "text": "He, she, and it, é terceiro, você ou seja, a boy, a man,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 54,
+      "start": 277.77,
+      "end": 283.8,
+      "text": "no caso de she, a woman, a girl, right? Então aqui tem alguns exemplos,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 55,
+      "start": 283.8,
+      "end": 294.12,
+      "text": "I, you, he's the hero, she's the witch, ela é, ela é a bruxa.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 56,
+      "start": 294.12,
+      "end": 299.12,
+      "text": "It is the door, é a porta, we, nós, nós somos amigos,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 57,
+      "start": 299.12,
+      "end": 303.32,
+      "text": "we are friends, nós somos casados, we are married.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 58,
+      "start": 303.32,
+      "end": 308.32,
+      "text": "Ah, mas esse are easy, nós vamos aprender daqui a pouquinho, daqui a pouquinho.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 59,
+      "start": 308.32,
+      "end": 313.32,
+      "text": "Okay, in day, quando é mais de uma pessoa objeto ou animal.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 60,
+      "start": 313.32,
+      "end": 316.32,
+      "text": "E o day tem uma coisa interessante, tá galera?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 61,
+      "start": 316.32,
+      "end": 321.32,
+      "text": "Hoje, você sabe que os idiomas, essas línguas, elas vão,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 62,
+      "start": 321.32,
+      "end": 324.32,
+      "text": "elas são dinâmicos, elas vão mudando, certo?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 63,
+      "start": 324.32,
+      "end": 332.32,
+      "text": "Em, em inglês, hoje, quando você não quer ofender ninguém com os pronomes,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 64,
+      "start": 332.32,
+      "end": 337.32,
+      "text": "você use day, mesmo que seja uma pessoa, tá?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 65,
+      "start": 337.32,
+      "end": 341.32,
+      "text": "Então, por exemplo, se você não quer dizer he, or she,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 66,
+      "start": 341.32,
+      "end": 347.8,
+      "text": "você pode dizer day e tá, e tá valendo, okay?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 67,
+      "start": 347.8,
+      "end": 352.8,
+      "text": "Então, a gente vai falar um pouco mais sobre essas coisas durante a medic story.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 68,
+      "start": 352.8,
+      "end": 357.8,
+      "text": "Enfim, qual que é a maior armadilha aqui? É o it, my friend.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 69,
+      "start": 357.8,
+      "end": 365.92,
+      "text": "É o it. Porque sempre, sempre foi ensinado que it é para objetos animais,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 70,
+      "start": 365.92,
+      "end": 370.92,
+      "text": "coisas inanimadas, mas tem uma armadilha, eu coloquei aqui no exercício,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 71,
+      "start": 370.92,
+      "end": 374.92,
+      "text": "foco nas armadilhas da história, o it, o pronome curinga,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 72,
+      "start": 374.92,
+      "end": 379.92,
+      "text": "é o sujeito oculto, o it, por que que a gente precisa do it?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 73,
+      "start": 379.92,
+      "end": 386.21,
+      "text": "Porque todas as frases que a gente fala em inglês precisa de um sujeito,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 74,
+      "start": 386.21,
+      "end": 392.47,
+      "text": "okay? Diferente do português, por exemplo, em português a gente fala",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 75,
+      "start": 392.47,
+      "end": 402.52,
+      "text": "está calor, está quente, é legal, é massa, é ruim, tá vendo?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 76,
+      "start": 402.52,
+      "end": 409.52,
+      "text": "Como é que o sujeito é oculto? Então, a gente usa o it pra quando a gente quiser",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 77,
+      "start": 409.52,
+      "end": 413.52,
+      "text": "no caso do português, quando a gente pensa alguma coisa que é oculto, a gente usa o it.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 78,
+      "start": 413.52,
+      "end": 419.52,
+      "text": "Nossa, isso é muito legal, isso é muito legal, não é desesvery nice,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 79,
+      "start": 419.52,
+      "end": 423.52,
+      "text": "pode falar it's very nice, okay? Eu coloquei aqui um exemplo,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 80,
+      "start": 423.52,
+      "end": 430.61,
+      "text": "eu uso o neutro, o livro é grande, o livro é grande, a tradução correta",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 81,
+      "start": 430.61,
+      "end": 435.61,
+      "text": "é The Bokeh's Back, só que você pode falar, é um livro grande,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 82,
+      "start": 435.61,
+      "end": 440.61,
+      "text": "It's a Big Bokeh, está chovendo It's Rainy, Taquente, It's Hot,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 83,
+      "start": 440.61,
+      "end": 444.74,
+      "text": "alright? E aí, o exemplo que eu coloco aqui é o seguinte,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 84,
+      "start": 444.74,
+      "end": 450.74,
+      "text": "muitas vezes a gente não sabe o que dizer, em determinadas situações",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 85,
+      "start": 450.74,
+      "end": 458.74,
+      "text": "onde o it é usado sim pra pessoas, por exemplo, alguém chega na sua porta,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 86,
+      "start": 458.74,
+      "end": 467.85,
+      "text": "okay, e bate, e aí você dentro de casa vai perguntar quem é, quem é?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 87,
+      "start": 467.85,
+      "end": 475.16,
+      "text": "Você vai perguntar who are you? Who is she? Who are they? Who are you?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 88,
+      "start": 475.16,
+      "end": 480.16,
+      "text": "No, você vai perguntar who is it? Who is it? Tá vendo?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 89,
+      "start": 480.16,
+      "end": 484.16,
+      "text": "Você sabe que é uma pessoa que tá atrás da porta e vai usar o it.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 90,
+      "start": 484.16,
+      "end": 490.16,
+      "text": "Este é o melhor exemplo pra você entender que it não é uma coisa certinha",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 91,
+      "start": 490.16,
+      "end": 497.16,
+      "text": "para coisas em objetos, você pode sim usar o it para pessoas, okay?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 92,
+      "start": 497.16,
+      "end": 503.16,
+      "text": "Who is it? Você não fala who are you? Eu deixei esse exemplo aqui",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 93,
+      "start": 503.16,
+      "end": 513.28,
+      "text": "e aí a pessoa responde, it's me, Leo, or it's John, it's Mary, right?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 94,
+      "start": 513.28,
+      "end": 519.95,
+      "text": "Ó, tá na hora de, tá na hora de, aqui ó, it's time to go, right?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 95,
+      "start": 519.95,
+      "end": 523.95,
+      "text": "Não tá vendo como é que o uso do it é muito interessante",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 96,
+      "start": 523.95,
+      "end": 531.49,
+      "text": "e a gente usa o tempo todo, sabe por quê? Porque a gente sempre precisa de um sujeito, okay?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 97,
+      "start": 531.49,
+      "end": 540.68,
+      "text": "Então o subject pronouns, os personal pronouns são as palavrinhas pequenas que substituem o sujeito",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 98,
+      "start": 540.68,
+      "end": 549.68,
+      "text": "e às vezes você não sabe quem é o sujeito, mas quando você não sabe quem é o sujeito ou o que é o sujeito, você usa it, right?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 99,
+      "start": 549.68,
+      "end": 553.68,
+      "text": "Então por exemplo, você tá falando assim, ah, o que que é?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 100,
+      "start": 553.68,
+      "end": 562.84,
+      "text": "O que foi? What is it? What is it? I don't know, what is it? Right? Good.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 101,
+      "start": 562.84,
+      "end": 578.9,
+      "text": "E aqui ó, dei o pronome plural universal e hoje eu diria que o pronome também singular universal, com essa mudança toda, com essa adequação de gênero, identidade,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 102,
+      "start": 578.9,
+      "end": 593.32,
+      "text": "desitudo mais, sem entrar no mérito disso, ou em inglês ajuda muito, que é o dei, porque em português eles inventaram o pronome neutro, né?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 103,
+      "start": 593.32,
+      "end": 602.32,
+      "text": "Então fica muito mais difícil a gente lembrar, mas em inglês olhe garasséi, isso, dei, right?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 104,
+      "start": 602.32,
+      "end": 613.86,
+      "text": "Faz confusão, faz, right? Por exemplo, ah, eu convidei, eu convidei um amigo ou uma amiga para almoçar com a gente.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 105,
+      "start": 613.86,
+      "end": 623.86,
+      "text": "So invite them, day are coming, e pode ser que seja uma pessoa só, então pode gerar confusão, mas isso é só uma brincadeira aqui.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 106,
+      "start": 623.86,
+      "end": 631.89,
+      "text": "Bom, vamos lá, qual que é o primeiro exercício que eu quero que você faça agora? É o seguinte, eu quero que você leia",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 107,
+      "start": 631.89,
+      "end": 642.99,
+      "text": "e escute de mim, ok? Você vai escutar de mim e vai dizer a mesma frase usando o pronome que você acha que é, all right?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 108,
+      "start": 642.99,
+      "end": 651.99,
+      "text": "Então nós temos aqui, the old map is in the chest, o antigo mapa está no baú, pronto, já sabe que chest é baú e tudo mais.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 109,
+      "start": 652.99,
+      "end": 659.99,
+      "text": "The old map is in the chest, it's in the chest, ok? Vamo lá, vamos tê-na? Good.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 110,
+      "start": 659.99,
+      "end": 669.25,
+      "text": "The old map is in the chest, it's in the chest, very good.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 111,
+      "start": 669.25,
+      "end": 679.48,
+      "text": "The wizard and the hero run fast, o mago ueroi corre bem rápido, the wizard and the hero run fast.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 112,
+      "start": 681.92,
+      "end": 691.92,
+      "text": "They run fast, very good. My father is waiting outside, meu pai está esperando, meu pai está esperando aí fora, meu pai está esperando lá fora.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 113,
+      "start": 691.92,
+      "end": 699.26,
+      "text": "My father is waiting outside, his waiting outside, all right.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 114,
+      "start": 700.26,
+      "end": 710.32,
+      "text": "Anna and I need to find the key. Anna and I, Anna e eu, precisamos encontrar a chave, a gente não tem que encontrar na chave.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 115,
+      "start": 710.32,
+      "end": 725.17,
+      "text": "Anna and I need to find the key. We need to find the key. Anna and I, essa parte, que a gente não lembra. Anna and I, we, ok?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 116,
+      "start": 726.81,
+      "end": 731.81,
+      "text": "Anna and I need to find the key. We need to find the key. Very good.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 117,
+      "start": 731.81,
+      "end": 737.91,
+      "text": "The mysterious light, the mysterious light, is getting closer.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 118,
+      "start": 737.91,
+      "end": 743,
+      "text": "A luz misteriosa está se aproximando. A luz misteriosa está se aproximando.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 119,
+      "start": 743,
+      "end": 752.79,
+      "text": "The mysterious light is getting closer. It's getting closer. Very good. It's getting closer.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 120,
+      "start": 753.79,
+      "end": 762.79,
+      "text": "It's getting closer. It's getting closer. What? What is it? The mysterious light. Very good. Very good.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 121,
+      "start": 762.79,
+      "end": 769.79,
+      "text": "Ok, agora vamos fazer uma conexão desse exercício, desse exercício aqui com a magic story.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 122,
+      "start": 769.79,
+      "end": 774.79,
+      "text": "Ok? Bom, você já domina aqui ó, você já domina o primeiro bloco de construção.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 123,
+      "start": 775.79,
+      "end": 780.79,
+      "text": "Nas magic stories, você vai ver e ouvire esses pronomes milhares de vezes.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 124,
+      "start": 780.79,
+      "end": 791.79,
+      "text": "Então, agora, na segunda aula deste módulo, nós vamos conseguir ligar esses pronouns, os sujeitos, ao verbo, a divinha qual,",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 125,
+      "start": 792.79,
+      "end": 804.79,
+      "text": "o verbo não é o verbo mais fácil do inglês, pelo contrário. Nós vamos começar pelo mais difícil.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 126,
+      "start": 804.79,
+      "end": 810.79,
+      "text": "Verbo-to-be, ser e estar em português, é o verbo mais complexo que a gente tem pra aprender.",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 127,
+      "start": 810.79,
+      "end": 815.79,
+      "text": "E nós vamos agora de cara pra você ver que é quick start mesmo, né? Basica ou não?",
+      "spokenTranslation": ""
+    },
+    {
+      "id": 128,
+      "start": 815.79,
+      "end": 818.79,
+      "text": "Vamos para a aula 2, tchau.",
+      "spokenTranslation": ""
     }
   ]
-};
+}

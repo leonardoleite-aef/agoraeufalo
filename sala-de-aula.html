@@ -192,11 +192,11 @@
           </button>
         </div>
 
-        <!-- Right: Training CTA, PDF, Complete Buttons -->
+        <!-- Right: Escutar no Celular, PDF, Complete Buttons -->
         <div class="flex items-center gap-2 shrink-0">
-          <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3.5 py-2 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95">
-            <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
-            <span>Treinar no Player</span>
+          <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3.5 py-2 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95" title="Escutar essa aula no seu celular">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+            <span>Escutar essa aula no seu celular</span>
           </button>
 
           <a id="pdfDownloadLink" href="Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf" target="_blank" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition">
@@ -2811,8 +2811,7 @@
       else if (activeLesson.id.includes("-pro") || activeLesson.id.includes("pro")) activityTab = "pronunciation";
 
       const courseId = activeCourse?.id || "ms-legacy";
-      const playerUrl = (courseId === 'ms-legacy' || courseId === 'magic-stories-legacy') ? 'treino/magic-stories.html' : 'treino/player.html';
-      window.location.href = `${playerUrl}?curso=${courseId}&modulo=${activeModule.id}&aula=${activeLesson.id}`;
+      window.location.href = `treino/player.html?curso=${courseId}&modulo=${activeModule.id}&aula=${activeLesson.id}`;
     }
 
     window.toggleSyllabusDrawer = () => {
