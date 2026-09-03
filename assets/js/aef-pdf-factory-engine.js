@@ -768,13 +768,15 @@
 
       let currentMode = 'general';
       let currentLines = [];
+      let extractedTitle = '';
+      let extractedSubtitle = '';
 
       const flushCurrent = () => {
         if (currentLines.length === 0) return;
 
         if (currentMode === 'lr') {
           const sentences = currentLines.map(l => {
-            // Só considera locutor se for nome curto (<= 15 chars, ex: 'Leo:', 'Grazi:', 'Anna:')
+            // Só considera locutor se for nome curto (<= 15 chars, ex: 'Leo:', 'Grazi:', 'Anna:', 'Carlos:', 'Attendant:')
             const colonIdx = l.indexOf(':');
             if (colonIdx > 0 && colonIdx <= 15 && !l.substring(0, colonIdx).includes('.')) {
               return { speaker: l.substring(0, colonIdx).trim(), en: l.substring(colonIdx + 1).trim(), pt: '' };
@@ -818,6 +820,47 @@
               showLines: true
             }
           });
+        } else if (currentMode === 'lask') {
+          const items = currentLines.map(l => {
+            if (l.includes('->') || l.includes(' - ')) {
+              const parts = l.split(/->| - /);
+              return { statement: parts[0].trim(), prompt: (parts[1] || '').trim() };
+            }
+            return { statement: l, prompt: 'Pergunte no reflexo:' };
+          });
+          parsedBlocks.push({
+            id: `b_lask_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'listen_ask',
+            data: {
+              title: 'Listen & Ask • Desafio de Perguntas',
+              instruction: 'Ao ouvir o estímulo afirmativo ou negativo, formule de imediato a pergunta correspondente.',
+              items,
+              showLines: true
+            }
+          });
+        } else if (currentMode === 'pro') {
+          const tips = [];
+          const contentLines = [];
+          currentLines.forEach(l => {
+            if (l.includes('➔') || l.includes('->')) {
+              tips.push(l);
+            } else {
+              contentLines.push(l);
+            }
+          });
+          parsedBlocks.push({
+            id: `b_pro_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'connected_speech',
+            data: {
+              title: 'Pronunciation & Connected Speech • Ritmo Mecânico',
+              instruction: 'Treine as conexões sonoras naturais e reduções da fala da vida real.',
+              content: contentLines.join('\n'),
+              tips: tips.length > 0 ? tips : [
+                'Fale no mesmo andamento da gravação.',
+                'Conecte o som final da consoante com a vogal seguinte.'
+              ]
+            }
+          });
         } else if (currentMode === 'gold') {
           parsedBlocks.push({
             id: `b_gold_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
@@ -828,14 +871,18 @@
             }
           });
         } else {
-          parsedBlocks.push({
-            id: `b_exp_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
-            type: 'explainer',
-            data: {
-              title: 'Conceito & Roteiro da Aula',
-              content: currentLines.join('\n\n')
-            }
-          });
+          // Se for linha de título/subtítulo solta no texto
+          const joined = currentLines.join(' ');
+          if (!joined.toLowerCase().startsWith('titulo:') && !joined.toLowerCase().startsWith('subtitulo:')) {
+            parsedBlocks.push({
+              id: `b_exp_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'explainer',
+              data: {
+                title: 'Conceito & Roteiro da Aula',
+                content: currentLines.join('\n\n')
+              }
+            });
+          }
         }
         currentLines = [];
       };
@@ -851,6 +898,18 @@
 
         const lower = line.toLowerCase().replace(/^[#\*\-]+\s*/, '');
 
+        if (lower.startsWith('titulo:') || lower.startsWith('title:')) {
+          flushCurrent();
+          extractedTitle = line.replace(/^[#\*\-\s]*(titulo|title):\s*/i, '').trim();
+          this.state.title = extractedTitle;
+          return;
+        } else if (lower.startsWith('subtitulo:') || lower.startsWith('subtitle:')) {
+          flushCurrent();
+          extractedSubtitle = line.replace(/^[#\*\-\s]*(subtitulo|subtitle):\s*/i, '').trim();
+          this.state.subtitle = extractedSubtitle;
+          return;
+        }
+
         if (lower.startsWith('section 1') || lower.startsWith('listen & read') || lower.startsWith('listen and read') || lower.startsWith('história') || lower.startsWith('story:')) {
           flushCurrent();
           currentMode = 'lr';
@@ -862,7 +921,10 @@
           currentMode = 'la';
         } else if (lower.startsWith('section 5') || lower.startsWith('listen & ask') || lower.startsWith('listen and ask') || lower.startsWith('desafio de perguntas')) {
           flushCurrent();
-          currentMode = 'la'; // Adiciona ao fluxo de treino de perguntas
+          currentMode = 'lask';
+        } else if (lower.startsWith('section 6') || lower.startsWith('pronúncia') || lower.startsWith('pronunciation') || lower.startsWith('connected speech') || lower.startsWith('dicas fonéticas:')) {
+          flushCurrent();
+          currentMode = 'pro';
         } else if (lower.startsWith('sacada de ouro') || lower.startsWith('golden tip')) {
           flushCurrent();
           currentMode = 'gold';
@@ -871,7 +933,6 @@
           if (line.startsWith('|') && line.endsWith('|')) {
             const parts = line.split('|').map(p => p.trim()).filter(Boolean);
             if (parts.length >= 2 && !parts[0].includes('---') && !parts[0].toLowerCase().includes('phrases') && !parts[0].toLowerCase().includes('question')) {
-              // Converte a linha da tabela para o formato de chunk ou pergunta
               if (currentMode === 'chunks') {
                 const en = parts[0].replace(/\*/g, '');
                 const pt = (parts[parts.length - 1] || '').replace(/\*/g, '');
@@ -883,7 +944,7 @@
                 return;
               }
             } else {
-              return; // Ignora cabeçalho e divisores da tabela markdown
+              return;
             }
           }
           currentLines.push(line);
@@ -891,17 +952,44 @@
       });
       flushCurrent();
 
-      this.distributeBlocksIntoPages(parsedBlocks);
+      this.distributeBlocksIntoPages(parsedBlocks, extractedTitle, extractedSubtitle);
       this.notify();
     }
 
-    distributeBlocksIntoPages(blocksList) {
+    distributeBlocksIntoPages(blocksList, customTitle = '', customSubtitle = '') {
       const pages = [];
-      let currentPage = {
-        id: `page_1`,
+      const title = customTitle || this.state.title || 'Apostila Oficial';
+      const subtitle = customSubtitle || this.state.subtitle || 'Material Didático de Apoio';
+
+      // PÁGINA 1: Capa Oficial Deep Navy (Arquétipo 1)
+      const msMatch = title.match(/MS\s*0*(\d+)/i);
+      const watermarkText = msMatch ? `MS • ${msMatch[1].padStart(2, '0')}` : 'AEF • 2026';
+
+      pages.push({
+        id: 'page_1',
         number: 1,
+        blocks: [{
+          id: 'b_cov_auto',
+          type: 'cover',
+          data: {
+            tag: '✦ MAGIC STORIES • SÉRIE OFICIAL 2026',
+            courseTitle: subtitle || 'Magic Stories Legacy',
+            moduleTitle: title,
+            lessonTitle: 'Treino de Fluência & Absorção Natural',
+            watermark: watermarkText,
+            synopsis: `Material oficial de acompanhamento e fixação mecânica da lição ${title}. Listen & Read, Chunks Vivos, Bate-pronto de Perguntas e Conexões Sonoras.`,
+            stats: 'Treino Completo de 6 Atividades • Método AgoraEuFalo',
+            artworkUrl: 'assets/images/cover-default-aef.jpg'
+          }
+        }]
+      });
+
+      // PÁGINAS SEGUINTES: Distribuição inteligente com cabeçalho sincronizado
+      let currentPage = {
+        id: `page_2`,
+        number: 2,
         blocks: [
-          { id: 'b_hdr_auto', type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Apostila Reestilizada', courseTitle: this.state.title, lessonTitle: this.state.subtitle } }
+          { id: 'b_hdr_auto_2', type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Treino Prático', courseTitle: title, lessonTitle: subtitle } }
         ]
       };
 
@@ -917,7 +1005,7 @@
             id: `page_${pages.length + 1}`,
             number: pages.length + 1,
             blocks: [
-              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Continuação', courseTitle: this.state.title, lessonTitle: this.state.subtitle } }
+              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Continuação', courseTitle: title, lessonTitle: subtitle } }
             ]
           };
           currentWeight = 18;
