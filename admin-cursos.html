@@ -43,11 +43,11 @@
 
   <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-courses-registry.js?v=20260903_1445"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260903_1445"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260903_1445"></script>
-  <script src="assets/js/aef-pdf-generator.js?v=20260903_1445"></script>
-  <script src="assets/js/aef-portal-auth.js?v=20260903_1445"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260903_1458"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260903_1458"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260903_1458"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260903_1458"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260903_1458"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -244,38 +244,7 @@
           </div>
         </div>
 
-        <!-- Elemento 5: Conteúdo Didático da Vídeo-Aula (Texto / HTML Abaixo do Vídeo) -->
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
-              <i data-lucide="file-code" class="w-4 h-4"></i>
-              <span>Elemento 5 • Texto Didático / HTML (Abaixo do Vídeo)</span>
-            </label>
-            <span class="text-[10px] text-slate-400 font-medium">Renderizado diretamente na Sala de Aula</span>
-          </div>
-
-          <!-- Quick Formatting Toolbar -->
-          <div class="flex flex-wrap items-center gap-1.5 pb-1 border-b border-white/10 text-[11px]">
-            <button type="button" onclick="insertDidacticSnippet('p')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition" title="Inserir Parágrafo">
-              &lt;p&gt;
-            </button>
-            <button type="button" onclick="insertDidacticSnippet('box-amber')" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold border border-amber-500/30 transition" title="Inserir Caixa Didática Âmbar">
-              🟨 Card Destaque
-            </button>
-            <button type="button" onclick="insertDidacticSnippet('box-white')" class="px-2 py-0.5 rounded bg-white/15 hover:bg-white/25 text-white font-semibold transition" title="Inserir Card Branco">
-              ⬜ Card Neutro
-            </button>
-            <button type="button" onclick="insertDidacticSnippet('ul')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition" title="Inserir Lista">
-              • Lista
-            </button>
-            <button type="button" onclick="insertDidacticSnippet('strong')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-300 font-bold transition" title="Texto em Negrito">
-              <b>B</b>
-            </button>
-          </div>
-
-          <textarea id="lessonProcessedHtmlDirectInput" rows="6" oninput="syncDirectHtmlInput(this.value)" placeholder="Digite aqui anotações, roteiro explicativo, vocabulário ou HTML que o aluno verá logo abaixo do vídeo da aula..." class="w-full p-3 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-y custom-scrollbar"></textarea>
-          <input type="hidden" id="lessonAudioUrlInput">
-        </div>
+        <input type="hidden" id="lessonAudioUrlInput">
 
         <!-- Media Picker 3: Apostila em PDF, Capa 1:1 e Thumbnail 16:9 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -409,12 +378,37 @@
         </p>
       </div>
 
-      <!-- TAB 2: CONTEÚDO FORMATADO POLIDO (HTML) -->
+      <!-- TAB 2: CONTEÚDO DIDÁTICO FORMATADO (ELEMENTO 5 • HTML) -->
       <div id="aiTabProcessed" class="hidden flex-1 flex flex-col pt-3 overflow-hidden">
         <div class="mb-2 flex items-center justify-between text-[11px] text-slate-400">
-          <span>HTML didático gerado pelo Agente / Formatado:</span>
+          <span class="font-bold text-amber-300 flex items-center gap-1">
+            <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
+            <span>Elemento 5 • Texto Didático (Abaixo do Vídeo)</span>
+          </span>
+          <span class="text-[10px] text-slate-400">Renderizado na Sala de Aula</span>
         </div>
-        <textarea id="lessonProcessedHtmlInput" placeholder="<div class='pedagogical-box'>...</div>" class="flex-1 w-full p-3.5 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-none custom-scrollbar"></textarea>
+
+        <!-- Quick Formatting Toolbar Funcional -->
+        <div class="flex flex-wrap items-center gap-1.5 pb-2 mb-2 border-b border-white/10 text-xs">
+          <button type="button" onclick="insertDidacticSnippet('p')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-bold transition flex items-center gap-1 cursor-pointer" title="Inserir Parágrafo">
+            <span>&lt;p&gt;</span>
+            <span class="text-[10px] text-slate-400 font-normal">Parágrafo</span>
+          </button>
+          <button type="button" onclick="insertDidacticSnippet('box-amber')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer" title="Inserir Caixa Didática Âmbar">
+            <span>🟨 Card Destaque</span>
+          </button>
+          <button type="button" onclick="insertDidacticSnippet('box-white')" class="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white font-bold transition flex items-center gap-1 cursor-pointer" title="Inserir Card Neutro">
+            <span>⬜ Card Neutro</span>
+          </button>
+          <button type="button" onclick="insertDidacticSnippet('ul')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-bold transition flex items-center gap-1 cursor-pointer" title="Inserir Lista">
+            <span>• Lista</span>
+          </button>
+          <button type="button" onclick="insertDidacticSnippet('strong')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-black transition cursor-pointer" title="Texto em Negrito">
+            <b>B</b>
+          </button>
+        </div>
+
+        <textarea id="lessonProcessedHtmlInput" oninput="updatePreviewHtml()" placeholder="Digite aqui o texto explicativo, notas de aula, chunks ou HTML que o aluno verá logo abaixo do vídeo..." class="flex-1 w-full p-3.5 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-none custom-scrollbar"></textarea>
       </div>
 
       <!-- TAB 3: LIVE PREVIEW DO ALUNO -->
@@ -953,35 +947,39 @@
       renderHierarchyTree();
     }
 
-    function syncDirectHtmlInput(val) {
-      const hiddenInput = document.getElementById("lessonProcessedHtmlInput");
-      if (hiddenInput) hiddenInput.value = val;
-      updatePreviewHtml();
-    }
-
     function insertDidacticSnippet(type) {
-      const textarea = document.getElementById("lessonProcessedHtmlDirectInput");
+      // Garante que a aba HTML está ativa
+      switchAiTab('processed');
+
+      const textarea = document.getElementById("lessonProcessedHtmlInput");
       if (!textarea) return;
 
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      const selected = textarea.value.substring(start, end) || "Texto aqui";
+      textarea.focus();
+      const start = textarea.selectionStart ?? textarea.value.length;
+      const end = textarea.selectionEnd ?? textarea.value.length;
+      const hasSelection = start !== end;
+      const selected = hasSelection ? textarea.value.substring(start, end) : "";
 
       let snippet = "";
       if (type === "p") {
-        snippet = `<p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">\n  ${selected}\n</p>\n`;
+        snippet = `\n<p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">\n  ${selected || "Digite o texto do parágrafo aqui..."}\n</p>\n`;
       } else if (type === "box-amber") {
-        snippet = `<div class="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-amber-900">📌 Destaque Importante</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected}</p>\n</div>\n`;
+        snippet = `\n<div class="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-amber-900">📌 Destaque Importante</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected || "Escreva aqui a sua nota em destaque..."}</p>\n</div>\n`;
       } else if (type === "box-white") {
-        snippet = `<div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-[#0A192F]">📖 Notas da Aula</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected}</p>\n</div>\n`;
+        snippet = `\n<div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-[#0A192F]">📖 Notas da Aula</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected || "Escreva aqui as notas complementares da aula..."}</p>\n</div>\n`;
       } else if (type === "ul") {
-        snippet = `<ul class="list-disc list-inside space-y-1 text-xs text-slate-800 font-medium">\n  <li>${selected}</li>\n  <li>Outro ponto importante</li>\n</ul>\n`;
+        snippet = `\n<ul class="list-disc list-inside space-y-1 text-xs text-slate-800 font-medium">\n  <li>${selected || "Primeiro ponto"}</li>\n  <li>Segundo ponto</li>\n</ul>\n`;
       } else if (type === "strong") {
-        snippet = `<strong>${selected}</strong>`;
+        snippet = `<strong>${selected || "texto em negrito"}</strong>`;
       }
 
-      textarea.setRangeText(snippet, start, end, "end");
-      syncDirectHtmlInput(textarea.value);
+      const before = textarea.value.substring(0, start);
+      const after = textarea.value.substring(end);
+      textarea.value = before + snippet + after;
+      textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+
+      updatePreviewHtml();
+      showToast("✨ Bloco didático inserido com sucesso!");
     }
 
     function updateLessonPublishedUi(isPub) {
