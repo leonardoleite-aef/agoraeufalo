@@ -1263,7 +1263,7 @@
 
     @page {
       size: A4 portrait;
-      margin: 10mm 12mm 12mm 12mm;
+      margin: 0;
     }
 
     * {
@@ -1279,32 +1279,56 @@
       color: #0F172A;
       background: ${forPrint ? '#FFFFFF' : '#0B0F17'};
       font-size: ${fontSize};
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
     /* A4 Page Container */
     .aef-a4-page {
       width: 210mm;
       min-height: 297mm;
-      height: ${forPrint ? '297mm' : 'auto'};
+      max-height: ${forPrint ? '297mm' : 'none'};
+      box-sizing: border-box;
       background: #FFFFFF;
-      margin: ${forPrint ? '0 auto' : '20px auto'};
-      padding: 14mm 16mm 14mm 16mm;
+      margin: ${forPrint ? '0' : '20px auto'};
+      padding: ${forPrint ? '12mm 14mm 10mm 14mm' : '14mm 16mm 12mm 16mm'};
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      page-break-inside: avoid;
+      break-inside: avoid;
       page-break-after: always;
       break-after: page;
       box-shadow: ${forPrint ? 'none' : '0 20px 40px rgba(0,0,0,0.5)'};
       border-radius: ${forPrint ? '0' : '8px'};
+      overflow: hidden;
+    }
+
+    @media print {
+      body {
+        background: #FFFFFF !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .aef-a4-page {
+        margin: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
     }
 
     .a4-inner-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     /* Running Footer */

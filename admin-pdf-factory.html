@@ -298,12 +298,19 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
           </span>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tamanho Base da Fonte</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Tamanho Base da Fonte</label>
+              <span id="activeFontSizeLabel" class="text-[10px] font-mono text-amber-400 font-bold">15pt</span>
+            </div>
             <div class="grid grid-cols-4 gap-1">
+              <button type="button" onclick="setFontSize('11pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">11pt</button>
+              <button type="button" onclick="setFontSize('12pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">12pt</button>
+              <button type="button" onclick="setFontSize('13pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">13pt</button>
               <button type="button" onclick="setFontSize('14pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">14pt</button>
               <button type="button" onclick="setFontSize('15pt')" class="fontSizeBtn py-1 rounded text-xs font-black bg-amber-500 text-slate-950 border border-amber-400">15pt</button>
               <button type="button" onclick="setFontSize('16pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">16pt</button>
               <button type="button" onclick="setFontSize('17pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">17pt</button>
+              <button type="button" onclick="setFontSize('18pt')" class="fontSizeBtn py-1 rounded text-xs font-bold bg-[#162340] text-slate-300 hover:text-white border border-[#1E3056]">18pt</button>
             </div>
           </div>
 
@@ -877,6 +884,8 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
 
     function setFontSize(size) {
       window.AEFPdfFactoryEngine.state.fontSize = size;
+      const lbl = document.getElementById("activeFontSizeLabel");
+      if (lbl) lbl.innerText = size;
       document.querySelectorAll(".fontSizeBtn").forEach(btn => {
         btn.className = btn.innerText === size 
           ? "fontSizeBtn py-1 rounded text-xs font-black bg-amber-500 text-slate-950 border border-amber-400"
@@ -1279,12 +1288,35 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
       const d = block.data || {};
       if (block.type === 'cover') return `Capa: "${d.lessonTitle || ''}" • ${d.courseTitle || ''}`;
       if (block.type === 'header_banner') return `Banner: "${d.lessonTitle || ''}"`;
-      if (block.type === 'listen_read') return `Sentenças (${(d.sentences||[]).length}): ${(d.sentences||[]).map(s=>s.en).join(' • ')}`;
-      if (block.type === 'vocab_chunks') return `Chunks (${(d.chunks||[]).length}): ${(d.chunks||[]).map(c=>c.en).join(' • ')}`;
-      if (block.type === 'listen_answer') return `Perguntas (${(d.questions||[]).length}): ${(d.questions||[]).join(' • ')}`;
-      if (block.type === 'golden_tip') return `"${d.content || ''}"`;
+      if (block.type === 'listen_read') {
+        const sentences = d.sentences || [];
+        return `Sentenças (${sentences.length}): ${sentences.map(s => (typeof s === 'string' ? s : s.en || '')).slice(0, 3).join(' • ')}`;
+      }
+      if (block.type === 'vocab_chunks') {
+        const chunks = d.chunks || [];
+        return `Chunks (${chunks.length}): ${chunks.map(c => (typeof c === 'string' ? c : c.en || '')).slice(0, 4).join(' • ')}`;
+      }
+      if (block.type === 'listen_answer') {
+        const questions = d.questions || [];
+        return `Perguntas (${questions.length}): ${questions.slice(0, 3).join(' • ')}`;
+      }
+      if (block.type === 'look_retell') {
+        const prompts = d.prompts || [];
+        const kw = d.keywords || [];
+        return `Look & Retell (${prompts.length} prompts, ${kw.length} kw): ${prompts.slice(0, 2).join(' • ')}`;
+      }
+      if (block.type === 'listen_ask') {
+        const items = d.items || [];
+        return `Listen & Ask (${items.length} estímulos): ${items.map(it => it.statement || '').slice(0, 2).join(' • ')}`;
+      }
+      if (block.type === 'connected_speech') {
+        return `Connected Speech: "${(d.content || '').replace(/<[^>]*>/g, '')}"`;
+      }
+      if (block.type === 'golden_tip') return `💡 "${d.content || ''}"`;
       if (block.type === 'explainer') return d.content || 'Conceito didático';
-      return JSON.stringify(d);
+      if (block.type === 'handwriting_lines') return `📝 Pautas de Caligrafia (${d.lineCount || 4} linhas)`;
+      if (block.type === 'qr_code') return `📱 QR Code: ${d.targetUrl || 'Link do Player'}`;
+      return d.content || d.title || JSON.stringify(d);
     }
 
     function handleAddSelectedBlock() {
@@ -1430,6 +1462,22 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
             <div><label class="block font-bold text-slate-400 mb-0.5">Keywords / Palavras-Chave (separadas por vírgula ou livres)</label><input type="text" id="m_keywords" value="${kwStr}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs"></div>
           </div>
         `;
+      } else if (block.type === 'listen_ask') {
+        const itemsStr = (d.items || []).map(it => `${it.statement || ''} -> ${it.prompt || ''}`).join('\n');
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Instrução / Legenda</label><input type="text" id="m_instruction" value="${d.instruction || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">Estímulos & Desafios (Texto Livre: Estímulo -> Pergunta-alvo)</label>
+              <textarea id="m_items" rows="6" placeholder="Rodrigo was at the office. -> Pergunte onde ele estava:" class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-sans text-xs leading-relaxed">${itemsStr}</textarea>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <input type="checkbox" id="m_showLines" ${d.showLines !== false ? 'checked' : ''} class="w-4 h-4 accent-amber-500 rounded">
+              <label for="m_showLines" class="font-bold text-slate-300 text-xs">Exibir linhas pautadas para formulação de perguntas</label>
+            </div>
+          </div>
+        `;
       } else if (block.type === 'handwriting_lines') {
         formHtml = `
           <div class="space-y-2">
@@ -1486,6 +1534,18 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         newData.instruction = document.getElementById("m_instruction")?.value;
         newData.prompts = (document.getElementById("m_prompts")?.value || '').split('\n').filter(Boolean);
         newData.keywords = (document.getElementById("m_keywords")?.value || '').split(',').map(s => s.trim()).filter(Boolean);
+      } else if (block.type === 'listen_ask') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.instruction = document.getElementById("m_instruction")?.value;
+        const rawItems = (document.getElementById("m_items")?.value || '').split('\n').filter(Boolean);
+        newData.items = rawItems.map(l => {
+          if (l.includes('->')) {
+            const p = l.split('->');
+            return { statement: p[0].trim(), prompt: (p[1] || '').trim() };
+          }
+          return { statement: l.trim(), prompt: 'Formule a pergunta:' };
+        });
+        newData.showLines = document.getElementById("m_showLines")?.checked;
       } else if (block.type === 'handwriting_lines') {
         newData.title = document.getElementById("m_title")?.value;
         newData.lineCount = parseInt(document.getElementById("m_lineCount")?.value || '4', 10);
