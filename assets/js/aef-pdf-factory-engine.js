@@ -266,7 +266,7 @@
       defaultData: () => ({
         title: 'Toque o Áudio Desta Aula no Celular',
         subtitle: 'Aponte a câmera para abrir o Training Player diretamente nesta lição.',
-        targetUrl: 'https://agoraeufalo.com.br/player.html?course=english-quickstart&lesson=eqs12'
+        targetUrl: 'https://agoraeufalo.com.br/player.html'
       })
     }
   };

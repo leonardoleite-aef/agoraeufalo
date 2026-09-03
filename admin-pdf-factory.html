@@ -810,6 +810,30 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
           }
         }
 
+        // ----------------------------------------------------
+        // CASCATA INTELIGENTE DE URL PARA O QR CODE (3 NÍVEIS)
+        // ----------------------------------------------------
+        let smartTargetUrl = 'https://agoraeufalo.com.br/player.html';
+        const rawTrackId = lrLesson?.trainingTrackId || (courseId && moduleId ? `${courseId}_${moduleId}`.toLowerCase().replace(/[^a-z0-9_]/g, '_') : null);
+
+        if (rawTrackId) {
+          // Nível 1: Faixa específica do Player
+          smartTargetUrl = `https://agoraeufalo.com.br/player.html?trackId=${encodeURIComponent(rawTrackId)}`;
+        } else if (courseId && moduleId) {
+          // Nível 2: Contexto de Curso e Módulo
+          smartTargetUrl = `https://agoraeufalo.com.br/player.html?course=${encodeURIComponent(courseId)}&module=${encodeURIComponent(moduleId)}`;
+        }
+
+        // Aplica nos blocos QR Code existentes do estado
+        window.AEFPdfFactoryEngine.state.pages.forEach(pg => {
+          (pg.blocks || []).forEach(blk => {
+            if (blk.type === 'qr_code') {
+              blk.data.targetUrl = smartTargetUrl;
+              blk.data.subtitle = `Aponte o celular ou clique no botão para treinar a lição "${mod.title}" no Player.`;
+            }
+          });
+        });
+
         // Atualiza campos de cabeçalho do documento
         document.getElementById("docTitleInput").value = window.AEFPdfFactoryEngine.state.title;
         document.getElementById("docSubtitleInput").value = window.AEFPdfFactoryEngine.state.subtitle;
@@ -838,6 +862,23 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
             if (gold) gold.data.content = firstLesson.goldenTip;
           }
         }
+
+        // Sincroniza QR Codes para Curso Rápido
+        let quickTargetUrl = 'https://agoraeufalo.com.br/player.html';
+        const qTrackId = firstLesson?.trainingTrackId || (courseId && moduleId ? `${courseId}_${moduleId}`.toLowerCase().replace(/[^a-z0-9_]/g, '_') : null);
+        if (qTrackId) {
+          quickTargetUrl = `https://agoraeufalo.com.br/player.html?trackId=${encodeURIComponent(qTrackId)}`;
+        } else if (courseId) {
+          quickTargetUrl = `https://agoraeufalo.com.br/player.html?course=${encodeURIComponent(courseId)}`;
+        }
+
+        window.AEFPdfFactoryEngine.state.pages.forEach(pg => {
+          (pg.blocks || []).forEach(blk => {
+            if (blk.type === 'qr_code') {
+              blk.data.targetUrl = quickTargetUrl;
+            }
+          });
+        });
 
         document.getElementById("docTitleInput").value = window.AEFPdfFactoryEngine.state.title;
         document.getElementById("docSubtitleInput").value = window.AEFPdfFactoryEngine.state.subtitle;
@@ -1733,7 +1774,24 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
 
       if (les) {
         les.pdfUrl = generatedUrl;
-        showToast(`✅ Apostila vinculada na aula: ${les.title}`);
+        
+        // Atualiza os blocos de QR Code da apostila ativa com o link exato da aula selecionada
+        const targetTrackId = les.trainingTrackId || `${courseId}_${modId}`.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+        const lessonTargetUrl = targetTrackId 
+          ? `https://agoraeufalo.com.br/player.html?trackId=${encodeURIComponent(targetTrackId)}`
+          : `https://agoraeufalo.com.br/player.html?course=${encodeURIComponent(courseId)}&module=${encodeURIComponent(modId)}`;
+
+        window.AEFPdfFactoryEngine.state.pages.forEach(pg => {
+          (pg.blocks || []).forEach(blk => {
+            if (blk.type === 'qr_code') {
+              blk.data.targetUrl = lessonTargetUrl;
+              blk.data.subtitle = `Aponte o celular ou clique no botão para treinar a aula "${les.title}" no Player.`;
+            }
+          });
+        });
+        window.AEFPdfFactoryEngine.notify();
+
+        showToast(`✅ Apostila vinculada na aula: ${les.title} (QR Code atualizado!)`);
         closeLinkModal();
       }
     }
