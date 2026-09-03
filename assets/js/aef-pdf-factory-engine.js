@@ -973,9 +973,9 @@
           type: 'cover',
           data: {
             tag: '✦ MAGIC STORIES • SÉRIE OFICIAL 2026',
-            courseTitle: subtitle || 'Magic Stories Legacy',
-            moduleTitle: title,
-            lessonTitle: 'Treino de Fluência & Absorção Natural',
+            courseTitle: subtitle || 'Magic Stories Legacy • Acervo Clássico',
+            moduleTitle: '', // Limpo para não embolar na mesma linha do curso
+            lessonTitle: title, // O TÍTULO REAL DA AULA É O H1 MONUMENTAL!
             watermark: watermarkText,
             synopsis: `Material oficial de acompanhamento e fixação mecânica da lição ${title}. Listen & Read, Chunks Vivos, Bate-pronto de Perguntas e Conexões Sonoras.`,
             stats: 'Treino Completo de 6 Atividades • Método AgoraEuFalo',
@@ -1184,7 +1184,7 @@
               <div class="aef-cover-archetype">
                 <div class="cover-watermark">${d.watermark || '01/02'}</div>
                 <div class="cover-tag">${d.tag || '✦ AGORAEUFALO • PROFESSOR LEONARDO LEITE'}</div>
-                <div class="cover-course">${d.courseTitle || ''} • ${d.moduleTitle || ''}</div>
+                <div class="cover-course">${[d.courseTitle, d.moduleTitle].filter(Boolean).join(' • ')}</div>
                 <h1 class="cover-lesson-title">${d.lessonTitle || ''}</h1>
                 <div class="cover-card">
                   <div class="cover-synopsis-label">Sinopse Pedagógica & Treino de Fala:</div>
