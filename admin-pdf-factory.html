@@ -381,7 +381,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
                 <option value="explainer">✦ Conceito Central / Explainer</option>
               </optgroup>
               <optgroup label="História & Vocabulário">
-                <option value="listen_read">🎧 Listen & Read (LR - 16pt)</option>
+                <option value="listen_read">🎧 Listen & Read (LR - Imersão Auditiva)</option>
                 <option value="vocab_chunks">📖 Vocabulary Session & Chunks</option>
               </optgroup>
               <optgroup label="Treino Ativo (Practice Workbook)">
@@ -1287,7 +1287,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
     function getBlockPreviewSnippet(block) {
       const d = block.data || {};
       if (block.type === 'cover') return `Capa: "${d.lessonTitle || ''}" • ${d.courseTitle || ''}`;
-      if (block.type === 'header_banner') return `Banner: "${d.lessonTitle || ''}"`;
+      if (block.type === 'header_banner') return `Cabeçalho: "${d.lessonTitle || ''}" (${d.courseTitle || 'Geral'})`;
       if (block.type === 'listen_read') {
         const sentences = d.sentences || [];
         return `Sentenças (${sentences.length}): ${sentences.map(s => (typeof s === 'string' ? s : s.en || '')).slice(0, 3).join(' • ')}`;
@@ -1375,11 +1375,26 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
             <div><label class="block font-bold text-slate-400 mb-0.5">Sinopse Pedagógica</label><textarea id="m_synopsis" rows="3" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white">${d.synopsis || ''}</textarea></div>
           </div>
         `;
+      } else if (block.type === 'header_banner') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">1. Tag Superior (Identificador / Linha 1)</label><input type="text" id="m_tag" value="${d.tag || '✦ AgoraEuFalo • Professor Leonardo Leite'}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white text-xs font-mono"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">2. Curso / Módulo (Linha 2)</label><input type="text" id="m_course" value="${d.courseTitle || ''}" placeholder="Ex: English QuickStart • Módulo 1" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white text-xs"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">3. Título da Aula / Atividade (Linha 3 - Destaque)</label><input type="text" id="m_lesson" value="${d.lessonTitle || ''}" placeholder="Ex: Aula 1.2 • O Rei dos Verbos" class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-black text-sm"></div>
+          </div>
+        `;
       } else if (block.type === 'golden_tip') {
         formHtml = `
           <div class="space-y-2">
             <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
             <div><label class="block font-bold text-slate-400 mb-0.5">Conselho do Professor Leo</label><textarea id="m_content" rows="4" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-serif leading-relaxed">${d.content || ''}</textarea></div>
+          </div>
+        `;
+      } else if (block.type === 'explainer') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || '✦ Conceito Central da Aula'}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Explicação / Conceito Didático (Texto Livre)</label><textarea id="m_content" rows="6" placeholder="Explique o sentimento da estrutura de forma simples e direta..." class="w-full bg-[#0A101F] border border-[#1E3056] p-2.5 rounded text-white font-sans text-xs leading-relaxed">${d.content || ''}</textarea></div>
           </div>
         `;
       } else if (block.type === 'listen_read') {
@@ -1517,7 +1532,14 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         newData.lessonTitle = document.getElementById("m_lesson")?.value;
         newData.watermark = document.getElementById("m_watermark")?.value;
         newData.synopsis = document.getElementById("m_synopsis")?.value;
+      } else if (block.type === 'header_banner') {
+        newData.tag = document.getElementById("m_tag")?.value;
+        newData.courseTitle = document.getElementById("m_course")?.value;
+        newData.lessonTitle = document.getElementById("m_lesson")?.value;
       } else if (block.type === 'golden_tip') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.content = document.getElementById("m_content")?.value;
+      } else if (block.type === 'explainer') {
         newData.title = document.getElementById("m_title")?.value;
         newData.content = document.getElementById("m_content")?.value;
       } else if (block.type === 'qr_code') {
