@@ -43,11 +43,11 @@
 
   <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-courses-registry.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-pdf-generator.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-portal-auth.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260903_1420"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260903_1420"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260903_1420"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260903_1420"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260903_1420"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -862,7 +862,7 @@
       }
 
       container.innerHTML = modules.map((mod, mIdx) => {
-        const lessons = mod.lessons || [];
+        const lessons = (mod.lessons || []).slice().sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
         const isModPub = mod.published !== false;
         return `
           <div class="border border-white/10 rounded-xl bg-white/5 overflow-hidden">
