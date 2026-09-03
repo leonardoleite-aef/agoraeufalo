@@ -1228,7 +1228,8 @@
         }
 
         updateMediaPreviews();
-        showToast(`✅ "${file.name}" enviado com sucesso!`);
+        await handleSaveLesson();
+        showToast(`✅ "${file.name}" enviado e salvo na aula com sucesso!`);
       } catch (err) {
         console.error("Erro no upload:", err);
         showToast(`❌ Erro no upload: ${err.message}`);
