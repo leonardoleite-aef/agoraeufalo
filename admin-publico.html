@@ -6,81 +6,19 @@
   <title>Gestão do Player Público, Vídeos & Leads • AgoraEuFalo Admin</title>
   <meta name="robots" content="noindex, nofollow">
 
-  <!-- Master Access Auth Gate -->
-  <script src="assets/js/aef-auth-gate.js"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
-            mono: ['"Fira Code"', 'monospace']
-          },
-          colors: {
-            brand: {
-              navy: '#0A192F',
-              'navy-light': '#112240',
-              slate: '#1E293B',
-              gold: '#F59E0B',
-              goldDark: '#D97706',
-              bgLight: '#FAF8F5'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
   <!-- Lucide Icons & Core Cloud SDKs -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-filepicker.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
   <script src="treino/data/public.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
 </head>
 <body class="bg-[#0A192F] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
 
   <!-- ========================================== -->
-  <!-- 1. HEADER                                  -->
+  <!-- MAIN WORKSPACE                             -->
   <!-- ========================================== -->
-  <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <a href="admin-alunos.html" class="flex items-center gap-2">
-          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
-        </a>
-        <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
-          SUGESTÕES DO LEO & PLAYER PÚBLICO
-        </span>
-      </div>
-
-      <div class="flex items-center gap-2 text-xs">
-        <a href="personal-trainer.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold flex items-center gap-1.5 transition">
-          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          <span>Ver Landing Page ↗</span>
-        </a>
-        <a href="treino/player.html?aluno=public" target="_blank" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black flex items-center gap-1.5 transition shadow-sm">
-          <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-          <span>Abrir Player ↗</span>
-        </a>
-        <a href="tts-studio.html" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold flex items-center gap-1 transition shadow-sm">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
-          <span>TTS Studio</span>
-        </a>
-        <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-semibold transition">
-          Admin Geral
-        </a>
-      </div>
-    </div>
-  </header>
 
   <!-- ========================================== -->
   <!-- 2. STATS & VISUAL GUIDE                    -->
