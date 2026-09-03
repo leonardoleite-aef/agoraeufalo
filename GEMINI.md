@@ -118,14 +118,21 @@ Sempre que um novo artigo for solicitado, execute o pipeline em lote único:
 
 ---
 
-## 6. A Fábrica de Cursos & Integração Fluida (Sala de Aula ⇄ Player ⇄ Vitrine de Cursos)
-A área de membros opera com conexão bidirecional perfeita entre teoria e treino prático:
+## 6. A Fábrica de Cursos & A Matriz Canônica dos 5 Elementos da Masterclass
+A área de membros opera com conexão bidirecional perfeita entre teoria e treino prático. Toda aula no Course Studio e na Sala de Aula é estruturada rigorosamente sobre **5 Elementos Canônicos**:
 
-1. **Na Sala de Aula (`sala-de-aula.html`):** O aluno assiste à masterclass, estuda os chunks claros, lê a Sacada de Ouro e baixa a apostila em PDF.
-2. **Na Vitrine do Curso (`curso.html`):** O aluno visualiza a grade completa de módulos e o acordeão de aulas com as **miniaturas 16:9 oficiais de cada aula** (`thumbnailUrl`), duração exata e status de conclusão.
+1. **🎬 Elemento 1 — Vídeo Masterclass (.MP4):** Exposição audiovisual da aula com thumbnail 16:9 em alta resolução.
+2. **📄 Elemento 2 — Apostila Oficial Diagramada (.PDF):** Material A4 para download imediato do aluno.
+3. **🖼️ Elemento 3 — Kit Visual de Capas:** Capa quadrada 1:1 (`artworkUrl`) e miniatura 16:9 (`thumbnailUrl`).
+4. **💡 Elemento 4 — Sacada de Ouro do Professor Leo:** O insight transformador de mais de 35 anos de sala de aula em destaque âmbar.
+5. **📝 Elemento 5 — Área Didática de Texto / HTML Editável (`processedContentHtml`):** Espaço nobre editável diretamente no Course Studio e renderizado com tipografia de luxo logo abaixo do vídeo na Sala de Aula (`sala-de-aula.html`). Utilizado para notas de aula, tabelas de vocabulário, roteiro formatado, avisos e blocos didáticos claros (`bg-amber-50`).
+
+### 6.1. Integração Fluida (Sala de Aula ⇄ Player ⇄ Vitrine de Cursos):
+1. **Na Sala de Aula (`sala-de-aula.html`):** O aluno assiste à masterclass, estuda o texto didático (Elemento 5), lê a Sacada de Ouro e baixa a apostila em PDF.
+2. **Na Vitrine do Curso (`curso.html`):** O aluno visualiza a grade completa de módulos e o acordeão de aulas com as miniaturas 16:9 oficiais de cada aula (`thumbnailUrl`), duração exata e status de conclusão.
 3. **O Botão de Prática Ativa (*📌 Enviar para Training Player*):** Abre com 1 toque o Player na faixa exata da aula para os exercícios de *Listen & Read*, *Listen & Answer*, *Look & Retell* e *Pronúncia*.
 4. **Botão de Retorno no Player:** Permite voltar diretamente para a lição ativa da Sala de Aula.
-5. **Conformidade de Schema (1:1):** Cada aula no Firestore (`courses/{courseId}/modules/{moduleId}/lessons/{lessonId}`) e nas matrizes locais contém os campos `hasTrainingTrack: true`, `trainingTrackId` e `thumbnailUrl` apontando para a miniatura 16:9 correspondente da aula. **Proibição de Thumbnails Mockados:** É terminantemente obrigatório vincular as miniaturas 16:9 geradas de cada aula na esteira de produção.
+5. **Conformidade de Schema (1:1):** Cada aula no Firestore (`courses/{courseId}/modules/{moduleId}/lessons/{lessonId}`) e nas matrizes locais contém os campos `hasTrainingTrack: true`, `trainingTrackId`, `thumbnailUrl`, `processedContentHtml` e `goldenTip`. **Proibição de Thumbnails Mockados:** É terminantemente obrigatório vincular as miniaturas 16:9 geradas de cada aula na esteira de produção.
 
 ---
 

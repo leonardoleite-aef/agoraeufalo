@@ -43,11 +43,11 @@
 
   <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-courses-registry.js?v=20260903_1420"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260903_1420"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260903_1420"></script>
-  <script src="assets/js/aef-pdf-generator.js?v=20260903_1420"></script>
-  <script src="assets/js/aef-portal-auth.js?v=20260903_1420"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260903_1445"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260903_1445"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260903_1445"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260903_1445"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260903_1445"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -244,53 +244,37 @@
           </div>
         </div>
 
-        <!-- Media Picker 2: Áudio da Aula (MP3 128kbps) com Upload Direto -->
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
+        <!-- Elemento 5: Conteúdo Didático da Vídeo-Aula (Texto / HTML Abaixo do Vídeo) -->
+        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
-              <i data-lucide="music" class="w-4 h-4"></i>
-              <span>Áudio da Aula (MP3 128k)</span>
+            <label class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <i data-lucide="file-code" class="w-4 h-4"></i>
+              <span>Elemento 5 • Texto Didático / HTML (Abaixo do Vídeo)</span>
             </label>
-            <span id="audioUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum áudio</span>
+            <span class="text-[10px] text-slate-400 font-medium">Renderizado diretamente na Sala de Aula</span>
           </div>
 
-          <!-- Direct Upload Button, Manual URL Button & Delete from Cloud -->
-          <div class="grid grid-cols-12 gap-2">
-            <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
-              <i data-lucide="upload" class="w-4 h-4"></i>
-              <span>Subir Áudio (Mac / PC)</span>
-              <input type="file" accept="audio/mp3,audio/mpeg,audio/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'audio')">
-            </label>
-            <button type="button" onclick="toggleManualUrl('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
-              <i data-lucide="link" class="w-3.5 h-3.5"></i>
-              <span>URL</span>
+          <!-- Quick Formatting Toolbar -->
+          <div class="flex flex-wrap items-center gap-1.5 pb-1 border-b border-white/10 text-[11px]">
+            <button type="button" onclick="insertDidacticSnippet('p')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition" title="Inserir Parágrafo">
+              &lt;p&gt;
             </button>
-            <button type="button" onclick="handleDeleteMediaFromStorage('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir áudio permanentemente do Storage e limpar da aula">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              <span>Excluir</span>
+            <button type="button" onclick="insertDidacticSnippet('box-amber')" class="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold border border-amber-500/30 transition" title="Inserir Caixa Didática Âmbar">
+              🟨 Card Destaque
+            </button>
+            <button type="button" onclick="insertDidacticSnippet('box-white')" class="px-2 py-0.5 rounded bg-white/15 hover:bg-white/25 text-white font-semibold transition" title="Inserir Card Branco">
+              ⬜ Card Neutro
+            </button>
+            <button type="button" onclick="insertDidacticSnippet('ul')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition" title="Inserir Lista">
+              • Lista
+            </button>
+            <button type="button" onclick="insertDidacticSnippet('strong')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-slate-300 font-bold transition" title="Texto em Negrito">
+              <b>B</b>
             </button>
           </div>
 
-          <!-- Progress Bar (Hidden by default) -->
-          <div id="audioProgressBarCont" class="hidden space-y-1.5 p-3 bg-white/5 rounded-xl border border-emerald-400/30">
-            <div class="flex items-center justify-between text-xs font-bold text-emerald-300">
-              <span id="audioProgressLabel">Enviando áudio para a Nuvem...</span>
-              <span id="audioProgressPct" class="font-mono">0%</span>
-            </div>
-            <div class="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
-              <div id="audioProgressBar" class="bg-gradient-to-r from-emerald-500 to-emerald-300 h-2.5 rounded-full transition-all duration-200" style="width: 0%"></div>
-            </div>
-          </div>
-
-          <!-- Audio Preview Box -->
-          <div id="audioPreviewCont" class="hidden space-y-2 pt-1">
-            <audio id="audioPreviewPlayer" controls class="w-full"></audio>
-          </div>
-
-          <!-- Manual URL Input Field (Collapsible) -->
-          <div id="audioManualUrlCont" class="hidden space-y-1 pt-1">
-            <input type="text" id="lessonAudioUrlInput" oninput="updateMediaPreviews()" placeholder="https://firebasestorage.googleapis.com/..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
-          </div>
+          <textarea id="lessonProcessedHtmlDirectInput" rows="6" oninput="syncDirectHtmlInput(this.value)" placeholder="Digite aqui anotações, roteiro explicativo, vocabulário ou HTML que o aluno verá logo abaixo do vídeo da aula..." class="w-full p-3 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-y custom-scrollbar"></textarea>
+          <input type="hidden" id="lessonAudioUrlInput">
         </div>
 
         <!-- Media Picker 3: Apostila em PDF, Capa 1:1 e Thumbnail 16:9 -->
@@ -955,15 +939,49 @@
       document.getElementById("lessonPublishedInput").checked = isPub;
       updateLessonPublishedUi(isPub);
 
-      // AI Fields
+      // AI Fields & Elemento 5 (Conteúdo Didático)
+      const procHtml = foundLesson.processedContentHtml || "";
       document.getElementById("lessonRawScriptInput").value = foundLesson.rawScript || "";
-      document.getElementById("lessonProcessedHtmlInput").value = foundLesson.processedContentHtml || "";
+      document.getElementById("lessonProcessedHtmlInput").value = procHtml;
+      const directHtmlEl = document.getElementById("lessonProcessedHtmlDirectInput");
+      if (directHtmlEl) directHtmlEl.value = procHtml;
       document.getElementById("lessonAiStatusSelect").value = foundLesson.aiStatus || "draft_pending";
 
       updateMediaPreviews();
       updateRawCounter();
       updatePreviewHtml();
       renderHierarchyTree();
+    }
+
+    function syncDirectHtmlInput(val) {
+      const hiddenInput = document.getElementById("lessonProcessedHtmlInput");
+      if (hiddenInput) hiddenInput.value = val;
+      updatePreviewHtml();
+    }
+
+    function insertDidacticSnippet(type) {
+      const textarea = document.getElementById("lessonProcessedHtmlDirectInput");
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = textarea.value.substring(start, end) || "Texto aqui";
+
+      let snippet = "";
+      if (type === "p") {
+        snippet = `<p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">\n  ${selected}\n</p>\n`;
+      } else if (type === "box-amber") {
+        snippet = `<div class="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-amber-900">📌 Destaque Importante</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected}</p>\n</div>\n`;
+      } else if (type === "box-white") {
+        snippet = `<div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-[#0A192F]">📖 Notas da Aula</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected}</p>\n</div>\n`;
+      } else if (type === "ul") {
+        snippet = `<ul class="list-disc list-inside space-y-1 text-xs text-slate-800 font-medium">\n  <li>${selected}</li>\n  <li>Outro ponto importante</li>\n</ul>\n`;
+      } else if (type === "strong") {
+        snippet = `<strong>${selected}</strong>`;
+      }
+
+      textarea.setRangeText(snippet, start, end, "end");
+      syncDirectHtmlInput(textarea.value);
     }
 
     function updateLessonPublishedUi(isPub) {
