@@ -983,20 +983,43 @@
 
     loadRecipe(recipeData) {
       if (!recipeData || !recipeData.pages) return;
+      
+      const loadedPages = JSON.parse(JSON.stringify(recipeData.pages));
+      const loadedTitle = (recipeData.title || '').toLowerCase();
+      
+      // Auto-higienização: se a receita salva tiver um QR code com o link antigo do eqs12, mas a apostila for de outro módulo (ex: MS005), corrige
+      loadedPages.forEach(pg => {
+        (pg.blocks || []).forEach(blk => {
+          if (blk.type === 'qr_code') {
+            const currentUrl = blk.data?.targetUrl || '';
+            if (currentUrl.includes('course=english-quickstart&lesson=eqs12') && !loadedTitle.includes('quickstart') && !loadedTitle.includes('eqs')) {
+              // Se for um módulo Magic Stories (ex: MS005)
+              const msMatch = (recipeData.title || '').match(/MS\s*0*(\d+)/i);
+              if (msMatch) {
+                const msNum = msMatch[1].padStart(3, '0');
+                blk.data.targetUrl = `https://agoraeufalo.com.br/player.html?trackId=ms_ms${msNum}`;
+              } else {
+                blk.data.targetUrl = 'https://agoraeufalo.com.br/player.html';
+              }
+            }
+          }
+        });
+      });
+
       this.state = {
         activeRecipeId: recipeData.id,
         title: recipeData.title || 'Apostila',
         subtitle: recipeData.subtitle || '',
-        courseId: recipeData.courseId || 'english-quickstart',
-        moduleId: recipeData.moduleId || 'eqs-m1',
-        lessonId: recipeData.lessonId || 'eqs12',
+        courseId: recipeData.courseId || (recipeData.templateType === 'magic_story' ? 'ms-legacy' : 'generic'),
+        moduleId: recipeData.moduleId || '',
+        lessonId: recipeData.lessonId || '',
         paletteId: recipeData.paletteId || 'amber',
         customHex: recipeData.customHex || '#C68A36',
         fontSize: recipeData.fontSize || '15pt',
         showFooter: recipeData.showFooter !== false,
         templateType: recipeData.templateType || 'generic',
         status: recipeData.status || 'testing',
-        pages: JSON.parse(JSON.stringify(recipeData.pages))
+        pages: loadedPages
       };
       this.renumberPages();
       this.notify();

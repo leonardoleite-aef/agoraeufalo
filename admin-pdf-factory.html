@@ -1541,6 +1541,17 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
             <div><label class="block font-bold text-slate-400 mb-0.5">Quantidade de Linhas Pautadas</label><input type="number" id="m_lineCount" value="${d.lineCount || 4}" min="1" max="12" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
           </div>
         `;
+      } else if (block.type === 'qr_code') {
+        formHtml = `
+          <div class="space-y-2">
+            <div><label class="block font-bold text-slate-400 mb-0.5">Título do Box</label><input type="text" id="m_title" value="${d.title || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div><label class="block font-bold text-slate-400 mb-0.5">Legenda / Instrução</label><input type="text" id="m_subtitle" value="${d.subtitle || ''}" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">URL Alvo do Player (Link embutido no QR Code e Botão)</label>
+              <input type="text" id="m_targetUrl" value="${d.targetUrl || 'https://agoraeufalo.com.br/player.html'}" placeholder="https://agoraeufalo.com.br/player.html?trackId=..." class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-mono text-xs">
+            </div>
+          </div>
+        `;
       } else {
         formHtml = `
           <div class="space-y-2">
@@ -1641,6 +1652,10 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         newData.instruction = document.getElementById("m_instruction")?.value;
         newData.questions = (document.getElementById("m_questions")?.value || '').split('\n').filter(Boolean);
         newData.showLines = document.getElementById("m_showLines")?.checked;
+      } else if (block.type === 'qr_code') {
+        newData.title = document.getElementById("m_title")?.value;
+        newData.subtitle = document.getElementById("m_subtitle")?.value;
+        newData.targetUrl = document.getElementById("m_targetUrl")?.value?.trim() || 'https://agoraeufalo.com.br/player.html';
       } else {
         newData.title = document.getElementById("m_title")?.value;
         newData.content = document.getElementById("m_content")?.value;

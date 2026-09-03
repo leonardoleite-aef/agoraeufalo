@@ -366,28 +366,38 @@
 
     function parseUrlParams() {
       const params = new URLSearchParams(window.location.search);
-      const curso = params.get('curso') || params.get('category');
-      const mod = params.get('modulo') || params.get('aluno');
-      const aula = params.get('aula') || params.get('track');
+      const curso = params.get('curso') || params.get('course') || params.get('category');
+      const mod = params.get('modulo') || params.get('module') || params.get('aluno');
+      const aula = params.get('aula') || params.get('lesson') || params.get('track') || params.get('trackId');
 
-      if (curso) state.courseId = curso;
+      if (curso) {
+        state.courseId = curso === 'magic-stories' ? 'ms-legacy' : curso;
+      }
+
       if (mod) {
         state.activeModuleId = mod;
       } else if (aula) {
-        if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
+        // Se foi passado trackId como ms_ms005 ou ms005-sunday-brunch ou ms005-lr
+        const cleanTrack = aula.toLowerCase().replace(/^ms_/, '');
+        
+        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+        const foundMsMod = msModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
+        if (foundMsMod) {
+          state.courseId = 'ms-legacy';
+          state.activeModuleId = foundMsMod.id;
+        } else {
           const eqsModules = window.AEF_QUICKSTART?.modules || [];
-          const foundMod = eqsModules.find(m => (m.tracks || []).some(t => t.id === aula || t.id.includes(aula)));
-          if (foundMod) state.activeModuleId = foundMod.id;
-        } else if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
-          const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-          const foundMod = msModules.find(m => (m.tracks || []).some(t => t.id === aula || t.id.includes(aula)));
-          if (foundMod) state.activeModuleId = foundMod.id;
+          const foundEqsMod = eqsModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
+          if (foundEqsMod) {
+            state.courseId = 'english-quickstart';
+            state.activeModuleId = foundEqsMod.id;
+          }
         }
       }
 
       const tracks = getCurrentTracklist();
       if (aula && tracks.length > 0) {
-        const foundIdx = tracks.findIndex(t => t.id === aula || t.id.includes(aula));
+        const foundIdx = tracks.findIndex(t => t.id === aula || aula.includes(t.id) || t.id.includes(aula));
         if (foundIdx !== -1) state.activeLessonIndex = foundIdx;
       }
     }
