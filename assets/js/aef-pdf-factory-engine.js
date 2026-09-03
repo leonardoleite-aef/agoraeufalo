@@ -1362,14 +1362,17 @@
     }
     .cover-watermark {
       position: absolute;
-      right: -10px;
-      bottom: -20px;
-      font-size: 110pt;
+      right: 15px;
+      bottom: 5px;
+      font-size: 105pt;
       font-weight: 900;
-      color: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.09);
+      letter-spacing: -2px;
       line-height: 1;
       user-select: none;
+      pointer-events: none;
       font-family: 'Playfair Display', serif;
+      z-index: 1;
     }
     .cover-tag {
       font-size: 9pt;
