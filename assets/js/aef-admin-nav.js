@@ -8,6 +8,23 @@
 (function () {
   'use strict';
 
+  // Destrói imediatamente qualquer overlay de senha legado vindo do cache do navegador
+  try {
+    sessionStorage.setItem("AEF_MASTER_SESSION_AUTH", "true");
+    const killLegacyGate = () => {
+      const ov = document.getElementById('aef-auth-gate-overlay');
+      if (ov) ov.remove();
+      const st = document.getElementById('aef-gate-style');
+      if (st) st.remove();
+    };
+    killLegacyGate();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', killLegacyGate);
+    }
+    setTimeout(killLegacyGate, 100);
+    setTimeout(killLegacyGate, 500);
+  } catch (e) {}
+
   class AEFAdminNav {
     constructor() {
       this.currentPath = window.location.pathname.split('/').pop() || 'admin-alunos.html';

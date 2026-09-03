@@ -9,6 +9,15 @@
 (function(window) {
   'use strict';
 
+  // Purge legacy password gate overlay if present in browser cache
+  try {
+    sessionStorage.setItem("AEF_MASTER_SESSION_AUTH", "true");
+    const el = document.getElementById('aef-auth-gate-overlay');
+    if (el) el.remove();
+    const st = document.getElementById('aef-gate-style');
+    if (st) st.remove();
+  } catch(e) {}
+
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk",
     authDomain: "agoraeufalo-3463a.firebaseapp.com",
