@@ -43,11 +43,11 @@
 
   <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-courses-registry.js?v=20260903_1458"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260903_1458"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260903_1458"></script>
-  <script src="assets/js/aef-pdf-generator.js?v=20260903_1458"></script>
-  <script src="assets/js/aef-portal-auth.js?v=20260903_1458"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260903_1512"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260903_1512"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260903_1512"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260903_1512"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260903_1512"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -348,7 +348,7 @@
             🤖 Roteiro IA
           </button>
           <button onclick="switchAiTab('processed')" id="tabBtnProcessed" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
-            ✨ HTML
+            📝 Notas da Aula
           </button>
           <button onclick="switchAiTab('preview')" id="tabBtnPreview" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
             👁️ Preview
@@ -378,37 +378,51 @@
         </p>
       </div>
 
-      <!-- TAB 2: CONTEÚDO DIDÁTICO FORMATADO (ELEMENTO 5 • HTML) -->
-      <div id="aiTabProcessed" class="hidden flex-1 flex flex-col pt-3 overflow-hidden">
-        <div class="mb-2 flex items-center justify-between text-[11px] text-slate-400">
+      <!-- TAB 2: EDITOR VISUAL DE NOTAS DA AULA (ELEMENTO 5 • SEM HTML) -->
+      <div id="aiTabProcessed" class="hidden flex-1 flex flex-col pt-2 overflow-hidden space-y-2">
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
           <span class="font-bold text-amber-300 flex items-center gap-1">
-            <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
-            <span>Elemento 5 • Texto Didático (Abaixo do Vídeo)</span>
+            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+            <span>Notas & Conteúdo da Aula (Abaixo do Vídeo)</span>
           </span>
-          <span class="text-[10px] text-slate-400">Renderizado na Sala de Aula</span>
+          <span class="text-[10px] text-emerald-400 font-mono">✍️ Digitação Livre • Zero Código</span>
         </div>
 
-        <!-- Quick Formatting Toolbar Funcional -->
-        <div class="flex flex-wrap items-center gap-1.5 pb-2 mb-2 border-b border-white/10 text-xs">
-          <button type="button" onclick="insertDidacticSnippet('p')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-bold transition flex items-center gap-1 cursor-pointer" title="Inserir Parágrafo">
-            <span>&lt;p&gt;</span>
-            <span class="text-[10px] text-slate-400 font-normal">Parágrafo</span>
-          </button>
-          <button type="button" onclick="insertDidacticSnippet('box-amber')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/30 transition flex items-center gap-1 cursor-pointer" title="Inserir Caixa Didática Âmbar">
-            <span>🟨 Card Destaque</span>
-          </button>
-          <button type="button" onclick="insertDidacticSnippet('box-white')" class="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white font-bold transition flex items-center gap-1 cursor-pointer" title="Inserir Card Neutro">
-            <span>⬜ Card Neutro</span>
-          </button>
-          <button type="button" onclick="insertDidacticSnippet('ul')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-bold transition flex items-center gap-1 cursor-pointer" title="Inserir Lista">
-            <span>• Lista</span>
-          </button>
-          <button type="button" onclick="insertDidacticSnippet('strong')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-black transition cursor-pointer" title="Texto em Negrito">
+        <!-- Barra de Ferramentas Estilo Word / Google Docs -->
+        <div class="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-white/10 border border-white/15 text-xs">
+          <button type="button" onclick="formatRichDoc('bold')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-black transition cursor-pointer" title="Negrito (Ctrl+B)">
             <b>B</b>
           </button>
+          <button type="button" onclick="formatRichDoc('italic')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white italic font-serif transition cursor-pointer" title="Itálico (Ctrl+I)">
+            <i>I</i>
+          </button>
+          <button type="button" onclick="formatRichDoc('formatBlock', '<h3>')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold transition cursor-pointer" title="Título de Seção">
+            Título
+          </button>
+          <button type="button" onclick="formatRichDoc('insertUnorderedList')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition cursor-pointer" title="Lista com Marcadores">
+            • Lista
+          </button>
+          <button type="button" onclick="insertRichCard('amber')" class="p-1.5 px-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/40 transition cursor-pointer" title="Caixa Didática de Destaque">
+            🟨 Card Destaque
+          </button>
+          <button type="button" onclick="insertRichCard('white')" class="p-1.5 px-2.5 rounded-lg bg-white/15 hover:bg-white/25 text-white font-bold transition cursor-pointer" title="Card Branco Institucional">
+            ⬜ Card Branco
+          </button>
+          <button type="button" onclick="insertRichLink()" class="p-1.5 px-2.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 font-bold border border-sky-500/40 transition cursor-pointer" title="Inserir Link">
+            🔗 Link
+          </button>
+          <button type="button" onclick="formatRichDoc('removeFormat')" class="p-1.5 px-2 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 transition cursor-pointer text-[10px]" title="Limpar Formatação">
+            Limpar
+          </button>
         </div>
 
-        <textarea id="lessonProcessedHtmlInput" oninput="updatePreviewHtml()" placeholder="Digite aqui o texto explicativo, notas de aula, chunks ou HTML que o aluno verá logo abaixo do vídeo..." class="flex-1 w-full p-3.5 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-none custom-scrollbar"></textarea>
+        <!-- Área de Escrita Visual (Zero HTML, como um Documento Real) -->
+        <div id="lessonRichVisualEditor" contenteditable="true" oninput="syncRichEditorToHiddenInput()" class="flex-1 p-4 rounded-xl bg-amber-50/95 border-2 border-amber-200/80 text-slate-900 text-xs sm:text-sm leading-relaxed overflow-y-auto custom-scrollbar focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-inner space-y-3">
+          <!-- O texto do professor aparece aqui visualmente formatado -->
+        </div>
+
+        <!-- Input Oculto que o sistema salva no Firestore -->
+        <input type="hidden" id="lessonProcessedHtmlInput">
       </div>
 
       <!-- TAB 3: LIVE PREVIEW DO ALUNO -->
@@ -938,7 +952,8 @@
       document.getElementById("lessonRawScriptInput").value = foundLesson.rawScript || "";
       document.getElementById("lessonProcessedHtmlInput").value = procHtml;
       const directHtmlEl = document.getElementById("lessonProcessedHtmlDirectInput");
-      if (directHtmlEl) directHtmlEl.value = procHtml;
+      const richEd = document.getElementById("lessonRichVisualEditor");
+      if (richEd) richEd.innerHTML = procHtml || `<p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">Digite suas anotações, explicações ou notas de estudo aqui...</p>`;
       document.getElementById("lessonAiStatusSelect").value = foundLesson.aiStatus || "draft_pending";
 
       updateMediaPreviews();
@@ -947,39 +962,56 @@
       renderHierarchyTree();
     }
 
-    function insertDidacticSnippet(type) {
-      // Garante que a aba HTML está ativa
+    // ==========================================
+    // WYSIWYG VISUAL RICH TEXT CONTROLLER
+    // ==========================================
+    function formatRichDoc(cmd, val = null) {
       switchAiTab('processed');
+      const editor = document.getElementById("lessonRichVisualEditor");
+      if (!editor) return;
+      editor.focus();
+      document.execCommand(cmd, false, val);
+      syncRichEditorToHiddenInput();
+    }
 
-      const textarea = document.getElementById("lessonProcessedHtmlInput");
-      if (!textarea) return;
+    function insertRichCard(theme = 'amber') {
+      switchAiTab('processed');
+      const editor = document.getElementById("lessonRichVisualEditor");
+      if (!editor) return;
+      editor.focus();
 
-      textarea.focus();
-      const start = textarea.selectionStart ?? textarea.value.length;
-      const end = textarea.selectionEnd ?? textarea.value.length;
-      const hasSelection = start !== end;
-      const selected = hasSelection ? textarea.value.substring(start, end) : "";
+      const selection = window.getSelection();
+      const selectedText = selection ? selection.toString() : "";
 
-      let snippet = "";
-      if (type === "p") {
-        snippet = `\n<p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">\n  ${selected || "Digite o texto do parágrafo aqui..."}\n</p>\n`;
-      } else if (type === "box-amber") {
-        snippet = `\n<div class="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-amber-900">📌 Destaque Importante</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected || "Escreva aqui a sua nota em destaque..."}</p>\n</div>\n`;
-      } else if (type === "box-white") {
-        snippet = `\n<div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-2">\n  <h4 class="font-bold text-xs uppercase tracking-wider text-[#0A192F]">📖 Notas da Aula</h4>\n  <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selected || "Escreva aqui as notas complementares da aula..."}</p>\n</div>\n`;
-      } else if (type === "ul") {
-        snippet = `\n<ul class="list-disc list-inside space-y-1 text-xs text-slate-800 font-medium">\n  <li>${selected || "Primeiro ponto"}</li>\n  <li>Segundo ponto</li>\n</ul>\n`;
-      } else if (type === "strong") {
-        snippet = `<strong>${selected || "texto em negrito"}</strong>`;
+      const cardHtml = theme === 'amber'
+        ? `<div class="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 shadow-xs space-y-1.5 my-3"><h4 class="font-bold text-xs uppercase tracking-wider text-amber-900">📌 Destaque Importante</h4><p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selectedText || "Escreva aqui a sua nota de destaque para o aluno..."}</p></div><p><br></p>`
+        : `<div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-1.5 my-3"><h4 class="font-bold text-xs uppercase tracking-wider text-[#0A192F]">📖 Notas da Aula</h4><p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selectedText || "Escreva aqui as notas complementares da aula..."}</p></div><p><br></p>`;
+
+      document.execCommand('insertHTML', false, cardHtml);
+      syncRichEditorToHiddenInput();
+      showToast("✨ Card inserido no editor visual!");
+    }
+
+    function insertRichLink() {
+      switchAiTab('processed');
+      const editor = document.getElementById("lessonRichVisualEditor");
+      if (!editor) return;
+      editor.focus();
+
+      const url = prompt("Digite ou cole o link (URL):", "https://");
+      if (url && url !== "https://") {
+        document.execCommand('createLink', false, url);
+        syncRichEditorToHiddenInput();
       }
+    }
 
-      const before = textarea.value.substring(0, start);
-      const after = textarea.value.substring(end);
-      textarea.value = before + snippet + after;
-      textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
-
+    function syncRichEditorToHiddenInput() {
+      const editor = document.getElementById("lessonRichVisualEditor");
+      const hiddenInput = document.getElementById("lessonProcessedHtmlInput");
+      if (editor && hiddenInput) {
+        hiddenInput.value = editor.innerHTML;
+      }
       updatePreviewHtml();
-      showToast("✨ Bloco didático inserido com sucesso!");
     }
 
     function updateLessonPublishedUi(isPub) {
