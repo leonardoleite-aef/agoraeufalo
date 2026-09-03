@@ -1,14 +1,316 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-full bg-[#060D17] text-slate-100">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=admin-alunos.html">
-  <title>Redirecionando para o Admin Geral...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Admin Command Hub • Painel Central | AgoraEuFalo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#0A192F">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    window.location.replace('admin-alunos.html');
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              midnight: '#0D1E36',
+              deep: '#060D17',
+              gold: '#C68A36',
+              'gold-light': '#F59E0B'
+            }
+          }
+        }
+      }
+    }
   </script>
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .hub-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hub-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5), 0 0 25px rgba(198, 138, 54, 0.15);
+    }
+  </style>
 </head>
-<body style="background:#0A192F;color:white;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-  <p>Redirecionando para o Painel Geral da Equipe & Alunos... <a href="admin-alunos.html" style="color:#F59E0B;">Clique aqui se não redirecionar</a></p>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ========================================== -->
+  <!-- 1. HUB HERO HEADER                         -->
+  <!-- ========================================== -->
+  <header class="border-b border-white/10 bg-gradient-to-b from-[#0A192F] to-[#060D17] py-8 sm:py-10 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 font-mono text-[11px] font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>SISTEMA OPERACIONAL AGORAEUFALO • GOD MODE</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black text-white font-serif tracking-tight">
+          Painel Central de Comando
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-xl leading-relaxed">
+          Hub unificado do Professor Leonardo Leite. Navegue com 1 clique pelas 6 áreas estratégicas do ecossistema.
+        </p>
+      </div>
+
+      <!-- Quick Switch to Portal -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="portal.html" target="_blank" class="px-4 py-2.5 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950 font-bold text-xs transition flex items-center gap-2 shadow-sm">
+          <i data-lucide="external-link" class="w-4 h-4"></i>
+          <span>Portal do Aluno ↗</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. OS 6 BLOCOS ESTRATÉGICOS                -->
+  <!-- ========================================== -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full flex-1 space-y-8">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- BLOCO 1: PESSOAS -->
+      <div class="hub-card bg-[#0A192F] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-amber-400/50">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-2xl font-black border border-amber-400/30 shadow-xs">
+            👥
+          </div>
+          <div>
+            <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">GESTÃO & CRM</span>
+            <h2 class="text-xl font-black text-white mt-1">1. Pessoas</h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-normal">
+              Gestão completa de alunos, atribuição de Tiers (Free, Club, VIP), autorizações de consumo, prescrições de áudios 1 a 1 e controle de equipe (RBAC).
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Recursos:</span>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-medium">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i> CRM de Alunos com Busca em Tempo Real</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i> Gestão de Tiers & Autorizações de Acesso</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i> Prescritor de Áudios de Mentoria VIP 1 a 1</li>
+            </ul>
+          </div>
+        </div>
+
+        <a href="admin-alunos.html" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-md">
+          <span>Acessar Gestão de Pessoas</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- BLOCO 2: CURSOS -->
+      <div class="hub-card bg-[#0A192F] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-sky-400/50">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-sky-500/15 text-sky-400 flex items-center justify-center text-2xl font-black border border-sky-400/30 shadow-xs">
+            📦
+          </div>
+          <div>
+            <span class="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-widest block">CONTEÚDO DIDÁTICO</span>
+            <h2 class="text-xl font-black text-white mt-1">2. Cursos</h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-normal">
+              Gestão de todos os cursos, módulos e masterclasses em 3 níveis. Edição de roteiros didáticos, miniaturas 16:9, apostilas e estúdio de áudio TTS.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Recursos:</span>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-medium">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-sky-400"></i> Course Studio Widescreen 3 Níveis</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-sky-400"></i> Grade de Módulos & Aulas</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-sky-400"></i> TTS Voice Studio (Áudios MP3 & Timestamps)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <a href="admin-cursos.html" class="w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-md">
+            <span>Abrir Course Studio</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="tts-studio.html" class="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition flex items-center justify-center gap-2">
+            <i data-lucide="mic" class="w-3.5 h-3.5 text-sky-300"></i>
+            <span>Ir para TTS Voice Studio</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BLOCO 3: MARKETING -->
+      <div class="hub-card bg-[#0A192F] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-emerald-400/50">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-2xl font-black border border-emerald-400/30 shadow-xs">
+            🎯
+          </div>
+          <div>
+            <span class="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block">OFERTAS & CONVERSÃO</span>
+            <h2 class="text-xl font-black text-white mt-1">3. Marketing</h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-normal">
+              Gestão e criação de ofertas e preços, suporte aos 2 tipos de Trials (Grátis vs. Test-Drive) e gerador de Landing Pages de funis de alta conversão.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Recursos:</span>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-medium">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Wizard de Criação de Ofertas</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Engine de Trials (Grátis & Test-Drive)</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Gerador de Landing Pages (IA Copy)</li>
+            </ul>
+          </div>
+        </div>
+
+        <a href="admin-ofertas.html" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-md">
+          <span>Acessar Gestor de Ofertas</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- BLOCO 4: COMUNICAÇÃO -->
+      <div class="hub-card bg-[#0A192F] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-blue-400/50">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-blue-500/15 text-blue-400 flex items-center justify-center text-2xl font-black border border-blue-400/30 shadow-xs">
+            💬
+          </div>
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest">ENGAGEMENT & SUPORTE</span>
+              <span class="text-[9px] font-mono font-black px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">EM DESENVOLVIMENTO</span>
+            </div>
+            <h2 class="text-xl font-black text-white mt-1">4. Comunicação</h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-normal">
+              Central de relacionamento com o aluno: automações de e-mails transacionais (Send), disparador de WhatsApp direto do Leo e atendimento de suporte.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Módulos do Roadmap:</span>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-medium">
+              <li class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-blue-400"></i> Sequências & Réguas no Send (Boas-vindas / Renovação)</li>
+              <li class="flex items-center gap-2"><i data-lucide="message-circle" class="w-3.5 h-3.5 text-blue-400"></i> Central WhatsApp Oficial do Professor Leo</li>
+              <li class="flex items-center gap-2"><i data-lucide="help-circle" class="w-3.5 h-3.5 text-blue-400"></i> Hub de Atendimento & Dúvidas de Matrícula</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-blue-500/10 border border-blue-400/20 text-center">
+          <span class="text-xs font-bold text-blue-300 flex items-center justify-center gap-1.5">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+            <span>Módulo Planejado na Próxima Sprint</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- BLOCO 5: VENDAS -->
+      <div class="hub-card bg-[#0A192F] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-purple-400/50">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center text-2xl font-black border border-purple-400/30 shadow-xs">
+            ⚡
+          </div>
+          <div>
+            <span class="text-[10px] font-mono font-bold text-purple-400 uppercase tracking-widest block">CHECKOUTS & MATRÍCULAS</span>
+            <h2 class="text-xl font-black text-white mt-1">5. Vendas & Cadastros</h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-normal">
+              Gestão de vendas e cadastros em cursos grátis e pagos. Processamento de Webhooks Hotmart/Stripe, links de resgate de alunos legados e captura de leads.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Recursos:</span>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-medium">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400"></i> Webhooks de Matrícula Automática</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400"></i> Canal Universal de Migração & Resgate</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400"></i> Gestor de Leads & Player Aberto</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <a href="migracao/index.html" target="_blank" class="w-full py-3 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-md">
+            <span>Canal de Migração de Alunos</span>
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+          <a href="admin-publico.html" class="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition flex items-center justify-center gap-2">
+            <i data-lucide="users" class="w-3.5 h-3.5 text-purple-300"></i>
+            <span>Ver Leads Capturados</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BLOCO 6: SITE-BLOG AEF -->
+      <div class="hub-card bg-[#0A192F] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-amber-500/50">
+        <div class="space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-2xl font-black border border-amber-400/30 shadow-xs">
+            📰
+          </div>
+          <div>
+            <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">PUBLICAÇÕES & AUTORIDADE</span>
+            <h2 class="text-xl font-black text-white mt-1">6. Site-Blog AEF & SEO</h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed font-normal">
+              Gestão editorial do site principal, publicação de artigos no Blog com esteira de 6 tarefas canônicas, painel de CMS e auditoria de metadados de SEO.
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Recursos:</span>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-medium">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i> CMS do Blog com Editor e Biblioteca</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i> Auditoria de SEO & OpenGraph</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400"></i> Site Institucional & Guia Definitivo</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <a href="blog-panel.html" class="py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-md">
+            <span>CMS Blog</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+          <a href="seo-manager.html" class="py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 border border-white/10">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>SEO Manager</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 3. FOOTER -->
+  <footer class="border-t border-white/10 py-6 px-4 text-center text-xs text-slate-500 space-y-1">
+    <p class="font-bold text-slate-400">AgoraEuFalo • Ecossistema EdTech do Professor Leonardo Leite</p>
+    <p>© 2026 Todos os direitos reservados • Acesso Restrito Administrativo</p>
+  </footer>
+
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
 </body>
 </html>

@@ -79,16 +79,19 @@
             
             <!-- Left: Brand & Admin Label -->
             <div class="flex items-center gap-2.5 shrink-0">
-              <a href="admin-alunos.html" class="flex items-center gap-2">
+              <a href="admin.html" class="flex items-center gap-2" title="Voltar ao Hub Central de Comando">
                 <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-6 sm:h-7 object-contain ${logoFilter} hover:opacity-100 transition">
               </a>
-              <span class="px-2 py-0.5 rounded-full ${isDark ? 'bg-amber-500 text-slate-950' : 'bg-amber-100 text-amber-900 border border-amber-300'} font-extrabold text-[9px] sm:text-[10px] uppercase tracking-wider">
-                ADMIN MASTER
-              </span>
+              <a href="admin.html" class="px-2 py-0.5 rounded-full ${isDark ? 'bg-amber-500 text-slate-950' : 'bg-amber-100 text-amber-900 border border-amber-300'} font-extrabold text-[9px] sm:text-[10px] uppercase tracking-wider hover:opacity-90 transition">
+                ADMIN HUB
+              </a>
             </div>
 
             <!-- Center: Navigation Links Across All 7 Tools -->
             <nav class="hidden lg:flex items-center gap-1 overflow-x-auto py-1 text-xs">
+              <a href="admin.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin.html')}">
+                <span>🏛️</span> <span>Hub Central</span>
+              </a>
               <a href="admin-alunos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-alunos.html')}">
                 <span>👥</span> <span>Alunos & CRM</span>
               </a>
@@ -132,6 +135,7 @@
 
           <!-- Mobile Sub-Navigation Bar (Scrollable) -->
           <div class="lg:hidden px-3 py-1.5 border-t ${isDark ? 'border-white/10 bg-[#0A192F]' : 'border-slate-200/80 bg-white'} flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+            <a href="admin.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin.html')}">🏛️ Hub</a>
             <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html')}">👥 Alunos</a>
             <a href="admin-ofertas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-ofertas.html')}">🎯 Ofertas</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
