@@ -774,11 +774,12 @@
 
         if (currentMode === 'lr') {
           const sentences = currentLines.map(l => {
-            if (l.includes(':')) {
-              const parts = l.split(':');
-              return { speaker: parts[0].trim(), en: parts.slice(1).join(':').trim(), pt: '' };
+            // Só considera locutor se for nome curto (<= 15 chars, ex: 'Leo:', 'Grazi:', 'Anna:')
+            const colonIdx = l.indexOf(':');
+            if (colonIdx > 0 && colonIdx <= 15 && !l.substring(0, colonIdx).includes('.')) {
+              return { speaker: l.substring(0, colonIdx).trim(), en: l.substring(colonIdx + 1).trim(), pt: '' };
             }
-            return { speaker: 'Narrador', en: l, pt: '' };
+            return { speaker: '', en: l, pt: '' };
           });
           parsedBlocks.push({
             id: `b_lr_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
@@ -839,21 +840,52 @@
         currentLines = [];
       };
 
-      lines.forEach(line => {
-        const lower = line.toLowerCase();
-        if (lower.startsWith('listen & read') || lower.startsWith('história') || lower.startsWith('story:')) {
+      lines.forEach(rawLine => {
+        const line = rawLine.trim();
+        if (!line) return;
+        
+        // Ignora imagens e links brutos do drive que não devem virar texto pedagógico
+        if (line.startsWith('![') || line.startsWith('[Movie') || line.startsWith('[Video') || line.startsWith('[7_Pronunciation') || line.startsWith('[Podcast')) {
+          return;
+        }
+
+        const lower = line.toLowerCase().replace(/^[#\*\-]+\s*/, '');
+
+        if (lower.startsWith('section 1') || lower.startsWith('listen & read') || lower.startsWith('listen and read') || lower.startsWith('história') || lower.startsWith('story:')) {
           flushCurrent();
           currentMode = 'lr';
-        } else if (lower.startsWith('vocabulary') || lower.startsWith('chunks:') || lower.startsWith('vocabulário:')) {
+        } else if (lower.startsWith('section 2') || lower.startsWith('vocabulary') || lower.startsWith('chunks:') || lower.startsWith('vocabulário:')) {
           flushCurrent();
           currentMode = 'chunks';
-        } else if (lower.startsWith('listen & answer') || lower.startsWith('perguntas:') || lower.startsWith('questions:')) {
+        } else if (lower.startsWith('section 3') || lower.startsWith('listen & answer') || lower.startsWith('listen and answer') || lower.startsWith('perguntas:') || lower.startsWith('questions:')) {
           flushCurrent();
           currentMode = 'la';
+        } else if (lower.startsWith('section 5') || lower.startsWith('listen & ask') || lower.startsWith('listen and ask') || lower.startsWith('desafio de perguntas')) {
+          flushCurrent();
+          currentMode = 'la'; // Adiciona ao fluxo de treino de perguntas
         } else if (lower.startsWith('sacada de ouro') || lower.startsWith('golden tip')) {
           flushCurrent();
           currentMode = 'gold';
         } else {
+          // Se for linha de tabela Markdown (| Chunks | Desc | Tradução |)
+          if (line.startsWith('|') && line.endsWith('|')) {
+            const parts = line.split('|').map(p => p.trim()).filter(Boolean);
+            if (parts.length >= 2 && !parts[0].includes('---') && !parts[0].toLowerCase().includes('phrases') && !parts[0].toLowerCase().includes('question')) {
+              // Converte a linha da tabela para o formato de chunk ou pergunta
+              if (currentMode === 'chunks') {
+                const en = parts[0].replace(/\*/g, '');
+                const pt = (parts[parts.length - 1] || '').replace(/\*/g, '');
+                currentLines.push(`${en} - ${pt}`);
+                return;
+              } else if (currentMode === 'la') {
+                const q = parts[0].replace(/\*/g, '');
+                if (q.length > 3) currentLines.push(q);
+                return;
+              }
+            } else {
+              return; // Ignora cabeçalho e divisores da tabela markdown
+            }
+          }
           currentLines.push(line);
         }
       });
