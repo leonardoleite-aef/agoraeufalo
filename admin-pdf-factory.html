@@ -855,14 +855,12 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
           smartTargetUrl = `https://agoraeufalo.com.br/player.html?course=${encodeURIComponent(courseId)}&module=${encodeURIComponent(moduleId)}`;
         }
 
-        // Aplica nos blocos QR Code existentes do estado
-        window.AEFPdfFactoryEngine.state.pages.forEach(pg => {
-          (pg.blocks || []).forEach(blk => {
-            if (blk.type === 'qr_code') {
-              blk.data.targetUrl = smartTargetUrl;
-              blk.data.subtitle = `Aponte o celular ou clique no botão para treinar a lição "${mod.title}" no Player.`;
-            }
-          });
+        // Aplica em TODOS os blocos QR Code existentes e futuros do estado
+        window.AEFPdfFactoryEngine.applyLinkedLessonToAllQrCodes({
+          courseId,
+          moduleId,
+          title: mod.title,
+          trainingUrl: smartTargetUrl
         });
 
         // Atualiza campos de cabeçalho do documento
@@ -903,12 +901,11 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
           quickTargetUrl = `https://agoraeufalo.com.br/player.html?course=${encodeURIComponent(courseId)}`;
         }
 
-        window.AEFPdfFactoryEngine.state.pages.forEach(pg => {
-          (pg.blocks || []).forEach(blk => {
-            if (blk.type === 'qr_code') {
-              blk.data.targetUrl = quickTargetUrl;
-            }
-          });
+        window.AEFPdfFactoryEngine.applyLinkedLessonToAllQrCodes({
+          courseId,
+          moduleId,
+          title: mod.title,
+          trainingUrl: quickTargetUrl
         });
 
         document.getElementById("docTitleInput").value = window.AEFPdfFactoryEngine.state.title;
@@ -1939,15 +1936,13 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
           ? `https://agoraeufalo.com.br/player.html?trackId=${encodeURIComponent(targetTrackId)}`
           : `https://agoraeufalo.com.br/player.html?course=${encodeURIComponent(courseId)}&module=${encodeURIComponent(modId)}`;
 
-        window.AEFPdfFactoryEngine.state.pages.forEach(pg => {
-          (pg.blocks || []).forEach(blk => {
-            if (blk.type === 'qr_code') {
-              blk.data.targetUrl = lessonTargetUrl;
-              blk.data.subtitle = `Aponte o celular ou clique no botão para treinar a aula "${les.title}" no Player.`;
-            }
-          });
+        window.AEFPdfFactoryEngine.applyLinkedLessonToAllQrCodes({
+          courseId,
+          moduleId: modId,
+          lessonId: lesId,
+          title: les.title,
+          trainingUrl: lessonTargetUrl
         });
-        window.AEFPdfFactoryEngine.notify();
 
         // 1. Salva no Cloud Firestore se conectado
         try {

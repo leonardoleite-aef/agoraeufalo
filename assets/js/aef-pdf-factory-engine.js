@@ -497,15 +497,62 @@
       const def = this.blockTypes[blockType];
       if (!def) return;
 
+      const blockData = def.defaultData();
+
+      // Herda automaticamente o link da aula vinculada se houver
+      const activeLessonUrl = this.state.linkedLessonData?.trainingUrl || this.state.playerTrackUrl;
+      if (activeLessonUrl) {
+        if (blockType === 'qr_code') {
+          blockData.targetUrl = activeLessonUrl;
+          if (this.state.linkedLessonData?.title) {
+            blockData.subtitle = `Aponte a câmera para abrir o treino da aula "${this.state.linkedLessonData.title}".`;
+          }
+        } else {
+          blockData.cornerQrUrl = activeLessonUrl;
+        }
+      }
+
       const newBlock = {
         id: `block_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
         type: blockType,
-        data: def.defaultData()
+        data: blockData
       };
 
       page.blocks.push(newBlock);
       this.notify();
       return newBlock;
+    }
+
+    applyLinkedLessonToAllQrCodes(lessonInfo) {
+      if (!lessonInfo) return;
+      const targetUrl = lessonInfo.trainingUrl || lessonInfo.targetUrl || 'https://agoraeufalo.com.br/player.html';
+      const lessonTitle = lessonInfo.title || lessonInfo.lessonTitle || '';
+
+      this.state.linkedLessonData = {
+        courseId: lessonInfo.courseId || this.state.courseId,
+        moduleId: lessonInfo.moduleId || this.state.moduleId,
+        lessonId: lessonInfo.lessonId || this.state.lessonId,
+        title: lessonTitle,
+        trainingUrl: targetUrl
+      };
+      this.state.playerTrackUrl = targetUrl;
+
+      // Atualiza TODOS os blocos de TODAS as páginas (QR Code dedicados e QR Codes de Canto)
+      this.state.pages.forEach(pg => {
+        (pg.blocks || []).forEach(blk => {
+          if (blk.type === 'qr_code') {
+            blk.data.targetUrl = targetUrl;
+            if (lessonTitle) {
+              blk.data.subtitle = `Aponte a câmera do celular para ouvir a lição "${lessonTitle}" e treinar a fala ativa.`;
+            }
+          } else {
+            // QR Codes de canto presentes nos blocos pedagógicos
+            blk.data.cornerQrUrl = targetUrl;
+          }
+        });
+      });
+
+      this.notify();
     }
 
     updateBlockData(pageIndex, blockId, newData) {
@@ -1218,6 +1265,11 @@
         title: projectName || this.state.title || 'Apostila Sem Título',
         subtitle: this.state.subtitle || '',
         templateType: this.state.templateType || 'generic',
+        courseId: this.state.courseId || '',
+        moduleId: this.state.moduleId || '',
+        lessonId: this.state.lessonId || '',
+        linkedLessonData: this.state.linkedLessonData || null,
+        playerTrackUrl: this.state.playerTrackUrl || '',
         paletteId: this.state.paletteId || 'amber',
         customHex: this.state.customHex || '#C68A36',
         fontSize: this.state.fontSize || '15pt',
@@ -1321,6 +1373,8 @@
         courseId: recipeData.courseId || (recipeData.templateType === 'magic_story' ? 'ms-legacy' : 'generic'),
         moduleId: recipeData.moduleId || '',
         lessonId: recipeData.lessonId || '',
+        linkedLessonData: recipeData.linkedLessonData || null,
+        playerTrackUrl: recipeData.playerTrackUrl || '',
         paletteId: recipeData.paletteId || 'amber',
         customHex: recipeData.customHex || '#C68A36',
         fontSize: recipeData.fontSize || '15pt',
@@ -1329,6 +1383,9 @@
         status: recipeData.status || 'testing',
         pages: loadedPages
       };
+      if (recipeData.linkedLessonData) {
+        this.applyLinkedLessonToAllQrCodes(recipeData.linkedLessonData);
+      }
       this.renumberPages();
       this.notify();
     }
@@ -1583,7 +1640,7 @@
 
           case 'qr_code':
             // 100% Real & Scannable QR Code URL
-            const targetUrl = d.targetUrl || 'https://agoraeufalo.com.br/player.html';
+            const targetUrl = d.targetUrl || this.state.linkedLessonData?.trainingUrl || this.state.playerTrackUrl || 'https://agoraeufalo.com.br/player.html';
             const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(targetUrl)}&margin=2&color=0A192F`;
             
             return `
