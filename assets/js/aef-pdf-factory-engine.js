@@ -462,6 +462,18 @@
       return this.state.pages.length - 1;
     }
 
+    movePage(fromIndex, toIndex) {
+      if (fromIndex < 0 || fromIndex >= this.state.pages.length) return fromIndex;
+      if (toIndex < 0 || toIndex >= this.state.pages.length) return fromIndex;
+      if (fromIndex === toIndex) return fromIndex;
+
+      const [page] = this.state.pages.splice(fromIndex, 1);
+      this.state.pages.splice(toIndex, 0, page);
+      this.renumberPages();
+      this.notify();
+      return toIndex;
+    }
+
     removePage(pageIndex) {
       if (this.state.pages.length <= 1) {
         alert("A apostila precisa ter pelo menos 1 página.");
