@@ -1004,6 +1004,116 @@
               }
             });
           }
+        } else if (currentMode === 'gc') {
+          let badge = 'SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS';
+          let title = 'O Sentimento da Estrutura (Grammar & Cultural Aspects Explained)';
+          let subtitle = '';
+          let clickInsight = '';
+          const cards = [];
+          let culturalNote = '';
+          let trainingTip = '';
+
+          let subSection = 'intro';
+          const cliqueLines = [];
+          const culturalLines = [];
+          const tipLines = [];
+
+          currentLines.forEach(l => {
+            const trimmed = l.trim();
+            if (!trimmed) return;
+            const lowerL = trimmed.toLowerCase();
+
+            if (lowerL.startsWith('selo:') || lowerL.startsWith('badge:')) {
+              badge = trimmed.replace(/^(selo|badge):\s*/i, '').trim();
+              return;
+            }
+            if (lowerL.startsWith('título:') || lowerL.startsWith('titulo:') || lowerL.startsWith('title:')) {
+              title = trimmed.replace(/^(título|titulo|title):\s*/i, '').trim();
+              return;
+            }
+            if (lowerL.startsWith('subtítulo:') || lowerL.startsWith('subtitulo:') || lowerL.startsWith('subtitle:')) {
+              subtitle = trimmed.replace(/^(subtítulo|subtitulo|subtitle):\s*/i, '').trim();
+              return;
+            }
+            if (lowerL.startsWith('clique mental:') || lowerL.startsWith('o clique do falante brasileiro:') || lowerL.startsWith('o clique:') || lowerL.startsWith('clique:')) {
+              subSection = 'clique';
+              const rest = trimmed.replace(/^(clique mental|o clique do falante brasileiro|o clique|clique):\s*/i, '').trim();
+              if (rest) cliqueLines.push(rest);
+              return;
+            }
+            if (lowerL.startsWith('cartões:') || lowerL.startsWith('cartoes:') || lowerL.startsWith('cards:')) {
+              subSection = 'cards';
+              return;
+            }
+            if (lowerL.startsWith('sacada cultural:') || lowerL.startsWith('aspecto cultural:') || lowerL.startsWith('sacada cultural & fala real:') || lowerL.startsWith('observação:') || lowerL.startsWith('observacao:')) {
+              subSection = 'cultural';
+              const rest = trimmed.replace(/^(sacada cultural & fala real|sacada cultural|aspecto cultural|observação|observacao):\s*/i, '').trim();
+              if (rest) culturalLines.push(rest);
+              return;
+            }
+            if (lowerL.startsWith('dica de treino:') || lowerL.startsWith('como as magic stories nos ajudam') || lowerL.startsWith('como treinar no reflexo:')) {
+              subSection = 'tip';
+              const rest = trimmed.replace(/^(dica de treino|como treinar no reflexo|como as magic stories nos ajudam a aprender|como as magic stories nos ajudam):\s*/i, '').trim();
+              if (rest) tipLines.push(rest);
+              return;
+            }
+
+            // Cartões com pipe (|)
+            if (trimmed.includes('|')) {
+              const parts = trimmed.split('|').map(p => p.trim());
+              cards.push({
+                badge: parts[0] || '',
+                ptConcept: parts[1] || '',
+                enExample: parts[2] || '',
+                subExample: parts[3] || '',
+                note: parts[4] || ''
+              });
+              return;
+            }
+
+            // Subtítulo solto no início
+            if (!subtitle && subSection === 'intro' && !lowerL.startsWith('section') && !lowerL.startsWith('grammar') && trimmed.length < 110) {
+              subtitle = trimmed;
+              return;
+            }
+
+            if (subSection === 'clique' || subSection === 'intro') {
+              cliqueLines.push(trimmed);
+            } else if (subSection === 'cultural') {
+              culturalLines.push(trimmed);
+            } else if (subSection === 'tip') {
+              tipLines.push(trimmed);
+            }
+          });
+
+          clickInsight = cliqueLines.join(' ');
+          culturalNote = culturalLines.join(' ');
+          trainingTip = tipLines.join(' ');
+
+          if (!subtitle && clickInsight.includes('Connecting')) {
+            const match = clickInsight.match(/(Dominando[^\.\n]+|Connecting[^\.\n]+)/i);
+            if (match) subtitle = match[0];
+          }
+
+          parsedBlocks.push({
+            id: `b_gc_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+            type: 'grammar_cultural',
+            data: {
+              badge: badge || 'SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS',
+              title: title || 'O Sentimento da Estrutura (Grammar & Cultural Aspects Explained)',
+              subtitle: subtitle || 'A Ponte Mental do Sentimento da Estrutura',
+              clickInsight: clickInsight || 'Observe a ponte mental entre o português falado no Brasil e a fala natural em inglês.',
+              cards: cards.length > 0 ? cards : [
+                { badge: '1. FORMA AFIRMATIVA', ptConcept: 'No português pensamos no presente', enExample: 'Have been...', subExample: '', note: '' },
+                { badge: '2. PERGUNTA DIRETA', ptConcept: 'Pergunta no reflexo de bate-pronto', enExample: 'How long have you been...?', subExample: '', note: '' },
+                { badge: '3. FORMA NEGATIVA', ptConcept: 'Negação coloquial fluida', enExample: 'Haven\'t been...', subExample: '', note: '' }
+              ],
+              culturalNote: culturalNote || '',
+              trainingTip: trainingTip || '⚡ Treine nas atividades Listen & Read e Listen & Answer até a fala virar reflexo.',
+              showCornerQr: false,
+              forceNewPage: true
+            }
+          });
         } else if (currentMode === 'la') {
           const rawQuestions = currentLines.map(l => l.replace(/^[0-9]+[\.\)\-]\s*/, '')).filter(Boolean);
           // Máximo de 10 perguntas por bloco/folha para densidade visual perfeita
@@ -1183,6 +1293,9 @@
         if (lower.startsWith('section 1') || lower.startsWith('listen & read') || lower.startsWith('listen and read') || lower.startsWith('história') || lower.startsWith('story:')) {
           flushCurrent();
           currentMode = 'lr';
+        } else if (lower.startsWith('grammar & cultural') || lower.startsWith('grammar and cultural') || lower.startsWith('section 2.1') || lower.startsWith('sentimento da estrutura')) {
+          flushCurrent();
+          currentMode = 'gc';
         } else if (lower.startsWith('section 2') || lower.startsWith('vocabulary') || lower.startsWith('chunks:') || lower.startsWith('vocabulário:')) {
           flushCurrent();
           currentMode = 'chunks';
