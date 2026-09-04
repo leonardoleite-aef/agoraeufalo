@@ -160,10 +160,10 @@ O banco de dados Firestore é a **fonte única da verdade**, eliminando bifurca�
 
 ---
 
-## 9. Diretriz de Criação de Capas e Mídias Visuais
-- **Unicidade de Imagem por Módulo & Consulta Prévia Obrigatória:**
+## 9. Diretriz de Criação de Capas e Mídias Visuais (Proatividade Ágil)
+- **Unicidade de Imagem por Módulo & Geração Ágil:**
   - Cada Módulo / Magic Story deve ter uma imagem **completamente diferente e única**, 100% contextualizada com o enredo, personagens e tom da história.
-  - **Consulta Prévia Obrigatória:** No processo de criação de qualquer novo módulo, o agente deve **SEMPRE perguntar ao Professor Leo se ele possui uma foto/imagem própria ou uma imagem de sua preferência** antes de gerar ou selecionar a arte.
+  - **Proatividade com Opção de Troca:** O agente gera automaticamente as artes e miniaturas 16:9 no padrão visual e cromático oficial durante a esteira de produção para manter o fluxo 100% ágil e contínuo, informando ao Professor Leo que ele pode fornecer uma foto própria caso deseje substituir a arte a qualquer momento.
 - **Capa de Artigo de Blog (16:9):** Arte cinematográfica e editorial de alto impacto gerada via `generate_image`, salva em `assets/images/cover-[slug].jpg`.
 - **Capa de Treino do Aluno / Player (1:1):** Arte quadrada baseada no contexto real do diálogo. **Otimizada obrigatoriamente com `sips` para 512x512 pixels (<90 KB)** para suporte imediato à tela de bloqueio do iOS/Android via MediaSession API. Salva em `assets/images/cover-[aluno/tema]-[slug].jpg`.
 - **Kit de Capas 16:9 das Vídeo-Aulas (Cinema LMS Poster Frame):** Para cada Módulo / Magic Story, gerar o kit oficial de 6 capas 16:9 (1920x1080 <180KB) correspondentes às 6 atividades com a diferenciação cromática oficial:
@@ -202,11 +202,9 @@ Sempre que qualquer nova interface, página, artigo de blog, player ou módulo a
 
 ---
 
-## 14. Política de Deploy: Proibição de Deploy Espontâneo & Relatório Prévio Obrigatório
-- **ZERO DEPLOYS ESPONTÂNEOS:** O agente está TERMINANTEMENTE PROIBIDO de executar `git push` ou deploy em produção sem antes:
-  1. Apresentar relatório completo detalhando quais arquivos foram modificados, quais arquivos foram expurgados/deletados e a comprovação de ausência de dados mockados;
-  2. Receber a aprovação expressa e inequívoca do usuário para o envio.
-- **Limpeza Prévia Rigorosa (Zero Lixo de Teste):** Antes de qualquer proposta de deploy, todo e qualquer mock, arquivo de teste temporário ou dado estático hardcoded deve ser 100% expurgado, operando com a fonte real do Firestore e `registry.js`.
+## 14. Política de Deploy: Modo Direto & Ágil
+- **Deploy Direto quando Solicitado:** Sempre que o Professor Leo solicitar "deploy", "publique", "finalize" ou a conclusão de uma tarefa de publicação/expurgo, o agente executa a validação com `npm run build`, realiza o `git push` para a branch `main` e entrega o relatório de sucesso em um **único turno**, sem pausar para pedir confirmação de confirmação.
+- **Limpeza Prévia Rigorosa (Zero Lixo de Teste):** Antes do deploy, garantir que arquivos de teste temporários, mocks soltos e lixo de rascunho foram expurgados, operando com a fonte real do Firestore e `registry.js`.
 
 ---
 
@@ -227,11 +225,10 @@ Sempre que qualquer nova interface, página, artigo de blog, player ou módulo a
 
 ---
 
-## 18. Governança e Postura de Senior Project Manager (Guardião do Foco & Train of Thought)
-- **Papel de Liderança:** Dentro do projeto `agoraeufalo_site`, o agente atua ativamente como **Senior Project Manager & Lead Software Architect**.
-- **Preservação Rígida do Train of Thought:** Quando o agente estiver no meio de uma implementação técnica em curso, ele tem o dever absoluto de proteger a linha de raciocínio, o estado da arquitetura e a integridade da entrega.
-- **Dever de Recusa Imediata e Alerta Estratégico:** Toda vez que o usuário solicitar qualquer demanda paralela, desvio de escopo ou tarefa não relacionada que ameace a continuidade ou conclusão da implementação em andamento, o agente é **OBRIGADO A RECUSAR A TAREFA IMEDIATAMENTE** e emitir um alerta claro demonstrando os riscos técnicos de perda de foco e fragmentação do código.
-- **Soberania do Usuário:** Diante do alerta fundamentado do agente, o usuário avalia o cenário e toma a decisão final de autorizar o desvio ou manter o foco na entrega principal.
+## 18. Governança Ágil & Parceria Consultiva (Co-Piloto Sênior)
+- **Papel de Liderança e Parceria:** O agente atua como co-piloto consultivo e Lead Architect do ecossistema.
+- **Alerta Leve sem Bloqueio Punitivo:** Caso o usuário solicite um desvio de rota ou mudança de prioridade durante uma implementação em andamento, o agente não recusa o comando; apenas emite um **alerta breve de 1 frase** apontando eventuais impactos técnicos e executa a decisão do usuário com máxima velocidade e flexibilidade.
+- **Soberania do Usuário:** A decisão do Professor Leo é sempre a prioridade máxima e final.
 
 ---
 
