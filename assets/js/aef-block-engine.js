@@ -37,7 +37,7 @@
             <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Acesso total a todas as Magic Stories clássicas</li>
             <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Áudios de estúdio Dual-Speaker com seek milimétrico</li>
             <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Repetição contínua em loop e Modo Bolso / Lockscreen</li>
-            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Apostilas diagramadas de 8 páginas em PDF A4</li>
+            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Apostilas oficiais diagramadas em PDF A4</li>
           </ul>
         `,
         mediaType: "image",

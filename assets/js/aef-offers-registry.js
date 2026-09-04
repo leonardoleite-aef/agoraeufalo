@@ -58,7 +58,7 @@
         offerPriceFormatted: "R$ 497,00",
         installmentsFormatted: "12x de R$ 49,70",
         recommendedTracking: "src=portal_free&sck=club_anual",
-        notes: "Acesso total a todas as Magic Stories clássicas, Spoken Reflex Studio, áudios MP3 e apostilas diagramadas de 8 páginas em PDF."
+        notes: "Acesso total a todas as Magic Stories clássicas, Spoken Reflex Studio, áudios MP3 e apostilas oficiais diagramadas em PDF."
       },
       createdAt: "2026-09-01T00:00:00.000Z",
       updatedAt: "2026-09-03T22:00:00.000Z"

@@ -67,7 +67,7 @@ O ecossistema **AgoraEuFalo** foi desenhado com separação rígida de responsab
 | :--- | :--- | :--- | :--- |
 | **1. Dashboard do Membro** | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | N/A | **Hub Diário:** Indicador de streak diária, tempo de escuta, card da *Prática Recomendada de Hoje* e catálogo dos 3 cursos oficiais (*Magic Stories*, *English QuickStart*, *Frases Prontas*). |
 | **2. Vitrine de Módulos** | [`curso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/curso.html) | `?curso=[id]` | **Grade Curricular:** Visualização de todos os módulos de qualquer curso, acordeão de aulas com as **miniaturas 16:9 oficiais**, duração, status de conclusão e botão para abrir a aula. |
-| **3. Sala de Aula Masterclass** | [`sala-de-aula.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/sala-de-aula.html) | `?curso=[id]&modulo=[modId]&aula=[lessonId]` | **Estudo Teórico & Materiais:** Player de vídeo 16:9, download do PDF oficial de 8 páginas da lição, chunks em destaque, Sacada de Ouro do Leo e botão *📌 Enviar para Training Player*. |
+| **3. Sala de Aula Masterclass** | [`sala-de-aula.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/sala-de-aula.html) | `?curso=[id]&modulo=[modId]&aula=[lessonId]` | **Estudo Teórico & Materiais:** Player de vídeo 16:9, download da Apostila Oficial em PDF da lição, chunks em destaque, Sacada de Ouro do Leo e botão *📌 Enviar para Training Player*. |
 
 ---
 

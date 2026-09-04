@@ -23,8 +23,8 @@
         "Acesso completo ao acervo de histórias Magic Stories",
         "Spoken Reflex Studio: Treino de escuta e fala ativa",
         "Modo Avião no Player para treinar 100% offline",
-        "AI Speech Coach avaliando sua pronúncia e ritmo (0 a 10)",
-        "Apostilas canônicas diagramadas de 8 páginas em PDF A4",
+        "Treino de fala ativa e reconto no Training Player",
+        "Apostilas oficiais diagramadas em PDF A4",
         "Suporte direto no WhatsApp do Professor Leo"
       ];
       const hasVideo = offer.salesPageData?.hasVideo || false;

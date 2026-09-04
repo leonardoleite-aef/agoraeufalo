@@ -1,7 +1,7 @@
 """
 AgoraEuFalo Editorial Prestige Engine - Livro Oficial de Treino MS002 (Tom)
-100% Padrão Institucional AgoraEuFalo (Sistema Canônico dos 3 Arquétipos em Exatas 8 Páginas)
-Calibrado em TODAS as páginas (P1 a P8) na faixa de 13.5 a 17pt para legibilidade absoluta!
+100% Padrão Institucional AgoraEuFalo (Sistema Canônico dos 3 Arquétipos)
+Calibrado na faixa de 15 a 17pt para legibilidade e conforto 40+!
 """
 
 import os, subprocess, pypdf

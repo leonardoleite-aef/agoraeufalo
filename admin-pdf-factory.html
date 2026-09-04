@@ -98,8 +98,8 @@
 
       <!-- Quick Template Select -->
       <select id="quickTemplateSelect" onchange="handleTemplateChange(this.value)" class="bg-[#111C33] border border-[#1E3056] text-white font-bold text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500">
-        <option value="magic_story">✨ Magic Story (8 Páginas)</option>
-        <option value="quick_course">📘 Curso Rápido (2 Páginas)</option>
+        <option value="magic_story">✨ Magic Story (3 Arquétipos)</option>
+        <option value="quick_course">📘 Curso Rápido / Guia</option>
         <option value="custom">🧩 Construtor Híbrido Livre</option>
       </select>
 
@@ -225,9 +225,9 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
             <button type="button" onclick="loadCanonicalTemplate('magic_story')" class="w-full text-left p-2 rounded-lg bg-[#162340] hover:bg-amber-500/20 border border-[#1E3056] hover:border-amber-500/40 text-xs transition flex items-center justify-between">
               <div>
                 <div class="font-bold text-white">✨ Magic Story (3 Arquétipos)</div>
-                <div class="text-[10px] text-slate-400">P1 Capa, P2-P4 LR/VOC, P5-P8 LA/LRT/PRO</div>
+                <div class="text-[10px] text-slate-400">Capa, Content/VOC, Practice Workbook (6 Atividades)</div>
               </div>
-              <span class="text-[10px] font-mono text-amber-400 font-bold">8 Págs</span>
+              <span class="text-[10px] font-mono text-amber-400 font-bold">Oficial</span>
             </button>
 
             <button type="button" onclick="loadCanonicalTemplate('quick_course')" class="w-full text-left p-2 rounded-lg bg-[#162340] hover:bg-sky-500/20 border border-[#1E3056] hover:border-sky-500/40 text-xs transition flex items-center justify-between">
@@ -235,7 +235,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
                 <div class="font-bold text-white">📘 Curso Rápido / Guia</div>
                 <div class="text-[10px] text-slate-400">Header, Conceito, Chunks, LA & QR Code</div>
               </div>
-              <span class="text-[10px] font-mono text-sky-400 font-bold">2 Págs</span>
+              <span class="text-[10px] font-mono text-sky-400 font-bold">Guia</span>
             </button>
           </div>
         </div>
@@ -742,7 +742,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
 
       const lessons = mod.lessons || [];
 
-      // MÓDULO MAGIC STORIES (8 Páginas Canônicas com Conteúdo Real)
+      // MÓDULO MAGIC STORIES (3 Arquétipos / 6 Atividades Canônicas)
       if (courseId === 'ms-legacy' || mod.id.startsWith('ms')) {
         const lrLesson = lessons.find(l => l.id.endsWith('-lr') || l.order === 1);
         const vocLesson = lessons.find(l => l.id.endsWith('-voc') || l.order === 2);
@@ -871,7 +871,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
 
         activePageIndex = 0;
         window.AEFPdfFactoryEngine.notify();
-        showToast(`🎉 "${mod.title}" carregado no estúdio em 8 páginas canônicas!`);
+        showToast(`🎉 "${mod.title}" carregado no estúdio no padrão dos 3 Arquétipos!`);
       } else {
         // CURSO RÁPIDO / GERAL (QuickStart, AEF Experience, First Steps, etc.)
         window.AEFPdfFactoryEngine.loadTemplate('quick_course');
@@ -1047,7 +1047,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
     function loadCanonicalTemplate(type) {
       window.AEFPdfFactoryEngine.loadTemplate(type);
       activePageIndex = 0;
-      showToast(`Modelo carregado: ${type === 'magic_story' ? 'Magic Story (8 Págs)' : 'Curso Rápido (2 Págs)'}`);
+      showToast(`Modelo carregado: ${type === 'magic_story' ? 'Magic Story (3 Arquétipos)' : 'Curso Rápido / Guia'}`);
     }
 
     function handleTemplateChange(type) {

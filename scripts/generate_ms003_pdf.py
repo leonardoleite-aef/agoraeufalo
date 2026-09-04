@@ -1,6 +1,6 @@
 """
 AgoraEuFalo Editorial Prestige Engine - Livro Oficial de Treino MS003 (Saturday Morning)
-100% Padrão Institucional AgoraEuFalo (Sistema Canônico dos 3 Arquétipos em Exatas 8 Páginas)
+100% Padrão Institucional AgoraEuFalo (Sistema Canônico dos 3 Arquétipos)
 Tabela Canônica de Fontes Travadas (13.5 a 17pt) com Seção de Estações do Ano e Adjetivos de Clima/Temperatura na P4!
 """
 
