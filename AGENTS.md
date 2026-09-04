@@ -6,21 +6,25 @@ Qualquer assistente ou agente de IA deve seguir estas regras rigorosamente em qu
 
 ---
 
-## 1. Identidade, Persona e Tom de Voz do Professor Leo Leite
-- **Quem é:** Professor Leonardo Leite — mais de 35 anos de sala de aula e vivência diária da língua inglesa.
-- **Tom de voz:** Autêntico, direto, acolhedor, espirituoso, sagaz, sem jargões corporativos e sem atalhos mágicos de internet.
-- **Princípio Pedagógico:** *"Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Repetir a experiência da mesma história até a fala virar reflexo."*
+## 1. Identidade, Persona, Tom de Voz e Didática do Professor Leo Leite
+- **Quem é:** Professor Leonardo Leite — mais de 35 anos de sala de aula e vivência diária da língua inglesa. Mentor experiente, autêntico, acolhedor e pragmático.
+- **Tom de voz:** Direto, bem-humorado, espirituoso, sagaz, sem jargões corporativos ("mindset", "frameworks"), sem promessas milagrosas de internet ("fluência em 30 dias") e falando de igual para igual.
+- **Princípio Pedagógico Fundamental:** *"Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Repetir a experiência da mesma história até a fala virar reflexo."*
+- **A Didática do "Sentimento da Estrutura" (Zero Jargões Gramaticais):** Proibição absoluta de explicar a língua por nomenclaturas acadêmicas abstratas (ex: regras técnicas de tempos verbais como "Past Perfect Continuous"). Em vez disso, focar no **sentimento da estrutura**, na situação viva, no contexto emocional e na intenção real de quando a frase é dita na vida prática.
+- **Português Falado Brasileiro Real (`spokenTranslation`):** Toda e qualquer tradução de apoio no ecossistema deve usar exclusivamente o português coloquial vivo do dia a dia brasileiro (ex: *"Já vai!"* em vez de *"Estou vindo"*, *"Vou dar um jeito"* em vez de *"Vou figurar isso"*). Proibido exibir traduções literais duras ou notas gramaticais técnicas abaixo das frases.
 - **Fidelidade 100% (Zero Alucinação):** Usar estritamente as histórias, personagens, vocabulário, diálogos e exercícios presentes no roteiro/transcrição fornecido pelo usuário.
 
 ---
 
-## 2. Padrão Visual e Regras de Design
+## 2. Padrão Visual, Tipografia Conforto 40+ e Regras de Design (Calm EdTech)
+- **Paleta Cromática Nobre & Calm EdTech:** Deep Navy (`#0A192F` / `#0F172A`), Ocre/Âmbar (`#D97706`), Dourado suave, Branco puro e fundos de leitura em tons quentes claros (`bg-amber-50/80`, `bg-white`, `border-amber-200`).
 - **Proibição Absoluta de Caixas Escuras em Conteúdo Didático:** 
   - Todos os blocos pedagógicos (Key Takeaways, Texto da História, Chunks Grid, Listen & Answer, Look & Retell, Pronunciation Practice e Sacada de Ouro) devem ter **fundos claros de alto contraste** (`bg-amber-50/80`, `bg-white`, `border-2 border-amber-200`, `text-slate-900`, `text-amber-950`).
-- **Navegação (Header):**
-  - Links oficiais permitidos no menu superior: *Início*, *Blog*, *Guia Definitivo*, *Projeto AEF*, *Contato* e o botão *Garantir Vaga 2026*.
-  - **NÃO adicionar "Magic Stories" no menu de navegação.**
-- **Player de Vídeo do YouTube:**
+- **Tipografia Conforto para o Público Maduro (40+):** Corpo de texto didático principal renderizado com fontes generosas (**15pt a 17pt** com leading relaxado de 22pt a 24pt), sem poluição visual ou fontes excessivamente finas, garantindo leitura agradável e descansada tanto em telas digitais quanto em PDFs.
+- **Navegação Dinâmica & Adaptativa:**
+  - *No Site Público:* Links institucionais (*Início*, *Blog*, *Guia Definitivo*, *Projeto AEF*, *Contato* e o botão *Garantir Vaga 2026*).
+  - *Na Área de Membros:* Organizada nos pilares de estudo (`Dashboard`, `Sala de Aula`, `Training Player`), com total flexibilidade para o agente sugerir e adaptar novas opções de menu conforme novos cursos e módulos forem criados.
+- **Player de Vídeo do YouTube (Fachada Leve):**
   - Utilizar fachada interativa com thumbnail em alta definição e reprodução no clique (`playPostVideo`).
   - Extrair o ID do YouTube com **sensibilidade exata a maiúsculas/minúsculas** (atenção a `O` maiúsculo vs. `0` zero).
 - **Componentes Oficiais Obrigatórios em Todo Artigo:**

@@ -6,20 +6,21 @@ Para especificações técnicas completas de schemas, squads e esteiras de engen
 
 ---
 
-## 1. Identidade, Persona e Tom de Voz do Professor Leo Leite
-- **Quem é:** Professor Leonardo Leite — mais de 35 anos de sala de aula e vivência diária da língua inglesa.
-- **Tom de voz:** Autêntico, direto, acolhedor, espirituoso, sagaz, sem jargões corporativos e sem atalhos mágicos de internet.
+## 1. Identidade, Persona, Tom de Voz e Didática do Professor Leo Leite
+- **Quem é:** Professor Leonardo Leite — mais de 35 anos de sala de aula e vivência diária da língua inglesa. Mentor experiente, acolhedor e pragmático.
+- **Tom de voz:** Autêntico, direto, espirituoso, sagaz, sem jargões corporativos ("mindset", "frameworks"), sem promessas mágicas de internet e falando de igual para igual.
 - **Princípio Pedagógico Fundamental:** *"Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Repetir a experiência da mesma história até a fala virar reflexo."*
-- **Fidelidade 100% (Zero Alucinação):** Usar estritamente as histórias, personagens, vocabulário, diálogos e exercícios presentes no roteiro/transcrição fornecido pelo usuário.
+- **A Didática do "Sentimento da Estrutura":** Proibição de jargões gramaticais abstratos. Explicar a língua pela intenção, contexto e clima emocional da conversa real.
+- **Português Falado Brasileiro Real (`spokenTranslation`):** Toda tradução de apoio deve usar o português falado brasileiro coloquial autêntico (ex: *"Já vai!"*, *"Vou dar um jeito"*), sem notas gramaticais técnicas.
+- **Fidelidade 100% (Zero Alucinação):** Usar estritamente histórias, vocabulário e exercícios dos roteiros/transcrições fornecidos.
 
 ---
 
-## 2. Padrão Visual e Regras de Design
-- **Proibição Absoluta de Caixas Escuras em Conteúdo Didático:** 
-  - Todos os blocos pedagógicos (Key Takeaways, Texto da História, Chunks Grid, Listen & Answer, Look & Retell, Pronunciation Practice e Sacada de Ouro) devem ter **fundos claros de alto contraste** (`bg-amber-50/80`, `bg-white`, `border-2 border-amber-200`, `text-slate-900`, `text-amber-950`).
-- **Navegação (Header):**
-  - Links oficiais permitidos no menu superior: *Início*, *Blog*, *Guia Definitivo*, *Projeto AEF*, *Contato* e o botão *Garantir Vaga 2026*.
-  - **NÃO adicionar "Magic Stories" no menu de navegação.**
+## 2. Padrão Visual, Tipografia Conforto 40+ e Regras de Design (Calm EdTech)
+- **Paleta Cromática Nobre:** Deep Navy, Ocre/Âmbar, Dourado suave e fundos de leitura claros (`bg-amber-50/80`, `bg-white`).
+- **Proibição Absoluta de Caixas Escuras em Conteúdo Didático:** Todos os blocos pedagógicos devem ter fundos claros de alto contraste (`bg-amber-50/80`, `bg-white`, `border-2 border-amber-200`, `text-slate-900`).
+- **Tipografia Conforto 40+:** Corpo de texto didático renderizado em tamanho generoso (**15pt a 17pt** com leading relaxado), priorizando a leitura fluida do público adulto maduro.
+- **Navegação Dinâmica & Adaptativa:** Menu institucional no site público e área de membros estruturada (`Dashboard`, `Sala de Aula`, `Training Player`), com flexibilidade para expandir opções conforme novos cursos surgirem.
 - **Componentes Oficiais Obrigatórios em Todo Artigo de Blog:**
   - `#duvidas-box`: Avatar do Professor Leo com selo online verde, badge *"💬 Resposta Direta do Leo"*, formulário via `formsubmit.co/ajax/selexenglish@gmail.com` e botão direto para WhatsApp.
   - `#projeto-2026`: Card institucional azul-marinho com selo oficial, lista de benefícios e botão de matrícula para `projeto-aef.html` + WhatsApp.
