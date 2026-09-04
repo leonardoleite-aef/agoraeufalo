@@ -34,7 +34,7 @@ Todas as aulas e treinos do ecossistema seguem a matriz pedagógica das 6 etapas
 1. **`1. Listen & Read (LR)` (Entrada & Imersão Auditiva Real):** Observar pelos ouvidos e não apenas pelos olhos. Sem tradução na tela.
 2. **`2. Vocabulary Session (VOC)` (Matriz de Chunks & Ativação de Vocabulário):** Compreensão 100% do contexto com **Tradução Falada Real (`spokenTranslation`)** e matriz de Chunks sonoros com botões de áudio individual (`▶`).
 3. **`3. Listen & Answer (LA)` (Reflexo & Velocidade de Resposta no Diálogo):** **Zero Respostas Reveladas** na tela/PDF para forçar o cérebro a responder no bate-pronto imediato.
-4. **`4. Look & Retell (LRT)` + AI Speech Coach (Produção Própria & Speaking Ativo):** Reconto autônomo com gravação de microfone radiante e avaliação pelo *Teste do Gringo* (0 a 10). Perguntas-guia são **estritamente as mesmas de LA**.
+4. **`4. Look & Retell (LRT)` (Produção Própria & Speaking Ativo):** Reconto autônomo e livre com perguntas-guia visuais de apoio (**estritamente as mesmas de LA**) e palavras-chave para o aluno praticar a fala com o inglês que tem no Agora *(AI Speech Coach permanece no roadmap futuro)*.
 5. **`5. Listen & Ask (LASK)` (Desafio de Formulação de Perguntas):** **Zero Perguntas Reveladas** na tela/PDF para treinar o cérebro a formular a pergunta correspondente ao estímulo.
 6. **`6. Pronunciation & Connected Speech (PRO)` (Musicalidade, Boca & Ritmo):** Texto completo de LR com marcações visuais de conexões sonoras (*Linking Sounds*), treino em loop contínuo (`🔂`) e a monumental **Sacada de Ouro do Professor Leo**.
 
