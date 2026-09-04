@@ -52,11 +52,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
   <!-- Core App Scripts -->
-  <script src="assets/js/aef-courses-registry.js?v=20260904_1206"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260904_1206"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260904_1206"></script>
-  <script src="assets/js/aef-pdf-factory-engine.js?v=20260904_1206"></script>
-  <script src="assets/js/aef-admin-nav.js?v=20260904_1206"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260904_1415"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260904_1415"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260904_1415"></script>
+  <script src="assets/js/aef-pdf-factory-engine.js?v=20260904_1415"></script>
+  <script src="assets/js/aef-admin-nav.js?v=20260904_1415"></script>
 
   <style>
     .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -1621,7 +1621,37 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         `;
       }
 
+      // OPÇÃO PADRÃO UNIVERSAL PARA TODOS OS BLOCOS (EXCETO O BLOCO QR CODE ISOLADO)
+      if (block.type !== 'qr_code') {
+        const defaultQrUrl = d.cornerQrUrl || window.AEFPdfFactoryEngine.state.linkedLessonData?.trainingUrl || window.AEFPdfFactoryEngine.state.playerTrackUrl || 'https://agoraeufalo.com.br/player.html';
+        formHtml += `
+          <div class="mt-4 pt-3 border-t border-[#1E3056] bg-[#0A101F]/60 p-3 rounded-xl space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <span>QR Code Interativo de Canto (Ponta Direita)</span>
+              </span>
+              <span class="text-[10px] text-slate-400 font-mono">Escaneável via Celular</span>
+            </div>
+
+            <div class="flex items-center gap-2 pt-0.5">
+              <input type="checkbox" id="m_showCornerQr" ${d.showCornerQr ? 'checked' : ''} onchange="document.getElementById('m_cornerQrCont').classList.toggle('hidden', !this.checked)" class="w-4 h-4 accent-amber-500 rounded cursor-pointer">
+              <label for="m_showCornerQr" class="font-bold text-slate-200 text-xs cursor-pointer">
+                Exibir QR Code na ponta superior direita deste bloco
+              </label>
+            </div>
+
+            <div id="m_cornerQrCont" class="${d.showCornerQr ? '' : 'hidden'} space-y-1 pt-1">
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Link de Áudio / Treino Vinculado (URL)</label>
+              <input type="text" id="m_cornerQrUrl" value="${defaultQrUrl}" placeholder="https://agoraeufalo.com.br/player.html?trackId=..." class="w-full bg-[#111C33] border border-[#1E3056] text-sky-400 font-mono text-[11px] p-2 rounded-lg focus:outline-none focus:border-amber-500">
+              <span class="text-[10px] text-slate-400 block">📱 O aluno poderá apontar a câmera do celular diretamente para este bloco na folha impressa e abrir o áudio correspondente.</span>
+            </div>
+          </div>
+        `;
+      }
+
       formContainer.innerHTML = formHtml;
+      if (window.lucide) lucide.createIcons();
       document.getElementById("editBlockModal").classList.remove("hidden");
     }
 
@@ -1719,6 +1749,12 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
       } else {
         newData.title = document.getElementById("m_title")?.value;
         newData.content = document.getElementById("m_content")?.value;
+      }
+
+      // Persistência universal do QR Code de canto
+      if (block.type !== 'qr_code') {
+        newData.showCornerQr = document.getElementById("m_showCornerQr")?.checked || false;
+        newData.cornerQrUrl = (document.getElementById("m_cornerQrUrl")?.value || '').trim();
       }
 
       window.AEFPdfFactoryEngine.updateBlockData(activePageIndex, editingBlockId, newData);

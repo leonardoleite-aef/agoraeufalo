@@ -782,74 +782,228 @@
       let currentLines = [];
       let extractedTitle = '';
       let extractedSubtitle = '';
+      let lrSentencesMaster = [];
 
       const flushCurrent = () => {
         if (currentLines.length === 0) return;
 
         if (currentMode === 'lr') {
-          const sentences = currentLines.map(l => {
-            // Só considera locutor se for nome curto (<= 15 chars, ex: 'Leo:', 'Grazi:', 'Anna:', 'Carlos:', 'Attendant:')
-            const colonIdx = l.indexOf(':');
-            if (colonIdx > 0 && colonIdx <= 15 && !l.substring(0, colonIdx).includes('.')) {
-              return { speaker: l.substring(0, colonIdx).trim(), en: l.substring(colonIdx + 1).trim(), pt: '' };
+          // Extração e organização inteligente de parágrafos contextuais da história
+          const rawSentences = currentLines.map(l => {
+            // Só considera locutor se começar com letra, tiver apenas caracteres alfabéticos/espaços (ex: 'Leo:', 'Grazi:', 'Attendant:')
+            // e NÃO for horário ou número (ex: '7:30', '08:00', '1:')
+            const speakerMatch = l.match(/^([A-Za-zÀ-ÿ\s]{2,15}):\s+(.*)$/);
+            if (speakerMatch) {
+              return { speaker: speakerMatch[1].trim(), en: speakerMatch[2].trim() };
             }
-            return { speaker: '', en: l, pt: '' };
+            return { speaker: '', en: l };
           });
-          parsedBlocks.push({
-            id: `b_lr_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
-            type: 'listen_read',
-            data: {
-              title: 'Listen & Read • Imersão Auditiva Real',
-              instruction: 'Observe pelos ouvidos. Sinta a melodia natural e a cadência da frase.',
-              sentences
+
+          // Armazena as sentenças de LR para que o bloco PRO possa repeti-las fielmente
+          lrSentencesMaster = rawSentences.map(s => (s.speaker ? `${s.speaker}: ${s.en}` : s.en));
+
+          // Agrupamento Inteligente em Parágrafos (Mudança de tema, falas isoladas e quebra de fluxo)
+          const paragraphs = [];
+          let currentPara = [];
+
+          rawSentences.forEach((s, idx) => {
+            const text = s.en;
+            const isDialogue = !!s.speaker;
+            const startsNewContext = /^(every day|then,|in the evening|in the morning|at night|meanwhile|suddenly|the question is:|one day|on monday|after that)/i.test(text);
+
+            if (isDialogue) {
+              // Diálogo/fala fica isolada em parágrafo próprio
+              if (currentPara.length > 0) {
+                paragraphs.push(currentPara);
+                currentPara = [];
+              }
+              paragraphs.push([s]);
+            } else if (startsNewContext && currentPara.length > 0) {
+              paragraphs.push(currentPara);
+              currentPara = [s];
+            } else {
+              currentPara.push(s);
+              // Limite confortável de 3 a 4 frases por parágrafo
+              if (currentPara.length >= 4) {
+                paragraphs.push(currentPara);
+                currentPara = [];
+              }
             }
           });
+          if (currentPara.length > 0) paragraphs.push(currentPara);
+
+          // Paginação inteligente de LR: se tiver muitos parágrafos/frases (> 8 a 10 frases no total), divide em folhas
+          const totalSentencesCount = rawSentences.length;
+          const CHUNK_SIZE_LR = 9; // ~8-9 frases por folha mantém fonte 15pt generosa e relaxada
+
+          if (totalSentencesCount <= CHUNK_SIZE_LR) {
+            parsedBlocks.push({
+              id: `b_lr_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'listen_read',
+              data: {
+                title: 'Listen & Read • Imersão Auditiva Real',
+                instruction: 'Observe pelos ouvidos. Sinta a cadência natural e o fluxo da história.',
+                paragraphs,
+                sentences: rawSentences,
+                forceNewPage: true
+              }
+            });
+          } else {
+            // Divide os parágrafos em partes para páginas separadas
+            let runningCount = 0;
+            let currentPartParas = [];
+            let partIndex = 1;
+
+            paragraphs.forEach(para => {
+              currentPartParas.push(para);
+              runningCount += para.length;
+
+              if (runningCount >= CHUNK_SIZE_LR) {
+                parsedBlocks.push({
+                  id: `b_lr_${Date.now()}_${partIndex}_${Math.random().toString(36).substr(2, 3)}`,
+                  type: 'listen_read',
+                  data: {
+                    title: `Listen & Read • Imersão Auditiva Real (Parte ${partIndex})`,
+                    instruction: 'Observe pelos ouvidos. Sinta a cadência natural e o fluxo da história.',
+                    paragraphs: currentPartParas,
+                    sentences: currentPartParas.flat(),
+                    forceNewPage: true
+                  }
+                });
+                partIndex++;
+                currentPartParas = [];
+                runningCount = 0;
+              }
+            });
+
+            if (currentPartParas.length > 0) {
+              parsedBlocks.push({
+                id: `b_lr_${Date.now()}_${partIndex}_${Math.random().toString(36).substr(2, 3)}`,
+                type: 'listen_read',
+                data: {
+                  title: `Listen & Read • Imersão Auditiva Real (Parte ${partIndex})`,
+                  instruction: 'Observe pelos ouvidos. Sinta a cadência natural e o fluxo da história.',
+                  paragraphs: currentPartParas,
+                  sentences: currentPartParas.flat(),
+                  forceNewPage: true
+                }
+              });
+            }
+          }
         } else if (currentMode === 'chunks') {
-          const chunks = currentLines.map(l => {
+          const rawChunks = currentLines.map(l => {
             if (l.includes('->') || l.includes(' - ') || l.includes('=')) {
               const parts = l.split(/->|-|=/);
               return { en: parts[0].trim(), pt: (parts[1] || '').trim(), soundTag: 'Chunk' };
             }
             return { en: l, pt: '', soundTag: 'Expressão' };
-          });
-          parsedBlocks.push({
-            id: `b_voc_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
-            type: 'vocab_chunks',
-            data: {
-              title: 'Vocabulary Session • Matriz de Chunks Sonoros',
-              instruction: 'Fixe os blocos inteiros com sua tradução falada real.',
-              chunks
-            }
-          });
+          }).filter(c => c.en.length > 0);
+
+          // Máximo de 12 chunks por página (grid 2 colunas x 6 linhas)
+          const CHUNK_SIZE_VOC = 12;
+          for (let i = 0; i < rawChunks.length; i += CHUNK_SIZE_VOC) {
+            const chunkItems = rawChunks.slice(i, i + CHUNK_SIZE_VOC);
+            const partNum = Math.floor(i / CHUNK_SIZE_VOC) + 1;
+            const totalParts = Math.ceil(rawChunks.length / CHUNK_SIZE_VOC);
+            const partSuffix = totalParts > 1 ? ` (Parte ${partNum} de ${totalParts})` : '';
+
+            parsedBlocks.push({
+              id: `b_voc_${Date.now()}_${partNum}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'vocab_chunks',
+              data: {
+                title: `Vocabulary Session • Chunks Sonoros${partSuffix}`,
+                instruction: 'Fixe os blocos inteiros com sua tradução falada real.',
+                chunks: chunkItems,
+                forceNewPage: true
+              }
+            });
+          }
         } else if (currentMode === 'la') {
-          parsedBlocks.push({
-            id: `b_la_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
-            type: 'listen_answer',
-            data: {
-              title: 'Listen & Answer • Velocidade de Resposta',
-              instruction: 'Responda no reflexo imediato. Sem respostas prontas.',
-              questions: currentLines.map(l => l.replace(/^[0-9]+[\.\)\-]\s*/, '')),
-              showLines: true
+          const rawQuestions = currentLines.map(l => l.replace(/^[0-9]+[\.\)\-]\s*/, '')).filter(Boolean);
+          // Máximo de 10 perguntas por bloco/folha para densidade visual perfeita
+          const CHUNK_SIZE = 10;
+          for (let i = 0; i < rawQuestions.length; i += CHUNK_SIZE) {
+            const chunkQuestions = rawQuestions.slice(i, i + CHUNK_SIZE);
+            const partNum = Math.floor(i / CHUNK_SIZE) + 1;
+            const totalParts = Math.ceil(rawQuestions.length / CHUNK_SIZE);
+            const partSuffix = totalParts > 1 ? ` (Parte ${partNum} de ${totalParts})` : '';
+
+            parsedBlocks.push({
+              id: `b_la_${Date.now()}_${partNum}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'listen_answer',
+              data: {
+                title: `Listen & Answer • Velocidade de Resposta${partSuffix}`,
+                instruction: 'Responda no reflexo imediato. Sem respostas prontas: use as linhas para fixação manual.',
+                questions: chunkQuestions,
+                showLines: true,
+                forceNewPage: true
+              }
+            });
+          }
+        } else if (currentMode === 'lrt') {
+          const rawPrompts = [];
+          const rawKeywords = [];
+
+          currentLines.forEach(l => {
+            const lowerL = l.toLowerCase();
+            if (lowerL.startsWith('keywords:') || lowerL.startsWith('palavras-chave:')) {
+              const kwText = l.replace(/^(keywords|palavras-chave):\s*/i, '');
+              rawKeywords.push(...kwText.split(',').map(s => s.trim()).filter(Boolean));
+            } else {
+              const cleaned = l.replace(/^[0-9]+[\.\)\-]\s*/, '').trim();
+              if (cleaned) rawPrompts.push(cleaned);
             }
           });
+
+          // Máximo de 10 prompts por bloco/folha
+          const CHUNK_SIZE = 10;
+          for (let i = 0; i < (rawPrompts.length || 1); i += CHUNK_SIZE) {
+            const chunkPrompts = rawPrompts.slice(i, i + CHUNK_SIZE);
+            const partNum = Math.floor(i / CHUNK_SIZE) + 1;
+            const totalParts = Math.ceil((rawPrompts.length || 1) / CHUNK_SIZE);
+            const partSuffix = totalParts > 1 ? ` (Parte ${partNum} de ${totalParts})` : '';
+
+            parsedBlocks.push({
+              id: `b_lrt_${Date.now()}_${partNum}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'look_retell',
+              data: {
+                title: `Look & Retell + AI Coach • Produção Própria${partSuffix}`,
+                instruction: 'Reconte a história com o seu inglês de hoje. Use as perguntas-guia como mapa mental de fala.',
+                prompts: chunkPrompts,
+                keywords: rawKeywords,
+                forceNewPage: true
+              }
+            });
+          }
         } else if (currentMode === 'lask') {
-          const items = currentLines.map(l => {
+          const rawItems = currentLines.map(l => {
             if (l.includes('->') || l.includes(' - ')) {
               const parts = l.split(/->| - /);
               return { statement: parts[0].trim(), prompt: (parts[1] || '').trim() };
             }
             return { statement: l, prompt: 'Pergunte no reflexo:' };
-          });
-          parsedBlocks.push({
-            id: `b_lask_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
-            type: 'listen_ask',
-            data: {
-              title: 'Listen & Ask • Desafio de Perguntas',
-              instruction: 'Ao ouvir o estímulo afirmativo ou negativo, formule de imediato a pergunta correspondente.',
-              items,
-              showLines: true
-            }
-          });
+          }).filter(it => it.statement.length > 0);
+
+          // Máximo de 10 estímulos por bloco/folha
+          const CHUNK_SIZE = 10;
+          for (let i = 0; i < rawItems.length; i += CHUNK_SIZE) {
+            const chunkItems = rawItems.slice(i, i + CHUNK_SIZE);
+            const partNum = Math.floor(i / CHUNK_SIZE) + 1;
+            const totalParts = Math.ceil(rawItems.length / CHUNK_SIZE);
+            const partSuffix = totalParts > 1 ? ` (Parte ${partNum} de ${totalParts})` : '';
+
+            parsedBlocks.push({
+              id: `b_lask_${Date.now()}_${partNum}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'listen_ask',
+              data: {
+                title: `Listen & Ask • Desafio de Perguntas${partSuffix}`,
+                instruction: 'Ao ouvir o estímulo afirmativo ou negativo, formule de imediato a pergunta correspondente.',
+                items: chunkItems,
+                showLines: true,
+                forceNewPage: true
+              }
+            });
+          }
         } else if (currentMode === 'pro') {
           const tips = [];
           const contentLines = [];
@@ -860,19 +1014,36 @@
               contentLines.push(l);
             }
           });
-          parsedBlocks.push({
-            id: `b_pro_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
-            type: 'connected_speech',
-            data: {
-              title: 'Pronunciation & Connected Speech • Ritmo Mecânico',
-              instruction: 'Treine as conexões sonoras naturais e reduções da fala da vida real.',
-              content: contentLines.join('\n'),
-              tips: tips.length > 0 ? tips : [
-                'Fale no mesmo andamento da gravação.',
-                'Conecte o som final da consoante com a vogal seguinte.'
-              ]
-            }
-          });
+
+          // Regra Canônica: O bloco PRO deve repetir as frases do LR (uma frase abaixo da outra),
+          // respeitando o limite de até 10 frases por folha
+          const baseSentences = (lrSentencesMaster && lrSentencesMaster.length > 0)
+            ? lrSentencesMaster
+            : (contentLines.length > 0 ? contentLines : ['Pratique a pronúncia das frases da história.']);
+
+          const CHUNK_SIZE_PRO = 10;
+          for (let i = 0; i < baseSentences.length; i += CHUNK_SIZE_PRO) {
+            const chunkSentences = baseSentences.slice(i, i + CHUNK_SIZE_PRO);
+            const partNum = Math.floor(i / CHUNK_SIZE_PRO) + 1;
+            const totalParts = Math.ceil(baseSentences.length / CHUNK_SIZE_PRO);
+            const partSuffix = totalParts > 1 ? ` (Parte ${partNum} de ${totalParts})` : '';
+
+            parsedBlocks.push({
+              id: `b_pro_${Date.now()}_${partNum}_${Math.random().toString(36).substr(2, 3)}`,
+              type: 'connected_speech',
+              data: {
+                title: `Pronunciation & Connected Speech • Ritmo Mecânico${partSuffix}`,
+                instruction: 'Treine as conexões sonoras naturais e reduções da fala da vida real. Repita em voz alta.',
+                sentences: chunkSentences,
+                content: chunkSentences.join('\n'),
+                tips: (i === 0 && tips.length > 0) ? tips : (tips.length > 0 ? tips.slice(0, 3) : [
+                  'Fale no mesmo andamento da gravação.',
+                  'Conecte o som final da consoante com a vogal seguinte.'
+                ]),
+                forceNewPage: true
+              }
+            });
+          }
         } else if (currentMode === 'gold') {
           parsedBlocks.push({
             id: `b_gold_${Date.now()}_${Math.random().toString(36).substr(2, 3)}`,
@@ -931,6 +1102,9 @@
         } else if (lower.startsWith('section 3') || lower.startsWith('listen & answer') || lower.startsWith('listen and answer') || lower.startsWith('perguntas:') || lower.startsWith('questions:')) {
           flushCurrent();
           currentMode = 'la';
+        } else if (lower.startsWith('section 4') || lower.startsWith('look & retell') || lower.startsWith('look and retell') || lower.startsWith('reconto')) {
+          flushCurrent();
+          currentMode = 'lrt';
         } else if (lower.startsWith('section 5') || lower.startsWith('listen & ask') || lower.startsWith('listen and ask') || lower.startsWith('desafio de perguntas')) {
           flushCurrent();
           currentMode = 'lask';
@@ -1010,14 +1184,15 @@
       blocksList.forEach(block => {
         const def = this.blockTypes[block.type];
         const weight = def ? def.defaultWeight : 30;
+        const wantsNewPage = block.data && block.data.forceNewPage && currentPage.blocks.length > 1;
 
-        if (currentWeight + weight > 90) {
+        if (wantsNewPage || (currentWeight + weight > 90)) {
           pages.push(currentPage);
           currentPage = {
             id: `page_${pages.length + 1}`,
             number: pages.length + 1,
             blocks: [
-              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Continuação', courseTitle: title, lessonTitle: subtitle } }
+              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Treino Prático', courseTitle: title, lessonTitle: subtitle } }
             ]
           };
           currentWeight = 18;
@@ -1190,66 +1365,76 @@
 
       const renderBlock = (block) => {
         const d = block.data || {};
+        const pal = this.palettes[this.state.paletteId] || this.palettes.amber;
+        const cornerQrHtml = renderCornerQr(d);
+
         switch (block.type) {
           case 'cover':
             return `
-              <div class="aef-cover-archetype">
+              <div class="aef-cover-hero" style="background: radial-gradient(circle at 80% 20%, #162B4D 0%, #0A192F 70%);">
                 <div class="cover-watermark">${d.watermark || '01/02'}</div>
-                <div class="cover-tag">${d.tag || '✦ AGORAEUFALO • PROFESSOR LEONARDO LEITE'}</div>
-                <div class="cover-course">${[d.courseTitle, d.moduleTitle].filter(Boolean).join(' • ')}</div>
-                <h1 class="cover-lesson-title">${d.lessonTitle || ''}</h1>
-                <div class="cover-card">
-                  <div class="cover-synopsis-label">Sinopse Pedagógica & Treino de Fala:</div>
-                  <div class="cover-synopsis-text">${d.synopsis || ''}</div>
-                  <div class="cover-stats">${d.stats || ''}</div>
+                <div class="cover-content">
+                  <div class="cover-tag">${d.tag || '✦ MAGIC STORIES • SÉRIE OFICIAL 2026'}</div>
+                  <h1 class="cover-title">${d.lessonTitle || 'Título da Aula'}</h1>
+                  <div class="cover-sub">${d.courseTitle || ''}</div>
+                  <div class="cover-synopsis-box">
+                    <div class="synopsis-label">SINOPSE PEDAGÓGICA & TREINO DE FALA:</div>
+                    <div class="synopsis-text">${d.synopsis || 'Sinopse não cadastrada.'}</div>
+                  </div>
+                  <div class="cover-footer-badge">
+                    <span class="dot" style="background:${pal.primary};"></span>
+                    <span>${d.stats || 'Apostila Oficial de Treino Prático • AgoraEuFalo'}</span>
+                  </div>
                 </div>
-                <div class="cover-footer">AgoraEuFalo Ecossistema Digital • Material Exclusivo para Alunos</div>
               </div>
             `;
 
           case 'header_banner':
             return `
-              <div class="aef-header-banner" style="background:${pal.headerBg};">
-                <div class="hdr-tag">${d.tag || '✦ AgoraEuFalo • Professor Leonardo Leite'}</div>
-                <div class="hdr-course">${d.courseTitle || ''}</div>
-                <h2 class="hdr-title">${d.lessonTitle || ''}</h2>
+              <div class="aef-header-banner" style="border-bottom-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
+                <div class="banner-tag" style="color:${pal.primary};">${d.tag || '✦ Treino Prático'}</div>
+                <div class="banner-title">${d.courseTitle || ''} • <span style="color:${pal.primary};">${d.lessonTitle || ''}</span></div>
               </div>
             `;
 
           case 'listen_read':
-            const sList = (d.sentences || []).map(s => {
-              if (typeof s === 'string') {
-                return `<div class="lr-sentence-row"><span class="lr-en">${s}</span></div>`;
-              }
-              return `
-                <div class="lr-sentence-row">
-                  ${s.speaker ? `<span class="lr-speaker">${s.speaker}:</span>` : ''}
-                  <span class="lr-en">${s.en || ''}</span>
-                </div>
-              `;
-            }).join('');
+            let lrBodyHtml = '';
+            if (d.paragraphs && d.paragraphs.length > 0) {
+              lrBodyHtml = d.paragraphs.map(para => {
+                const paraSentences = para.map(s => {
+                  const speaker = s.speaker ? `<span class="speaker-tag" style="color:${pal.primary}; font-weight:800;">${s.speaker}:</span> ` : '';
+                  return `${speaker}${s.en || s}`;
+                }).join(' ');
+                return `<p class="lr-paragraph" style="margin-bottom:12px; line-height:1.65; font-size:1.05em; color:#0F172A;">${paraSentences}</p>`;
+              }).join('');
+            } else {
+              lrBodyHtml = (d.sentences || []).map(s => {
+                const speaker = s.speaker ? `<span class="speaker-tag" style="color:${pal.primary}; font-weight:800;">${s.speaker}:</span> ` : '';
+                return `<div class="lr-sentence" style="margin-bottom:8px; line-height:1.5;">${speaker}${s.en || s}</div>`;
+              }).join('');
+            }
             return `
-              <div class="aef-box lr-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box lr-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>🎧 ${d.title || 'Listen & Read'}</span>
                 </div>
                 ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
-                <div class="lr-content">${sList}</div>
+                <div class="lr-content" style="padding-top:4px;">${lrBodyHtml}</div>
               </div>
             `;
 
           case 'vocab_chunks':
             const cList = (d.chunks || []).map(c => `
-              <div class="chunk-card">
-                <div class="chunk-en-row">
-                  <span class="chunk-en">${c.en || ''}</span>
-                  ${c.soundTag ? `<span class="chunk-tag" style="background:${pal.badgeBg}; color:${pal.badgeText};">${c.soundTag}</span>` : ''}
-                </div>
-                ${c.pt ? `<div class="chunk-pt">↳ ${c.pt}</div>` : ''}
+              <div class="chunk-item">
+                <span class="chunk-en">${c.en || c}</span>
+                ${c.pt ? `<span class="chunk-pt" style="color:${pal.primary};"> ➔ ${c.pt}</span>` : ''}
               </div>
             `).join('');
             return `
-              <div class="aef-box vocab-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box vocab-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>📖 ${d.title || 'Vocabulary Session'}</span>
                 </div>
@@ -1269,7 +1454,8 @@
               </div>
             `).join('');
             return `
-              <div class="aef-box la-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box la-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>⚡ ${d.title || 'Listen & Answer'}</span>
                 </div>
@@ -1279,19 +1465,22 @@
             `;
 
           case 'look_retell':
-            const pList = (d.prompts || []).map(p => `<li>${p}</li>`).join('');
+            const pList = (d.prompts || []).map((p, i) => `<li><span class="prompt-num" style="font-weight:700; color:${pal.primary};">${i + 1}.</span> ${p}</li>`).join('');
             const kwList = (d.keywords || []).map(k => `<span class="kw-badge">${k}</span>`).join('');
             return `
-              <div class="aef-box lrt-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box lrt-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>🎙️ ${d.title || 'Look & Retell + AI Coach'}</span>
                 </div>
                 ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
-                <ul class="lrt-prompts">${pList}</ul>
-                <div class="lrt-kw-box">
-                  <span class="kw-label">Keywords / Palavras-Chave:</span>
-                  <div class="kw-container">${kwList}</div>
-                </div>
+                <ul class="lrt-prompts" style="list-style:none; padding-left:0;">${pList}</ul>
+                ${(d.keywords || []).length > 0 ? `
+                  <div class="lrt-kw-box">
+                    <span class="kw-label">Keywords / Palavras-Chave:</span>
+                    <div class="kw-container">${kwList}</div>
+                  </div>
+                ` : ''}
               </div>
             `;
 
@@ -1306,7 +1495,8 @@
               </div>
             `).join('');
             return `
-              <div class="aef-box lask-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box lask-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>❓ ${d.title || 'Listen & Ask'}</span>
                 </div>
@@ -1317,20 +1507,34 @@
 
           case 'connected_speech':
             const tList = (d.tips || []).map(t => `<li>${t}</li>`).join('');
+            let proSentencesHtml = '';
+            if (d.sentences && d.sentences.length > 0) {
+              proSentencesHtml = d.sentences.map((sent, i) => `
+                <div class="pro-sentence-item" style="padding:6px 0; border-bottom:1px dashed #E2E8F0; font-size:1em; font-weight:600; color:#0F172A; display:flex; gap:8px;">
+                  <span style="color:${pal.primary}; font-weight:800; min-width:20px;">${i + 1}.</span>
+                  <span>${sent}</span>
+                </div>
+              `).join('');
+            } else if (d.content) {
+              proSentencesHtml = `<div class="conn-text-box">${d.content}</div>`;
+            }
+
             return `
-              <div class="aef-box conn-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box conn-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>🎵 ${d.title || 'Connected Speech & Pronúncia'}</span>
                 </div>
                 ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
-                <div class="conn-text-box">${d.content || ''}</div>
-                ${tList ? `<ul class="conn-tips">${tList}</ul>` : ''}
+                <div class="pro-sentences-list" style="margin-bottom:12px;">${proSentencesHtml}</div>
+                ${tList ? `<div style="margin-top:10px; padding-top:8px; border-top:1.5px solid #EAE5DC;"><span style="font-size:8.5pt; font-weight:800; text-transform:uppercase; color:${pal.primaryDark}; display:block; margin-bottom:4px;">✦ Dicas de Conexão & Redução:</span><ul class="conn-tips" style="margin:0; padding-left:18px;">${tList}</ul></div>` : ''}
               </div>
             `;
 
           case 'golden_tip':
             return `
-              <div class="aef-golden-box">
+              <div class="aef-golden-box" style="position:relative;">
+                ${cornerQrHtml}
                 <div class="golden-title">💡 ${d.title || 'Sacada de Ouro do Professor Leo'}</div>
                 <div class="golden-content">"${d.content || ''}"</div>
               </div>
@@ -1338,7 +1542,8 @@
 
           case 'explainer':
             return `
-              <div class="aef-box explainer-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box explainer-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>✦ ${d.title || 'Conceito Central'}</span>
                 </div>
@@ -1352,7 +1557,8 @@
               linesHtml += `<div class="handwriting-line" style="border-color:${pal.dotColor}; height:24px; margin-bottom:8px;"></div>`;
             }
             return `
-              <div class="aef-box lines-box" style="border-left-color:${pal.primary};">
+              <div class="aef-box lines-box" style="border-left-color:${pal.primary}; position:relative;">
+                ${cornerQrHtml}
                 <div class="box-title" style="color:${pal.primary};">
                   <span>📝 ${d.title || 'Anotações de Treino Oral'}</span>
                 </div>
