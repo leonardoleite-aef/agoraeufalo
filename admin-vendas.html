@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Departamento de Vendas • Catálogo de Ofertas & Checkouts | AgoraEuFalo Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#C68A36',
+              amber: '#F59E0B',
+              slate: '#1E293B',
+              card: '#0D1B2A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-offers-registry.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+  </style>
+</head>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Top bar container handled by AEFAdminNav -->
+  <div id="aef-admin-header-container"></div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WORKSPACE                                                            -->
+  <!-- ========================================================================= -->
+  <main class="max-w-[98vw] 2xl:max-w-[1920px] w-full mx-auto p-4 sm:p-6 flex-1 space-y-6">
+
+    <!-- HERO / TITLE & ACTIONS -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
+      <div class="space-y-2 z-10">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-black text-sm border border-purple-400/30">
+            ⚡
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            DEPARTAMENTO DE VENDAS
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            FASE 1: CATÁLOGO DE OFERTAS & CHECKOUTS
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          Gestão Central de Ofertas Comerciais & Hotmart
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+          Configure preços, parcelamentos, regras de acesso e links de checkout. As ofertas cadastradas aqui abastecem os modais de paywall, cards in-feed e landing pages criadas pelo <span class="text-amber-400 font-bold">Departamento de Marketing</span>.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 z-10 shrink-0">
+        <button onclick="openCreateOfferModal()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>+ Nova Oferta Comercial</span>
+        </button>
+
+        <button onclick="openHotmartGuideModal()" class="px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition border border-white/10 flex items-center gap-2 cursor-pointer" title="Ver como cadastrar na Hotmart">
+          <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
+          <span>Guia Rápido Hotmart</span>
+        </button>
+
+        <button onclick="syncOffersFromCloud()" class="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10 cursor-pointer" title="Sincronizar com Firestore">
+          <i data-lucide="refresh-cw" class="w-4 h-4" id="sync-icon"></i>
+        </button>
+      </div>
+
+      <!-- Subtle background glow -->
+      <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
+    <!-- METRICS STRIP -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="tag" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Ofertas</span>
+          <p class="text-lg font-black text-white" id="stat-total">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="check-circle" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Ofertas Ativas</span>
+          <p class="text-lg font-black text-emerald-400" id="stat-active">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="clock" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Aguardando Link HM</span>
+          <p class="text-lg font-black text-amber-400" id="stat-pending">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-green-500/15 text-green-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Mentoria WhatsApp</span>
+          <p class="text-lg font-black text-green-400" id="stat-whatsapp">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3 col-span-2 sm:col-span-1">
+        <div class="w-11 h-11 rounded-xl bg-rose-500/15 text-rose-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="flame" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Escassez / OTO</span>
+          <p class="text-lg font-black text-rose-400" id="stat-scarcity">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER & SEARCH BAR -->
+    <div class="bg-[#0A192F] border border-white/10 rounded-3xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 text-xs font-bold no-scrollbar">
+        <button onclick="setFilter('all')" id="tab-all" class="px-3.5 py-2 rounded-xl bg-amber-500 text-slate-950 font-black shrink-0 transition cursor-pointer">
+          Todas (<span id="count-all">0</span>)
+        </button>
+        <button onclick="setFilter('ms-club')" id="tab-ms-club" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          🎓 Magic Stories Club
+        </button>
+        <button onclick="setFilter('courses')" id="tab-courses" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          📚 Cursos Avulsos
+        </button>
+        <button onclick="setFilter('mentoria-vip')" id="tab-mentoria-vip" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          👑 Mentoria VIP
+        </button>
+        <button onclick="setFilter('all-access')" id="tab-all-access" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          💎 Vitalício
+        </button>
+        <button onclick="setFilter('pending')" id="tab-pending" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-amber-400 hover:text-amber-300 shrink-0 transition cursor-pointer">
+          ⏳ Pendentes de Link
+        </button>
+        <button onclick="setFilter('paused')" id="tab-paused" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white shrink-0 transition cursor-pointer">
+          ⏸️ Pausadas
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full md:w-80 shrink-0">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="offerSearchInput" oninput="handleSearch(this.value)" placeholder="Buscar por título, código ou preço..." class="w-full bg-[#112240] border border-white/10 text-white rounded-2xl pl-10 pr-3 py-2 text-xs focus:border-amber-400 focus:outline-none placeholder:text-slate-500 font-medium">
+      </div>
+    </div>
+
+    <!-- OFFERS GRID -->
+    <section id="offersContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
+      <!-- Injected dynamically via JS -->
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: CRIAR / EDITAR OFERTA COMERCIAL                                  -->
+  <!-- ========================================================================= -->
+  <div id="offerModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <!-- Header -->
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">DEPARTAMENTO DE VENDAS</span>
+          <h3 class="text-base sm:text-lg font-black text-white" id="modalOfferTitle">Configurar Oferta Comercial</h3>
+        </div>
+        <button onclick="closeOfferModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form id="offerForm" onsubmit="handleSaveOfferForm(event)" class="p-5 sm:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-xs">
+        <input type="hidden" id="formOfferId">
+
+        <!-- 1. TÍTULO & PRODUTO -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">1. Identificação da Oferta</span>
+          
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Título Interno da Oferta *</label>
+            <input type="text" id="formTitle" required placeholder="Ex: Magic Stories Club • Assinatura Anual (Plano Oficial)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Produto Associado *</label>
+              <select id="formProductId" onchange="handleProductSelectChange(this.value)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="ms-club">🎓 Magic Stories Club</option>
+                <option value="english-quickstart">📚 English QuickStart</option>
+                <option value="frases-prontas">🗣️ Frases Prontas</option>
+                <option value="mentoria-vip">👑 Mentoria VIP Individual</option>
+                <option value="all-access-lifetime">💎 Membro Fundador (All-Access)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Badge Comercial em Destaque</label>
+              <input type="text" id="formBadge" placeholder="Ex: PLANO OFICIAL, 50% OFF, 7 DIAS GRÁTIS" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Slug / Código Interno (URL)</label>
+              <input type="text" id="formSlug" placeholder="ex: ms-club-anual-2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Tier Concedido ao Aluno</label>
+              <select id="formGrantedTier" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="club_annual">🎓 Membro Club Anual (club_annual)</option>
+                <option value="club_monthly">🎓 Membro Club Mensal (club_monthly)</option>
+                <option value="course_member">📚 Aluno de Curso Individual (course_member)</option>
+                <option value="vip">👑 Mentoria VIP Individual (vip)</option>
+                <option value="free">🌱 Aluno Free / Degustação (free)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. PREÇOS & MODALIDADE -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">2. Preço & Condições Comerciais</span>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Modalidade</label>
+              <select id="formBillingType" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="subscription">Assinatura Recorrente</option>
+                <option value="one_time">Pagamento Único</option>
+                <option value="free">100% Gratuito</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Preço Regular (De R$)</label>
+              <input type="number" step="0.01" id="formRegularPrice" value="997.00" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Preço Oferta (Por R$) *</label>
+              <input type="number" step="0.01" id="formOfferPrice" required value="497.00" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono font-bold text-amber-300 focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Texto de Parcelamento (Exibido no CTA) *</label>
+            <input type="text" id="formInstallments" required placeholder="Ex: 12x de R$ 49,70 ou R$ 497 à vista" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- 3. INTEGRAÇÃO HOTMART & CHECKOUT -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">3. Checkout & Integração de Pagamento</span>
+            <div class="flex items-center gap-2">
+              <label class="text-[11px] text-slate-300 flex items-center gap-1 cursor-pointer">
+                <input type="radio" name="formProvider" value="hotmart" checked onchange="toggleProviderFields('hotmart')" class="accent-amber-400">
+                <span>Hotmart</span>
+              </label>
+              <label class="text-[11px] text-slate-300 flex items-center gap-1 cursor-pointer">
+                <input type="radio" name="formProvider" value="whatsapp" onchange="toggleProviderFields('whatsapp')" class="accent-green-400">
+                <span>WhatsApp Leo</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Hotmart fields -->
+          <div id="hotmartFieldsGroup" class="space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="font-bold text-slate-300">Link de Checkout Direto da Hotmart</label>
+                <span class="text-[10px] text-amber-400 font-mono">Pode colar depois de criar na HM</span>
+              </div>
+              <input type="url" id="formCheckoutUrl" placeholder="https://pay.hotmart.com/XXXXX?off=YYYY" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Código da Oferta na Hotmart</label>
+                <input type="text" id="formOfferCode" placeholder="Ex: CLUB_ANUAL_2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">SRC / SCK Padrão de Rastreamento</label>
+                <input type="text" id="formTrackingParam" placeholder="src=portal_free&sck=oferta" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- WhatsApp fields -->
+          <div id="whatsappFieldsGroup" class="space-y-3 hidden">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Número do WhatsApp para Triagem</label>
+              <input type="text" id="formWhatsappNumber" value="+55 11 99616-0910" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Mensagem Pré-Formatada do Aluno</label>
+              <textarea id="formWhatsappPrefill" rows="2" class="w-full bg-[#112240] border border-white/15 rounded-xl p-2.5 text-white text-xs focus:border-amber-400 focus:outline-none">Olá Professor Leo! Quero aplicar para a Mentoria VIP Individual 1 a 1 de 6 meses.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. ESCASSEZ & STATUS -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">4. Escassez & Status da Campanha</span>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Status da Oferta</label>
+              <select id="formStatus" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="active">🟢 Ativa (Visível para o Marketing)</option>
+                <option value="paused">⚪ Pausada (Oculta temporariamente)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Vagas Restantes (Opcional)</label>
+              <input type="number" id="formSpotsLeft" placeholder="Deixe em branco se ilimitado" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-white/10 space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="formHasCountdown" onchange="document.getElementById('countdownBox').classList.toggle('hidden', !this.checked)" class="w-4 h-4 accent-amber-400">
+              <span class="font-bold text-white text-xs">Ativar Timer de Contagem Regressiva (Oferta Relâmpago / OTO)</span>
+            </label>
+
+            <div id="countdownBox" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div>
+                <label class="block text-slate-400 font-medium mb-1">Duração do Timer (Minutos):</label>
+                <input type="number" id="formCountdownMinutes" value="15" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-medium mb-1">Redirecionar para URL ao expirar:</label>
+                <input type="text" id="formRedirectOnExpire" placeholder="curso.html?curso=frases-prontas" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white text-xs focus:border-amber-400 focus:outline-none">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeOfferModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition cursor-pointer">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black transition flex items-center gap-1.5 shadow-md cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Salvar Oferta Comercial</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: FICHA TÉCNICA PARA CADASTRO NA HOTMART                           -->
+  <!-- ========================================================================= -->
+  <div id="hotmartSpecModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div class="flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-xs">
+            📋
+          </span>
+          <div>
+            <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">ASSISTENTE DE CADASTRO HOTMART</span>
+            <h3 class="text-base font-black text-white" id="specModalTitle">Dados Prontos para Cadastrar na Hotmart</h3>
+          </div>
+        </div>
+        <button onclick="closeHotmartSpecModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Spec Content with 1-Click Copy -->
+      <div class="p-5 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-xs">
+        <p class="text-slate-300 leading-relaxed">
+          Copie estes parâmetros com 1 clique para cadastrar esta oferta na Hotmart sem erros de digitação:
+        </p>
+
+        <!-- Spec Items -->
+        <div class="space-y-2.5">
+          
+          <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Nome do Produto</span>
+              <p class="font-bold text-white text-xs mt-0.5" id="specProductName">-</p>
+            </div>
+            <button onclick="copySpecField('specProductName')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-300 font-bold text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar</span>
+            </button>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Formato / Tipo de Cobrança</span>
+              <p class="font-bold text-white text-xs mt-0.5" id="specFormat">-</p>
+            </div>
+            <button onclick="copySpecField('specFormat')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-300 font-bold text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold text-slate-400 uppercase block">Preço de Tabela</span>
+                <p class="font-bold text-slate-300 text-xs mt-0.5" id="specRegularPrice">-</p>
+              </div>
+              <button onclick="copySpecField('specRegularPrice')" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-300 transition cursor-pointer" title="Copiar">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[#060D17] border border-amber-400/30 flex items-center justify-between gap-2 bg-amber-500/5">
+              <div>
+                <span class="text-[10px] font-bold text-amber-400 uppercase block">Preço da Oferta</span>
+                <p class="font-black text-amber-300 text-xs mt-0.5" id="specOfferPrice">-</p>
+              </div>
+              <button onclick="copySpecField('specOfferPrice')" class="p-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 transition cursor-pointer" title="Copiar">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Texto Parcelamento</span>
+              <p class="font-bold text-white text-xs mt-0.5" id="specInstallments">-</p>
+            </div>
+            <button onclick="copySpecField('specInstallments')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-300 font-bold text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar</span>
+            </button>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Código Sugerido da Oferta</span>
+              <p class="font-mono text-amber-400 text-xs mt-0.5" id="specOfferCode">-</p>
+            </div>
+            <button onclick="copySpecField('specOfferCode')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-300 font-bold text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar</span>
+            </button>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Parâmetros de Tracking Recomendados</span>
+              <p class="font-mono text-slate-300 text-[11px] mt-0.5" id="specTrackingHint">-</p>
+            </div>
+            <button onclick="copySpecField('specTrackingHint')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-300 font-bold text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Quick Paste Hotmart URL Box -->
+        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 space-y-2.5">
+          <span class="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
+            <i data-lucide="link" class="w-4 h-4"></i> Já criou na Hotmart? Cole o Link do Checkout aqui:
+          </span>
+          <div class="flex items-center gap-2">
+            <input type="url" id="quickPasteUrl" placeholder="https://pay.hotmart.com/..." class="flex-1 bg-[#060D17] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            <button onclick="saveQuickPasteHotmartUrl()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shrink-0 cursor-pointer">
+              Salvar Link
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-[#112240] border-t border-white/10 flex items-center justify-end">
+        <button onclick="closeHotmartSpecModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition cursor-pointer">
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: GUIA RÁPIDO HOTMART                                              -->
+  <!-- ========================================================================= -->
+  <div id="hotmartGuideModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 font-bold text-base">📖 Guia de Cadastro na Hotmart</span>
+        </div>
+        <button onclick="closeHotmartGuideModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-xs text-slate-300 leading-relaxed">
+        <div class="p-3.5 rounded-2xl bg-[#112240] border border-white/10 space-y-1">
+          <span class="font-bold text-amber-400 block">Passo 1: Criar o Produto na Hotmart</span>
+          <p>Acesse o painel da Hotmart ➔ Produtos ➔ Cadastrar Produto. Escolha "Curso Online" ou "Assinatura" conforme a modalidade da oferta.</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-[#112240] border border-white/10 space-y-1">
+          <span class="font-bold text-amber-400 block">Passo 2: Configurar a Precificação & Código da Oferta</span>
+          <p>Em "Precificação", adicione a oferta usando os valores sugeridos no botão <b>"📋 Ficha Hotmart"</b> desta tela.</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-[#112240] border border-white/10 space-y-1">
+          <span class="font-bold text-amber-400 block">Passo 3: Copiar o Link do Checkout</span>
+          <p>Na aba "Links de Divulgação", copie o link direto do <b>Checkout da Hotmart</b> (ex: <code class="text-amber-300 font-mono">https://pay.hotmart.com/...</code>).</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-[#112240] border border-white/10 space-y-1">
+          <span class="font-bold text-amber-400 block">Passo 4: Colar aqui no Departamento de Vendas</span>
+          <p>Clique em <b>"Colar Link"</b> no card da oferta correspondente. A partir deste momento, todos os CTAs e modais de marketing passarão a levar o aluno direto para o seu checkout oficial!</p>
+        </div>
+      </div>
+
+      <div class="p-4 bg-[#112240] border-t border-white/10 text-right">
+        <button onclick="closeHotmartGuideModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer">
+          Entendi, vamos lá!
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SCRIPTS & INTERACTION LOGIC                                               -->
+  <!-- ========================================================================= -->
+  <script>
+    let allOffers = [];
+    let currentFilter = 'all';
+    let currentSearchTerm = '';
+    let currentSpecOfferId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadOffers();
+      if (window.lucide) window.lucide.createIcons();
+    });
+
+    async function loadOffers() {
+      allOffers = await window.aefOffersRegistry.getAllOffers();
+      updateMetrics();
+      renderOffersGrid();
+    }
+
+    async function syncOffersFromCloud() {
+      const icon = document.getElementById('sync-icon');
+      if (icon) icon.classList.add('animate-spin');
+
+      try {
+        await window.aefOffersRegistry.syncFromFirestore();
+        await loadOffers();
+      } finally {
+        setTimeout(() => {
+          if (icon) icon.classList.remove('animate-spin');
+        }, 600);
+      }
+    }
+
+    function updateMetrics() {
+      const total = allOffers.length;
+      const active = allOffers.filter(o => o.status === 'active').length;
+      const pending = allOffers.filter(o => o.isPendingHotmartLink || !o.checkoutUrl || o.checkoutUrl.includes('OFFER_')).length;
+      const whatsapp = allOffers.filter(o => o.provider === 'whatsapp').length;
+      const scarcity = allOffers.filter(o => o.scarcity?.hasCountdown || (o.scarcity?.spotsLeft && o.scarcity.spotsLeft > 0)).length;
+
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('stat-active').innerText = active;
+      document.getElementById('stat-pending').innerText = pending;
+      document.getElementById('stat-whatsapp').innerText = whatsapp;
+      document.getElementById('stat-scarcity').innerText = scarcity;
+
+      document.getElementById('count-all').innerText = total;
+    }
+
+    function setFilter(f) {
+      currentFilter = f;
+      const tabs = ['all', 'ms-club', 'courses', 'mentoria-vip', 'all-access', 'pending', 'paused'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+          if (t === f) {
+            btn.className = "px-3.5 py-2 rounded-xl bg-amber-500 text-slate-950 font-black shrink-0 transition cursor-pointer";
+          } else {
+            btn.className = "px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer";
+          }
+        }
+      });
+      renderOffersGrid();
+    }
+
+    function handleSearch(val) {
+      currentSearchTerm = (val || '').toLowerCase().trim();
+      renderOffersGrid();
+    }
+
+    function renderOffersGrid() {
+      const container = document.getElementById('offersContainer');
+      if (!container) return;
+
+      let list = [...allOffers];
+
+      // Filter
+      if (currentFilter === 'ms-club') {
+        list = list.filter(o => o.productId === 'ms-club');
+      } else if (currentFilter === 'courses') {
+        list = list.filter(o => o.productId === 'english-quickstart' || o.productId === 'frases-prontas');
+      } else if (currentFilter === 'mentoria-vip') {
+        list = list.filter(o => o.productId === 'mentoria-vip');
+      } else if (currentFilter === 'all-access') {
+        list = list.filter(o => o.productId === 'all-access-lifetime');
+      } else if (currentFilter === 'pending') {
+        list = list.filter(o => o.isPendingHotmartLink || !o.checkoutUrl || o.checkoutUrl.includes('OFFER_'));
+      } else if (currentFilter === 'paused') {
+        list = list.filter(o => o.status === 'paused');
+      }
+
+      // Search term
+      if (currentSearchTerm) {
+        list = list.filter(o => 
+          (o.title && o.title.toLowerCase().includes(currentSearchTerm)) ||
+          (o.slug && o.slug.toLowerCase().includes(currentSearchTerm)) ||
+          (o.productTitle && o.productTitle.toLowerCase().includes(currentSearchTerm)) ||
+          (o.hotmartSetupSpec?.suggestedOfferCode && o.hotmartSetupSpec.suggestedOfferCode.toLowerCase().includes(currentSearchTerm))
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-500 space-y-3">
+            <i data-lucide="tag" class="w-12 h-12 mx-auto opacity-30"></i>
+            <p class="font-bold text-sm">Nenhuma oferta comercial encontrada neste filtro.</p>
+            <button onclick="setFilter('all')" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs transition cursor-pointer">
+              Limpar Filtros
+            </button>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = list.map(offer => {
+        const isActive = offer.status === 'active';
+        const isPending = offer.isPendingHotmartLink || !offer.checkoutUrl || offer.checkoutUrl.includes('OFFER_');
+        const isWhatsapp = offer.provider === 'whatsapp';
+
+        // Badge color por produto
+        let productBadgeColor = "bg-blue-500/10 text-blue-300 border-blue-400/30";
+        if (offer.productId === 'ms-club') productBadgeColor = "bg-amber-500/10 text-amber-300 border-amber-400/30";
+        else if (offer.productId === 'mentoria-vip') productBadgeColor = "bg-purple-500/10 text-purple-300 border-purple-400/30";
+        else if (offer.productId === 'all-access-lifetime') productBadgeColor = "bg-emerald-500/10 text-emerald-300 border-emerald-400/30";
+
+        // Preço e parcelas
+        const regularPriceFormatted = (offer.pricing?.regularPrice && offer.pricing.regularPrice > offer.pricing.offerPrice)
+          ? `R$ ${offer.pricing.regularPrice.toFixed(2).replace('.', ',')}`
+          : null;
+        const offerPriceFormatted = `R$ ${(offer.pricing?.offerPrice || 0).toFixed(2).replace('.', ',')}`;
+
+        return `
+          <div class="bg-[#0A192F] border ${isActive ? 'border-white/10 hover:border-amber-400/40' : 'border-white/5 opacity-75'} rounded-3xl p-5 shadow-xl flex flex-col justify-between space-y-4 transition group">
+            
+            <!-- Card Top: Product & Status Toggle -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-full font-mono font-bold text-[10px] uppercase tracking-wider border ${productBadgeColor}">
+                  ${offer.productTitle || 'PRODUTO'}
+                </span>
+
+                <!-- Quick Status Switch -->
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold ${isActive ? 'text-emerald-400' : 'text-slate-400'} flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}"></span>
+                    <span>${isActive ? 'ATIVA' : 'PAUSADA'}</span>
+                  </span>
+                  <button onclick="handleToggleStatus('${offer.id}')" class="p-1 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 transition cursor-pointer" title="${isActive ? 'Pausar oferta' : 'Ativar oferta'}">
+                    <i data-lucide="${isActive ? 'pause' : 'play'}" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Title & Badge -->
+              <div>
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="text-[10px] font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 uppercase tracking-wider">
+                    ${offer.badge || 'OFERTA'}
+                  </span>
+                  ${offer.scarcity?.hasCountdown ? `
+                    <span class="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 flex items-center gap-1">
+                      <i data-lucide="flame" class="w-3 h-3"></i> OTO (${offer.scarcity.countdownMinutes || 15}m)
+                    </span>
+                  ` : ''}
+                </div>
+                <h3 class="font-bold text-sm sm:text-base text-white leading-snug group-hover:text-amber-200 transition">
+                  ${offer.title}
+                </h3>
+                <span class="text-[11px] font-mono text-slate-400 block mt-0.5">
+                  ID: ${offer.id}
+                </span>
+              </div>
+
+              <!-- Pricing Highlight Box -->
+              <div class="p-3.5 rounded-2xl bg-[#060D17] border border-white/10 space-y-1">
+                <div class="flex items-baseline gap-2">
+                  ${regularPriceFormatted ? `
+                    <span class="text-xs text-slate-400 line-through font-mono">De ${regularPriceFormatted}</span>
+                  ` : ''}
+                  <span class="text-lg font-black text-amber-300 font-mono">Por ${offerPriceFormatted}</span>
+                </div>
+                <p class="text-xs font-bold text-white leading-snug">
+                  ${offer.pricing?.installmentsText || ''}
+                </p>
+                <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px] text-slate-400 font-medium">
+                  <span>Tier: <strong class="text-slate-200">${offer.grantedTier}</strong></span>
+                  <span>${offer.pricing?.billingType === 'subscription' ? '🔄 Assinatura' : '📦 Pagamento Único'}</span>
+                </div>
+              </div>
+
+              <!-- Checkout Status Box -->
+              ${isWhatsapp ? `
+                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-400/30 space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-emerald-300 flex items-center gap-1">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Triagem Direta WhatsApp
+                    </span>
+                    <span class="text-[10px] font-mono text-emerald-400">${offer.whatsappNumber}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 pt-1">
+                    <button onclick="handleTestCheckout('${offer.id}')" class="flex-1 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 cursor-pointer">
+                      <span>Testar WhatsApp</span>
+                      <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </button>
+                    <button onclick="handleCopyCheckoutUrl('${offer.id}')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Copiar Link">
+                      <i data-lucide="copy" class="w-3 h-3"></i>
+                    </button>
+                  </div>
+                </div>
+              ` : isPending ? `
+                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-400/30 space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-amber-300 flex items-center gap-1">
+                      <i data-lucide="clock" class="w-3.5 h-3.5"></i> Aguardando Link da Hotmart
+                    </span>
+                    <span class="text-[10px] font-mono text-slate-400">${offer.hotmartSetupSpec?.suggestedOfferCode || '-'}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 pt-1">
+                    <button onclick="openHotmartSpecModal('${offer.id}')" class="flex-1 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] transition flex items-center justify-center gap-1 cursor-pointer">
+                      <i data-lucide="clipboard-list" class="w-3 h-3"></i>
+                      <span>Ver Ficha para HM</span>
+                    </button>
+                    <button onclick="handleQuickPasteUrlPrompt('${offer.id}')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Colar Link">
+                      <i data-lucide="link" class="w-3 h-3 text-amber-400"></i>
+                      <span>Colar</span>
+                    </button>
+                  </div>
+                </div>
+              ` : `
+                <div class="p-3 rounded-xl bg-sky-500/10 border border-sky-400/30 space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-sky-300 flex items-center gap-1">
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-sky-400"></i> Hotmart Conectada
+                    </span>
+                    <span class="text-[10px] font-mono text-slate-400">${offer.hotmartSetupSpec?.suggestedOfferCode || '-'}</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 pt-1">
+                    <button onclick="handleTestCheckout('${offer.id}')" class="flex-1 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 cursor-pointer">
+                      <span>Testar Checkout</span>
+                      <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </button>
+                    <button onclick="handleCopyCheckoutUrl('${offer.id}')" class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Copiar Link com SRC">
+                      <i data-lucide="copy" class="w-3 h-3"></i>
+                      <span>Link</span>
+                    </button>
+                  </div>
+                </div>
+              `}
+
+            </div>
+
+            <!-- Card Bottom: Actions -->
+            <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-1 text-xs">
+              <div class="flex items-center gap-1">
+                <button onclick="openEditOfferModal('${offer.id}')" class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold transition flex items-center gap-1 cursor-pointer" title="Editar oferta">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>Editar</span>
+                </button>
+                <button onclick="handleDuplicateOffer('${offer.id}')" class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold transition flex items-center gap-1 cursor-pointer" title="Duplicar oferta para nova campanha">
+                  <i data-lucide="copy-plus" class="w-3.5 h-3.5 text-purple-400"></i>
+                  <span>Duplicar</span>
+                </button>
+              </div>
+
+              <div class="flex items-center gap-1">
+                <button onclick="openHotmartSpecModal('${offer.id}')" class="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-amber-300 transition cursor-pointer" title="Ver ficha técnica para Hotmart">
+                  <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="handleDeleteOffer('${offer.id}')" class="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition cursor-pointer" title="Excluir oferta">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // TOGGLE STATUS
+    async function handleToggleStatus(offerId) {
+      try {
+        await window.aefOffersRegistry.toggleOfferStatus(offerId);
+        await loadOffers();
+      } catch (e) {
+        alert('Erro ao alterar status: ' + e.message);
+      }
+    }
+
+    // DUPLICATE OFFER
+    async function handleDuplicateOffer(offerId) {
+      if (!confirm('Deseja duplicar esta oferta para criar uma nova campanha?')) return;
+      try {
+        await window.aefOffersRegistry.duplicateOffer(offerId);
+        await loadOffers();
+        alert('Oferta duplicada com sucesso! A cópia foi salva como pausada para você editar.');
+      } catch (e) {
+        alert('Erro ao duplicar oferta: ' + e.message);
+      }
+    }
+
+    // DELETE OFFER
+    async function handleDeleteOffer(offerId) {
+      if (!confirm('Deseja realmente excluir esta oferta comercial?')) return;
+      try {
+        await window.aefOffersRegistry.deleteOffer(offerId);
+        await loadOffers();
+      } catch (e) {
+        alert('Erro ao excluir oferta: ' + e.message);
+      }
+    }
+
+    // COPY CHECKOUT URL
+    function handleCopyCheckoutUrl(offerId) {
+      const url = window.aefOffersRegistry.generateTrackingUrl(offerId, 'admin_vendas');
+      navigator.clipboard.writeText(url);
+      alert('Link copiado com sucesso!\n\n' + url);
+    }
+
+    // TEST CHECKOUT
+    function handleTestCheckout(offerId) {
+      const url = window.aefOffersRegistry.generateTrackingUrl(offerId, 'admin_test');
+      window.open(url, '_blank');
+    }
+
+    // QUICK PASTE HOTMART URL
+    async function handleQuickPasteUrlPrompt(offerId) {
+      const offer = await window.aefOffersRegistry.getOfferById(offerId);
+      if (!offer) return;
+
+      const url = prompt(`Cole a URL de checkout gerada na Hotmart para:\n"${offer.title}"`, offer.checkoutUrl || '');
+      if (url && url.trim()) {
+        offer.checkoutUrl = url.trim();
+        offer.isPendingHotmartLink = false;
+        await window.aefOffersRegistry.saveOffer(offer);
+        await loadOffers();
+        alert('Link da Hotmart salvo com sucesso!');
+      }
+    }
+
+    // MODAL EDIT / CREATE
+    function openCreateOfferModal() {
+      document.getElementById('modalOfferTitle').innerText = "Criar Nova Oferta Comercial";
+      document.getElementById('formOfferId').value = "";
+      document.getElementById('formTitle').value = "";
+      document.getElementById('formSlug').value = "";
+      document.getElementById('formProductId').value = "ms-club";
+      document.getElementById('formBadge').value = "OFERTA OFICIAL";
+      document.getElementById('formGrantedTier').value = "club_annual";
+      document.getElementById('formBillingType').value = "subscription";
+      document.getElementById('formRegularPrice').value = "997.00";
+      document.getElementById('formOfferPrice').value = "497.00";
+      document.getElementById('formInstallments').value = "12x de R$ 49,70";
+      document.getElementById('formCheckoutUrl').value = "";
+      document.getElementById('formOfferCode').value = "";
+      document.getElementById('formTrackingParam').value = "src=portal_free&sck=oferta";
+      document.getElementById('formStatus').value = "active";
+      document.getElementById('formSpotsLeft').value = "";
+      document.getElementById('formHasCountdown').checked = false;
+      document.getElementById('countdownBox').classList.add('hidden');
+
+      toggleProviderFields('hotmart');
+      document.getElementById('offerModal').classList.remove('hidden');
+    }
+
+    async function openEditOfferModal(offerId) {
+      const offer = await window.aefOffersRegistry.getOfferById(offerId);
+      if (!offer) return;
+
+      document.getElementById('modalOfferTitle').innerText = `Editar Oferta: ${offer.title}`;
+      document.getElementById('formOfferId').value = offer.id;
+      document.getElementById('formTitle').value = offer.title || "";
+      document.getElementById('formSlug').value = offer.slug || "";
+      document.getElementById('formProductId').value = offer.productId || "ms-club";
+      document.getElementById('formBadge').value = offer.badge || "OFERTA";
+      document.getElementById('formGrantedTier').value = offer.grantedTier || "club_annual";
+      document.getElementById('formBillingType').value = offer.pricing?.billingType || "subscription";
+      document.getElementById('formRegularPrice').value = offer.pricing?.regularPrice || 997;
+      document.getElementById('formOfferPrice').value = offer.pricing?.offerPrice || 497;
+      document.getElementById('formInstallments').value = offer.pricing?.installmentsText || "";
+      document.getElementById('formCheckoutUrl').value = offer.checkoutUrl || "";
+      document.getElementById('formOfferCode').value = offer.hotmartSetupSpec?.suggestedOfferCode || "";
+      document.getElementById('formTrackingParam').value = offer.hotmartSetupSpec?.recommendedTracking || "";
+      document.getElementById('formWhatsappNumber').value = offer.whatsappNumber || "+55 11 99616-0910";
+      document.getElementById('formWhatsappPrefill').value = offer.whatsappPrefillText || "";
+      document.getElementById('formStatus').value = offer.status || "active";
+      document.getElementById('formSpotsLeft').value = offer.scarcity?.spotsLeft || "";
+      document.getElementById('formHasCountdown').checked = !!offer.scarcity?.hasCountdown;
+      document.getElementById('formCountdownMinutes').value = offer.scarcity?.countdownMinutes || 15;
+      document.getElementById('formRedirectOnExpire').value = offer.scarcity?.redirectOnExpireUrl || "";
+      document.getElementById('countdownBox').classList.toggle('hidden', !offer.scarcity?.hasCountdown);
+
+      const provider = offer.provider || 'hotmart';
+      const rad = document.querySelector(`input[name="formProvider"][value="${provider}"]`);
+      if (rad) rad.checked = true;
+      toggleProviderFields(provider);
+
+      document.getElementById('offerModal').classList.remove('hidden');
+    }
+
+    function closeOfferModal() {
+      document.getElementById('offerModal').classList.add('hidden');
+    }
+
+    function toggleProviderFields(provider) {
+      document.getElementById('hotmartFieldsGroup').classList.toggle('hidden', provider !== 'hotmart');
+      document.getElementById('whatsappFieldsGroup').classList.toggle('hidden', provider !== 'whatsapp');
+    }
+
+    function handleProductSelectChange(prodId) {
+      const prodNames = {
+        'ms-club': 'Magic Stories Club',
+        'english-quickstart': 'English QuickStart',
+        'frases-prontas': 'Frases Prontas',
+        'mentoria-vip': 'Mentoria VIP Individual',
+        'all-access-lifetime': 'Membro Fundador (All-Access)'
+      };
+      const titleInput = document.getElementById('formTitle');
+      if (!titleInput.value) {
+        titleInput.value = `${prodNames[prodId] || prodId} • Nova Oferta`;
+      }
+    }
+
+    async function handleSaveOfferForm(e) {
+      e.preventDefault();
+      const offerId = document.getElementById('formOfferId').value || document.getElementById('formSlug').value || `offer_${Date.now()}`;
+      const title = document.getElementById('formTitle').value.trim();
+      const slug = document.getElementById('formSlug').value.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const productId = document.getElementById('formProductId').value;
+      const provider = document.querySelector('input[name="formProvider"]:checked')?.value || 'hotmart';
+      const checkoutUrl = document.getElementById('formCheckoutUrl').value.trim();
+
+      const prodTitles = {
+        'ms-club': 'Magic Stories Club',
+        'english-quickstart': 'English QuickStart',
+        'frases-prontas': 'Frases Prontas',
+        'mentoria-vip': 'Mentoria VIP Individual',
+        'all-access-lifetime': 'Membro Fundador (All-Access)'
+      };
+
+      const offerData = {
+        id: offerId,
+        title: title,
+        slug: slug,
+        productId: productId,
+        productTitle: prodTitles[productId] || productId,
+        badge: document.getElementById('formBadge').value.trim() || "OFERTA",
+        status: document.getElementById('formStatus').value,
+        provider: provider,
+        checkoutUrl: checkoutUrl,
+        whatsappNumber: document.getElementById('formWhatsappNumber').value.trim(),
+        whatsappPrefillText: document.getElementById('formWhatsappPrefill').value.trim(),
+        grantedTier: document.getElementById('formGrantedTier').value,
+        pricing: {
+          billingType: document.getElementById('formBillingType').value,
+          regularPrice: parseFloat(document.getElementById('formRegularPrice').value || "0"),
+          offerPrice: parseFloat(document.getElementById('formOfferPrice').value || "0"),
+          currency: "BRL",
+          installmentsText: document.getElementById('formInstallments').value.trim()
+        },
+        scarcity: {
+          hasCountdown: document.getElementById('formHasCountdown').checked,
+          countdownMinutes: parseInt(document.getElementById('formCountdownMinutes').value || "15"),
+          redirectOnExpireUrl: document.getElementById('formRedirectOnExpire').value.trim(),
+          spotsLeft: parseInt(document.getElementById('formSpotsLeft').value || "0") || null
+        },
+        hotmartSetupSpec: {
+          suggestedProductName: title,
+          format: document.getElementById('formBillingType').value === 'subscription' ? 'Assinatura' : 'Curso Online',
+          suggestedOfferCode: document.getElementById('formOfferCode').value.trim(),
+          regularPriceFormatted: `R$ ${parseFloat(document.getElementById('formRegularPrice').value || "0").toFixed(2).replace('.', ',')}`,
+          offerPriceFormatted: `R$ ${parseFloat(document.getElementById('formOfferPrice').value || "0").toFixed(2).replace('.', ',')}`,
+          installmentsFormatted: document.getElementById('formInstallments').value.trim(),
+          recommendedTracking: document.getElementById('formTrackingParam').value.trim()
+        }
+      };
+
+      try {
+        await window.aefOffersRegistry.saveOffer(offerData);
+        closeOfferModal();
+        await loadOffers();
+        alert('Oferta comercial salva com sucesso!');
+      } catch (err) {
+        alert('Erro ao salvar oferta: ' + err.message);
+      }
+    }
+
+    // HOTMART SPEC MODAL
+    async function openHotmartSpecModal(offerId) {
+      currentSpecOfferId = offerId;
+      const offer = await window.aefOffersRegistry.getOfferById(offerId);
+      if (!offer) return;
+
+      const spec = window.aefOffersRegistry.getHotmartSetupSpec(offerId);
+      document.getElementById('specModalTitle').innerText = `Ficha Hotmart: ${offer.title}`;
+      document.getElementById('specProductName').innerText = spec.productName;
+      document.getElementById('specFormat').innerText = spec.format;
+      document.getElementById('specRegularPrice').innerText = spec.regularPrice;
+      document.getElementById('specOfferPrice').innerText = spec.offerPrice;
+      document.getElementById('specInstallments').innerText = spec.installments;
+      document.getElementById('specOfferCode').innerText = spec.offerCode;
+      document.getElementById('specTrackingHint').innerText = spec.trackingHint;
+
+      document.getElementById('quickPasteUrl').value = (offer.checkoutUrl && !offer.checkoutUrl.includes('OFFER_')) ? offer.checkoutUrl : '';
+
+      document.getElementById('hotmartSpecModal').classList.remove('hidden');
+    }
+
+    function closeHotmartSpecModal() {
+      document.getElementById('hotmartSpecModal').classList.add('hidden');
+      currentSpecOfferId = null;
+    }
+
+    function copySpecField(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText;
+      navigator.clipboard.writeText(text);
+      alert(`Copiado: "${text}"`);
+    }
+
+    async function saveQuickPasteHotmartUrl() {
+      if (!currentSpecOfferId) return;
+      const url = document.getElementById('quickPasteUrl').value.trim();
+      if (!url) {
+        alert('Por favor, cole a URL de checkout da Hotmart.');
+        return;
+      }
+
+      const offer = await window.aefOffersRegistry.getOfferById(currentSpecOfferId);
+      if (!offer) return;
+
+      offer.checkoutUrl = url;
+      offer.isPendingHotmartLink = false;
+      await window.aefOffersRegistry.saveOffer(offer);
+      closeHotmartSpecModal();
+      await loadOffers();
+      alert('Link da Hotmart atualizado com sucesso para esta oferta!');
+    }
+
+    // GUIDE MODAL
+    function openHotmartGuideModal() {
+      document.getElementById('hotmartGuideModal').classList.remove('hidden');
+    }
+    function closeHotmartGuideModal() {
+      document.getElementById('hotmartGuideModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

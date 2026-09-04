@@ -37,8 +37,9 @@
         if (this.currentPath !== 'admin.html') {
           const toolNames = {
             'admin-alunos.html': 'Alunos & CRM',
-            'admin-cursos.html': 'Course Studio',
+            'admin-vendas.html': 'Vendas & Checkouts',
             'admin-ofertas.html': 'Ofertas & Trials',
+            'admin-cursos.html': 'Course Studio',
             'admin-pdf-factory.html': 'PDF Factory',
             'tts-studio.html': 'TTS Voice Studio',
             'admin-publico.html': 'Leads & Sugestões',
@@ -62,7 +63,7 @@
     }
 
     isDarkTheme() {
-      const darkPages = ['admin-cursos.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
+      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
       return darkPages.some(p => this.currentPath.includes(p)) || document.body.classList.contains('bg-[#060D17]') || document.body.classList.contains('bg-[#0A192F]') || document.body.classList.contains('bg-[#0B0F17]') || document.body.classList.contains('bg-[#080D1A]');
     }
 
@@ -130,8 +131,8 @@
               <a href="admin-alunos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-alunos.html')}">
                 <span>👥</span> <span>Alunos & CRM</span>
               </a>
-              <a href="admin-ofertas.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-ofertas.html')}">
-                <span>🎯</span> <span>Ofertas & Trials</span>
+              <a href="admin-vendas.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-vendas.html')}">
+                <span>⚡</span> <span>Vendas & Ofertas</span>
               </a>
               <a href="admin-cursos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-cursos.html')}">
                 <span>📦</span> <span>Course Studio</span>
@@ -194,7 +195,7 @@
           <div class="lg:hidden px-3 py-1.5 border-t ${isDark ? 'border-white/10 bg-[#0A192F]' : 'border-slate-200/80 bg-white'} flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
             <a href="admin.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin.html')}">🏛️ Hub</a>
             <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html')}">👥 Alunos</a>
-            <a href="admin-ofertas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-ofertas.html')}">🎯 Ofertas</a>
+            <a href="admin-vendas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-vendas.html')}">⚡ Vendas</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
             <a href="admin-pdf-factory.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-pdf-factory.html')}">📄 PDF</a>
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
