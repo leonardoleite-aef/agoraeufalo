@@ -34,9 +34,12 @@
   <script src="data/thomas.js?v=20260901_2155"></script>
   <script src="data/andre.js?v=20260901_2155"></script>
   <script src="data/matheus.js?v=20260901_2155"></script>
+  <script src="../assets/js/aef-courses-registry.js"></script>
   <script src="../assets/js/aef-portal-auth.js"></script>
   <script src="../assets/js/aef-cloud-sync.js"></script>
   <script src="../assets/js/aef-learning-tracker.js"></script>
+  <script src="../assets/js/aef-offers-registry.js"></script>
+  <script src="../assets/js/aef-block-engine.js"></script>
 
   <style>
     body {
@@ -141,7 +144,7 @@
         <i data-lucide="log-out" class="w-3.5 h-3.5 text-amber-400"></i>
         <span>Sair</span>
       </a>
-      <div id="player-sim-badge" class="hidden items-center gap-1 px-2 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-extrabold cursor-pointer" onclick="if(window.aefPortalAuth) window.aefPortalAuth.clearImpersonation();" title="Clique para sair do modo simulação e voltar ao Master">
+      <div id="player-sim-badge" class="hidden items-center gap-1 px-2 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-extrabold cursor-pointer" onclick="window.clearPlayerImpersonation()" title="Clique para sair do modo simulação e voltar ao Master">
         <span>👁️</span> <span id="player-sim-text">Aluno</span> ✕
       </div>
     </div>
@@ -413,6 +416,17 @@
       pendingPlayPromise: null
     };
 
+    window.clearPlayerImpersonation = function() {
+      try {
+        sessionStorage.removeItem('aef_impersonate_state');
+        localStorage.removeItem('aef_impersonate_state');
+      } catch(e) {}
+      if (window.aefPortalAuth && typeof window.aefPortalAuth.clearImpersonation === 'function') {
+        try { window.aefPortalAuth.clearImpersonation(); return; } catch(e) {}
+      }
+      window.location.reload();
+    };
+
     // MOTOR DE CONTROLE DE ACESSO & PERFIS DO PLAYER (TIER GUARD)
     function getPlayerAccessProfile() {
       let imp = null;
@@ -428,12 +442,25 @@
 
       // 1. Modo Simulação Ativo (Ver como Aluno / God-Mode Impersonation)
       if (imp && imp.active) {
+        let enrolled = imp.enrolledProducts;
+        if (!enrolled) {
+          if (imp.preset === 'first_steps_free') {
+            enrolled = ['first-steps', 'english-quickstart'];
+          } else if (imp.tier === 'free') {
+            enrolled = ['english-quickstart'];
+          } else if (imp.tier === 'club_annual') {
+            enrolled = ['ms-legacy', 'english-quickstart', 'frases-prontas'];
+          } else if (imp.tier === 'vip') {
+            enrolled = ['ms-legacy', 'english-quickstart', `mentoria-${imp.studentId || 'andre'}`];
+          }
+        }
         return {
           isSimulating: true,
           isAdmin: false,
           tier: imp.tier || 'free',
           studentId: imp.studentId || null,
-          studentName: imp.studentName || (imp.tier === 'free' ? 'Aluno Free' : 'Aluno Simulado')
+          studentName: imp.studentName || (imp.tier === 'free' ? 'Aluno Free' : 'Aluno Simulado'),
+          enrolledProducts: enrolled || []
         };
       }
 
@@ -448,7 +475,8 @@
           isAdmin: true,
           tier: 'admin_master',
           studentId: null,
-          studentName: 'Professor Leo (Master)'
+          studentName: 'Professor Leo (Master)',
+          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps']
         };
       }
 
@@ -457,12 +485,17 @@
         ? window.aefPortalAuth.getActiveTier()
         : (localStorage.getItem('aef_user_tier') || 'free');
 
+      const realEnrolled = (window.aefPortalAuth && typeof window.aefPortalAuth.getEnrolledProducts === 'function')
+        ? window.aefPortalAuth.getEnrolledProducts()
+        : JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]');
+
       return {
         isSimulating: false,
         isAdmin: false,
         tier: realTier,
         studentId: localStorage.getItem('aef_student_id') || null,
-        studentName: localStorage.getItem('aef_user_name') || 'Aluno'
+        studentName: localStorage.getItem('aef_user_name') || 'Aluno',
+        enrolledProducts: realEnrolled
       };
     }
 
@@ -474,9 +507,14 @@
       if (profile.isAdmin) return true;
 
       const tier = profile.tier || 'free';
+      const enrolled = profile.enrolledProducts || [];
 
       if (tier === 'free') {
-        // Aluno Free acessa apenas QuickStart (Degustação), Novidades e Minhas Coisas
+        // Aluno Free que possui cursos avulsos ou de resgate (ex: 'first-steps') tem acesso aos seus cursos
+        if (enrolled.includes(cId) || (cId === 'first-steps' && enrolled.includes('first-steps'))) {
+          return true;
+        }
+        // Aluno Free geral acessa apenas QuickStart (Degustação), Novidades e Minhas Coisas
         return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom';
       }
 
@@ -492,18 +530,39 @@
       return false;
     }
 
-    window.showLockedPaywall = (courseId = null) => {
+    window.showLockedPaywall = async (courseId = null) => {
       const modal = document.getElementById('player-lock-modal');
       if (!modal) return;
 
       const targetCourse = courseId || state.courseId;
+      const profile = getPlayerAccessProfile();
       const badgeEl = document.getElementById('lock-modal-badge');
       const titleEl = document.getElementById('lock-modal-title');
       const descEl = document.getElementById('lock-modal-desc');
       const ctaPrimary = document.getElementById('lock-modal-cta-primary');
       const ctaText = document.getElementById('lock-modal-cta-text');
 
-      if (targetCourse === 'vip') {
+      // Tenta carregar bloco de marketing dinâmico configurado no Admin
+      let dynamicBlock = null;
+      if (window.aefBlockEngine) {
+        try {
+          dynamicBlock = await window.aefBlockEngine.findBestBlockForSlot('player_restricted_modal', profile.tier);
+        } catch(e) {}
+      }
+
+      if (dynamicBlock && dynamicBlock.content && targetCourse !== 'vip') {
+        let offer = null;
+        if (dynamicBlock.attachedOfferId && window.aefOffersRegistry) {
+          offer = await window.aefOffersRegistry.getOfferById(dynamicBlock.attachedOfferId);
+        }
+        const ctaUrl = offer ? window.aefOffersRegistry.generateTrackingUrl(offer, 'player_modal', dynamicBlock.id) : 'https://wa.me/5511996160910';
+
+        if (badgeEl) badgeEl.innerText = dynamicBlock.content.badgeText || 'CONTEÚDO EXCLUSIVO DO CLUB';
+        if (titleEl) titleEl.innerText = dynamicBlock.content.headline || 'Destrave o Magic Stories Club';
+        if (descEl) descEl.innerHTML = dynamicBlock.content.subhead || dynamicBlock.content.bodyHtml || '';
+        if (ctaPrimary) ctaPrimary.href = ctaUrl;
+        if (ctaText) ctaText.innerText = dynamicBlock.content.ctaText || 'Destravar Agora';
+      } else if (targetCourse === 'vip') {
         if (badgeEl) badgeEl.innerText = 'PRESCRIÇÃO VIP INDIVIDUAL';
         if (titleEl) titleEl.innerText = 'Mentoria VIP Exclusiva 1 a 1';
         if (descEl) descEl.innerHTML = 'Estes treinos são prescrições personalizadas gravadas individualmente pelo Professor Leo para mentorados VIP. Entre em contato para conhecer as vagas da mentoria individual.';
@@ -518,7 +577,7 @@
       }
 
       modal.classList.remove('hidden');
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     };
 
     window.closeLockModal = () => {
@@ -550,6 +609,17 @@
       populateModuleSelect();
       loadCurrentContent(state.activeLessonIndex);
       setupAudioEvents();
+
+      // Sincronização Dinâmica com Cloud Firestore em segundo plano
+      syncPlayerWithCloud();
+
+      // Cross-tab auto-sync: se Course Studio ou Admin salvar/deletar em outra aba, atualiza instantaneamente
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'aef_last_course_update') {
+          console.log('🔄 [AEFPlayer] Mudança remota detectada no Course Studio! Re-sincronizando...');
+          syncPlayerWithCloud();
+        }
+      });
     });
 
     function parseUrlParams(profile) {
@@ -737,6 +807,7 @@
       populateCourseSelect();
       populateModuleSelect();
       loadCurrentContent(0);
+      syncPlayerWithCloud();
     };
 
     function populateModuleSelect() {
@@ -756,6 +827,7 @@
       state.activeModuleId = modId;
       state.activeLessonIndex = 0;
       loadCurrentContent(0);
+      syncPlayerWithCloud();
     };
 
     function getCurrentTracklist() {
@@ -773,6 +845,134 @@
       const allMods = getAllModulesForCurrentCourse();
       const mod = allMods.find(m => m.id === state.activeModuleId) || allMods[0];
       return mod?.title || 'Treinamento AgoraEuFalo';
+    }
+
+    async function syncPlayerWithCloud() {
+      if (!window.aefCloudSync) return;
+      try {
+        const profile = getPlayerAccessProfile();
+
+        if (state.courseId === 'ms-legacy' || state.courseId === 'english-quickstart') {
+          const hierarchy = await window.aefCloudSync.getCoursesHierarchy();
+          const courseData = hierarchy[state.courseId];
+          if (!courseData || !courseData.modules) return;
+
+          const targetModules = (state.courseId === 'ms-legacy')
+            ? window.AEF_MAGIC_STORIES?.modules
+            : window.AEF_QUICKSTART?.modules;
+
+          if (!targetModules) return;
+
+          let updatedAny = false;
+          courseData.modules.forEach(cloudMod => {
+            let localMod = targetModules.find(m => m.id === cloudMod.id);
+            if (!localMod) {
+              localMod = {
+                id: cloudMod.id,
+                title: cloudMod.title || cloudMod.id,
+                shortTitle: cloudMod.shortTitle || cloudMod.title,
+                badge: cloudMod.badge || `MÓDULO ${cloudMod.id.toUpperCase()}`,
+                coverImage: cloudMod.coverImage || '../assets/images/logo-fundo-escuro.png',
+                tracks: []
+              };
+              targetModules.push(localMod);
+              updatedAny = true;
+            }
+
+            const cloudLessons = cloudMod.lessons || [];
+            if (cloudLessons.length === 0) return;
+
+            const existingTracksMap = new Map();
+            (localMod.tracks || []).forEach(t => {
+              if (t && t.id) existingTracksMap.set(t.id, t);
+            });
+
+            // Reconciliação estrita com Firestore (aulas excluídas somem do player!)
+            const reconciledTracks = [];
+            cloudLessons.forEach(cLes => {
+              if (cLes.published === false) return;
+              const localTrack = existingTracksMap.get(cLes.id) || {};
+
+              const sentences = (cLes.sentences && Array.isArray(cLes.sentences) && cLes.sentences.length > 0)
+                ? cLes.sentences
+                : (localTrack.sentences || []);
+
+              reconciledTracks.push({
+                id: cLes.id,
+                moduleId: cloudMod.id,
+                title: cLes.title || localTrack.title || 'Treino',
+                activity: cLes.activity || localTrack.activity || 'listen_read',
+                duration: cLes.duration || localTrack.duration || '02:00',
+                audioUrl: cLes.audioUrl || localTrack.audioUrl || '',
+                videoUrl: cLes.videoUrl || localTrack.videoUrl || '',
+                coverImage: cLes.artworkUrl || cLes.thumbnailUrl || localTrack.coverImage || '../assets/images/logo-fundo-escuro.png',
+                goldenTip: cLes.goldenTip || localTrack.goldenTip || '',
+                sentences: sentences
+              });
+            });
+
+            localMod.tracks = reconciledTracks;
+            updatedAny = true;
+          });
+
+          if (updatedAny) {
+            refreshPlayerActiveView();
+          }
+        } else if (state.courseId === 'vip') {
+          const sId = profile.studentId || state.activeModuleId || 'andre';
+          const cloudTracks = await window.aefCloudSync.getStudentCloudTracks(sId);
+          if (cloudTracks && cloudTracks.length > 0) {
+            const allVips = getAllModulesForCurrentCourse();
+            const vipMod = allVips.find(m => m.id === sId);
+            if (vipMod) {
+              vipMod.tracks = cloudTracks;
+              refreshPlayerActiveView();
+            }
+          }
+        } else if (state.courseId === 'public') {
+          const cloudTracks = await window.aefCloudSync.getStudentCloudTracks('public');
+          if (cloudTracks && cloudTracks.length > 0) {
+            if (window.AEF_STUDENT_PUBLIC) {
+              window.AEF_STUDENT_PUBLIC.tracks = cloudTracks;
+              refreshPlayerActiveView();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("⚠️ [AEFPlayer] Aviso de sincronização com nuvem:", err);
+      }
+    }
+
+    function refreshPlayerActiveView() {
+      const tracks = getCurrentTracklist();
+      if (tracks.length === 0) return;
+      if (state.activeLessonIndex >= tracks.length) {
+        state.activeLessonIndex = 0;
+      }
+      populateModuleSelect();
+      renderPlaylistDrawer();
+
+      const track = getCurrentActiveTrack();
+      if (track) {
+        const titleEl = document.getElementById('lesson-title');
+        if (titleEl) titleEl.innerText = track.title || `Faixa ${state.activeLessonIndex + 1}`;
+
+        const subheadEl = document.getElementById('module-subhead');
+        if (subheadEl) subheadEl.innerText = getCurrentModuleTitle();
+
+        const coverImg = document.getElementById('track-cover-img');
+        if (coverImg && track.coverImage) coverImg.src = track.coverImage;
+
+        if (!state.isPlaying) {
+          const newSrc = track.audioUrl || track.videoUrl || '';
+          if (newSrc && state.audio.src !== newSrc) {
+            state.audio.src = newSrc;
+            state.audio.load();
+          }
+        }
+        renderLyrics();
+        updateMediaSession();
+      }
     }
 
     function loadCurrentContent(lessonIdx) {

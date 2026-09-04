@@ -180,6 +180,9 @@
         <button onclick="setFilter('all-access')" id="tab-all-access" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
           💎 Vitalício
         </button>
+        <button onclick="setFilter('migration')" id="tab-migration" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-emerald-400 hover:text-emerald-300 shrink-0 transition cursor-pointer">
+          🎁 Migração & Resgate
+        </button>
         <button onclick="setFilter('pending')" id="tab-pending" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-amber-400 hover:text-amber-300 shrink-0 transition cursor-pointer">
           ⏳ Pendentes de Link
         </button>
@@ -639,7 +642,7 @@
 
     function setFilter(f) {
       currentFilter = f;
-      const tabs = ['all', 'ms-club', 'courses', 'mentoria-vip', 'all-access', 'pending', 'paused'];
+      const tabs = ['all', 'ms-club', 'courses', 'mentoria-vip', 'all-access', 'migration', 'pending', 'paused'];
       tabs.forEach(t => {
         const btn = document.getElementById(`tab-${t}`);
         if (btn) {
@@ -666,13 +669,15 @@
 
       // Filter
       if (currentFilter === 'ms-club') {
-        list = list.filter(o => o.productId === 'ms-club');
+        list = list.filter(o => o.productId === 'ms-club' && o.category !== 'migration');
       } else if (currentFilter === 'courses') {
-        list = list.filter(o => o.productId === 'english-quickstart' || o.productId === 'frases-prontas');
+        list = list.filter(o => (o.productId === 'english-quickstart' || o.productId === 'frases-prontas') && o.category !== 'migration');
       } else if (currentFilter === 'mentoria-vip') {
         list = list.filter(o => o.productId === 'mentoria-vip');
       } else if (currentFilter === 'all-access') {
-        list = list.filter(o => o.productId === 'all-access-lifetime');
+        list = list.filter(o => o.productId === 'all-access-lifetime' && o.category !== 'migration');
+      } else if (currentFilter === 'migration') {
+        list = list.filter(o => o.category === 'migration' || o.id.startsWith('migracao-'));
       } else if (currentFilter === 'pending') {
         list = list.filter(o => o.isPendingHotmartLink || !o.checkoutUrl || o.checkoutUrl.includes('OFFER_'));
       } else if (currentFilter === 'paused') {

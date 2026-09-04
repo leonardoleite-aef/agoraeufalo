@@ -38,6 +38,7 @@
           const toolNames = {
             'admin-alunos.html': 'Alunos & CRM',
             'admin-vendas.html': 'Vendas & Checkouts',
+            'admin-marketing.html': 'Marketing & Blocos',
             'admin-ofertas.html': 'Ofertas & Trials',
             'admin-cursos.html': 'Course Studio',
             'admin-pdf-factory.html': 'PDF Factory',
@@ -63,7 +64,7 @@
     }
 
     isDarkTheme() {
-      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
+      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-marketing.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
       return darkPages.some(p => this.currentPath.includes(p)) || document.body.classList.contains('bg-[#060D17]') || document.body.classList.contains('bg-[#0A192F]') || document.body.classList.contains('bg-[#0B0F17]') || document.body.classList.contains('bg-[#080D1A]');
     }
 
@@ -132,7 +133,10 @@
                 <span>👥</span> <span>Alunos & CRM</span>
               </a>
               <a href="admin-vendas.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-vendas.html')}">
-                <span>⚡</span> <span>Vendas & Ofertas</span>
+                <span>⚡</span> <span>Vendas</span>
+              </a>
+              <a href="admin-marketing.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-marketing.html')}">
+                <span>🎯</span> <span>Marketing</span>
               </a>
               <a href="admin-cursos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-cursos.html')}">
                 <span>📦</span> <span>Course Studio</span>
@@ -165,6 +169,7 @@
                 <select id="aef-admin-impersonate-select" onchange="AEFAdminNav.handleImpersonate(this.value)" class="bg-transparent font-bold text-[11px] ${isDark ? 'text-slate-200' : 'text-slate-800'} focus:outline-none cursor-pointer">
                   <option value="admin_master" class="bg-slate-900 text-amber-300">👑 Leo (God Mode)</option>
                   <option value="free" class="bg-slate-900 text-slate-100">🌱 Aluno Free</option>
+                  <option value="first_steps_free" class="bg-slate-900 text-emerald-300 font-bold">🎁 Ex-Aluno First Steps (Tier Free)</option>
                   <option value="club_annual" class="bg-slate-900 text-slate-100">🎓 Membro Club</option>
                   <optgroup label="👑 Mentorados VIP" class="bg-slate-900 text-amber-400">
                     <option value="vip:andre" class="bg-slate-900 text-slate-100">André (VIP)</option>
@@ -196,6 +201,7 @@
             <a href="admin.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin.html')}">🏛️ Hub</a>
             <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html')}">👥 Alunos</a>
             <a href="admin-vendas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-vendas.html')}">⚡ Vendas</a>
+            <a href="admin-marketing.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-marketing.html')}">🎯 Marketing</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
             <a href="admin-pdf-factory.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-pdf-factory.html')}">📄 PDF</a>
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
@@ -225,44 +231,55 @@
     }
 
     static handleImpersonate(val) {
-      if (!window.aefPortalAuth) {
-        // Fallback se o módulo auth ainda não carregou
-        if (val === 'admin_master') {
-          sessionStorage.removeItem('aef_impersonate_state');
-          try { localStorage.removeItem('aef_impersonate_state'); } catch(e) {}
-        } else if (val.startsWith('vip:')) {
-          const sId = val.replace('vip:', '');
-          const stateObj = {
-            tier: 'vip',
-            studentId: sId,
-            studentName: sId.charAt(0).toUpperCase() + sId.slice(1),
-            active: true
-          };
-          sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
-          try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
-        } else {
-          const stateObj = {
-            tier: val,
-            studentId: null,
-            studentName: val === 'free' ? 'Aluno Free' : 'Membro Club',
-            active: true
-          };
-          sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
-          try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
+      if (val === 'admin_master') {
+        sessionStorage.removeItem('aef_impersonate_state');
+        try { localStorage.removeItem('aef_impersonate_state'); } catch(e) {}
+        if (window.aefPortalAuth) {
+          try { window.aefPortalAuth.clearImpersonation(); return; } catch(e) {}
         }
-        window.location.href = 'portal.html';
+        window.location.reload();
         return;
       }
 
-      if (val === 'admin_master') {
-        window.aefPortalAuth.clearImpersonation();
+      let stateObj = null;
+      if (val === 'first_steps_free') {
+        stateObj = {
+          tier: 'free',
+          preset: 'first_steps_free',
+          studentId: 'ex_aluno_first_steps',
+          studentName: 'Ex-Aluno First Steps',
+          studentEmail: 'exaluno@resgate.agoraeufalo.com.br',
+          enrolledProducts: ['first-steps', 'english-quickstart'],
+          active: true,
+          timestamp: Date.now()
+        };
       } else if (val.startsWith('vip:')) {
         const sId = val.replace('vip:', '');
-        const names = { andre: 'André', estevao: 'Estêvão', thomas: 'Thomas', matheus: 'Matheus' };
-        window.aefPortalAuth.setImpersonation('vip', sId, names[sId] || sId);
+        const names = { andre: 'André Barrote', estevao: 'Estêvão', thomas: 'Thomas', matheus: 'Matheus' };
+        stateObj = {
+          tier: 'vip',
+          studentId: sId,
+          studentName: names[sId] || (sId.charAt(0).toUpperCase() + sId.slice(1)),
+          studentEmail: `${sId}@vip.agoraeufalo.com.br`,
+          active: true,
+          timestamp: Date.now()
+        };
       } else {
-        window.aefPortalAuth.setImpersonation(val, null, val === 'free' ? 'Aluno Free' : 'Membro Club');
+        stateObj = {
+          tier: val,
+          studentId: null,
+          studentName: val === 'free' ? 'Aluno Free' : 'Membro Club',
+          studentEmail: `aluno-${val}@simulado.agoraeufalo.com.br`,
+          active: true,
+          timestamp: Date.now()
+        };
       }
+
+      sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
+      try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
+
+      // Redireciona sempre para o portal para visualização imediata da experiência do aluno
+      window.location.href = 'portal.html';
     }
   }
 

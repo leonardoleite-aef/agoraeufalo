@@ -1191,6 +1191,15 @@
       // Persist to Cloud Firestore with SDK + REST fallback
       try {
         await directSaveLessonCloud(activeCourseId, moduleId, foundLesson);
+        try {
+          localStorage.setItem('aef_last_course_update', JSON.stringify({
+            courseId: activeCourseId,
+            moduleId: moduleId,
+            lessonId: foundLesson.id,
+            action: 'save',
+            timestamp: Date.now()
+          }));
+        } catch (e) {}
       } catch (err) {
         console.warn("Firestore sync lesson:", err);
       }
@@ -1203,21 +1212,47 @@
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 
-      const mod = (course.modules || []).find(m => m.id === activeModuleId);
+      const targetLessonId = activeLessonId;
+      const targetModuleId = activeModuleId;
+      const targetCourseId = activeCourseId;
+
+      const mod = (course.modules || []).find(m => m.id === targetModuleId);
       if (mod) {
-        mod.lessons = (mod.lessons || []).filter(l => l.id !== activeLessonId);
+        mod.lessons = (mod.lessons || []).filter(l => l.id !== targetLessonId);
+        
+        let deletedCloud = false;
         try {
-          if (window.aefCloudSync) {
-            await window.aefCloudSync.deleteLessonFromCloud(activeCourseId, activeModuleId, activeLessonId);
+          if (window.aefCloudSync && typeof window.aefCloudSync.deleteLessonFromCloud === 'function') {
+            deletedCloud = await window.aefCloudSync.deleteLessonFromCloud(targetCourseId, targetModuleId, targetLessonId);
           }
         } catch (e) {
-          console.warn("Firestore delete lesson error:", e);
+          console.warn("Firestore delete lesson SDK error:", e);
         }
+
+        if (!deletedCloud) {
+          try {
+            const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${targetCourseId}/modules/${targetModuleId}/lessons/${targetLessonId}`;
+            const res = await fetch(restUrl, { method: 'DELETE' });
+            deletedCloud = res.ok;
+          } catch (re) {
+            console.warn("Firestore delete lesson direct REST error:", re);
+          }
+        }
+
+        try {
+          localStorage.setItem('aef_last_course_update', JSON.stringify({
+            courseId: targetCourseId,
+            moduleId: targetModuleId,
+            lessonId: targetLessonId,
+            action: 'delete',
+            timestamp: Date.now()
+          }));
+        } catch (e) {}
       }
 
       activeLessonId = null;
       renderHierarchyTree();
-      showToast("Aula excluída com sucesso.");
+      showToast("Aula excluída com sucesso da Nuvem e da lista.");
     }
 
     // Direct Native File Upload Handler

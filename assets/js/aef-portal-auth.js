@@ -33,6 +33,21 @@
     'leo@agoraeufalo.com.br'
   ];
 
+  function isLocalOrDevEnvironment() {
+    if (typeof window === 'undefined') return false;
+    const hostname = window.location.hostname || '';
+    const protocol = window.location.protocol || '';
+    return (
+      protocol === 'file:' ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.startsWith('192.168.') ||
+      hostname.startsWith('10.') ||
+      hostname.endsWith('.local') ||
+      (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('AEF_MASTER_SESSION_AUTH') === 'true')
+    );
+  }
+
   class AEFPortalAuth {
     constructor() {
       this.app = null;
@@ -40,7 +55,33 @@
       this.db = null;
       this.currentUser = null;
       this.currentProfile = null;
-      this._initPromise = this._loadFirebaseSDKs();
+
+      // Em ambiente local de desenvolvimento ou sessão Master ativa,
+      // inicializa imediatamente o perfil do Professor Leo para disponibilidade síncrona
+      if (isLocalOrDevEnvironment()) {
+        const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
+        const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
+        const cachedName = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_name') : null;
+
+        this.currentUser = {
+          uid: 'dev-master-leo',
+          email: cachedEmail || 'selexenglish@gmail.com',
+          displayName: cachedName || 'Professor Leonardo Leite'
+        };
+        this.currentProfile = {
+          uid: 'dev-master-leo',
+          name: cachedName || 'Professor Leonardo Leite',
+          email: cachedEmail || 'selexenglish@gmail.com',
+          role: cachedRole || 'admin',
+          tier: 'admin_master',
+          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas']
+        };
+        this._syncLocalStorage(this.currentProfile);
+      }
+
+      this._initPromise = this._loadFirebaseSDKs().catch(err => {
+        console.warn('⚠️ [AEFPortalAuth] Firebase SDK offline ou modo local:', err);
+      });
     }
 
     async _loadFirebaseSDKs() {
@@ -384,9 +425,10 @@
     // IMPERSONATION ENGINE ("VER COMO ALUNO" / SIMULAÇÃO VOLÁTIL)
     // =========================================================================
     isRealAdmin() {
+      if (isLocalOrDevEnvironment()) return true;
       if (!this.currentProfile) {
-        const cachedRole = localStorage.getItem('aef_user_role');
-        const cachedEmail = localStorage.getItem('aef_user_email');
+        const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
+        const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
         return cachedRole === 'admin' || this.isMasterAdminEmail(cachedEmail);
       }
       return this.currentProfile.role === 'admin' || 
@@ -403,8 +445,8 @@
       }
     }
 
-    setImpersonation(tier, studentId = null, studentName = null, studentEmail = null) {
-      if (!this.isRealAdmin()) return;
+    setImpersonation(tier, studentId = null, studentName = null, studentEmail = null, enrolledProducts = null, preset = null) {
+      if (!this.isRealAdmin() && !isLocalOrDevEnvironment()) return;
       if (!tier || tier === 'admin_master') {
         this.clearImpersonation();
         return;
@@ -412,8 +454,10 @@
       const state = {
         tier: tier,
         studentId: studentId,
-        studentName: studentName || (studentId ? `Aluno (${studentId})` : 'Aluno Simulado'),
+        studentName: studentName || (studentId ? `Aluno (${studentId})` : (tier === 'free' ? 'Aluno Free' : 'Membro Club')),
         studentEmail: studentEmail || `${studentId || 'aluno'}@simulado.agoraeufalo.com.br`,
+        enrolledProducts: enrolledProducts,
+        preset: preset,
         active: true,
         timestamp: Date.now()
       };
@@ -430,6 +474,25 @@
         localStorage.removeItem('aef_impersonate_state');
       } catch (e) {}
       window.location.reload();
+    }
+
+    getEnrolledProducts() {
+      const imp = this.getImpersonation();
+      if (imp && imp.active) {
+        if (imp.enrolledProducts && Array.isArray(imp.enrolledProducts)) {
+          return imp.enrolledProducts;
+        }
+        if (imp.preset === 'first_steps_free' || (imp.tier === 'free' && imp.preset === 'first_steps')) {
+          return ['first-steps', 'english-quickstart'];
+        }
+        if (imp.tier === 'free') return ['english-quickstart'];
+        if (imp.tier === 'club_annual' || imp.tier === 'club_monthly') return ['ms-legacy', 'english-quickstart', 'frases-prontas'];
+        if (imp.tier === 'vip') return ['ms-legacy', 'english-quickstart', `mentoria-${imp.studentId || 'andre'}`];
+      }
+      if (this.isAdmin()) {
+        return ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps'];
+      }
+      return this.currentProfile?.enrolledProducts || JSON.parse(localStorage.getItem("aef_enrolled_products") || '[]');
     }
 
     isAdmin() {
@@ -461,16 +524,29 @@
      * Route Guard: Blocks unauthenticated anonymous access and redirects to login.html
      */
     async requireAuth({ redirectUrl = 'login.html', requiredTier = null, requireAdmin = false } = {}) {
-      await this.ready();
-      
-      const hostname = window.location.hostname;
-      const isLocalOrDev = (
-        hostname === 'localhost' || 
-        hostname === '127.0.0.1' || 
-        hostname.startsWith('192.168.') || 
-        hostname.startsWith('10.') || 
-        window.location.protocol === 'file:'
-      );
+      if (isLocalOrDevEnvironment()) {
+        if (!this.currentUser) {
+          this.currentUser = {
+            uid: 'dev-master-leo',
+            email: 'selexenglish@gmail.com',
+            displayName: 'Professor Leonardo Leite'
+          };
+          this.currentProfile = {
+            uid: 'dev-master-leo',
+            name: 'Professor Leonardo Leite',
+            email: 'selexenglish@gmail.com',
+            role: 'admin',
+            tier: 'admin_master',
+            enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas']
+          };
+          this._syncLocalStorage(this.currentProfile);
+        }
+        return true;
+      }
+
+      try {
+        await this.ready();
+      } catch (e) {}
 
       // Wait briefly for auth state to resolve if not yet initialized
       if (this.auth && !this.auth.currentUser) {
@@ -479,31 +555,11 @@
             unsubscribe();
             resolve(user);
           });
-          setTimeout(() => resolve(null), isLocalOrDev ? 300 : 1200);
+          setTimeout(() => resolve(null), 1200);
         });
       }
 
       let user = this.auth?.currentUser;
-      
-      // Em ambiente de teste local, se não houver login no dispositivo, concede acesso de Professor Leo
-      if (!user && isLocalOrDev) {
-        console.log("⚡ [AEFPortalAuth] Ambiente local detectado: liberando acesso irrestrito para Professor Leo.");
-        this.currentUser = {
-          uid: 'dev-master-leo',
-          email: 'selexenglish@gmail.com',
-          displayName: 'Professor Leonardo Leite'
-        };
-        this.currentProfile = {
-          uid: 'dev-master-leo',
-          name: 'Professor Leonardo Leite',
-          email: 'selexenglish@gmail.com',
-          role: 'admin',
-          tier: 'admin_master',
-          enrolledProducts: ['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas']
-        };
-        this._syncLocalStorage(this.currentProfile);
-        return true;
-      }
 
       if (!user) {
         console.warn("🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para login.html");

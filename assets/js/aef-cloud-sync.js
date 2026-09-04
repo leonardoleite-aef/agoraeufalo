@@ -857,10 +857,30 @@
       const fields = {};
       for (const [k, v] of Object.entries(obj)) {
         if (v === undefined || typeof v === 'function' || k === 'modules' || k === 'lessons') continue;
-        if (typeof v === 'string') fields[k] = { stringValue: v };
-        else if (typeof v === 'number') fields[k] = Number.isInteger(v) ? { integerValue: v.toString() } : { doubleValue: v };
-        else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
-        else if (Array.isArray(v)) {
+        if (k === 'sentences' && Array.isArray(v)) {
+          fields[k] = {
+            arrayValue: {
+              values: v.map(s => ({
+                mapValue: {
+                  fields: {
+                    id: { integerValue: String(s.id || 1) },
+                    start: { doubleValue: parseFloat(s.start) || 0.0 },
+                    end: { doubleValue: parseFloat(s.end) || 0.0 },
+                    text: { stringValue: s.text || "" },
+                    spokenTranslation: { stringValue: s.spokenTranslation || s.translation || "" },
+                    notes: { stringValue: s.notes || "" }
+                  }
+                }
+              }))
+            }
+          };
+        } else if (typeof v === 'string') {
+          fields[k] = { stringValue: v };
+        } else if (typeof v === 'number') {
+          fields[k] = Number.isInteger(v) ? { integerValue: v.toString() } : { doubleValue: v };
+        } else if (typeof v === 'boolean') {
+          fields[k] = { booleanValue: v };
+        } else if (Array.isArray(v)) {
           fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
         }
       }
@@ -980,6 +1000,20 @@
         aiStatus: lessonData.aiStatus || "draft_pending",
         updatedAt: new Date().toISOString()
       };
+      if (lessonData.duration) payload.duration = lessonData.duration;
+      if (lessonData.activity) payload.activity = lessonData.activity;
+      if (lessonData.trainingTrackId) payload.trainingTrackId = lessonData.trainingTrackId;
+      if (lessonData.description) payload.description = lessonData.description;
+      if (lessonData.sentences && Array.isArray(lessonData.sentences)) {
+        payload.sentences = lessonData.sentences.map((s, idx) => ({
+          id: s.id || (idx + 1),
+          start: parseFloat(s.start) || 0.0,
+          end: parseFloat(s.end) || 0.0,
+          text: s.text || "",
+          spokenTranslation: s.spokenTranslation || s.translation || "",
+          notes: s.notes || ""
+        }));
+      }
 
       let saved = false;
       if (this.db) {
@@ -1055,21 +1089,30 @@
                     if (mData.stats) mObj.stats = mData.stats;
                     mObj.lessons = mObj.lessons || [];
 
-                    // Fetch Lessons Subcollection in parallel
+                    // Fetch Lessons Subcollection in parallel (Firestore is Single Source of Truth)
                     try {
                       const lessonsSnap = await this.db.collection("courses").doc(cid).collection("modules").doc(mid).collection("lessons").get();
                       if (!lessonsSnap.empty) {
+                        const existingMap = new Map();
+                        (mObj.lessons || []).forEach(l => {
+                          if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
+                        });
+
+                        const reconciledLessons = [];
+                        const seenIds = new Set();
+
                         for (const lDoc of lessonsSnap.docs) {
                           const lid = lDoc.id;
+                          if (seenIds.has(lid)) continue;
+                          seenIds.add(lid);
                           const lData = lDoc.data();
-                          let lObj = mObj.lessons.find(l => l.id === lid);
-                          if (!lObj) {
-                            lObj = { id: lid, title: lData.title || lid, order: lData.order || (mObj.lessons.length + 1) };
-                            mObj.lessons.push(lObj);
-                          }
-                          Object.assign(lObj, lData);
+                          const baseObj = existingMap.get(lid) || {};
+                          const mergedObj = Object.assign({}, baseObj, lData, { id: lid });
+                          mergedObj.order = parseInt(mergedObj.order) || (reconciledLessons.length + 1);
+                          reconciledLessons.push(mergedObj);
                         }
-                        mObj.lessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                        reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                        mObj.lessons = reconciledLessons;
                       }
                     } catch (le) {
                       console.warn(`Firestore lessons subcollection fetch (${cid}/${mid}):`, le);
@@ -1132,33 +1175,61 @@
                         if (mf.published?.booleanValue !== undefined) mObj.published = mf.published.booleanValue;
                         mObj.lessons = mObj.lessons || [];
 
-                        // REST fetch lessons
+                        // REST fetch lessons (Firestore is Single Source of Truth)
                         try {
                           const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules/${mid}/lessons`);
                           if (lRes.ok) {
                             const lData = await lRes.json();
-                            if (lData && lData.documents) {
+                            if (lData && Array.isArray(lData.documents) && lData.documents.length > 0) {
+                              const existingMap = new Map();
+                              (mObj.lessons || []).forEach(l => {
+                                if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
+                              });
+
+                              const reconciledLessons = [];
+                              const seenIds = new Set();
+
                               for (const lDoc of lData.documents) {
                                 const lid = lDoc.name.split("/").pop();
+                                if (seenIds.has(lid)) continue;
+                                seenIds.add(lid);
                                 const lf = lDoc.fields || {};
-                                let lObj = mObj.lessons.find(l => l.id === lid);
-                                if (!lObj) {
-                                  lObj = { id: lid, title: lf.title?.stringValue || lid, order: parseInt(lf.order?.integerValue) || (mObj.lessons.length + 1) };
-                                  mObj.lessons.push(lObj);
-                                }
-                                if (lf.title?.stringValue) lObj.title = lf.title.stringValue;
-                                if (lf.videoUrl?.stringValue) lObj.videoUrl = lf.videoUrl.stringValue;
-                                if (lf.audioUrl?.stringValue) lObj.audioUrl = lf.audioUrl.stringValue;
-                                if (lf.pdfUrl?.stringValue) lObj.pdfUrl = lf.pdfUrl.stringValue;
-                                if (lf.goldenTip?.stringValue) lObj.goldenTip = lf.goldenTip.stringValue;
-                                if (lf.artworkUrl?.stringValue) lObj.artworkUrl = lf.artworkUrl.stringValue;
-                                if (lf.thumbnailUrl?.stringValue) lObj.thumbnailUrl = lf.thumbnailUrl.stringValue;
-                                if (lf.published?.booleanValue !== undefined) lObj.published = lf.published.booleanValue;
-                                if (lf.hasTrainingTrack?.booleanValue !== undefined) lObj.hasTrainingTrack = lf.hasTrainingTrack.booleanValue;
-                                if (lf.rawScript?.stringValue) lObj.rawScript = lf.rawScript.stringValue;
-                                if (lf.processedContentHtml?.stringValue) lObj.processedContentHtml = lf.processedContentHtml.stringValue;
+                                const baseObj = existingMap.get(lid) || {};
+                                const restObj = {
+                                  id: lid,
+                                  title: lf.title?.stringValue || baseObj.title || lid,
+                                  order: parseInt(lf.order?.integerValue) || baseObj.order || (reconciledLessons.length + 1),
+                                  videoUrl: lf.videoUrl?.stringValue !== undefined ? lf.videoUrl.stringValue : (baseObj.videoUrl || ""),
+                                  audioUrl: lf.audioUrl?.stringValue !== undefined ? lf.audioUrl.stringValue : (baseObj.audioUrl || ""),
+                                  pdfUrl: lf.pdfUrl?.stringValue !== undefined ? lf.pdfUrl.stringValue : (baseObj.pdfUrl || ""),
+                                  goldenTip: lf.goldenTip?.stringValue !== undefined ? lf.goldenTip.stringValue : (baseObj.goldenTip || ""),
+                                  artworkUrl: lf.artworkUrl?.stringValue !== undefined ? lf.artworkUrl.stringValue : (baseObj.artworkUrl || ""),
+                                  thumbnailUrl: lf.thumbnailUrl?.stringValue !== undefined ? lf.thumbnailUrl.stringValue : (baseObj.thumbnailUrl || ""),
+                                  published: lf.published?.booleanValue !== undefined ? lf.published.booleanValue : (baseObj.published !== false),
+                                  hasTrainingTrack: lf.hasTrainingTrack?.booleanValue !== undefined ? lf.hasTrainingTrack.booleanValue : (baseObj.hasTrainingTrack !== false),
+                                  trainingTrackId: lf.trainingTrackId?.stringValue !== undefined ? lf.trainingTrackId.stringValue : (baseObj.trainingTrackId || lid),
+                                  rawScript: lf.rawScript?.stringValue !== undefined ? lf.rawScript.stringValue : (baseObj.rawScript || ""),
+                                  processedContentHtml: lf.processedContentHtml?.stringValue !== undefined ? lf.processedContentHtml.stringValue : (baseObj.processedContentHtml || ""),
+                                  duration: lf.duration?.stringValue !== undefined ? lf.duration.stringValue : (baseObj.duration || "05:00"),
+                                  activity: lf.activity?.stringValue !== undefined ? lf.activity.stringValue : (baseObj.activity || ""),
+                                  description: lf.description?.stringValue !== undefined ? lf.description.stringValue : (baseObj.description || ""),
+                                  sentences: (lf.sentences?.arrayValue?.values || []).length > 0 ? (lf.sentences.arrayValue.values.map(sv => {
+                                    const sf = sv.mapValue?.fields || {};
+                                    return {
+                                      id: parseInt(sf.id?.integerValue || sf.id?.stringValue || "1"),
+                                      start: parseFloat(sf.start?.doubleValue || sf.start?.stringValue || "0"),
+                                      end: parseFloat(sf.end?.doubleValue || sf.end?.stringValue || "0"),
+                                      text: sf.text?.stringValue || "",
+                                      spokenTranslation: sf.spokenTranslation?.stringValue || sf.translation?.stringValue || "",
+                                      notes: sf.notes?.stringValue || ""
+                                    };
+                                  })) : (baseObj.sentences || [])
+                                };
+                                const mergedObj = Object.assign({}, baseObj, restObj);
+                                reconciledLessons.push(mergedObj);
                               }
-                              mObj.lessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                              reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                              mObj.lessons = reconciledLessons;
                             }
                           }
                         } catch (le) {
@@ -1197,25 +1268,49 @@
         await batch.commit();
         return true;
       } catch (e) {
-        console.warn("Error deleting module from cloud:", e);
+        console.warn("Error deleting module from cloud via SDK, trying REST fallback:", e);
+      }
+
+      // REST Fallback for module delete
+      try {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}`;
+        const res = await fetch(restUrl, { method: "DELETE" });
+        return res.ok;
+      } catch (re) {
+        console.warn("Error deleting module from cloud via REST:", re);
         return false;
       }
     }
 
     /**
-     * Deletes a single lesson from Firestore
+     * Deletes a single lesson from Firestore (SDK + REST fallback)
      */
     async deleteLessonFromCloud(courseId, moduleId, lessonId) {
       if (!courseId || !moduleId || !lessonId) return false;
       await this.init();
-      if (!this.db) return false;
-      try {
-        await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lessonId).delete();
-        return true;
-      } catch (e) {
-        console.warn("Error deleting lesson from cloud:", e);
-        return false;
+      
+      let deleted = false;
+      if (this.db) {
+        try {
+          await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lessonId).delete();
+          deleted = true;
+        } catch (e) {
+          console.warn("Error deleting lesson from cloud via SDK, trying REST fallback:", e);
+        }
       }
+
+      // REST Fallback for lesson delete
+      if (!deleted) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`;
+          const res = await fetch(restUrl, { method: "DELETE" });
+          deleted = res.ok;
+        } catch (re) {
+          console.warn("Error deleting lesson from cloud via REST:", re);
+        }
+      }
+
+      return deleted;
     }
   }
 

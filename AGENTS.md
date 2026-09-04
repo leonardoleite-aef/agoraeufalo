@@ -256,5 +256,19 @@ Qualquer novo PDF/Apostila de aula gerado a partir do Módulo 2 deve seguir estr
 3. **Páginas Livres (Sem Restrição de Espaço):** O conteúdo deve fluir naturalmente em 3, 4 ou mais páginas dependendo de sua densidade, eliminando o engessamento de limites fixos. No entanto, o design deve preencher cada página de forma útil (ex: utilizando áreas de anotações e grids amplos de workbook) para evitar páginas vazias ou semipreenchidas.
 4. **Compilação Chrome Headless & Acabamento Editorial:** A compilação é feita via headless Google Chrome utilizando a flag `--no-pdf-header-footer` para eliminar data/hora/URI e inserindo cabeçalhos e rodapés de luxo diretamente no HTML/CSS de cada página.
 
+---
+
+## 21. Regra Permanente de Lançamento da Nova Homepage: Roteamento Inteligente de Usuário Logado & Hero Teaser
+- **Compromisso Solene de Lançamento (PROIBIDO submeter a produção sem esta regra):**
+  - Quando um usuário que **JÁ possui login salvo no navegador** (`localStorage.getItem('aef_user_email')` ou sessão de autenticação ativa) acessar a Homepage:
+    - **O usuário já é aluno e NUNCA deve ser tratado como um lead frio desconhecido.**
+    - **Comportamento Obrigatório do Sistema:**
+      1. **Header:** Reconhece o aluno imediatamente com saudação personalizada (*"Olá, [Nome] • Ir para Minha Sala ➔"* com link direto para `portal.html`).
+      2. **Hero Section:** O formulário de captura de lead ("Ative seu acesso grátis") é substituído dinamicamente pelo **Card de Boas-Vindas & Retorno Rápido** (*"Bem-vindo de volta, [Nome]! Você parou na [Última Aula]. [Continuar de Onde Parou ➔]"*).
+      3. **Smartphone Teaser:** O player do smartphone nunca deve sumir ou ficar em branco; para alunos logados, ele carrega a última lição do aluno ou a recomendação do dia, enquanto para visitantes anônimos ele entrega o teaser de degustação.
+  - **Revisão Obrigatória Pré-Deploy com o Professor Leo:** Antes de qualquer deploy de `nova-home.html` para `index.html`, o agente tem o dever expresso de lembrar o Professor Leo e validar em conjunto:
+    1. A experiência completa de quem já tem login salvo vs. visitante novo;
+    2. A revisão fina de toda a copy, novas imagens temáticas e links de ofertas.
+
 
 

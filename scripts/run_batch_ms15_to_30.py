@@ -309,20 +309,24 @@ for mod in modules_meta:
     for idx, mp4_name in enumerate(mp4_files):
         name_lower = mp4_name.lower()
         
-        # Identifica tipo
-        if 'lr_1' in name_lower or 'lr.mp4' in name_lower or ('lr' in name_lower and 'lr_2' not in name_lower and 'lr_3' not in name_lower and 'lr_4' not in name_lower):
-            act_key = 'lr' if len([x for x in mp4_files if 'lr' in x.lower()]) == 1 else 'lr_1'
+        # Identifica tipo (LRT deve ser testado ANTES de LR, pois 'lrt' contém a substring 'lr')
+        if 'lrt' in name_lower:
+            act_key = 'lrt'
+            act_type = 'look_retell'
+            lesson_title = "Aula 04 • Look & Retell (LRT)"
+        elif 'lr_1' in name_lower or 'lr.mp4' in name_lower or ('lr' in name_lower and 'lrt' not in name_lower and 'lr_2' not in name_lower and 'lr_3' not in name_lower and 'lr_4' not in name_lower):
+            act_key = 'lr' if len([x for x in mp4_files if 'lr' in x.lower() and 'lrt' not in x.lower()]) == 1 else 'lr_1'
             act_type = 'listen_read'
             lesson_title = "Aula 01 • Listen & Read (LR)" if act_key == 'lr' else "Aula 01.1 • Listen & Read (Part 1)"
-        elif 'lr_2' in name_lower:
+        elif 'lr_2' in name_lower and 'lrt' not in name_lower:
             act_key = 'lr_2'
             act_type = 'listen_read'
             lesson_title = "Aula 01.2 • Listen & Read (Part 2)"
-        elif 'lr_3' in name_lower:
+        elif 'lr_3' in name_lower and 'lrt' not in name_lower:
             act_key = 'lr_3'
             act_type = 'listen_read'
             lesson_title = "Aula 01.3 • Listen & Read (Part 3)"
-        elif 'lr_4' in name_lower:
+        elif 'lr_4' in name_lower and 'lrt' not in name_lower:
             act_key = 'lr_4'
             act_type = 'listen_read'
             lesson_title = "Aula 01.4 • Listen & Read (Part 4)"
@@ -334,10 +338,6 @@ for mod in modules_meta:
             act_key = 'la'
             act_type = 'listen_answer'
             lesson_title = "Aula 03 • Listen & Answer (LA)"
-        elif 'lrt' in name_lower:
-            act_key = 'lrt'
-            act_type = 'look_retell'
-            lesson_title = "Aula 04 • Look & Retell (LRT)"
         elif 'lask_1' in name_lower:
             act_key = 'lask_1'
             act_type = 'listen_ask'

@@ -1,0 +1,1275 @@
+import os
+
+html_content = """<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Primary Meta Tags -->
+  <title>AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade • Professor Leonardo Leite</title>
+  <meta name="title" content="AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade • Professor Leonardo Leite">
+  <meta name="description" content="Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Conheça a metodologia de mais de 35 anos de sala de aula do Professor Leo Leite e treine seu ouvido até a fala virar reflexo.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://agoraeufalo.com.br/nova-home.html">
+
+  <!-- Open Graph / WhatsApp / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agoraeufalo.com.br/nova-home.html">
+  <meta property="og:title" content="AgoraEuFalo | O Método de Inglês do Professor Leonardo Leite">
+  <meta property="og:description" content="Você não precisa de mais regras de gramática. Você precisa treinar seu ouvido até a fala virar reflexo. Treine no smartphone ou computador.">
+  <meta property="og:image" content="https://agoraeufalo.com.br/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="AgoraEuFalo">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              deep: '#060D17',
+              petrol: '#0D2040',
+              slate: '#1E293B',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              'accent-light': '#FDF8F0',
+              muted: '#64748B',
+              subtle: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Luxury Design System Stylesheets -->
+  <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <style>
+    /* Estilo Titanium iPhone Hiper-Realista */
+    .titanium-phone {
+      background: radial-gradient(circle at 50% 0%, #1e293b, #090e17 80%);
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 20px 50px -10px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(217, 119, 6, 0.15);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .titanium-phone:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 
+        0 0 0 1px rgba(217, 119, 6, 0.3),
+        0 30px 60px -10px rgba(0, 0, 0, 0.9),
+        0 0 50px rgba(217, 119, 6, 0.25);
+    }
+    
+    /* Barras do Waveform Sonoro */
+    .wave-bar {
+      width: 3px;
+      height: 8px;
+      border-radius: 9999px;
+      background-color: #d97706;
+      transition: height 0.15s ease, background-color 0.2s ease;
+    }
+    .is-playing .wave-bar {
+      animation: soundWavePulse 1.2s ease-in-out infinite alternate;
+      background-color: #f59e0b;
+    }
+    .is-playing .wave-bar:nth-child(2n) { animation-delay: 0.15s; }
+    .is-playing .wave-bar:nth-child(3n) { animation-delay: 0.3s; }
+    .is-playing .wave-bar:nth-child(4n) { animation-delay: 0.45s; }
+    .is-playing .wave-bar:nth-child(5n) { animation-delay: 0.6s; }
+
+    @keyframes soundWavePulse {
+      0% { height: 6px; }
+      50% { height: 28px; }
+      100% { height: 12px; }
+    }
+
+    /* Glow de fundo âmbar */
+    .amber-ambient-glow {
+      background: radial-gradient(circle, rgba(217,119,6,0.18) 0%, rgba(217,119,6,0) 70%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- ========================================================================= -->
+  <!-- HEADER CINEMÁTICO (DEEP NAVY COM BLUR)                                    -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-[#060D17]/95 backdrop-blur-md border-b border-white/10 transition-all text-white">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo Oficial -->
+      <a href="nova-home.html" class="flex items-center gap-3 group" aria-label="Página Inicial AgoraEuFalo">
+        <img 
+          src="assets/images/logo-fundo-escuro.png" 
+          alt="Logo AgoraEuFalo - Professor Leonardo Leite" 
+          class="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+      </a>
+
+      <!-- Menu de Navegação Desktop -->
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-300">
+        <a href="#metodo" class="hover:text-amber-400 transition-colors">O Método</a>
+        <a href="#seis-etapas" class="hover:text-amber-400 transition-colors">As 6 Etapas</a>
+        <a href="#comparativo" class="hover:text-amber-400 transition-colors">Desktop vs Mobile</a>
+        <a href="#professor" class="hover:text-amber-400 transition-colors">O Professor</a>
+        <a href="#depoimentos" class="hover:text-amber-400 transition-colors">Depoimentos</a>
+        <a href="blog/index.html" class="text-amber-400 font-bold hover:text-amber-300 transition-colors flex items-center gap-1.5">
+          <span>Blog</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+        </a>
+        <a href="guia-magic-stories.html" class="hover:text-amber-400 transition-colors">Guia Definitivo</a>
+        <a href="contato.html" class="hover:text-amber-400 transition-colors">Contato</a>
+      </nav>
+
+      <!-- Ações do Header: Acessar Portal & CTA Onboarding -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a 
+          href="portal.html" 
+          class="hidden sm:inline-flex px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 border border-white/10 transition-all"
+        >
+          <span>Já sou Aluno</span>
+        </a>
+
+        <a 
+          href="#onboarding-section" 
+          class="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition-all shadow-lg shadow-amber-500/20 active:scale-95 flex items-center gap-1.5"
+        >
+          <span>Ativar Acesso Grátis</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+
+        <!-- Botão Hamburger Mobile -->
+        <button 
+          type="button" 
+          id="mobile-menu-toggle"
+          class="lg:hidden w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-white flex items-center justify-center border border-white/10 transition-colors"
+          aria-label="Abrir Menu de Navegação"
+        >
+          <i data-lucide="menu" id="hamburger-icon" class="w-5 h-5"></i>
+          <i data-lucide="x" id="close-icon" class="w-5 h-5 hidden"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Menu Dropdown Mobile -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#0A192F] border-b border-white/10 px-5 py-4 space-y-2 shadow-2xl">
+      <a href="#metodo" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-semibold text-slate-200 hover:bg-white/5 hover:text-amber-400">O Método</a>
+      <a href="#seis-etapas" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-semibold text-slate-200 hover:bg-white/5 hover:text-amber-400">As 6 Etapas</a>
+      <a href="#comparativo" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-semibold text-slate-200 hover:bg-white/5 hover:text-amber-400">Desktop vs Mobile</a>
+      <a href="#professor" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-semibold text-slate-200 hover:bg-white/5 hover:text-amber-400">O Professor Leo</a>
+      <a href="#depoimentos" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-semibold text-slate-200 hover:bg-white/5 hover:text-amber-400">Depoimentos Reais</a>
+      <a href="blog/index.html" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-bold text-amber-400 hover:bg-amber-400/10">📰 Blog AgoraEuFalo</a>
+      <a href="guia-magic-stories.html" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-semibold text-slate-200 hover:bg-white/5 hover:text-amber-400">📖 Guia Definitivo</a>
+      <a href="portal.html" class="mobile-nav-link block py-2.5 px-3 rounded-lg font-bold text-slate-200 hover:bg-white/5">🔑 Já sou Aluno (Entrar)</a>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 1. HERO SECTION CINEMÁTICO (DEEP NAVY #060D17 / #0A192F)                   -->
+  <!-- ========================================================================= -->
+  <section class="relative pt-12 pb-20 sm:pt-16 sm:pb-28 overflow-hidden bg-gradient-to-b from-[#060D17] via-[#0A192F] to-[#060D17] text-white">
+    <!-- Glow de Ambiente Âmbar -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] amber-ambient-glow pointer-events-none blur-3xl"></div>
+
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        <!-- Coluna da Esquerda: Copywriting de Alto Impacto & Form de Acesso Rápido -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          
+          <!-- Badge Institucional -->
+          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span>35 Anos de Sala de Aula • Método Canônico</span>
+          </div>
+
+          <!-- Headline Principal -->
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.15]">
+            Você não precisa de mais regras de gramática.
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-500 mt-2">
+              Você precisa treinar seu ouvido até a fala virar reflexo.
+            </span>
+          </h1>
+
+          <!-- Subhead -->
+          <p class="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            Inglês não é matéria de escola para passar em prova; inglês é <strong>experiência viva</strong>. Pare de travar com a tradução mental de 4 segundos. Treine sua escuta ativa e musculatura da fala no seu smartphone ou no computador.
+          </p>
+
+          <!-- Box de Acesso Rápido / Onboarding Hero -->
+          <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 max-w-xl mx-auto lg:mx-0">
+            <div class="flex items-center gap-3">
+              <img src="assets/images/leonardo-leite.png" alt="Professor Leo Leite" class="w-11 h-11 rounded-full object-cover border-2 border-amber-400 shrink-0">
+              <div class="text-left">
+                <p class="text-xs font-mono font-bold text-amber-300 uppercase tracking-wider">Acesso Imediato à Sala de Aula</p>
+                <p class="text-xs text-slate-300">Comece agora com os treinos gratuitos do Professor Leo</p>
+              </div>
+            </div>
+
+            <!-- Form Hero 1-Click -->
+            <form id="hero-onboarding-form" class="space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <input 
+                  type="text" 
+                  id="hero-name-input" 
+                  placeholder="Seu primeiro nome" 
+                  required
+                  class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400 transition"
+                >
+                <input 
+                  type="email" 
+                  id="hero-email-input" 
+                  placeholder="Seu melhor e-mail" 
+                  required
+                  class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400 transition"
+                >
+              </div>
+              <button 
+                type="submit"
+                class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition-all shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Entrar na Sala de Aula Agora ➔</span>
+              </button>
+            </form>
+
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-[11px] text-slate-400 pt-1 font-medium">
+              <span class="flex items-center gap-1">⚡ Sem cartão de crédito</span>
+              <span class="flex items-center gap-1">📱 Treine no celular sem tela</span>
+              <span class="flex items-center gap-1">🛡️ 100% Seguro</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Coluna da Direita: Smartphone Titanium Flutuante (iPhone Mockup Hiper-Realista) -->
+        <div class="lg:col-span-5 flex justify-center">
+          
+          <div class="relative w-full max-w-[340px] sm:max-w-[360px]">
+            
+            <!-- Aura luminosa ao redor do aparelho -->
+            <div class="absolute -inset-4 bg-gradient-to-tr from-amber-500/20 to-blue-500/10 rounded-[56px] blur-2xl pointer-events-none"></div>
+
+            <!-- Corpo Titanium do Smartphone -->
+            <div class="relative rounded-[50px] p-3.5 titanium-phone border-4 border-slate-700/60 text-white select-none">
+              
+              <!-- Dynamic Island & Speaker Notch -->
+              <div class="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-30 flex items-center justify-end px-2.5 space-x-1.5 shadow-md">
+                <span class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700"></span>
+                <span class="w-2 h-2 rounded-full bg-blue-900/60"></span>
+              </div>
+
+              <!-- Tela Interna do Smartphone -->
+              <div 
+                class="bg-[#0A1424] rounded-[40px] overflow-hidden p-5 flex flex-col justify-between border border-white/10 min-h-[580px] relative"
+                data-aef-slot="homepage_hero_teaser"
+              >
+                
+                <!-- Status Bar do iPhone -->
+                <div class="flex items-center justify-between text-[11px] text-slate-400 font-medium px-2 pt-1 pb-3">
+                  <span>9:41</span>
+                  <div class="flex items-center gap-1.5 text-slate-300">
+                    <i data-lucide="wifi" class="w-3.5 h-3.5"></i>
+                    <i data-lucide="battery" class="w-3.5 h-3.5"></i>
+                  </div>
+                </div>
+
+                <!-- Header Interno do Player -->
+                <div class="space-y-2 text-center pt-2">
+                  <div class="inline-block">
+                    <span id="hero-teaser-badge" class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold text-[9px] uppercase tracking-wider border border-amber-400/30">
+                      🎧 ÁUDIO DEMONSTRATIVO ATIVO
+                    </span>
+                  </div>
+                  <h3 id="hero-teaser-title" class="font-black text-white text-base leading-tight">
+                    Spoken Reflex Session • Welcome
+                  </h3>
+                  <p id="hero-teaser-author" class="text-xs text-amber-400 font-medium">
+                    Professor Leo Leite & Native Partner
+                  </p>
+                </div>
+
+                <!-- Capa da Lição no Player -->
+                <div class="relative my-4 aspect-square rounded-2xl overflow-hidden border border-white/15 shadow-xl group">
+                  <img 
+                    id="hero-teaser-cover" 
+                    src="assets/images/cover-public-spoken-reflex.jpg" 
+                    alt="Spoken Reflex Session" 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  >
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                  <div class="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] text-slate-300 font-mono">
+                    <span>AGORAEUFALO AUDIO LAB</span>
+                    <span class="text-amber-400 font-bold">128 KBPS HD</span>
+                  </div>
+                </div>
+
+                <!-- Preview de Transcrição / Citação Falada -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 italic text-center leading-relaxed">
+                  <span class="text-amber-400 font-bold not-italic">“</span>
+                  <span id="hero-teaser-transcript">Inglês não é matéria de prova. Ouça a melodia e deixe a fala virar reflexo.</span>
+                  <span class="text-amber-400 font-bold not-italic">”</span>
+                </div>
+
+                <!-- Waveform Visualizer de Barras -->
+                <div id="hero-waveform-container" class="py-3 flex items-center justify-center gap-1 h-10">
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                  <div class="wave-bar"></div>
+                </div>
+
+                <!-- Controles do Player de Áudio -->
+                <div class="space-y-3 pb-2">
+                  <!-- Audio Element Oculto -->
+                  <audio 
+                    id="hero-teaser-audio" 
+                    src="assets/audio/public/public_spoken_reflex_session01.mp3" 
+                    preload="metadata"
+                  ></audio>
+
+                  <!-- Barra de Progresso Interativa -->
+                  <div class="space-y-1">
+                    <div id="hero-progress-track" class="w-full h-1.5 bg-white/15 rounded-full cursor-pointer relative overflow-hidden">
+                      <div id="hero-progress-fill" class="h-full bg-amber-400 rounded-full w-0 transition-all duration-100"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                      <span id="hero-current-time">0:00</span>
+                      <span id="hero-teaser-duration">0:45</span>
+                    </div>
+                  </div>
+
+                  <!-- Botão Central Play / Pause -->
+                  <div class="flex items-center justify-center gap-4">
+                    <button 
+                      type="button" 
+                      id="hero-teaser-play-btn"
+                      class="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 hover:scale-105 active:scale-95 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/40 transition-all cursor-pointer"
+                      aria-label="Reproduzir Áudio Demonstrativo"
+                    >
+                      <i data-lucide="play" id="hero-play-icon" class="w-6 h-6 fill-current ml-0.5"></i>
+                      <i data-lucide="pause" id="hero-pause-icon" class="w-6 h-6 fill-current hidden"></i>
+                    </button>
+                  </div>
+
+                  <!-- Micro Dica de Bolso -->
+                  <p class="text-[10px] text-slate-400 text-center font-medium">
+                    💡 Toque para ouvir a cadência real da pronúncia nativa
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 2. O CHOQUE DE REALIDADE (FUNDO NOBRE CLARO #FAF8F5 / BG-AMBER-50)         -->
+  <!-- ========================================================================= -->
+  <section id="metodo" class="py-20 sm:py-28 bg-[#FAF8F5] border-t border-amber-200/60 text-slate-900">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <!-- Cabeçalho da Seção Didática -->
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <span class="px-3.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-mono font-bold text-xs uppercase tracking-wider">
+          O Diagnóstico do Professor Leo
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          Por que aplicativos de joguinhos e regras de gramática não destravam a sua fala?
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed font-normal">
+          Você já passou anos estudando, conhece dezenas de regras no papel, mas na hora em que um nativo fala em ritmo real, seu cérebro trava. Entenda a raiz biológica desse bloqueio:
+        </p>
+      </div>
+
+      <!-- Grid dos 3 Vilões da Fluência (Cards Claros Conforme Regra 2) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Card 1: A Armadilha dos Olhos -->
+        <div class="bg-white border-2 border-amber-200/80 rounded-3xl p-7 sm:p-8 shadow-sm hover:shadow-md transition-shadow space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-300 text-amber-700 flex items-center justify-center">
+            <i data-lucide="eye-off" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">
+            1. A Armadilha dos Olhos
+          </h3>
+          <p class="text-xs font-mono font-bold text-amber-700 uppercase">A leitura desliga os ouvidos</p>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Ao ler e ouvir ao mesmo tempo, seu cérebro foca 90% na escrita e simplesmente <strong>desliga a escuta</strong>. Na vida real, não existem legendas no ar na frente do interlocutor. Você precisa treinar seus ouvidos para decodificar sons sem o apoio dos olhos.
+          </p>
+        </div>
+
+        <!-- Card 2: A Paralisia da Tradução Mental -->
+        <div class="bg-white border-2 border-amber-200/80 rounded-3xl p-7 sm:p-8 shadow-sm hover:shadow-md transition-shadow space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-300 text-amber-700 flex items-center justify-center">
+            <i data-lucide="clock-alert" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">
+            2. O Delay de 4 Segundos
+          </h3>
+          <p class="text-xs font-mono font-bold text-amber-700 uppercase">A paralisia da tradução mental</p>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Ouvir em inglês ➔ traduzir para português ➔ formular a resposta em português ➔ traduzir para inglês ➔ tentar conjugar. Esse ciclo leva de <strong>3 a 5 segundos</strong>. Numa conversa viva, o diálogo já seguiu e você fica para trás.
+          </p>
+        </div>
+
+        <!-- Card 3: A Ilusão das Palavras Soltas -->
+        <div class="bg-white border-2 border-amber-200/80 rounded-3xl p-7 sm:p-8 shadow-sm hover:shadow-md transition-shadow space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-300 text-amber-700 flex items-center justify-center">
+            <i data-lucide="blocks" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">
+            3. A Ilusão de Palavras Soltas
+          </h3>
+          <p class="text-xs font-mono font-bold text-amber-700 uppercase">Inglês se fala em chunks sonoros</p>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Decorar listas de palavras isoladas não constrói frases espontâneas. Nativos não combinam palavras uma por uma; eles disparam <strong>blocos sonoros pré-moldados (Sound Chunks)</strong>. Você precisa absorver a melodia inteira do bloco.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Citação Monumental do Professor Leo -->
+      <div class="mt-12 bg-amber-50 border-2 border-amber-300 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-sm">
+        <img src="assets/images/leonardo-leite.png" alt="Professor Leo Leite" class="w-20 h-20 rounded-full object-cover border-4 border-amber-400 shrink-0">
+        <div class="space-y-2 text-center md:text-left">
+          <p class="text-xs font-mono font-bold text-amber-800 uppercase tracking-wider">A Sacada de Ouro do Leo</p>
+          <blockquote class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+            “Falar inglês não é um teste de memória intelectual; é um reflexo neuromuscular. Assim como nadar ou dirigir, você só aprende repetindo a experiência prática da mesma história até a fala sair no automático.”
+          </blockquote>
+          <p class="text-xs text-slate-600 font-medium">— Professor Leonardo Leite, 35 anos de vivência diária</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 3. AS 6 ATIVIDADES CANÔNICAS DO MÉTODO MAGIC STORIES (FUNDO CLARO)        -->
+  <!-- ========================================================================= -->
+  <section id="seis-etapas" class="py-20 sm:py-28 bg-white border-t border-slate-200 text-slate-900">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <!-- Cabeçalho -->
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 font-mono font-bold text-xs uppercase tracking-wider">
+          A Matriz Pedagógica Canônica
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          As 6 Atividades do Método Magic Stories
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed">
+          Cada lição do AgoraEuFalo passa por um ciclo industrial de 6 passos progressivos. Você sai da escuta atenta até a fala autônoma e conectada:
+        </p>
+      </div>
+
+      <!-- Grid das 6 Atividades Canônicas com Thumbnails e Cores Oficiais -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- 1. LR: Listen & Read -->
+        <div class="bg-amber-50/40 border-2 border-blue-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative aspect-video overflow-hidden border-b border-blue-100">
+              <img src="assets/images/thumbs/ms001/thumb_ms001_lr.jpg" alt="Listen & Read" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#1A56DB] text-white font-mono font-bold text-xs shadow-md">
+                1. LR 🎧
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900">1. Listen & Read (LR)</h3>
+              <p class="text-xs font-mono font-bold text-[#1A56DB] uppercase">Entrada & Imersão Auditiva Real</p>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Observar com extrema atenção muito mais <strong>pelos ouvidos</strong> do que pelos olhos. Sentir a diferença brutal entre a grafia e o som real emitido por nativos.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 text-xs font-semibold text-[#1A56DB] flex items-center gap-1">
+            <span>Áudio contínuo sem tradução</span>
+          </div>
+        </div>
+
+        <!-- 2. VOC: Vocabulary Session -->
+        <div class="bg-amber-50/40 border-2 border-emerald-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative aspect-video overflow-hidden border-b border-emerald-100">
+              <img src="assets/images/thumbs/ms001/thumb_ms001_voc.jpg" alt="Vocabulary Session" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#047857] text-white font-mono font-bold text-xs shadow-md">
+                2. VOC 📖
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900">2. Vocabulary Session (VOC)</h3>
+              <p class="text-xs font-mono font-bold text-[#047857] uppercase">Matriz de Chunks & Compreensão</p>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Momento de ter 100% de certeza do contexto da história no <strong>Português Falado Brasileiro Real</strong>, dissecando os chunks acústicos sem decoreba gramatical.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 text-xs font-semibold text-[#047857] flex items-center gap-1">
+            <span>Tradução falada & chunks isolados</span>
+          </div>
+        </div>
+
+        <!-- 3. LA: Listen & Answer -->
+        <div class="bg-amber-50/40 border-2 border-amber-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative aspect-video overflow-hidden border-b border-amber-100">
+              <img src="assets/images/thumbs/ms001/thumb_ms001_la.jpg" alt="Listen & Answer" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#D97706] text-white font-mono font-bold text-xs shadow-md">
+                3. LA ⚡
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900">3. Listen & Answer (LA)</h3>
+              <p class="text-xs font-mono font-bold text-[#D97706] uppercase">Reflexo & Resposta Bate-Pronto</p>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Primeira arena ativa. Perguntas rápidas com pausas curtas para resposta oral no reflexo. <strong>Sem respostas prontas impressas</strong> para eliminar muletas visuais.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 text-xs font-semibold text-[#D97706] flex items-center gap-1">
+            <span>Bate-pronto oral em tempo real</span>
+          </div>
+        </div>
+
+        <!-- 4. LRT: Look & Retell -->
+        <div class="bg-amber-50/40 border-2 border-rose-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative aspect-video overflow-hidden border-b border-rose-100">
+              <img src="assets/images/thumbs/ms001/thumb_ms001_lrt.jpg" alt="Look & Retell" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#E11D48] text-white font-mono font-bold text-xs shadow-md">
+                4. LRT 🎙️
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900">4. Look & Retell (LRT)</h3>
+              <p class="text-xs font-mono font-bold text-[#E11D48] uppercase">Reconto Próprio + AI Speech Coach</p>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Falar o que você já sabe com o inglês que você tem HOJE. Grave seu áudio livremente e receba o diagnóstico de inteligibilidade no <strong>Teste do Gringo (0 a 10)</strong>.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 text-xs font-semibold text-[#E11D48] flex items-center gap-1">
+            <span>Speaking autônomo & feedback IA</span>
+          </div>
+        </div>
+
+        <!-- 5. LASK: Listen & Ask -->
+        <div class="bg-amber-50/40 border-2 border-indigo-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative aspect-video overflow-hidden border-b border-indigo-100">
+              <img src="assets/images/thumbs/ms001/thumb_ms001_lask.jpg" alt="Listen & Ask" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#6366F1] text-white font-mono font-bold text-xs shadow-md">
+                5. LASK ❓
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900">5. Listen & Ask (LASK)</h3>
+              <p class="text-xs font-mono font-bold text-[#6366F1] uppercase">Formulação Rápida de Perguntas</p>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Quem lidera conversas é quem sabe perguntar com rapidez. Ouça uma afirmação ou negação e formule a pergunta correspondente de imediato no reflexo.
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 text-xs font-semibold text-[#6366F1] flex items-center gap-1">
+            <span>Domínio da liderança do diálogo</span>
+          </div>
+        </div>
+
+        <!-- 6. PRO: Pronunciation Practice -->
+        <div class="bg-amber-50/40 border-2 border-teal-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative aspect-video overflow-hidden border-b border-teal-100">
+              <img src="assets/images/thumbs/ms001/thumb_ms001_pro.jpg" alt="Pronunciation Practice" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#0D9488] text-white font-mono font-bold text-xs shadow-md">
+                6. PRO 🎵
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900">6. Pronunciation & Linking</h3>
+              <p class="text-xs font-mono font-bold text-[#0D9488] uppercase">Connected Speech & Musicalidade</p>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Moldar a musculatura da boca com conexões consoante-vogal <strong>(Linking Sounds)</strong>, chave fonética de reduções e treino em loop contínuo (🔂).
+              </p>
+            </div>
+          </div>
+          <div class="px-6 pb-6 text-xs font-semibold text-[#0D9488] flex items-center gap-1">
+            <span>Ritmo natural & Sacada de Ouro</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. A DUALIDADE: DESKTOP VS MOBILE (DEEP NAVY #0A192F)                      -->
+  <!-- ========================================================================= -->
+  <section id="comparativo" class="py-20 sm:py-28 bg-[#0A192F] text-white border-t border-white/10 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <span class="px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 font-mono font-bold text-xs uppercase tracking-wider">
+          A Liberdade do Ecossistema
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight">
+          Estudo Profundo na Mesa. Liberdade Total no Bolso.
+        </h2>
+        <p class="text-base text-slate-300 leading-relaxed">
+          Você não precisa ficar acorrentado na frente de um computador por horas a fio para destravar o inglês. O AgoraEuFalo foi desenhado para se encaixar na sua rotina real:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        
+        <!-- Coluna Desktop: Sala de Aula -->
+        <div class="bg-gradient-to-br from-[#112240] to-[#0A192F] border-2 border-white/10 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-mono font-bold uppercase">
+                🖥️ No Computador / Tablet
+              </span>
+              <span class="text-xs text-slate-400">Sala de Aula Virtual</span>
+            </div>
+
+            <h3 class="text-2xl font-bold text-white">
+              Estudo Profundo & Masterclasses
+            </h3>
+
+            <p class="text-sm text-slate-300 leading-relaxed">
+              O ambiente perfeito quando você tem 20 ou 30 minutos focado na sua mesa de trabalho ou em casa:
+            </p>
+
+            <ul class="space-y-3 text-sm text-slate-200">
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Vídeo Masterclasses em HD</strong> com explicações profundas do Leo.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Apostilas Diagramadas A4 (PDF)</strong> com densidade pedagógica real e espaço para anotações manuais.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Notas de Aula & Sacadas de Ouro</strong> formatadas com tipografia de livro.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pt-4 border-t border-white/10">
+            <a href="portal.html" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-amber-300 hover:text-amber-200 uppercase tracking-wider">
+              <span>Conhecer a Sala de Aula ➔</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Coluna Mobile: Training Player -->
+        <div class="bg-gradient-to-br from-[#112240] to-[#0A192F] border-2 border-amber-500/30 rounded-3xl p-8 space-y-6 flex flex-col justify-between shadow-xl">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs font-mono font-bold uppercase">
+                📱 No Smartphone com Fones
+              </span>
+              <span class="text-xs text-amber-400 font-bold">Sem Ficar Preso à Tela</span>
+            </div>
+
+            <h3 class="text-2xl font-bold text-white">
+              Training Player de Bolso
+            </h3>
+
+            <p class="text-sm text-slate-300 leading-relaxed">
+              O treino que acontece enquanto a vida acontece. Treine caminhando, dirigindo, no metrô ou cozinhando:
+            </p>
+
+            <ul class="space-y-3 text-sm text-slate-200">
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Play/Pause por 1 Toque</strong> no card com auto-scroll suave.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Repetição em Loop Contínuo (🔂)</strong> para travar a frase até a musculatura dominar.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <span><strong>Suporte à MediaSession API</strong>: controle direto pelo fone Bluetooth com celular no bolso.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="pt-4 border-t border-white/10">
+            <a href="treino/player.html?curso=english-quickstart&aula=eqs01" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-amber-300 hover:text-amber-200 uppercase tracking-wider">
+              <span>Testar o Player no Celular ➔</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 5. QUEM É O PROFESSOR LEO LEITE (FUNDO NOBRE CLARO #FAF8F5)               -->
+  <!-- ========================================================================= -->
+  <section id="professor" class="py-20 sm:py-28 bg-[#FAF8F5] border-t border-amber-200/60 text-slate-900">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Foto Oficial com Badge Online -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative max-w-sm w-full">
+            <div class="relative rounded-3xl overflow-hidden border-4 border-amber-300 shadow-2xl">
+              <img 
+                src="assets/images/leonardo-leite.png" 
+                alt="Professor Leonardo Leite" 
+                class="w-full h-auto object-cover"
+              >
+            </div>
+            <!-- Badge Flutuante -->
+            <div class="absolute -bottom-4 -right-4 bg-slate-950 text-white border-2 border-amber-400 rounded-2xl p-4 shadow-xl flex items-center gap-3">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <div>
+                <p class="text-xs font-mono font-bold text-amber-400 uppercase">Leo Leite</p>
+                <p class="text-xs text-slate-300">+35 Anos de Sala de Aula</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Biografia e Filosofia do Leo -->
+        <div class="lg:col-span-7 space-y-6">
+          <span class="px-3.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-mono font-bold text-xs uppercase tracking-wider">
+            O Professor & Mentor
+          </span>
+
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+            Sem atalhos mágicos de internet. 35 anos de vivência diária da língua inglesa.
+          </h2>
+
+          <div class="space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
+            <p>
+              Seja bem-vindo. Eu sou o <strong>Professor Leonardo Leite</strong>. Durante mais de três décadas e meia dentro de salas de aula, vi milhares de brasileiros inteligentes travarem na hora de falar por um motivo simples: ensinaram a eles que inglês é matéria teórica de colégio.
+            </p>
+            <p>
+              Fizeram você decorar regras do <em>Present Perfect</em> e preencher lacunas em folhas de papel. Mas quando um nativo fala em ritmo acelerado na vida real, não existe tempo para consultar tabela gramatical.
+            </p>
+            <p>
+              O ecossistema <strong>AgoraEuFalo</strong> nasceu para devolver ao aluno a experiência viva: treinar a boca e os ouvidos na mesma história, através de conexões sonoras naturais, até que o inglês saia de você com a mesma naturalidade com que você respira.
+            </p>
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center gap-4">
+            <a 
+              href="https://wa.me/5531999817975?text=Hello%20Leo!%20Estou%20na%20home%20e%20gostaria%20de%20conversar%20com%20você." 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2"
+            >
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>Falar Diretamente com o Leo no WhatsApp</span>
+            </a>
+            
+            <a 
+              href="guia-magic-stories.html" 
+              class="px-6 py-3.5 rounded-xl bg-white border-2 border-amber-300 text-slate-900 hover:bg-amber-50 font-bold text-xs uppercase tracking-wider transition"
+            >
+              <span>Ler o Guia Definitivo do Método</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 6. HISTÓRIAS REAIS & DEPOIMENTOS DE ALUNOS (FUNDO CLARO #FFFFFF)          -->
+  <!-- ========================================================================= -->
+  <section id="depoimentos" class="py-20 sm:py-28 bg-white border-t border-slate-200 text-slate-900">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <span class="px-3.5 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-mono font-bold text-xs uppercase tracking-wider">
+          Histórias de Quem Já Destravou
+        </span>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          O que acontece quando o treino auditivo substitui as regras de gramática?
+        </h2>
+        <p class="text-base text-slate-600 leading-relaxed">
+          Veja os relatos de alunos que já haviam desistido do inglês tradicional e reencontraram a segurança para falar:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Depoimento 1: André Barrote -->
+        <div class="bg-amber-50/50 border-2 border-amber-200/90 rounded-3xl p-7 flex flex-col justify-between shadow-sm space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <img src="assets/images/cover-andre-session01.jpg" alt="André Barrote" class="w-12 h-12 rounded-full object-cover border-2 border-amber-400">
+              <div>
+                <h4 class="font-black text-slate-900 text-sm">André Barrote</h4>
+                <p class="text-xs text-amber-700 font-semibold font-mono">Executivo • Mentoria VIP</p>
+              </div>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+              “Eu sempre travava nas reuniões globais da empresa tentando achar a palavra perfeita na cabeça. O método do Leo me fez entender que inglês é ritmo. O Listen & Answer me deu o reflexo de responder na hora. Minha postura profissional mudou completamente.”
+            </p>
+          </div>
+          <div class="flex items-center text-amber-500 gap-1 text-xs">
+            ★★★★★ <span class="text-slate-500 ml-1 text-[11px]">Aluno Mentoria VIP</span>
+          </div>
+        </div>
+
+        <!-- Depoimento 2: Dra. Patricia -->
+        <div class="bg-amber-50/50 border-2 border-amber-200/90 rounded-3xl p-7 flex flex-col justify-between shadow-sm space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <img src="assets/images/cover-patricia-session01.jpg" alt="Dra. Patricia" class="w-12 h-12 rounded-full object-cover border-2 border-amber-400">
+              <div>
+                <h4 class="font-black text-slate-900 text-sm">Dra. Patricia M.</h4>
+                <p class="text-xs text-amber-700 font-semibold font-mono">Médica • Magic Stories Club</p>
+              </div>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+              “Fiz 6 anos de escola tradicional e nunca conseguia entender congressos internacionais sem tradução simultânea. Com as histórias narradas pelo Leo e a dissecação de chunks no player móvel, meu ouvido finalmente se abriu para o som real.”
+            </p>
+          </div>
+          <div class="flex items-center text-amber-500 gap-1 text-xs">
+            ★★★★★ <span class="text-slate-500 ml-1 text-[11px]">Aluna Magic Stories Club</span>
+          </div>
+        </div>
+
+        <!-- Depoimento 3: Carlos Eduardo -->
+        <div class="bg-amber-50/50 border-2 border-amber-200/90 rounded-3xl p-7 flex flex-col justify-between shadow-sm space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <img src="assets/images/cover-carlos-session01.jpg" alt="Carlos Eduardo" class="w-12 h-12 rounded-full object-cover border-2 border-amber-400">
+              <div>
+                <h4 class="font-black text-slate-900 text-sm">Carlos Eduardo</h4>
+                <p class="text-xs text-amber-700 font-semibold font-mono">Software Engineer • QuickStart</p>
+              </div>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+              “Treinar escutando pelo celular enquanto levo meu cachorro para passear pela manhã é surreal de prático. Sem telas, sem animações infantis. É conteúdo adulto, inteligente e que me deu segurança para falar com gringos nas daily meetings.”
+            </p>
+          </div>
+          <div class="flex items-center text-amber-500 gap-1 text-xs">
+            ★★★★★ <span class="text-slate-500 ml-1 text-[11px]">Aluno English QuickStart</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 7. ONBOARDING EM 1 CLIQUE & FINAL CALL TO ACTION (DEEP NAVY COM GLOW)      -->
+  <!-- ========================================================================= -->
+  <section id="onboarding-section" class="py-20 sm:py-28 bg-[#060D17] text-white border-t border-white/10 relative overflow-hidden">
+    <!-- Glow âmbar central -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] amber-ambient-glow pointer-events-none blur-3xl"></div>
+
+    <div class="max-w-4xl mx-auto px-5 sm:px-8 relative z-10 text-center space-y-8">
+      
+      <div class="space-y-4">
+        <span class="px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 font-mono font-bold text-xs uppercase tracking-wider">
+          ✨ Comece Gratuitamente Agora
+        </span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          Pronto para transformar sua escuta e fala em reflexo automático?
+        </h2>
+        <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Crie seu acesso inicial em 10 segundos. Você entra diretamente na Sala de Aula do Professor Leo e já pode iniciar seu primeiro treino auditivo.
+        </p>
+      </div>
+
+      <!-- Card Central do Form Final -->
+      <div class="bg-gradient-to-b from-[#0A192F] to-[#060D17] border-2 border-amber-500/40 rounded-3xl p-6 sm:p-10 max-w-2xl mx-auto shadow-2xl space-y-6">
+        
+        <form id="final-onboarding-form" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+            <div>
+              <label for="final-name-input" class="block text-xs font-mono font-bold text-amber-300 uppercase tracking-wider mb-1">
+                Seu Primeiro Nome
+              </label>
+              <input 
+                type="text" 
+                id="final-name-input" 
+                placeholder="Ex: João" 
+                required
+                class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400 transition"
+              >
+            </div>
+            <div>
+              <label for="final-email-input" class="block text-xs font-mono font-bold text-amber-300 uppercase tracking-wider mb-1">
+                Seu Melhor E-mail
+              </label>
+              <input 
+                type="email" 
+                id="final-email-input" 
+                placeholder="Ex: joao@gmail.com" 
+                required
+                class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-400 transition"
+              >
+            </div>
+          </div>
+
+          <button 
+            type="submit"
+            id="final-submit-btn"
+            class="w-full py-4 px-8 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm uppercase tracking-wider transition-all shadow-xl shadow-amber-500/30 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>✨ Ativar Meu Acesso Grátis Agora ➔</span>
+          </button>
+        </form>
+
+        <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 pt-2 border-t border-white/10">
+          <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Acesso Gratuito Garantido</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="headphones" class="w-4 h-4 text-amber-400"></i> Player sem Tela no Celular</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="sparkles" class="w-4 h-4 text-blue-400"></i> Suporte do Professor Leo</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- MICRO-OVERLAY CINEMÁTICO DE TRANSIÇÃO (HOME ➔ PORTAL)                     -->
+  <!-- ========================================================================= -->
+  <div 
+    id="onboarding-transition-overlay" 
+    class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-lg flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300"
+  >
+    <div class="bg-[#0A192F] border-2 border-amber-500/50 rounded-3xl max-w-md w-full p-8 text-center text-white shadow-2xl space-y-6 relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Avatar com Selo Online -->
+      <div class="relative w-20 h-20 mx-auto">
+        <img src="assets/images/leonardo-leite.png" alt="Professor Leo Leite" class="w-20 h-20 rounded-full object-cover border-2 border-amber-400 shadow-md">
+        <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 border-2 border-slate-950 animate-ping"></span>
+      </div>
+
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider border border-amber-400/30">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-spin"></i>
+          <span>Preparando sua Sala...</span>
+        </div>
+        <h3 class="text-2xl font-black text-white">
+          Bem-vindo, <span id="overlay-student-name" class="text-amber-400">Aluno</span>!
+        </h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Estamos configurando seu acesso gratuito e abrindo sua primeira aula com o Professor Leo.
+        </p>
+      </div>
+
+      <!-- Barra de Carregamento Dinâmica -->
+      <div class="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+        <div class="bg-gradient-to-r from-amber-500 to-yellow-400 h-full w-full animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER INSTITUCIONAL OFICIAL                                              -->
+  <!-- ========================================================================= -->
+  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800/80">
+        
+        <!-- Logo e Assinatura -->
+        <div class="text-center md:text-left">
+          <a href="nova-home.html" class="inline-block mb-2">
+            <img 
+              src="assets/images/logo-fundo-escuro.png" 
+              alt="Logo AgoraEuFalo" 
+              class="h-8 w-auto object-contain mx-auto md:mx-0 opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </a>
+          <p class="text-xs text-slate-400">
+            Treinamento prático de escuta e fala em língua inglesa com o Professor Leonardo Leite.
+          </p>
+        </div>
+
+        <!-- Links Legais & Suporte -->
+        <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-300">
+          <a href="blog/index.html" class="hover:text-amber-400 font-semibold transition-colors">Blog</a>
+          <a href="guia-magic-stories.html" class="hover:text-amber-400 text-amber-300 font-semibold transition-colors">Guia Magic Stories</a>
+          <a href="projeto-aef.html" class="hover:text-white transition-colors">Projeto AEF</a>
+          <a href="contato.html" class="hover:text-amber-400 transition-colors">Contato</a>
+          <a href="termos-de-uso.html" class="hover:text-white transition-colors">Termos de Uso</a>
+          <a href="politica-de-privacidade.html" class="hover:text-white transition-colors">Política de Privacidade</a>
+          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Preciso%20da%20sua%20ajuda!" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+            <span>Suporte ao Aluno</span>
+          </a>
+        </div>
+
+        <!-- Redes Sociais -->
+        <div class="flex items-center gap-3">
+          <!-- Substack -->
+          <a href="https://leoleite.substack.com" target="_blank" rel="noopener noreferrer" aria-label="Substack Leonardo Leite" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-[#FF6719] flex items-center justify-center transition-all hover:scale-105 shadow-sm">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/leonardoagoraeufalo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Leonardo AgoraEuFalo" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-pink-600 flex items-center justify-center transition-all hover:scale-105 shadow-sm">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@agoraeufaloingles" target="_blank" rel="noopener noreferrer" aria-label="YouTube AgoraEuFalo" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-red-600 flex items-center justify-center transition-all hover:scale-105 shadow-sm">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+          <!-- WhatsApp -->
+          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Vim%20pelo%20site%20e%20gostaria%20de%20tirar%20uma%20dúvida." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp do Professor Leonardo" class="w-9 h-9 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-emerald-600 flex items-center justify-center transition-all hover:scale-105 shadow-sm">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.277-.1-.479-.15-.68.15-.202.3-.78.978-.956 1.178-.176.2-.352.226-.653.075-.301-.15-1.272-.469-2.424-1.496-.895-.798-1.5-1.784-1.676-2.085-.176-.3-.019-.462.132-.612.136-.135.301-.351.452-.527.15-.175.201-.3.301-.5.101-.2.051-.376-.025-.526-.075-.15-.68-1.64-.931-2.245-.245-.589-.494-.509-.68-.518-.176-.009-.377-.01-.578-.01-.201 0-.527.075-.804.376-.276.3-1.055 1.03-1.055 2.511 0 1.48 1.08 2.91 1.231 3.111.15.2 2.124 3.244 5.145 4.551.719.311 1.281.497 1.719.636.723.23 1.381.197 1.901.12.58-.087 1.78-.727 2.031-1.43.251-.703.251-1.305.176-1.43-.075-.125-.276-.2-.577-.35zM12.042 21.936c-1.803 0-3.571-.486-5.118-1.408l-.367-.218-3.805.998 1.016-3.71-.24-.381c-1.011-1.608-1.546-3.473-1.546-5.385 0-5.503 4.478-9.98 9.983-9.98 2.666 0 5.172 1.038 7.057 2.923 1.884 1.885 2.921 4.391 2.92 7.058 0 5.503-4.478 9.98-9.899 9.981zM12.042 0C5.394 0 0 5.393 0 12.041c0 2.124.555 4.197 1.609 6.024L0 24l6.115-1.604c1.767.963 3.766 1.472 5.927 1.472 6.648 0 12.042-5.393 12.042-12.041C24.084 5.393 18.69 0 12.042 0z"/></svg>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>© 2026 AgoraEuFalo. Todos os direitos reservados.</p>
+        <p>Professor Leonardo Leite • 35 anos de sala de aula e vivência real.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPT ENGINE: Vendas, Marketing Blocks & Interatividade -->
+  <script src="assets/js/aef-offers-registry.js"></script>
+  <script src="assets/js/aef-block-engine.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inicializa Lucide Icons
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      // 2. Menu Mobile Toggle
+      const mobileToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      if (mobileToggle && mobileMenu) {
+        mobileToggle.addEventListener('click', () => {
+          const isHidden = mobileMenu.classList.toggle('hidden');
+          if (hamburgerIcon && closeIcon) {
+            hamburgerIcon.classList.toggle('hidden', !isHidden);
+            closeIcon.classList.toggle('hidden', isHidden);
+          }
+        });
+
+        // Fecha menu ao clicar em qualquer link
+        mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            if (hamburgerIcon && closeIcon) {
+              hamburgerIcon.classList.remove('hidden');
+              closeIcon.classList.add('hidden');
+            }
+          });
+        });
+      }
+
+      // 3. Player Teaser no Smartphone (1 Toque com Waveform & Progress)
+      const audioEl = document.getElementById('hero-teaser-audio');
+      const playBtn = document.getElementById('hero-teaser-play-btn');
+      const playIcon = document.getElementById('hero-play-icon');
+      const pauseIcon = document.getElementById('hero-pause-icon');
+      const waveformBox = document.getElementById('hero-waveform-container');
+      const progressFill = document.getElementById('hero-progress-fill');
+      const progressTrack = document.getElementById('hero-progress-track');
+      const currentTimeEl = document.getElementById('hero-current-time');
+      const durationEl = document.getElementById('hero-teaser-duration');
+
+      function formatTime(seconds) {
+        if (isNaN(seconds) || seconds === Infinity) return "0:00";
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+      }
+
+      if (audioEl && playBtn) {
+        // Play / Pause Toggle
+        playBtn.addEventListener('click', () => {
+          if (audioEl.paused) {
+            audioEl.play().catch(e => console.warn('Autoplay bloqueado:', e));
+          } else {
+            audioEl.pause();
+          }
+        });
+
+        audioEl.addEventListener('play', () => {
+          if (playIcon) playIcon.classList.add('hidden');
+          if (pauseIcon) pauseIcon.classList.remove('hidden');
+          if (waveformBox) waveformBox.classList.add('is-playing');
+        });
+
+        audioEl.addEventListener('pause', () => {
+          if (playIcon) playIcon.classList.remove('hidden');
+          if (pauseIcon) pauseIcon.classList.add('hidden');
+          if (waveformBox) waveformBox.classList.remove('is-playing');
+        });
+
+        audioEl.addEventListener('timeupdate', () => {
+          if (!audioEl.duration) return;
+          const pct = (audioEl.currentTime / audioEl.duration) * 100;
+          if (progressFill) progressFill.style.width = `${pct}%`;
+          if (currentTimeEl) currentTimeEl.innerText = formatTime(audioEl.currentTime);
+        });
+
+        audioEl.addEventListener('loadedmetadata', () => {
+          if (durationEl && audioEl.duration) {
+            durationEl.innerText = formatTime(audioEl.duration);
+          }
+        });
+
+        audioEl.addEventListener('ended', () => {
+          if (playIcon) playIcon.classList.remove('hidden');
+          if (pauseIcon) pauseIcon.classList.add('hidden');
+          if (waveformBox) waveformBox.classList.remove('is-playing');
+          if (progressFill) progressFill.style.width = '0%';
+          if (currentTimeEl) currentTimeEl.innerText = '0:00';
+        });
+
+        // Seek no clique da barra de progresso
+        if (progressTrack) {
+          progressTrack.addEventListener('click', (e) => {
+            const rect = progressTrack.getBoundingClientRect();
+            const clickPos = (e.clientX - rect.left) / rect.width;
+            if (audioEl.duration) {
+              audioEl.currentTime = clickPos * audioEl.duration;
+            }
+          });
+        }
+      }
+
+      // 4. Onboarding em 1 Clique com Micro-Overlay Cinemático
+      function handleOnboardingSubmit(name, email) {
+        const cleanName = (name || '').trim() || 'Aluno';
+        const cleanEmail = (email || '').trim().toLowerCase();
+
+        // Armazena credenciais do novo aluno no localStorage
+        localStorage.setItem('aef_user_name', cleanName);
+        localStorage.setItem('aef_user_email', cleanEmail);
+        localStorage.setItem('aef_user_tier', 'free');
+        localStorage.setItem('aef_enrolled_products', JSON.stringify(['english-quickstart']));
+
+        // Exibe o Micro-Overlay Cinemático
+        const overlay = document.getElementById('onboarding-transition-overlay');
+        const overlayName = document.getElementById('overlay-student-name');
+        if (overlayName) overlayName.innerText = cleanName.split(' ')[0];
+
+        if (overlay) {
+          overlay.classList.remove('hidden');
+          setTimeout(() => overlay.classList.remove('opacity-0'), 20);
+        }
+
+        // Redireciona com suavidade para o portal com o modal de boas-vindas ativo
+        setTimeout(() => {
+          const targetUrl = `portal.html?welcome=true&name=${encodeURIComponent(cleanName.split(' ')[0])}`;
+          window.location.href = targetUrl;
+        }, 950);
+      }
+
+      // Listener Form Hero
+      const heroForm = document.getElementById('hero-onboarding-form');
+      if (heroForm) {
+        heroForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('hero-name-input')?.value;
+          const email = document.getElementById('hero-email-input')?.value;
+          handleOnboardingSubmit(name, email);
+        });
+      }
+
+      // Listener Form Final
+      const finalForm = document.getElementById('final-onboarding-form');
+      if (finalForm) {
+        finalForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('final-name-input')?.value;
+          const email = document.getElementById('final-email-input')?.value;
+          handleOnboardingSubmit(name, email);
+        });
+      }
+
+      // 5. Inicialização dos Blocos do aefBlockEngine
+      if (window.aefBlockEngine) {
+        try {
+          window.aefBlockEngine.renderAllSlots('free', ['english-quickstart']);
+        } catch(err) {
+          console.warn('[nova-home] aefBlockEngine init:', err);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+"""
+
+output_path = "/Users/macbookpro/Desktop/agoraeufalo_site/nova-home.html"
+with open(output_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Successfully generated {output_path} ({len(html_content)} bytes)")

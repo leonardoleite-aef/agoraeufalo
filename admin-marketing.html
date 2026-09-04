@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Fábrica de Marketing • Building Blocks & Campanhas | AgoraEuFalo Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#C68A36',
+              amber: '#F59E0B',
+              slate: '#1E293B',
+              card: '#0D1B2A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-offers-registry.js"></script>
+  <script src="assets/js/aef-block-engine.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+  </style>
+</head>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Top bar container handled by AEFAdminNav -->
+  <div id="aef-admin-header-container"></div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WORKSPACE                                                            -->
+  <!-- ========================================================================= -->
+  <main class="max-w-[98vw] 2xl:max-w-[1920px] w-full mx-auto p-4 sm:p-6 flex-1 space-y-6">
+
+    <!-- HERO / TITLE & ACTIONS -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
+      <div class="space-y-2 z-10">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-sm border border-emerald-400/30">
+            🎯
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            DEPARTAMENTO DE MARKETING
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            FASE 2: FÁBRICA DE BUILDING BLOCKS
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          Fábrica de Peças de Marketing & Segmentação de Tiers
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+          Monte modais de paywall, cards in-feed e banners topo. Conecte cada peça criativa a uma <span class="text-amber-400 font-bold">Oferta Comercial de Vendas</span> e segmente exatamente quais tiers de alunos verão cada anúncio.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 z-10 shrink-0">
+        <button onclick="openCreateBlockModal()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>+ Criar Nova Peça / Bloco</span>
+        </button>
+
+        <a href="admin-vendas.html" class="px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition border border-white/10 flex items-center gap-2 cursor-pointer" title="Ir para o Departamento de Vendas">
+          <i data-lucide="tag" class="w-4 h-4 text-purple-400"></i>
+          <span>Base de Ofertas (Vendas)</span>
+        </a>
+
+        <button onclick="syncBlocksFromCloud()" class="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10 cursor-pointer" title="Sincronizar com Firestore">
+          <i data-lucide="refresh-cw" class="w-4 h-4" id="sync-icon"></i>
+        </button>
+      </div>
+
+      <!-- Background glow -->
+      <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
+    <!-- METRICS STRIP -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3.5">
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="layers" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total de Peças</span>
+          <p class="text-lg font-black text-white" id="stat-total-blocks">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Blocos Ativos</span>
+          <p class="text-lg font-black text-emerald-400" id="stat-active-blocks">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="lock" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Modais Paywall</span>
+          <p class="text-lg font-black text-purple-400" id="stat-modals">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="layout" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Cards In-Feed</span>
+          <p class="text-lg font-black text-sky-400" id="stat-infeed">0</p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg flex items-center gap-3 col-span-2 sm:col-span-1">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-black shrink-0">
+          <i data-lucide="megaphone" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Banners Topo</span>
+          <p class="text-lg font-black text-amber-400" id="stat-banners">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER & SEARCH BAR -->
+    <div class="bg-[#0A192F] border border-white/10 rounded-3xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 text-xs font-bold no-scrollbar">
+        <button onclick="setFilter('all')" id="tab-all" class="px-3.5 py-2 rounded-xl bg-amber-500 text-slate-950 font-black shrink-0 transition cursor-pointer">
+          Todos (<span id="count-all">0</span>)
+        </button>
+        <button onclick="setFilter('card_infeed')" id="tab-infeed" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          📰 Cards In-Feed
+        </button>
+        <button onclick="setFilter('modal_paywall')" id="tab-modal" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          🔒 Modais de Paywall
+        </button>
+        <button onclick="setFilter('banner_top')" id="tab-banner" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
+          📢 Banners Topo
+        </button>
+        <button onclick="setFilter('paused')" id="tab-paused" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white shrink-0 transition cursor-pointer">
+          ⏸️ Pausados
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full md:w-80 shrink-0">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="blockSearchInput" oninput="handleSearch(this.value)" placeholder="Buscar por título, headline ou oferta..." class="w-full bg-[#112240] border border-white/10 text-white rounded-2xl pl-10 pr-3 py-2 text-xs focus:border-amber-400 focus:outline-none placeholder:text-slate-500 font-medium">
+      </div>
+    </div>
+
+    <!-- BLOCKS GRID -->
+    <section id="blocksContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <!-- Injected dynamically via JS -->
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CONSTRUTOR DE BLOCO DE MARKETING (ESTÚDIO DE LEGO)                  -->
+  <!-- ========================================================================= -->
+  <div id="blockModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">FÁBRICA DE MARKETING</span>
+          <h3 class="text-base sm:text-lg font-black text-white" id="modalBlockTitle">Montar Peça / Bloco Criativo</h3>
+        </div>
+        <button onclick="closeBlockModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form Body -->
+      <form id="blockForm" onsubmit="handleSaveBlockForm(event)" class="p-5 sm:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-xs">
+        <input type="hidden" id="formBlockId">
+
+        <!-- 1. IDENTIFICAÇÃO & FORMATO -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">1. Formato & Localização da Peça</span>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Título Interno da Campanha *</label>
+            <input type="text" id="formTitle" required placeholder="Ex: Card In-Feed • Curso Frases Prontas 2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Formato Visual *</label>
+              <select id="formFormat" onchange="handleFormatChange(this.value)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="card_infeed">📰 Card In-Feed (Integrado no Portal / Vitrine)</option>
+                <option value="modal_paywall">🔒 Modal de Paywall (Training Player / Lock)</option>
+                <option value="banner_top">📢 Banner Flutuante no Topo (Global Top Bar)</option>
+                <option value="banner_below_video">🎬 Banner Abaixo do Vídeo (Sala de Aula)</option>
+                <option value="popup_flash">⚡ Pop-up Temporizado / Flash</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Slot de Destino no Layout *</label>
+              <select id="formSlotId" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="portal_courses_infeed">portal_courses_infeed (Vitrine de Cursos do Portal)</option>
+                <option value="portal_hero_below">portal_hero_below (Abaixo do Hero de Retomada)</option>
+                <option value="player_restricted_modal">player_restricted_modal (Modal ao clicar em áudio restrito)</option>
+                <option value="global_top_bar">global_top_bar (Barra superior flutuante)</option>
+                <option value="sala_de_aula_below_video">sala_de_aula_below_video (Abaixo da Sacada de Ouro)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. O SELETOR DE VENDAS (CONECTANDO OFERTA) -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-amber-400/30 bg-amber-500/5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <i data-lucide="link" class="w-4 h-4"></i>
+              2. Conexão Comercial: Qual Oferta de Vendas Abastece este CTA?
+            </span>
+            <a href="admin-vendas.html" target="_blank" class="text-[10px] text-amber-300 underline font-bold">Ver Todas em Vendas ↗</a>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Selecionar Oferta Comercial Cadastrada *</label>
+            <select id="formAttachedOfferId" onchange="handleOfferSelectChange(this.value)" class="w-full bg-[#112240] border border-amber-400/40 rounded-xl px-3 py-2 text-white font-bold text-xs focus:border-amber-400 focus:outline-none cursor-pointer">
+              <!-- Dynamically populated from window.aefOffersRegistry -->
+            </select>
+          </div>
+
+          <!-- Preview da Oferta Selecionada -->
+          <div id="attachedOfferPreviewBox" class="p-3 rounded-xl bg-[#112240] border border-white/10 flex items-center justify-between text-xs">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Condição Comercial Carregada:</span>
+              <p class="font-black text-amber-300 text-xs mt-0.5" id="previewOfferPriceText">Carregando...</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-bold text-slate-400 uppercase block">Provedor:</span>
+              <p class="font-mono text-slate-300 text-xs mt-0.5" id="previewOfferProvider">Hotmart</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. COPYWRITING & CONTEÚDO VISUAL -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">3. Conteúdo & Copywriting</span>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sm:col-span-1">
+              <label class="block font-bold text-slate-300 mb-1">Badge da Peça</label>
+              <input type="text" id="formBadgeText" placeholder="Ex: 🔥 OFERTA EXCLUSIVA" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block font-bold text-slate-300 mb-1">Headline Principal (Título) *</label>
+              <input type="text" id="formHeadline" required placeholder="Ex: Destrave as 6 Atividades do Magic Stories Club" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Subtítulo Persuasivo</label>
+            <input type="text" id="formSubhead" placeholder="Ex: Treine no carro, academia e caminhada sem telas ligadas." class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Corpo de Texto / Bullets de Benefícios (HTML)</label>
+            <textarea id="formBodyHtml" rows="3" class="w-full bg-[#112240] border border-white/15 rounded-xl p-3 text-white text-xs focus:border-amber-400 focus:outline-none" placeholder="<ul class='space-y-1'><li>✓ Benefício 1</li><li>✓ Benefício 2</li></ul>"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Imagem / Mídia de Apoio (URL)</label>
+              <input type="text" id="formMediaUrl" placeholder="assets/images/cover-magic-stories-legacy.jpg" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Texto do Botão (CTA) *</label>
+              <input type="text" id="formCtaText" required placeholder="Ex: Garantir Minha Vaga na Hotmart" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. SEGMENTAÇÃO POR TIERS & STATUS -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">4. Segmentação de Audiência (Tiers)</span>
+
+          <div>
+            <span class="block font-bold text-slate-300 mb-2">Exibir esta peça para quais Tiers?</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetTiers" value="unauthenticated" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">Visitante Não Logado</span>
+              </label>
+
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetTiers" value="free" checked class="accent-amber-400">
+                <span class="font-bold text-white text-xs">🌱 Aluno Free</span>
+              </label>
+
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetTiers" value="club_monthly" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">🎓 Membro Club Mensal</span>
+              </label>
+
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetTiers" value="club_annual" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">🎓 Membro Club Anual</span>
+              </label>
+
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetTiers" value="course_member" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">📚 Aluno de Curso</span>
+              </label>
+
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetTiers" value="vip" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">👑 Mentoria VIP</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/10">
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Status da Peça</label>
+              <select id="formStatus" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="active">🟢 Ativa (Exibindo nos slots)</option>
+                <option value="paused">⚪ Pausada (Oculta)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-300 mb-1">Prioridade de Exibição (1 a 100)</label>
+              <input type="number" id="formPriority" value="80" min="1" max="100" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeBlockModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition cursor-pointer">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black transition flex items-center gap-1.5 shadow-md cursor-pointer">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Salvar Peça Criativa</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: PREVIEW DO BLOCO                                                   -->
+  <!-- ========================================================================= -->
+  <div id="previewModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 font-bold text-base">👁️ Pré-visualização do Bloco Criativo</span>
+        </div>
+        <button onclick="closePreviewModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scrollbar flex-1 bg-[#060D17]">
+        <div id="previewContainer"></div>
+      </div>
+
+      <div class="p-4 bg-[#112240] border-t border-white/10 text-right">
+        <button onclick="closePreviewModal()" class="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition cursor-pointer">
+          Fechar Preview
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SCRIPTS & INTERACTION LOGIC                                               -->
+  <!-- ========================================================================= -->
+  <script>
+    let allBlocks = [];
+    let allOffers = [];
+    let currentFilter = 'all';
+    let currentSearchTerm = '';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadInitialData();
+      if (window.lucide) window.lucide.createIcons();
+    });
+
+    async function loadInitialData() {
+      allOffers = await window.aefOffersRegistry.getAllOffers();
+      allBlocks = await window.aefBlockEngine.getAllBlocks();
+      updateMetrics();
+      renderBlocksGrid();
+      populateOfferSelect();
+    }
+
+    async function syncBlocksFromCloud() {
+      const icon = document.getElementById('sync-icon');
+      if (icon) icon.classList.add('animate-spin');
+
+      try {
+        await window.aefBlockEngine.syncFromFirestore();
+        await window.aefOffersRegistry.syncFromFirestore();
+        await loadInitialData();
+      } finally {
+        setTimeout(() => {
+          if (icon) icon.classList.remove('animate-spin');
+        }, 600);
+      }
+    }
+
+    function updateMetrics() {
+      const total = allBlocks.length;
+      const active = allBlocks.filter(b => b.status === 'active').length;
+      const modals = allBlocks.filter(b => b.format === 'modal_paywall').length;
+      const infeed = allBlocks.filter(b => b.format === 'card_infeed').length;
+      const banners = allBlocks.filter(b => b.format === 'banner_top').length;
+
+      document.getElementById('stat-total-blocks').innerText = total;
+      document.getElementById('stat-active-blocks').innerText = active;
+      document.getElementById('stat-modals').innerText = modals;
+      document.getElementById('stat-infeed').innerText = infeed;
+      document.getElementById('stat-banners').innerText = banners;
+
+      document.getElementById('count-all').innerText = total;
+    }
+
+    function setFilter(f) {
+      currentFilter = f;
+      const tabs = ['all', 'card_infeed', 'modal_paywall', 'banner_top', 'paused'];
+      const map = { all: 'tab-all', card_infeed: 'tab-infeed', modal_paywall: 'tab-modal', banner_top: 'tab-banner', paused: 'tab-paused' };
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(map[t]);
+        if (btn) {
+          btn.className = (t === f)
+            ? "px-3.5 py-2 rounded-xl bg-amber-500 text-slate-950 font-black shrink-0 transition cursor-pointer"
+            : "px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer";
+        }
+      });
+      renderBlocksGrid();
+    }
+
+    function handleSearch(val) {
+      currentSearchTerm = (val || '').toLowerCase().trim();
+      renderBlocksGrid();
+    }
+
+    function populateOfferSelect(selectedId = null) {
+      const sel = document.getElementById('formAttachedOfferId');
+      if (!sel) return;
+
+      sel.innerHTML = allOffers.map(o => `
+        <option value="${o.id}" ${o.id === selectedId ? 'selected' : ''}>
+          ${o.title} • (${o.pricing?.installmentsText || `R$ ${o.pricing?.offerPrice}`})
+        </option>
+      `).join('');
+
+      if (!selectedId && allOffers.length > 0) {
+        handleOfferSelectChange(allOffers[0].id);
+      }
+    }
+
+    function handleOfferSelectChange(offerId) {
+      const offer = allOffers.find(o => o.id === offerId);
+      if (!offer) return;
+
+      const priceBox = document.getElementById('previewOfferPriceText');
+      const provBox = document.getElementById('previewOfferProvider');
+
+      if (priceBox) priceBox.innerText = `${offer.pricing?.installmentsText || `R$ ${offer.pricing?.offerPrice}`} (${offer.grantedTier})`;
+      if (provBox) provBox.innerText = offer.provider === 'whatsapp' ? '💬 WhatsApp Leo' : '⚡ Hotmart Checkout';
+    }
+
+    function handleFormatChange(fmt) {
+      const slotSel = document.getElementById('formSlotId');
+      if (fmt === 'modal_paywall') slotSel.value = 'player_restricted_modal';
+      else if (fmt === 'card_infeed') slotSel.value = 'portal_courses_infeed';
+      else if (fmt === 'banner_top') slotSel.value = 'global_top_bar';
+      else if (fmt === 'banner_below_video') slotSel.value = 'sala_de_aula_below_video';
+    }
+
+    function renderBlocksGrid() {
+      const container = document.getElementById('blocksContainer');
+      if (!container) return;
+
+      let list = [...allBlocks];
+
+      if (currentFilter === 'card_infeed') list = list.filter(b => b.format === 'card_infeed');
+      else if (currentFilter === 'modal_paywall') list = list.filter(b => b.format === 'modal_paywall');
+      else if (currentFilter === 'banner_top') list = list.filter(b => b.format === 'banner_top');
+      else if (currentFilter === 'paused') list = list.filter(b => b.status === 'paused');
+
+      if (currentSearchTerm) {
+        list = list.filter(b => 
+          (b.title && b.title.toLowerCase().includes(currentSearchTerm)) ||
+          (b.content?.headline && b.content.headline.toLowerCase().includes(currentSearchTerm)) ||
+          (b.attachedOfferId && b.attachedOfferId.toLowerCase().includes(currentSearchTerm))
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-500 space-y-3">
+            <i data-lucide="layers" class="w-12 h-12 mx-auto opacity-30"></i>
+            <p class="font-bold text-sm">Nenhum bloco de marketing encontrado neste filtro.</p>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = list.map(block => {
+        const isActive = block.status === 'active';
+        const offer = allOffers.find(o => o.id === block.attachedOfferId);
+
+        let formatBadge = "bg-blue-500/15 text-blue-300 border-blue-400/30";
+        let formatIcon = "layout";
+        if (block.format === 'modal_paywall') {
+          formatBadge = "bg-purple-500/15 text-purple-300 border-purple-400/30";
+          formatIcon = "lock";
+        } else if (block.format === 'banner_top') {
+          formatBadge = "bg-amber-500/15 text-amber-300 border-amber-400/30";
+          formatIcon = "megaphone";
+        }
+
+        const targetTiersText = (block.targeting?.targetTiers || []).map(t => {
+          if (t === 'free') return '🌱 Free';
+          if (t === 'club_annual') return '🎓 Club Anual';
+          if (t === 'club_monthly') return '🎓 Club Mensal';
+          if (t === 'vip') return '👑 VIP';
+          if (t === 'unauthenticated') return 'Visitante';
+          return t;
+        }).join(', ') || 'Todos';
+
+        return `
+          <div class="bg-[#0A192F] border ${isActive ? 'border-white/10 hover:border-amber-400/40' : 'border-white/5 opacity-75'} rounded-3xl p-5 shadow-xl flex flex-col justify-between space-y-4 transition group">
+            
+            <div class="space-y-3">
+              <!-- Top Row: Format & Status Switch -->
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-full font-mono font-bold text-[10px] uppercase tracking-wider border ${formatBadge} flex items-center gap-1.5">
+                  <i data-lucide="${formatIcon}" class="w-3 h-3"></i>
+                  <span>${block.format.replace('_', ' ')}</span>
+                </span>
+
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-bold ${isActive ? 'text-emerald-400' : 'text-slate-400'} flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}"></span>
+                    <span>${isActive ? 'ATIVO' : 'PAUSADO'}</span>
+                  </span>
+                  <button onclick="handleToggleStatus('${block.id}')" class="p-1 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 transition cursor-pointer">
+                    <i data-lucide="${isActive ? 'pause' : 'play'}" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Title & Slot -->
+              <div>
+                <span class="text-[10px] font-mono text-slate-400 block mb-0.5">Slot: <strong class="text-amber-400">${block.placement?.slotId}</strong></span>
+                <h3 class="font-bold text-sm sm:text-base text-white leading-snug group-hover:text-amber-200 transition">
+                  ${block.title}
+                </h3>
+              </div>
+
+              <!-- Headline & Copy Highlight -->
+              <div class="p-3 rounded-2xl bg-[#060D17] border border-white/10 space-y-1">
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">${block.content?.badgeText || 'HEADLINE:'}</span>
+                <p class="font-bold text-white text-xs leading-snug">${block.content?.headline || ''}</p>
+                <p class="text-[11px] text-slate-400 leading-relaxed line-clamp-2">${block.content?.subhead || ''}</p>
+              </div>
+
+              <!-- Connected Offer (O Seletor de Vendas!) -->
+              <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-400/30 text-xs flex items-center justify-between gap-2">
+                <div>
+                  <span class="text-[9px] uppercase font-bold text-amber-300 block">🔗 Oferta de Vendas Conectada:</span>
+                  <p class="font-bold text-white truncate max-w-[200px]">${offer ? offer.title : (block.attachedOfferId || 'Nenhuma')}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <span class="text-amber-300 font-mono font-bold text-xs">${offer?.pricing?.installmentsText || `R$ ${offer?.pricing?.offerPrice || 0}`}</span>
+                </div>
+              </div>
+
+              <!-- Targeting Badge -->
+              <div class="text-[10px] text-slate-400">
+                <span>Público-Alvo: <strong class="text-slate-200">${targetTiersText}</strong></span>
+              </div>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-1 text-xs">
+              <div class="flex items-center gap-1">
+                <button onclick="handlePreviewBlock('${block.id}')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 font-bold transition flex items-center gap-1 cursor-pointer" title="Pré-visualizar">
+                  <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                  <span>Preview</span>
+                </button>
+                <button onclick="openEditBlockModal('${block.id}')" class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold transition flex items-center gap-1 cursor-pointer">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5 text-sky-400"></i>
+                  <span>Editar</span>
+                </button>
+              </div>
+
+              <div class="flex items-center gap-1">
+                <button onclick="handleDuplicateBlock('${block.id}')" class="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-purple-300 transition cursor-pointer" title="Duplicar peça">
+                  <i data-lucide="copy-plus" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="handleDeleteBlock('${block.id}')" class="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition cursor-pointer" title="Excluir peça">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    async function handleToggleStatus(id) {
+      try {
+        await window.aefBlockEngine.toggleBlockStatus(id);
+        await loadInitialData();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function handleDuplicateBlock(id) {
+      if (!confirm('Deseja duplicar esta peça criativa para nova variação?')) return;
+      try {
+        await window.aefBlockEngine.duplicateBlock(id);
+        await loadInitialData();
+        alert('Peça duplicada com sucesso!');
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    async function handleDeleteBlock(id) {
+      if (!confirm('Deseja realmente excluir este bloco de marketing?')) return;
+      try {
+        await window.aefBlockEngine.deleteBlock(id);
+        await loadInitialData();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    // MODAL EDIT / CREATE
+    function openCreateBlockModal() {
+      document.getElementById('modalBlockTitle').innerText = "Criar Novo Bloco / Peça de Marketing";
+      document.getElementById('formBlockId').value = "";
+      document.getElementById('formTitle').value = "";
+      document.getElementById('formFormat').value = "card_infeed";
+      document.getElementById('formSlotId').value = "portal_courses_infeed";
+      document.getElementById('formBadgeText').value = "OFERTA OFICIAL";
+      document.getElementById('formHeadline').value = "";
+      document.getElementById('formSubhead').value = "";
+      document.getElementById('formBodyHtml').value = "";
+      document.getElementById('formMediaUrl').value = "";
+      document.getElementById('formCtaText').value = "Garantir Minha Vaga";
+      document.getElementById('formStatus').value = "active";
+      document.getElementById('formPriority').value = "80";
+
+      populateOfferSelect();
+      document.getElementById('blockModal').classList.remove('hidden');
+    }
+
+    async function openEditBlockModal(blockId) {
+      const block = await window.aefBlockEngine.getBlockById(blockId);
+      if (!block) return;
+
+      document.getElementById('modalBlockTitle').innerText = `Editar Bloco: ${block.title}`;
+      document.getElementById('formBlockId').value = block.id;
+      document.getElementById('formTitle').value = block.title || "";
+      document.getElementById('formFormat').value = block.format || "card_infeed";
+      document.getElementById('formSlotId').value = block.placement?.slotId || "portal_courses_infeed";
+      document.getElementById('formBadgeText').value = block.content?.badgeText || "";
+      document.getElementById('formHeadline').value = block.content?.headline || "";
+      document.getElementById('formSubhead').value = block.content?.subhead || "";
+      document.getElementById('formBodyHtml').value = block.content?.bodyHtml || "";
+      document.getElementById('formMediaUrl').value = block.content?.mediaUrl || "";
+      document.getElementById('formCtaText').value = block.content?.ctaText || "Aproveitar Agora";
+      document.getElementById('formStatus').value = block.status || "active";
+      document.getElementById('formPriority').value = block.placement?.priority || 80;
+
+      populateOfferSelect(block.attachedOfferId);
+
+      // Checkboxes de Tiers
+      const selectedTiers = block.targeting?.targetTiers || [];
+      document.querySelectorAll('input[name="formTargetTiers"]').forEach(cb => {
+        cb.checked = selectedTiers.includes(cb.value);
+      });
+
+      document.getElementById('blockModal').classList.remove('hidden');
+    }
+
+    function closeBlockModal() {
+      document.getElementById('blockModal').classList.add('hidden');
+    }
+
+    async function handleSaveBlockForm(e) {
+      e.preventDefault();
+      const blockId = document.getElementById('formBlockId').value || `block_${Date.now()}`;
+      const title = document.getElementById('formTitle').value.trim();
+      const format = document.getElementById('formFormat').value;
+      const slotId = document.getElementById('formSlotId').value;
+      const attachedOfferId = document.getElementById('formAttachedOfferId').value;
+
+      const targetTiers = Array.from(document.querySelectorAll('input[name="formTargetTiers"]:checked')).map(cb => cb.value);
+
+      const blockData = {
+        id: blockId,
+        title: title,
+        format: format,
+        attachedOfferId: attachedOfferId,
+        placement: {
+          slotId: slotId,
+          priority: parseInt(document.getElementById('formPriority').value || "80")
+        },
+        targeting: {
+          targetTiers: targetTiers.length > 0 ? targetTiers : ["free"],
+          excludeTiers: ["vip"],
+          excludeIfEnrolledProduct: ""
+        },
+        content: {
+          badgeText: document.getElementById('formBadgeText').value.trim(),
+          headline: document.getElementById('formHeadline').value.trim(),
+          subhead: document.getElementById('formSubhead').value.trim(),
+          bodyHtml: document.getElementById('formBodyHtml').value.trim(),
+          mediaType: document.getElementById('formMediaUrl').value.trim() ? "image" : "none",
+          mediaUrl: document.getElementById('formMediaUrl').value.trim(),
+          ctaText: document.getElementById('formCtaText').value.trim(),
+          ctaSecondaryText: "Ver Detalhes"
+        },
+        status: document.getElementById('formStatus').value
+      };
+
+      try {
+        await window.aefBlockEngine.saveBlock(blockData);
+        closeBlockModal();
+        await loadInitialData();
+        alert('Peça criativa de marketing salva com sucesso!');
+      } catch (err) {
+        alert('Erro ao salvar bloco: ' + err.message);
+      }
+    }
+
+    // PREVIEW MODAL
+    async function handlePreviewBlock(blockId) {
+      const block = await window.aefBlockEngine.getBlockById(blockId);
+      if (!block) return;
+
+      const container = document.getElementById('previewContainer');
+      await window.aefBlockEngine.renderBlockIntoElement(container, block, 'preview');
+      document.getElementById('previewModal').classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function closePreviewModal() {
+      document.getElementById('previewModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

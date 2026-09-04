@@ -140,20 +140,25 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const emailParam = urlParams.get('email');
-      const ofertaParam = urlParams.get('oferta') || urlParams.get('offer') || 'migracao-first-steps-6m';
+      const ofertaParam = urlParams.get('oferta') || urlParams.get('offer') || 'migracao-resgate-gratis';
 
       if (emailParam) {
         document.getElementById('claimStudentEmail').value = emailParam;
         document.getElementById('claimStudentName').value = emailParam.split('@')[0].replace(/[._]/g, ' ');
       }
 
-      currentOffer = await window.aefOffersEngine.matchOfferByCodeOrName(ofertaParam);
+      if (window.aefOffersRegistry) {
+        await window.aefOffersRegistry.init();
+        currentOffer = await window.aefOffersRegistry.getOfferById(ofertaParam);
+      } else if (window.aefOffersEngine) {
+        currentOffer = await window.aefOffersEngine.matchOfferByCodeOrName(ofertaParam);
+      }
 
       if (currentOffer) {
         document.getElementById('claimOfferTitle').innerText = currentOffer.title;
         document.getElementById('claimBadgeText').innerText = currentOffer.badge || "MIGRAÇÃO DE ALUNO";
         
-        const durText = currentOffer.accessDuration?.isLifetime ? "Acesso Vitalício 💎" : `${currentOffer.accessDuration?.value || 6} Meses de acesso liberado`;
+        const durText = currentOffer.accessDuration?.isLifetime ? "Acesso Vitalício 💎" : `${currentOffer.accessDuration?.value || 12} Meses de acesso liberado`;
         document.getElementById('claimDurationText').innerText = `Período de Acesso: ${durText}`;
 
         if (currentOffer.salesPageData?.mainHeadline) {
@@ -178,21 +183,22 @@
       try {
         const studentId = email.replace(/[^a-zA-Z0-9]/g, '_');
         const offer = currentOffer || {
-          id: 'migracao-first-steps-6m',
-          grantedCourses: ['english-quickstart'],
-          grantedTier: 'course_member',
-          accessDuration: { value: 6, isLifetime: false }
+          id: 'migracao-resgate-gratis',
+          title: 'Resgate de Boas-Vindas (First Steps)',
+          grantedCourses: ['first-steps', 'english-quickstart'],
+          grantedTier: 'free',
+          accessDuration: { value: 12, isLifetime: false }
         };
 
-        const accessDates = window.aefOffersEngine.calculateAccessDates(offer);
+        const accessDates = window.aefOffersEngine ? window.aefOffersEngine.calculateAccessDates(offer) : null;
 
         const studentDoc = {
           uid: studentId,
           name: name,
           email: email,
-          tier: offer.grantedTier || 'course_member',
+          tier: offer.grantedTier || 'free',
           role: 'student',
-          enrolledProducts: offer.grantedCourses || ['english-quickstart'],
+          enrolledProducts: offer.grantedCourses || ['first-steps', 'english-quickstart'],
           activeOffer: {
             offerId: offer.id,
             title: offer.title,
@@ -213,6 +219,11 @@
               email: { stringValue: studentDoc.email },
               tier: { stringValue: studentDoc.tier },
               role: { stringValue: studentDoc.role },
+              enrolledProducts: {
+                arrayValue: {
+                  values: studentDoc.enrolledProducts.map(p => ({ stringValue: p }))
+                }
+              },
               updatedAt: { stringValue: studentDoc.updatedAt }
             }
           })

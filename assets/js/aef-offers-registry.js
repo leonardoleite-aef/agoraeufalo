@@ -10,7 +10,7 @@
 (function (window) {
   'use strict';
 
-  const STORAGE_KEY = 'aef_offers_registry_cache';
+  const STORAGE_KEY = 'aef_offers_registry_cache_v3';
 
   // Sementes Canônicas Oficiais dos Produtos AgoraEuFalo
   const CANONICAL_OFFERS_SEED = [
@@ -405,6 +405,156 @@
       },
       createdAt: "2026-09-01T00:00:00.000Z",
       updatedAt: "2026-09-03T22:00:00.000Z"
+    },
+    {
+      id: "migracao-resgate-gratis",
+      title: "Resgate de Boas-Vindas • Ativação Gratuita para Alunos Antigos (First Steps)",
+      slug: "migracao-resgate-gratis",
+      productId: "first-steps",
+      productTitle: "Resgate de Boas-Vindas (First Steps)",
+      category: "migration",
+      badge: "🎁 RESGATE 100% GRÁTIS",
+      status: "active",
+      provider: "hotmart",
+      isPendingHotmartLink: false,
+      checkoutUrl: "migracao/index.html?oferta=migracao-resgate-gratis",
+      whatsappNumber: "+55 11 99616-0910",
+      whatsappPrefillText: "Olá Professor Leo! Fui aluno de turmas anteriores e gostaria de resgatar meu acesso gratuito ao First Steps na nova plataforma.",
+      grantedTier: "free",
+      grantedCourses: ["first-steps", "english-quickstart"],
+      accessDuration: {
+        type: "months",
+        value: 12,
+        isLifetime: false
+      },
+      pricing: {
+        billingType: "free",
+        regularPrice: 397.00,
+        offerPrice: 0.00,
+        currency: "BRL",
+        installmentsText: "100% Gratuito para Ex-Alunos",
+        trialMode: "none",
+        trialDays: 0
+      },
+      scarcity: {
+        hasCountdown: false,
+        expiresAt: null,
+        countdownMinutes: null,
+        redirectOnExpireUrl: "",
+        spotsLeft: null
+      },
+      hotmartSetupSpec: {
+        suggestedProductName: "Resgate de Boas-Vindas AgoraEuFalo (First Steps)",
+        format: "Ativação Gratuita / Degustação de Luxo",
+        suggestedOfferCode: "RESGATE_GRATIS_2026",
+        regularPriceFormatted: "R$ 397,00",
+        offerPriceFormatted: "R$ 0,00 (Gratuito)",
+        installmentsFormatted: "Presente do Leo",
+        recommendedTracking: "src=email_resgate&sck=resgate_gratis",
+        notes: "Acesso de presente aos alunos históricos. Libera o curso First Steps mantendo o perfil no Tier Free para receber ofertas do Club."
+      },
+      createdAt: "2026-09-04T00:00:00.000Z",
+      updatedAt: "2026-09-04T00:00:00.000Z"
+    },
+    {
+      id: "migracao-upgrade-club",
+      title: "Upgrade de Fidelidade • Transição com Crédito para o Club Anual",
+      slug: "migracao-upgrade-club",
+      productId: "ms-club",
+      productTitle: "Magic Stories Club (Upgrade Exclusivo)",
+      category: "migration",
+      badge: "🚀 UPGRADE FIDELIDADE",
+      status: "active",
+      provider: "hotmart",
+      isPendingHotmartLink: true,
+      checkoutUrl: "https://pay.hotmart.com/OFFER_MIGRACAO_CLUB_297",
+      whatsappNumber: "+55 11 99616-0910",
+      whatsappPrefillText: "Olá Professor Leo! Quero fazer o upgrade com desconto de ex-aluno para o Magic Stories Club Anual por R$ 297.",
+      grantedTier: "club_annual",
+      grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
+      accessDuration: {
+        type: "months",
+        value: 12,
+        isLifetime: false
+      },
+      pricing: {
+        billingType: "subscription",
+        regularPrice: 497.00,
+        offerPrice: 297.00,
+        currency: "BRL",
+        installmentsText: "12x de R$ 29,70 ou R$ 297 à vista",
+        trialMode: "none",
+        trialDays: 0
+      },
+      scarcity: {
+        hasCountdown: false,
+        expiresAt: null,
+        countdownMinutes: null,
+        redirectOnExpireUrl: "",
+        spotsLeft: 25
+      },
+      hotmartSetupSpec: {
+        suggestedProductName: "Magic Stories Club Anual • Upgrade Alunos Anteriores",
+        format: "Assinatura Anual com Desconto Especial de Migração",
+        suggestedOfferCode: "MIGRACAO_CLUB_297",
+        regularPriceFormatted: "R$ 497,00",
+        offerPriceFormatted: "R$ 297,00",
+        installmentsFormatted: "12x de R$ 29,70",
+        recommendedTracking: "src=migracao_upgrade&sck=upgrade_club_297",
+        notes: "Oferta fechada com link não listado publicamente. O valor investido em cursos passados é abatido como crédito para a anuidade do Club."
+      },
+      createdAt: "2026-09-04T00:00:00.000Z",
+      updatedAt: "2026-09-04T00:00:00.000Z"
+    },
+    {
+      id: "migracao-membro-historico",
+      title: "Plano Membro Histórico • Transição para o Vitalício Total",
+      slug: "migracao-membro-historico",
+      productId: "all-access-lifetime",
+      productTitle: "Membro Histórico Vitalício (All-Access Total)",
+      category: "migration",
+      badge: "💎 MEMBRO HISTÓRICO",
+      status: "active",
+      provider: "hotmart",
+      isPendingHotmartLink: true,
+      checkoutUrl: "https://pay.hotmart.com/OFFER_MIGRACAO_HISTORICO_997",
+      whatsappNumber: "+55 11 99616-0910",
+      whatsappPrefillText: "Olá Leo! Sou ex-aluno de turmas históricas e quero garantir a vaga de Membro Vitalício Total por R$ 997.",
+      grantedTier: "club_annual",
+      grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
+      accessDuration: {
+        type: "months",
+        value: 999,
+        isLifetime: true
+      },
+      pricing: {
+        billingType: "one_time",
+        regularPrice: 2997.00,
+        offerPrice: 997.00,
+        currency: "BRL",
+        installmentsText: "12x de R$ 99,70 ou R$ 997 à vista",
+        trialMode: "none",
+        trialDays: 0
+      },
+      scarcity: {
+        hasCountdown: false,
+        expiresAt: null,
+        countdownMinutes: null,
+        redirectOnExpireUrl: "",
+        spotsLeft: 10
+      },
+      hotmartSetupSpec: {
+        suggestedProductName: "Membro Histórico AgoraEuFalo • Vitalício All-Access",
+        format: "Pagamento Único Vitalício com Desconto de Transição",
+        suggestedOfferCode: "HISTORICO_VITALICIO_997",
+        regularPriceFormatted: "R$ 2.997,00",
+        offerPriceFormatted: "R$ 997,00",
+        installmentsFormatted: "12x de R$ 99,70",
+        recommendedTracking: "src=migracao_historico&sck=historico_997",
+        notes: "Oferta restrita de alto ticket para reativação definitiva de fãs e alunos veteranos do método."
+      },
+      createdAt: "2026-09-04T00:00:00.000Z",
+      updatedAt: "2026-09-04T00:00:00.000Z"
     }
   ];
 
