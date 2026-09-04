@@ -589,7 +589,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         </div>
         <div>
           <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Selecione a Aula</label>
-          <select id="linkLessonSelect" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-emerald-500"></select>
+          <select id="linkLessonSelect" onchange="updateCanonicalPdfFilename()" class="w-full bg-[#111C33] border border-[#1E3056] text-white font-bold p-2 rounded-lg focus:outline-none focus:border-emerald-500"></select>
         </div>
 
         <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-1">
@@ -1835,12 +1835,31 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
     // ----------------------------------------------------
     // LINK TO COURSE & LESSON MODAL
     // ----------------------------------------------------
+    function getCoursesDataSource() {
+      if (typeof AEF_ALL_COURSES_MAP === 'object' && Object.keys(AEF_ALL_COURSES_MAP).length > 0) {
+        return AEF_ALL_COURSES_MAP;
+      }
+      if (typeof window.AEF_COURSES_REGISTRY === 'object' && Object.keys(window.AEF_COURSES_REGISTRY).length > 0) {
+        return window.AEF_COURSES_REGISTRY;
+      }
+      if (typeof window.AEF_COURSES_DATA === 'object' && Object.keys(window.AEF_COURSES_DATA).length > 0) {
+        return window.AEF_COURSES_DATA;
+      }
+      return {};
+    }
+
     function openLinkModal() {
       const select = document.getElementById("linkCourseSelect");
-      if (!select || !window.AEF_COURSES_DATA) return;
+      if (!select) return;
 
-      const courses = window.AEF_COURSES_DATA;
-      select.innerHTML = Object.keys(courses).map(k => `
+      const courses = getCoursesDataSource();
+      const keys = Object.keys(courses);
+      if (keys.length === 0) {
+        alert("Nenhum curso carregado no catálogo. Aguarde a sincronização.");
+        return;
+      }
+
+      select.innerHTML = keys.map(k => `
         <option value="${k}">${courses[k].title || k}</option>
       `).join('');
 
@@ -1850,7 +1869,8 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
 
     function populateModuleSelect(courseId) {
       const select = document.getElementById("linkModuleSelect");
-      const course = window.AEF_COURSES_DATA[courseId];
+      const courses = getCoursesDataSource();
+      const course = courses[courseId];
       if (!select || !course) return;
 
       select.innerHTML = (course.modules || []).map(m => `
@@ -1863,9 +1883,14 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
     function populateLessonSelect(moduleId) {
       const select = document.getElementById("linkLessonSelect");
       const courseId = document.getElementById("linkCourseSelect").value;
-      const course = window.AEF_COURSES_DATA[courseId];
+      const courses = getCoursesDataSource();
+      const course = courses[courseId];
       const mod = (course?.modules || []).find(m => m.id === moduleId);
-      if (!select || !mod) return;
+      if (!select || !mod) {
+        if (select) select.innerHTML = '<option value="">(Nenhuma aula cadastrada)</option>';
+        updateCanonicalPdfFilename();
+        return;
+      }
 
       select.innerHTML = (mod.lessons || []).map(l => `
         <option value="${l.id}">${l.title || l.id}</option>
@@ -1879,20 +1904,29 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
       const lessonSelect = document.getElementById("linkLessonSelect");
       const lessonTitle = lessonSelect?.options[lessonSelect.selectedIndex]?.text || 'aula';
       const cleanSlug = lessonTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
-      document.getElementById("canonicalPdfFilename").innerText = `Material-PDF/Apostila_${courseId}_${cleanSlug}.pdf`;
+      const filenameEl = document.getElementById("canonicalPdfFilename");
+      if (filenameEl) {
+        filenameEl.innerText = `Material-PDF/Apostila_${courseId}_${cleanSlug}.pdf`;
+      }
     }
 
     function closeLinkModal() {
       document.getElementById("linkCourseModal").classList.add("hidden");
     }
 
-    function confirmLinkToLesson() {
-      const courseId = document.getElementById("linkCourseSelect").value;
-      const modId = document.getElementById("linkModuleSelect").value;
-      const lesId = document.getElementById("linkLessonSelect").value;
-      const generatedUrl = document.getElementById("canonicalPdfFilename").innerText;
+    async function confirmLinkToLesson() {
+      const courseId = document.getElementById("linkCourseSelect")?.value;
+      const modId = document.getElementById("linkModuleSelect")?.value;
+      const lesId = document.getElementById("linkLessonSelect")?.value;
+      const generatedUrl = document.getElementById("canonicalPdfFilename")?.innerText || '';
 
-      const course = window.AEF_COURSES_DATA[courseId];
+      if (!courseId || !modId || !lesId) {
+        alert("Por favor, selecione o Curso, Módulo e Aula antes de vincular.");
+        return;
+      }
+
+      const courses = getCoursesDataSource();
+      const course = courses[courseId];
       const mod = (course?.modules || []).find(m => m.id === modId);
       const les = (mod?.lessons || []).find(l => l.id === lesId);
 
@@ -1915,7 +1949,48 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         });
         window.AEFPdfFactoryEngine.notify();
 
-        showToast(`✅ Apostila vinculada na aula: ${les.title} (QR Code atualizado!)`);
+        // 1. Salva no Cloud Firestore se conectado
+        try {
+          if (window.aefCloudSync) {
+            await window.aefCloudSync.init();
+            if (window.aefCloudSync.db) {
+              await window.aefCloudSync.db
+                .collection("courses").doc(courseId)
+                .collection("modules").doc(modId)
+                .collection("lessons").doc(lesId)
+                .set({ pdfUrl: generatedUrl, updatedAt: new Date().toISOString() }, { merge: true });
+            } else {
+              // REST Fallback
+              const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${courseId}/modules/${modId}/lessons/${lesId}?updateMask.fieldPaths=pdfUrl&updateMask.fieldPaths=updatedAt`;
+              await fetch(restUrl, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  fields: {
+                    pdfUrl: { stringValue: generatedUrl },
+                    updatedAt: { stringValue: new Date().toISOString() }
+                  }
+                })
+              });
+            }
+          }
+        } catch (cloudErr) {
+          console.warn("Aviso ao persistir link no Firestore:", cloudErr);
+        }
+
+        // 2. Salva no LocalStorage para sincronia imediata entre janelas
+        try {
+          localStorage.setItem('aef_last_course_update', JSON.stringify({
+            courseId,
+            moduleId: modId,
+            lessonId: lesId,
+            pdfUrl: generatedUrl,
+            action: 'link_pdf',
+            timestamp: Date.now()
+          }));
+        } catch (e) {}
+
+        showToast(`✅ Apostila vinculada com sucesso na aula: ${les.title}!`);
         closeLinkModal();
       }
     }

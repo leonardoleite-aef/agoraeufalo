@@ -1521,8 +1521,12 @@
       const filename = `Apostila_${activeCourseId}_${cleanSlug}.pdf`;
 
       const generatedUrl = `Material-PDF/${filename}`;
-      document.getElementById("lessonPdfUrlInput").value = generatedUrl;
-      showToast(`✅ Link da Apostila salvo na aula: ${generatedUrl}`);
+      const inputEl = document.getElementById("lessonPdfUrlInput");
+      if (inputEl) inputEl.value = generatedUrl;
+
+      // Persiste imediatamente na aula ativa
+      await handleSaveLesson();
+      showToast(`✅ Apostila vinculada e salva na aula: ${generatedUrl}`);
     }
 
     // Modal Helpers (Course & Module)

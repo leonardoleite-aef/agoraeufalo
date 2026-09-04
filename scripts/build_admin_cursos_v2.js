@@ -1385,11 +1385,14 @@ const completeHtml = `<!DOCTYPE html>
       const course = ALL_COURSES[activeCourseId];
       const lessonTitle = document.getElementById("lessonTitleInput")?.value?.trim() || "aula";
       const cleanSlug = lessonTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
-      const filename = \`Apostila_\${activeCourseId}_\${cleanSlug}.pdf\`;
+      const filename = `Apostila_${activeCourseId}_${cleanSlug}.pdf`;
 
-      const generatedUrl = \`Material-PDF/\${filename}\`;
-      document.getElementById("lessonPdfUrlInput").value = generatedUrl;
-      showToast(\`✅ Link da Apostila salvo na aula: \${generatedUrl}\`);
+      const generatedUrl = `Material-PDF/${filename}`;
+      const inputEl = document.getElementById("lessonPdfUrlInput");
+      if (inputEl) inputEl.value = generatedUrl;
+
+      await handleSaveLesson();
+      showToast(`✅ Apostila vinculada e salva na aula: ${generatedUrl}`);
     }
 
     // Modal Helpers (Course & Module)
