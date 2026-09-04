@@ -403,6 +403,7 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
               <optgroup label="História & Vocabulário">
                 <option value="listen_read">🎧 Listen & Read (LR - Imersão Auditiva)</option>
                 <option value="vocab_chunks">📖 Vocabulary Session & Chunks</option>
+                <option value="grammar_cultural">🌍 O Sentimento da Estrutura • Grammar & Cultural Insights</option>
               </optgroup>
               <optgroup label="Treino Ativo (Practice Workbook)">
                 <option value="listen_answer">⚡ Listen & Answer (LA)</option>
@@ -1410,6 +1411,9 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
       if (block.type === 'connected_speech') {
         return `Connected Speech: "${(d.content || '').replace(/<[^>]*>/g, '')}"`;
       }
+      if (block.type === 'grammar_cultural') {
+        return `🌍 ${d.title || 'Grammar & Cultural Insights'}: "${d.subtitle || ''}"`;
+      }
       if (block.type === 'golden_tip') return `💡 "${d.content || ''}"`;
       if (block.type === 'explainer') return d.content || 'Conceito didático';
       if (block.type === 'handwriting_lines') return `📝 Pautas de Caligrafia (${d.lineCount || 4} linhas)`;
@@ -1598,6 +1602,46 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
             <div><label class="block font-bold text-slate-400 mb-0.5">Quantidade de Linhas Pautadas</label><input type="number" id="m_lineCount" value="${d.lineCount || 4}" min="1" max="12" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white"></div>
           </div>
         `;
+      } else if (block.type === 'grammar_cultural') {
+        const cardsText = (d.cards || []).map(c => 
+          `${c.badge || ''} | ${c.ptConcept || ''} | ${c.enExample || ''} | ${c.subExample || ''} | ${c.note || ''}`
+        ).join('\n');
+
+        formHtml = `
+          <div class="space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-bold text-slate-400 mb-0.5">Selo Superior / Seção (Badge)</label>
+                <input type="text" id="m_badge" value="${d.badge || ''}" placeholder="SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-mono text-xs">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-400 mb-0.5">Título da Seção</label>
+                <input type="text" id="m_title" value="${d.title || ''}" placeholder="O Sentimento da Estrutura • Grammar & Cultural Aspects" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-bold text-xs">
+              </div>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">Subtítulo / Insight Central</label>
+              <input type="text" id="m_subtitle" value="${d.subtitle || ''}" placeholder="A Ponte Mental: Conectando o nosso 'Há...' com o 'Have been...'" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">💡 O "Clique" do Falante Brasileiro (Pílula Central sem Gramatiquês)</label>
+              <textarea id="m_clickInsight" rows="3" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs leading-relaxed" placeholder="Explique a ponte entre o português e o sentimento do inglês...">${d.clickInsight || ''}</textarea>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">Cartões Comparativos (1 por linha no formato: Selo | Conceito PT | Frase EN | Exemplo Extra | Nota)</label>
+              <textarea id="m_cards" rows="4" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-mono text-[11px] leading-relaxed" placeholder="1. AFIRMATIVA | Eles são casados há... | They have been married for 18 years. | I have been a teacher for 10 years. | Frase da história">${cardsText}</textarea>
+              <span class="text-[10px] text-slate-500 block mt-0.5">Dica: Separe com barra vertical "|" os campos de cada cartão. Pode ter 1, 2 ou 3 cartões.</span>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">🗣️ Sacada Cultural & Fala Real (Connected Speech / Vida Prática)</label>
+              <textarea id="m_culturalNote" rows="2" class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white font-sans text-xs leading-relaxed" placeholder="Nuances de pronúncia ou cultura do dia a dia...">${d.culturalNote || ''}</textarea>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-400 mb-0.5">⚡ Dica de Treino Ativo (Como treinar no Player / Magic Stories)</label>
+              <input type="text" id="m_trainingTip" value="${d.trainingTip || ''}" placeholder="Não tente decorar regras: treine no Listen & Answer..." class="w-full bg-[#0A101F] border border-[#1E3056] p-2 rounded text-white text-xs">
+            </div>
+          </div>
+        `;
       } else if (block.type === 'qr_code') {
         formHtml = `
           <div class="space-y-2">
@@ -1739,6 +1783,24 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
         newData.instruction = document.getElementById("m_instruction")?.value;
         newData.questions = (document.getElementById("m_questions")?.value || '').split('\n').filter(Boolean);
         newData.showLines = document.getElementById("m_showLines")?.checked;
+      } else if (block.type === 'grammar_cultural') {
+        newData.badge = (document.getElementById("m_badge")?.value || '').trim();
+        newData.title = (document.getElementById("m_title")?.value || '').trim();
+        newData.subtitle = (document.getElementById("m_subtitle")?.value || '').trim();
+        newData.clickInsight = (document.getElementById("m_clickInsight")?.value || '').trim();
+        const rawCards = (document.getElementById("m_cards")?.value || '').split('\n').filter(Boolean);
+        newData.cards = rawCards.map(line => {
+          const parts = line.split('|').map(s => s.trim());
+          return {
+            badge: parts[0] || '',
+            ptConcept: parts[1] || '',
+            enExample: parts[2] || '',
+            subExample: parts[3] || '',
+            note: parts[4] || ''
+          };
+        });
+        newData.culturalNote = (document.getElementById("m_culturalNote")?.value || '').trim();
+        newData.trainingTip = (document.getElementById("m_trainingTip")?.value || '').trim();
       } else if (block.type === 'qr_code') {
         newData.title = document.getElementById("m_title")?.value;
         newData.subtitle = document.getElementById("m_subtitle")?.value;

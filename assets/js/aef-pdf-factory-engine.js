@@ -268,6 +268,45 @@
         subtitle: 'Aponte a câmera para abrir o Training Player diretamente nesta lição.',
         targetUrl: 'https://agoraeufalo.com.br/player.html'
       })
+    },
+    grammar_cultural: {
+      id: 'grammar_cultural',
+      name: 'O Sentimento da Estrutura • Grammar & Cultural Insights',
+      icon: 'compass',
+      category: 'Estrutura & Cultura',
+      defaultWeight: 75,
+      defaultData: () => ({
+        badge: 'SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS',
+        title: 'O Sentimento da Estrutura (Grammar & Cultural Aspects Explained)',
+        subtitle: 'A Ponte Mental: Conectando o nosso "Há..." com o "Have been..." (Duração no Presente)',
+        clickInsight: 'No Brasil você diz: "Eles são casados há 18 anos". No inglês, você precisa de uma ponte que viaja do passado até este exato segundo: "Grazi and Tom have been married for 18 years". Toda vez que você for expressar há quanto tempo você faz algo, é algo ou vem fazendo algo, a boca puxa o HAVE BEEN!',
+        cards: [
+          {
+            badge: '1. FORMA AFIRMATIVA',
+            ptConcept: 'Para expressar uma situação que começou lá atrás e continua até agora.',
+            enExample: 'Grazi and Tom have been married for 18 years.',
+            subExample: 'I have been a teacher for 10 years.',
+            note: 'Frase da história que mostra o estado contínuo.'
+          },
+          {
+            badge: '2. PERGUNTA DE BATE-PRONTO',
+            ptConcept: 'Para perguntar sobre a duração de algo no bate-pronto imediato.',
+            enExample: 'How long have Tom and Grazi been married?',
+            subExample: 'How long have you been living here?',
+            note: 'A chave mágica de reflexo: "How long have you...?"'
+          },
+          {
+            badge: '3. FORMA NEGATIVA',
+            ptConcept: 'Para negar a duração de algo com naturalidade.',
+            enExample: 'Tom and Grazi haven\'t been married for 10 years.',
+            subExample: 'They haven\'t been doing that for long.',
+            note: 'Na fala rápida coloquial: haven\'t been...'
+          }
+        ],
+        culturalNote: '🗣️ Aspecto Cultural & Fala Real: Na vida real, o nativo raramente pronuncia "They have been" pausadamente. Na conversa coloquial, a ligação vira "They\'ve been" (/ðeɪv bɪn/) ou "I\'ve been" (/aɪv bɪn/). Além disso, observe a sintonia: FOR mede o tamanho do tempo (for 18 years); SINCE marca o ponto de partida na linha do tempo (since 2006).',
+        trainingTip: '⚡ Como as Magic Stories Ajudam Você a Destravar: Não tente decorar regras no papel! A exposição repetida nas atividades "Listen & Read" e "Listen & Answer" faz o cérebro associar o "há..." com o "have been..." de forma automática, até a fala virar reflexo espontâneo sem passar pela tradução.',
+        showCornerQr: true
+      })
     }
   };
 
@@ -1660,6 +1699,81 @@
                     <img src="${qrImageUrl}" alt="QR Code" width="68" height="68" style="display:block; border-radius:4px;" crossorigin="anonymous">
                   </a>
                 </div>
+              </div>
+            `;
+
+          case 'grammar_cultural':
+            const gCards = (d.cards && Array.isArray(d.cards)) ? d.cards : [];
+            let cardsHtml = '';
+            if (gCards.length > 0) {
+              const colWidth = gCards.length === 1 ? '100%' : (gCards.length === 2 ? '48%' : '31.5%');
+              const cardsItems = gCards.map(c => `
+                <div class="gc-card" style="flex:1 1 ${colWidth}; background:#FFFFFF; border:1.5px solid ${pal.border}; border-radius:8px; padding:9px 11px; box-shadow:0 1px 3px rgba(10,25,47,0.04); display:flex; flex-direction:column; justify-content:space-between; page-break-inside:avoid;">
+                  <div>
+                    <div style="font-size:7pt; font-weight:900; color:${pal.primary}; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; display:inline-block; background:${pal.primaryLight}; padding:1px 6px; border-radius:4px;">
+                      ${c.badge || 'Forma'}
+                    </div>
+                    <div style="font-size:8pt; color:#475569; font-style:italic; line-height:1.35; margin-bottom:6px;">
+                      ${c.ptConcept || ''}
+                    </div>
+                  </div>
+                  <div style="margin-top:4px; padding-top:5px; border-top:1px dashed ${pal.border};">
+                    <div style="font-size:9.5pt; font-weight:800; color:#0A192F; line-height:1.35; margin-bottom:2px;">
+                      "${c.enExample || ''}"
+                    </div>
+                    ${c.subExample ? `<div style="font-size:8pt; font-weight:600; color:${pal.primaryDark}; line-height:1.3;">• ${c.subExample}</div>` : ''}
+                    ${c.note ? `<div style="font-size:7pt; color:#64748B; margin-top:3px; font-style:italic;">${c.note}</div>` : ''}
+                  </div>
+                </div>
+              `).join('');
+              cardsHtml = `<div class="gc-cards-grid" style="display:flex; flex-wrap:wrap; gap:8px; margin:8px 0;">${cardsItems}</div>`;
+            }
+
+            return `
+              <div class="aef-box grammar-cultural-box" style="border-left:4.5px solid ${pal.primary}; background:${pal.primaryLight}; border-radius:10px; padding:12px 14px; position:relative; margin-bottom:12px; page-break-inside:avoid; border:1px solid ${pal.border};">
+                ${cornerQrHtml}
+                
+                <!-- Header -->
+                <div style="padding-right:55px;">
+                  ${d.badge ? `<div style="font-size:7.5pt; font-weight:900; color:${pal.primary}; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:2px;">${d.badge}</div>` : ''}
+                  <div style="font-size:12.5pt; font-weight:900; color:#0A192F; line-height:1.2; letter-spacing:-0.2px;">
+                    ${d.title || 'O Sentimento da Estrutura • Grammar & Cultural Aspects Explained'}
+                  </div>
+                  ${d.subtitle ? `<div style="font-size:9pt; font-weight:700; color:${pal.primaryDark}; margin-top:2px; line-height:1.3;">${d.subtitle}</div>` : ''}
+                </div>
+
+                <!-- Click Insight (O Clique Mental) -->
+                ${d.clickInsight ? `
+                  <div style="background:#FFFFFF; border-left:3.5px solid ${pal.accent}; border-radius:6px; padding:8px 10px; margin-top:8px; box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                    <div style="font-size:7.5pt; font-weight:900; color:${pal.accent}; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      💡 O "Clique" do Falante Brasileiro
+                    </div>
+                    <div style="font-size:9.5pt; color:#1E293B; line-height:1.45; font-weight:500;">
+                      ${d.clickInsight}
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- Cards Grid -->
+                ${cardsHtml}
+
+                <!-- Cultural / Real-life Nuance Box -->
+                ${d.culturalNote ? `
+                  <div style="background:#FFFFFF; border:1px solid ${pal.border}; border-radius:6px; padding:7px 10px; margin-top:6px;">
+                    <div style="font-size:8.5pt; color:#334155; line-height:1.4; font-weight:500;">
+                      ${d.culturalNote}
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- Training Tip (Listen & Answer / Magic Stories) -->
+                ${d.trainingTip ? `
+                  <div style="background:rgba(255,255,255,0.7); border-radius:6px; padding:6px 10px; margin-top:6px; border:1px dashed ${pal.border};">
+                    <div style="font-size:8pt; color:#475569; line-height:1.35; font-style:italic;">
+                      ${d.trainingTip}
+                    </div>
+                  </div>
+                ` : ''}
               </div>
             `;
 
