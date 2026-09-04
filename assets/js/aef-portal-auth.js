@@ -380,7 +380,10 @@
       return this.currentProfile;
     }
 
-    isAdmin() {
+    // =========================================================================
+    // IMPERSONATION ENGINE ("VER COMO ALUNO" / SIMULAÇÃO VOLÁTIL)
+    // =========================================================================
+    isRealAdmin() {
       if (!this.currentProfile) {
         const cachedRole = localStorage.getItem('aef_user_role');
         const cachedEmail = localStorage.getItem('aef_user_email');
@@ -391,7 +394,56 @@
              this.isMasterAdminEmail(this.currentProfile.email);
     }
 
+    getImpersonation() {
+      try {
+        const raw = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    setImpersonation(tier, studentId = null, studentName = null, studentEmail = null) {
+      if (!this.isRealAdmin()) return;
+      if (!tier || tier === 'admin_master') {
+        this.clearImpersonation();
+        return;
+      }
+      const state = {
+        tier: tier,
+        studentId: studentId,
+        studentName: studentName || (studentId ? `Aluno (${studentId})` : 'Aluno Simulado'),
+        studentEmail: studentEmail || `${studentId || 'aluno'}@simulado.agoraeufalo.com.br`,
+        active: true,
+        timestamp: Date.now()
+      };
+      try {
+        sessionStorage.setItem('aef_impersonate_state', JSON.stringify(state));
+        localStorage.setItem('aef_impersonate_state', JSON.stringify(state));
+      } catch (e) {}
+      window.location.reload();
+    }
+
+    clearImpersonation() {
+      try {
+        sessionStorage.removeItem('aef_impersonate_state');
+        localStorage.removeItem('aef_impersonate_state');
+      } catch (e) {}
+      window.location.reload();
+    }
+
+    isAdmin() {
+      // Se estiver em modo de simulação, comporta-se rigorosamente como o aluno simulado
+      const imp = this.getImpersonation();
+      if (imp && imp.active) {
+        return false;
+      }
+      return this.isRealAdmin();
+    }
+
     getActiveTier() {
+      const imp = this.getImpersonation();
+      if (imp && imp.active) return imp.tier;
       if (this.isAdmin()) return 'admin_master';
       if (!this.currentProfile) return localStorage.getItem('aef_user_tier') || 'free';
       return this.currentProfile.tier || 'free';
@@ -399,12 +451,10 @@
 
     // Check if user has access to a specific tier/product
     hasAccess(requiredTier) {
-      if (this.isAdmin()) return true; // God Mode: Admin passes all gates
-      if (!this.currentProfile) {
-        const cachedTier = localStorage.getItem('aef_user_tier') || 'free';
-        return this._compareTiers(cachedTier, requiredTier);
-      }
-      return this._compareTiers(this.currentProfile.tier, requiredTier);
+      if (this.isAdmin()) return true; // God Mode real: Admin passa por todos os portões
+      const imp = this.getImpersonation();
+      const effectiveTier = (imp && imp.active) ? imp.tier : (this.currentProfile?.tier || localStorage.getItem('aef_user_tier') || 'free');
+      return this._compareTiers(effectiveTier, requiredTier);
     }
 
     /**

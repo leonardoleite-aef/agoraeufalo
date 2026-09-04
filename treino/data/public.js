@@ -6,8 +6,9 @@
 window.AEF_STUDENT_PUBLIC = {
   id: "public",
   name: "English Personal Trainer (Acesso Aberto)",
-  badge: "Acesso Aberto",,
-{
+  badge: "Acesso Aberto",
+  tracks: [
+    {
   "id": "eqs-1-1",
   "title": "English QuickStart • Aula 1.1 • Os Pronomes Sujeito",
   "duration": "15:00",
@@ -915,3 +916,5 @@ window.AEF_STUDENT_PUBLIC = {
     }
   ]
 }
+]
+};

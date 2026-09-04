@@ -94,6 +94,24 @@
   <!-- ========================================== -->
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full flex-1 space-y-8">
     
+    <!-- BANNER DINÂMICO: CONTINUAR DE ONDE PAROU NO ADMIN -->
+    <div id="admin-resume-banner" class="hidden p-5 rounded-3xl bg-gradient-to-r from-[#0D1E36] via-[#112240] to-[#0A192F] border border-amber-400/40 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0 border border-amber-400/30">
+          📍
+        </div>
+        <div>
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest block">CONTINUIDADE DE TRABALHO</span>
+          <h3 class="text-base font-black text-white" id="admin-resume-title">Você estava editando: Course Studio</h3>
+          <p class="text-xs text-slate-300 mt-0.5" id="admin-resume-subtitle">Retome diretamente a ferramenta e o módulo de onde parou sem precisar navegar pela árvore.</p>
+        </div>
+      </div>
+      <a id="admin-resume-btn" href="admin-cursos.html" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-md shrink-0 active:scale-95 cursor-pointer">
+        <span>Retomar Trabalho</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <!-- BLOCO 1: PESSOAS -->
@@ -316,7 +334,22 @@
   </footer>
 
   <script>
-    if (window.lucide) window.lucide.createIcons();
+    document.addEventListener("DOMContentLoaded", () => {
+      const banner = document.getElementById("admin-resume-banner");
+      const titleEl = document.getElementById("admin-resume-title");
+      const btnEl = document.getElementById("admin-resume-btn");
+
+      const lastUrl = localStorage.getItem("aef_admin_last_tool_url");
+      const lastName = localStorage.getItem("aef_admin_last_tool_name");
+
+      if (banner && lastUrl && lastUrl !== "admin.html") {
+        banner.classList.remove("hidden");
+        if (titleEl) titleEl.innerText = `Você estava em: ${lastName || 'Ferramenta de Trabalho'}`;
+        if (btnEl) btnEl.href = lastUrl;
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+    });
   </script>
 </body>
 </html>

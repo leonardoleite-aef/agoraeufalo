@@ -732,10 +732,15 @@
       const queryCourse = urlParams.get('curso') || urlParams.get('id') || urlParams.get('aluno');
 
       const savedCourseId = localStorage.getItem('aef_admin_active_course_id');
+      const savedModuleId = localStorage.getItem('aef_admin_active_module_id');
+      const savedLessonId = localStorage.getItem('aef_admin_active_lesson_id');
+
       if (queryCourse && (ALL_COURSES[queryCourse] || ALL_COURSES[`mentoria-${queryCourse}`])) {
         activeCourseId = ALL_COURSES[queryCourse] ? queryCourse : `mentoria-${queryCourse}`;
       } else if (savedCourseId && ALL_COURSES[savedCourseId]) {
         activeCourseId = savedCourseId;
+        if (savedModuleId) activeModuleId = savedModuleId;
+        if (savedLessonId) activeLessonId = savedLessonId;
       } else {
         const keys = Object.keys(ALL_COURSES);
         if (!keys.includes(activeCourseId) && keys.length > 0) {
@@ -919,6 +924,10 @@
     function selectLessonForEdit(lessonId, moduleId) {
       activeLessonId = lessonId;
       activeModuleId = moduleId;
+      try {
+        localStorage.setItem('aef_admin_active_module_id', moduleId);
+        localStorage.setItem('aef_admin_active_lesson_id', lessonId);
+      } catch (e) {}
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 

@@ -34,6 +34,9 @@
   <script src="data/thomas.js?v=20260901_2155"></script>
   <script src="data/andre.js?v=20260901_2155"></script>
   <script src="data/matheus.js?v=20260901_2155"></script>
+  <script src="../assets/js/aef-portal-auth.js"></script>
+  <script src="../assets/js/aef-cloud-sync.js"></script>
+  <script src="../assets/js/aef-learning-tracker.js"></script>
 
   <style>
     body {
@@ -133,10 +136,15 @@
   <header class="relative z-20 w-full max-w-lg mx-auto px-4 pt-2.5 pb-1 flex items-center justify-between gap-2 shrink-0">
     
     <!-- Botão Sair (Voltar ao Portal / Dashboard) -->
-    <a id="btn-exit" href="../portal.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 text-xs font-bold transition backdrop-blur-md border border-white/10 shrink-0" title="Sair para o Portal">
-      <i data-lucide="log-out" class="w-3.5 h-3.5 text-amber-400"></i>
-      <span>Sair</span>
-    </a>
+    <div class="flex items-center gap-1.5 shrink-0">
+      <a id="btn-exit" href="../portal.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 text-xs font-bold transition backdrop-blur-md border border-white/10 shrink-0" title="Sair para o Portal">
+        <i data-lucide="log-out" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Sair</span>
+      </a>
+      <div id="player-sim-badge" class="hidden items-center gap-1 px-2 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-extrabold cursor-pointer" onclick="if(window.aefPortalAuth) window.aefPortalAuth.clearImpersonation();" title="Clique para sair do modo simulação e voltar ao Master">
+        <span>👁️</span> <span id="player-sim-text">Aluno</span> ✕
+      </div>
+    </div>
 
     <!-- Seletor Duplo: [Curso / Categoria] + [Módulo / Aluno / Faixa] -->
     <div class="flex items-center gap-1.5 min-w-0 flex-1 justify-center">
@@ -144,7 +152,7 @@
       <!-- Dropdown 1: Menu de Cursos / Categorias -->
       <div class="flex items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-2.5 py-1 shrink-0 max-w-[145px]">
         <select id="course-select" onchange="window.selectCourse(this.value)" class="bg-transparent text-[11px] font-bold text-amber-300 focus:outline-none cursor-pointer truncate pr-0.5">
-          <option value="ms-legacy" selected class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
+          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
           <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
           <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades</option>
           <option value="vip" class="bg-slate-900 text-slate-100">👑 Mentoria VIP</option>
@@ -330,6 +338,56 @@
   <!-- Audio Element Oculto -->
   <audio id="core-audio" preload="auto" playsinline></audio>
 
+  <!-- Modal de Bloqueio / Paywall para Cursos Restritos (Aluno Free / Sem Acesso) -->
+  <div id="player-lock-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-md bg-[#0F1D33] border-2 border-amber-500/40 rounded-3xl p-6 sm:p-7 shadow-2xl text-center relative animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Botão Fechar Modal -->
+      <button onclick="window.closeLockModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition" title="Fechar">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Ícone Destaque -->
+      <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center mb-4 shadow-lg shadow-amber-500/10">
+        <i data-lucide="lock" class="w-8 h-8"></i>
+      </div>
+
+      <!-- Badge de Status -->
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-mono font-bold uppercase tracking-wider mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+        <span id="lock-modal-badge">CONTEÚDO EXCLUSIVO</span>
+      </div>
+
+      <h3 id="lock-modal-title" class="text-xl font-black text-white font-serif-title mb-2">
+        Treino Exclusivo do Magic Stories Club
+      </h3>
+
+      <p id="lock-modal-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+        Este treino faz parte do acervo fechado dos alunos matriculados. Como <b>Aluno Free</b>, você tem acesso liberado ao <b>English QuickStart</b> e ao laboratório de treino.
+      </p>
+
+      <!-- Botões de Ação -->
+      <div class="space-y-2.5">
+        <a id="lock-modal-cta-primary" href="https://wa.me/5511996160910?text=Ol%C3%A1%20Professor%20Leo!%20Quero%20destravar%20o%20Magic%20Stories%20Club" target="_blank" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 active:scale-95">
+          <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+          <span id="lock-modal-cta-text">Destravar no WhatsApp</span>
+        </a>
+
+        <button onclick="window.switchToFreeAllowedCourse()" class="w-full py-3 px-5 rounded-2xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2">
+          <i data-lucide="headphones" class="w-4 h-4 text-amber-400"></i>
+          <span>Ouvir Treino Grátis (QuickStart)</span>
+        </button>
+      </div>
+
+      <!-- Rodapé Seguro -->
+      <p class="text-[10px] text-slate-500 mt-4 flex items-center justify-center gap-1">
+        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+        <span>Plataforma Oficial Professor Leonardo Leite • AgoraEuFalo</span>
+      </p>
+
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="aef-toast" class="fixed bottom-24 inset-x-0 mx-auto w-max max-w-xs px-4 py-2 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs text-center shadow-2xl z-50 hidden transition-all">
     Notificação
@@ -341,10 +399,11 @@
   <script>
     // ESTADO GLOBAL DO PLAYER
     const state = {
-      courseId: "ms-legacy",
-      activeModuleId: "ms001-grazi",
+      courseId: "",
+      activeModuleId: "",
       activeLessonIndex: 0,
       isPlaying: false,
+      isLocked: false,
       isContinuousPlay: true,
       isLyricsOpen: false,
       showTranslation: false,
@@ -354,66 +413,240 @@
       pendingPlayPromise: null
     };
 
+    // MOTOR DE CONTROLE DE ACESSO & PERFIS DO PLAYER (TIER GUARD)
+    function getPlayerAccessProfile() {
+      let imp = null;
+      if (window.aefPortalAuth && typeof window.aefPortalAuth.getImpersonation === 'function') {
+        imp = window.aefPortalAuth.getImpersonation();
+      }
+      if (!imp) {
+        try {
+          const raw = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
+          imp = raw ? JSON.parse(raw) : null;
+        } catch(e) {}
+      }
+
+      // 1. Modo Simulação Ativo (Ver como Aluno / God-Mode Impersonation)
+      if (imp && imp.active) {
+        return {
+          isSimulating: true,
+          isAdmin: false,
+          tier: imp.tier || 'free',
+          studentId: imp.studentId || null,
+          studentName: imp.studentName || (imp.tier === 'free' ? 'Aluno Free' : 'Aluno Simulado')
+        };
+      }
+
+      // 2. Master Admin Real (Professor Leo)
+      const isRealAdmin = window.aefPortalAuth && typeof window.aefPortalAuth.isRealAdmin === 'function'
+        ? window.aefPortalAuth.isRealAdmin()
+        : (localStorage.getItem('aef_user_role') === 'admin');
+
+      if (isRealAdmin) {
+        return {
+          isSimulating: false,
+          isAdmin: true,
+          tier: 'admin_master',
+          studentId: null,
+          studentName: 'Professor Leo (Master)'
+        };
+      }
+
+      // 3. Usuário Real Autenticado ou Visitante
+      const realTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function')
+        ? window.aefPortalAuth.getActiveTier()
+        : (localStorage.getItem('aef_user_tier') || 'free');
+
+      return {
+        isSimulating: false,
+        isAdmin: false,
+        tier: realTier,
+        studentId: localStorage.getItem('aef_student_id') || null,
+        studentName: localStorage.getItem('aef_user_name') || 'Aluno'
+      };
+    }
+
+    function isCourseAllowedForUser(courseId, profile) {
+      if (!courseId) return true;
+      const cId = courseId.toLowerCase();
+
+      // Master Admin Leo tem passe livre irrestrito
+      if (profile.isAdmin) return true;
+
+      const tier = profile.tier || 'free';
+
+      if (tier === 'free') {
+        // Aluno Free acessa apenas QuickStart (Degustação), Novidades e Minhas Coisas
+        return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom';
+      }
+
+      if (tier === 'club_monthly' || tier === 'club_annual' || tier === 'course_member' || tier === 'pro' || tier === 'lifetime') {
+        // Membro Club tem acesso total ao Magic Stories, QuickStart e Novidades; VIP é restrito
+        return cId !== 'vip';
+      }
+
+      if (tier === 'vip' || tier === 'vip_mentorship') {
+        return true;
+      }
+
+      return false;
+    }
+
+    window.showLockedPaywall = (courseId = null) => {
+      const modal = document.getElementById('player-lock-modal');
+      if (!modal) return;
+
+      const targetCourse = courseId || state.courseId;
+      const badgeEl = document.getElementById('lock-modal-badge');
+      const titleEl = document.getElementById('lock-modal-title');
+      const descEl = document.getElementById('lock-modal-desc');
+      const ctaPrimary = document.getElementById('lock-modal-cta-primary');
+      const ctaText = document.getElementById('lock-modal-cta-text');
+
+      if (targetCourse === 'vip') {
+        if (badgeEl) badgeEl.innerText = 'PRESCRIÇÃO VIP INDIVIDUAL';
+        if (titleEl) titleEl.innerText = 'Mentoria VIP Exclusiva 1 a 1';
+        if (descEl) descEl.innerHTML = 'Estes treinos são prescrições personalizadas gravadas individualmente pelo Professor Leo para mentorados VIP. Entre em contato para conhecer as vagas da mentoria individual.';
+        if (ctaPrimary) ctaPrimary.href = 'https://wa.me/5511996160910?text=Ol%C3%A1%20Professor%20Leo!%20Gostaria%20de%20saber%20sobre%20as%20vagas%20da%20Mentoria%20VIP';
+        if (ctaText) ctaText.innerText = 'Saber Mais Sobre a Mentoria VIP';
+      } else {
+        if (badgeEl) badgeEl.innerText = 'EXCLUSIVO MAGIC STORIES CLUB';
+        if (titleEl) titleEl.innerText = 'Treino Exclusivo Magic Stories';
+        if (descEl) descEl.innerHTML = 'Este áudio faz parte do acervo fechado dos alunos do <b>Magic Stories Club</b>. No plano Free, você tem acesso liberado ao <b>English QuickStart</b> e ao laboratório de treino!';
+        if (ctaPrimary) ctaPrimary.href = 'https://wa.me/5511996160910?text=Ol%C3%A1%20Professor%20Leo!%20Quero%20destravar%20o%20Magic%20Stories%20Club';
+        if (ctaText) ctaText.innerText = 'Destravar Magic Stories no WhatsApp';
+      }
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    };
+
+    window.closeLockModal = () => {
+      const modal = document.getElementById('player-lock-modal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.switchToFreeAllowedCourse = () => {
+      window.closeLockModal();
+      window.selectCourse('english-quickstart');
+    };
+
     // INICIALIZAÇÃO
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      parseUrlParams();
+
+      const profile = getPlayerAccessProfile();
+
+      // Checa se está em modo simulação (Ver como Aluno)
+      if (profile.isSimulating) {
+        const simBadge = document.getElementById('player-sim-badge');
+        const simText = document.getElementById('player-sim-text');
+        if (simBadge) simBadge.classList.remove('hidden');
+        if (simText) simText.innerText = profile.studentName || profile.tier;
+      }
+
+      parseUrlParams(profile);
       populateCourseSelect();
       populateModuleSelect();
       loadCurrentContent(state.activeLessonIndex);
       setupAudioEvents();
     });
 
-    function parseUrlParams() {
+    function parseUrlParams(profile) {
+      if (!profile) profile = getPlayerAccessProfile();
       const params = new URLSearchParams(window.location.search);
-      const curso = params.get('curso') || params.get('course') || params.get('category');
-      const mod = params.get('modulo') || params.get('module') || params.get('aluno');
+      let curso = params.get('curso') || params.get('course') || params.get('category');
+      let mod = params.get('modulo') || params.get('module') || params.get('aluno');
       const aula = params.get('aula') || params.get('lesson') || params.get('track') || params.get('trackId');
 
-      if (curso) {
-        state.courseId = curso === 'magic-stories' ? 'ms-legacy' : curso;
+      if (curso === 'magic-stories') curso = 'ms-legacy';
+      if (curso === 'eqs') curso = 'english-quickstart';
+
+      if (!curso && mod && ['estevao', 'thomas', 'andre', 'matheus'].includes(mod.toLowerCase())) {
+        curso = 'vip';
       }
+
+      // Se nenhum curso foi passado na URL, define o curso padrão permitido para o perfil
+      if (!curso) {
+        if (profile.tier === 'free') {
+          curso = 'english-quickstart';
+        } else if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
+          curso = 'vip';
+          if (!mod) mod = profile.studentId || 'andre';
+        } else {
+          curso = 'ms-legacy';
+        }
+      }
+
+      state.courseId = curso;
+
+      // Verificação de permissão de acesso
+      if (!isCourseAllowedForUser(curso, profile)) {
+        state.isLocked = true;
+        state.activeModuleId = mod || '';
+        return;
+      }
+
+      state.isLocked = false;
 
       if (mod) {
         state.activeModuleId = mod;
       } else if (aula) {
         // Se foi passado trackId como ms_ms005 ou ms005-sunday-brunch ou ms005-lr
         const cleanTrack = aula.toLowerCase().replace(/^ms_/, '');
-        
-        const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-        const foundMsMod = msModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
-        if (foundMsMod) {
-          state.courseId = 'ms-legacy';
-          state.activeModuleId = foundMsMod.id;
-        } else {
+        if (curso === 'english-quickstart') {
           const eqsModules = window.AEF_QUICKSTART?.modules || [];
           const foundEqsMod = eqsModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
           if (foundEqsMod) {
-            state.courseId = 'english-quickstart';
             state.activeModuleId = foundEqsMod.id;
           }
+        } else {
+          const msModules = window.AEF_MAGIC_STORIES?.modules || [];
+          const foundMsMod = msModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
+          if (foundMsMod) {
+            state.activeModuleId = foundMsMod.id;
+          }
         }
+      }
+
+      // Garante módulo válido para o curso atual
+      const allMods = getAllModulesForCurrentCourse();
+      if (!allMods.some(m => m.id === state.activeModuleId)) {
+        state.activeModuleId = allMods[0]?.id || "";
       }
 
       const tracks = getCurrentTracklist();
       if (aula && tracks.length > 0) {
         const foundIdx = tracks.findIndex(t => t.id === aula || aula.includes(t.id) || t.id.includes(aula));
         if (foundIdx !== -1) state.activeLessonIndex = foundIdx;
+        else state.activeLessonIndex = 0;
+      } else {
+        state.activeLessonIndex = 0;
       }
     }
 
     function getAllModulesForCurrentCourse() {
+      const profile = getPlayerAccessProfile();
+      if (!isCourseAllowedForUser(state.courseId, profile)) {
+        return [];
+      }
+
       if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
         return window.AEF_MAGIC_STORIES?.modules || [];
       } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
         return window.AEF_QUICKSTART?.modules || [];
       } else if (state.courseId === 'vip') {
-        return [
+        const allVips = [
           { id: 'estevao', title: 'Estêvão (Executivo)', shortTitle: 'Estêvão', tracks: window.AEF_STUDENT_ESTEVAO?.tracks || [] },
           { id: 'thomas', title: 'Thomas (Tech Lead)', shortTitle: 'Thomas', tracks: window.AEF_STUDENT_THOMAS?.tracks || [] },
           { id: 'andre', title: 'André (Entrevistas)', shortTitle: 'André', tracks: window.AEF_STUDENT_ANDRE?.tracks || [] },
           { id: 'matheus', title: 'Matheus (Fluência)', shortTitle: 'Matheus', tracks: window.AEF_STUDENT_MATHEUS?.tracks || [] }
         ];
+        if (profile.tier === 'vip' && profile.studentId) {
+          const onlyThisStudent = allVips.filter(v => v.id === profile.studentId);
+          return onlyThisStudent.length > 0 ? onlyThisStudent : allVips;
+        }
+        return allVips;
       } else if (state.courseId === 'public') {
         return [
           { id: 'public-demo', title: 'Novidades Free', shortTitle: 'Novidades', tracks: window.AEF_STUDENT_PUBLIC?.tracks || [] }
@@ -429,16 +662,79 @@
 
     function populateCourseSelect() {
       const select = document.getElementById('course-select');
-      if (select) select.value = state.courseId;
+      if (!select) return;
+
+      const profile = getPlayerAccessProfile();
+
+      if (profile.tier === 'free') {
+        select.innerHTML = `
+          <option value="english-quickstart" class="bg-slate-900 text-amber-300 font-bold">⚡ QuickStart (Liberado)</option>
+          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades Free</option>
+          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
+          <option value="ms-legacy" class="bg-slate-900 text-amber-500/80">🔒 Magic Stories (Club)</option>
+          <option value="vip" class="bg-slate-900 text-amber-500/80">🔒 Mentoria VIP</option>
+        `;
+        if (!isCourseAllowedForUser(state.courseId, profile)) {
+          state.courseId = 'english-quickstart';
+        }
+      } else if (profile.tier === 'club_monthly' || profile.tier === 'club_annual' || profile.tier === 'course_member' || profile.tier === 'pro' || profile.tier === 'lifetime') {
+        select.innerHTML = `
+          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
+          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
+          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades</option>
+          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
+          <option value="vip" class="bg-slate-900 text-amber-500/80">🔒 Mentoria VIP</option>
+        `;
+        if (!isCourseAllowedForUser(state.courseId, profile)) {
+          state.courseId = 'ms-legacy';
+        }
+      } else if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
+        const sId = profile.studentId || 'andre';
+        const sName = profile.studentName || sId;
+        select.innerHTML = `
+          <option value="vip" class="bg-slate-900 text-amber-300 font-bold">👑 Minha Mentoria (${sName})</option>
+          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
+          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
+          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
+        `;
+      } else {
+        // Admin Master Leo
+        select.innerHTML = `
+          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
+          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
+          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades</option>
+          <option value="vip" class="bg-slate-900 text-slate-100">👑 Mentoria VIP</option>
+          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
+        `;
+      }
+
+      select.value = state.courseId;
     }
 
     window.selectCourse = (courseId) => {
+      const profile = getPlayerAccessProfile();
+      
+      if (!isCourseAllowedForUser(courseId, profile)) {
+        if (state.isPlaying) {
+          state.audio.pause();
+          state.isPlaying = false;
+          updatePlayButtonUI();
+        }
+        state.isLocked = true;
+        showLockedPaywall(courseId);
+        const select = document.getElementById('course-select');
+        if (select) select.value = state.courseId;
+        return;
+      }
+
+      state.isLocked = false;
       state.courseId = courseId;
       state.activeLessonIndex = 0;
       
       const allMods = getAllModulesForCurrentCourse();
       state.activeModuleId = allMods[0]?.id || "";
 
+      populateCourseSelect();
       populateModuleSelect();
       loadCurrentContent(0);
     };
@@ -480,6 +776,33 @@
     }
 
     function loadCurrentContent(lessonIdx) {
+      const profile = getPlayerAccessProfile();
+      if (!isCourseAllowedForUser(state.courseId, profile)) {
+        state.isLocked = true;
+        state.audio.pause();
+        state.audio.src = '';
+        state.isPlaying = false;
+        updatePlayButtonUI();
+
+        const titleEl = document.getElementById('lesson-title');
+        if (titleEl) titleEl.innerText = '🔒 Conteúdo Bloqueado';
+
+        const subheadEl = document.getElementById('module-subhead');
+        if (subheadEl) subheadEl.innerText = 'Exclusivo para membros Club / VIP';
+
+        const badgeEl = document.getElementById('track-badge-text');
+        if (badgeEl) badgeEl.innerText = 'BLOQUEADO';
+
+        const coverImg = document.getElementById('track-cover-img');
+        if (coverImg) coverImg.src = '../assets/images/logo-fundo-escuro.png';
+
+        renderLyrics();
+        renderPlaylistDrawer();
+        showLockedPaywall(state.courseId);
+        return;
+      }
+
+      state.isLocked = false;
       state.activeLessonIndex = lessonIdx;
       const track = getCurrentActiveTrack();
       const moduleTitle = getCurrentModuleTitle();
@@ -518,13 +841,43 @@
       renderPlaylistDrawer();
       updateMediaSession();
       lucide.createIcons();
+
+      // 4. Salva no aefLearningTracker a atividade do aluno
+      if (window.aefLearningTracker && track) {
+        window.aefLearningTracker.saveLastActivity({
+          courseId: state.courseId,
+          courseTitle: state.courseId === 'ms-legacy' ? 'Magic Stories Legacy' : (state.courseId === 'english-quickstart' ? 'English QuickStart' : moduleTitle),
+          moduleId: state.activeModuleId,
+          moduleTitle: moduleTitle,
+          lessonId: track.id,
+          lessonTitle: track.title,
+          lessonDuration: track.duration || '02:00',
+          thumbnailUrl: track.coverImage || 'assets/images/cover-default-aef.jpg',
+          source: 'player'
+        });
+      }
     }
 
     function renderLyrics() {
       const container = document.getElementById('lyrics-scroll-container');
-      const track = getCurrentActiveTrack();
       if (!container) return;
 
+      if (state.isLocked) {
+        container.innerHTML = `
+          <div class="text-center text-slate-300 py-12 px-4 space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center">
+              <i data-lucide="lock" class="w-6 h-6"></i>
+            </div>
+            <p class="font-bold text-sm text-white">Transcrição Bloqueada</p>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">Este treinamento é exclusivo para membros do Magic Stories Club ou Mentoria VIP.</p>
+            <button onclick="window.switchToFreeAllowedCourse()" class="mt-2 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Ouvir QuickStart Grátis</button>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      const track = getCurrentActiveTrack();
       const sentences = track?.sentences || [];
       if (sentences.length === 0) {
         container.innerHTML = `
@@ -574,6 +927,12 @@
     };
 
     window.seekToSentence = (idx) => {
+      const profile = getPlayerAccessProfile();
+      if (state.isLocked || !isCourseAllowedForUser(state.courseId, profile)) {
+        showLockedPaywall(state.courseId);
+        return;
+      }
+
       const track = getCurrentActiveTrack();
       const sentence = track?.sentences?.[idx];
       if (!sentence) return;
@@ -615,6 +974,15 @@
 
     // CONTROLES DE ÁUDIO & PLAY/PAUSE IMEDIATO
     window.playAudio = async () => {
+      const profile = getPlayerAccessProfile();
+      if (state.isLocked || !isCourseAllowedForUser(state.courseId, profile)) {
+        state.isLocked = true;
+        state.isPlaying = false;
+        updatePlayButtonUI();
+        showLockedPaywall(state.courseId);
+        return;
+      }
+
       if (state.pendingPlayPromise !== null) {
         try { await state.pendingPlayPromise; } catch (_e) {}
         state.pendingPlayPromise = null;
@@ -691,6 +1059,12 @@
     };
 
     window.playNextLesson = () => {
+      const profile = getPlayerAccessProfile();
+      if (state.isLocked || !isCourseAllowedForUser(state.courseId, profile)) {
+        showLockedPaywall(state.courseId);
+        return;
+      }
+
       const tracks = getCurrentTracklist();
       if (state.activeLessonIndex < tracks.length - 1) {
         loadCurrentContent(state.activeLessonIndex + 1);
@@ -714,6 +1088,12 @@
     };
 
     window.playPrevLesson = () => {
+      const profile = getPlayerAccessProfile();
+      if (state.isLocked || !isCourseAllowedForUser(state.courseId, profile)) {
+        showLockedPaywall(state.courseId);
+        return;
+      }
+
       if (state.activeLessonIndex > 0) {
         loadCurrentContent(state.activeLessonIndex - 1);
         window.playAudio();
@@ -781,6 +1161,18 @@
         seekBar.style.background = `linear-gradient(to right, #F59E0B 0%, #F59E0B ${pct}%, rgba(255,255,255,0.15) ${pct}%, rgba(255,255,255,0.15) 100%)`;
       }
 
+      // Rastreamento Contínuo de Tempo de Escuta (Listening Time)
+      if (state.isPlaying && window.aefLearningTracker) {
+        const nowMs = Date.now();
+        if (!state._lastListeningTrackMs) state._lastListeningTrackMs = nowMs;
+        const deltaSec = (nowMs - state._lastListeningTrackMs) / 1000;
+        if (deltaSec >= 5) {
+          const studentId = state.courseId === 'vip' ? (state.activeModuleId || 'public') : 'public';
+          window.aefLearningTracker.recordListeningTime(studentId, Math.round(deltaSec));
+          state._lastListeningTrackMs = nowMs;
+        }
+      }
+
       // Sincroniza Linha Ativa da Letra
       const track = getCurrentActiveTrack();
       const sentences = track?.sentences || [];
@@ -834,11 +1226,31 @@
     };
 
     function renderPlaylistDrawer() {
-      const tracks = getCurrentTracklist();
-      const moduleTitle = getCurrentModuleTitle();
       const container = document.getElementById('playlist-items-container');
       const badge = document.getElementById('playlist-count-badge');
       const sub = document.getElementById('drawer-module-subtitle');
+
+      if (state.isLocked) {
+        if (sub) sub.innerText = 'Conteúdo Bloqueado';
+        if (badge) badge.innerText = '0';
+        if (container) {
+          container.innerHTML = `
+            <div class="text-center text-slate-300 py-8 px-4 space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center">
+                <i data-lucide="lock" class="w-6 h-6"></i>
+              </div>
+              <p class="font-bold text-xs text-white">Faixas restritas para o seu plano</p>
+              <p class="text-[11px] text-slate-400 max-w-xs mx-auto">Faça upgrade da sua conta ou troque para o English QuickStart gratuito.</p>
+              <button onclick="window.switchToFreeAllowedCourse()" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Ir para o QuickStart</button>
+            </div>
+          `;
+          lucide.createIcons();
+        }
+        return;
+      }
+
+      const tracks = getCurrentTracklist();
+      const moduleTitle = getCurrentModuleTitle();
 
       if (sub) sub.innerText = moduleTitle;
       if (badge) badge.innerText = tracks.length;
@@ -873,6 +1285,11 @@
     }
 
     window.selectLessonFromDrawer = (idx) => {
+      const profile = getPlayerAccessProfile();
+      if (state.isLocked || !isCourseAllowedForUser(state.courseId, profile)) {
+        showLockedPaywall(state.courseId);
+        return;
+      }
       loadCurrentContent(idx);
       window.togglePlaylistDrawer();
       window.togglePlayPause();

@@ -28,7 +28,29 @@
   class AEFAdminNav {
     constructor() {
       this.currentPath = window.location.pathname.split('/').pop() || 'admin-alunos.html';
+      this.saveAdminLocation();
       this.init();
+    }
+
+    saveAdminLocation() {
+      try {
+        if (this.currentPath !== 'admin.html') {
+          const toolNames = {
+            'admin-alunos.html': 'Alunos & CRM',
+            'admin-cursos.html': 'Course Studio',
+            'admin-ofertas.html': 'Ofertas & Trials',
+            'admin-pdf-factory.html': 'PDF Factory',
+            'tts-studio.html': 'TTS Voice Studio',
+            'admin-publico.html': 'Leads & Sugestões',
+            'blog-panel.html': 'Blog CMS',
+            'seo-manager.html': 'SEO Manager'
+          };
+          const name = toolNames[this.currentPath] || this.currentPath;
+          localStorage.setItem('aef_admin_last_tool_url', this.currentPath);
+          localStorage.setItem('aef_admin_last_tool_name', name);
+          localStorage.setItem('aef_admin_last_tool_time', Date.now());
+        }
+      } catch (e) {}
     }
 
     init() {
@@ -85,6 +107,19 @@
               <a href="admin.html" class="px-2 py-0.5 rounded-full ${isDark ? 'bg-amber-500 text-slate-950' : 'bg-amber-100 text-amber-900 border border-amber-300'} font-extrabold text-[9px] sm:text-[10px] uppercase tracking-wider hover:opacity-90 transition">
                 ADMIN HUB
               </a>
+              ${(() => {
+                const lastUrl = localStorage.getItem('aef_admin_last_tool_url');
+                const lastName = localStorage.getItem('aef_admin_last_tool_name');
+                if (this.currentPath === 'admin.html' && lastUrl && lastUrl !== 'admin.html') {
+                  return `
+                    <a href="${lastUrl}" class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold hover:bg-emerald-500 hover:text-slate-950 transition" title="Continuar de onde parou no Admin">
+                      <span>↩ Retomar:</span>
+                      <span class="font-extrabold">${lastName || 'Última Ferramenta'}</span>
+                    </a>
+                  `;
+                }
+                return '';
+              })()}
             </div>
 
             <!-- Center: Navigation Links Across All 7 Tools -->
@@ -120,9 +155,28 @@
 
             <!-- Right: View as Student & Master Profile Actions -->
             <div class="flex items-center gap-2 shrink-0">
-              <!-- Switch to Student View -->
-              <a href="portal.html" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Ver como Aluno">
-                <span>👁️</span> <span class="hidden sm:inline">Portal do Aluno ↗</span>
+              
+              <!-- Seletor God-Mode: Ver como Aluno -->
+              <div class="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-xl ${isDark ? 'bg-white/5 border border-white/10' : 'bg-slate-100 border border-slate-200'} text-xs">
+                <span class="text-[10px] font-bold ${isDark ? 'text-amber-400' : 'text-amber-800'} uppercase tracking-wider flex items-center gap-1">
+                  <span>👁️</span> <span class="hidden xl:inline">Ver como:</span>
+                </span>
+                <select id="aef-admin-impersonate-select" onchange="AEFAdminNav.handleImpersonate(this.value)" class="bg-transparent font-bold text-[11px] ${isDark ? 'text-slate-200' : 'text-slate-800'} focus:outline-none cursor-pointer">
+                  <option value="admin_master" class="bg-slate-900 text-amber-300">👑 Leo (God Mode)</option>
+                  <option value="free" class="bg-slate-900 text-slate-100">🌱 Aluno Free</option>
+                  <option value="club_annual" class="bg-slate-900 text-slate-100">🎓 Membro Club</option>
+                  <optgroup label="👑 Mentorados VIP" class="bg-slate-900 text-amber-400">
+                    <option value="vip:andre" class="bg-slate-900 text-slate-100">André (VIP)</option>
+                    <option value="vip:estevao" class="bg-slate-900 text-slate-100">Estêvão (VIP)</option>
+                    <option value="vip:thomas" class="bg-slate-900 text-slate-100">Thomas (VIP)</option>
+                    <option value="vip:matheus" class="bg-slate-900 text-slate-100">Matheus (VIP)</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <!-- Switch to Student View Button -->
+              <a href="portal.html" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Abrir Portal do Aluno">
+                <span>Portal ↗</span>
               </a>
 
               <!-- Master Profile Avatar -->
@@ -130,7 +184,7 @@
                 <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 flex items-center justify-center font-black text-xs shadow-sm">
                   PL
                 </div>
-                <span class="hidden xl:inline text-xs font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}">Prof. Leo</span>
+                <span class="hidden 2xl:inline text-xs font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}">Prof. Leo</span>
               </div>
             </div>
 
@@ -151,8 +205,66 @@
           </div>
         </header>
       `;
+
+      // Sincroniza valor atual do impersonate
+      try {
+        const rawImp = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
+        if (rawImp) {
+          const imp = JSON.parse(rawImp);
+          const sel = document.getElementById('aef-admin-impersonate-select');
+          if (sel) {
+            if (imp.tier === 'vip' && imp.studentId) {
+              sel.value = `vip:${imp.studentId}`;
+            } else {
+              sel.value = imp.tier || 'free';
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    static handleImpersonate(val) {
+      if (!window.aefPortalAuth) {
+        // Fallback se o módulo auth ainda não carregou
+        if (val === 'admin_master') {
+          sessionStorage.removeItem('aef_impersonate_state');
+          try { localStorage.removeItem('aef_impersonate_state'); } catch(e) {}
+        } else if (val.startsWith('vip:')) {
+          const sId = val.replace('vip:', '');
+          const stateObj = {
+            tier: 'vip',
+            studentId: sId,
+            studentName: sId.charAt(0).toUpperCase() + sId.slice(1),
+            active: true
+          };
+          sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
+          try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
+        } else {
+          const stateObj = {
+            tier: val,
+            studentId: null,
+            studentName: val === 'free' ? 'Aluno Free' : 'Membro Club',
+            active: true
+          };
+          sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
+          try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
+        }
+        window.location.href = 'portal.html';
+        return;
+      }
+
+      if (val === 'admin_master') {
+        window.aefPortalAuth.clearImpersonation();
+      } else if (val.startsWith('vip:')) {
+        const sId = val.replace('vip:', '');
+        const names = { andre: 'André', estevao: 'Estêvão', thomas: 'Thomas', matheus: 'Matheus' };
+        window.aefPortalAuth.setImpersonation('vip', sId, names[sId] || sId);
+      } else {
+        window.aefPortalAuth.setImpersonation(val, null, val === 'free' ? 'Aluno Free' : 'Membro Club');
+      }
     }
   }
 
+  window.AEFAdminNav = AEFAdminNav;
   window.aefAdminNav = new AEFAdminNav();
 })();

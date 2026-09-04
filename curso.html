@@ -48,6 +48,7 @@
   <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
   <script src="assets/js/aef-cloud-sync.js?v=20260902_1955"></script>
   <script src="assets/js/aef-portal-auth.js?v=20260902_1955"></script>
+  <script src="assets/js/aef-learning-tracker.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -369,10 +370,17 @@
         if (nextTitle) nextTitle.innerText = "Espaço Exclusivo com o Leo";
       }
 
+      const courseProgress = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(COURSE_DATA.id) : null;
+      const lastLessonId = courseProgress?.lastLessonId;
       const firstLesson = COURSE_DATA.modules?.[0]?.lessons?.[0];
+      const targetLessonId = lastLessonId || firstLesson?.id;
+
       const continueBtn = document.getElementById("btnContinueWatching");
-      if (continueBtn && firstLesson) {
-        continueBtn.href = `sala-de-aula.html?curso=${COURSE_DATA.id}&aula=${firstLesson.id}`;
+      if (continueBtn && targetLessonId) {
+        continueBtn.href = `sala-de-aula.html?curso=${COURSE_DATA.id}&aula=${targetLessonId}`;
+        if (lastLessonId) {
+          continueBtn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i><span>Continuar de Onde Parou</span>`;
+        }
       }
 
       const playerBtn = document.getElementById("btnPraticarPlayer");
@@ -380,8 +388,8 @@
         const studentId = COURSE_DATA.studentId || (COURSE_DATA.id.startsWith("mentoria-") ? COURSE_DATA.id.replace("mentoria-", "") : "");
         if (studentId) {
           playerBtn.href = `treino/player.html?aluno=${studentId}`;
-        } else if (firstLesson) {
-          playerBtn.href = `treino/player.html?curso=${COURSE_DATA.id}&aula=${firstLesson.id}&activity=listen_read`;
+        } else if (targetLessonId) {
+          playerBtn.href = `treino/player.html?curso=${COURSE_DATA.id}&aula=${targetLessonId}&activity=listen_read`;
         }
       }
 
@@ -449,6 +457,7 @@
 
       let totalLessons = 0;
       let totalCompleted = 0;
+      const courseProgress = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(COURSE_DATA.id) : null;
 
       container.innerHTML = visibleModules.map((mod, mIdx) => {
         const modLessons = (mod.lessons || []).filter(l => isAdminView || l.published !== false);
@@ -462,8 +471,11 @@
           }
         });
 
+        const isModComplete = modLessons.length > 0 && modCompleted === modLessons.length;
         const modPercent = modLessons.length > 0 ? Math.round((modCompleted / modLessons.length) * 100) : 0;
-        const isModComplete = modPercent === 100 && modLessons.length > 0;
+        const isTargetModule = (courseProgress?.lastModuleId && courseProgress.lastModuleId === mod.id) || 
+                               (courseProgress?.lastLessonId && modLessons.some(l => l.id === courseProgress.lastLessonId)) ||
+                               (!courseProgress?.lastLessonId && mIdx === 0);
 
         return `
           <div class="border border-[#EAE5DC] rounded-2xl bg-white overflow-hidden shadow-xs">
@@ -484,17 +496,18 @@
                 </div>
               </div>
 
-              <i data-lucide="chevron-down" id="chevron-${mod.id}" class="w-4 h-4 text-[#7A7369] transition duration-200"></i>
+              <i data-lucide="chevron-down" id="chevron-${mod.id}" class="w-4 h-4 text-[#7A7369] transition duration-200 ${isTargetModule ? 'rotate-180' : ''}"></i>
 
             </div>
 
-            <!-- Module Lessons List (Accordion Body - Inicia Fechado) -->
-            <div id="lessons-list-${mod.id}" class="hidden p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
+            <!-- Module Lessons List (Accordion Body) -->
+            <div id="lessons-list-${mod.id}" class="${isTargetModule ? '' : 'hidden'} p-2 sm:p-3 bg-[#FAF8F5] border-t border-[#EAE5DC] space-y-2">
               ${modLessons.length === 0 ? '<p class="text-xs text-slate-500 p-3 italic">Nenhuma aula pública disponível neste módulo.</p>' : modLessons.map((les) => {
                 const isCompleted = completedLessonIds.includes(les.id);
+                const isCurrentLesson = courseProgress?.lastLessonId === les.id;
                 const thumbSrc = les.thumbnailUrl || les.thumbUrl || 'assets/images/leonardo-leite.png';
                 return `
-                  <a href="sala-de-aula.html?curso=${COURSE_DATA.id}&aula=${les.id}" class="p-3 rounded-xl bg-white hover:border-[#C68A36] border border-[#EAE5DC] transition flex items-center justify-between gap-3 group">
+                  <a href="sala-de-aula.html?curso=${COURSE_DATA.id}&aula=${les.id}" class="p-3 rounded-xl bg-white hover:border-[#C68A36] ${isCurrentLesson ? 'border-2 border-[#C68A36] bg-[#FFFDF9]' : 'border border-[#EAE5DC]'} transition flex items-center justify-between gap-3 group">
                     <div class="flex items-center gap-3 min-w-0">
                       <div class="relative w-20 h-12 sm:w-24 sm:h-14 rounded-lg bg-[#0D1E36] overflow-hidden shrink-0 flex items-center justify-center border border-[#EAE5DC] shadow-2xs">
                         <img src="${thumbSrc}" alt="${les.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
@@ -503,7 +516,10 @@
                         </span>
                       </div>
                       <div class="min-w-0">
-                        <h4 class="font-bold text-xs text-[#0A192F] truncate group-hover:text-[#C68A36] transition">${les.title}</h4>
+                        <div class="flex items-center gap-1.5">
+                          <h4 class="font-bold text-xs text-[#0A192F] truncate group-hover:text-[#C68A36] transition">${les.title}</h4>
+                          ${isCurrentLesson ? '<span class="px-1.5 py-0.2 rounded bg-amber-100 text-[#C68A36] text-[8px] font-bold uppercase">Última Vista</span>' : ''}
+                        </div>
                         <p class="text-[10px] text-[#7A7369]">${les.duration} • Prof. Leonardo Leite</p>
                       </div>
                     </div>

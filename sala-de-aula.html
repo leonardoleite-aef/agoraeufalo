@@ -40,6 +40,7 @@
   <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
   <script src="assets/js/aef-cloud-sync.js?v=20260902_1955"></script>
   <script src="assets/js/aef-portal-auth.js?v=20260902_1955"></script>
+  <script src="assets/js/aef-learning-tracker.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -530,10 +531,22 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno") || "ms-legacy";
+      let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno");
+      let targetModuleId = urlParams.get("modulo");
+      let targetLessonId = urlParams.get("aula");
+
+      // Consulta a última atividade salva caso a página seja aberta sem parâmetros
+      const lastActivity = window.aefLearningTracker ? window.aefLearningTracker.getGlobalLastActivity() : null;
+
+      if (!rawParam && lastActivity && lastActivity.courseId) {
+        rawParam = lastActivity.courseId;
+        if (!targetLessonId) targetLessonId = lastActivity.lessonId;
+        if (!targetModuleId) targetModuleId = lastActivity.moduleId;
+      } else if (!rawParam) {
+        rawParam = "ms-legacy";
+      }
+
       let courseId = rawParam;
-      const targetModuleId = urlParams.get("modulo");
-      const targetLessonId = urlParams.get("aula");
 
       // 1. Renderização imediata da base local para zero atraso visual
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
@@ -544,6 +557,17 @@
         const menteeSlug = urlParams.get("aluno");
         if (baseCourses[`mentoria-${menteeSlug}`]) {
           courseId = `mentoria-${menteeSlug}`;
+        }
+      }
+
+      // Se passou o curso mas não especificou a aula, busca a última aula assistida deste curso específico
+      if (!targetLessonId && window.aefLearningTracker) {
+        const courseProg = window.aefLearningTracker.getCourseProgress(courseId);
+        if (courseProg && courseProg.lastLessonId) {
+          targetLessonId = courseProg.lastLessonId;
+          if (!targetModuleId && courseProg.lastModuleId) {
+            targetModuleId = courseProg.lastModuleId;
+          }
         }
       }
 
@@ -823,6 +847,30 @@
 
       activeLesson = found;
 
+      // Salva no aefLearningTracker para persistência e continuidade
+      if (window.aefLearningTracker && activeCourse && activeModule) {
+        window.aefLearningTracker.saveLastActivity({
+          courseId: activeCourse.id,
+          courseTitle: activeCourse.title,
+          moduleId: activeModule.id,
+          moduleTitle: activeModule.shortTitle || activeModule.title,
+          lessonId: found.id,
+          lessonTitle: found.title,
+          lessonDuration: found.duration || "05:00",
+          thumbnailUrl: found.thumbnailUrl || found.artworkUrl || activeCourse.coverImageUrl || "assets/images/cover-default-aef.jpg",
+          source: "classroom"
+        });
+
+        // Atualiza URL sem recarregar para manter link compartilhável
+        try {
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set("curso", activeCourse.id);
+          newUrl.searchParams.set("modulo", activeModule.id);
+          newUrl.searchParams.set("aula", found.id);
+          window.history.replaceState({}, '', newUrl);
+        } catch (e) {}
+      }
+
       const topBreadcrumbCourse = document.getElementById("topBreadcrumbCourse");
       const topBreadcrumbModule = document.getElementById("topBreadcrumbModule");
       const topBreadcrumbLesson = document.getElementById("topBreadcrumbLesson");
@@ -1049,6 +1097,11 @@
         completedLessonIds.push(id);
       }
       localStorage.setItem("aef_completed_lessons", JSON.stringify(completedLessonIds));
+      
+      if (window.aefLearningTracker && activeCourse) {
+        window.aefLearningTracker.toggleLessonCompleted(activeCourse.id, id);
+      }
+
       selectLesson(id);
       updateCourseProgress();
     }
