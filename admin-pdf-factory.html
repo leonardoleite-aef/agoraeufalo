@@ -52,11 +52,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
   <!-- Core App Scripts -->
-  <script src="assets/js/aef-courses-registry.js?v=20260904_1424"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260904_1424"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260904_1424"></script>
-  <script src="assets/js/aef-pdf-factory-engine.js?v=20260904_1424"></script>
-  <script src="assets/js/aef-admin-nav.js?v=20260904_1424"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260904_1445"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260904_1445"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260904_1445"></script>
+  <script src="assets/js/aef-pdf-factory-engine.js?v=20260904_1445"></script>
+  <script src="assets/js/aef-admin-nav.js?v=20260904_1445"></script>
 
   <style>
     .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -1769,7 +1769,20 @@ Was e were são o sentimento da frase!" class="w-full bg-[#0A101F] border border
       const iframe = document.getElementById("pdfCanvasIframe");
       if (!iframe) return;
       const html = window.AEFPdfFactoryEngine.generateCompleteHtml(false);
-      iframe.srcdoc = html;
+      
+      try {
+        const doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+        if (doc) {
+          doc.open();
+          doc.write(html);
+          doc.close();
+        } else {
+          iframe.srcdoc = html;
+        }
+      } catch (e) {
+        console.warn("Falha no doc.write do iframe, aplicando fallback srcdoc:", e);
+        iframe.srcdoc = html;
+      }
     }
 
     function setZoom(zoom) {
