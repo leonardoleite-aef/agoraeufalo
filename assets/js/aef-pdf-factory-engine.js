@@ -832,9 +832,9 @@
           });
           if (currentPara.length > 0) paragraphs.push(currentPara);
 
-          // Paginação inteligente de LR: se tiver muitos parágrafos/frases (> 8 a 10 frases no total), divide em folhas
+          // Paginação inteligente de LR: se tiver até 15 frases, cabe perfeitamente em 1 folha A4 com fonte confortável
           const totalSentencesCount = rawSentences.length;
-          const CHUNK_SIZE_LR = 9; // ~8-9 frases por folha mantém fonte 15pt generosa e relaxada
+          const CHUNK_SIZE_LR = 15;
 
           if (totalSentencesCount <= CHUNK_SIZE_LR) {
             parsedBlocks.push({
@@ -849,7 +849,7 @@
               }
             });
           } else {
-            // Divide os parágrafos em partes para páginas separadas
+            // Divide os parágrafos em partes equilibradas para páginas separadas
             let runningCount = 0;
             let currentPartParas = [];
             let partIndex = 1;
@@ -899,8 +899,8 @@
             return { en: l, pt: '', soundTag: 'Expressão' };
           }).filter(c => c.en.length > 0);
 
-          // Máximo de 12 chunks por página (grid 2 colunas x 6 linhas)
-          const CHUNK_SIZE_VOC = 12;
+          // Grid de 2 colunas acomoda até 16 chunks por página de forma densa e elegante
+          const CHUNK_SIZE_VOC = 16;
           for (let i = 0; i < rawChunks.length; i += CHUNK_SIZE_VOC) {
             const chunkItems = rawChunks.slice(i, i + CHUNK_SIZE_VOC);
             const partNum = Math.floor(i / CHUNK_SIZE_VOC) + 1;
@@ -1050,7 +1050,8 @@
             type: 'golden_tip',
             data: {
               title: 'Sacada de Ouro do Professor Leo',
-              content: currentLines.join(' ')
+              content: currentLines.join(' '),
+              forceNewPage: false
             }
           });
         } else {
@@ -1175,7 +1176,7 @@
         id: `page_2`,
         number: 2,
         blocks: [
-          { id: 'b_hdr_auto_2', type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Treino Prático', courseTitle: title, lessonTitle: subtitle } }
+          { id: 'b_hdr_auto_2', type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Treino Prático', courseTitle: subtitle, lessonTitle: title } }
         ]
       };
 
@@ -1192,7 +1193,7 @@
             id: `page_${pages.length + 1}`,
             number: pages.length + 1,
             blocks: [
-              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Treino Prático', courseTitle: title, lessonTitle: subtitle } }
+              { id: `b_hdr_auto_${pages.length + 1}`, type: 'header_banner', data: { tag: '✦ AgoraEuFalo • Treino Prático', courseTitle: subtitle, lessonTitle: title } }
             ]
           };
           currentWeight = 18;
@@ -1385,30 +1386,30 @@
         switch (block.type) {
           case 'cover':
             return `
-              <div class="aef-cover-hero" style="background: radial-gradient(circle at 80% 20%, #162B4D 0%, #0A192F 70%);">
+              <div class="aef-cover-archetype">
                 <div class="cover-watermark">${d.watermark || '01/02'}</div>
-                <div class="cover-content">
+                <div>
                   <div class="cover-tag">${d.tag || '✦ MAGIC STORIES • SÉRIE OFICIAL 2026'}</div>
-                  <h1 class="cover-title">${d.lessonTitle || 'Título da Aula'}</h1>
-                  <div class="cover-sub">${d.courseTitle || ''}</div>
-                  <div class="cover-synopsis-box">
-                    <div class="synopsis-label">SINOPSE PEDAGÓGICA & TREINO DE FALA:</div>
-                    <div class="synopsis-text">${d.synopsis || 'Sinopse não cadastrada.'}</div>
-                  </div>
-                  <div class="cover-footer-badge">
-                    <span class="dot" style="background:${pal.primary};"></span>
-                    <span>${d.stats || 'Apostila Oficial de Treino Prático • AgoraEuFalo'}</span>
-                  </div>
+                  ${d.courseTitle ? `<div class="cover-course">${d.courseTitle}</div>` : ''}
+                  <h1 class="cover-lesson-title">${d.lessonTitle || 'Título da Aula'}</h1>
                 </div>
+                <div class="cover-card">
+                  <div class="cover-synopsis-label">SINOPSE PEDAGÓGICA & TREINO DE FALA:</div>
+                  <div class="cover-synopsis-text">${d.synopsis || 'Sinopse não cadastrada.'}</div>
+                  <div class="cover-stats">${d.stats || 'Apostila Oficial de Treino Prático • AgoraEuFalo'}</div>
+                </div>
+                <div class="cover-footer">✦ AgoraEuFalo • Professor Leonardo Leite • selexenglish@gmail.com</div>
               </div>
             `;
 
           case 'header_banner':
             return `
-              <div class="aef-header-banner" style="border-bottom-color:${pal.primary}; position:relative;">
+              <div class="aef-header-banner" style="background:none; border-bottom:2px solid ${pal.primary}; border-radius:0; padding:0 0 8px 0; margin-bottom:12px; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div>
+                  <div class="hdr-tag" style="color:${pal.primary}; font-size:7.5pt; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:2px;">${d.tag || '✦ AGORAEUFALO • TREINO PRÁTICO'}</div>
+                  <div class="hdr-title" style="font-size:12pt; font-weight:800; color:#0F172A; margin:0;">${d.lessonTitle || ''} <span style="font-weight:400; color:#64748B; font-size:10pt;">${d.courseTitle ? `• ${d.courseTitle}` : ''}</span></div>
+                </div>
                 ${cornerQrHtml}
-                <div class="banner-tag" style="color:${pal.primary};">${d.tag || '✦ Treino Prático'}</div>
-                <div class="banner-title">${d.courseTitle || ''} • <span style="color:${pal.primary};">${d.lessonTitle || ''}</span></div>
               </div>
             `;
 
@@ -1441,9 +1442,9 @@
 
           case 'vocab_chunks':
             const cList = (d.chunks || []).map(c => `
-              <div class="chunk-item">
-                <span class="chunk-en">${c.en || c}</span>
-                ${c.pt ? `<span class="chunk-pt" style="color:${pal.primary};"> ➔ ${c.pt}</span>` : ''}
+              <div class="chunk-card" style="background:#FFFFFF; border:1px solid #EAE5DC; border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; justify-content:center;">
+                <div class="chunk-en" style="font-weight:800; color:#0A192F; font-size:1.02em; line-height:1.25;">${c.en || c}</div>
+                ${c.pt ? `<div class="chunk-pt" style="color:${pal.primary}; font-size:9pt; font-style:italic; font-weight:600; margin-top:3px; line-height:1.2;">➔ ${c.pt}</div>` : ''}
               </div>
             `).join('');
             return `
@@ -1453,7 +1454,7 @@
                   <span>📖 ${d.title || 'Vocabulary Session'}</span>
                 </div>
                 ${d.instruction ? `<div class="box-instruction">${d.instruction}</div>` : ''}
-                <div class="chunks-grid">${cList}</div>
+                <div class="chunks-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;">${cList}</div>
               </div>
             `;
 
@@ -1612,12 +1613,13 @@
 
       const pagesHtml = this.state.pages.map((page, idx) => {
         const blocksContent = page.blocks.map(renderBlock).join('');
+        const isCoverPage = idx === 0 && page.blocks.some(b => b.type === 'cover');
         return `
-          <div class="aef-a4-page ${forPrint ? 'page-print' : ''}" data-page="${idx + 1}">
+          <div class="aef-a4-page ${forPrint ? 'page-print' : ''} ${isCoverPage ? 'page-cover' : ''}" data-page="${idx + 1}" ${isCoverPage ? 'style="padding:0; background:transparent; box-shadow:none;"' : ''}>
             <div class="a4-inner-content">
               ${blocksContent}
             </div>
-            ${this.state.showFooter ? `
+            ${(this.state.showFooter && !isCoverPage) ? `
               <div class="a4-running-footer">
                 <span class="f-left">✦ AgoraEuFalo • Professor Leonardo Leite</span>
                 <span class="f-mid">selexenglish@gmail.com</span>

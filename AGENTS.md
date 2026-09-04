@@ -67,28 +67,21 @@ Todas as aulas e treinos do ecossistema seguem rigorosamente a estrutura pedagó
 ---
 
 ## 4. O Squad Unificado de Agentes de IA
-A criação e manutenção de conteúdo são executadas por um squad especializado de 7 subagentes:
+A criação e manutenção de conteúdo e software são executadas por um squad especializado de 7 subagentes:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                         SQUAD DE AGENTES AGORAEUFALO                                    │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│ 1. Leo-Content-Writer: Redação de histórias, dramaturgia vocal (injeção de pausas      │
-│    dramáticas, risadas, suspiros e tags de atuação Gemini TTS) e roteiros das 6 etapas │
-│ 2. Leo-Vocab-Session-Architect: Dissecação de vocabulário, Tradução Falada Real,       │
-│    matriz de Sound Chunks acústicos, curiosidades gramaticais sem jargões ("O         │
-│    Sentimento da Estrutura") e exemplos de aplicação na vida real.                      │
-│ 3. Visual-Artwork-Artist: Capas 16:9 (Blog/LMS) e 1:1 512x512 <90KB (Player).          │
+│ 1. Leo-Content-Writer: Redação de histórias vivas, dramaturgia vocal (pausas          │
+│    dramáticas, risadas, tags Gemini TTS) e roteiros das 6 etapas pedagógicas.          │
+│ 2. Leo-Vocab-Session-Architect: Mapeamento de divergências contraintuitivas do         │
+│    inglês vs. português, pílulas do "Sentimento da Estrutura", Chunks e mini-glossário.│
+│ 3. Visual-Artwork-Artist: Capas 16:9 e 1:1 puras no Prompt Blueprint de Cinema 35mm.   │
 │ 4. Player-Audio-Engine: Síntese Gemini TTS (Dual/Single), MP3 128k e timestamps reais. │
-│ 5. Editorial-PDF-Engine: Compilação de Livros Impressos & Apostilas Interativas A4    │
-│    (ReportLab) no Sistema Canônico dos 3 Arquétipos em 8 Páginas (Fontes 15 a 17pt):   │
-│    - P1: Arquétipo 1 (Module Divider / Capa Deep Navy, 01/02 Watermark, Arte & Sinopse)│
-│    - P2: Arquétipo 2 (Content & Insights: Listen & Read com fonte confortável 15-17pt) │
-│    - P3 & P4: Arquétipo 2 (Vocabulary Session: Tradução Real, Chunks & Curiosidades)   │
-│    - P5 a P8: Arquétipo 3 (Practice Workbook: LA sem respostas, LRT, LASK sem          │
-│      perguntas, PRO com texto completo de LR e Sacada de Ouro do Leo)                  │
-│ 6. Look-Retell-AI-Coach: Avaliação de áudio 0-10, diagnóstico de engasgos e feedback. │
-│ 7. Tier-Platform-Distributor: Distribuição Firestore (Free, Cursos, VIP) e Git Deploy. │
+│ 5. Editorial-PDF-Engine: Compilação ReportLab na PDF Factory (3 Arquétipos, >70%).     │
+│ 6. Retell-Stage-Architect: Palco de Look & Retell com os 2 estímulos visuais oficiais. │
+│ 7. Platform-CRM-Distributor: Gestão de Pessoas (CRM/Tiers), Vendas (Webhooks) & Deploy │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -97,7 +90,7 @@ Sempre que um novo conteúdo, aula de curso ou Magic Story for criado a partir d
 
 - **Etapa A (Curadoria de Densidade & Corte):** Extrair a transcrição completa e selecionar o trecho de maior potência comunicativa e narrativa.
 - **Etapa B (Redação da Magic Story & Áudio LR):** Escrever a história narrada ou diálogo vivo com dramaturgia vocal de modo que **CADA FRASE SEJA 100% UTILIZÁVEL** para as etapas de LA, LRT e LASK. Respeitar rigorosamente a duração: **mínimo de 1min10s (01:10) e máximo de 2min00s (02:00)** ➔ Síntese Gemini TTS (Dual/Single) MP3 128k ➔ Gera faixa de **`1. Listen & Read (LR)`** com timestamps milimétricos e **Página 2 do PDF** com fonte confortável de **15 a 17pt**.
-- **Etapa C (Explainer Didático & Vocabulary Session com o Leo-Vocab-Session-Architect):** Criar texto e áudio explicativo no estilo Google NotebookLM / Podcasting do Leo ➔ Tradução Falada Real + Matriz de Chunks Sonoros + Curiosidades Gramaticais sem Jargões ("O Sentimento da Estrutura") + Exemplos de Aplicação no Cotidiano ➔ Gera as **Páginas 3 e 4 do PDF (VOC)** e 4 cards em cascata na Sala de Aula e aba VOC do Player.
+- **Etapa C (Vocabulary Session & Mapeamento Contraintuitivo com o Leo-Vocab-Session-Architect):** Criar texto e áudio explicativo dissecando tudo que é particular no inglês e vai contra a intuição do falante de português (ex: *"She is a 45-year-old woman"*, *"a million-dollar house"*, uso de *"is"* para idade, estado físico, fome, calor e origem) + Pílulas do "Sentimento da Estrutura" + Matriz de Sound Chunks curados + Tradução Falada Real + Mini Glossário de expressões estranhas ➔ Gera as **Páginas 3 e 4 do PDF (VOC)** e os cards didáticos na Sala de Aula e no Player.
 - **Etapa D (Listen & Answer - Cobertura Literal 100% da História):** Criar **quantas perguntas forem necessárias para cobrir literalmente toda a história**. Esta dissecação exaustiva define a quantidade total de perguntas e respostas trabalhadas no módulo. **Proibição Absoluta de Limite Artificial e de Spoilers:** Proibido limitar perguntas e proibido mostrar as respostas no PDF/tela ➔ Síntese Gemini TTS com micro-pausas de 2 a 4 segundos ➔ Gera as **Páginas 5 e 6 do PDF (LA/LRT)** com linhas pautadas para escrita manual.
 - **Etapa E (Look & Retell - Speaking Ativo):** Organizar as perguntas-guia visuais (**que são obrigatoriamente as mesmas perguntas trabalhadas no Listen & Answer**) e espaço de palavras-chave (*Keywords*) ➔ Palco de treino e reconto autônomo no Player.
 - **Etapa F (Listen & Ask - Desafio de Perguntas sem Spoilers):** Criar frases de estímulo (afirmativas/negativas) com espaço pautado para o aluno formular a pergunta no reflexo (**sem mostrar a pergunta pronta impressa**) ➔ Síntese Gemini TTS ➔ Gera a **Página 7 do PDF (LASK)**.
@@ -167,12 +160,17 @@ O banco de dados Firestore é a **fonte única da verdade**, eliminando bifurca�
 
 ---
 
-## 9. Diretriz de Criação de Capas e Mídias Visuais (Proatividade Ágil)
-- **Unicidade de Imagem por Módulo & Geração Ágil:**
-  - Cada Módulo / Magic Story deve ter uma imagem **completamente diferente e única**, 100% contextualizada com o enredo, personagens e tom da história.
-  - **Proatividade com Opção de Troca:** O agente gera automaticamente as artes e miniaturas 16:9 no padrão visual e cromático oficial durante a esteira de produção para manter o fluxo 100% ágil e contínuo, informando ao Professor Leo que ele pode fornecer uma foto própria caso deseje substituir a arte a qualquer momento.
-- **Capa de Artigo de Blog (16:9):** Arte cinematográfica e editorial de alto impacto gerada via `generate_image`, salva em `assets/images/cover-[slug].jpg`.
-- **Capa de Treino do Aluno / Player (1:1):** Arte quadrada baseada no contexto real do diálogo. **Otimizada obrigatoriamente com `sips` para 512x512 pixels (<90 KB)** para suporte imediato à tela de bloqueio do iOS/Android via MediaSession API. Salva em `assets/images/cover-[aluno/tema]-[slug].jpg`.
+## 9. Diretriz de Criação de Capas e Mídias Visuais (Visual-Artwork-Artist)
+- **Estilo Cinematográfico 35mm & Arte Pura (Clean Cinema Frame):**
+  - Todas as imagens são geradas como **fotografia cinematográfica realista de 35mm com iluminação quente/natural**, personagens humanos autênticos e expressivos, sem aparência de banco de imagens genérico e sem traços infantis.
+  - **Zero Texto Queimado na Imagem:** A arte gerada é 100% pura (sem letras, títulos ou numerações na foto), permitindo que a tipografia editorial responsiva seja renderizada por cima via código (HTML/CSS) no LMS, no Player e no PDF.
+- **Prompt Blueprint Oficial de Cinema 35mm:**
+  ```text
+  [Enredo contextualizado da cena da história], cinematic 35mm film photography, photorealistic, natural warm lighting, shallow depth of field, authentic emotional expression, rich textures, Calm EdTech luxury color grading, no text, no watermarks
+  ```
+- **Proatividade com Opção de Troca:** O agente gera automaticamente as artes e miniaturas 16:9 no padrão visual oficial durante a esteira de produção para manter o fluxo ágil e contínuo, avisando ao Professor Leo que ele pode fornecer uma foto própria caso deseje substituir a arte a qualquer momento.
+- **Capa de Artigo de Blog & Masterclass (16:9):** Arte cinematográfica 16:9 gerada via `generate_image`, salva em `assets/images/cover-[slug].jpg`.
+- **Capa de Treino do Aluno / Player (1:1):** Arte quadrada baseada no enredo da cena. **Otimizada obrigatoriamente com `sips` para 512x512 pixels (<90 KB)** para suporte imediato à tela de bloqueio do iOS/Android via MediaSession API. Salva em `assets/images/cover-[aluno/tema]-[slug].jpg`.
 - **Kit de Capas 16:9 das Vídeo-Aulas (Cinema LMS Poster Frame):** Para cada Módulo / Magic Story, gerar o kit oficial de 6 capas 16:9 (1920x1080 <180KB) correspondentes às 6 atividades com a diferenciação cromática oficial:
   1. `LR`: Azul Cobalto Real (`#1A56DB`) 🎧
   2. `VOC`: Verde Esmeralda (`#047857`) 📖
