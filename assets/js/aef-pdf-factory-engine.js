@@ -1363,6 +1363,20 @@
       const pal = this.getPalette();
       const fontSize = this.state.fontSize || '15pt';
 
+      const renderCornerQr = (d) => {
+        if (!d || !d.showCornerQr) return '';
+        const url = d.cornerQrUrl || this.state.linkedLessonData?.trainingUrl || this.state.playerTrackUrl || 'https://agoraeufalo.com.br/player.html';
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(url)}&margin=1&color=0A192F`;
+        return `
+          <div class="block-corner-qr" style="position:absolute; top:8px; right:8px; z-index:5; text-align:center; background:#FFFFFF; padding:3px; border-radius:6px; border:1px solid rgba(0,0,0,0.1); box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+            <a href="${url}" target="_blank" style="display:block; text-decoration:none;">
+              <img src="${qrUrl}" alt="QR" width="48" height="48" style="display:block; border-radius:3px;" crossorigin="anonymous">
+              <span style="display:block; font-size:5.5pt; font-weight:800; color:#0A192F; margin-top:2px; text-transform:uppercase; letter-spacing:0.3px;">Áudio / Treino</span>
+            </a>
+          </div>
+        `;
+      };
+
       const renderBlock = (block) => {
         const d = block.data || {};
         const pal = this.palettes[this.state.paletteId] || this.palettes.amber;
