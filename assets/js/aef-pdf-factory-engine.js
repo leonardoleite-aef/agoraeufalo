@@ -305,7 +305,7 @@
         ],
         culturalNote: '🗣️ Aspecto Cultural & Fala Real: Na vida real, o nativo raramente pronuncia "They have been" pausadamente. Na conversa coloquial, a ligação vira "They\'ve been" (/ðeɪv bɪn/) ou "I\'ve been" (/aɪv bɪn/). Além disso, observe a sintonia: FOR mede o tamanho do tempo (for 18 years); SINCE marca o ponto de partida na linha do tempo (since 2006).',
         trainingTip: '⚡ Como as Magic Stories Ajudam Você a Destravar: Não tente decorar regras no papel! A exposição repetida nas atividades "Listen & Read" e "Listen & Answer" faz o cérebro associar o "há..." com o "have been..." de forma automática, até a fala virar reflexo espontâneo sem passar pela tradução.',
-        showCornerQr: true
+        showCornerQr: false
       })
     }
   };
@@ -1734,7 +1734,7 @@
                 ${cornerQrHtml}
                 
                 <!-- Header -->
-                <div style="padding-right:55px;">
+                <div style="${d.showCornerQr ? 'padding-right:55px;' : ''}">
                   ${d.badge ? `<div style="font-size:7.5pt; font-weight:900; color:${pal.primary}; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:2px;">${d.badge}</div>` : ''}
                   <div style="font-size:12.5pt; font-weight:900; color:#0A192F; line-height:1.2; letter-spacing:-0.2px;">
                     ${d.title || 'O Sentimento da Estrutura • Grammar & Cultural Aspects Explained'}
