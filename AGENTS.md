@@ -163,14 +163,19 @@ O banco de dados Firestore é a **fonte única da verdade**, eliminando bifurca�
 ---
 
 ## 9. Diretriz de Criação de Capas e Mídias Visuais (Visual-Artwork-Artist)
-- **Estilo Cinematográfico 35mm & Arte Pura (Clean Cinema Frame):**
-  - Todas as imagens são geradas como **fotografia cinematográfica realista de 35mm com iluminação quente/natural**, personagens humanos autênticos e expressivos, sem aparência de banco de imagens genérico e sem traços infantis.
-  - **Zero Texto Queimado na Imagem:** A arte gerada é 100% pura (sem letras, títulos ou numerações na foto), permitindo que a tipografia editorial responsiva seja renderizada por cima via código (HTML/CSS) no LMS, no Player e no PDF.
-- **Prompt Blueprint Oficial de Cinema 35mm:**
-  ```text
-  [Enredo contextualizado da cena da história], cinematic 35mm film photography, photorealistic, natural warm lighting, shallow depth of field, authentic emotional expression, rich textures, Calm EdTech luxury color grading, no text, no watermarks
-  ```
-- **Proatividade com Opção de Troca:** O agente gera automaticamente as artes e miniaturas 16:9 no padrão visual oficial durante a esteira de produção para manter o fluxo ágil e contínuo, avisando ao Professor Leo que ele pode fornecer uma foto própria caso deseje substituir a arte a qualquer momento.
+- **Os 4 Estilos Visuais Canônicos de Capas do Ecossistema AgoraEuFalo:**
+  1. **💎 Estilo 1 — 3D Glassmorphism & Isometric Art (Apple EdTech):** Objetos conceituais tridimensionais (portais de vidro fosco translúcido, ondas sonoras de ouro, esferas de cristal, cubos flutuantes) sobre estúdio Deep Navy com luz volumétrica âmbar. Zero figuras humanas. Ideal para cursos de Fundamentos, Aceleradores e Treinamentos de Entrada.
+  2. **⚡ Estilo 2 — Cyber-Minimalist & Redes Neurais de Som (Alta Performance):** Ondas sonoras douradas fluidas pulsando em espaço digital obsidiana/marinho, anéis holográficos de frequência e malha de dados. Ideal para Frases Prontas, Automação Oral e Treino de Reflexo Rápido.
+  3. **📖 Estilo 3 — Fantasia & Mitologia Narrativa (Worldbuilding Mágico):** Livros antigos de couro iluminados, cidades em miniatura e constelações subindo das páginas abertas, lanternas místicas e arquitetura atemporal. Ideal para Magic Stories e narrativas imersivas.
+  4. **🏛️ Estilo 4 — Editorial Geométrico Masterclass (Mentor Leonardo Leite):** Fundo Deep Navy com faixas diagonais âmbar/ouro, tipografia monumental e a foto oficial autêntica do Professor Leonardo Leite (`assets/images/leonardo-leite.png`). Elimina fotos de pessoas desconhecidas ("álbum de família") e foca 100% na autoridade do mentor.
+
+- **Regra de Ouro sobre Títulos e Tipografia em Capas:**
+  - **Zero Texto Crítico Queimado na IA:** Imagens geradas por IA devem ser puras (sem títulos embutidos na geração), evitando erros de acentuação, problemas de kerning ou distorções da língua portuguesa.
+  - **Composição da Tipografia Oficial:** 
+    - *Na Web (LMS, Sala de Aula e Portal):* Tipografia editorial renderizada dinamicamente via HTML/CSS de alto contraste.
+    - *Para Plataformas Externas (Hotmart, Stripe, YouTube, Redes):* Banners e capas compostos em alta resolução (1080x1080 e 1920x480) via scripts Python (Pillow) integrando o background puro com a foto real do Leo, selos transparentes (`selo-2026.png`) e tipografia vetorial milimétrica.
+
+- **Proatividade com Opção de Troca:** O agente gera automaticamente as artes no padrão visual oficial durante a esteira de produção para manter o fluxo ágil e contínuo, avisando ao Professor Leo que ele pode fornecer uma foto própria caso deseje substituir a arte a qualquer momento.
 - **Capa de Artigo de Blog & Masterclass (16:9):** Arte cinematográfica 16:9 gerada via `generate_image`, salva em `assets/images/cover-[slug].jpg`.
 - **Capa de Treino do Aluno / Player (1:1):** Arte quadrada baseada no enredo da cena. **Otimizada obrigatoriamente com `sips` para 512x512 pixels (<90 KB)** para suporte imediato à tela de bloqueio do iOS/Android via MediaSession API. Salva em `assets/images/cover-[aluno/tema]-[slug].jpg`.
 - **Kit de Capas 16:9 das Vídeo-Aulas (Cinema LMS Poster Frame):** Para cada Módulo / Magic Story, gerar o kit oficial de 6 capas 16:9 (1920x1080 <180KB) correspondentes às 6 atividades com a diferenciação cromática oficial:
