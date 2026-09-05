@@ -918,7 +918,96 @@
         }
       }
 
+      // 1. CHECAGEM DE ACESSO E PAYWALL RIGOROSA
+      const auth = window.aefPortalAuth;
+      const isAdmin = auth ? auth.isAdmin() : false;
+      const currentTier = auth ? auth.getActiveTier() : 'free';
+      const enrolled = (auth ? auth.getEnrolledProducts() : []) || [];
+
+      // Curso gratuito? (Ex: English QuickStart)
+      const isCourseFree = (activeCourse && (activeCourse.tierRequired === 'free' || activeCourse.id === 'english-quickstart'));
+
+      // Módulo é expressamente degustação gratuita?
+      const isModuleFree = activeModule && (
+        activeModule.isFreeTier === true ||
+        (activeCourse && Array.isArray(activeCourse.freeModuleIds) && activeCourse.freeModuleIds.includes(activeModule.id))
+      );
+
+      // Aluno está matriculado no produto?
+      const isEnrolled = enrolled.includes(activeCourse.id) ||
+                         enrolled.includes('all_access_master') ||
+                         enrolled.includes('magic_stories_club');
+
+      // Usuário tem tier compatível com o curso?
+      const hasTierAccess = (currentTier === 'club_annual' || currentTier === 'club_monthly' || currentTier === 'vip' || currentTier === 'vip_mentorship' || currentTier === 'admin_master');
+
+      const isAuthorized = isAdmin || isCourseFree || isModuleFree || isEnrolled || (hasTierAccess && activeCourse.id === 'ms-legacy');
+
       const videoStage = document.getElementById("videoStage");
+
+      // BLOQUEIO DE ACESSO SE NÃO FOR AUTORIZADO (PAYWALL CARD)
+      if (!isAuthorized) {
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-4 select-none">
+            <div class="w-16 h-16 rounded-3xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-3xl shadow-xl">
+              🔒
+            </div>
+            <div class="space-y-2 max-w-md">
+              <span class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+                CONTEÚDO EXCLUSIVO DO CLUB
+              </span>
+              <h3 class="text-xl sm:text-2xl font-black text-white leading-tight font-serif">Esta aula é exclusiva para assinantes</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                A história de <strong>${activeModule ? activeModule.title : 'Magic Stories'}</strong> e todo o acervo clássico do Magic Stories Legacy fazem parte do plano de membros <strong>AgoraEuFalo Club</strong>.
+              </p>
+            </div>
+            <div class="pt-2 flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
+              <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                <span>Garantir Acesso no Hotmart Club ➔</span>
+              </a>
+              <a href="portal.html" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition flex items-center justify-center">
+                Voltar ao Meu Portal
+              </a>
+            </div>
+            <p class="text-[10px] text-slate-400">Garantia incondicional de 7 dias • Acesso imediato no Hotmart Club</p>
+          </div>
+        `;
+
+        // Mascara o conteúdo de texto da aula para não vazar
+        const processedContainer = document.getElementById("lessonProcessedContentContainer");
+        if (processedContainer) {
+          processedContainer.innerHTML = `
+            <div class="p-6 rounded-2xl bg-[#0A192F] border border-amber-400/30 text-center space-y-3">
+              <span class="text-2xl">📖</span>
+              <h4 class="text-sm font-black text-white font-serif">Apostila e Roteiro Didático Bloqueados</h4>
+              <p class="text-xs text-slate-300 max-w-md mx-auto">O texto integral com chunks, linking sounds e sacadas do Leo estão disponíveis exclusivamente para membros do Club.</p>
+              <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="inline-flex px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition">
+                Assinar o Club na Hotmart ➔
+              </a>
+            </div>
+          `;
+          processedContainer.classList.remove("hidden");
+        }
+
+        // Bloqueia download do PDF
+        const pdfLink = document.getElementById("pdfDownloadLink");
+        const pdfBtnLabel = document.getElementById("pdfBtnLabel");
+        if (pdfLink) {
+          pdfLink.href = "https://pay.hotmart.com/T107479074N?off=mgwnab3h";
+          pdfLink.target = "_blank";
+          pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
+          if (pdfBtnLabel) pdfBtnLabel.innerText = "🔒 PDF Exclusivo de Assinantes";
+        }
+
+        const markBtn = document.getElementById("btnMarkComplete");
+        if (markBtn) {
+          markBtn.disabled = true;
+          markBtn.classList.add("opacity-40", "cursor-not-allowed");
+        }
+        return;
+      }
+
+      // 2. RENDERIZAÇÃO NORMAL PARA USUÁRIO AUTORIZADO
       if (found.videoUrl) {
         if (found.videoUrl.includes("youtube.com") || found.videoUrl.includes("youtu.be")) {
           videoStage.innerHTML = `

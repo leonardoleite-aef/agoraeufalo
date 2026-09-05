@@ -930,8 +930,18 @@
       const heroCtaTrain = document.getElementById("hero-cta-train");
       const heroThumb = document.querySelector("#hero-lesson-title")?.closest("section")?.querySelector("img");
 
-      if (lastActivity && lastActivity.lessonId) {
-        // Aluno já possui histórico: recupera exatamente onde parou!
+      // Validação de Acesso: O aluno realmente tem direito ao curso onde parou?
+      const isFreeTier = effectiveTier === 'free';
+      const hasCourseAccess = lastActivity && lastActivity.lessonId && (
+        isAdmin ||
+        effectiveTier === 'admin_master' ||
+        (Array.isArray(enrolledProducts) && enrolledProducts.includes(lastActivity.courseId)) ||
+        (!isFreeTier && (lastActivity.courseId === 'ms-legacy' || lastActivity.courseId === 'frases-prontas' || lastActivity.courseId === 'english-quickstart')) ||
+        (isFreeTier && lastActivity.courseId === 'english-quickstart')
+      );
+
+      if (hasCourseAccess) {
+        // Aluno já possui histórico e tem permissão: recupera exatamente onde parou!
         if (heroTag) heroTag.innerText = `${lastActivity.courseTitle} • ${lastActivity.moduleTitle || 'Módulo Ativo'}`;
         if (heroTitle) heroTitle.innerText = lastActivity.lessonTitle || "Continuar Prática Ativa";
         if (heroDesc) heroDesc.innerText = `Você estava aqui! Clique para continuar seus treinos de escuta, fala e reflexo imediato.`;
@@ -946,7 +956,7 @@
         if (heroCtaTrain) heroCtaTrain.href = "treino/player.html?aluno=andre";
         if (heroThumb) heroThumb.src = "assets/images/cover-andre-barrote.jpg";
       } else {
-        // Fallback para novo aluno
+        // Aluno Free ou sem acesso ao histórico anterior: sempre recomenda English QuickStart
         if (heroTag) heroTag.innerText = "English QuickStart • Fundamentos da Fala";
         if (heroTitle) heroTitle.innerText = "Aula 0.1 • Como Estudar o QuickStart";
         if (heroDesc) heroDesc.innerText = "Comece por aqui para alinhar o método e destravar sua escuta e fala desde o primeiro dia.";
