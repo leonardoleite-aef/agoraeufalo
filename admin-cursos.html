@@ -1142,6 +1142,94 @@
           </div>
         </div>
 
+        <!-- 3 OPÇÕES CANÔNICAS DE DISPONIBILIDADE & MONETIZAÇÃO -->
+        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <span>💎</span>
+              <span>Disponibilidade & Monetização (3 Opções)</span>
+            </label>
+            <span class="text-[10px] font-mono text-slate-400">Regras de Acesso</span>
+          </div>
+
+          <!-- Opção A: Incluso na Assinatura Paga AEF Club -->
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-1">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="courseModalClubSubInput" checked class="rounded accent-amber-500 w-4 h-4">
+              <span class="text-xs font-bold text-white">🎓 Incluso na Assinatura Paga (AEF Club / VIP)</span>
+            </label>
+            <p class="text-[10px] text-slate-400 pl-6 leading-relaxed">
+              Alunos com assinatura AEF Club ativa ou Mentoria VIP têm acesso total a todos os módulos deste curso.
+            </p>
+          </div>
+
+          <!-- Opção B: Degustação na Assinatura Free (Modular) -->
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="courseModalFreeTierInput" onchange="toggleCourseFreeTierConfig(this.checked)" class="rounded accent-emerald-500 w-4 h-4">
+              <span class="text-xs font-bold text-emerald-300">🌱 Disponível na Assinatura Free (Degustação Modular)</span>
+            </label>
+            <p class="text-[10px] text-slate-400 pl-6 leading-relaxed">
+              Você define quais módulos ficam abertos gratuitamente, com CTA no último minuto de aula para assinar o Club.
+            </p>
+
+            <!-- Painel Expansível de Módulos Free & CTA -->
+            <div id="courseModalFreeTierConfig" class="hidden pl-6 pt-2 space-y-2.5 border-t border-white/10 mt-2">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-1">
+                  Módulos Liberados na Degustação Grátis:
+                </label>
+                <div id="courseModalFreeModulesList" class="space-y-1.5 max-h-32 overflow-y-auto custom-scrollbar p-2 bg-black/20 rounded-xl border border-white/10">
+                  <p class="text-[10px] text-slate-400 italic">Nenhum módulo cadastrado ainda.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-0.5">Mensagem do CTA (Último Minuto)</label>
+                  <input type="text" id="courseModalFreeCtaMsgInput" placeholder="Gostou desta aula? Destrave o curso completo no AEF Club!" class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-0.5">Link Checkout / Assinatura (Hotmart)</label>
+                  <input type="text" id="courseModalFreeCtaUrlInput" placeholder="https://pay.hotmart.com/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-mono focus:outline-none focus:border-amber-400">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opção C: Venda Avulsa (Checkout Direto Hotmart / Stripe) -->
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="courseModalStandaloneInput" onchange="toggleCourseStandaloneConfig(this.checked)" class="rounded accent-sky-500 w-4 h-4">
+              <span class="text-xs font-bold text-sky-300">💳 Venda Avulsa (Checkout Direto Hotmart / Stripe)</span>
+            </label>
+            <p class="text-[10px] text-slate-400 pl-6 leading-relaxed">
+              O aluno pode comprar este curso isoladamente sem assinar o Club. Ao comprar, o curso é adicionado à sua conta.
+            </p>
+
+            <!-- Painel Expansível de Venda Avulsa -->
+            <div id="courseModalStandaloneConfig" class="hidden pl-6 pt-2 space-y-2 border-t border-white/10 mt-2">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-0.5">Preço Sugerido</label>
+                  <input type="text" id="courseModalStandalonePriceInput" placeholder="Ex: R$ 197 / $47" class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-bold focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider text-amber-300 mb-0.5">Hotmart (Primário Brasil)</label>
+                  <input type="text" id="courseModalCheckoutHotmartInput" placeholder="https://pay.hotmart.com/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-mono focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider text-sky-300 mb-0.5">Stripe (Fallback Global)</label>
+                  <input type="text" id="courseModalCheckoutStripeInput" placeholder="https://buy.stripe.com/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-mono focus:outline-none focus:border-sky-400">
+                </div>
+              </div>
+              <p class="text-[9px] text-slate-400 italic">
+                ℹ️ Somente cursos com "Venda Avulsa" ativada exigem a geração de capas externas para plataformas (1000x1000 e 940x120) na Station 2.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <!-- Paleta de Cores Temática do Curso -->
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Cor Tema do Curso (Paleta da Apostila em PDF)</label>
@@ -1277,6 +1365,9 @@
         if (typeof v === 'string') fields[k] = { stringValue: v };
         else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
         else if (typeof v === 'number') fields[k] = { integerValue: String(v) };
+        else if (Array.isArray(v)) {
+          fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
+        }
       }
       fields.updatedAt = { stringValue: new Date().toISOString() };
       const res = await fetch(restUrl, {
@@ -1510,6 +1601,7 @@
       container.innerHTML = modules.map((mod, mIdx) => {
         const lessons = (mod.lessons || []).slice().sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
         const isModPub = mod.published !== false;
+        const isModFree = mod.isFreeTier === true || (course.freeModuleIds && course.freeModuleIds.includes(mod.id));
         return `
           <div class="border border-white/10 rounded-xl bg-white/5 overflow-hidden">
             <!-- Module Header -->
@@ -1523,6 +1615,9 @@
 
               <!-- Module Status & Actions -->
               <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="event.stopPropagation(); toggleModuleFreeTier('${mod.id}')" class="px-2 py-0.5 rounded-full text-[9px] font-mono font-black transition cursor-pointer flex items-center gap-1 ${isModFree ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 shadow-xs' : 'bg-white/5 text-slate-400 border border-white/10 hover:text-white'}" title="Clique para alternar se este módulo está liberado na Degustação Grátis (Free Tier)">
+                  ${isModFree ? '🌱 Free' : '🔒 Club'}
+                </button>
                 <button onclick="event.stopPropagation(); toggleModulePublished('${mod.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 ${isModPub ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}" title="Clique para alternar o status do Módulo">
                   ${isModPub ? '🟢' : '🟡'}
                 </button>
@@ -2178,14 +2273,77 @@
     }
 
     // Modal Helpers (Course & Module)
+    // Toggles de Configuração das 3 Opções no Modal de Curso
+    function toggleCourseFreeTierConfig(checked) {
+      const cfg = document.getElementById("courseModalFreeTierConfig");
+      if (cfg) {
+        if (checked) cfg.classList.remove("hidden");
+        else cfg.classList.add("hidden");
+      }
+    }
+
+    function toggleCourseStandaloneConfig(checked) {
+      const cfg = document.getElementById("courseModalStandaloneConfig");
+      if (cfg) {
+        if (checked) cfg.classList.remove("hidden");
+        else cfg.classList.add("hidden");
+      }
+    }
+
+    // Toggle Rápido de 1 Toque na Árvore de Módulos (🌱 Free vs 🔒 Club)
+    async function toggleModuleFreeTier(moduleId) {
+      const course = ALL_COURSES[activeCourseId];
+      if (!course) return;
+      const mod = (course.modules || []).find(m => m.id === moduleId);
+      if (!mod) return;
+
+      mod.isFreeTier = !mod.isFreeTier;
+      if (!Array.isArray(course.freeModuleIds)) {
+        course.freeModuleIds = [];
+      }
+      if (mod.isFreeTier) {
+        if (!course.freeModuleIds.includes(moduleId)) course.freeModuleIds.push(moduleId);
+        course.availableInFreeTier = true;
+      } else {
+        course.freeModuleIds = course.freeModuleIds.filter(id => id !== moduleId);
+      }
+
+      renderHierarchyTree();
+      try {
+        await directSaveModuleCloud(activeCourseId, mod);
+        await directSaveCourseCloud(course);
+      } catch (e) {
+        console.warn("Sync free tier module:", e);
+      }
+      showToast(mod.isFreeTier ? `🌱 Módulo "${mod.title}" liberado no Free Tier!` : `🔒 Módulo "${mod.title}" agora é Exclusivo Club/Pago.`);
+    }
+
+    // Modal Helpers (Course & Module)
     function openCourseModal() {
       document.getElementById("courseModalTitle").innerText = "Novo Curso";
       document.getElementById("courseModalId").value = "";
       document.getElementById("courseModalTitleInput").value = "";
       document.getElementById("courseModalSlugInput").value = "";
       document.getElementById("courseModalDescInput").value = "";
+      document.getElementById("courseModalCoverInput").value = "";
       document.getElementById("courseModalThemeColorInput").value = "amber";
+      document.getElementById("courseModalTierInput").value = "club_anual";
       document.getElementById("courseModalPublishedInput").checked = true;
+
+      // 3 Opções de Disponibilidade
+      document.getElementById("courseModalClubSubInput").checked = true;
+      document.getElementById("courseModalFreeTierInput").checked = false;
+      toggleCourseFreeTierConfig(false);
+      document.getElementById("courseModalFreeCtaMsgInput").value = "Gostou desta aula? Destrave o curso completo no AEF Club!";
+      document.getElementById("courseModalFreeCtaUrlInput").value = "https://pay.hotmart.com/";
+      document.getElementById("courseModalFreeModulesList").innerHTML = '<p class="text-[10px] text-slate-400 italic">Salve o curso primeiro para adicionar módulos.</p>';
+
+      document.getElementById("courseModalStandaloneInput").checked = false;
+      toggleCourseStandaloneConfig(false);
+      document.getElementById("courseModalStandalonePriceInput").value = "";
+      document.getElementById("courseModalCheckoutHotmartInput").value = "";
+      document.getElementById("courseModalCheckoutStripeInput").value = "";
+
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
@@ -2208,8 +2366,44 @@
       document.getElementById("courseModalDescInput").value = course.description || "";
       document.getElementById("courseModalCoverInput").value = course.coverImageUrl || "";
       document.getElementById("courseModalThemeColorInput").value = course.themeColor || "amber";
-      document.getElementById("courseModalTierInput").value = course.tierRequired || "vip";
+      document.getElementById("courseModalTierInput").value = course.tierRequired || "club_anual";
       document.getElementById("courseModalPublishedInput").checked = course.published !== false;
+
+      // 3 Opções de Disponibilidade
+      const isClub = course.includedInClubSubscription !== false;
+      document.getElementById("courseModalClubSubInput").checked = isClub;
+
+      const isFree = course.availableInFreeTier === true || course.tierRequired === 'free';
+      document.getElementById("courseModalFreeTierInput").checked = isFree;
+      toggleCourseFreeTierConfig(isFree);
+      document.getElementById("courseModalFreeCtaMsgInput").value = course.freeTierCtaMessage || "Gostou desta aula? Destrave o curso completo no AEF Club!";
+      document.getElementById("courseModalFreeCtaUrlInput").value = course.freeTierCtaUrl || course.checkoutHotmart || "https://pay.hotmart.com/";
+
+      // Popula lista de módulos do curso com checkboxes
+      const freeModsContainer = document.getElementById("courseModalFreeModulesList");
+      const currentFreeIds = course.freeModuleIds || [];
+      const mods = course.modules || [];
+      if (mods.length === 0) {
+        freeModsContainer.innerHTML = '<p class="text-[10px] text-slate-400 italic">Nenhum módulo criado ainda.</p>';
+      } else {
+        freeModsContainer.innerHTML = mods.map((m, idx) => {
+          const isModChecked = currentFreeIds.includes(m.id) || m.isFreeTier === true || (idx === 0 && isFree && currentFreeIds.length === 0);
+          return `
+            <label class="flex items-center gap-2 p-1.5 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer text-xs">
+              <input type="checkbox" value="${m.id}" ${isModChecked ? 'checked' : ''} class="rounded accent-emerald-500 w-3.5 h-3.5">
+              <span class="text-white font-medium truncate">${idx + 1}. ${m.title || m.id}</span>
+            </label>
+          `;
+        }).join('');
+      }
+
+      const isStandalone = course.availableStandalone === true;
+      document.getElementById("courseModalStandaloneInput").checked = isStandalone;
+      toggleCourseStandaloneConfig(isStandalone);
+      document.getElementById("courseModalStandalonePriceInput").value = course.standalonePrice || "";
+      document.getElementById("courseModalCheckoutHotmartInput").value = course.standaloneCheckoutHotmart || course.checkoutHotmart || "";
+      document.getElementById("courseModalCheckoutStripeInput").value = course.standaloneCheckoutStripe || course.checkoutStripe || "";
+
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
@@ -2226,16 +2420,48 @@
       const desc = document.getElementById("courseModalDescInput").value.trim();
       const published = document.getElementById("courseModalPublishedInput").checked;
 
+      // 3 Opções de Disponibilidade
+      const includedInClubSubscription = document.getElementById("courseModalClubSubInput").checked;
+      const availableInFreeTier = document.getElementById("courseModalFreeTierInput").checked;
+      const freeTierCtaMessage = document.getElementById("courseModalFreeCtaMsgInput").value.trim() || "Gostou desta aula? Destrave o curso completo no AEF Club!";
+      const freeTierCtaUrl = document.getElementById("courseModalFreeCtaUrlInput").value.trim();
+
+      const freeModuleCheckboxes = document.querySelectorAll('#courseModalFreeModulesList input[type="checkbox"]:checked');
+      const freeModuleIds = Array.from(freeModuleCheckboxes).map(cb => cb.value);
+
+      const availableStandalone = document.getElementById("courseModalStandaloneInput").checked;
+      const standalonePrice = document.getElementById("courseModalStandalonePriceInput").value.trim();
+      const standaloneCheckoutHotmart = document.getElementById("courseModalCheckoutHotmartInput").value.trim();
+      const standaloneCheckoutStripe = document.getElementById("courseModalCheckoutStripeInput").value.trim();
+
       const courseObj = ALL_COURSES[id] || { modules: [] };
       courseObj.id = id;
       courseObj.title = title;
       courseObj.slug = slug;
       courseObj.tierRequired = tier;
       courseObj.themeColor = themeColor;
-      courseObj.badge = tier === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO";
+      courseObj.badge = tier === "vip" ? "MENTORIA VIP" : (availableInFreeTier ? "EXPERIMENTE GRÁTIS" : "AEF CLUB");
       courseObj.coverImageUrl = cover;
       courseObj.description = desc;
       courseObj.published = published;
+
+      // Persistência das 3 Opções
+      courseObj.includedInClubSubscription = includedInClubSubscription;
+      courseObj.availableInFreeTier = availableInFreeTier;
+      courseObj.freeTierCtaMessage = freeTierCtaMessage;
+      courseObj.freeTierCtaUrl = freeTierCtaUrl;
+      courseObj.freeModuleIds = freeModuleIds;
+      courseObj.availableStandalone = availableStandalone;
+      courseObj.standalonePrice = standalonePrice;
+      courseObj.standaloneCheckoutHotmart = standaloneCheckoutHotmart;
+      courseObj.standaloneCheckoutStripe = standaloneCheckoutStripe;
+
+      // Atualiza a flag isFreeTier em cada módulo
+      if (Array.isArray(courseObj.modules)) {
+        courseObj.modules.forEach(m => {
+          m.isFreeTier = freeModuleIds.includes(m.id);
+        });
+      }
 
       ALL_COURSES[id] = courseObj;
       activeCourseId = id;

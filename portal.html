@@ -497,22 +497,23 @@
     <div data-aef-slot="portal_hero_below"></div>
 
     <!-- C. SEÇÃO 1: "MEUS CURSOS MATRICULADOS" (GRADE DE CARDS) -->
+    <!-- C. GRADE UNIFICADA: "MEUS CURSOS & TREINAMENTOS AGORAEUFALO" -->
     <section id="meus-cursos" class="space-y-4">
       
       <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
         <div>
           <h3 class="font-black text-base sm:text-lg text-[#0A192F] flex items-center gap-2">
             <i data-lucide="book-open" class="w-5 h-5 text-[#C68A36]"></i>
-            <span>Meus Cursos Matriculados</span>
+            <span>Meus Cursos & Treinamentos</span>
           </h3>
-          <p class="text-xs text-[#7A7369]">Cursos com acesso liberado na sua conta:</p>
+          <p class="text-xs text-[#7A7369]">Cursos liberados na sua conta e programas com degustação gratuita:</p>
         </div>
         <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-mono text-[11px] font-bold" id="enrolled-courses-count">
           0 CURSOS
         </span>
       </div>
 
-      <!-- Enrolled Courses Grid -->
+      <!-- Unified Courses Grid (All Courses in 1 High-End Catalog) -->
       <div id="enrolledCoursesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <!-- Injected dynamically via JS -->
       </div>
@@ -521,29 +522,6 @@
 
     <!-- AEF DYNAMIC MARKETING SLOT: Courses In-Feed -->
     <div data-aef-slot="portal_courses_infeed"></div>
-
-    <!-- D. SEÇÃO 2: "VITRINE & CURSOS DISPONÍVEIS PARA INSCRIÇÃO" (CATÁLOGO) -->
-    <section id="vitrine-cursos" class="space-y-4 pt-4 border-t border-[#EAE5DC]">
-      
-      <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
-        <div>
-          <h3 class="font-black text-base sm:text-lg text-[#0A192F] flex items-center gap-2">
-            <i data-lucide="sparkles" class="w-5 h-5 text-amber-500"></i>
-            <span>Vitrine de Treinamentos & Especializações</span>
-          </h3>
-          <p class="text-xs text-[#7A7369]">Expanda sua fluência com novos programas do Professor Leo:</p>
-        </div>
-        <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-700 font-mono text-[10px] font-bold uppercase">
-          DISPONÍVEL
-        </span>
-      </div>
-
-      <!-- Available Courses Grid -->
-      <div id="availableCoursesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <!-- Injected dynamically via JS -->
-      </div>
-
-    </section>
 
     <!-- E. CENTRAL DE RECURSOS & CONTATO DIRETO -->
     <section class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -1021,7 +999,16 @@
                 studentId: f.studentId?.stringValue || "",
                 published: f.published?.booleanValue ?? true,
                 coverImageUrl: f.coverImageUrl?.stringValue || "assets/images/cover-default-aef.jpg",
-                description: f.description?.stringValue || ""
+                description: f.description?.stringValue || "",
+                includedInClubSubscription: f.includedInClubSubscription?.booleanValue ?? true,
+                availableInFreeTier: f.availableInFreeTier?.booleanValue ?? (f.tierRequired?.stringValue === 'free'),
+                freeModuleIds: f.freeModuleIds?.arrayValue?.values ? f.freeModuleIds.arrayValue.values.map(v => v.stringValue) : [],
+                freeTierCtaMessage: f.freeTierCtaMessage?.stringValue || '',
+                freeTierCtaUrl: f.freeTierCtaUrl?.stringValue || '',
+                availableStandalone: f.availableStandalone?.booleanValue ?? false,
+                standalonePrice: f.standalonePrice?.stringValue || '',
+                standaloneCheckoutHotmart: f.standaloneCheckoutHotmart?.stringValue || '',
+                standaloneCheckoutStripe: f.standaloneCheckoutStripe?.stringValue || ''
               };
             });
             courses = Object.assign({}, baseMatrix, cloudCourses);
@@ -1032,34 +1019,38 @@
       }
 
       const enrolledContainer = document.getElementById("enrolledCoursesGrid");
-      const availableContainer = document.getElementById("availableCoursesGrid");
       const enrolledCountBadge = document.getElementById("enrolled-courses-count");
 
-      let enrolledHtml = "";
-      let availableHtml = "";
+      let gridHtml = "";
       let enrolledCount = 0;
+      let totalVisible = 0;
 
       const normalizedCurrentEmail = (currentEmail || '').trim().toLowerCase();
+      const isClubMember = currentTier === 'club_annual' || currentTier === 'club_anual' || currentTier === 'legacy_member';
 
       for (const [id, course] of Object.entries(courses)) {
         // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
         if (course.published === false) continue;
 
-        // Se for um curso VIP de outro mentorado e o usuário não for admin nem o dono, não exibe
+        // Se for um curso VIP de outro mentorado e o usuário não for admin nem o dono, isola a privacidade
         const isMentorshipCourse = course.tierRequired === 'vip' || id.startsWith('mentoria-');
         const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
         const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
 
         if (isMentorshipCourse && !isAdmin && !isOwner) {
-          // Isolamento de privacidade: mentorias são 100% privadas do mentorado
           continue;
         }
 
+        totalVisible++;
+
+        const isIncludedInClub = course.includedInClubSubscription !== false && !isMentorshipCourse;
         const isEnrolled = isAdmin || 
                            isOwner || 
                            enrolledProducts.includes(id) || 
                            enrolledProducts.includes('all_access_master') ||
-                           ((currentTier === 'vip' || currentTier === 'vip_mentorship') && isOwner);
+                           ((currentTier === 'vip' || currentTier === 'vip_mentorship') && isOwner) ||
+                           (isClubMember && isIncludedInClub) ||
+                           course.tierRequired === 'free';
 
         if (isEnrolled) {
           enrolledCount++;
@@ -1074,13 +1065,14 @@
             ? `sala-de-aula.html?curso=${course.slug || course.id}&modulo=${courseProg.lastModuleId || ''}&aula=${resumeLessonId}`
             : `curso.html?curso=${course.slug || course.id}`;
 
-          enrolledHtml += `
+          gridHtml += `
             <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-[#C68A36]/60 transition flex flex-col justify-between">
               
               <div>
                 <!-- Course Cover Image -->
                 <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
                   <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
                   <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
                     ${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'CURSO ATIVO')}
                   </span>
@@ -1119,45 +1111,108 @@
             </div>
           `;
         } else {
-          // Mentoria não aparece na vitrine de cursos abertos para compra geral
-          // Cursos exclusivos de resgate para ex-alunos (enrolled_only) também não aparecem na vitrine pública
-          if (isMentorshipCourse || course.tierRequired === 'enrolled_only') continue;
+          // Curso que NÃO pertence ao plano do aluno
+          const hasFreeTasting = course.availableInFreeTier === true || 
+                                 (Array.isArray(course.freeModuleIds) && course.freeModuleIds.length > 0) || 
+                                 course.tierRequired === 'free';
 
-          availableHtml += `
-            <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between">
-              
-              <div>
-                <!-- Course Cover Image -->
-                <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                  <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-90">
-                  <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
-                    DISPONÍVEL
-                  </span>
+          // Link de checkout padrão Hotmart (Primário) ou fallback Stripe
+          const defaultCheckoutUrl = course.freeTierCtaUrl || 
+                                     course.standaloneCheckoutHotmart || 
+                                     'https://pay.hotmart.com/E106082992D?src=portal_card';
+
+          if (hasFreeTasting) {
+            // CASO COM DEGUSTAÇÃO FREE: FAIXA 'EXPERIMENTE GRÁTIS'
+            gridHtml += `
+              <div class="bg-white border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between relative group">
+                
+                <div>
+                  <!-- Cover com Faixa Dourada 'EXPERIMENTE GRÁTIS' -->
+                  <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0A192F]/80 via-black/20 to-black/30"></div>
+                    
+                    <!-- Ribbon Dourada de Degustação -->
+                    <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1.5">
+                      <span>🎁</span>
+                      <span>EXPERIMENTE GRÁTIS</span>
+                    </span>
+
+                    <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/90 text-white font-mono font-bold text-[9px] uppercase tracking-wider shadow-sm backdrop-blur-xs">
+                      🌱 Aulas Abertas Liberadas
+                    </span>
+                  </div>
+
+                  <!-- Course Body -->
+                  <div class="p-4 sm:p-5 space-y-2">
+                    <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                    <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">
+                      ${course.description || 'Experimente o método de escuta atenta e fala no reflexo do Professor Leo.'}
+                    </p>
+                  </div>
                 </div>
 
-                <!-- Course Body -->
-                <div class="p-4 sm:p-5 space-y-2">
-                  <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
+                <!-- Action Buttons: Degustação + Desbloqueio -->
+                <div class="p-4 sm:p-5 pt-0 space-y-2">
+                  <div class="grid grid-cols-2 gap-2">
+                    <a href="curso.html?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300/80 font-bold text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
+                      <span>Degustação</span>
+                      <i data-lucide="play" class="w-3 h-3 text-amber-600 fill-current"></i>
+                    </a>
+                    <a href="${defaultCheckoutUrl}" target="_blank" class="py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs">
+                      <span>Desbloquear</span>
+                      <i data-lucide="lock" class="w-3 h-3"></i>
+                    </a>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Action Button -->
-              <div class="p-4 sm:p-5 pt-0">
-                <a href="https://wa.me/5531999817975?text=Oi%20Leo!%20Quero%20saber%20mais%20sobre%20o%20curso%20${encodeURIComponent(course.title)}" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm">
-                  <span>Garantir Vaga</span>
-                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                </a>
               </div>
+            `;
+          } else {
+            // CASO EXCLUSIVO PAGO (SEM DEGUSTAÇÃO FREE)
+            const isStandaloneOnly = course.availableStandalone && course.includedInClubSubscription === false;
+            gridHtml += `
+              <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-slate-400 transition flex flex-col justify-between">
+                
+                <div>
+                  <!-- Cover com Faixa Azul-Marinho / Ouro de Conteúdo Exclusivo -->
+                  <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-85">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30"></div>
+                    
+                    <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-slate-900/90 text-amber-300 border border-amber-400/40 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1">
+                      <span>🔒</span>
+                      <span>${isStandaloneOnly ? 'VENDA AVULSA' : 'EXCLUSIVO AEF CLUB'}</span>
+                    </span>
+                  </div>
 
-            </div>
-          `;
+                  <!-- Course Body -->
+                  <div class="p-4 sm:p-5 space-y-2">
+                    <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                    <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
+                  </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="p-4 sm:p-5 pt-0">
+                  <a href="${defaultCheckoutUrl}" target="_blank" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
+                    <span>Desbloquear Acesso</span>
+                  </a>
+                </div>
+
+              </div>
+            `;
+          }
         }
       }
 
-      if (enrolledContainer) enrolledContainer.innerHTML = enrolledHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso matriculado no momento.</p>`;
-      if (availableContainer) availableContainer.innerHTML = availableHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso adicional disponível.</p>`;
-      if (enrolledCountBadge) enrolledCountBadge.innerText = `${enrolledCount} CURSO${enrolledCount > 1 ? 'S' : ''}`;
+      if (enrolledContainer) {
+        enrolledContainer.innerHTML = gridHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso disponível no momento.</p>`;
+      }
+      if (enrolledCountBadge) {
+        enrolledCountBadge.innerText = `${enrolledCount} MATRICULADOS • ${totalVisible} DISPONÍVEIS`;
+      }
     }
 
     window.togglePortalDrawer = () => {

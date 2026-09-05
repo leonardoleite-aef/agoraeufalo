@@ -946,7 +946,7 @@
 
           const audioScriptLines = [
             `[Speaker: Leo (Charon)]`,
-            `Fala, meu amigo! Leonardo Leite aqui. Vamos para a ${lData.title.split('•')[0].trim()} de "${courseTitle}"!`,
+            `Hello, my dear friend! Leonardo Leite aqui. Vamos para a ${lData.title.split('•')[0].trim()} de "${courseTitle}"!`,
             `Coloque os fones e observe pelos ouvidos como dois nativos resolvem essa situação no dia a dia real.`,
             `[pause: 1.5s]`
           ];
@@ -1039,7 +1039,7 @@
           trainingTrackId: `${slug}-track-1`,
           published: true,
           goldenTip: 'Nunca traduza palavra por palavra. Foque no ritmo e no sentimento da frase inteira!',
-          audioScript: `[Speaker: Leo (Charon)]\nHello, my friend! Leonardo Leite aqui. Vamos para o primeiro impacto de "${courseTitle}"!\n[pause: 1.5s]\n[Speaker: Native (Aoede)]\nHi there! How can I help you today?\n[pause: 0.8s]\n[Speaker: Traveler (Puck)]\nHi! I need some assistance with this, please.\n[pause: 1.5s]\n[Speaker: Leo (Charon)]\nSimples, direto e elegante. Repita no player até virar reflexo!`,
+          audioScript: `[Speaker: Leo (Charon)]\nHello, my dear friend! Leonardo Leite aqui. Vamos para o primeiro impacto de "${courseTitle}"!\n[pause: 1.5s]\n[Speaker: Native (Aoede)]\nHi there! How can I help you today?\n[pause: 0.8s]\n[Speaker: Traveler (Puck)]\nHi! I need some assistance with this, please.\n[pause: 1.5s]\n[Speaker: Leo (Charon)]\nSimples, direto e elegante. Repita no player até virar reflexo!`,
           processedContentHtml: `<div class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs"><p class="text-xs text-slate-800">Treine no Player até a fala sair no automático.</p></div>`
         },
         {
@@ -1059,7 +1059,7 @@
           trainingTrackId: `${slug}-track-2`,
           published: true,
           goldenTip: 'Se não entender de primeira, não diga "What?". Use "Could you say that again, please?" com cadência suave.',
-          audioScript: `[Speaker: Leo (Charon)]\nAula dois! Treino de bate-pronto.\n[pause: 1.5s]\n[Speaker: Native (Aoede)]\nWould you prefer option A or option B?\n[pause: 0.8s]\n[Speaker: Traveler (Puck)]\nOption A works great for me, thank you.\n[pause: 1.5s]\n[Speaker: Leo (Charon)]\nRepita até a sua boca acostumar com o som!`,
+          audioScript: `[Speaker: Leo (Charon)]\nHello, my dear friend! Aula dois: treino de bate-pronto.\n[pause: 1.5s]\n[Speaker: Native (Aoede)]\nWould you prefer option A or option B?\n[pause: 0.8s]\n[Speaker: Traveler (Puck)]\nOption A works great for me, thank you.\n[pause: 1.5s]\n[Speaker: Leo (Charon)]\nRepita até a sua boca acostumar com o som!`,
           processedContentHtml: `<div class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs"><p class="text-xs text-slate-800">Pratique o reflexo imediato no Player.</p></div>`
         },
         {
@@ -1079,7 +1079,7 @@
           trainingTrackId: `${slug}-track-3`,
           published: true,
           goldenTip: 'Termine sempre agradecendo com um sorriso: "I really appreciate your help. Have a great one!".',
-          audioScript: `[Speaker: Leo (Charon)]\nFechando com chave de ouro!\n[pause: 1.5s]\n[Speaker: Native (Aoede)]\nIs there anything else I can do for you?\n[pause: 0.8s]\n[Speaker: Traveler (Puck)]\nThat is all, thank you so much for your help!\n[pause: 1.5s]\n[Speaker: Leo (Charon)]\nExcelente! Leve essa confiança para a vida prática!`,
+          audioScript: `[Speaker: Leo (Charon)]\nHello, my dear friend! Fechando com chave de ouro!\n[pause: 1.5s]\n[Speaker: Native (Aoede)]\nIs there anything else I can do for you?\n[pause: 0.8s]\n[Speaker: Traveler (Puck)]\nThat is all, thank you so much for your help!\n[pause: 1.5s]\n[Speaker: Leo (Charon)]\nExcelente! Leve essa confiança para a vida prática!`,
           processedContentHtml: `<div class="p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs"><p class="text-xs text-slate-800">Missão cumprida! Seu inglês da vida prática destravado.</p></div>`
         }
       ];

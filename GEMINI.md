@@ -11,8 +11,10 @@ Para especificações técnicas completas de schemas, squads e esteiras de engen
 - **Tom de voz:** Autêntico, direto, espirituoso, sagaz, sem jargões corporativos ("mindset", "frameworks"), sem promessas mágicas de internet e falando de igual para igual.
 - **Princípio Pedagógico Fundamental:** *"Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Repetir a experiência da mesma história até a fala virar reflexo."*
 - **A Didática do "Sentimento da Estrutura":** Proibição de jargões gramaticais abstratos. Explicar a língua pela intenção, contexto e clima emocional da conversa real.
+- **Bordão Canônico Inegociável & Abertura Vocal Obrigatória:** Toda saudação, abertura de áudio/vídeo, introdução pedagógica, roteiro Gemini TTS, mensagem direta ou fala gravada do Professor Leonardo Leite começa **obrigatoriamente** com *"Hello, my dear friend!"* (seguido da continuidade da fala em português falado coloquial ou inglês). Proibição absoluta de saudações genéricas ("Fala, meu amigo!", "Olá pessoal", "Oi turma").
 - **Português Falado Brasileiro Real (`spokenTranslation`):** Toda tradução de apoio deve usar o português falado brasileiro coloquial autêntico (ex: *"Já vai!"*, *"Vou dar um jeito"*), sem notas gramaticais técnicas.
 - **Fidelidade 100% (Zero Alucinação):** Usar estritamente histórias, vocabulário e exercícios dos roteiros/transcrições fornecidos.
+- **Arquitetura de Assinatura & Checkouts (Hotmart Primário, Stripe Fallback):** O AEF Club opera com assinatura única gerida prioritariamente na **Hotmart** (BRL, PIX, 12x, recuperação de cliente). O **Stripe** atua como **fallback** para pagamentos internacionais, moedas estrangeiras ou contingências. Cursos podem ser configurados com Assinatura Club, Degustação Free modular e Venda Avulsa.
 
 ---
 
