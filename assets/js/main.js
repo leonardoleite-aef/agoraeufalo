@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function openCheckoutModal(checkoutUrl) {
     if (!checkoutModal || !checkoutIframeContainer) return;
 
-    const url = checkoutUrl || 'https://pay.hotmart.com/E106082992D?src=popup_site';
+    const url = checkoutUrl || 'https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=popup_site';
 
     checkoutIframeContainer.innerHTML = `
       <iframe 

@@ -23,8 +23,8 @@
       badge: "PLANO OFICIAL",
       status: "active",
       provider: "hotmart",
-      isPendingHotmartLink: true,
-      checkoutUrl: "https://pay.hotmart.com/OFFER_MS_CLUB_ANUAL",
+      isPendingHotmartLink: false,
+      checkoutUrl: "https://pay.hotmart.com/T107479074N?off=mgwnab3h",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Quero tirar uma dúvida sobre a matrícula no Magic Stories Club Anual.",
       grantedTier: "club_annual",
@@ -39,7 +39,7 @@
         regularPrice: 997.00,
         offerPrice: 497.00,
         currency: "BRL",
-        installmentsText: "12x de R$ 49,70",
+        installmentsText: "12 x R$51,40",
         trialMode: "none",
         trialDays: 0
       },
@@ -571,27 +571,37 @@
     async init() {
       if (this.initialized) return this.offers;
 
-      // 1. Carrega do localStorage de imediato (zero latência)
+      // 1. Inicia sempre com o mapa da semente canônica oficial
+      const offerMap = new Map();
+      CANONICAL_OFFERS_SEED.forEach(seed => {
+        offerMap.set(seed.id, JSON.parse(JSON.stringify(seed)));
+      });
+
+      // 2. Carrega do localStorage e funde (preserva catálogo e restaura edições locais)
       try {
-        const cached = localStorage.getItem(STORAGE_KEY);
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            this.offers = parsed;
+        if (typeof window !== 'undefined' && window.localStorage) {
+          const cached = window.localStorage.getItem(STORAGE_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              parsed.forEach(item => {
+                if (item && item.id) {
+                  const existing = offerMap.get(item.id) || {};
+                  offerMap.set(item.id, { ...existing, ...item });
+                }
+              });
+            }
           }
         }
       } catch (e) {
         console.warn("[AEFOffersRegistry] Falha ao ler cache local:", e);
       }
 
-      // Se não havia cache local, usa semente canônica
-      if (!this.offers || this.offers.length === 0) {
-        this.offers = JSON.parse(JSON.stringify(CANONICAL_OFFERS_SEED));
-        this.saveToLocalCache();
-      }
+      this.offers = Array.from(offerMap.values());
+      this.saveToLocalCache();
 
-      // 2. Conecta ao Firebase se disponível
-      if (window.aefCloudSync) {
+      // 3. Conecta ao Firebase se disponível
+      if (typeof window !== 'undefined' && window.aefCloudSync) {
         try {
           await window.aefCloudSync.init();
           this.db = window.firebase ? window.firebase.firestore() : null;
@@ -600,7 +610,7 @@
         }
       }
 
-      // 3. Busca atualizações do Firestore em background
+      // 4. Busca atualizações do Firestore em background e funde
       await this.syncFromFirestore();
 
       this.initialized = true;
@@ -609,7 +619,9 @@
 
     saveToLocalCache() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.offers));
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.offers));
+        }
       } catch (e) {
         console.warn("[AEFOffersRegistry] Falha ao salvar no cache local:", e);
       }
@@ -617,18 +629,13 @@
 
     async syncFromFirestore() {
       try {
+        let remoteOffers = [];
         if (this.db) {
           const snap = await this.db.collection('offers').orderBy('createdAt', 'desc').get();
           if (!snap.empty) {
-            const remoteOffers = [];
             snap.forEach(doc => {
               remoteOffers.push({ id: doc.id, ...doc.data() });
             });
-            if (remoteOffers.length > 0) {
-              this.offers = remoteOffers;
-              this.saveToLocalCache();
-              return remoteOffers;
-            }
           }
         } else {
           // REST API Fallback
@@ -636,14 +643,41 @@
           if (res.ok) {
             const data = await res.json();
             if (data && data.documents && data.documents.length > 0) {
-              const remoteOffers = data.documents.map(doc => this.parseFirestoreDocument(doc));
-              if (remoteOffers.length > 0) {
-                this.offers = remoteOffers;
-                this.saveToLocalCache();
-                return remoteOffers;
-              }
+              remoteOffers = data.documents.map(doc => this.parseFirestoreDocument(doc));
             }
           }
+        }
+
+        if (remoteOffers.length > 0) {
+          // Fusão Inteligente: Preserva todas as 11 sementes canônicas + ofertas locais + sobrepõe dados remotos do Firestore
+          const offerMap = new Map();
+
+          // 1. Sementes canônicas oficiais
+          CANONICAL_OFFERS_SEED.forEach(seed => {
+            offerMap.set(seed.id, JSON.parse(JSON.stringify(seed)));
+          });
+
+          // 2. Ofertas que estavam em this.offers
+          if (Array.isArray(this.offers)) {
+            this.offers.forEach(o => {
+              if (o && o.id) {
+                const existing = offerMap.get(o.id) || {};
+                offerMap.set(o.id, { ...existing, ...o });
+              }
+            });
+          }
+
+          // 3. Sobrepõe com os dados remotos vindos do Firestore (como o link real da Hotmart que o Leo salvou)
+          remoteOffers.forEach(rem => {
+            if (rem && rem.id) {
+              const existing = offerMap.get(rem.id) || {};
+              offerMap.set(rem.id, { ...existing, ...rem });
+            }
+          });
+
+          this.offers = Array.from(offerMap.values());
+          this.saveToLocalCache();
+          return this.offers;
         }
       } catch (err) {
         // Silencioso se offline, mantém os dados locais/seed
@@ -818,6 +852,33 @@
       } catch (e) {}
 
       return true;
+    }
+
+    /**
+     * Restaura todo o catálogo canônico garantindo que nenhuma oferta se perca
+     */
+    async restoreCanonicalSeed() {
+      const offerMap = new Map();
+      CANONICAL_OFFERS_SEED.forEach(seed => offerMap.set(seed.id, JSON.parse(JSON.stringify(seed))));
+
+      if (Array.isArray(this.offers)) {
+        this.offers.forEach(o => {
+          if (o && o.id && o.checkoutUrl && !o.checkoutUrl.includes('OFFER_')) {
+            const seed = offerMap.get(o.id);
+            if (seed) {
+              seed.checkoutUrl = o.checkoutUrl;
+              seed.isPendingHotmartLink = false;
+              if (o.pricing?.installmentsText) seed.pricing.installmentsText = o.pricing.installmentsText;
+            } else {
+              offerMap.set(o.id, o);
+            }
+          }
+        });
+      }
+
+      this.offers = Array.from(offerMap.values());
+      this.saveToLocalCache();
+      return this.offers;
     }
 
     /**

@@ -34,7 +34,7 @@
         offerPrice: 497.00,
         installments: "12x de R$ 49,90",
         paymentMethods: ["credit_card", "pix", "boleto"],
-        checkoutUrl: "https://pay.hotmart.com/OFFER_ANUAL_2026"
+        checkoutUrl: "https://pay.hotmart.com/T107479074N?off=mgwnab3h"
       },
       campaignExpiry: {
         hasExpiry: false,
@@ -54,11 +54,11 @@
         ],
         hasVideo: false,
         videoEmbedUrl: "",
-        generatedPageUrl: "ofertas/plano-anual-2026.html"
+        generatedPageUrl: "projeto-aef.html"
       },
       hotmartData: {
-        productId: "HOTMART_PROD_CLUB",
-        offerCode: "CLUB_ANUAL_2026"
+        productId: "T107479074N",
+        offerCode: "mgwnab3h"
       },
       createdAt: new Date().toISOString()
     },
