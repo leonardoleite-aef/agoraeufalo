@@ -40,7 +40,7 @@
             'admin-vendas.html': 'Vendas & Checkouts',
             'admin-marketing.html': 'Marketing & Blocos',
             'admin-ofertas.html': 'Ofertas & Trials',
-            'admin-cursos.html': 'Course Studio',
+            'admin-cursos.html': 'Course Factory',
             'admin-pdf-factory.html': 'PDF Factory',
             'tts-studio.html': 'TTS Voice Studio',
             'admin-publico.html': 'Leads & Sugestões',
@@ -139,7 +139,7 @@
                 <span>🎯</span> <span>Marketing</span>
               </a>
               <a href="admin-cursos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-cursos.html')}">
-                <span>📦</span> <span>Course Studio</span>
+                <span>🏭</span> <span>Course Factory</span>
               </a>
               <a href="admin-pdf-factory.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-pdf-factory.html')}">
                 <span>📄</span> <span>PDF Factory</span>
