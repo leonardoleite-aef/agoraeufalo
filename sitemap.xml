@@ -21,6 +21,14 @@
     <priority>0.95</priority>
   </url>
 
+  <!-- 2.0 Planos & Preços da Assinatura -->
+  <url>
+    <loc>https://agoraeufalo.com.br/precos.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
   <!-- 2.1 English Personal Training Player (Showcase & Treinador Interativo) -->
   <url>
     <loc>https://agoraeufalo.com.br/personal-trainer.html</loc>
