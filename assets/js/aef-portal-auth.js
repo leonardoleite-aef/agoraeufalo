@@ -169,6 +169,12 @@
       return false;
     }
 
+    isHotmartReviewerEmail(email) {
+      if (!email) return false;
+      const clean = email.trim().toLowerCase();
+      return clean === 'hotmart.teste@agoraeufalo.com.br' || clean === 'avaliador.hotmart@agoraeufalo.com.br';
+    }
+
     // =========================================================================
     // AUTHENTICATION METHODS
     // =========================================================================
@@ -215,6 +221,7 @@
       
       const isMasterAdmin = this.isMasterAdminEmail(email);
       const isVipMentee = this.isVipMenteeEmail(email);
+      const isHotmartReviewer = this.isHotmartReviewerEmail(email);
 
       if (profile && isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
         profile.role = 'admin';
@@ -233,6 +240,16 @@
         if (!profile.enrolledProducts.includes('ms-legacy')) profile.enrolledProducts.push('ms-legacy');
         await this.db.collection('users').doc(cred.user.uid).update({
           tier: 'vip',
+          enrolledProducts: profile.enrolledProducts,
+          lastLoginAt: new Date().toISOString()
+        });
+      } else if (profile && isHotmartReviewer) {
+        profile.role = 'student';
+        profile.tier = 'club_annual';
+        profile.enrolledProducts = ['magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+        await this.db.collection('users').doc(cred.user.uid).update({
+          role: 'student',
+          tier: 'club_annual',
           enrolledProducts: profile.enrolledProducts,
           lastLoginAt: new Date().toISOString()
         });
