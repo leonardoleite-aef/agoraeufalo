@@ -194,7 +194,31 @@
           });
         }
       } catch (err) {
-        console.warn('⚠️ [AEFWebhook] Aviso ao buscar logs remotos:', err);
+        console.warn('⚠️ [AEFWebhook] Aviso ao buscar logs via SDK:', err);
+      }
+
+      // REST Fallback caso o SDK esteja ocioso ou sem índice
+      if (remoteLogs.length === 0) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/webhook_logs?key=AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk`);
+          if (res.ok) {
+            const data = await res.json();
+            const docs = data.documents || [];
+            docs.forEach(d => {
+              const f = d.fields || {};
+              const obj = {};
+              for (const [k, v] of Object.entries(f)) {
+                if (v.stringValue !== undefined) obj[k] = v.stringValue;
+                else if (v.integerValue !== undefined) obj[k] = parseInt(v.integerValue, 10);
+                else if (v.doubleValue !== undefined) obj[k] = v.doubleValue;
+                else if (v.booleanValue !== undefined) obj[k] = v.booleanValue;
+              }
+              if (obj.id) remoteLogs.push(obj);
+            });
+          }
+        } catch (restErr) {
+          console.warn('⚠️ [AEFWebhook] REST fallback error:', restErr);
+        }
       }
 
       // Mescla com logs locais
