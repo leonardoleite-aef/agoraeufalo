@@ -783,13 +783,13 @@
         console.warn("Auth check fallback:", authErr);
       }
 
-      const isLocalOrDev = (
+      const isExplicitlyLoggedOut = typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') === 'true';
+      const isLocalOrDev = !isExplicitlyLoggedOut && (
         window.location.protocol === 'file:' ||
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
         window.location.hostname.startsWith('192.168.') ||
-        window.location.hostname.startsWith('10.') ||
-        sessionStorage.getItem('AEF_MASTER_SESSION_AUTH') === 'true'
+        window.location.hostname.startsWith('10.')
       );
 
       const profile = (window.aefPortalAuth && window.aefPortalAuth.currentProfile) || {};

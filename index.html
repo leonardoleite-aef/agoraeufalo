@@ -1995,6 +1995,20 @@
 
       // 8. Roteamento Inteligente de Aluno Logado (Diretriz Permanente Seção 6)
       function checkLoggedInStudent() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('logout') === 'true' || localStorage.getItem('aef_logged_out') === 'true') {
+          try {
+            localStorage.removeItem('aef_user_name');
+            localStorage.removeItem('aef_user_profile');
+            localStorage.removeItem('aef_user_email');
+            localStorage.removeItem('aef_user_role');
+            localStorage.removeItem('aef_user_tier');
+            localStorage.removeItem('aef_enrolled_products');
+            localStorage.setItem('aef_logged_out', 'true');
+          } catch(e) {}
+          return;
+        }
+
         let studentName = null;
         try {
           const storedProfile = localStorage.getItem('aef_user_profile');
@@ -2013,6 +2027,7 @@
 
         if (window.aefPortalAuth && typeof window.aefPortalAuth.onAuthStateChanged === 'function') {
           window.aefPortalAuth.onAuthStateChanged((user, profile) => {
+            if (localStorage.getItem('aef_logged_out') === 'true') return;
             if (user && profile) {
               applyStudentState(profile.name || user.displayName || user.email.split('@')[0]);
             }
@@ -2058,10 +2073,12 @@
         } catch (e) {
           console.warn('SignOut error:', e);
         }
-      } else {
+      }
+      try {
         localStorage.clear();
         sessionStorage.clear();
-      }
+        localStorage.setItem('aef_logged_out', 'true');
+      } catch(e) {}
       window.location.href = 'index.html?logout=true';
     };
   </script>

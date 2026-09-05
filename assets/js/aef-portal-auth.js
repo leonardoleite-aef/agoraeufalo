@@ -11,7 +11,6 @@
 
   // Purge legacy password gate overlay if present in browser cache
   try {
-    sessionStorage.setItem("AEF_MASTER_SESSION_AUTH", "true");
     const el = document.getElementById('aef-auth-gate-overlay');
     if (el) el.remove();
     const st = document.getElementById('aef-gate-style');
@@ -43,8 +42,7 @@
       hostname === '127.0.0.1' ||
       hostname.startsWith('192.168.') ||
       hostname.startsWith('10.') ||
-      hostname.endsWith('.local') ||
-      (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('AEF_MASTER_SESSION_AUTH') === 'true')
+      hostname.endsWith('.local')
     );
   }
 
@@ -56,9 +54,13 @@
       this.currentUser = null;
       this.currentProfile = null;
 
-      // Em ambiente local de desenvolvimento ou sessão Master ativa,
-      // inicializa imediatamente o perfil do Professor Leo para disponibilidade síncrona
-      if (isLocalOrDevEnvironment()) {
+      // Apenas em ferramentas administrativas do backoffice ('admin-*.html') em ambiente local,
+      // inicializa o perfil do Professor Leo para testes. NUNCA para visitantes comuns ou na Home pública.
+      const isDev = isLocalOrDevEnvironment();
+      const isAdminPage = typeof window !== 'undefined' && (window.location.pathname.includes('admin') || window.location.search.includes('god_mode=1'));
+      const isExplicitlyLoggedOut = typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') === 'true';
+
+      if (isDev && isAdminPage && !isExplicitlyLoggedOut) {
         const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
         const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
         const cachedName = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_name') : null;
@@ -140,6 +142,7 @@
     _syncLocalStorage(profile) {
       if (!profile) return;
       try {
+        localStorage.removeItem('aef_logged_out');
         localStorage.setItem('aef_user_name', profile.name || 'Aluno AgoraEuFalo');
         localStorage.setItem('aef_user_email', profile.email || '');
         localStorage.setItem('aef_user_tier', profile.tier || 'free');
@@ -421,9 +424,11 @@
         localStorage.removeItem('aef_active_tier');
         localStorage.removeItem('aef_enrolled_products');
         localStorage.removeItem('aef_is_admin');
+        localStorage.setItem('aef_logged_out', 'true');
       }
       if (typeof sessionStorage !== 'undefined') {
         sessionStorage.removeItem('aef_impersonate_state');
+        sessionStorage.removeItem('AEF_MASTER_SESSION_AUTH');
       }
     }
 
@@ -556,7 +561,7 @@
      * Route Guard: Blocks unauthenticated anonymous access and redirects to login.html
      */
     async requireAuth({ redirectUrl = 'login.html', requiredTier = null, requireAdmin = false } = {}) {
-      if (isLocalOrDevEnvironment()) {
+      if (isLocalOrDevEnvironment() && typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') !== 'true') {
         if (!this.currentUser) {
           this.currentUser = {
             uid: 'dev-master-leo',
