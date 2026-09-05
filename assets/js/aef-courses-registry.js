@@ -10,7 +10,7 @@ const AEF_COURSES_DATA = {
     "slug": "english-quickstart",
     "badge": "FOUNDATION",
     "tierRequired": "free",
-    "coverImageUrl": "assets/images/cover-english-quickstart.jpg",
+    "coverImageUrl": "assets/images/cover-english-quickstart.jpg?v=20260905",
     "description": "",
     "published": true,
     "modules": [
