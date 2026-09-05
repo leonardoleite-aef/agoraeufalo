@@ -9,11 +9,11 @@
   <meta name="title" content="AgoraEuFalo | Treine seu Ouvido e Fale Inglês com Naturalidade • Professor Leonardo Leite">
   <meta name="description" content="Inglês não é matéria de escola para passar em prova; inglês é experiência viva. Conheça a metodologia de mais de 35 anos de sala de aula do Professor Leo Leite e treine seu ouvido até a fala virar reflexo.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" href="https://agoraeufalo.com.br/nova-home.html">
+  <link rel="canonical" href="https://agoraeufalo.com.br/">
 
   <!-- Open Graph / WhatsApp / Facebook / LinkedIn -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://agoraeufalo.com.br/nova-home.html">
+  <meta property="og:url" content="https://agoraeufalo.com.br/">
   <meta property="og:title" content="AgoraEuFalo | O Método de Inglês do Professor Leonardo Leite">
   <meta property="og:description" content="Você não precisa de mais regras de gramática. Você precisa treinar seu ouvido até a fala virar reflexo. Treine no smartphone ou computador.">
   <meta property="og:image" content="https://agoraeufalo.com.br/assets/images/og-image.jpg">
@@ -63,6 +63,10 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core Cloud & Auth SDKs -->
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
 
   <!-- Luxury Design System Stylesheets -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -124,7 +128,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
       
       <!-- Logo Oficial -->
-      <a href="nova-home.html" class="flex items-center gap-3 shrink-0 group" aria-label="Página Inicial AgoraEuFalo">
+      <a href="index.html" class="flex items-center gap-3 shrink-0 group" aria-label="Página Inicial AgoraEuFalo">
         <img 
           src="assets/images/logo-fundo-escuro.png" 
           alt="Logo AgoraEuFalo - Professor Leonardo Leite" 
@@ -150,8 +154,17 @@
 
       <!-- Ações do Header: Acessar Portal & CTA Onboarding -->
       <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <!-- Badge de Aluno Reconhecido (Injetado se Logado) -->
+        <div id="header-auth-badge" class="hidden items-center">
+          <a href="portal.html" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="header-auth-name">Olá, Aluno</span> • Ir para Minha Sala ➔
+          </a>
+        </div>
+
         <a 
           href="portal.html" 
+          id="header-login-btn"
           class="hidden sm:inline-flex px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 border border-white/15 whitespace-nowrap transition-all"
         >
           <span>Já sou Aluno</span>
@@ -159,6 +172,7 @@
 
         <a 
           href="#onboarding-section" 
+          id="header-cta-btn"
           class="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider whitespace-nowrap transition-all shadow-lg shadow-amber-500/20 active:scale-95 flex items-center gap-1.5 cursor-pointer"
         >
           <span>Ativar Acesso Grátis</span>
@@ -226,8 +240,8 @@
             Inglês não é matéria de escola para passar em prova; inglês é <strong>experiência viva</strong>. Pare de travar com a tradução mental de 4 segundos. Treine sua escuta ativa e musculatura da fala no seu smartphone ou no computador.
           </p>
 
-          <!-- Box de Acesso Rápido / Onboarding Hero -->
-          <div class="bg-white/5 backdrop-blur-md border border-white/10 p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 max-w-xl mx-auto lg:mx-0">
+          <!-- Box de Acesso Rápido / Onboarding Hero (Visitante) -->
+          <div id="hero-onboarding-box" class="bg-white/5 backdrop-blur-md border border-white/10 p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 max-w-xl mx-auto lg:mx-0">
             <div class="flex items-center gap-3">
               <img src="assets/images/leonardo-leite.png" alt="Professor Leo Leite" class="w-11 h-11 rounded-full object-cover border-2 border-amber-400 shrink-0">
               <div class="text-left">
@@ -266,6 +280,37 @@
               <span class="flex items-center gap-1">⚡ Sem cartão de crédito</span>
               <span class="flex items-center gap-1">📱 Treine no celular sem tela</span>
               <span class="flex items-center gap-1">🛡️ 100% Seguro</span>
+            </div>
+          </div>
+
+          <!-- Card de Boas-Vindas & Retorno Rápido (Se Aluno já Logado) -->
+          <div id="hero-welcome-back-card" class="hidden bg-gradient-to-r from-amber-500/15 via-slate-900/95 to-amber-500/10 backdrop-blur-md border-2 border-amber-400/40 p-6 rounded-3xl shadow-2xl space-y-4 max-w-xl mx-auto lg:mx-0 text-left">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 p-0.5 shadow-md shrink-0">
+                <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-amber-400 font-extrabold text-base" id="hero-welcome-avatar">
+                  A
+                </div>
+              </div>
+              <div>
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-300 uppercase tracking-wider">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Membro Reconhecido
+                </span>
+                <h3 class="text-xl font-black text-white" id="hero-welcome-title">Bem-vindo de volta!</h3>
+              </div>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Sua Sala de Aula e seu Personal Training Player estão ativos. Continue exatamente de onde você parou.
+            </p>
+            <div class="pt-1 flex flex-wrap items-center gap-3">
+              <a href="portal.html" class="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-500/25 flex items-center gap-2">
+                <span>Continuar Meus Treinos</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+              <a href="treino/player.html" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition border border-white/15 flex items-center gap-2">
+                <i data-lucide="headphones" class="w-4 h-4 text-amber-400"></i>
+                <span>Abrir Player</span>
+              </a>
             </div>
           </div>
 
@@ -1932,6 +1977,63 @@
           console.warn('[nova-home] aefBlockEngine init:', err);
         }
       }
+
+      // 8. Roteamento Inteligente de Aluno Logado (Diretriz Permanente Seção 6)
+      function checkLoggedInStudent() {
+        let studentName = null;
+        try {
+          const storedProfile = localStorage.getItem('aef_user_profile');
+          if (storedProfile) {
+            const p = JSON.parse(storedProfile);
+            if (p && (p.name || p.email)) studentName = p.name || p.email.split('@')[0];
+          }
+          if (!studentName) {
+            studentName = localStorage.getItem('aef_user_name');
+          }
+        } catch(e) {}
+
+        if (studentName) {
+          applyStudentState(studentName);
+        }
+
+        if (window.aefPortalAuth && typeof window.aefPortalAuth.onAuthStateChanged === 'function') {
+          window.aefPortalAuth.onAuthStateChanged((user, profile) => {
+            if (user && profile) {
+              applyStudentState(profile.name || user.displayName || user.email.split('@')[0]);
+            }
+          });
+        }
+      }
+
+      function applyStudentState(name) {
+        if (!name) return;
+        const firstName = name.trim().split(' ')[0] || 'Aluno';
+        const headerAuthBadge = document.getElementById('header-auth-badge');
+        const headerAuthName = document.getElementById('header-auth-name');
+        const headerLoginBtn = document.getElementById('header-login-btn');
+        const headerCtaBtn = document.getElementById('header-cta-btn');
+        const heroOnboardingBox = document.getElementById('hero-onboarding-box');
+        const heroWelcomeBackCard = document.getElementById('hero-welcome-back-card');
+        const heroWelcomeTitle = document.getElementById('hero-welcome-title');
+        const heroWelcomeAvatar = document.getElementById('hero-welcome-avatar');
+
+        if (headerAuthBadge && headerAuthName) {
+          headerAuthName.textContent = `Olá, ${firstName}`;
+          headerAuthBadge.classList.remove('hidden');
+          headerAuthBadge.classList.add('flex');
+          if (headerLoginBtn) headerLoginBtn.classList.add('hidden');
+          if (headerCtaBtn) headerCtaBtn.classList.add('hidden');
+        }
+
+        if (heroOnboardingBox && heroWelcomeBackCard) {
+          heroOnboardingBox.classList.add('hidden');
+          heroWelcomeBackCard.classList.remove('hidden');
+          if (heroWelcomeTitle) heroWelcomeTitle.textContent = `Bem-vindo de volta, ${firstName}!`;
+          if (heroWelcomeAvatar) heroWelcomeAvatar.textContent = firstName.charAt(0).toUpperCase();
+        }
+      }
+
+      checkLoggedInStudent();
     });
   </script>
 </body>

@@ -485,31 +485,46 @@
 
       await this.saveWebhookLog(logEntry);
 
-      // 4. Disparo de E-mail de Boas-Vindas com Magic Link (1ª Compra Aprovada)
-      if (event === 'PURCHASE_APPROVED' && !isRecurrent) {
-        const magicLinkUrl = `https://agoraeufalo.com.br/portal.html?email=${encodeURIComponent(email)}&welcome=true`;
-        try {
-          if (window.aefCloudSync && typeof window.aefCloudSync.sendTransactionalEmail === 'function') {
-            await window.aefCloudSync.sendTransactionalEmail('hotmart_welcome', {
-              email: email,
-              name: name,
-              subject: `🎉 Bem-vindo ao AgoraEuFalo! Seu acesso ao ${baseMapping.productName} está liberado`,
-              html: `
-                <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 24px; background: #FFFDF9; border: 1px solid #EAE5DC; border-radius: 16px;">
-                  <h2 style="color: #0A192F;">Olá, ${name}!</h2>
-                  <p style="color: #4A453E; line-height: 1.6;">Sua matrícula no <strong>${baseMapping.productName}</strong> foi confirmada com sucesso pelo Professor Leonardo Leite!</p>
-                  <p style="color: #4A453E; line-height: 1.6;">Você já pode acessar seu Portal do Aluno e começar seus treinos práticos de reflexo oral:</p>
-                  <div style="text-align: center; margin: 30px 0;">
-                    <a href="${magicLinkUrl}" style="background: #C68A36; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 12px; font-weight: bold; display: inline-block;">Acessar Meu Portal do Aluno ➔</a>
-                  </div>
-                  <p style="color: #7A7369; font-size: 12px;">Se precisar de qualquer suporte, envie um WhatsApp direto para o Leo ou responda a este e-mail.</p>
-                </div>
-              `
+      // 4. Disparo Sistêmico de E-mail via aefEmailEngine (Brevo / Firestore Queue)
+      try {
+        if (window.aefEmailEngine && typeof window.aefEmailEngine.sendTransactionalEmail === 'function') {
+          const magicLinkUrl = `https://agoraeufalo.com.br/portal.html?email=${encodeURIComponent(email)}&welcome=true`;
+
+          if (event === 'PURCHASE_APPROVED') {
+            await window.aefEmailEngine.sendTransactionalEmail({
+              templateId: !isRecurrent ? 'E1_WELCOME_ONBOARDING' : 'E4_PURCHASE_CONFIRMED',
+              toEmail: email,
+              toName: name,
+              params: {
+                magicLink: magicLinkUrl,
+                productName: baseMapping.productName,
+                platform: payload.id && String(payload.id).startsWith('stripe_') ? 'Stripe' : 'Hotmart'
+              }
+            });
+          } else if (event === 'SWITCH_PLAN') {
+            await window.aefEmailEngine.sendTransactionalEmail({
+              templateId: 'E5_PLAN_CHANGED',
+              toEmail: email,
+              toName: name,
+              params: {
+                newPlanName: targetTier,
+                magicLink: magicLinkUrl
+              }
+            });
+          } else if (event === 'SUBSCRIPTION_CANCELLATION' || event === 'PURCHASE_DELAYED' || event === 'PURCHASE_REFUNDED') {
+            await window.aefEmailEngine.sendTransactionalEmail({
+              templateId: 'E6_SUSPENSION_CANCELLATION',
+              toEmail: email,
+              toName: name,
+              params: {
+                reason: resultSummary,
+                recoveryUrl: 'https://agoraeufalo.com.br/precos.html'
+              }
             });
           }
-        } catch (mailErr) {
-          console.warn('⚠️ [AEFWebhook] Falha no envio de e-mail:', mailErr);
         }
+      } catch (mailErr) {
+        console.warn('⚠️ [AEFWebhook] Falha no disparo do e-mail sistêmico:', mailErr);
       }
 
       return {
