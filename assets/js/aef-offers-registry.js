@@ -20,6 +20,7 @@
       slug: "ms-club-anual",
       productId: "ms-club",
       productTitle: "Magic Stories Club",
+      hotmartProductId: "8460579",
       badge: "PLANO OFICIAL",
       status: "active",
       provider: "hotmart",
@@ -51,6 +52,7 @@
         spotsLeft: null
       },
       hotmartSetupSpec: {
+        hotmartProductId: "8460579",
         suggestedProductName: "AgoraEuFalo • Magic Stories Club (Anual)",
         format: "Assinatura Anual (Recorrência a cada 12 meses)",
         suggestedOfferCode: "CLUB_ANUAL_2026",
@@ -69,6 +71,7 @@
       slug: "ms-club-mensal",
       productId: "ms-club",
       productTitle: "Magic Stories Club",
+      hotmartProductId: "8460579",
       badge: "RECORRÊNCIA MENSAL",
       status: "active",
       provider: "hotmart",
@@ -100,6 +103,7 @@
         spotsLeft: null
       },
       hotmartSetupSpec: {
+        hotmartProductId: "8460579",
         suggestedProductName: "AgoraEuFalo • Magic Stories Club (Mensal)",
         format: "Assinatura Mensal (Cobrança recorrente todo mês)",
         suggestedOfferCode: "CLUB_MENSAL_59",
@@ -363,6 +367,7 @@
       slug: "trial-7-dias-gratis",
       productId: "ms-club",
       productTitle: "Magic Stories Club",
+      hotmartProductId: "8460579",
       badge: "🎁 7 DIAS GRÁTIS",
       status: "active",
       provider: "hotmart",
@@ -394,6 +399,7 @@
         spotsLeft: null
       },
       hotmartSetupSpec: {
+        hotmartProductId: "8460579",
         suggestedProductName: "Magic Stories Club • Período de Testes 7 Dias",
         format: "Assinatura com Período de Teste Gratuito",
         suggestedOfferCode: "TRIAL_7D_FREE",
@@ -462,6 +468,7 @@
       slug: "migracao-upgrade-club",
       productId: "ms-club",
       productTitle: "Magic Stories Club (Upgrade Exclusivo)",
+      hotmartProductId: "8460579",
       category: "migration",
       badge: "🚀 UPGRADE FIDELIDADE",
       status: "active",
@@ -494,6 +501,7 @@
         spotsLeft: 25
       },
       hotmartSetupSpec: {
+        hotmartProductId: "8460579",
         suggestedProductName: "Magic Stories Club Anual • Upgrade Alunos Anteriores",
         format: "Assinatura Anual com Desconto Especial de Migração",
         suggestedOfferCode: "MIGRACAO_CLUB_297",
@@ -754,6 +762,16 @@
         offerData.isPendingHotmartLink = false;
       }
 
+      // Garante hotmartProductId para produtos do AEF Club
+      if (offerData.productId === 'ms-club' && !offerData.hotmartProductId) {
+        offerData.hotmartProductId = '8460579';
+      }
+      if (offerData.hotmartSetupSpec) {
+        if (!offerData.hotmartSetupSpec.hotmartProductId && offerData.hotmartProductId) {
+          offerData.hotmartSetupSpec.hotmartProductId = offerData.hotmartProductId;
+        }
+      }
+
       // Atualiza localmente
       const idx = this.offers.findIndex(o => o.id === id);
       if (idx >= 0) {
@@ -914,7 +932,9 @@
       if (!offer) return null;
 
       const spec = offer.hotmartSetupSpec || {};
+      const hotmartProductId = offer.hotmartProductId || spec.hotmartProductId || (offer.productId === 'ms-club' ? '8460579' : '');
       return {
+        hotmartProductId: hotmartProductId,
         productName: spec.suggestedProductName || offer.productTitle,
         offerCode: spec.suggestedOfferCode || offer.id.toUpperCase(),
         format: spec.format || (offer.pricing?.billingType === 'subscription' ? 'Assinatura' : 'Pagamento Único'),
@@ -930,12 +950,15 @@
     parseFirestoreDocument(doc) {
       const f = doc.fields || {};
       const id = f.id?.stringValue || doc.name.split("/").pop();
+      const prodId = f.productId?.stringValue || "ms-club";
+      const hmId = f.hotmartProductId?.stringValue || (prodId === "ms-club" ? "8460579" : "");
       return {
         id: id,
         title: f.title?.stringValue || id,
         slug: f.slug?.stringValue || id,
-        productId: f.productId?.stringValue || "ms-club",
+        productId: prodId,
         productTitle: f.productTitle?.stringValue || "Magic Stories Club",
+        hotmartProductId: hmId,
         badge: f.badge?.stringValue || "OFERTA",
         status: f.status?.stringValue || "active",
         provider: f.provider?.stringValue || "hotmart",
@@ -967,6 +990,7 @@
           spotsLeft: parseInt(f.scarcity?.mapValue?.fields?.spotsLeft?.integerValue || "0") || null
         },
         hotmartSetupSpec: {
+          hotmartProductId: f.hotmartSetupSpec?.mapValue?.fields?.hotmartProductId?.stringValue || hmId,
           suggestedProductName: f.hotmartSetupSpec?.mapValue?.fields?.suggestedProductName?.stringValue || "",
           format: f.hotmartSetupSpec?.mapValue?.fields?.format?.stringValue || "",
           suggestedOfferCode: f.hotmartSetupSpec?.mapValue?.fields?.suggestedOfferCode?.stringValue || "",

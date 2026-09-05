@@ -89,6 +89,14 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-2.5 z-10 shrink-0">
+        <!-- Hotmart Club Product ID Quick Copy Pill -->
+        <button onclick="copyHotmartId('8460579', event)" class="px-3.5 py-2 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 transition flex items-center gap-2 cursor-pointer shadow-md group" title="Clique para copiar o ID Oficial do AEF Club na Hotmart">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span class="text-slate-300 font-bold text-xs">Hotmart Club:</span>
+          <span class="font-mono font-black text-amber-300 text-xs tracking-wider">ID 8460579</span>
+          <i data-lucide="copy" class="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition"></i>
+        </button>
+
         <button onclick="openCreateOfferModal()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 cursor-pointer">
           <i data-lucide="plus-circle" class="w-4 h-4"></i>
           <span>+ Nova Oferta Comercial</span>
@@ -334,14 +342,19 @@
               <input type="url" id="formCheckoutUrl" placeholder="https://pay.hotmart.com/XXXXX?off=YYYY" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">ID do Produto na Hotmart</label>
+                <input type="text" id="formHotmartProductId" placeholder="Ex: 8460579" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-amber-300 font-mono text-xs font-bold focus:border-amber-400 focus:outline-none">
+              </div>
+
               <div>
                 <label class="block font-bold text-slate-300 mb-1">Código da Oferta na Hotmart</label>
                 <input type="text" id="formOfferCode" placeholder="Ex: CLUB_ANUAL_2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
               </div>
 
               <div>
-                <label class="block font-bold text-slate-300 mb-1">SRC / SCK Padrão de Rastreamento</label>
+                <label class="block font-bold text-slate-300 mb-1">SRC / SCK Rastreamento</label>
                 <input type="text" id="formTrackingParam" placeholder="src=portal_free&sck=oferta" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
               </div>
             </div>
@@ -445,6 +458,20 @@
         <!-- Spec Items -->
         <div class="space-y-2.5">
           
+          <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-amber-400 uppercase block">ID do Produto na Hotmart</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Oficial Hotmart</span>
+              </div>
+              <p class="font-mono font-black text-amber-300 text-sm mt-0.5" id="specHotmartProductId">-</p>
+            </div>
+            <button onclick="copySpecField('specHotmartProductId')" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar ID</span>
+            </button>
+          </div>
+
           <div class="p-3 rounded-xl bg-[#060D17] border border-white/10 flex items-center justify-between gap-3">
             <div>
               <span class="text-[10px] font-bold text-slate-400 uppercase block">Nome do Produto</span>
@@ -565,6 +592,18 @@
       </div>
 
       <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-xs text-slate-300 leading-relaxed">
+        <!-- Hotmart Product ID Card -->
+        <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block">Produto AEF Club Cadastrado</span>
+            <p class="text-xs text-white mt-0.5">ID Oficial na Hotmart: <strong class="text-amber-300 font-mono text-sm">8460579</strong></p>
+          </div>
+          <button onclick="copyHotmartId('8460579', event)" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copiar ID</span>
+          </button>
+        </div>
+
         <div class="p-3.5 rounded-2xl bg-[#112240] border border-white/10 space-y-1">
           <span class="font-bold text-amber-400 block">Passo 1: Criar o Produto na Hotmart</span>
           <p>Acesse o painel da Hotmart ➔ Produtos ➔ Cadastrar Produto. Escolha "Curso Online" ou "Assinatura" conforme a modalidade da oferta.</p>
@@ -701,6 +740,7 @@
           (o.title && o.title.toLowerCase().includes(currentSearchTerm)) ||
           (o.slug && o.slug.toLowerCase().includes(currentSearchTerm)) ||
           (o.productTitle && o.productTitle.toLowerCase().includes(currentSearchTerm)) ||
+          (o.hotmartProductId && o.hotmartProductId.toLowerCase().includes(currentSearchTerm)) ||
           (o.hotmartSetupSpec?.suggestedOfferCode && o.hotmartSetupSpec.suggestedOfferCode.toLowerCase().includes(currentSearchTerm))
         );
       }
@@ -723,6 +763,7 @@
         const isActive = offer.status === 'active';
         const isPending = offer.isPendingHotmartLink || !offer.checkoutUrl || offer.checkoutUrl.includes('OFFER_');
         const isWhatsapp = offer.provider === 'whatsapp';
+        const hotmartProdId = offer.hotmartProductId || (offer.productId === 'ms-club' ? '8460579' : '');
 
         // Badge color por produto
         let productBadgeColor = "bg-blue-500/10 text-blue-300 border-blue-400/30";
@@ -742,9 +783,18 @@
             <!-- Card Top: Product & Status Toggle -->
             <div class="space-y-3">
               <div class="flex items-center justify-between gap-2">
-                <span class="px-2.5 py-0.5 rounded-full font-mono font-bold text-[10px] uppercase tracking-wider border ${productBadgeColor}">
-                  ${offer.productTitle || 'PRODUTO'}
-                </span>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-full font-mono font-bold text-[10px] uppercase tracking-wider border ${productBadgeColor}">
+                    ${offer.productTitle || 'PRODUTO'}
+                  </span>
+                  ${hotmartProdId ? `
+                    <button onclick="copyHotmartId('${hotmartProdId}', event)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-mono text-[10px] font-bold cursor-pointer transition shadow-sm group/btn" title="Copiar ID Hotmart: ${hotmartProdId}">
+                      <i data-lucide="tag" class="w-2.5 h-2.5 text-amber-400"></i>
+                      <span>HM ID: ${hotmartProdId}</span>
+                      <i data-lucide="copy" class="w-2.5 h-2.5 opacity-70 group-hover/btn:opacity-100"></i>
+                    </button>
+                  ` : ''}
+                </div>
 
                 <!-- Quick Status Switch -->
                 <div class="flex items-center gap-2">
@@ -773,9 +823,15 @@
                 <h3 class="font-bold text-sm sm:text-base text-white leading-snug group-hover:text-amber-200 transition">
                   ${offer.title}
                 </h3>
-                <span class="text-[11px] font-mono text-slate-400 block mt-0.5">
-                  ID: ${offer.id}
-                </span>
+                <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mt-1">
+                  <span>ID: ${offer.id}</span>
+                  ${hotmartProdId ? `
+                    <button onclick="copyHotmartId('${hotmartProdId}', event)" class="text-amber-400 font-bold flex items-center gap-1 cursor-pointer hover:underline" title="Clique para copiar o ID na Hotmart">
+                      <i data-lucide="hash" class="w-3 h-3 text-amber-500"></i>
+                      <span>HM: <strong>${hotmartProdId}</strong></span>
+                    </button>
+                  ` : ''}
+                </div>
               </div>
 
               <!-- Pricing Highlight Box -->
@@ -822,6 +878,15 @@
                     </span>
                     <span class="text-[10px] font-mono text-slate-400">${offer.hotmartSetupSpec?.suggestedOfferCode || '-'}</span>
                   </div>
+                  ${hotmartProdId ? `
+                    <div class="flex items-center justify-between text-[10px] font-mono text-amber-200/80 pt-0.5">
+                      <span>Produto Hotmart:</span>
+                      <button onclick="copyHotmartId('${hotmartProdId}', event)" class="font-bold text-amber-300 hover:text-white flex items-center gap-1 cursor-pointer">
+                        <span>#${hotmartProdId}</span>
+                        <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                      </button>
+                    </div>
+                  ` : ''}
                   <div class="flex items-center gap-1.5 pt-1">
                     <button onclick="openHotmartSpecModal('${offer.id}')" class="flex-1 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] transition flex items-center justify-center gap-1 cursor-pointer">
                       <i data-lucide="clipboard-list" class="w-3 h-3"></i>
@@ -841,6 +906,15 @@
                     </span>
                     <span class="text-[10px] font-mono text-slate-400">${offer.hotmartSetupSpec?.suggestedOfferCode || '-'}</span>
                   </div>
+                  ${hotmartProdId ? `
+                    <div class="flex items-center justify-between text-[10px] font-mono text-sky-200/80 pt-0.5">
+                      <span>Produto Hotmart:</span>
+                      <button onclick="copyHotmartId('${hotmartProdId}', event)" class="font-bold text-sky-300 hover:text-white flex items-center gap-1 cursor-pointer">
+                        <span>#${hotmartProdId}</span>
+                        <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                      </button>
+                    </div>
+                  ` : ''}
                   <div class="flex items-center gap-1.5 pt-1">
                     <button onclick="handleTestCheckout('${offer.id}')" class="flex-1 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold text-[11px] transition flex items-center justify-center gap-1 cursor-pointer">
                       <span>Testar Checkout</span>
@@ -947,6 +1021,14 @@
       }
     }
 
+    // COPY HOTMART PRODUCT ID
+    function copyHotmartId(id, e) {
+      if (e) e.stopPropagation();
+      const val = id || '8460579';
+      navigator.clipboard.writeText(val);
+      alert(`ID do Produto na Hotmart copiado: ${val}`);
+    }
+
     // MODAL EDIT / CREATE
     function openCreateOfferModal() {
       document.getElementById('modalOfferTitle').innerText = "Criar Nova Oferta Comercial";
@@ -954,6 +1036,7 @@
       document.getElementById('formTitle').value = "";
       document.getElementById('formSlug').value = "";
       document.getElementById('formProductId').value = "ms-club";
+      document.getElementById('formHotmartProductId').value = "8460579";
       document.getElementById('formBadge').value = "OFERTA OFICIAL";
       document.getElementById('formGrantedTier').value = "club_annual";
       document.getElementById('formBillingType').value = "subscription";
@@ -981,6 +1064,7 @@
       document.getElementById('formTitle').value = offer.title || "";
       document.getElementById('formSlug').value = offer.slug || "";
       document.getElementById('formProductId').value = offer.productId || "ms-club";
+      document.getElementById('formHotmartProductId').value = offer.hotmartProductId || offer.hotmartSetupSpec?.hotmartProductId || (offer.productId === 'ms-club' ? '8460579' : '');
       document.getElementById('formBadge').value = offer.badge || "OFERTA";
       document.getElementById('formGrantedTier').value = offer.grantedTier || "club_annual";
       document.getElementById('formBillingType').value = offer.pricing?.billingType || "subscription";
@@ -1028,6 +1112,10 @@
       if (!titleInput.value) {
         titleInput.value = `${prodNames[prodId] || prodId} • Nova Oferta`;
       }
+      if (prodId === 'ms-club') {
+        const hmInput = document.getElementById('formHotmartProductId');
+        if (!hmInput.value) hmInput.value = '8460579';
+      }
     }
 
     async function handleSaveOfferForm(e) {
@@ -1036,6 +1124,7 @@
       const title = document.getElementById('formTitle').value.trim();
       const slug = document.getElementById('formSlug').value.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const productId = document.getElementById('formProductId').value;
+      const hotmartProductId = document.getElementById('formHotmartProductId').value.trim() || (productId === 'ms-club' ? '8460579' : '');
       const provider = document.querySelector('input[name="formProvider"]:checked')?.value || 'hotmart';
       const checkoutUrl = document.getElementById('formCheckoutUrl').value.trim();
 
@@ -1053,6 +1142,7 @@
         slug: slug,
         productId: productId,
         productTitle: prodTitles[productId] || productId,
+        hotmartProductId: hotmartProductId,
         badge: document.getElementById('formBadge').value.trim() || "OFERTA",
         status: document.getElementById('formStatus').value,
         provider: provider,
@@ -1074,6 +1164,7 @@
           spotsLeft: parseInt(document.getElementById('formSpotsLeft').value || "0") || null
         },
         hotmartSetupSpec: {
+          hotmartProductId: hotmartProductId,
           suggestedProductName: title,
           format: document.getElementById('formBillingType').value === 'subscription' ? 'Assinatura' : 'Curso Online',
           suggestedOfferCode: document.getElementById('formOfferCode').value.trim(),
@@ -1102,6 +1193,7 @@
 
       const spec = window.aefOffersRegistry.getHotmartSetupSpec(offerId);
       document.getElementById('specModalTitle').innerText = `Ficha Hotmart: ${offer.title}`;
+      document.getElementById('specHotmartProductId').innerText = spec.hotmartProductId || offer.hotmartProductId || (offer.productId === 'ms-club' ? '8460579' : 'Não definido');
       document.getElementById('specProductName').innerText = spec.productName;
       document.getElementById('specFormat').innerText = spec.format;
       document.getElementById('specRegularPrice').innerText = spec.regularPrice;
