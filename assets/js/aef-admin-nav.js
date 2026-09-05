@@ -38,6 +38,7 @@
           const toolNames = {
             'admin-alunos.html': 'Alunos & CRM',
             'admin-vendas.html': 'Vendas & Checkouts',
+            'admin-webhooks.html': 'Webhooks & Automação',
             'admin-marketing.html': 'Marketing & Blocos',
             'admin-ofertas.html': 'Ofertas & Trials',
             'admin-cursos.html': 'Course Factory',
@@ -64,7 +65,7 @@
     }
 
     isDarkTheme() {
-      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-marketing.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
+      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-webhooks.html', 'admin-marketing.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
       return darkPages.some(p => this.currentPath.includes(p)) || document.body.classList.contains('bg-[#060D17]') || document.body.classList.contains('bg-[#0A192F]') || document.body.classList.contains('bg-[#0B0F17]') || document.body.classList.contains('bg-[#080D1A]');
     }
 
@@ -135,6 +136,9 @@
               <a href="admin-vendas.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-vendas.html')}">
                 <span>⚡</span> <span>Vendas</span>
               </a>
+              <a href="admin-webhooks.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-webhooks.html')}">
+                <span>🔗</span> <span>Webhooks</span>
+              </a>
               <a href="admin-marketing.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-marketing.html')}">
                 <span>🎯</span> <span>Marketing</span>
               </a>
@@ -201,6 +205,7 @@
             <a href="admin.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin.html')}">🏛️ Hub</a>
             <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html')}">👥 Alunos</a>
             <a href="admin-vendas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-vendas.html')}">⚡ Vendas</a>
+            <a href="admin-webhooks.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-webhooks.html')}">🔗 Webhooks</a>
             <a href="admin-marketing.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-marketing.html')}">🎯 Marketing</a>
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
             <a href="admin-pdf-factory.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-pdf-factory.html')}">📄 PDF</a>

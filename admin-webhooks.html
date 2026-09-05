@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Departamento de Webhooks • Automação Hotmart & Stripe | AgoraEuFalo Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#C68A36',
+              amber: '#F59E0B',
+              slate: '#1E293B',
+              card: '#0D1B2A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Core Cloud SDKs -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-offers-registry.js"></script>
+  <script src="assets/js/aef-webhook-handler.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+    .json-pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Top bar container handled by AEFAdminNav -->
+  <div id="aef-admin-header-container"></div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WORKSPACE                                                            -->
+  <!-- ========================================================================= -->
+  <main class="max-w-[98vw] 2xl:max-w-[1920px] w-full mx-auto p-4 sm:p-6 flex-1 space-y-6">
+
+    <!-- HERO / TITLE & ACTIONS -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative overflow-hidden">
+      <div class="space-y-2 z-10">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm border border-amber-400/30">
+            ⚡
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            DEPARTAMENTO DE WEBHOOKS
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 font-mono font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            HOTMART 2.0.0 & STRIPE READY
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          Gestão de Webhooks, Matrículas & Ciclo de Assinaturas
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+          Monitoramento em tempo real de eventos da Hotmart (compras, renovações, inadimplências e cancelamentos). Concessão automática de Tiers, desbloqueio de cursos no Firestore e simulador de testes integrado.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 z-10 shrink-0">
+        <!-- Botão Rápido: Abrir Simulador -->
+        <button onclick="scrollToSimulator()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 cursor-pointer">
+          <i data-lucide="play-circle" class="w-4 h-4"></i>
+          <span>Simulador de Webhook</span>
+        </button>
+
+        <!-- Botão Guia Hotmart -->
+        <button onclick="openHotmartWebhookGuideModal()" class="px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition border border-white/10 flex items-center gap-2 cursor-pointer" title="Ver como configurar na Hotmart">
+          <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
+          <span>Guia Hotmart</span>
+        </button>
+
+        <!-- Sincronizar Logs -->
+        <button onclick="refreshLogs()" class="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10 cursor-pointer" title="Atualizar Logs">
+          <i data-lucide="refresh-cw" class="w-4 h-4" id="logs-sync-icon"></i>
+        </button>
+      </div>
+
+      <!-- Subtle background glow -->
+      <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 1. BARRA DE MÉTRICAS & KPIS EM TEMPO REAL                                -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+      <!-- Total Eventos -->
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">TOTAL PROCESSADO</span>
+          <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+        </div>
+        <div class="mt-3">
+          <span class="text-2xl font-black text-white" id="stat-total-webhooks">0</span>
+          <span class="text-[10px] text-slate-400 block mt-0.5">eventos recebidos</span>
+        </div>
+      </div>
+
+      <!-- Aprovados (Sucesso) -->
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-emerald-500/30 bg-emerald-500/5 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">COMPRAS APROVADAS</span>
+          <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+        <div class="mt-3">
+          <span class="text-2xl font-black text-emerald-300" id="stat-approved-webhooks">0</span>
+          <span class="text-[10px] text-emerald-400/80 block mt-0.5">1ª compra / matrícula ativa</span>
+        </div>
+      </div>
+
+      <!-- Recorrências / Renovações -->
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-sky-500/30 bg-sky-500/5 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-wider">RENOVAÇÕES CLUB</span>
+          <i data-lucide="repeat" class="w-4 h-4 text-sky-400"></i>
+        </div>
+        <div class="mt-3">
+          <span class="text-2xl font-black text-sky-300" id="stat-renewals-webhooks">0</span>
+          <span class="text-[10px] text-sky-400/80 block mt-0.5">recorrências mantidas</span>
+        </div>
+      </div>
+
+      <!-- Atrasados (Grace Period) -->
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-amber-500/30 bg-amber-500/5 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">ATRASADOS / TOLERÂNCIA</span>
+          <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+        </div>
+        <div class="mt-3">
+          <span class="text-2xl font-black text-amber-300" id="stat-delayed-webhooks">0</span>
+          <span class="text-[10px] text-amber-400/80 block mt-0.5">período de graça (5 dias)</span>
+        </div>
+      </div>
+
+      <!-- Cancelados / Reembolsados -->
+      <div class="p-4 rounded-2xl bg-[#0A192F] border border-rose-500/30 bg-rose-500/5 shadow-sm flex flex-col justify-between col-span-2 sm:col-span-1">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono font-bold text-rose-400 uppercase tracking-wider">CANCELADOS / REEMBOLSOS</span>
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+        </div>
+        <div class="mt-3">
+          <span class="text-2xl font-black text-rose-300" id="stat-canceled-webhooks">0</span>
+          <span class="text-[10px] text-rose-400/80 block mt-0.5">acesso agendado ou revogado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 2. CENTRAL DE CONFIGURAÇÃO DO ENDPOINT & HOTTOK                          -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Card Endpoint & Token -->
+      <div class="lg:col-span-2 p-6 rounded-3xl bg-[#0A192F] border border-white/10 space-y-5">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-black text-sm border border-amber-400/30">
+              🔗
+            </div>
+            <div>
+              <h3 class="text-sm font-black text-white uppercase tracking-wider">Endpoint do Webhook & Segurança</h3>
+              <p class="text-xs text-slate-400">Configure estes dados na sua conta da Hotmart para ativar o envio de notificações.</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+            ATIVO
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- URL Pública do Webhook -->
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-mono uppercase tracking-wider text-slate-400 block font-bold">
+              URL do Webhook (Cole na Hotmart):
+            </label>
+            <div class="flex items-center gap-2">
+              <input type="text" id="webhook-endpoint-url" readonly value="https://agoraeufalo-webhook-hotmart.selexenglish.workers.dev" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/10 text-amber-300 font-mono text-xs focus:outline-none focus:border-amber-400 select-all">
+              <button onclick="copyEndpointUrl()" class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Copiar URL">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span id="copy-btn-text">Copiar</span>
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-400">Recebe requisições HTTP POST da Hotmart versão 2.0.0.</p>
+          </div>
+
+          <!-- Token Secreto Hottok -->
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-mono uppercase tracking-wider text-slate-400 block font-bold">
+              Token Secreto (Hottok):
+            </label>
+            <div class="flex items-center gap-2">
+              <input type="password" id="webhook-hottok-input" placeholder="Cole o token Hottok da Hotmart aqui" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-amber-400">
+              <button onclick="toggleHottokVisibility()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition cursor-pointer shrink-0" title="Alternar Visibilidade">
+                <i data-lucide="eye" class="w-3.5 h-3.5" id="hottok-eye-icon"></i>
+              </button>
+              <button onclick="saveHottok()" class="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition cursor-pointer shrink-0">
+                Salvar
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-400">Enviado no cabeçalho <code class="text-amber-300 font-mono">X-HOTMART-HOTTOK</code> para validar autenticidade.</p>
+          </div>
+        </div>
+
+        <!-- Alerta de Configuração Rápida -->
+        <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-start gap-3">
+          <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <p class="text-xs text-amber-200/90 leading-relaxed">
+            <strong class="text-amber-300">Dica do Professor Leo:</strong> Na Hotmart, cadastre o produto principal <span class="font-mono font-bold text-white bg-black/40 px-1.5 py-0.5 rounded">ID 8460579 (Magic Stories Club)</span> e selecione a versão <strong class="text-white">2.0.0</strong> para receber o envelope padronizado de compras e assinaturas.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card Checklist Rápido de Configuração na Hotmart -->
+      <div class="p-6 rounded-3xl bg-[#0A192F] border border-white/10 flex flex-col justify-between space-y-4">
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 font-bold text-sm">📋</span>
+            <h4 class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">Passo a Passo na Hotmart</h4>
+          </div>
+          <ol class="text-xs text-slate-300 space-y-2.5 font-medium list-decimal list-inside leading-relaxed">
+            <li>Acesse <strong class="text-white">Ferramentas</strong> no menu da Hotmart.</li>
+            <li>Procure por <strong class="text-white">Webhook (Configuração de Envio)</strong>.</li>
+            <li>Clique em <strong class="text-amber-300">+ Cadastrar Configuração</strong>.</li>
+            <li>Cole a URL acima e selecione os 8 eventos recomendados.</li>
+            <li>Copie o seu <strong class="text-white">Hottok</strong> e salve no campo ao lado.</li>
+          </ol>
+        </div>
+
+        <a href="https://app.hotmart.com/tools/webhook" target="_blank" class="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition flex items-center justify-center gap-2 border border-white/10 shadow-sm cursor-pointer">
+          <span>Abrir Painel Hotmart Webhooks ↗</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 3. SIMULADOR & SANDBOX DE WEBHOOKS (TEST RUNNER)                         -->
+    <!-- ========================================================================= -->
+    <div id="webhook-simulator-card" class="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#0A192F] to-[#0D1E36] border border-amber-400/30 shadow-xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-black border border-amber-400/30">
+            🧪
+          </div>
+          <div>
+            <h2 class="text-lg font-black text-white flex items-center gap-2">
+              <span>Simulador de Webhooks Hotmart 2.0.0</span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">TEST RUNNER</span>
+            </h2>
+            <p class="text-xs text-slate-300 mt-0.5">Dispare simulações completas de matrícula, cancelamento e atraso diretamente no Firestore sem gastar R$ 1,00.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="executeSimulatorTest()" id="btn-run-simulation" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 cursor-pointer active:scale-95">
+            <i data-lucide="zap" class="w-4 h-4 fill-slate-950"></i>
+            <span>⚡ Executar Simulação</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Seletor de Cenários Pré-Configurados -->
+      <div class="space-y-2">
+        <label class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider block">
+          1. Escolha um Cenário de Teste:
+        </label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button onclick="loadTemplate('purchase_club_anual')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group active">
+            <span class="text-emerald-400 font-black text-xs block">🎉 1ª Compra Aprovada</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">Club Anual (R$ 497)</span>
+          </button>
+
+          <button onclick="loadTemplate('purchase_club_mensal')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-emerald-400 font-black text-xs block">🎉 1ª Compra Aprovada</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">Club Mensal (R$ 59)</span>
+          </button>
+
+          <button onclick="loadTemplate('purchase_vip_2026')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-amber-400 font-black text-xs block">👑 Mentoria VIP 2026</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">Projeto 2026 (R$ 2.497)</span>
+          </button>
+
+          <button onclick="loadTemplate('subscription_renewal')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-sky-400 font-black text-xs block">🔄 Renovação Automática</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">Recorrência #2 Aprovada</span>
+          </button>
+
+          <button onclick="loadTemplate('delayed_payment')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-amber-300 font-black text-xs block">⚠️ Pagamento Atrasado</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">PURCHASE_DELAYED (Grace)</span>
+          </button>
+
+          <button onclick="loadTemplate('subscription_cancel')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-rose-400 font-black text-xs block">🛑 Cancelamento Assinatura</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">Acesso até data futura</span>
+          </button>
+
+          <button onclick="loadTemplate('refund')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-rose-400 font-black text-xs block">💸 Reembolso Solicitado</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">Revogação Imediata</span>
+          </button>
+
+          <button onclick="loadTemplate('switch_plan')" class="template-btn p-3 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 border border-white/10 hover:border-amber-400/50 text-left transition cursor-pointer group">
+            <span class="text-purple-400 font-black text-xs block">🔀 Troca de Plano</span>
+            <span class="text-[11px] text-slate-300 font-bold block mt-0.5">SWITCH_PLAN (Upgrade)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Customizador Rápido de Aluno Teste & Editor JSON -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Formulário Rápido de Dados do Aluno -->
+        <div class="space-y-3 p-4 rounded-2xl bg-slate-950/70 border border-white/10">
+          <span class="text-[11px] font-mono font-bold text-amber-400 uppercase tracking-wider block">
+            2. Ajuste os Dados do Aluno Teste:
+          </span>
+
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase font-bold text-slate-400">Nome do Aluno:</label>
+            <input type="text" id="sim-buyer-name" value="Rodrigo Silva (Aluno Teste)" oninput="syncFieldsToJson()" class="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-white focus:outline-none focus:border-amber-400">
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase font-bold text-slate-400">E-mail do Aluno:</label>
+            <input type="email" id="sim-buyer-email" value="rodrigo.teste.club@agoraeufalo.com.br" oninput="syncFieldsToJson()" class="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-amber-300 font-mono focus:outline-none focus:border-amber-400">
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase font-bold text-slate-400">WhatsApp / Telefone:</label>
+            <input type="text" id="sim-buyer-phone" value="+55 11 99999-8888" oninput="syncFieldsToJson()" class="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-white font-mono focus:outline-none focus:border-amber-400">
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase font-bold text-slate-400">Código da Oferta Hotmart:</label>
+            <input type="text" id="sim-offer-code" value="mgwnab3h" oninput="syncFieldsToJson()" class="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-white font-mono focus:outline-none focus:border-amber-400">
+          </div>
+
+          <!-- Resultado Diagnóstico ao Vivo -->
+          <div id="sim-result-box" class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300 space-y-1">
+            <span class="font-bold flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Resultado do Teste:</span>
+            <p id="sim-result-text" class="text-[11px] text-slate-200 leading-relaxed"></p>
+          </div>
+        </div>
+
+        <!-- Editor de Payload JSON -->
+        <div class="lg:col-span-2 space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+              3. Payload JSON Bruto (Envelope Hotmart 2.0.0):
+            </label>
+            <button onclick="prettifyJsonEditor()" class="text-[10px] font-mono text-amber-400 hover:text-amber-300 font-bold cursor-pointer">
+              Formatar JSON
+            </button>
+          </div>
+          <textarea id="sim-json-editor" rows="12" class="w-full p-4 rounded-2xl bg-slate-950 border border-white/10 text-amber-300 json-pre focus:outline-none focus:border-amber-400 custom-scrollbar resize-none selection:bg-amber-500 selection:text-slate-950"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 4. LIVE LOG FEED & HISTÓRICO DE AUDITORIA                                 -->
+    <!-- ========================================================================= -->
+    <div class="p-6 sm:p-8 rounded-3xl bg-[#0A192F] border border-white/10 space-y-6">
+      
+      <!-- Top Filters & Search -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <h3 class="text-base font-black text-white flex items-center gap-2">
+            <span>Registro de Auditoria & Feed de Webhooks</span>
+            <span class="text-xs font-mono font-normal text-slate-400" id="logs-count-badge">(0 logs)</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">Histórico auditável de todos os eventos recebidos da Hotmart e gravados no Firestore.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Busca por e-mail ou transação -->
+          <div class="relative">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="logs-search-input" placeholder="Buscar por e-mail ou transação..." oninput="renderLogsTable()" class="pl-8 pr-3 py-1.5 rounded-xl bg-slate-950 border border-white/10 text-xs text-white focus:outline-none focus:border-amber-400 w-48 sm:w-64">
+          </div>
+
+          <!-- Filtro por Categoria -->
+          <select id="logs-filter-select" onchange="renderLogsTable()" class="px-3 py-1.5 rounded-xl bg-slate-950 border border-white/10 text-xs text-slate-200 focus:outline-none focus:border-amber-400 cursor-pointer">
+            <option value="all">Todos os Eventos</option>
+            <option value="PURCHASE_APPROVED">Compras Aprovadas</option>
+            <option value="PURCHASE_DELAYED">Atrasos (Grace)</option>
+            <option value="SUBSCRIPTION_CANCELLATION">Cancelamentos</option>
+            <option value="PURCHASE_REFUNDED">Reembolsos / Chargeback</option>
+            <option value="SWITCH_PLAN">Trocas de Plano</option>
+          </select>
+
+          <!-- Limpar Logs Locais -->
+          <button onclick="clearLogs()" class="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-rose-400 transition border border-white/10 cursor-pointer" title="Limpar Logs Locais">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela de Logs -->
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-950 text-slate-400 font-mono text-[10px] uppercase tracking-wider border-b border-white/10">
+            <tr>
+              <th class="py-3 px-4">Data / Hora</th>
+              <th class="py-3 px-4">Evento Hotmart</th>
+              <th class="py-3 px-4">Aluno / Comprador</th>
+              <th class="py-3 px-4">Produto & Oferta</th>
+              <th class="py-3 px-4">Valor</th>
+              <th class="py-3 px-4">Status</th>
+              <th class="py-3 px-4 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="logs-table-body" class="divide-y divide-white/5 font-medium">
+            <tr>
+              <td colspan="7" class="py-8 text-center text-slate-400">
+                <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto text-amber-400 mb-2"></i>
+                <span>Carregando feed de webhooks do Firestore...</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 5. MATRIZ DE REGRAS DE NEGÓCIO & ENTITLEMENTS                             -->
+    <!-- ========================================================================= -->
+    <div class="p-6 rounded-3xl bg-[#0A192F] border border-white/10 space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div>
+          <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+            <span>🏛️ Matriz Canônica de Regras do AgoraEuFalo</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-400/30">SINGLE SOURCE OF TRUTH</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">Como cada evento da Hotmart afeta o acesso do aluno na base de dados Firestore.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-white/10 space-y-2">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>PURCHASE_APPROVED</span>
+          </div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">
+            Concede Tier <strong class="text-white font-mono">club_annual</strong> ou <strong class="text-white font-mono">vip_mentorship</strong>. Libera o catálogo completo de cursos e dispara e-mail com Magic Link.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-white/10 space-y-2">
+          <div class="flex items-center gap-2 text-sky-400 font-bold">
+            <i data-lucide="repeat" class="w-4 h-4"></i>
+            <span>RECORRÊNCIA #2+</span>
+          </div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">
+            Mantém o Tier ativo sem interrupção. Registra nova transação e estende a validade da assinatura para o próximo ciclo de 12 meses.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-white/10 space-y-2">
+          <div class="flex items-center gap-2 text-amber-400 font-bold">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+            <span>PURCHASE_DELAYED</span>
+          </div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">
+            Período de tolerância amigável de <strong class="text-white">5 dias</strong>. O aluno não é bloqueado imediatamente, permitindo que a Hotmart retente o cartão.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950/60 border border-white/10 space-y-2">
+          <div class="flex items-center gap-2 text-rose-400 font-bold">
+            <i data-lucide="user-x" class="w-4 h-4"></i>
+            <span>CANCELLATION & REFUND</span>
+          </div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">
+            Cancelamento mantém acesso até <strong class="text-white font-mono">date_next_charge</strong>. Reembolso ou chargeback revogam o acesso imediatamente para Tier <strong class="text-white font-mono">free</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: INSPETOR DE PAYLOAD JSON                                           -->
+  <!-- ========================================================================= -->
+  <div id="inspector-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6">
+    <div class="bg-[#0A192F] border border-white/20 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm border border-amber-400/30">
+            🔍
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white flex items-center gap-2" id="inspector-title">
+              Detalhes do Webhook
+            </h3>
+            <p class="text-xs text-slate-400 font-mono" id="inspector-id">wh_000000</p>
+          </div>
+        </div>
+        <button onclick="closeInspectorModal()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+        <!-- Diagnóstico da Ação Executada -->
+        <div class="p-4 rounded-2xl bg-slate-950 border border-white/10 space-y-1">
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider block">DIAGNÓSTICO DA AÇÃO NO SISTEMA</span>
+          <p class="text-xs text-slate-200 leading-relaxed font-medium" id="inspector-summary"></p>
+        </div>
+
+        <!-- Metadados -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-slate-400 block">Aluno:</span>
+            <span class="font-bold text-white block truncate" id="inspector-buyer"></span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-slate-400 block">E-mail:</span>
+            <span class="font-mono text-amber-300 block truncate" id="inspector-email"></span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-slate-400 block">Transação:</span>
+            <span class="font-mono text-white block truncate" id="inspector-tx"></span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-slate-400 block">Valor:</span>
+            <span class="font-bold text-emerald-400 block truncate" id="inspector-amount"></span>
+          </div>
+        </div>
+
+        <!-- Payload JSON Formatado -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">Payload Bruto JSON:</span>
+            <button onclick="copyInspectorPayload()" class="text-[10px] font-mono text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3 h-3"></i>
+              <span id="inspector-copy-label">Copiar JSON</span>
+            </button>
+          </div>
+          <pre id="inspector-json" class="p-4 rounded-2xl bg-slate-950 border border-white/10 text-amber-300 json-pre overflow-x-auto max-h-72 custom-scrollbar"></pre>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-white/10 bg-slate-950/60 flex items-center justify-between">
+        <button onclick="reprocessCurrentWebhook()" class="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+          <span>Reprocessar este Webhook</span>
+        </button>
+        <button onclick="closeInspectorModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition cursor-pointer">
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: GUIA PASSO A PASSO HOTMART                                         -->
+  <!-- ========================================================================= -->
+  <div id="hotmart-guide-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6">
+    <div class="bg-[#0A192F] border border-white/20 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm border border-amber-400/30">
+            📖
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white">Guia Oficial de Webhooks na Hotmart</h3>
+            <p class="text-xs text-slate-400">Instruções para configurar em menos de 5 minutos</p>
+          </div>
+        </div>
+        <button onclick="closeHotmartGuideModal()" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs text-slate-300 leading-relaxed overflow-y-auto custom-scrollbar">
+        <div class="space-y-3">
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">1</span>
+            <div>
+              <strong class="text-white block text-sm">Acesse a Ferramenta de Webhook</strong>
+              <p class="text-slate-400 mt-0.5">No painel da Hotmart, clique em <strong>Ferramentas</strong> ➔ <strong>Webhook (Configuração de Envio)</strong>.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">2</span>
+            <div>
+              <strong class="text-white block text-sm">Cadastre a URL do AgoraEuFalo</strong>
+              <p class="text-slate-400 mt-0.5">Clique em <strong>+ Cadastrar Configuração</strong>. No campo Nome da Configuração, coloque <span class="text-amber-300 font-mono">AgoraEuFalo Matrículas</span>. No campo URL para envio, cole <span class="text-amber-300 font-mono">https://agoraeufalo-webhook-hotmart.selexenglish.workers.dev</span>.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">3</span>
+            <div>
+              <strong class="text-white block text-sm">Selecione a Versão 2.0.0</strong>
+              <p class="text-slate-400 mt-0.5">Marque expressamente a opção <strong class="text-white">Versão 2.0.0</strong> para receber os dados formatados em JSON.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">4</span>
+            <div>
+              <strong class="text-white block text-sm">Marque os Eventos Canônicos</strong>
+              <p class="text-slate-400 mt-0.5">Marque: <em>Compra Aprovada</em>, <em>Cancelamento de Assinatura</em>, <em>Compra Atrasada</em>, <em>Troca de Plano</em>, <em>Compra Reembolsada</em> e <em>Chargeback</em>.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">5</span>
+            <div>
+              <strong class="text-white block text-sm">Copie seu Hottok de Autenticação</strong>
+              <p class="text-slate-400 mt-0.5">Na aba de autenticação ou cabeçalho, copie o token <strong class="text-white">Hottok</strong> e salve no campo correspondente no nosso painel.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-white/10 bg-slate-950/60 flex justify-end">
+        <button onclick="closeHotmartGuideModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer">
+          Entendi, vamos começar!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC                                                          -->
+  <!-- ========================================================================= -->
+  <script>
+    let activeLogs = [];
+    let currentInspectedLog = null;
+
+    // Modelos de Template para Simulação
+    const SIMULATOR_TEMPLATES = {
+      purchase_club_anual: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "PURCHASE_APPROVED",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Anual)",
+            ucode: "ms_club_anual_official"
+          },
+          buyer: {
+            name: "Rodrigo Silva (Aluno Teste)",
+            email: "rodrigo.teste.club@agoraeufalo.com.br",
+            checkout_phone: "+55 11 99999-8888",
+            document: "12345678900"
+          },
+          purchase: {
+            transaction: "HP" + Math.floor(Math.random() * 1000000000),
+            order_date: new Date().toISOString(),
+            approved_date: new Date().toISOString(),
+            status: "APPROVED",
+            price: {
+              value: 497.00,
+              currency_code: "BRL"
+            },
+            payment: {
+              type: "CREDIT_CARD",
+              installments_number: 12
+            },
+            offer: {
+              code: "mgwnab3h"
+            },
+            recurrent: false,
+            recurrence_number: 1
+          },
+          subscription: {
+            subscriber_code: "SUB" + Math.floor(Math.random() * 1000000),
+            status: "ACTIVE",
+            date_next_charge: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        }
+      },
+      purchase_club_mensal: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "PURCHASE_APPROVED",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Mensal)",
+            ucode: "ms_club_mensal"
+          },
+          buyer: {
+            name: "Camila Rocha (Teste Mensal)",
+            email: "camila.rocha@agoraeufalo.com.br",
+            checkout_phone: "+55 21 98888-7777"
+          },
+          purchase: {
+            transaction: "HP" + Math.floor(Math.random() * 1000000000),
+            status: "APPROVED",
+            price: {
+              value: 59.00,
+              currency_code: "BRL"
+            },
+            payment: {
+              type: "CREDIT_CARD",
+              installments_number: 1
+            },
+            offer: {
+              code: "CLUB_MENSAL"
+            },
+            recurrent: false,
+            recurrence_number: 1
+          },
+          subscription: {
+            subscriber_code: "SUB_M" + Math.floor(Math.random() * 100000),
+            status: "ACTIVE",
+            date_next_charge: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        }
+      },
+      purchase_vip_2026: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "PURCHASE_APPROVED",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "PROJETO_AEF_2026",
+            name: "Projeto AgoraEuFalo 2026 (Mentoria VIP + Formação Completa)"
+          },
+          buyer: {
+            name: "Dr. André Barrote (VIP)",
+            email: "andre.barrote@vip.agoraeufalo.com.br",
+            checkout_phone: "+55 11 97777-6666"
+          },
+          purchase: {
+            transaction: "HP_VIP_" + Math.floor(Math.random() * 100000),
+            status: "APPROVED",
+            price: {
+              value: 2497.00,
+              currency_code: "BRL"
+            },
+            payment: {
+              type: "PIX",
+              installments_number: 1
+            },
+            offer: {
+              code: "VIP_2026_MASTER"
+            },
+            recurrent: false,
+            recurrence_number: 1
+          }
+        }
+      },
+      subscription_renewal: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "PURCHASE_APPROVED",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Anual)"
+          },
+          buyer: {
+            name: "Rodrigo Silva (Aluno Teste)",
+            email: "rodrigo.teste.club@agoraeufalo.com.br",
+            checkout_phone: "+55 11 99999-8888"
+          },
+          purchase: {
+            transaction: "HP_REC_" + Math.floor(Math.random() * 1000000),
+            status: "APPROVED",
+            price: {
+              value: 497.00,
+              currency_code: "BRL"
+            },
+            payment: {
+              type: "CREDIT_CARD",
+              installments_number: 1
+            },
+            recurrent: true,
+            recurrence_number: 2
+          },
+          subscription: {
+            subscriber_code: "SUB_REC_99812",
+            status: "ACTIVE",
+            date_next_charge: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        }
+      },
+      delayed_payment: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "PURCHASE_DELAYED",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Anual)"
+          },
+          buyer: {
+            name: "Rodrigo Silva (Aluno Teste)",
+            email: "rodrigo.teste.club@agoraeufalo.com.br",
+            checkout_phone: "+55 11 99999-8888"
+          },
+          purchase: {
+            transaction: "HP_DELAY_" + Math.floor(Math.random() * 100000),
+            status: "OVERDUE",
+            price: {
+              value: 497.00,
+              currency_code: "BRL"
+            }
+          }
+        }
+      },
+      subscription_cancel: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "SUBSCRIPTION_CANCELLATION",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Anual)"
+          },
+          buyer: {
+            name: "Rodrigo Silva (Aluno Teste)",
+            email: "rodrigo.teste.club@agoraeufalo.com.br",
+            checkout_phone: "+55 11 99999-8888"
+          },
+          cancellation_date: new Date().toISOString(),
+          date_next_charge: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
+          actual_recurrence_value: 497.00
+        }
+      },
+      refund: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "PURCHASE_REFUNDED",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Anual)"
+          },
+          buyer: {
+            name: "Aluno Reembolsado Teste",
+            email: "reembolso.teste@agoraeufalo.com.br"
+          },
+          purchase: {
+            transaction: "HP_REFUND_" + Math.floor(Math.random() * 100000),
+            status: "REFUNDED",
+            price: {
+              value: 497.00,
+              currency_code: "BRL"
+            }
+          }
+        }
+      },
+      switch_plan: {
+        id: "wh_test_" + Date.now(),
+        creation_date: Date.now(),
+        event: "SWITCH_PLAN",
+        version: "2.0.0",
+        data: {
+          product: {
+            id: "8460579",
+            name: "AgoraEuFalo • Magic Stories Club (Anual)"
+          },
+          buyer: {
+            name: "Camila Rocha (Upgrade Anual)",
+            email: "camila.rocha@agoraeufalo.com.br"
+          },
+          switch_plan_date: new Date().toISOString(),
+          subscription: {
+            subscriber_code: "SUB_M_UPGRADE",
+            status: "ACTIVE",
+            date_next_charge: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        }
+      }
+    };
+
+    // Inicialização ao carregar a página
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (window.lucide) window.lucide.createIcons();
+
+      // Carrega Hottok salvo
+      const savedHottok = localStorage.getItem("aef_hotmart_hottok_token") || "";
+      const hottokInput = document.getElementById("webhook-hottok-input");
+      if (hottokInput && savedHottok) hottokInput.value = savedHottok;
+
+      // Carrega Template Inicial
+      loadTemplate('purchase_club_anual');
+
+      // Carrega Logs
+      await refreshLogs();
+    });
+
+    // Alternar Template no Simulador
+    function loadTemplate(key) {
+      document.querySelectorAll('.template-btn').forEach(btn => {
+        btn.classList.remove('border-amber-400', 'bg-amber-500/10');
+      });
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('border-amber-400', 'bg-amber-500/10');
+      }
+
+      const tpl = JSON.parse(JSON.stringify(SIMULATOR_TEMPLATES[key] || SIMULATOR_TEMPLATES.purchase_club_anual));
+      tpl.id = "wh_sim_" + Date.now();
+      tpl.creation_date = Date.now();
+
+      const buyer = tpl.data.buyer || {};
+      const offer = tpl.data.purchase?.offer?.code || "";
+
+      document.getElementById('sim-buyer-name').value = buyer.name || "Aluno AgoraEuFalo";
+      document.getElementById('sim-buyer-email').value = buyer.email || "aluno@agoraeufalo.com.br";
+      document.getElementById('sim-buyer-phone').value = buyer.checkout_phone || "+55 11 99999-8888";
+      document.getElementById('sim-offer-code').value = offer;
+
+      document.getElementById('sim-json-editor').value = JSON.stringify(tpl, null, 2);
+    }
+
+    // Sincroniza inputs do formulário rápido de volta para o JSON
+    function syncFieldsToJson() {
+      try {
+        const text = document.getElementById('sim-json-editor').value;
+        const payload = JSON.parse(text);
+        if (!payload.data) payload.data = {};
+        if (!payload.data.buyer) payload.data.buyer = {};
+        if (!payload.data.purchase) payload.data.purchase = {};
+        if (!payload.data.purchase.offer) payload.data.purchase.offer = {};
+
+        payload.data.buyer.name = document.getElementById('sim-buyer-name').value;
+        payload.data.buyer.email = document.getElementById('sim-buyer-email').value;
+        payload.data.buyer.checkout_phone = document.getElementById('sim-buyer-phone').value;
+        payload.data.purchase.offer.code = document.getElementById('sim-offer-code').value;
+
+        document.getElementById('sim-json-editor').value = JSON.stringify(payload, null, 2);
+      } catch (e) {}
+    }
+
+    // Formatar JSON no Editor
+    function prettifyJsonEditor() {
+      try {
+        const val = document.getElementById('sim-json-editor').value;
+        const parsed = JSON.parse(val);
+        document.getElementById('sim-json-editor').value = JSON.stringify(parsed, null, 2);
+      } catch (e) {
+        alert("JSON inválido: " + e.message);
+      }
+    }
+
+    // Executa a Simulação
+    async function executeSimulatorTest() {
+      const btn = document.getElementById('btn-run-simulation');
+      const resBox = document.getElementById('sim-result-box');
+      const resText = document.getElementById('sim-result-text');
+
+      let payload = null;
+      try {
+        payload = JSON.parse(document.getElementById('sim-json-editor').value);
+      } catch (err) {
+        alert("Erro no JSON: " + err.message);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span>Processando...</span>`;
+      if (window.lucide) window.lucide.createIcons();
+
+      try {
+        if (!window.aefWebhookHandler) {
+          throw new Error("Módulo AEFWebhookHandler não carregado.");
+        }
+
+        const result = await window.aefWebhookHandler.processHotmartWebhook(payload);
+
+        resBox.classList.remove('hidden', 'bg-rose-500/10', 'border-rose-500/30', 'text-rose-300');
+        resBox.classList.add('bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-300');
+        resText.innerHTML = `
+          <strong>${result.summary}</strong><br>
+          <span class="text-slate-300 text-[10px]">
+            ID Usuário: <code class="font-mono text-amber-300">${result.studentId}</code> • Tier: <code class="font-mono text-emerald-300">${result.tier}</code> • Cursos: <strong>${result.enrolledProducts.length}</strong>
+          </span>
+        `;
+
+        await refreshLogs();
+      } catch (err) {
+        resBox.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-300');
+        resBox.classList.add('bg-rose-500/10', 'border-rose-500/30', 'text-rose-300');
+        resText.innerText = "Falha ao processar: " + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4 fill-slate-950"></i> <span>⚡ Executar Simulação</span>`;
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+
+    // Atualiza Lista de Logs e KPIs
+    async function refreshLogs() {
+      const syncIcon = document.getElementById('logs-sync-icon');
+      if (syncIcon) syncIcon.classList.add('animate-spin');
+
+      if (window.aefWebhookHandler) {
+        activeLogs = await window.aefWebhookHandler.fetchRemoteLogs(100);
+      } else {
+        activeLogs = [];
+      }
+
+      updateKpis(activeLogs);
+      renderLogsTable();
+
+      if (syncIcon) {
+        setTimeout(() => syncIcon.classList.remove('animate-spin'), 400);
+      }
+    }
+
+    // Atualiza os Cards de KPIs
+    function updateKpis(logs) {
+      document.getElementById('stat-total-webhooks').innerText = logs.length;
+
+      const approved = logs.filter(l => l.event === 'PURCHASE_APPROVED' && (!l.rawPayload?.data?.purchase?.recurrent || l.rawPayload?.data?.purchase?.recurrence_number <= 1)).length;
+      document.getElementById('stat-approved-webhooks').innerText = approved;
+
+      const renewals = logs.filter(l => l.event === 'PURCHASE_APPROVED' && (l.rawPayload?.data?.purchase?.recurrent || l.rawPayload?.data?.purchase?.recurrence_number > 1)).length;
+      document.getElementById('stat-renewals-webhooks').innerText = renewals;
+
+      const delayed = logs.filter(l => l.event === 'PURCHASE_DELAYED').length;
+      document.getElementById('stat-delayed-webhooks').innerText = delayed;
+
+      const canceled = logs.filter(l => l.event === 'SUBSCRIPTION_CANCELLATION' || l.event === 'PURCHASE_REFUNDED' || l.event === 'PURCHASE_CHARGEBACK').length;
+      document.getElementById('stat-canceled-webhooks').innerText = canceled;
+
+      const badge = document.getElementById('logs-count-badge');
+      if (badge) badge.innerText = `(${logs.length} logs)`;
+    }
+
+    // Renderiza a Tabela de Logs
+    function renderLogsTable() {
+      const tbody = document.getElementById('logs-table-body');
+      if (!tbody) return;
+
+      const searchTerm = (document.getElementById('logs-search-input')?.value || '').toLowerCase().trim();
+      const filterEvent = document.getElementById('logs-filter-select')?.value || 'all';
+
+      const filtered = activeLogs.filter(item => {
+        if (filterEvent !== 'all' && item.event !== filterEvent) return false;
+        if (searchTerm) {
+          const email = (item.buyerEmail || '').toLowerCase();
+          const name = (item.buyerName || '').toLowerCase();
+          const tx = (item.transactionId || '').toLowerCase();
+          const prod = (item.productName || '').toLowerCase();
+          if (!email.includes(searchTerm) && !name.includes(searchTerm) && !tx.includes(searchTerm) && !prod.includes(searchTerm)) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-400">
+              <i data-lucide="inbox" class="w-8 h-8 mx-auto text-slate-500 mb-2"></i>
+              <span>Nenhum webhook encontrado para os filtros selecionados.</span>
+            </td>
+          </tr>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(log => {
+        const dateObj = new Date(log.processedAt || log.rawPayload?.creation_date || Date.now());
+        const timeFormatted = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        let eventBadge = '';
+        if (log.event === 'PURCHASE_APPROVED') {
+          const isRec = log.rawPayload?.data?.purchase?.recurrent;
+          eventBadge = isRec 
+            ? `<span class="px-2 py-0.5 rounded-md bg-sky-500/20 text-sky-300 font-mono text-[10px] font-bold border border-sky-500/30">RECORRÊNCIA #2+</span>`
+            : `<span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30">PURCHASE_APPROVED</span>`;
+        } else if (log.event === 'PURCHASE_DELAYED') {
+          eventBadge = `<span class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">PURCHASE_DELAYED</span>`;
+        } else if (log.event === 'SUBSCRIPTION_CANCELLATION') {
+          eventBadge = `<span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold border border-rose-500/30">CANCELLATION</span>`;
+        } else if (log.event === 'PURCHASE_REFUNDED' || log.event === 'PURCHASE_CHARGEBACK') {
+          eventBadge = `<span class="px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 font-mono text-[10px] font-bold border border-purple-500/30">${log.event}</span>`;
+        } else {
+          eventBadge = `<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-mono text-[10px] font-bold">${log.event}</span>`;
+        }
+
+        let statusDot = '';
+        if (log.status === 'processed') {
+          statusDot = `<span class="inline-flex items-center gap-1 text-emerald-400 font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 200 OK</span>`;
+        } else if (log.status === 'warning') {
+          statusDot = `<span class="inline-flex items-center gap-1 text-amber-400 font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Alerta</span>`;
+        } else {
+          statusDot = `<span class="inline-flex items-center gap-1 text-rose-400 font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Erro</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-white/5 transition">
+            <td class="py-3 px-4 font-mono text-[11px] text-slate-400">${timeFormatted}</td>
+            <td class="py-3 px-4">${eventBadge}</td>
+            <td class="py-3 px-4">
+              <span class="text-white font-bold block truncate max-w-[180px]">${escapeHtml(log.buyerName || 'Aluno')}</span>
+              <span class="text-[10px] font-mono text-amber-300/90 block truncate max-w-[180px]">${escapeHtml(log.buyerEmail || '')}</span>
+            </td>
+            <td class="py-3 px-4">
+              <span class="text-slate-200 block truncate max-w-[200px]">${escapeHtml(log.productName || 'Magic Stories Club')}</span>
+              <span class="text-[10px] font-mono text-slate-400 block">${escapeHtml(log.transactionId || '')}</span>
+            </td>
+            <td class="py-3 px-4 font-bold text-white">${escapeHtml(log.amountFormatted || 'R$ 0,00')}</td>
+            <td class="py-3 px-4">${statusDot}</td>
+            <td class="py-3 px-4 text-right">
+              <button onclick="inspectLog('${log.id}')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-[11px] font-bold transition border border-white/10 cursor-pointer">
+                Ver Payload
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // Inspecionar Log Específico
+    function inspectLog(id) {
+      const log = activeLogs.find(l => l.id === id);
+      if (!log) return;
+      currentInspectedLog = log;
+
+      document.getElementById('inspector-title').innerText = `${log.event} (${log.provider || 'hotmart'})`;
+      document.getElementById('inspector-id').innerText = log.id;
+      document.getElementById('inspector-summary').innerText = log.resultSummary || "Processado com sucesso pelo sistema.";
+      document.getElementById('inspector-buyer').innerText = log.buyerName || "Desconhecido";
+      document.getElementById('inspector-email').innerText = log.buyerEmail || "-";
+      document.getElementById('inspector-tx').innerText = log.transactionId || "-";
+      document.getElementById('inspector-amount').innerText = log.amountFormatted || "-";
+
+      document.getElementById('inspector-json').innerText = JSON.stringify(log.rawPayload || log, null, 2);
+
+      document.getElementById('inspector-modal').classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function closeInspectorModal() {
+      document.getElementById('inspector-modal').classList.add('hidden');
+      currentInspectedLog = null;
+    }
+
+    function copyInspectorPayload() {
+      if (!currentInspectedLog) return;
+      const text = JSON.stringify(currentInspectedLog.rawPayload || currentInspectedLog, null, 2);
+      navigator.clipboard.writeText(text).then(() => {
+        const lbl = document.getElementById('inspector-copy-label');
+        lbl.innerText = "Copiado!";
+        setTimeout(() => lbl.innerText = "Copiar JSON", 1500);
+      });
+    }
+
+    async function reprocessCurrentWebhook() {
+      if (!currentInspectedLog || !currentInspectedLog.rawPayload) return;
+      if (confirm(`Deseja reprocessar o evento ${currentInspectedLog.event} para ${currentInspectedLog.buyerEmail}?`)) {
+        closeInspectorModal();
+        try {
+          await window.aefWebhookHandler.processHotmartWebhook(currentInspectedLog.rawPayload);
+          alert("Webhook reprocessado com sucesso!");
+          await refreshLogs();
+        } catch (e) {
+          alert("Erro ao reprocessar: " + e.message);
+        }
+      }
+    }
+
+    // Copiar URL do Endpoint
+    function copyEndpointUrl() {
+      const input = document.getElementById('webhook-endpoint-url');
+      input.select();
+      navigator.clipboard.writeText(input.value).then(() => {
+        const btn = document.getElementById('copy-btn-text');
+        btn.innerText = "Copiado!";
+        setTimeout(() => btn.innerText = "Copiar", 2000);
+      });
+    }
+
+    // Salvar Hottok
+    function saveHottok() {
+      const val = document.getElementById('webhook-hottok-input').value.trim();
+      localStorage.setItem('aef_hotmart_hottok_token', val);
+      alert("Token Hottok salvo com sucesso no navegador!");
+    }
+
+    function toggleHottokVisibility() {
+      const input = document.getElementById('webhook-hottok-input');
+      const icon = document.getElementById('hottok-eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function clearLogs() {
+      if (confirm("Deseja limpar o cache local de logs de webhooks?")) {
+        localStorage.removeItem('aef_webhook_logs_cache_v2');
+        refreshLogs();
+      }
+    }
+
+    function scrollToSimulator() {
+      const el = document.getElementById('webhook-simulator-card');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openHotmartWebhookGuideModal() {
+      document.getElementById('hotmart-guide-modal').classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function closeHotmartGuideModal() {
+      document.getElementById('hotmart-guide-modal').classList.add('hidden');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
