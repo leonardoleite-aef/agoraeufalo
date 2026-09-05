@@ -2821,13 +2821,15 @@
       document.getElementById('aiPocketCourseModal').classList.add('hidden');
     }
 
+    let currentSelectedPocketPreset = null;
+
     function initAiPocketPresets() {
       const container = document.getElementById('aiPocketPresetsContainer');
       if (!container || !window.aefPocketCourseAI) return;
 
       const presets = window.aefPocketCourseAI.getPresets();
       container.innerHTML = Object.entries(presets).map(([k, p]) => `
-        <button type="button" onclick="handleSelectPocketPreset('${k}')" class="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+        <button type="button" id="presetBtn_${k}" onclick="handleSelectPocketPreset('${k}')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-white/5">
           <span>${p.label}</span>
         </button>
       `).join('');
@@ -2839,7 +2841,21 @@
       const preset = presets[key];
       if (!preset) return;
 
+      currentSelectedPocketPreset = key;
       document.getElementById('aiPocketPromptInput').value = preset.defaultPrompt;
+
+      // Atualiza destaque visual dos botões de preset
+      Object.keys(presets).forEach(k => {
+        const btn = document.getElementById('presetBtn_' + k);
+        if (btn) {
+          if (k === key) {
+            btn.className = "px-2.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md border border-amber-400";
+          } else {
+            btn.className = "px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-white/5";
+          }
+        }
+      });
+
       showToast(`Preset "${preset.label}" selecionado!`);
     }
 
@@ -2850,7 +2866,7 @@
 
       try {
         if (!window.aefPocketCourseAI) throw new Error('Motor aefPocketCourseAI não carregado.');
-        const generated = await window.aefPocketCourseAI.generatePocketCourse(promptText);
+        const generated = await window.aefPocketCourseAI.generatePocketCourse(promptText, currentSelectedPocketPreset);
         activeAiPocketData = generated;
 
         // Render preview

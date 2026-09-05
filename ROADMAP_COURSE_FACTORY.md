@@ -64,15 +64,15 @@ Este documento preserva de forma permanente a **Visão Macro Estratégica** do P
 
 ---
 
-## 4. O Catálogo Canônico de Pocket Courses Planejados
-1. **Atividades Cotidianas:**
-   - 🛒 *Shopping & Supermarket:* Roupas, devoluções, tamanhos, pedidos de ajuda e pagamentos.
-   - 🍽️ *Eating Out, Pubs & Cafés:* Pedir recomendações, reservas, dietas especiais e a conta.
-   - ✈️ *Traveling & Airports:* Alfândega, imigração, táxis, direções na rua e check-in em hotéis.
-2. **Vida Profissional:**
-   - 💼 *Business Meetings & Presentations:* Liderar agendas, discordar educadamente, resumir pontos e intervir sem interromper de forma rude.
-   - ✉️ *Writing & Emailing:* E-mails formais, follow-ups de negócios e mensagens rápidas.
-3. **Modalidades de Treino Específico:**
-   - 🎧 *Only Listening (Imersão Pura):* Treino de audição real de inglês rápido e nativo.
-   - 🗣️ *Only Speaking (Reflexo & Cadência):* Bate-pronto de conversação autônoma.
-   - 🚨 *Emergency Quick Courses:* Socorro imediato para viagens ou entrevistas urgentes em 48 horas.
+## 4. O Catálogo Oficial das 10 Categorias Canônicas de Pocket Courses
+
+1. ✈️ **Airport & In-Flight Survival:** Navigating check-in, baggage claims, security screenings, flight delays, customs declarations, and asking flight attendants for assistance.
+2. 🍽️ **Dining Out & Social Table Talk:** Reading menus, asking about ingredients, ordering modifications, returning dishes politely, splitting the bill, and handling casual small talk with servers.
+3. 🏨 **Hotels & Short-Term Rentals (Airbnb):** Checking in, handling room issues (air conditioning, noisy neighbors, missing amenities), requesting early/late checkout, and communicating with hosts.
+4. 🚕 **Getting Around Town:** Hailing taxis/rideshares, buying transit tickets, interpreting metro maps, and asking locals for real-time walking or driving directions.
+5. 🚨 **Emergency & Medical Situations:** Describing symptoms at a pharmacy, communicating acute pain or allergies at a clinic, reporting lost passports or wallets, and calling local emergency services.
+6. 💻 **Online Meetings & Remote Work:** Unmuting etiquette, interrupting politely, stating audio/video issues, screen sharing, chiming in during fast-paced group discussions, and wrapping up action items.
+7. 🎯 **Job Interview Fast-Track:** Delivering a punchy 60-second self-introduction, explaining career milestones, answering common behavioral questions ("Tell me about a time you..."), and asking insightful questions to the interviewer.
+8. 🛍️ **Shopping, Sizing & Returns:** Asking for different sizes/colors, asking about return policies, tax-free refunds, finding bargains, and declining persistent sales reps without being rude.
+9. 🤝 **Networking & Small Talk:** Breaking the ice at mixers or conferences, introducing mutual colleagues, finding common ground (hobbies, weather, current projects), and gracefully exiting conversations.
+10. 🏛️ **Local Sightseeing & Guided Experiences:** Booking tours, asking about photography rules, understanding museum guides, renting vehicles/equipment, and negotiating prices at street markets.
