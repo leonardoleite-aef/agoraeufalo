@@ -904,6 +904,8 @@
         description: promise,
         published: true,
         aiGenerated: true,
+        courseCategory: 'pocket',
+        isPocketCourse: true,
         aiPromptUsed: cleanPrompt || (preset ? preset.defaultPrompt : ''),
         visualPromptBlueprint: artConcept,
         createdAt: new Date().toISOString(),

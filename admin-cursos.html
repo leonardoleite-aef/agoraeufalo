@@ -1045,8 +1045,11 @@
             ⚡
           </span>
           <div>
-            <h3 class="font-black text-base text-white">AI Pocket Course Architect</h3>
-            <p class="text-[10px] text-slate-300">Motor de Thinking Process com a Didática dos 35+ Anos do Leo Leite</p>
+            <h3 class="font-black text-base text-white flex items-center gap-2">
+              AI Pocket Course Architect
+              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">Cursos Rápidos</span>
+            </h3>
+            <p class="text-[10px] text-slate-300">Cursos rápidos e práticos focados nos ouvidos (MS, QuickStart e Frases Prontas são geridos na Estação 1)</p>
           </div>
         </div>
         <button onclick="closeAiPocketModal()" class="text-slate-400 hover:text-white p-1 text-sm">✕</button>
@@ -1404,23 +1407,40 @@
       const keys = Object.keys(ALL_COURSES);
       if (!keys.includes(activeCourseId) && keys.length > 0) activeCourseId = keys[0];
 
-      const generalCourses = [];
+      const structuralCourses = [];
+      const pocketCourses = [];
       const vipCourses = [];
 
       keys.forEach(k => {
         const c = ALL_COURSES[k];
         const isVIP = c.tierRequired === 'vip' || k.startsWith('mentoria-') || (c.badge && c.badge.includes('VIP'));
-        if (isVIP) vipCourses.push(c);
-        else generalCourses.push(c);
+        const isPocket = c.isPocketCourse === true || c.courseCategory === 'pocket' || c.aiGenerated === true || (c.badge && c.badge.includes('POCKET')) || ['airport-flight-survival', 'dining-out-table-talk', 'hotels-short-term-rentals', 'getting-around-town', 'emergency-medical-situations', 'online-meetings-remote-work', 'job-interview-fast-track', 'shopping-sizing-returns', 'networking-small-talk', 'local-sightseeing-guided-experiences'].includes(c.id);
+
+        if (isVIP) {
+          vipCourses.push(c);
+        } else if (isPocket) {
+          pocketCourses.push(c);
+        } else {
+          structuralCourses.push(c);
+        }
       });
 
       let html = '';
 
-      if (generalCourses.length > 0) {
-        html += '<optgroup label="📦 Cursos Gerais & Formações">';
-        html += generalCourses.map(c => {
+      if (structuralCourses.length > 0) {
+        html += '<optgroup label="🏛️ Programas Estruturais & Longos">';
+        html += structuralCourses.map(c => {
           const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
           return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>${pubIcon} ${c.title || c.id}</option>`;
+        }).join("");
+        html += '</optgroup>';
+      }
+
+      if (pocketCourses.length > 0) {
+        html += '<optgroup label="⚡ Pocket Courses (Cursos Rápidos)">';
+        html += pocketCourses.map(c => {
+          const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
+          return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>⚡ ${pubIcon} ${c.title || c.id}</option>`;
         }).join("");
         html += '</optgroup>';
       }

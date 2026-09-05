@@ -76,3 +76,22 @@ Este documento preserva de forma permanente a **Visão Macro Estratégica** do P
 8. 🛍️ **Shopping, Sizing & Returns:** Asking for different sizes/colors, asking about return policies, tax-free refunds, finding bargains, and declining persistent sales reps without being rude.
 9. 🤝 **Networking & Small Talk:** Breaking the ice at mixers or conferences, introducing mutual colleagues, finding common ground (hobbies, weather, current projects), and gracefully exiting conversations.
 10. 🏛️ **Local Sightseeing & Guided Experiences:** Booking tours, asking about photography rules, understanding museum guides, renting vehicles/equipment, and negotiating prices at street markets.
+
+---
+
+## 5. A Taxonomia Oficial de Cursos: Programas Longos vs. Pocket Courses
+
+O ecossistema AgoraEuFalo opera com uma divisão clara e harmônica entre dois tipos de produtos pedagógicos:
+
+### 🏛️ Classe A: Programas Estruturais & Cursos Longos (Formações Base)
+- **Magic Stories (MS Legacy & MS Club):** O programa central de imersão auditiva com histórias completas da vida real, método das 6 etapas canônicas (LR, VOC, LA, LRT, LASK, PRO), dezenas de ciclos e apostilas em PDF diagramadas na PDF Factory.
+- **English QuickStart (Fundamentos da Fala):** O curso instrumental dos 5 módulos essenciais (Núcleo da frase, Ações no presente, Passado e continuidade, Artigo e posse, Conexões + Bônus).
+- **Frases Prontas da Vida Real:** O acervo master de repertório oral e Sound Chunks pré-moldados para destravar respostas automáticas.
+- **Mentorias VIP Individuais (Tier 3):** O programa 1 a 1 de maior proximidade com prescrições personalizadas do Professor Leo.
+- *Onde são criados/editados:* Na **Estação 1 (Estrutura Pedagógica & Aulas)** da Course Factory Studio.
+
+### ⚡ Classe B: Pocket Courses (Cursos Rápidos / Treinos Práticos de Impacto)
+- **O Propósito:** Soluções cirúrgicas para situações pontuais onde o aluno precisa destravar a escuta e a resposta imediata em bate-pronto (viagem amanhã, reunião urgente, entrevista de emprego na próxima semana).
+- **As 10 Categorias Canônicas:** Airport & Flight, Dining Out, Hotels & Airbnb, Getting Around Town, Emergency & Medical, Online Meetings, Job Interview, Shopping & Sizing, Networking & Small Talk, Local Sightseeing.
+- **Formato:** Player-First e fones de ouvido. 3 aulas objetivas com scripts dramatizados para áudio TTS, Sound Chunks no Português Falado Real e Sacada de Ouro do Leo.
+- *Onde são criados:* No modal **`+ Pocket Course com IA`** e finalizados na **Estação 2 (Estúdio de Criativos)** para geração do Kit Master de 6 imagens.
