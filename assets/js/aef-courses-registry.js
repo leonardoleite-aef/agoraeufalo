@@ -145,7 +145,7 @@ const AEF_COURSES_DATA = {
     "slug": "ms-legacy",
     "badge": "LEGACY CLUB",
     "tierRequired": "legacy_member",
-    "coverImageUrl": "assets/images/cover-magic-stories-legacy.jpg",
+    "coverImageUrl": "assets/images/cover-magic-stories-cinema.jpg?v=20260905",
     "description": "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas em PDF.",
     "published": true,
     "modules": [

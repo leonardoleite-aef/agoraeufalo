@@ -2747,19 +2747,23 @@
         });
 
         // Carregar imagem base existente se disponível
-        const candidateImg = (course.coverImageUrl && course.coverImageUrl.trim()) ||
-                             (course.artworkUrl && course.artworkUrl.trim()) ||
-                             (course.modules?.[0]?.coverImageUrl && course.modules[0].coverImageUrl.trim()) ||
-                             (course.modules?.[0]?.thumbnailUrl && course.modules[0].thumbnailUrl.trim()) ||
-                             (course.modules?.[0]?.lessons?.[0]?.thumbnailUrl && course.modules[0].lessons[0].thumbnailUrl.trim()) ||
-                             (course.modules?.[0]?.lessons?.[0]?.artworkUrl && course.modules[0].lessons[0].artworkUrl.trim()) ||
-                             'assets/images/cover-default-aef.jpg';
+        let candidateImg = (course.coverImageUrl && course.coverImageUrl.trim()) ||
+                           (course.artworkUrl && course.artworkUrl.trim()) ||
+                           (course.modules?.[0]?.coverImageUrl && course.modules[0].coverImageUrl.trim()) ||
+                           (course.modules?.[0]?.thumbnailUrl && course.modules[0].thumbnailUrl.trim()) ||
+                           (course.modules?.[0]?.lessons?.[0]?.thumbnailUrl && course.modules[0].lessons[0].thumbnailUrl.trim()) ||
+                           (course.modules?.[0]?.lessons?.[0]?.artworkUrl && course.modules[0].lessons[0].artworkUrl.trim()) ||
+                           'assets/images/cover-default-aef.jpg';
+
+        // Cache-buster para garantir que o canvas nunca carregue imagem antiga da memória do navegador
+        const bustUrl = candidateImg.startsWith('data:') ? candidateImg : (candidateImg + (candidateImg.includes('?') ? '&' : '?') + `_cb=${Date.now()}`);
+
         try {
-          await window.aefCreativeStudio.loadFromUrl(candidateImg);
+          await window.aefCreativeStudio.loadFromUrl(bustUrl);
           const thumb = document.getElementById('creativeBaseImgThumb');
           const label = document.getElementById('creativeBaseImgLabel');
-          if (thumb) thumb.src = candidateImg;
-          if (label) label.innerText = candidateImg.split('/').pop() || 'imagem';
+          if (thumb) thumb.src = bustUrl;
+          if (label) label.innerText = candidateImg.split('?')[0].split('/').pop() || 'imagem';
         } catch (e) {
           console.warn('Erro ao carregar imagem base:', e);
         }
