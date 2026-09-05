@@ -407,9 +407,24 @@
 
     async signOut() {
       await this.ready();
-      await this.auth.signOut();
+      if (this.auth) {
+        try { await this.auth.signOut(); } catch(e) {}
+      }
       this.currentUser = null;
       this.currentProfile = null;
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('aef_user_role');
+        localStorage.removeItem('aef_user_tier');
+        localStorage.removeItem('aef_user_email');
+        localStorage.removeItem('aef_user_name');
+        localStorage.removeItem('aef_user_profile');
+        localStorage.removeItem('aef_active_tier');
+        localStorage.removeItem('aef_enrolled_products');
+        localStorage.removeItem('aef_is_admin');
+      }
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('aef_impersonate_state');
+      }
     }
 
     // =========================================================================
