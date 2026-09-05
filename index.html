@@ -162,6 +162,14 @@
           </a>
           <button 
             type="button" 
+            onclick="toggleVisitorPreview(true)" 
+            class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-400/30 transition cursor-pointer" 
+            title="Ver a Home como um visitante novo vê"
+          >
+            <span>👁️ Ver como Visitante</span>
+          </button>
+          <button 
+            type="button" 
             onclick="handleUserSignOut()" 
             class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white text-xs font-semibold border border-white/10 transition cursor-pointer" 
             title="Sair desta conta"
@@ -319,6 +327,14 @@
                 <i data-lucide="headphones" class="w-4 h-4 text-amber-400"></i>
                 <span>Abrir Player</span>
               </a>
+              <button 
+                type="button" 
+                onclick="toggleVisitorPreview(true)" 
+                class="px-3.5 py-3 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                title="Ver a Home como um visitante novo vê"
+              >
+                <span>👁️ Ver como Visitante</span>
+              </button>
               <button 
                 type="button" 
                 onclick="handleUserSignOut()" 
@@ -1996,16 +2012,14 @@
       // 8. Roteamento Inteligente de Aluno Logado (Diretriz Permanente Seção 6)
       function checkLoggedInStudent() {
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('logout') === 'true' || localStorage.getItem('aef_logged_out') === 'true') {
-          try {
-            localStorage.removeItem('aef_user_name');
-            localStorage.removeItem('aef_user_profile');
-            localStorage.removeItem('aef_user_email');
-            localStorage.removeItem('aef_user_role');
-            localStorage.removeItem('aef_user_tier');
-            localStorage.removeItem('aef_enrolled_products');
-            localStorage.setItem('aef_logged_out', 'true');
-          } catch(e) {}
+        const isForceVisitor = urlParams.get('modo') === 'visitante' || 
+                               urlParams.get('preview') === 'visitor' || 
+                               urlParams.get('logout') === 'true' || 
+                               sessionStorage.getItem('aef_preview_visitor') === 'true' ||
+                               localStorage.getItem('aef_logged_out') === 'true';
+
+        if (isForceVisitor) {
+          applyVisitorState();
           return;
         }
 
@@ -2027,12 +2041,34 @@
 
         if (window.aefPortalAuth && typeof window.aefPortalAuth.onAuthStateChanged === 'function') {
           window.aefPortalAuth.onAuthStateChanged((user, profile) => {
-            if (localStorage.getItem('aef_logged_out') === 'true') return;
+            const stillVisitor = sessionStorage.getItem('aef_preview_visitor') === 'true' || 
+                                 localStorage.getItem('aef_logged_out') === 'true' ||
+                                 urlParams.get('modo') === 'visitante';
+            if (stillVisitor) return;
             if (user && profile) {
               applyStudentState(profile.name || user.displayName || user.email.split('@')[0]);
             }
           });
         }
+      }
+
+      function applyVisitorState() {
+        const headerAuthBadge = document.getElementById('header-auth-badge');
+        const headerLoginBtn = document.getElementById('header-login-btn');
+        const headerCtaBtn = document.getElementById('header-cta-btn');
+        const heroOnboardingBox = document.getElementById('hero-onboarding-box');
+        const heroWelcomeBackCard = document.getElementById('hero-welcome-back-card');
+        const visitorBanner = document.getElementById('visitor-preview-banner');
+
+        if (headerAuthBadge) {
+          headerAuthBadge.classList.add('hidden');
+          headerAuthBadge.classList.remove('flex');
+        }
+        if (headerLoginBtn) headerLoginBtn.classList.remove('hidden');
+        if (headerCtaBtn) headerCtaBtn.classList.remove('hidden');
+        if (heroOnboardingBox) heroOnboardingBox.classList.remove('hidden');
+        if (heroWelcomeBackCard) heroWelcomeBackCard.classList.add('hidden');
+        if (visitorBanner) visitorBanner.classList.remove('hidden');
       }
 
       function applyStudentState(name) {
@@ -2046,6 +2082,7 @@
         const heroWelcomeBackCard = document.getElementById('hero-welcome-back-card');
         const heroWelcomeTitle = document.getElementById('hero-welcome-title');
         const heroWelcomeAvatar = document.getElementById('hero-welcome-avatar');
+        const visitorBanner = document.getElementById('visitor-preview-banner');
 
         if (headerAuthBadge && headerAuthName) {
           headerAuthName.textContent = `Olá, ${firstName}`;
@@ -2061,10 +2098,27 @@
           if (heroWelcomeTitle) heroWelcomeTitle.textContent = `Bem-vindo de volta, ${firstName}!`;
           if (heroWelcomeAvatar) heroWelcomeAvatar.textContent = firstName.charAt(0).toUpperCase();
         }
+        if (visitorBanner) visitorBanner.classList.add('hidden');
       }
 
+      window.applyVisitorState = applyVisitorState;
       checkLoggedInStudent();
     });
+
+    window.toggleVisitorPreview = function(enable) {
+      if (enable) {
+        sessionStorage.setItem('aef_preview_visitor', 'true');
+        if (typeof window.applyVisitorState === 'function') {
+          window.applyVisitorState();
+        } else {
+          window.location.href = 'index.html?modo=visitante';
+        }
+      } else {
+        sessionStorage.removeItem('aef_preview_visitor');
+        localStorage.removeItem('aef_logged_out');
+        window.location.href = window.location.pathname;
+      }
+    };
 
     window.handleUserSignOut = async function() {
       if (window.aefPortalAuth && typeof window.aefPortalAuth.signOut === 'function') {
@@ -2082,5 +2136,23 @@
       window.location.href = 'index.html?logout=true';
     };
   </script>
+
+  <!-- Floating Banner de Controle de Preview (Modo Visitante) -->
+  <div id="visitor-preview-banner" class="hidden fixed bottom-5 right-5 z-50 bg-[#0A192F]/95 border-2 border-amber-400 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3.5 backdrop-blur-md">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+      <div class="text-left">
+        <p class="text-[11px] font-mono font-bold text-amber-300 uppercase tracking-wider">Modo Visitante Ativo</p>
+        <p class="text-[10px] text-slate-300">Você está vendo a Home como um visitante novo</p>
+      </div>
+    </div>
+    <button 
+      type="button" 
+      onclick="toggleVisitorPreview(false)" 
+      class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer shrink-0 shadow-sm"
+    >
+      Voltar para Aluno Logado
+    </button>
+  </div>
 </body>
 </html>

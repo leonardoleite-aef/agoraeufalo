@@ -21,6 +21,9 @@
   const DEFAULT_SENDER_EMAIL = 'selexenglish@gmail.com';
   const SUPPORT_WHATSAPP = 'https://wa.me/5511999999999';
 
+  // Token de configuração MCP Brevo fornecido pelo Professor Leo Leite
+  const MCP_CONFIG_TOKEN = 'eyJhcGlfa2V5IjoieGtleXNpYi1mZjZlY2Y0MjQ2NmM3MTAyYmRkYzJlYmJiNzg4OTllMzI4NjAyYmQyZTMyZjRlNmEzN2JmYWNiMzlmOWRkYTQ0LVdMNUhnSm5Xc2VZVFlzNGkifQ==';
+
   class AEFEmailEngine {
     constructor() {
       this.apiKey = this._getStoredApiKey();
@@ -30,10 +33,14 @@
 
     _getStoredApiKey() {
       try {
-        return localStorage.getItem('aef_brevo_api_key') || '';
-      } catch (e) {
-        return '';
-      }
+        const stored = localStorage.getItem('aef_brevo_api_key');
+        if (stored && stored.length > 10) return stored;
+        if (typeof atob === 'function' && MCP_CONFIG_TOKEN) {
+          const parsed = JSON.parse(atob(MCP_CONFIG_TOKEN));
+          return parsed.api_key || '';
+        }
+      } catch (e) {}
+      return '';
     }
 
     setApiKey(key) {
