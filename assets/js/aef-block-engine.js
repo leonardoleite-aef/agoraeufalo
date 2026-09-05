@@ -10,13 +10,48 @@
 (function (window) {
   'use strict';
 
-  const STORAGE_KEY = 'aef_marketing_blocks_cache_v3';
+  const STORAGE_KEY = 'aef_marketing_blocks_cache_v4';
 
   // Sementes Canônicas de Blocos de Marketing
   const CANONICAL_BLOCKS_SEED = [
     {
+      id: "card-infeed-ms-club",
+      title: "Card In-Feed • AgoraEuFalo Club (Magic Stories)",
+      format: "card_infeed",
+      attachedOfferId: "ms-club-anual",
+      placement: {
+        slotId: "portal_courses_infeed",
+        priority: 100
+      },
+      targeting: {
+        targetTiers: ["free", "unauthenticated"],
+        excludeTiers: ["club_annual", "club_monthly", "vip"],
+        excludeIfEnrolledProduct: "ms-club"
+      },
+      content: {
+        badgeText: "✨ ASSINATURA AGORAEUFALO CLUB",
+        headline: "AgoraEuFalo Club • O Método Magic Stories para Falar no Reflexo",
+        subhead: "Destrave o acervo completo das 30 Magic Stories clássicas narradas pelo Professor Leo Leite e parceiros nativos.",
+        bodyHtml: `
+          <ul class="space-y-2 text-xs text-slate-300 mb-3">
+            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> <span><strong>30 Magic Stories Clássicas:</strong> Histórias completas gravadas em estúdio com o Professor Leo e falantes nativos.</span></li>
+            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> <span><strong>As 6 Atividades Canônicas:</strong> Listen & Read, Vocab Session, Listen & Answer, Look & Retell, Listen & Ask e Pronúncia.</span></li>
+            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> <span><strong>Training Player Profissional:</strong> Repetição em loop (🔂), seek milissegundo e modo fone de ouvido para treinar onde quiser.</span></li>
+            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> <span><strong>Apostilas Oficiais Diagramadas:</strong> PDFs em alta resolução para acompanhamento e escrita manual.</span></li>
+          </ul>
+        `,
+        mediaType: "image",
+        mediaUrl: "assets/images/cover-magic-stories-cinema.jpg?v=20260905",
+        ctaText: "Garantir Minha Vaga no Club",
+        ctaSecondaryText: "12x no cartão ou à vista no PIX • Garantia incondicional de 7 dias"
+      },
+      status: "active",
+      createdAt: "2026-09-05T00:00:00.000Z",
+      updatedAt: "2026-09-05T12:00:00.000Z"
+    },
+    {
       id: "modal-paywall-ms-club",
-      title: "Modal de Bloqueio • Assine o Magic Stories Club",
+      title: "Modal de Bloqueio • Assine o AgoraEuFalo Club",
       format: "modal_paywall",
       attachedOfferId: "ms-club-anual",
       placement: {
@@ -30,11 +65,11 @@
       },
       content: {
         badgeText: "CONTEÚDO EXCLUSIVO DO CLUB",
-        headline: "Destrave as 6 Atividades do Magic Stories Club",
+        headline: "Destrave as 30 Magic Stories do AgoraEuFalo Club",
         subhead: "Treine no carro, academia e caminhada sem telas ligadas. O método prático para transformar o inglês em reflexo natural.",
         bodyHtml: `
           <ul class="space-y-2 text-xs text-slate-300">
-            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Acesso total a todas as Magic Stories clássicas</li>
+            <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Acesso total a todas as 30 Magic Stories clássicas</li>
             <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Áudios de estúdio Dual-Speaker com seek milimétrico</li>
             <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Repetição contínua em loop e Modo Bolso / Lockscreen</li>
             <li class="flex items-center gap-2"><span class="text-amber-400 font-bold">✓</span> Apostilas oficiais diagramadas em PDF A4</li>
@@ -47,7 +82,7 @@
       },
       status: "active",
       createdAt: "2026-09-01T00:00:00.000Z",
-      updatedAt: "2026-09-03T22:00:00.000Z"
+      updatedAt: "2026-09-05T12:00:00.000Z"
     },
     {
       id: "card-infeed-frases-prontas",
@@ -77,9 +112,9 @@
         ctaText: "Garantir Acesso Vitalício",
         ctaSecondaryText: "Ver Grade do Curso"
       },
-      status: "active",
+      status: "paused",
       createdAt: "2026-09-01T00:00:00.000Z",
-      updatedAt: "2026-09-03T22:00:00.000Z"
+      updatedAt: "2026-09-05T12:00:00.000Z"
     },
     {
       id: "banner-mentoria-vip-club",
@@ -109,9 +144,9 @@
         ctaText: "Aplicar para Mentoria VIP no WhatsApp",
         ctaSecondaryText: "Como Funciona a Mentoria"
       },
-      status: "active",
+      status: "paused",
       createdAt: "2026-09-01T00:00:00.000Z",
-      updatedAt: "2026-09-03T22:00:00.000Z"
+      updatedAt: "2026-09-05T12:00:00.000Z"
     },
     {
       id: "banner-top-desconto-relampago",
@@ -136,7 +171,7 @@
       },
       status: "paused",
       createdAt: "2026-09-01T00:00:00.000Z",
-      updatedAt: "2026-09-03T22:00:00.000Z"
+      updatedAt: "2026-09-05T12:00:00.000Z"
     },
     {
       id: "card-infeed-migracao-club",
@@ -169,9 +204,9 @@
         ctaText: "Garantir Upgrade por R$ 297",
         ctaSecondaryText: "Tirar Dúvida no WhatsApp"
       },
-      status: "active",
+      status: "paused",
       createdAt: "2026-09-04T00:00:00.000Z",
-      updatedAt: "2026-09-04T00:00:00.000Z"
+      updatedAt: "2026-09-05T12:00:00.000Z"
     },
     {
       id: "teaser-hero-spoken-reflex",
@@ -214,35 +249,34 @@
     async init() {
       if (this.initialized) return this.blocks;
 
-      // 1. Lê do localStorage de imediato
+      // 1. Inicia sempre com o mapa da semente canônica oficial
+      const blockMap = new Map();
+      CANONICAL_BLOCKS_SEED.forEach(seed => {
+        blockMap.set(seed.id, JSON.parse(JSON.stringify(seed)));
+      });
+
+      // 2. Lê do localStorage e mescla (preserva edições locais sem apagar sementes)
       try {
         const cached = localStorage.getItem(STORAGE_KEY);
         if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            this.blocks = parsed;
+            parsed.forEach(item => {
+              if (item && item.id) {
+                const existing = blockMap.get(item.id) || {};
+                blockMap.set(item.id, { ...existing, ...item });
+              }
+            });
           }
         }
       } catch (e) {
         console.warn("[AEFBlockEngine] Falha ao ler cache local:", e);
       }
 
-      if (!this.blocks || this.blocks.length === 0) {
-        this.blocks = JSON.parse(JSON.stringify(CANONICAL_BLOCKS_SEED));
-        this.saveToLocalCache();
-      } else {
-        // Garante que novos blocos canônicos da seed sejam mesclados no cache existente
-        let addedNew = false;
-        CANONICAL_BLOCKS_SEED.forEach(seed => {
-          if (!this.blocks.some(b => b.id === seed.id)) {
-            this.blocks.push(JSON.parse(JSON.stringify(seed)));
-            addedNew = true;
-          }
-        });
-        if (addedNew) this.saveToLocalCache();
-      }
+      this.blocks = Array.from(blockMap.values());
+      this.saveToLocalCache();
 
-      // 2. Conecta ao Firebase se disponível
+      // 3. Conecta ao Firebase se disponível
       if (window.aefCloudSync) {
         try {
           await window.aefCloudSync.init();
@@ -250,10 +284,10 @@
         } catch (e) {}
       }
 
-      // 3. Sincroniza em background
+      // 4. Sincroniza em background
       await this.syncFromFirestore();
 
-      // 4. Garante que o registro de ofertas esteja pronto
+      // 5. Garante que o registro de ofertas esteja pronto
       if (window.aefOffersRegistry) {
         await window.aefOffersRegistry.init();
       }
@@ -270,16 +304,11 @@
 
     async syncFromFirestore() {
       try {
+        let cloudList = [];
         if (this.db) {
-          const snap = await this.db.collection('marketing_blocks').orderBy('createdAt', 'desc').get();
+          const snap = await this.db.collection('marketing_blocks').get();
           if (!snap.empty) {
-            const list = [];
-            snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
-            if (list.length > 0) {
-              this.blocks = list;
-              this.saveToLocalCache();
-              return list;
-            }
+            snap.forEach(doc => cloudList.push({ id: doc.id, ...doc.data() }));
           }
         } else {
           // REST Fallback
@@ -287,16 +316,37 @@
           if (res.ok) {
             const data = await res.json();
             if (data && data.documents && data.documents.length > 0) {
-              const list = data.documents.map(doc => this.parseFirestoreDocument(doc));
-              if (list.length > 0) {
-                this.blocks = list;
-                this.saveToLocalCache();
-                return list;
-              }
+              cloudList = data.documents.map(doc => this.parseFirestoreDocument(doc));
             }
           }
         }
+
+        if (cloudList.length > 0) {
+          const blockMap = new Map();
+          this.blocks.forEach(b => blockMap.set(b.id, b));
+          cloudList.forEach(cb => {
+            if (cb && cb.id) {
+              const existing = blockMap.get(cb.id) || {};
+              blockMap.set(cb.id, { ...existing, ...cb });
+            }
+          });
+          this.blocks = Array.from(blockMap.values());
+          this.saveToLocalCache();
+        }
       } catch (e) {}
+      return this.blocks;
+    }
+
+    /**
+     * Restaura a coleção com as sementes canônicas originais
+     */
+    async restoreCanonicalSeed() {
+      const blockMap = new Map();
+      CANONICAL_BLOCKS_SEED.forEach(seed => {
+        blockMap.set(seed.id, JSON.parse(JSON.stringify(seed)));
+      });
+      this.blocks = Array.from(blockMap.values());
+      this.saveToLocalCache();
       return this.blocks;
     }
 
@@ -482,9 +532,31 @@
 
       if (candidates.length === 0) return null;
 
+      // Validação estrita de Oferta Comercial Ativa e Regra Canônica do Free Tier
+      const validCandidates = [];
+      const isFreeTier = userTier === 'free' || userTier === 'unauthenticated';
+
+      for (const b of candidates) {
+        if (b.attachedOfferId && window.aefOffersRegistry) {
+          const offer = await window.aefOffersRegistry.getOfferById(b.attachedOfferId);
+          // Se a oferta não existir ou estiver pausada/inativa, descarta o bloco
+          if (!offer || offer.status !== 'active') {
+            continue;
+          }
+          // Regra Inegociável AgoraEuFalo: No Free Tier, a ÚNICA oferta autorizada a rodar
+          // em marketing é a Assinatura do AgoraEuFalo Club (Magic Stories)
+          if (isFreeTier && offer.productId !== 'ms-club') {
+            continue;
+          }
+        }
+        validCandidates.push(b);
+      }
+
+      if (validCandidates.length === 0) return null;
+
       // Ordena por prioridade descendente
-      candidates.sort((a, b) => (b.placement?.priority || 50) - (a.placement?.priority || 50));
-      return candidates[0];
+      validCandidates.sort((a, b) => (b.placement?.priority || 50) - (a.placement?.priority || 50));
+      return validCandidates[0];
     }
 
     /**
@@ -588,7 +660,7 @@
             </div>
 
             <div class="relative z-10 pt-4 mt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-              <a href="${ctaUrl}" target="_blank" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 active:scale-95 cursor-pointer">
+              <a href="${ctaUrl}" data-open-checkout="true" data-checkout-url="${ctaUrl}" target="_blank" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg hover:shadow-amber-500/20 flex items-center gap-2 active:scale-95 cursor-pointer">
                 <span>${block.content?.ctaText || 'Garantir Acesso Agora'}</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </a>
@@ -614,7 +686,7 @@
               <span class="truncate">${block.content?.headline}</span>
               ${offer ? `<strong class="hidden sm:inline font-black underline">${installmentsText}</strong>` : ''}
             </div>
-            <a href="${ctaUrl}" target="_blank" class="px-3.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-900 text-white font-black text-[11px] uppercase tracking-wider transition shrink-0 shadow-sm flex items-center gap-1 cursor-pointer">
+            <a href="${ctaUrl}" data-open-checkout="true" data-checkout-url="${ctaUrl}" target="_blank" class="px-3.5 py-1 rounded-lg bg-slate-950 hover:bg-slate-900 text-white font-black text-[11px] uppercase tracking-wider transition shrink-0 shadow-sm flex items-center gap-1 cursor-pointer">
               <span>${block.content?.ctaText || 'Ver Oferta'}</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>

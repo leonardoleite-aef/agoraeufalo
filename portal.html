@@ -51,6 +51,7 @@
   <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
   <script src="assets/js/aef-offers-registry.js"></script>
   <script src="assets/js/aef-block-engine.js"></script>
+  <script src="assets/js/aef-checkout-modal.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -1126,10 +1127,19 @@
                                  (Array.isArray(course.freeModuleIds) && course.freeModuleIds.length > 0) || 
                                  course.tierRequired === 'free';
 
-          // Link de checkout padrão Hotmart (Primário) ou fallback Stripe
-          const defaultCheckoutUrl = course.freeTierCtaUrl || 
+          // Link de checkout dinâmico da Hotmart (busca direto da Central de Ofertas do Leo)
+          let defaultCheckoutUrl = course.freeTierCtaUrl || 
                                      course.standaloneCheckoutHotmart || 
                                      'https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_card';
+
+          if (window.aefOffersRegistry) {
+            const offer = (course.attachedOfferId && window.aefOffersRegistry.getOfferById(course.attachedOfferId)) ||
+                          window.aefOffersRegistry.getOfferByProductId(id) ||
+                          window.aefOffersRegistry.getOfferById('ms-club-anual');
+            if (offer && offer.checkoutUrl && !offer.checkoutUrl.includes('OFFER_')) {
+              defaultCheckoutUrl = window.aefOffersRegistry.generateTrackingUrl(offer.id, 'portal_card');
+            }
+          }
 
           if (hasFreeTasting) {
             // CASO COM DEGUSTAÇÃO FREE: FAIXA 'EXPERIMENTE GRÁTIS'
@@ -1169,7 +1179,7 @@
                       <span>Degustação</span>
                       <i data-lucide="play" class="w-3 h-3 text-amber-600 fill-current"></i>
                     </a>
-                    <a href="${defaultCheckoutUrl}" target="_blank" class="py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs">
+                    <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs cursor-pointer">
                       <span>Desbloquear</span>
                       <i data-lucide="lock" class="w-3 h-3"></i>
                     </a>
@@ -1205,7 +1215,7 @@
 
                 <!-- Action Button -->
                 <div class="p-4 sm:p-5 pt-0">
-                  <a href="${defaultCheckoutUrl}" target="_blank" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm">
+                  <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
                     <span>Desbloquear Acesso</span>
                   </a>
