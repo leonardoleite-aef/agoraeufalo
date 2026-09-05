@@ -591,11 +591,14 @@
           <div id="panelImgLibrary" class="hidden space-y-2">
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">Escolher Capa do Ecossistema:</label>
             <select id="creativeLibrarySelect" onchange="handleSelectLibraryImage(this.value)" class="w-full bg-[#112240] border border-white/20 text-white text-xs font-semibold rounded-xl p-2 focus:border-amber-400 focus:outline-none">
-              <option value="assets/images/cover-andre-graziela.jpg">Andre & Graziela (35mm)</option>
-              <option value="assets/images/cover-english-quickstart.jpg">English QuickStart Master</option>
-              <option value="assets/images/cover-andre-art.jpg">Andre Art (Cinema)</option>
-              <option value="assets/images/cover-default-aef.jpg">Capa Padrão AgoraEuFalo</option>
-              <option value="assets/images/cover-andre-graziella-change.jpg">Graziella Change</option>
+              <option value="assets/images/cover-portal-3d-luxury.jpg">💎 Portal 3D Glassmorphism (16:9 Luxo)</option>
+              <option value="assets/images/cover-portal-3d-square.jpg">💎 Portal 3D Glassmorphism (1:1 Quadrado)</option>
+              <option value="assets/images/cover-sound-matrix-cyber.jpg">⚡ Cyber Sound Matrix (Alta Performance)</option>
+              <option value="assets/images/cover-fantasy-story-portal.jpg">📖 Livro Mágico das Histórias (Fantasia / Magic Stories)</option>
+              <option value="assets/images/hotmart-membership-cover-leo.jpg">🏛️ Masterclass Leo Leite (Editorial Foto Oficial)</option>
+              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante 35mm)</option>
+              <option value="assets/images/cover-magic-stories-cinema.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
+              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
             </select>
           </div>
 
@@ -1253,6 +1256,19 @@
               <input type="file" accept="image/*" class="hidden" onchange="handleModalCoverUpload(this.files[0])">
             </label>
           </div>
+          <div class="mt-1.5">
+            <select onchange="if(this.value){document.getElementById('courseModalCoverInput').value=this.value;}" class="w-full bg-[#112240] border border-white/15 text-slate-300 text-[11px] rounded-xl p-1.5 focus:border-amber-400 focus:outline-none">
+              <option value="">-- Ou escolha uma capa pronta da biblioteca --</option>
+              <option value="assets/images/cover-portal-3d-luxury.jpg">💎 Portal 3D Glassmorphism (16:9 Luxo Apple)</option>
+              <option value="assets/images/cover-portal-3d-square.jpg">💎 Portal 3D Glassmorphism (1:1 Quadrado)</option>
+              <option value="assets/images/cover-sound-matrix-cyber.jpg">⚡ Cyber Sound Matrix (Alta Performance)</option>
+              <option value="assets/images/cover-fantasy-story-portal.jpg">📖 Livro Mágico das Histórias (Fantasia / Magic Stories)</option>
+              <option value="assets/images/hotmart-membership-cover-leo.jpg">🏛️ Masterclass Leo Leite (Editorial Foto Oficial)</option>
+              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante Internacional 35mm)</option>
+              <option value="assets/images/cover-magic-stories-cinema.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
+              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
+            </select>
+          </div>
         </div>
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição</label>
@@ -1313,6 +1329,19 @@
               <span>Upload Capa</span>
               <input type="file" accept="image/*" class="hidden" onchange="handleModuleCoverUpload(this.files[0])">
             </label>
+          </div>
+          <div class="mt-1.5">
+            <select onchange="if(this.value){document.getElementById('moduleModalCoverUrlInput').value=this.value;}" class="w-full bg-[#112240] border border-white/15 text-slate-300 text-[11px] rounded-xl p-1.5 focus:border-amber-400 focus:outline-none">
+              <option value="">-- Ou escolha uma capa pronta da biblioteca --</option>
+              <option value="assets/images/cover-portal-3d-luxury.jpg">💎 Portal 3D Glassmorphism (16:9 Luxo Apple)</option>
+              <option value="assets/images/cover-portal-3d-square.jpg">💎 Portal 3D Glassmorphism (1:1 Quadrado)</option>
+              <option value="assets/images/cover-sound-matrix-cyber.jpg">⚡ Cyber Sound Matrix (Alta Performance)</option>
+              <option value="assets/images/cover-fantasy-story-portal.jpg">📖 Livro Mágico das Histórias (Fantasia / Magic Stories)</option>
+              <option value="assets/images/hotmart-membership-cover-leo.jpg">🏛️ Masterclass Leo Leite (Editorial Foto Oficial)</option>
+              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante Internacional 35mm)</option>
+              <option value="assets/images/cover-magic-stories-cinema.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
+              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
+            </select>
           </div>
         </div>
         <div>
