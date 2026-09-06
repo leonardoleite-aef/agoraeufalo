@@ -119,9 +119,9 @@
         });
 
         const gridHtml = chunkPairs.map(cp => `
-          <div style="background:#FAF8F5; border:1px solid #EAE5DC; border-radius:10px; padding:8px 12px; margin-bottom:6px; page-break-inside:avoid;">
-            <div style="font-weight:bold; color:#0A192F; font-size:14px;">${cp.en}</div>
-            ${cp.pt ? `<div style="font-size:12px; color:#047857; font-style:italic;">↳ ${cp.pt}</div>` : ''}
+          <div style="background:#FAF8F5; border:1px solid #EAE5DC; border-radius:10px; padding:10px 14px; margin-bottom:8px; page-break-inside:avoid;">
+            <div style="font-weight:800; color:#0A192F; font-size:15px; letter-spacing:0.3px;">${cp.en}</div>
+            ${cp.pt ? `<div style="font-size:12px; color:#92400E; font-weight:600; margin-top:2px;">💡 Ponto de Atenção / Melodia: ${cp.pt}</div>` : ''}
           </div>
         `).join('');
 
