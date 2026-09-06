@@ -948,8 +948,15 @@ const completeHtml = `<!DOCTYPE html>
     async function initializeStudioData() {
       ALL_COURSES = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY || {}));
       
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramCourse = urlParams.get('curso') || urlParams.get('course');
+      const paramModule = urlParams.get('modulo') || urlParams.get('module');
+      const paramLesson = urlParams.get('aula') || urlParams.get('lesson');
+
       const savedCourseId = localStorage.getItem('aef_admin_active_course_id');
-      if (savedCourseId && ALL_COURSES[savedCourseId]) {
+      if (paramCourse && ALL_COURSES[paramCourse]) {
+        activeCourseId = paramCourse;
+      } else if (savedCourseId && ALL_COURSES[savedCourseId]) {
         activeCourseId = savedCourseId;
       } else {
         const keys = Object.keys(ALL_COURSES);
@@ -957,10 +964,24 @@ const completeHtml = `<!DOCTYPE html>
           activeCourseId = keys[0];
         }
       }
+      localStorage.setItem('aef_admin_active_course_id', activeCourseId);
 
       renderCourseSwitcher();
       renderHierarchyTree();
       updateArtworkControlsFromCourse();
+
+      if (paramLesson) {
+        const c = ALL_COURSES[activeCourseId];
+        if (c) {
+          for (const m of (c.modules || [])) {
+            const l = (m.lessons || []).find(x => x.id === paramLesson);
+            if (l) {
+              selectLessonForEdit(l.id, m.id);
+              break;
+            }
+          }
+        }
+      }
 
       try {
         if (window.aefCloudSync) {
