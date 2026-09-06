@@ -4,7 +4,7 @@
  * 
  * Este motor permite que qualquer usuário/assistente no navegador (Mac, PC, iPad)
  * execute tarefas completas de Inteligência Artificial sem depender de terminal:
- * 1. 🎙️ Transcrição Multimodal de Áudio/Vídeo com Gemini 2.0 Flash
+ * 1. 🎙️ Transcrição Multimodal de Áudio/Vídeo com Gemini 2.5 Flash / Fallbacks
  * 2. ✨ Estruturação Pedagógica (Sentimento da Estrutura, Chunks & Zero Traduções Óbvias)
  * 3. 💡 Extração da Sacada de Ouro do Professor Leo
  */
@@ -12,9 +12,15 @@
 (function (window) {
   'use strict';
 
+  const SUPPORTED_MODELS = [
+    'gemini-2.5-flash',
+    'gemini-1.5-flash',
+    'gemini-2.5-pro',
+    'gemini-1.5-pro'
+  ];
+
   class AEFStudioAI {
     constructor() {
-      this.modelText = localStorage.getItem('AEF_GEMINI_MODEL') || 'gemini-2.0-flash';
       this.apiKey = localStorage.getItem('AEF_GEMINI_API_KEY') || '';
     }
 
@@ -95,22 +101,54 @@
     }
 
     /**
-     * 1. TRANSCRIÇÃO MULTIMODAL DE VÍDEO / ÁUDIO
+     * Executor com Multi-Model Fallback Resiliente
      */
-    async transcribeMediaFile(file, onProgress = null) {
+    async callGeminiApi(payload, onProgress = null) {
       const apiKey = this.getApiKey();
       if (!apiKey) {
         this.promptApiKeyConfig();
-        if (!this.hasApiKey()) throw new Error("Chave da API do Gemini necessária para transcrição.");
+        if (!this.hasApiKey()) throw new Error("Chave da API do Gemini necessária.");
       }
 
+      let lastError = null;
+
+      for (const model of SUPPORTED_MODELS) {
+        try {
+          if (onProgress) onProgress(`Processando com ${model}...`);
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(this.getApiKey())}`;
+
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            const errJson = await response.json().catch(() => ({}));
+            const msg = errJson.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+            console.warn(`[Gemini API] Falha no modelo ${model}: ${msg}`);
+            lastError = new Error(`[${model}] ${msg}`);
+            continue; // Tenta o próximo modelo suportado
+          }
+
+          const resData = await response.json();
+          return resData;
+        } catch (err) {
+          console.warn(`[Gemini API] Erro de rede/execução no modelo ${model}:`, err);
+          lastError = err;
+        }
+      }
+
+      throw lastError || new Error("Nenhum modelo Gemini disponível respondeu à requisição.");
+    }
+
+    /**
+     * 1. TRANSCRIÇÃO MULTIMODAL DE VÍDEO / ÁUDIO
+     */
+    async transcribeMediaFile(file, onProgress = null) {
       if (onProgress) onProgress("Lendo arquivo de mídia...");
       const base64Data = await this.fileToBase64(file);
       const mimeType = file.type || (file.name.endsWith('.mp3') ? 'audio/mp3' : 'video/mp4');
-
-      if (onProgress) onProgress("Enviando para o Gemini Multimodal...");
-
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(this.getApiKey())}`;
 
       const systemPrompt = `Você é o transcritor de alta fidelidade do Professor Leonardo Leite (AgoraEuFalo).
 Transcreva com EXTREMA PRECISÃO todo o áudio falado nesta aula.
@@ -143,18 +181,7 @@ Retorne APENAS o texto da transcrição limpo e pontuado, sem introduções, sem
         }
       };
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.error?.message || `Erro HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const resData = await response.json();
+      const resData = await this.callGeminiApi(payload, onProgress);
       const text = resData.candidates?.[0]?.content?.parts?.[0]?.text || '';
       return text.trim();
     }
@@ -163,19 +190,9 @@ Retorne APENAS o texto da transcrição limpo e pontuado, sem introduções, sem
      * 2. ESTRUTURAÇÃO PEDAGÓGICA DA MASTERCLASS & SACADA DE OURO
      */
     async structureMasterclass(rawScript, lessonTitle = "", courseTitle = "", onProgress = null) {
-      const apiKey = this.getApiKey();
-      if (!apiKey) {
-        this.promptApiKeyConfig();
-        if (!this.hasApiKey()) throw new Error("Chave da API do Gemini necessária para estruturar a aula.");
-      }
-
       if (!rawScript || rawScript.trim().length < 10) {
         throw new Error("O roteiro bruto (rawScript) está muito curto ou vazio. Cole o texto ou transcreva a aula primeiro.");
       }
-
-      if (onProgress) onProgress("Processando didática do Professor Leo com IA...");
-
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(this.getApiKey())}`;
 
       const systemPrompt = `Você é o Arquiteto Pedagógico Sênior do ecossistema AgoraEuFalo, codificando a didática consagrada de mais de 35 anos de sala de aula do Professor Leonardo Leite.
 
@@ -229,18 +246,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
         }
       };
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.error?.message || `Erro HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const resData = await response.json();
+      const resData = await this.callGeminiApi(payload, onProgress);
       const rawJson = resData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
       
       let parsed = {};
