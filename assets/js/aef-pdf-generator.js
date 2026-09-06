@@ -177,10 +177,14 @@
 <head>
   <meta charset="UTF-8">
   <title>${courseTitle} • ${lessonTitle} | Apostila Oficial</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
   <style>
     @page {
       size: A4 portrait;
-      margin: 15mm 15mm 18mm 15mm;
+      margin: 14mm 14mm 16mm 14mm;
     }
     * {
       box-sizing: border-box;
@@ -188,13 +192,19 @@
       print-color-adjust: exact !important;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: #0F172A;
       background: #FFFFFF;
       margin: 0;
       padding: 0;
-      font-size: 13.5pt;
+      font-size: 14pt;
       line-height: 1.6;
+    }
+
+    /* Anti-orphan and anti-cut rules for print */
+    .pedagogical-box, .golden-box, .practice-box, .header-banner, .pedagogical-stream > div {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
 
     /* Header Banner Institucional Nobre */
@@ -204,7 +214,6 @@
       border-radius: 18px;
       padding: 22px 26px;
       margin-bottom: 24px;
-      page-break-inside: avoid;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
     .header-tag {

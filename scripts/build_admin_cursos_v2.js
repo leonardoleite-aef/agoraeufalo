@@ -999,6 +999,10 @@ const completeHtml = `<!DOCTYPE html>
             renderCourseSwitcher();
             renderHierarchyTree();
             updateArtworkControlsFromCourse();
+
+            if (activeLessonId && activeModuleId) {
+              selectLessonForEdit(activeLessonId, activeModuleId);
+            }
           }
         }
       } catch (err) {
@@ -1625,9 +1629,19 @@ const completeHtml = `<!DOCTYPE html>
       };
 
       const rawScript = document.getElementById("lessonRawScriptInput")?.value || "";
+      const processedHtml = document.getElementById("lessonProcessedHtmlInput")?.value || "";
+      const goldenTip = document.getElementById("lessonGoldenTipInput")?.value || "";
+      const lessonTitle = document.getElementById("lessonTitleInput")?.value || "Aula";
+
+      const lesForPdf = Object.assign({}, les, {
+        title: lessonTitle,
+        goldenTip: goldenTip,
+        processedContentHtml: processedHtml,
+        rawScript: rawScript
+      });
 
       if (window.AEFPdfGenerator) {
-        LAST_GENERATED_PDF_HTML = window.AEFPdfGenerator.generatePrintableHtml(course, mod, les, rawScript);
+        LAST_GENERATED_PDF_HTML = window.AEFPdfGenerator.generatePrintableHtml(course, mod, lesForPdf, rawScript);
         
         const previewBox = document.getElementById("pdfPreviewContainer");
         if (previewBox) {
