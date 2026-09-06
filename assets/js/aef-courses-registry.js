@@ -4,6 +4,67 @@
  * Fully structured hierarchy: Courses > Modules > Lessons
  */
 const AEF_COURSES_DATA = {
+  "dtc_curso": {
+    "id": "dtc_curso",
+    "title": "Dates and Times - Curso Rápido",
+    "slug": "dtc_curso",
+    "badge": "EXPERIMENTE GRÁTIS",
+    "tierRequired": "free",
+    "themeColor": "ruby",
+    "coverImageUrl": "assets/images/cover-dates-and-times-square.jpg",
+    "description": "Aprenda tudo sobre datas, horas, uso de tempo e períodos em inglês. Um curso rápido que definitivamente vai te deixar pronto para escutar, entender e expresar tudo sobre datas, dias, horas, calendários e períodos de tempo em Inglês.",
+    "published": true,
+    "modules": [
+      {
+        "id": "ciclo-01",
+        "title": "COMECE AQUI",
+        "order": 1,
+        "description": "Assista esta aula antes de começar",
+        "published": true,
+        "lessons": [
+          {
+            "id": "aula-1788730082287",
+            "moduleId": "ciclo-01",
+            "courseId": "dtc_curso",
+            "title": "Comece Aqui",
+            "order": 1,
+            "duration": "03:00",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fdtc_curso%2Fciclo-01%2F1788730112771_DTC_intro_1.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "assets/images/thumbs/dtc_intro_thumb.jpg",
+            "artworkUrl": "assets/images/cover-dates-and-times-square.jpg",
+            "pdfUrl": "",
+            "goldenTip": "Datas e Horas em inglês exigem reflexo auditivo e repetição constante.",
+            "published": true
+          }
+        ]
+      },
+      {
+        "id": "ciclo-02",
+        "title": "As Horas em Inglês",
+        "order": 2,
+        "description": "Aprenda a escutar e entender as horas em Inglês. E aprenda a falar tambem, claro.",
+        "published": true,
+        "lessons": []
+      },
+      {
+        "id": "ciclo-03",
+        "title": "Os Anos em Inglês",
+        "order": 3,
+        "description": "Falar os anos em Inglês é bem diferente do português. Se você não treinar, nunca vai lembrar na hora de entender, e muito menos na hora de falar.",
+        "published": true,
+        "lessons": []
+      },
+      {
+        "id": "ciclo-04",
+        "title": "Datas Meses e Dias em Inglês",
+        "order": 4,
+        "description": "Usar seu inglês para identificar datas, meses e dias em inglês, demanda treino. Só estudar não adianta.",
+        "published": true,
+        "lessons": []
+      }
+    ]
+  },
   "english-quickstart": {
     "id": "english-quickstart",
     "title": "English QuickStart • Fundamentos da Fala",

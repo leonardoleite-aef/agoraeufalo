@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Factory Studio • Gestor de Cursos, Criativos & Módulos | AgoraEuFalo</title>
+  <title>Course Studio Pro • Gestor de Cursos & Módulos | AgoraEuFalo</title>
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Tailwind CSS & Google Fonts -->
@@ -43,16 +43,11 @@
 
   <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/js/aef-courses-registry.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-offers-registry.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-pdf-generator.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-creative-studio-engine.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-pocket-course-ai.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-portal-auth.js?v=20260904_2200"></script>
-  <script src="assets/js/aef-admin-nav.js"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260902_0140"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -65,71 +60,54 @@
 <body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
 
   <!-- ========================================== -->
-  <!-- 1. TOP COMMAND BAR & STATIONS NAV          -->
+  <!-- 1. TOP COMMAND BAR                         -->
   <!-- ========================================== -->
   <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-md">
-    <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-3 sm:px-6 py-2 flex flex-col md:flex-row items-center justify-between gap-3">
+    <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
       
-      <!-- Brand & Title & Course Switcher -->
-      <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
-        <div class="flex items-center gap-2.5">
-          <a href="admin.html" class="flex items-center gap-2">
-            <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-6 sm:h-7 object-contain">
-          </a>
-          <span class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] sm:text-[10px] uppercase tracking-wider">
-            COURSE FACTORY
-          </span>
-        </div>
-
-        <!-- Course Switcher -->
-        <div class="flex items-center gap-1.5">
-          <label class="text-[11px] text-slate-400 font-bold hidden xl:inline">Curso:</label>
-          <select id="headerCourseSelect" onchange="handleSelectCourse(this.value)" class="bg-[#112240] border border-white/20 text-white font-bold text-xs rounded-xl px-2.5 py-1.5 focus:border-amber-400 focus:outline-none max-w-[160px] sm:max-w-[240px] truncate">
-            <!-- Injected via JS -->
-          </select>
-          <button onclick="openCourseModal()" class="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 transition cursor-pointer" title="Novo Curso Manual">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <a href="admin-alunos.html" class="flex items-center gap-2">
+          <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
+        </a>
+        <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
+          COURSE STUDIO • WIDESCREEN
+        </span>
       </div>
 
-      <!-- 3 Stations Navigation Tabs -->
-      <div class="flex items-center bg-[#060D17] p-1 rounded-2xl border border-white/10 shadow-inner">
-        <button id="stationTabPedagogica" onclick="switchStation('pedagogica')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 font-black shadow cursor-pointer">
-          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
-          <span>1. Estrutura & Aulas</span>
-        </button>
-        <button id="stationTabCreatives" onclick="switchStation('creatives')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-300 hover:text-white cursor-pointer">
-          <i data-lucide="palette" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>2. Criativos & Imagens</span>
-          <span class="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-400/20 text-amber-300 font-mono font-bold">6 Formatos</span>
-        </button>
-        <button id="stationTabVendas" onclick="switchStation('vendas')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-300 hover:text-white cursor-pointer">
-          <i data-lucide="tag" class="w-3.5 h-3.5 text-purple-400"></i>
-          <span>3. Vendas & Ofertas</span>
-        </button>
-      </div>
-
-      <!-- Right: AI Pocket Course Generator & Quick Cloud Sync -->
+      <!-- Course Switcher & Status -->
       <div class="flex items-center gap-2">
-        <button onclick="openAiPocketModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-500 via-amber-500 to-amber-400 hover:opacity-95 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-          <span>+ Pocket Course (IA)</span>
+        <label class="text-xs text-slate-400 font-bold hidden md:inline">Curso Ativo:</label>
+        <select id="headerCourseSelect" onchange="handleSelectCourse(this.value)" class="bg-[#112240] border border-white/20 text-white font-bold text-xs rounded-xl px-3 py-1.5 focus:border-amber-400 focus:outline-none max-w-[220px] sm:max-w-[320px] truncate">
+          <!-- Injected via JS -->
+        </select>
+        <button onclick="openCourseModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow flex items-center gap-1 cursor-pointer" title="Novo Curso">
+          <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Novo Curso</span>
         </button>
-        <button onclick="handleSyncAllToFirestore()" id="btnSyncCloud" class="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 hover:bg-emerald-500 hover:text-slate-950 font-bold transition flex items-center justify-center cursor-pointer" title="Sincronizar todo o catálogo com a Nuvem">
-          <i data-lucide="cloud" class="w-4 h-4"></i>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-2 text-xs">
+        <button onclick="handleSyncAllToFirestore()" id="btnSyncCloud" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 hover:bg-emerald-500 hover:text-slate-950 font-bold transition flex items-center gap-1.5 cursor-pointer" title="Sincronizar todo o catálogo de cursos com o Firestore">
+          <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Sincronizar Cloud</span>
         </button>
-        <a href="portal.html" target="_blank" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition" title="Portal do Aluno ↗">
-          <i data-lucide="external-link" class="w-4 h-4"></i>
+        <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Admin Geral</span>
+        </a>
+        <a href="portal.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950 font-bold transition flex items-center gap-1.5">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Portal do Aluno ↗</span>
         </a>
       </div>
     </div>
   </header>
 
   <!-- ========================================== -->
-  <!-- ESTAÇÃO 1: ESTRUTURA PEDAGÓGICA & AULAS    -->
+  <!-- 2. STUDIO 3-COLUMN WIDESCREEN WORKSPACE   -->
   <!-- ========================================== -->
-  <div id="stationPedagogica" class="station-view">
   <main class="flex-1 max-w-[98vw] 2xl:max-w-[1920px] mx-auto w-full px-4 py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
 
     <!-- ======================================================== -->
@@ -266,7 +244,54 @@
           </div>
         </div>
 
-        <input type="hidden" id="lessonAudioUrlInput">
+        <!-- Media Picker 2: Áudio da Aula (MP3 128kbps) com Upload Direto -->
+        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+              <i data-lucide="music" class="w-4 h-4"></i>
+              <span>Áudio da Aula (MP3 128k)</span>
+            </label>
+            <span id="audioUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum áudio</span>
+          </div>
+
+          <!-- Direct Upload Button, Manual URL Button & Delete from Cloud -->
+          <div class="grid grid-cols-12 gap-2">
+            <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Subir Áudio (Mac / PC)</span>
+              <input type="file" accept="audio/mp3,audio/mpeg,audio/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'audio')">
+            </label>
+            <button type="button" onclick="toggleManualUrl('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
+              <i data-lucide="link" class="w-3.5 h-3.5"></i>
+              <span>URL</span>
+            </button>
+            <button type="button" onclick="handleDeleteMediaFromStorage('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir áudio permanentemente do Storage e limpar da aula">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Excluir</span>
+            </button>
+          </div>
+
+          <!-- Progress Bar (Hidden by default) -->
+          <div id="audioProgressBarCont" class="hidden space-y-1.5 p-3 bg-white/5 rounded-xl border border-emerald-400/30">
+            <div class="flex items-center justify-between text-xs font-bold text-emerald-300">
+              <span id="audioProgressLabel">Enviando áudio para a Nuvem...</span>
+              <span id="audioProgressPct" class="font-mono">0%</span>
+            </div>
+            <div class="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div id="audioProgressBar" class="bg-gradient-to-r from-emerald-500 to-emerald-300 h-2.5 rounded-full transition-all duration-200" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Audio Preview Box -->
+          <div id="audioPreviewCont" class="hidden space-y-2 pt-1">
+            <audio id="audioPreviewPlayer" controls class="w-full"></audio>
+          </div>
+
+          <!-- Manual URL Input Field (Collapsible) -->
+          <div id="audioManualUrlCont" class="hidden space-y-1 pt-1">
+            <input type="text" id="lessonAudioUrlInput" oninput="updateMediaPreviews()" placeholder="https://firebasestorage.googleapis.com/..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+        </div>
 
         <!-- Media Picker 3: Apostila em PDF, Capa 1:1 e Thumbnail 16:9 -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -370,7 +395,7 @@
             🤖 Roteiro IA
           </button>
           <button onclick="switchAiTab('processed')" id="tabBtnProcessed" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
-            📝 Notas da Aula
+            ✨ HTML
           </button>
           <button onclick="switchAiTab('preview')" id="tabBtnPreview" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold transition whitespace-nowrap">
             👁️ Preview
@@ -400,51 +425,12 @@
         </p>
       </div>
 
-      <!-- TAB 2: EDITOR VISUAL DE NOTAS DA AULA (ELEMENTO 5 • SEM HTML) -->
-      <div id="aiTabProcessed" class="hidden flex-1 flex flex-col pt-2 overflow-hidden space-y-2">
-        <div class="flex items-center justify-between text-[11px] text-slate-400">
-          <span class="font-bold text-amber-300 flex items-center gap-1">
-            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-            <span>Notas & Conteúdo da Aula (Abaixo do Vídeo)</span>
-          </span>
-          <span class="text-[10px] text-emerald-400 font-mono">✍️ Digitação Livre • Zero Código</span>
+      <!-- TAB 2: CONTEÚDO FORMATADO POLIDO (HTML) -->
+      <div id="aiTabProcessed" class="hidden flex-1 flex flex-col pt-3 overflow-hidden">
+        <div class="mb-2 flex items-center justify-between text-[11px] text-slate-400">
+          <span>HTML didático gerado pelo Agente / Formatado:</span>
         </div>
-
-        <!-- Barra de Ferramentas Estilo Word / Google Docs -->
-        <div class="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-white/10 border border-white/15 text-xs">
-          <button type="button" onclick="formatRichDoc('bold')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-black transition cursor-pointer" title="Negrito (Ctrl+B)">
-            <b>B</b>
-          </button>
-          <button type="button" onclick="formatRichDoc('italic')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white italic font-serif transition cursor-pointer" title="Itálico (Ctrl+I)">
-            <i>I</i>
-          </button>
-          <button type="button" onclick="formatRichDoc('formatBlock', '<h3>')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold transition cursor-pointer" title="Título de Seção">
-            Título
-          </button>
-          <button type="button" onclick="formatRichDoc('insertUnorderedList')" class="p-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition cursor-pointer" title="Lista com Marcadores">
-            • Lista
-          </button>
-          <button type="button" onclick="insertRichCard('amber')" class="p-1.5 px-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/40 transition cursor-pointer" title="Caixa Didática de Destaque">
-            🟨 Card Destaque
-          </button>
-          <button type="button" onclick="insertRichCard('white')" class="p-1.5 px-2.5 rounded-lg bg-white/15 hover:bg-white/25 text-white font-bold transition cursor-pointer" title="Card Branco Institucional">
-            ⬜ Card Branco
-          </button>
-          <button type="button" onclick="insertRichLink()" class="p-1.5 px-2.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 font-bold border border-sky-500/40 transition cursor-pointer" title="Inserir Link">
-            🔗 Link
-          </button>
-          <button type="button" onclick="formatRichDoc('removeFormat')" class="p-1.5 px-2 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 transition cursor-pointer text-[10px]" title="Limpar Formatação">
-            Limpar
-          </button>
-        </div>
-
-        <!-- Área de Escrita Visual (Zero HTML, como um Documento Real) -->
-        <div id="lessonRichVisualEditor" contenteditable="true" oninput="syncRichEditorToHiddenInput()" class="flex-1 p-4 rounded-xl bg-amber-50/95 border-2 border-amber-200/80 text-slate-900 text-xs sm:text-sm leading-relaxed overflow-y-auto custom-scrollbar focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-inner space-y-3">
-          <!-- O texto do professor aparece aqui visualmente formatado -->
-        </div>
-
-        <!-- Input Oculto que o sistema salva no Firestore -->
-        <input type="hidden" id="lessonProcessedHtmlInput">
+        <textarea id="lessonProcessedHtmlInput" placeholder="<div class='pedagogical-box'>...</div>" class="flex-1 w-full p-3.5 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-none custom-scrollbar"></textarea>
       </div>
 
       <!-- TAB 3: LIVE PREVIEW DO ALUNO -->
@@ -504,618 +490,9 @@
     </section>
 
   </main>
-  </div> <!-- /#stationPedagogica -->
 
   <!-- ========================================== -->
-  <!-- ESTAÇÃO 2: ESTÚDIO DE CRIATIVOS & MÍDIA    -->
-  <!-- ========================================== -->
-  <section id="stationCreatives" class="station-view hidden flex-1 max-w-[98vw] 2xl:max-w-[1920px] mx-auto w-full px-4 py-4 space-y-4">
-    
-    <!-- Top Action Strip -->
-    <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-mono font-bold text-[10px] uppercase tracking-wider border border-amber-500/30">
-            ESTÚDIO DE CRIATIVOS & MARKETING
-          </span>
-          <span class="text-xs text-slate-400">•</span>
-          <span id="creativeActiveCourseName" class="text-xs font-bold text-white">Carregando curso...</span>
-        </div>
-        <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
-          Kit Master de 6 Formatos • Hotmart, YouTube, Player & Landing Pages
-        </h2>
-        <p class="text-xs text-slate-300 max-w-3xl leading-relaxed">
-          Defina o conceito visual uma única vez. O motor gráfico desdobra automaticamente os 6 formatos oficiais com proporções exatas, contraste Calm EdTech, tipografia e logotipos aplicados em tempo real.
-        </p>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2 shrink-0">
-        <button onclick="handleCreativeDownloadZip()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer">
-          <i data-lucide="archive" class="w-4 h-4"></i>
-          <span>📦 Baixar Kit Completo (.ZIP)</span>
-        </button>
-
-        <button onclick="handleLinkCreativeToCourse()" class="px-3.5 py-2.5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold text-xs transition border border-emerald-500/40 flex items-center gap-1.5 cursor-pointer" title="Salvar capas geradas nas propriedades do Curso ativo e sincronizar com Firestore">
-          <i data-lucide="cloud-upload" class="w-4 h-4"></i>
-          <span>Vincular ao Curso & Nuvem</span>
-        </button>
-
-        <button onclick="renderAllCreativeCanvases()" class="p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition border border-white/10 cursor-pointer" title="Re-renderizar Canvases">
-          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- 3-Column Creative Workspace -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-
-      <!-- ======================================================= -->
-      <!-- COLUNA 1: ENTRADA DE IMAGEM & CONTROLES (Col-span-3)   -->
-      <!-- ======================================================= -->
-      <div class="lg:col-span-3 space-y-3.5">
-        
-        <!-- Card 1: Fonte da Imagem Base (Tríplice Entrada) -->
-        <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-white/10">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="image" class="w-3.5 h-3.5"></i>
-              <span>1. Imagem Base</span>
-            </h3>
-            <span class="text-[10px] text-slate-400">Origem</span>
-          </div>
-
-          <!-- Tríplice Seletor -->
-          <div class="grid grid-cols-3 gap-1 bg-[#060D17] p-1 rounded-xl border border-white/5 text-[10px] font-bold">
-            <button type="button" id="imgSourceTabFile" onclick="switchImageSourceTab('file')" class="py-1 px-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition">
-              Upload
-            </button>
-            <button type="button" id="imgSourceTabLibrary" onclick="switchImageSourceTab('library')" class="py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
-              Biblioteca
-            </button>
-            <button type="button" id="imgSourceTabAi" onclick="switchImageSourceTab('ai')" class="py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
-              Prompt IA
-            </button>
-          </div>
-
-          <!-- Painel 1: Upload de Arquivo -->
-          <div id="panelImgFile" class="space-y-2">
-            <label class="flex flex-col items-center justify-center border-2 border-dashed border-white/20 hover:border-amber-400/60 rounded-2xl p-4 text-center cursor-pointer transition bg-white/5 hover:bg-white/10">
-              <i data-lucide="upload-cloud" class="w-6 h-6 text-amber-400 mb-1"></i>
-              <span class="text-xs font-bold text-white">Subir Foto (PC / Mac)</span>
-              <span class="text-[10px] text-slate-400 mt-0.5">JPG, PNG ou WebP em alta resolução</span>
-              <input type="file" accept="image/*" class="hidden" onchange="handleCreativeFileUpload(this.files[0])">
-            </label>
-          </div>
-
-          <!-- Painel 2: Biblioteca de Capas Existentes -->
-          <div id="panelImgLibrary" class="hidden space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">Escolher Capa do Ecossistema:</label>
-            <select id="creativeLibrarySelect" onchange="handleSelectLibraryImage(this.value)" class="w-full bg-[#112240] border border-white/20 text-white text-xs font-semibold rounded-xl p-2 focus:border-amber-400 focus:outline-none">
-              <option value="assets/images/cover-portal-3d-luxury.jpg">💎 Portal 3D Glassmorphism (16:9 Luxo)</option>
-              <option value="assets/images/cover-portal-3d-square.jpg">💎 Portal 3D Glassmorphism (1:1 Quadrado)</option>
-              <option value="assets/images/cover-sound-matrix-cyber.jpg">⚡ Cyber Sound Matrix (Alta Performance)</option>
-              <option value="assets/images/cover-fantasy-story-portal.jpg">📖 Livro Mágico das Histórias (Fantasia / Magic Stories)</option>
-              <option value="assets/images/hotmart-membership-cover-leo.jpg">🏛️ Masterclass Leo Leite (Editorial Foto Oficial)</option>
-              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante 35mm)</option>
-              <option value="assets/images/cover-magic-stories-cinema.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
-              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
-            </select>
-          </div>
-
-          <!-- Painel 3: Prompt Blueprint 35mm para IA -->
-          <div id="panelImgAi" class="hidden space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-amber-300">Prompt Blueprint Oficial (35mm):</label>
-            <textarea id="creativeAiPromptText" rows="3" readonly class="w-full bg-[#060D17] border border-white/10 rounded-xl p-2 text-[10px] font-mono text-slate-300 focus:outline-none leading-relaxed"></textarea>
-            <div class="flex items-center gap-1.5">
-              <button type="button" onclick="copyCreativeAiPrompt()" class="flex-1 px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 text-[10px] font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="copy" class="w-3 h-3"></i>
-                <span>Copiar Prompt</span>
-              </button>
-              <button type="button" onclick="pasteImageFromUrlPrompt()" class="px-2.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 hover:bg-amber-500 hover:text-slate-950 text-[10px] font-bold transition cursor-pointer">
-                Colar URL
-              </button>
-            </div>
-          </div>
-
-          <!-- Preview da Imagem Carregada -->
-          <div class="pt-1 flex items-center gap-2">
-            <img id="creativeBaseImgThumb" src="assets/images/cover-default-aef.jpg" alt="Preview Base" class="w-12 h-12 rounded-xl object-cover border border-white/20 bg-black shrink-0">
-            <div class="truncate text-[11px]">
-              <span class="text-slate-400 block text-[9px] uppercase font-bold">Imagem Carregada</span>
-              <span id="creativeBaseImgLabel" class="font-bold text-white truncate block">cover-default-aef.jpg</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Tipografia & Textos dos Criativos -->
-        <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-white/10">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="type" class="w-3.5 h-3.5"></i>
-              <span>2. Textos & Marca</span>
-            </h3>
-            <span class="text-[10px] text-slate-400">Calm EdTech</span>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título da Arte</label>
-            <input type="text" id="creativeTitleInput" oninput="handleCreativeTextChange()" placeholder="Ex: English QuickStart" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-bold focus:border-amber-400 focus:outline-none">
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Subtítulo / Promessa Curta</label>
-            <input type="text" id="creativeSubtitleInput" oninput="handleCreativeTextChange()" placeholder="Ex: Aprenda pelos ouvidos até a fala virar reflexo" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Texto do Badge</label>
-            <input type="text" id="creativeBadgeInput" oninput="handleCreativeTextChange()" placeholder="Ex: POCKET COURSE • OFICIAL" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-amber-300 font-mono text-xs focus:border-amber-400 focus:outline-none">
-          </div>
-
-          <div class="pt-1 space-y-1.5 text-xs text-slate-300">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="creativeShowLogoCheck" checked onchange="handleCreativeTextChange()" class="rounded border-white/20 bg-white/10 text-amber-500 focus:ring-0">
-              <span class="text-[11px] font-medium">Exibir Logotipo Oficial AgoraEuFalo</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="creativeShowBadgeCheck" checked onchange="handleCreativeTextChange()" class="rounded border-white/20 bg-white/10 text-amber-500 focus:ring-0">
-              <span class="text-[11px] font-medium">Exibir Pílula/Badge de Destaque</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Card 3: Enquadramento, Zoom & Efeitos -->
-        <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-white/10">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-              <span>3. Enquadramento & Zoom</span>
-            </h3>
-            <span class="text-[10px] text-slate-400">Ajuste Fino</span>
-          </div>
-
-          <div>
-            <div class="flex items-center justify-between text-[10px] text-slate-300 font-bold mb-1">
-              <span>Deslocamento Vertical (Pan):</span>
-              <span id="creativeOffsetVal" class="font-mono text-amber-400">0%</span>
-            </div>
-            <input type="range" id="creativeOffsetInput" min="-100" max="100" value="0" oninput="handleCreativeSliderChange()" class="w-full accent-amber-500 cursor-pointer">
-          </div>
-
-          <div>
-            <div class="flex items-center justify-between text-[10px] text-slate-300 font-bold mb-1">
-              <span>Zoom da Imagem:</span>
-              <span id="creativeZoomVal" class="font-mono text-amber-400">1.0x</span>
-            </div>
-            <input type="range" id="creativeZoomInput" min="0.8" max="2.0" step="0.05" value="1.0" oninput="handleCreativeSliderChange()" class="w-full accent-amber-500 cursor-pointer">
-          </div>
-
-          <div>
-            <div class="flex items-center justify-between text-[10px] text-slate-300 font-bold mb-1">
-              <span>Escurecimento / Contraste:</span>
-              <span id="creativeDarknessVal" class="font-mono text-amber-400">55%</span>
-            </div>
-            <input type="range" id="creativeDarknessInput" min="0" max="100" value="55" oninput="handleCreativeSliderChange()" class="w-full accent-amber-500 cursor-pointer">
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ======================================================= -->
-      <!-- COLUNA 2: GRADE DOS 6 FORMATOS EM CANVASES (Col-span-6) -->
-      <!-- ======================================================= -->
-      <div class="lg:col-span-6 space-y-4">
-        
-        <!-- Banner de Atalho Rápido para Download ZIP -->
-        <div class="p-3.5 rounded-2xl bg-[#112240] border border-white/10 flex items-center justify-between gap-3 shadow">
-          <div class="flex items-center gap-2">
-            <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">
-              📁
-            </span>
-            <span class="text-xs text-slate-200 font-bold">
-              Todos os 6 formatos sincronizados em alta resolução (JPG 95%).
-            </span>
-          </div>
-          <button onclick="handleCreativeDownloadZip()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 transition cursor-pointer">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Baixar ZIP</span>
-          </button>
-        </div>
-
-        <!-- Grade 2 Colunas dos Formatos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          <!-- FORMATO 1: HOTMART CAPA 1:1 -->
-          <div class="p-3.5 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>📦</span> <span>Hotmart Capa (1:1)</span>
-              </span>
-              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                1000x1000
-              </span>
-            </div>
-            <div class="w-full aspect-square bg-black rounded-xl overflow-hidden border border-white/10 shadow-inner">
-              <canvas id="canvas_hotmart_cover" class="w-full h-full object-contain"></canvas>
-            </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-slate-400">Vitrine & App Hotmart</span>
-              <button onclick="handleCreativeDownloadSingle('hotmart_cover')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-                <i data-lucide="download" class="w-3 h-3"></i>
-                <span>Baixar JPG</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- FORMATO 2: YOUTUBE THUMB 16:9 -->
-          <div class="p-3.5 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>🎬</span> <span>YouTube / Video Thumb</span>
-              </span>
-              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/30">
-                1920x1080 (16:9)
-              </span>
-            </div>
-            <div class="w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-inner">
-              <canvas id="canvas_youtube_thumb" class="w-full h-full object-contain"></canvas>
-            </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-slate-400">Masterclass & YouTube</span>
-              <button onclick="handleCreativeDownloadSingle('youtube_thumb')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-                <i data-lucide="download" class="w-3 h-3"></i>
-                <span>Baixar JPG</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- FORMATO 3: HOTMART CHECKOUT BANNER 940x120 -->
-          <div class="p-3.5 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2.5 md:col-span-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>💳</span> <span>Hotmart Checkout Banner (Panorâmico)</span>
-              </span>
-              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                940x120 px
-              </span>
-            </div>
-            <div class="w-full h-20 bg-black rounded-xl overflow-hidden border border-white/10 shadow-inner">
-              <canvas id="canvas_hotmart_checkout" class="w-full h-full object-contain"></canvas>
-            </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-slate-400">Cabeçalho oficial da página de pagamento na Hotmart</span>
-              <button onclick="handleCreativeDownloadSingle('hotmart_checkout')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-                <i data-lucide="download" class="w-3 h-3"></i>
-                <span>Baixar JPG</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- FORMATO 4: PLAYER MOBILE LOCKSCREEN (512x512) -->
-          <div class="p-3.5 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>🎧</span> <span>Player / Lockscreen</span>
-              </span>
-              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                512x512 (&lt;90KB)
-              </span>
-            </div>
-            <div class="w-full aspect-square bg-black rounded-xl overflow-hidden border border-white/10 shadow-inner max-w-[280px] mx-auto">
-              <canvas id="canvas_player_mobile" class="w-full h-full object-contain"></canvas>
-            </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-slate-400">MediaSession API (iOS / Android)</span>
-              <button onclick="handleCreativeDownloadSingle('player_mobile')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-                <i data-lucide="download" class="w-3 h-3"></i>
-                <span>Baixar JPG</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- FORMATO 5: SALES PAGE HERO (16:9) -->
-          <div class="p-3.5 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>🚀</span> <span>Hero Sales Page 16:9</span>
-              </span>
-              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                1920x1080 (Widescreen)
-              </span>
-            </div>
-            <div class="w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-inner">
-              <canvas id="canvas_sales_hero" class="w-full h-full object-contain"></canvas>
-            </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-slate-400">Destaque no topo de Landing Pages</span>
-              <button onclick="handleCreativeDownloadSingle('sales_hero')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-                <i data-lucide="download" class="w-3 h-3"></i>
-                <span>Baixar JPG</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- FORMATO 6: VITRINE LMS (800x450) -->
-          <div class="p-3.5 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2.5 md:col-span-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white flex items-center gap-1.5">
-                <span>🏛️</span> <span>Card Vitrine LMS (Portal do Aluno)</span>
-              </span>
-              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                800x450 px
-              </span>
-            </div>
-            <div class="w-full aspect-[16/9] max-h-48 bg-black rounded-xl overflow-hidden border border-white/10 shadow-inner">
-              <canvas id="canvas_lms_card" class="w-full h-full object-contain"></canvas>
-            </div>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[10px] text-slate-400">Card no catálogo de cursos e aulas na área de membros</span>
-              <button onclick="handleCreativeDownloadSingle('lms_card')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-                <i data-lucide="download" class="w-3 h-3"></i>
-                <span>Baixar JPG</span>
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- ======================================================= -->
-      <!-- COLUNA 3: SIMULADOR DE CONTEXTO VISUAL (Col-span-3)     -->
-      <!-- ======================================================= -->
-      <div class="lg:col-span-3 space-y-3.5">
-        
-        <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-3">
-          <div class="flex items-center justify-between pb-2 border-b border-white/10">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-              <span>Simulador de Contexto</span>
-            </h3>
-            <span class="text-[10px] text-emerald-400 font-bold">1:1 Real</span>
-          </div>
-
-          <p class="text-[11px] text-slate-300 leading-relaxed">
-            Veja exatamente como o aluno e o cliente enxergam sua imagem na plataforma final antes de publicar:
-          </p>
-
-          <!-- Abas do Simulador -->
-          <div class="grid grid-cols-2 gap-1 bg-[#060D17] p-1 rounded-xl border border-white/5 text-[10px] font-bold">
-            <button type="button" id="simTabHotmart" onclick="switchSimulatorMockup('hotmart')" class="py-1 px-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition">
-              🛒 Hotmart
-            </button>
-            <button type="button" id="simTabYoutube" onclick="switchSimulatorMockup('youtube')" class="py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
-              ▶️ YouTube
-            </button>
-            <button type="button" id="simTabCheckout" onclick="switchSimulatorMockup('checkout')" class="py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
-              💳 Checkout
-            </button>
-            <button type="button" id="simTabPlayer" onclick="switchSimulatorMockup('player')" class="py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition">
-              📱 Player AEF
-            </button>
-          </div>
-
-          <!-- MOCKUP CONTAINER DINÂMICO -->
-          <div id="mockupSimulatorBox" class="p-3 bg-[#060D17] rounded-2xl border border-white/10 min-h-[380px] flex flex-col justify-center">
-            
-            <!-- 1. MOCKUP: HOTMART PRODUCT CARD -->
-            <div id="mockupViewHotmart" class="space-y-3">
-              <div class="text-[10px] font-mono text-purple-400 font-bold uppercase flex items-center justify-between">
-                <span>SIMULAÇÃO HOTMART</span>
-                <span>⭐ 5.0 (42 avaliações)</span>
-              </div>
-              <div class="bg-white rounded-2xl overflow-hidden shadow-2xl text-slate-900 border border-slate-200">
-                <img id="simHotmartImg" src="assets/images/cover-default-aef.jpg" alt="Hotmart Preview" class="w-full aspect-square object-cover">
-                <div class="p-3 space-y-1.5">
-                  <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800">CURSO ONLINE</span>
-                  <h4 id="simHotmartTitle" class="font-black text-xs leading-tight text-slate-900 line-clamp-2">English QuickStart • Fundamentos da Fala</h4>
-                  <p class="text-[10px] text-slate-500">Por Leonardo Leite</p>
-                  <div class="pt-1 flex items-baseline justify-between border-t border-slate-100">
-                    <span class="text-[9px] text-slate-400">12x de</span>
-                    <span class="text-xs font-black text-emerald-600">R$ 49,70</span>
-                  </div>
-                </div>
-              </div>
-              <p class="text-[10px] text-slate-400 text-center italic">Enquadramento 1:1 perfeito sem cortes indesejados.</p>
-            </div>
-
-            <!-- 2. MOCKUP: YOUTUBE VIDEO PLAYER -->
-            <div id="mockupViewYoutube" class="hidden space-y-3">
-              <div class="text-[10px] font-mono text-red-400 font-bold uppercase flex items-center justify-between">
-                <span>SIMULAÇÃO YOUTUBE</span>
-                <span>HD 1080p</span>
-              </div>
-              <div class="bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/20 relative group">
-                <img id="simYoutubeImg" src="assets/images/cover-default-aef.jpg" alt="YouTube Preview" class="w-full aspect-video object-cover">
-                <!-- YouTube Overlay Elements -->
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div class="w-12 h-8 rounded-xl bg-red-600/90 text-white flex items-center justify-center shadow-lg">
-                    ▶
-                  </div>
-                </div>
-                <div class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 text-white font-mono text-[9px] font-bold rounded">
-                  14:20
-                </div>
-              </div>
-              <div class="space-y-0.5">
-                <h4 id="simYoutubeTitle" class="font-bold text-xs text-white leading-tight">Masterclass • English QuickStart</h4>
-                <p class="text-[10px] text-slate-400">AgoraEuFalo • 3.4 mil visualizações</p>
-              </div>
-            </div>
-
-            <!-- 3. MOCKUP: HOTMART CHECKOUT HEADER -->
-            <div id="mockupViewCheckout" class="hidden space-y-3">
-              <div class="text-[10px] font-mono text-amber-400 font-bold uppercase flex items-center justify-between">
-                <span>SIMULAÇÃO CHECKOUT</span>
-                <span>🔒 Compra Segura</span>
-              </div>
-              <div class="bg-slate-900 rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
-                <img id="simCheckoutImg" src="assets/images/cover-default-aef.jpg" alt="Checkout Banner Preview" class="w-full h-16 object-contain bg-black">
-                <div class="p-3 bg-slate-800/80 space-y-2 text-[10px]">
-                  <div class="flex items-center justify-between font-bold text-slate-200">
-                    <span>Você está adquirindo:</span>
-                    <span class="text-amber-400">Garantia 7 Dias</span>
-                  </div>
-                  <div class="p-2 bg-slate-950/60 rounded-xl border border-white/5 space-y-1">
-                    <p id="simCheckoutCourseName" class="font-bold text-white text-[11px]">Curso AgoraEuFalo</p>
-                    <p class="text-emerald-400 font-mono font-bold">12x de R$ 49,70 ou R$ 497,00 à vista</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 4. MOCKUP: PLAYER MOBILE LOCKSCREEN -->
-            <div id="mockupViewPlayer" class="hidden space-y-3">
-              <div class="text-[10px] font-mono text-emerald-400 font-bold uppercase flex items-center justify-between">
-                <span>SIMULAÇÃO PLAYER MOBILE</span>
-                <span>Lockscreen iOS/Android</span>
-              </div>
-              <div class="max-w-[220px] mx-auto bg-slate-900 p-3 rounded-3xl border-2 border-white/20 shadow-2xl space-y-2">
-                <img id="simPlayerImg" src="assets/images/cover-default-aef.jpg" alt="Player Preview" class="w-full aspect-square rounded-2xl object-cover shadow border border-white/10">
-                <div class="space-y-0.5 text-center">
-                  <h5 id="simPlayerTitle" class="font-bold text-[11px] text-white truncate">Aula 01 • O Diálogo Real</h5>
-                  <p class="text-[9px] text-amber-400 font-medium">Leonardo Leite • Training Track</p>
-                </div>
-                <!-- Mini Player Controls -->
-                <div class="space-y-1 pt-1">
-                  <div class="w-full bg-white/20 h-1 rounded-full overflow-hidden">
-                    <div class="bg-amber-400 h-1 w-2/3"></div>
-                  </div>
-                  <div class="flex items-center justify-center gap-4 text-white text-xs pt-1">
-                    <span>⏮</span> <span class="w-6 h-6 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-[10px]">▶</span> <span>⏭</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ========================================== -->
-  <!-- ESTAÇÃO 3: VENDAS & OFERTAS HOTMART        -->
-  <!-- ========================================== -->
-  <section id="stationVendas" class="station-view hidden flex-1 max-w-[98vw] 2xl:max-w-[1920px] mx-auto w-full px-4 py-4 space-y-5">
-    
-    <!-- Hero Strip Vendas -->
-    <div class="p-6 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-mono font-bold text-[10px] uppercase tracking-wider border border-purple-500/30">
-            DEPARTAMENTO DE VENDAS & CHECKOUTS
-          </span>
-          <span class="text-xs text-slate-400">•</span>
-          <span id="vendasCourseName" class="text-xs font-bold text-white">Carregando curso...</span>
-        </div>
-        <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
-          Conexão de Ofertas Comerciais & Links da Hotmart
-        </h2>
-        <p class="text-xs text-slate-300 max-w-3xl leading-relaxed">
-          Gerencie a precificação, planos de assinatura, parcelamentos e links de checkout vinculados a este curso.
-        </p>
-      </div>
-
-      <div class="flex items-center gap-2 shrink-0">
-        <a href="admin-vendas.html" class="px-4 py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-2 cursor-pointer">
-          <i data-lucide="tag" class="w-4 h-4"></i>
-          <span>Abrir Departamento de Vendas ↗</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Ofertas Conectadas Container -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="vendasOffersGrid">
-      <!-- Injetado dinamicamente via JS -->
-    </div>
-
-  </section>
-
-  <!-- ========================================== -->
-  <!-- 3. MODAL: CRIAR POCKET COURSE COM IA       -->
-  <!-- ========================================== -->
-  <div id="aiPocketCourseModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl text-white relative max-h-[92vh] overflow-y-auto space-y-5">
-      
-      <div class="flex items-center justify-between pb-3 border-b border-white/10">
-        <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm">
-            ⚡
-          </span>
-          <div>
-            <h3 class="font-black text-base text-white flex items-center gap-2">
-              AI Pocket Course Architect
-              <span class="text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">Cursos Rápidos</span>
-            </h3>
-            <p class="text-[10px] text-slate-300">Cursos rápidos e práticos focados nos ouvidos (MS, QuickStart e Frases Prontas são geridos na Estação 1)</p>
-          </div>
-        </div>
-        <button onclick="closeAiPocketModal()" class="text-slate-400 hover:text-white p-1 text-sm">✕</button>
-      </div>
-
-      <!-- Presets Rápidos -->
-      <div class="space-y-2">
-        <label class="block text-[10px] font-bold uppercase tracking-wider text-amber-300">Escolha um Tema Canônico ou Escreva o seu:</label>
-        <div class="flex flex-wrap gap-1.5" id="aiPocketPresetsContainer">
-          <!-- Injetado via JS -->
-        </div>
-      </div>
-
-      <!-- Input de Prompt Livre -->
-      <div class="space-y-1.5">
-        <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">Instruções / Mini-Prompt do Professor Leo:</label>
-        <textarea id="aiPocketPromptInput" rows="3" placeholder="Ex: Curso para quem vai viajar e precisa pedir comida em pubs e restaurantes em Londres sem constrangimento..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none leading-relaxed"></textarea>
-      </div>
-
-      <!-- Botão de Ação IA -->
-      <div class="flex items-center justify-between pt-1">
-        <span class="text-[10px] text-slate-400 flex items-center gap-1">
-          <span>🎧</span> <span>Gera roteiros com foco nos Ouvidos & Player de Áudio</span>
-        </span>
-        <button type="button" onclick="handleRunAiPocketCourse()" id="btnRunAiPocket" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:opacity-90 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer">
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Projetar Pocket Course</span>
-        </button>
-      </div>
-
-      <!-- Container do Preview do Curso Gerado -->
-      <div id="aiPocketResultContainer" class="hidden p-4 rounded-2xl bg-white/5 border border-amber-400/40 space-y-3">
-        <div class="flex items-center justify-between pb-2 border-b border-white/10">
-          <div>
-            <span id="resPocketBadge" class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-500/20 text-amber-300">POCKET COURSE</span>
-            <h4 id="resPocketTitle" class="font-black text-sm text-white mt-1">Título do Curso</h4>
-          </div>
-          <span class="text-xs text-emerald-400 font-bold">✨ Estrutura Pronta</span>
-        </div>
-
-        <p id="resPocketPromise" class="text-xs text-slate-300 leading-relaxed italic bg-[#060D17] p-3 rounded-xl border border-white/5"></p>
-
-        <!-- Aulas Previstas -->
-        <div class="space-y-1.5">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Aulas Geradas com Scripts de Áudio TTS:</span>
-          <div id="resPocketLessonsList" class="space-y-1 text-xs text-slate-200 font-medium"></div>
-        </div>
-
-        <!-- Botão Salvar e Abrir no Estúdio -->
-        <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="closeAiPocketModal()" class="px-3 py-2 rounded-xl bg-white/10 text-slate-300 font-bold text-xs hover:bg-white/20">Cancelar</button>
-          <button type="button" onclick="handleSaveAiPocketCourse()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="check" class="w-4 h-4"></i>
-            <span>Salvar & Abrir no Estúdio de Imagens</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- 4. MODAL: CRIAR / EDITAR CURSO             -->
+  <!-- 3. MODAL: CRIAR / EDITAR CURSO             -->
   <!-- ========================================== -->
   <div id="courseModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-white relative max-h-[90vh] overflow-y-auto">
@@ -1145,94 +522,6 @@
           </div>
         </div>
 
-        <!-- 3 OPÇÕES CANÔNICAS DE DISPONIBILIDADE & MONETIZAÇÃO -->
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
-              <span>💎</span>
-              <span>Disponibilidade & Monetização (3 Opções)</span>
-            </label>
-            <span class="text-[10px] font-mono text-slate-400">Regras de Acesso</span>
-          </div>
-
-          <!-- Opção A: Incluso na Assinatura Paga AEF Club -->
-          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-1">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="courseModalClubSubInput" checked class="rounded accent-amber-500 w-4 h-4">
-              <span class="text-xs font-bold text-white">🎓 Incluso na Assinatura Paga (AEF Club / VIP)</span>
-            </label>
-            <p class="text-[10px] text-slate-400 pl-6 leading-relaxed">
-              Alunos com assinatura AEF Club ativa ou Mentoria VIP têm acesso total a todos os módulos deste curso.
-            </p>
-          </div>
-
-          <!-- Opção B: Degustação na Assinatura Free (Modular) -->
-          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="courseModalFreeTierInput" onchange="toggleCourseFreeTierConfig(this.checked)" class="rounded accent-emerald-500 w-4 h-4">
-              <span class="text-xs font-bold text-emerald-300">🌱 Disponível na Assinatura Free (Degustação Modular)</span>
-            </label>
-            <p class="text-[10px] text-slate-400 pl-6 leading-relaxed">
-              Você define quais módulos ficam abertos gratuitamente, com CTA no último minuto de aula para assinar o Club.
-            </p>
-
-            <!-- Painel Expansível de Módulos Free & CTA -->
-            <div id="courseModalFreeTierConfig" class="hidden pl-6 pt-2 space-y-2.5 border-t border-white/10 mt-2">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-1">
-                  Módulos Liberados na Degustação Grátis:
-                </label>
-                <div id="courseModalFreeModulesList" class="space-y-1.5 max-h-32 overflow-y-auto custom-scrollbar p-2 bg-black/20 rounded-xl border border-white/10">
-                  <p class="text-[10px] text-slate-400 italic">Nenhum módulo cadastrado ainda.</p>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-0.5">Mensagem do CTA (Último Minuto)</label>
-                  <input type="text" id="courseModalFreeCtaMsgInput" placeholder="Gostou desta aula? Destrave o curso completo no AEF Club!" class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-0.5">Link Checkout / Assinatura (Hotmart)</label>
-                  <input type="text" id="courseModalFreeCtaUrlInput" placeholder="https://pay.hotmart.com/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-mono focus:outline-none focus:border-amber-400">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Opção C: Venda Avulsa (Checkout Direto Hotmart / Stripe) -->
-          <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="courseModalStandaloneInput" onchange="toggleCourseStandaloneConfig(this.checked)" class="rounded accent-sky-500 w-4 h-4">
-              <span class="text-xs font-bold text-sky-300">💳 Venda Avulsa (Checkout Direto Hotmart / Stripe)</span>
-            </label>
-            <p class="text-[10px] text-slate-400 pl-6 leading-relaxed">
-              O aluno pode comprar este curso isoladamente sem assinar o Club. Ao comprar, o curso é adicionado à sua conta.
-            </p>
-
-            <!-- Painel Expansível de Venda Avulsa -->
-            <div id="courseModalStandaloneConfig" class="hidden pl-6 pt-2 space-y-2 border-t border-white/10 mt-2">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-0.5">Preço Sugerido</label>
-                  <input type="text" id="courseModalStandalonePriceInput" placeholder="Ex: R$ 197 / $47" class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-bold focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-amber-300 mb-0.5">Hotmart (Primário Brasil)</label>
-                  <input type="text" id="courseModalCheckoutHotmartInput" placeholder="https://pay.hotmart.com/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-mono focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-sky-300 mb-0.5">Stripe (Fallback Global)</label>
-                  <input type="text" id="courseModalCheckoutStripeInput" placeholder="https://buy.stripe.com/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[11px] font-mono focus:outline-none focus:border-sky-400">
-                </div>
-              </div>
-              <p class="text-[9px] text-slate-400 italic">
-                ℹ️ Somente cursos com "Venda Avulsa" ativada exigem a geração de capas externas para plataformas (1000x1000 e 940x120) na Station 2.
-              </p>
-            </div>
-          </div>
-        </div>
-
         <!-- Paleta de Cores Temática do Curso -->
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Cor Tema do Curso (Paleta da Apostila em PDF)</label>
@@ -1255,19 +544,6 @@
               <span>Upload</span>
               <input type="file" accept="image/*" class="hidden" onchange="handleModalCoverUpload(this.files[0])">
             </label>
-          </div>
-          <div class="mt-1.5">
-            <select onchange="if(this.value){document.getElementById('courseModalCoverInput').value=this.value;}" class="w-full bg-[#112240] border border-white/15 text-slate-300 text-[11px] rounded-xl p-1.5 focus:border-amber-400 focus:outline-none">
-              <option value="">-- Ou escolha uma capa pronta da biblioteca --</option>
-              <option value="assets/images/cover-portal-3d-luxury.jpg">💎 Portal 3D Glassmorphism (16:9 Luxo Apple)</option>
-              <option value="assets/images/cover-portal-3d-square.jpg">💎 Portal 3D Glassmorphism (1:1 Quadrado)</option>
-              <option value="assets/images/cover-sound-matrix-cyber.jpg">⚡ Cyber Sound Matrix (Alta Performance)</option>
-              <option value="assets/images/cover-fantasy-story-portal.jpg">📖 Livro Mágico das Histórias (Fantasia / Magic Stories)</option>
-              <option value="assets/images/hotmart-membership-cover-leo.jpg">🏛️ Masterclass Leo Leite (Editorial Foto Oficial)</option>
-              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante Internacional 35mm)</option>
-              <option value="assets/images/cover-magic-stories-cinema.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
-              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
-            </select>
           </div>
         </div>
         <div>
@@ -1322,29 +598,6 @@
           <p class="text-[9px] text-slate-400 mt-1">Este PDF será o padrão de todas as aulas deste módulo que ainda não tiverem um PDF específico.</p>
         </div>
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa / Arte do Módulo (Opcional)</label>
-          <div class="flex items-center gap-2">
-            <input type="text" id="moduleModalCoverUrlInput" placeholder="assets/images/cover-... ou https://..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
-            <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shrink-0">
-              <span>Upload Capa</span>
-              <input type="file" accept="image/*" class="hidden" onchange="handleModuleCoverUpload(this.files[0])">
-            </label>
-          </div>
-          <div class="mt-1.5">
-            <select onchange="if(this.value){document.getElementById('moduleModalCoverUrlInput').value=this.value;}" class="w-full bg-[#112240] border border-white/15 text-slate-300 text-[11px] rounded-xl p-1.5 focus:border-amber-400 focus:outline-none">
-              <option value="">-- Ou escolha uma capa pronta da biblioteca --</option>
-              <option value="assets/images/cover-portal-3d-luxury.jpg">💎 Portal 3D Glassmorphism (16:9 Luxo Apple)</option>
-              <option value="assets/images/cover-portal-3d-square.jpg">💎 Portal 3D Glassmorphism (1:1 Quadrado)</option>
-              <option value="assets/images/cover-sound-matrix-cyber.jpg">⚡ Cyber Sound Matrix (Alta Performance)</option>
-              <option value="assets/images/cover-fantasy-story-portal.jpg">📖 Livro Mágico das Histórias (Fantasia / Magic Stories)</option>
-              <option value="assets/images/hotmart-membership-cover-leo.jpg">🏛️ Masterclass Leo Leite (Editorial Foto Oficial)</option>
-              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante Internacional 35mm)</option>
-              <option value="assets/images/cover-magic-stories-cinema.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
-              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
-            </select>
-          </div>
-        </div>
-        <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição</label>
           <textarea id="moduleModalDescInput" rows="2" class="w-full p-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:outline-none"></textarea>
         </div>
@@ -1394,9 +647,6 @@
         if (typeof v === 'string') fields[k] = { stringValue: v };
         else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
         else if (typeof v === 'number') fields[k] = { integerValue: String(v) };
-        else if (Array.isArray(v)) {
-          fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
-        }
       }
       fields.updatedAt = { stringValue: new Date().toISOString() };
       const res = await fetch(restUrl, {
@@ -1475,19 +725,9 @@
       // 1. Renderiza INSTANTANEAMENTE com a base local para ZERO atraso visual
       ALL_COURSES = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY || {}));
       
-      const urlParams = new URLSearchParams(window.location.search);
-      const queryCourse = urlParams.get('curso') || urlParams.get('id') || urlParams.get('aluno');
-
       const savedCourseId = localStorage.getItem('aef_admin_active_course_id');
-      const savedModuleId = localStorage.getItem('aef_admin_active_module_id');
-      const savedLessonId = localStorage.getItem('aef_admin_active_lesson_id');
-
-      if (queryCourse && (ALL_COURSES[queryCourse] || ALL_COURSES[`mentoria-${queryCourse}`])) {
-        activeCourseId = ALL_COURSES[queryCourse] ? queryCourse : `mentoria-${queryCourse}`;
-      } else if (savedCourseId && ALL_COURSES[savedCourseId]) {
+      if (savedCourseId && ALL_COURSES[savedCourseId]) {
         activeCourseId = savedCourseId;
-        if (savedModuleId) activeModuleId = savedModuleId;
-        if (savedLessonId) activeLessonId = savedLessonId;
       } else {
         const keys = Object.keys(ALL_COURSES);
         if (!keys.includes(activeCourseId) && keys.length > 0) {
@@ -1527,54 +767,11 @@
       const keys = Object.keys(ALL_COURSES);
       if (!keys.includes(activeCourseId) && keys.length > 0) activeCourseId = keys[0];
 
-      const structuralCourses = [];
-      const pocketCourses = [];
-      const vipCourses = [];
-
-      keys.forEach(k => {
+      select.innerHTML = keys.map(k => {
         const c = ALL_COURSES[k];
-        const isVIP = c.tierRequired === 'vip' || k.startsWith('mentoria-') || (c.badge && c.badge.includes('VIP'));
-        const isPocket = c.isPocketCourse === true || c.courseCategory === 'pocket' || c.aiGenerated === true || (c.badge && c.badge.includes('POCKET')) || ['airport-flight-survival', 'dining-out-table-talk', 'hotels-short-term-rentals', 'getting-around-town', 'emergency-medical-situations', 'online-meetings-remote-work', 'job-interview-fast-track', 'shopping-sizing-returns', 'networking-small-talk', 'local-sightseeing-guided-experiences'].includes(c.id);
-
-        if (isVIP) {
-          vipCourses.push(c);
-        } else if (isPocket) {
-          pocketCourses.push(c);
-        } else {
-          structuralCourses.push(c);
-        }
-      });
-
-      let html = '';
-
-      if (structuralCourses.length > 0) {
-        html += '<optgroup label="🏛️ Programas Estruturais & Longos">';
-        html += structuralCourses.map(c => {
-          const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
-          return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>${pubIcon} ${c.title || c.id}</option>`;
-        }).join("");
-        html += '</optgroup>';
-      }
-
-      if (pocketCourses.length > 0) {
-        html += '<optgroup label="⚡ Pocket Courses (Cursos Rápidos)">';
-        html += pocketCourses.map(c => {
-          const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
-          return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>⚡ ${pubIcon} ${c.title || c.id}</option>`;
-        }).join("");
-        html += '</optgroup>';
-      }
-
-      if (vipCourses.length > 0) {
-        html += '<optgroup label="👑 Mentorados VIP (Tier 3)">';
-        html += vipCourses.map(c => {
-          const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
-          return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>👑 ${pubIcon} ${c.title || c.id}</option>`;
-        }).join("");
-        html += '</optgroup>';
-      }
-
-      select.innerHTML = html;
+        const pubIcon = c.published !== false ? '🟢' : '🟡 [Draft]';
+        return `<option value="${c.id}" ${c.id === activeCourseId ? 'selected' : ''}>${pubIcon} ${c.title || c.id}</option>`;
+      }).join("");
     }
 
     function handleSelectCourse(cid) {
@@ -1583,10 +780,6 @@
       activeModuleId = null;
       activeLessonId = null;
       renderHierarchyTree();
-      if (typeof currentStation !== 'undefined') {
-        if (currentStation === 'creatives') initCreativeStudio();
-        if (currentStation === 'vendas') initVendasStation();
-      }
     }
 
     function renderHierarchyTree() {
@@ -1628,9 +821,8 @@
       }
 
       container.innerHTML = modules.map((mod, mIdx) => {
-        const lessons = (mod.lessons || []).slice().sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+        const lessons = mod.lessons || [];
         const isModPub = mod.published !== false;
-        const isModFree = mod.isFreeTier === true || (course.freeModuleIds && course.freeModuleIds.includes(mod.id));
         return `
           <div class="border border-white/10 rounded-xl bg-white/5 overflow-hidden">
             <!-- Module Header -->
@@ -1644,9 +836,6 @@
 
               <!-- Module Status & Actions -->
               <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="event.stopPropagation(); toggleModuleFreeTier('${mod.id}')" class="px-2 py-0.5 rounded-full text-[9px] font-mono font-black transition cursor-pointer flex items-center gap-1 ${isModFree ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 shadow-xs' : 'bg-white/5 text-slate-400 border border-white/10 hover:text-white'}" title="Clique para alternar se este módulo está liberado na Degustação Grátis (Free Tier)">
-                  ${isModFree ? '🌱 Free' : '🔒 Club'}
-                </button>
                 <button onclick="event.stopPropagation(); toggleModulePublished('${mod.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 ${isModPub ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}" title="Clique para alternar o status do Módulo">
                   ${isModPub ? '🟢' : '🟡'}
                 </button>
@@ -1696,10 +885,6 @@
     function selectLessonForEdit(lessonId, moduleId) {
       activeLessonId = lessonId;
       activeModuleId = moduleId;
-      try {
-        localStorage.setItem('aef_admin_active_module_id', moduleId);
-        localStorage.setItem('aef_admin_active_lesson_id', lessonId);
-      } catch (e) {}
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 
@@ -1729,71 +914,15 @@
       document.getElementById("lessonPublishedInput").checked = isPub;
       updateLessonPublishedUi(isPub);
 
-      // AI Fields & Elemento 5 (Conteúdo Didático)
-      const procHtml = foundLesson.processedContentHtml || "";
+      // AI Fields
       document.getElementById("lessonRawScriptInput").value = foundLesson.rawScript || "";
-      document.getElementById("lessonProcessedHtmlInput").value = procHtml;
-      const directHtmlEl = document.getElementById("lessonProcessedHtmlDirectInput");
-      const richEd = document.getElementById("lessonRichVisualEditor");
-      if (richEd) richEd.innerHTML = procHtml || `<p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">Digite suas anotações, explicações ou notas de estudo aqui...</p>`;
+      document.getElementById("lessonProcessedHtmlInput").value = foundLesson.processedContentHtml || "";
       document.getElementById("lessonAiStatusSelect").value = foundLesson.aiStatus || "draft_pending";
 
       updateMediaPreviews();
       updateRawCounter();
       updatePreviewHtml();
       renderHierarchyTree();
-    }
-
-    // ==========================================
-    // WYSIWYG VISUAL RICH TEXT CONTROLLER
-    // ==========================================
-    function formatRichDoc(cmd, val = null) {
-      switchAiTab('processed');
-      const editor = document.getElementById("lessonRichVisualEditor");
-      if (!editor) return;
-      editor.focus();
-      document.execCommand(cmd, false, val);
-      syncRichEditorToHiddenInput();
-    }
-
-    function insertRichCard(theme = 'amber') {
-      switchAiTab('processed');
-      const editor = document.getElementById("lessonRichVisualEditor");
-      if (!editor) return;
-      editor.focus();
-
-      const selection = window.getSelection();
-      const selectedText = selection ? selection.toString() : "";
-
-      const cardHtml = theme === 'amber'
-        ? `<div class="p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 shadow-xs space-y-1.5 my-3"><h4 class="font-bold text-xs uppercase tracking-wider text-amber-900">📌 Destaque Importante</h4><p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selectedText || "Escreva aqui a sua nota de destaque para o aluno..."}</p></div><p><br></p>`
-        : `<div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-1.5 my-3"><h4 class="font-bold text-xs uppercase tracking-wider text-[#0A192F]">📖 Notas da Aula</h4><p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${selectedText || "Escreva aqui as notas complementares da aula..."}</p></div><p><br></p>`;
-
-      document.execCommand('insertHTML', false, cardHtml);
-      syncRichEditorToHiddenInput();
-      showToast("✨ Card inserido no editor visual!");
-    }
-
-    function insertRichLink() {
-      switchAiTab('processed');
-      const editor = document.getElementById("lessonRichVisualEditor");
-      if (!editor) return;
-      editor.focus();
-
-      const url = prompt("Digite ou cole o link (URL):", "https://");
-      if (url && url !== "https://") {
-        document.execCommand('createLink', false, url);
-        syncRichEditorToHiddenInput();
-      }
-    }
-
-    function syncRichEditorToHiddenInput() {
-      const editor = document.getElementById("lessonRichVisualEditor");
-      const hiddenInput = document.getElementById("lessonProcessedHtmlInput");
-      if (editor && hiddenInput) {
-        hiddenInput.value = editor.innerHTML;
-      }
-      updatePreviewHtml();
     }
 
     function updateLessonPublishedUi(isPub) {
@@ -1963,15 +1092,6 @@
       // Persist to Cloud Firestore with SDK + REST fallback
       try {
         await directSaveLessonCloud(activeCourseId, moduleId, foundLesson);
-        try {
-          localStorage.setItem('aef_last_course_update', JSON.stringify({
-            courseId: activeCourseId,
-            moduleId: moduleId,
-            lessonId: foundLesson.id,
-            action: 'save',
-            timestamp: Date.now()
-          }));
-        } catch (e) {}
       } catch (err) {
         console.warn("Firestore sync lesson:", err);
       }
@@ -1984,47 +1104,21 @@
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 
-      const targetLessonId = activeLessonId;
-      const targetModuleId = activeModuleId;
-      const targetCourseId = activeCourseId;
-
-      const mod = (course.modules || []).find(m => m.id === targetModuleId);
+      const mod = (course.modules || []).find(m => m.id === activeModuleId);
       if (mod) {
-        mod.lessons = (mod.lessons || []).filter(l => l.id !== targetLessonId);
-        
-        let deletedCloud = false;
+        mod.lessons = (mod.lessons || []).filter(l => l.id !== activeLessonId);
         try {
-          if (window.aefCloudSync && typeof window.aefCloudSync.deleteLessonFromCloud === 'function') {
-            deletedCloud = await window.aefCloudSync.deleteLessonFromCloud(targetCourseId, targetModuleId, targetLessonId);
+          if (window.aefCloudSync) {
+            await window.aefCloudSync.deleteLessonFromCloud(activeCourseId, activeModuleId, activeLessonId);
           }
         } catch (e) {
-          console.warn("Firestore delete lesson SDK error:", e);
+          console.warn("Firestore delete lesson error:", e);
         }
-
-        if (!deletedCloud) {
-          try {
-            const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${targetCourseId}/modules/${targetModuleId}/lessons/${targetLessonId}`;
-            const res = await fetch(restUrl, { method: 'DELETE' });
-            deletedCloud = res.ok;
-          } catch (re) {
-            console.warn("Firestore delete lesson direct REST error:", re);
-          }
-        }
-
-        try {
-          localStorage.setItem('aef_last_course_update', JSON.stringify({
-            courseId: targetCourseId,
-            moduleId: targetModuleId,
-            lessonId: targetLessonId,
-            action: 'delete',
-            timestamp: Date.now()
-          }));
-        } catch (e) {}
       }
 
       activeLessonId = null;
       renderHierarchyTree();
-      showToast("Aula excluída com sucesso da Nuvem e da lista.");
+      showToast("Aula excluída com sucesso.");
     }
 
     // Direct Native File Upload Handler
@@ -2093,8 +1187,7 @@
         }
 
         updateMediaPreviews();
-        await handleSaveLesson();
-        showToast(`✅ "${file.name}" enviado e salvo na aula com sucesso!`);
+        showToast(`✅ "${file.name}" enviado com sucesso!`);
       } catch (err) {
         console.error("Erro no upload:", err);
         showToast(`❌ Erro no upload: ${err.message}`);
@@ -2296,55 +1389,8 @@
       const inputEl = document.getElementById("lessonPdfUrlInput");
       if (inputEl) inputEl.value = generatedUrl;
 
-      // Persiste imediatamente na aula ativa
       await handleSaveLesson();
       showToast(`✅ Apostila vinculada e salva na aula: ${generatedUrl}`);
-    }
-
-    // Modal Helpers (Course & Module)
-    // Toggles de Configuração das 3 Opções no Modal de Curso
-    function toggleCourseFreeTierConfig(checked) {
-      const cfg = document.getElementById("courseModalFreeTierConfig");
-      if (cfg) {
-        if (checked) cfg.classList.remove("hidden");
-        else cfg.classList.add("hidden");
-      }
-    }
-
-    function toggleCourseStandaloneConfig(checked) {
-      const cfg = document.getElementById("courseModalStandaloneConfig");
-      if (cfg) {
-        if (checked) cfg.classList.remove("hidden");
-        else cfg.classList.add("hidden");
-      }
-    }
-
-    // Toggle Rápido de 1 Toque na Árvore de Módulos (🌱 Free vs 🔒 Club)
-    async function toggleModuleFreeTier(moduleId) {
-      const course = ALL_COURSES[activeCourseId];
-      if (!course) return;
-      const mod = (course.modules || []).find(m => m.id === moduleId);
-      if (!mod) return;
-
-      mod.isFreeTier = !mod.isFreeTier;
-      if (!Array.isArray(course.freeModuleIds)) {
-        course.freeModuleIds = [];
-      }
-      if (mod.isFreeTier) {
-        if (!course.freeModuleIds.includes(moduleId)) course.freeModuleIds.push(moduleId);
-        course.availableInFreeTier = true;
-      } else {
-        course.freeModuleIds = course.freeModuleIds.filter(id => id !== moduleId);
-      }
-
-      renderHierarchyTree();
-      try {
-        await directSaveModuleCloud(activeCourseId, mod);
-        await directSaveCourseCloud(course);
-      } catch (e) {
-        console.warn("Sync free tier module:", e);
-      }
-      showToast(mod.isFreeTier ? `🌱 Módulo "${mod.title}" liberado no Free Tier!` : `🔒 Módulo "${mod.title}" agora é Exclusivo Club/Pago.`);
     }
 
     // Modal Helpers (Course & Module)
@@ -2354,25 +1400,8 @@
       document.getElementById("courseModalTitleInput").value = "";
       document.getElementById("courseModalSlugInput").value = "";
       document.getElementById("courseModalDescInput").value = "";
-      document.getElementById("courseModalCoverInput").value = "";
       document.getElementById("courseModalThemeColorInput").value = "amber";
-      document.getElementById("courseModalTierInput").value = "club_anual";
       document.getElementById("courseModalPublishedInput").checked = true;
-
-      // 3 Opções de Disponibilidade
-      document.getElementById("courseModalClubSubInput").checked = true;
-      document.getElementById("courseModalFreeTierInput").checked = false;
-      toggleCourseFreeTierConfig(false);
-      document.getElementById("courseModalFreeCtaMsgInput").value = "Gostou desta aula? Destrave o curso completo no AEF Club!";
-      document.getElementById("courseModalFreeCtaUrlInput").value = "https://pay.hotmart.com/";
-      document.getElementById("courseModalFreeModulesList").innerHTML = '<p class="text-[10px] text-slate-400 italic">Salve o curso primeiro para adicionar módulos.</p>';
-
-      document.getElementById("courseModalStandaloneInput").checked = false;
-      toggleCourseStandaloneConfig(false);
-      document.getElementById("courseModalStandalonePriceInput").value = "";
-      document.getElementById("courseModalCheckoutHotmartInput").value = "";
-      document.getElementById("courseModalCheckoutStripeInput").value = "";
-
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
@@ -2395,44 +1424,8 @@
       document.getElementById("courseModalDescInput").value = course.description || "";
       document.getElementById("courseModalCoverInput").value = course.coverImageUrl || "";
       document.getElementById("courseModalThemeColorInput").value = course.themeColor || "amber";
-      document.getElementById("courseModalTierInput").value = course.tierRequired || "club_anual";
+      document.getElementById("courseModalTierInput").value = course.tierRequired || "vip";
       document.getElementById("courseModalPublishedInput").checked = course.published !== false;
-
-      // 3 Opções de Disponibilidade
-      const isClub = course.includedInClubSubscription !== false;
-      document.getElementById("courseModalClubSubInput").checked = isClub;
-
-      const isFree = course.availableInFreeTier === true || course.tierRequired === 'free';
-      document.getElementById("courseModalFreeTierInput").checked = isFree;
-      toggleCourseFreeTierConfig(isFree);
-      document.getElementById("courseModalFreeCtaMsgInput").value = course.freeTierCtaMessage || "Gostou desta aula? Destrave o curso completo no AEF Club!";
-      document.getElementById("courseModalFreeCtaUrlInput").value = course.freeTierCtaUrl || course.checkoutHotmart || "https://pay.hotmart.com/";
-
-      // Popula lista de módulos do curso com checkboxes
-      const freeModsContainer = document.getElementById("courseModalFreeModulesList");
-      const currentFreeIds = course.freeModuleIds || [];
-      const mods = course.modules || [];
-      if (mods.length === 0) {
-        freeModsContainer.innerHTML = '<p class="text-[10px] text-slate-400 italic">Nenhum módulo criado ainda.</p>';
-      } else {
-        freeModsContainer.innerHTML = mods.map((m, idx) => {
-          const isModChecked = currentFreeIds.includes(m.id) || m.isFreeTier === true || (idx === 0 && isFree && currentFreeIds.length === 0);
-          return `
-            <label class="flex items-center gap-2 p-1.5 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer text-xs">
-              <input type="checkbox" value="${m.id}" ${isModChecked ? 'checked' : ''} class="rounded accent-emerald-500 w-3.5 h-3.5">
-              <span class="text-white font-medium truncate">${idx + 1}. ${m.title || m.id}</span>
-            </label>
-          `;
-        }).join('');
-      }
-
-      const isStandalone = course.availableStandalone === true;
-      document.getElementById("courseModalStandaloneInput").checked = isStandalone;
-      toggleCourseStandaloneConfig(isStandalone);
-      document.getElementById("courseModalStandalonePriceInput").value = course.standalonePrice || "";
-      document.getElementById("courseModalCheckoutHotmartInput").value = course.standaloneCheckoutHotmart || course.checkoutHotmart || "";
-      document.getElementById("courseModalCheckoutStripeInput").value = course.standaloneCheckoutStripe || course.checkoutStripe || "";
-
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
@@ -2449,48 +1442,16 @@
       const desc = document.getElementById("courseModalDescInput").value.trim();
       const published = document.getElementById("courseModalPublishedInput").checked;
 
-      // 3 Opções de Disponibilidade
-      const includedInClubSubscription = document.getElementById("courseModalClubSubInput").checked;
-      const availableInFreeTier = document.getElementById("courseModalFreeTierInput").checked;
-      const freeTierCtaMessage = document.getElementById("courseModalFreeCtaMsgInput").value.trim() || "Gostou desta aula? Destrave o curso completo no AEF Club!";
-      const freeTierCtaUrl = document.getElementById("courseModalFreeCtaUrlInput").value.trim();
-
-      const freeModuleCheckboxes = document.querySelectorAll('#courseModalFreeModulesList input[type="checkbox"]:checked');
-      const freeModuleIds = Array.from(freeModuleCheckboxes).map(cb => cb.value);
-
-      const availableStandalone = document.getElementById("courseModalStandaloneInput").checked;
-      const standalonePrice = document.getElementById("courseModalStandalonePriceInput").value.trim();
-      const standaloneCheckoutHotmart = document.getElementById("courseModalCheckoutHotmartInput").value.trim();
-      const standaloneCheckoutStripe = document.getElementById("courseModalCheckoutStripeInput").value.trim();
-
       const courseObj = ALL_COURSES[id] || { modules: [] };
       courseObj.id = id;
       courseObj.title = title;
       courseObj.slug = slug;
       courseObj.tierRequired = tier;
       courseObj.themeColor = themeColor;
-      courseObj.badge = tier === "vip" ? "MENTORIA VIP" : (availableInFreeTier ? "EXPERIMENTE GRÁTIS" : "AEF CLUB");
+      courseObj.badge = tier === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO";
       courseObj.coverImageUrl = cover;
       courseObj.description = desc;
       courseObj.published = published;
-
-      // Persistência das 3 Opções
-      courseObj.includedInClubSubscription = includedInClubSubscription;
-      courseObj.availableInFreeTier = availableInFreeTier;
-      courseObj.freeTierCtaMessage = freeTierCtaMessage;
-      courseObj.freeTierCtaUrl = freeTierCtaUrl;
-      courseObj.freeModuleIds = freeModuleIds;
-      courseObj.availableStandalone = availableStandalone;
-      courseObj.standalonePrice = standalonePrice;
-      courseObj.standaloneCheckoutHotmart = standaloneCheckoutHotmart;
-      courseObj.standaloneCheckoutStripe = standaloneCheckoutStripe;
-
-      // Atualiza a flag isFreeTier em cada módulo
-      if (Array.isArray(courseObj.modules)) {
-        courseObj.modules.forEach(m => {
-          m.isFreeTier = freeModuleIds.includes(m.id);
-        });
-      }
 
       ALL_COURSES[id] = courseObj;
       activeCourseId = id;
@@ -2542,20 +1503,6 @@
       }
     }
 
-    async function handleModuleCoverUpload(file) {
-      if (!file) return;
-      showToast(`Enviando Capa do Módulo "${file.name}" para a Nuvem...`);
-      try {
-        if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
-        await window.aefCloudSync.init();
-        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, `courses/${activeCourseId}/covers`);
-        document.getElementById("moduleModalCoverUrlInput").value = downloadUrl;
-        showToast("✅ Capa do Módulo enviada com sucesso!");
-      } catch (e) {
-        showToast("❌ Erro no upload da capa: " + e.message);
-      }
-    }
-
     function editModule(moduleId) {
       const course = ALL_COURSES[activeCourseId];
       const mod = (course?.modules || []).find(m => m.id === moduleId);
@@ -2567,7 +1514,6 @@
       document.getElementById("moduleModalIdInput").value = mod.id;
       document.getElementById("moduleModalOrderInput").value = mod.order || 1;
       document.getElementById("moduleModalPdfUrlInput").value = mod.pdfUrl || "";
-      document.getElementById("moduleModalCoverUrlInput").value = mod.coverImageUrl || mod.thumbnailUrl || "";
       document.getElementById("moduleModalDescInput").value = mod.description || "";
       document.getElementById("moduleModalPublishedInput").checked = mod.published !== false;
       const btnDel = document.getElementById("btnDeleteModule");
@@ -2586,7 +1532,6 @@
       const title = rawTitle || "Novo Módulo";
       const order = parseInt(document.getElementById("moduleModalOrderInput").value) || 1;
       const pdfUrl = document.getElementById("moduleModalPdfUrlInput").value.trim();
-      const coverUrl = document.getElementById("moduleModalCoverUrlInput").value.trim();
       const desc = document.getElementById("moduleModalDescInput").value.trim();
       const published = document.getElementById("moduleModalPublishedInput").checked;
 
@@ -2594,13 +1539,12 @@
       let existingMod = course.modules.find(m => m.id === modId);
 
       if (!existingMod) {
-        existingMod = { id: modId, courseId: activeCourseId, title, order, pdfUrl, coverImageUrl: coverUrl, description: desc, published, lessons: [] };
+        existingMod = { id: modId, courseId: activeCourseId, title, order, pdfUrl, description: desc, published, lessons: [] };
         course.modules.push(existingMod);
       } else {
         existingMod.title = title;
         existingMod.order = order;
         existingMod.pdfUrl = pdfUrl;
-        existingMod.coverImageUrl = coverUrl;
         existingMod.description = desc;
         existingMod.published = published;
       }
@@ -2705,521 +1649,6 @@
       toast.classList.remove("hidden");
       setTimeout(() => toast.classList.add("hidden"), 4000);
     }
-
-    // =========================================================================
-    // COURSE FACTORY: GESTÃO DAS 3 ESTAÇÕES & CRIATIVOS & POCKET AI
-    // =========================================================================
-    let currentStation = 'pedagogica';
-    let activeAiPocketData = null;
-
-    function switchStation(station) {
-      currentStation = station;
-
-      const stations = ['pedagogica', 'creatives', 'vendas'];
-      stations.forEach(s => {
-        const cont = document.getElementById(s === 'pedagogica' ? 'stationPedagogica' : (s === 'creatives' ? 'stationCreatives' : 'stationVendas'));
-        const tab = document.getElementById(s === 'pedagogica' ? 'stationTabPedagogica' : (s === 'creatives' ? 'stationTabCreatives' : 'stationTabVendas'));
-        if (cont) cont.classList.toggle('hidden', s !== station);
-        if (tab) {
-          if (s === station) {
-            tab.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 font-black shadow cursor-pointer";
-          } else {
-            tab.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-300 hover:text-white cursor-pointer";
-          }
-        }
-      });
-
-      if (station === 'creatives') {
-        initCreativeStudio();
-      } else if (station === 'vendas') {
-        initVendasStation();
-      }
-      if (window.lucide) lucide.createIcons();
-    }
-
-    // =========================================================================
-    // ESTAÇÃO 2: ESTÚDIO DE CRIATIVOS (CANVAS MULTI-FORMATO & SIMULADOR)
-    // =========================================================================
-    async function initCreativeStudio() {
-      const course = ALL_COURSES[activeCourseId];
-      if (!course) return;
-
-      const titleEl = document.getElementById('creativeActiveCourseName');
-      if (titleEl) titleEl.innerText = `${course.title} (${course.id})`;
-      
-      const titleInp = document.getElementById('creativeTitleInput');
-      if (titleInp) titleInp.value = course.title || 'Curso AgoraEuFalo';
-
-      const subInp = document.getElementById('creativeSubtitleInput');
-      if (subInp) subInp.value = course.description || 'Aprenda pelos ouvidos até a fala virar reflexo';
-
-      const badgeInp = document.getElementById('creativeBadgeInput');
-      if (badgeInp) badgeInp.value = (course.badge || 'CURSO OFICIAL').toUpperCase();
-
-      // Gerar prompt de IA padrão baseado no curso
-      const aiPromptText = document.getElementById('creativeAiPromptText');
-      if (aiPromptText) {
-        aiPromptText.value = `${course.title}, cinematic 35mm film photography, photorealistic, natural warm lighting, shallow depth of field, authentic emotional expression, Calm EdTech luxury color grading, no text, no watermarks`;
-      }
-
-      // Configurações do Engine
-      if (window.aefCreativeStudio) {
-        window.aefCreativeStudio.updateSettings({
-          title: course.title || 'Curso AgoraEuFalo',
-          subtitle: course.description || 'Aprenda pelos ouvidos até a fala virar reflexo',
-          badge: (course.badge || 'CURSO OFICIAL').toUpperCase(),
-          showLogo: document.getElementById('creativeShowLogoCheck')?.checked ?? true,
-          showBadge: document.getElementById('creativeShowBadgeCheck')?.checked ?? true,
-          verticalOffset: parseInt(document.getElementById('creativeOffsetInput')?.value || 0, 10),
-          zoom: parseFloat(document.getElementById('creativeZoomInput')?.value || 1.0),
-          overlayDarkness: (parseInt(document.getElementById('creativeDarknessInput')?.value || 55, 10)) / 100
-        });
-
-        // Carregar imagem base existente se disponível
-        let candidateImg = (course.coverImageUrl && course.coverImageUrl.trim()) ||
-                           (course.artworkUrl && course.artworkUrl.trim()) ||
-                           (course.modules?.[0]?.coverImageUrl && course.modules[0].coverImageUrl.trim()) ||
-                           (course.modules?.[0]?.thumbnailUrl && course.modules[0].thumbnailUrl.trim()) ||
-                           (course.modules?.[0]?.lessons?.[0]?.thumbnailUrl && course.modules[0].lessons[0].thumbnailUrl.trim()) ||
-                           (course.modules?.[0]?.lessons?.[0]?.artworkUrl && course.modules[0].lessons[0].artworkUrl.trim()) ||
-                           'assets/images/cover-default-aef.jpg';
-
-        // Cache-buster para garantir que o canvas nunca carregue imagem antiga da memória do navegador
-        const bustUrl = candidateImg.startsWith('data:') ? candidateImg : (candidateImg + (candidateImg.includes('?') ? '&' : '?') + `_cb=${Date.now()}`);
-
-        try {
-          await window.aefCreativeStudio.loadFromUrl(bustUrl);
-          const thumb = document.getElementById('creativeBaseImgThumb');
-          const label = document.getElementById('creativeBaseImgLabel');
-          if (thumb) thumb.src = bustUrl;
-          if (label) label.innerText = candidateImg.split('?')[0].split('/').pop() || 'imagem';
-        } catch (e) {
-          console.warn('Erro ao carregar imagem base:', e);
-        }
-
-        renderAllCreativeCanvases();
-      }
-      updateSimulatorMockupData();
-    }
-
-    function renderAllCreativeCanvases() {
-      if (!window.aefCreativeStudio) return;
-      const formats = ['hotmart_cover', 'hotmart_checkout', 'youtube_thumb', 'player_mobile', 'sales_hero', 'lms_card'];
-      formats.forEach(f => {
-        const cv = document.getElementById('canvas_' + f);
-        if (cv) {
-          window.aefCreativeStudio.renderFormat(f, cv);
-        }
-      });
-      updateSimulatorMockupData();
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function switchImageSourceTab(tab) {
-      const pFile = document.getElementById('panelImgFile');
-      const pLib = document.getElementById('panelImgLibrary');
-      const pAi = document.getElementById('panelImgAi');
-
-      if (pFile) pFile.classList.toggle('hidden', tab !== 'file');
-      if (pLib) pLib.classList.toggle('hidden', tab !== 'library');
-      if (pAi) pAi.classList.toggle('hidden', tab !== 'ai');
-
-      ['file', 'library', 'ai'].forEach(t => {
-        const btn = document.getElementById('imgSourceTab' + t.charAt(0).toUpperCase() + t.slice(1));
-        if (btn) {
-          if (t === tab) {
-            btn.className = "py-1 px-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition";
-          } else {
-            btn.className = "py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition";
-          }
-        }
-      });
-    }
-
-    async function handleCreativeFileUpload(file) {
-      if (!file || !window.aefCreativeStudio) return;
-      try {
-        await window.aefCreativeStudio.loadFromFile(file);
-        const thumb = document.getElementById('creativeBaseImgThumb');
-        const label = document.getElementById('creativeBaseImgLabel');
-        if (thumb) thumb.src = window.aefCreativeStudio.baseImageUrl;
-        if (label) label.innerText = file.name;
-        renderAllCreativeCanvases();
-        showToast('Foto carregada com sucesso!');
-      } catch (err) {
-        alert('Erro ao carregar foto: ' + err.message);
-      }
-    }
-
-    async function handleSelectLibraryImage(url) {
-      if (!url || !window.aefCreativeStudio) return;
-      try {
-        await window.aefCreativeStudio.loadFromUrl(url);
-        const thumb = document.getElementById('creativeBaseImgThumb');
-        const label = document.getElementById('creativeBaseImgLabel');
-        if (thumb) thumb.src = url;
-        if (label) label.innerText = url.split('/').pop();
-        renderAllCreativeCanvases();
-        showToast('Capa da biblioteca selecionada!');
-      } catch (err) {
-        alert('Erro ao carregar imagem: ' + err.message);
-      }
-    }
-
-    function copyCreativeAiPrompt() {
-      const textarea = document.getElementById('creativeAiPromptText');
-      if (!textarea) return;
-      navigator.clipboard.writeText(textarea.value);
-      showToast('📋 Prompt Blueprint copiado para a área de transferência!');
-    }
-
-    async function pasteImageFromUrlPrompt() {
-      const url = prompt('Cole a URL de uma imagem na internet ou caminho local (ex: assets/images/...):');
-      if (url && url.trim()) {
-        await handleSelectLibraryImage(url.trim());
-      }
-    }
-
-    function handleCreativeTextChange() {
-      if (!window.aefCreativeStudio) return;
-      const title = document.getElementById('creativeTitleInput')?.value.trim() || 'Curso';
-      const subtitle = document.getElementById('creativeSubtitleInput')?.value.trim() || '';
-      const badge = document.getElementById('creativeBadgeInput')?.value.trim() || '';
-      const showLogo = document.getElementById('creativeShowLogoCheck')?.checked ?? true;
-      const showBadge = document.getElementById('creativeShowBadgeCheck')?.checked ?? true;
-
-      window.aefCreativeStudio.updateSettings({
-        title,
-        subtitle,
-        badge,
-        showLogo,
-        showBadge
-      });
-
-      renderAllCreativeCanvases();
-    }
-
-    function handleCreativeSliderChange() {
-      if (!window.aefCreativeStudio) return;
-      const offset = parseInt(document.getElementById('creativeOffsetInput')?.value || 0, 10);
-      const zoom = parseFloat(document.getElementById('creativeZoomInput')?.value || 1.0);
-      const darkness = parseInt(document.getElementById('creativeDarknessInput')?.value || 55, 10);
-
-      const offEl = document.getElementById('creativeOffsetVal');
-      const zoomEl = document.getElementById('creativeZoomVal');
-      const darkEl = document.getElementById('creativeDarknessVal');
-
-      if (offEl) offEl.innerText = `${offset > 0 ? '+' : ''}${offset}%`;
-      if (zoomEl) zoomEl.innerText = `${zoom.toFixed(2)}x`;
-      if (darkEl) darkEl.innerText = `${darkness}%`;
-
-      window.aefCreativeStudio.updateSettings({
-        verticalOffset: offset,
-        zoom: zoom,
-        overlayDarkness: darkness / 100
-      });
-
-      renderAllCreativeCanvases();
-    }
-
-    async function handleCreativeDownloadZip() {
-      if (!window.aefCreativeStudio) return;
-      showToast('📦 Empacotando Kit Completo em .ZIP...');
-      try {
-        await window.aefCreativeStudio.downloadZipKit(activeCourseId || 'curso-aef');
-        showToast('✅ Download do Kit ZIP concluído com sucesso!');
-      } catch (err) {
-        alert('Erro ao gerar ZIP: ' + err.message);
-      }
-    }
-
-    async function handleCreativeDownloadSingle(formatKey) {
-      if (!window.aefCreativeStudio) return;
-      showToast(`Baixando formato ${formatKey}...`);
-      try {
-        await window.aefCreativeStudio.downloadSingleFormat(formatKey, activeCourseId || 'curso-aef');
-      } catch (err) {
-        alert('Erro no download: ' + err.message);
-      }
-    }
-
-    async function handleLinkCreativeToCourse() {
-      if (!window.aefCreativeStudio) return;
-      showToast('☁️ Vinculando capas geradas e salvando no Firestore...');
-      try {
-        await window.aefCreativeStudio.linkKitToCurrentCourse(activeCourseId);
-        
-        const course = ALL_COURSES[activeCourseId];
-        if (course) {
-          course.coverImageUrl = window.aefCreativeStudio.baseImageUrl || course.coverImageUrl;
-          course.artworkUrl = window.aefCreativeStudio.baseImageUrl || course.artworkUrl;
-          await directSaveCourseCloud(course);
-        }
-
-        showToast('✅ Capas oficiais vinculadas e sincronizadas com a Nuvem!');
-      } catch (err) {
-        alert('Erro ao vincular: ' + err.message);
-      }
-    }
-
-    // =========================================================================
-    // SIMULADOR DE CONTEXTO VISUAL
-    // =========================================================================
-    let currentMockup = 'hotmart';
-
-    function switchSimulatorMockup(simType) {
-      currentMockup = simType;
-
-      const types = ['hotmart', 'youtube', 'checkout', 'player'];
-      types.forEach(t => {
-        const view = document.getElementById('mockupView' + t.charAt(0).toUpperCase() + t.slice(1));
-        const tab = document.getElementById('simTab' + t.charAt(0).toUpperCase() + t.slice(1));
-        if (view) view.classList.toggle('hidden', t !== simType);
-        if (tab) {
-          if (t === simType) {
-            tab.className = "py-1 px-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition";
-          } else {
-            tab.className = "py-1 px-1.5 rounded-lg text-slate-400 hover:text-white text-center transition";
-          }
-        }
-      });
-
-      updateSimulatorMockupData();
-    }
-
-    function updateSimulatorMockupData() {
-      const title = document.getElementById('creativeTitleInput')?.value || 'Curso AgoraEuFalo';
-      
-      const cvHotmart = document.getElementById('canvas_hotmart_cover');
-      const cvYoutube = document.getElementById('canvas_youtube_thumb');
-      const cvCheckout = document.getElementById('canvas_hotmart_checkout');
-      const cvPlayer = document.getElementById('canvas_player_mobile');
-
-      try {
-        if (cvHotmart && document.getElementById('simHotmartImg')) {
-          document.getElementById('simHotmartImg').src = cvHotmart.toDataURL('image/jpeg', 0.85);
-          document.getElementById('simHotmartTitle').innerText = title;
-        }
-        if (cvYoutube && document.getElementById('simYoutubeImg')) {
-          document.getElementById('simYoutubeImg').src = cvYoutube.toDataURL('image/jpeg', 0.85);
-          document.getElementById('simYoutubeTitle').innerText = title;
-        }
-        if (cvCheckout && document.getElementById('simCheckoutImg')) {
-          document.getElementById('simCheckoutImg').src = cvCheckout.toDataURL('image/jpeg', 0.85);
-          document.getElementById('simCheckoutCourseName').innerText = title;
-        }
-        if (cvPlayer && document.getElementById('simPlayerImg')) {
-          document.getElementById('simPlayerImg').src = cvPlayer.toDataURL('image/jpeg', 0.85);
-          document.getElementById('simPlayerTitle').innerText = title;
-        }
-      } catch (e) {
-        // Ignora security error caso imagem remota sem CORS
-      }
-    }
-
-    // =========================================================================
-    // ESTAÇÃO 3: VENDAS & OFERTAS HOTMART
-    // =========================================================================
-    async function initVendasStation() {
-      const course = ALL_COURSES[activeCourseId];
-      if (!course) return;
-
-      const nameEl = document.getElementById('vendasCourseName');
-      if (nameEl) nameEl.innerText = `${course.title} (${course.id})`;
-      const grid = document.getElementById('vendasOffersGrid');
-      if (!grid) return;
-
-      if (!window.aefOffersRegistry) {
-        grid.innerHTML = `<div class="p-6 col-span-3 text-center text-slate-400">Carregando catálogo de ofertas...</div>`;
-        return;
-      }
-
-      const allOffers = await window.aefOffersRegistry.getAllOffers();
-      const linkedOffers = allOffers.filter(o => 
-        o.productId === activeCourseId || 
-        (o.grantedCourses && o.grantedCourses.includes(activeCourseId))
-      );
-
-      if (linkedOffers.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full p-8 rounded-3xl bg-[#0A192F] border border-dashed border-white/20 text-center space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mx-auto text-xl">⚡</div>
-            <h4 class="font-bold text-white text-base">Nenhuma Oferta Comercial Conectada a Este Curso</h4>
-            <p class="text-xs text-slate-400 max-w-md mx-auto">
-              Crie uma oferta comercial no Departamento de Vendas para disponibilizar checkouts da Hotmart para "${course.title}".
-            </p>
-            <a href="admin-vendas.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase transition shadow">
-              <span>+ Criar Oferta no Depto. de Vendas</span>
-            </a>
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = linkedOffers.map(o => `
-        <div class="p-5 rounded-3xl bg-[#0A192F] border border-white/10 shadow-xl space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono font-bold text-[10px] border border-purple-500/30">
-              ${o.badge || 'OFERTA'}
-            </span>
-            <span class="text-xs ${o.status === 'active' ? 'text-emerald-400' : 'text-slate-400'} font-bold">
-              ${o.status === 'active' ? '🟢 Ativa' : '⏸️ Pausada'}
-            </span>
-          </div>
-          <h4 class="font-bold text-white text-sm line-clamp-2">${o.title}</h4>
-          <div class="p-3 bg-white/5 rounded-2xl border border-white/5 flex items-baseline justify-between">
-            <span class="text-xs text-slate-400">Preço:</span>
-            <span class="text-base font-black text-emerald-400">${o.pricing?.installmentsText || ('R$ ' + (o.pricing?.offerPrice || 497))}</span>
-          </div>
-          <div class="pt-2 flex items-center justify-between text-xs gap-2">
-            <a href="${o.checkoutUrl || '#'}" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-center transition flex items-center justify-center gap-1.5">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-              <span>Testar Checkout</span>
-            </a>
-            <a href="admin-vendas.html" class="p-2 rounded-xl bg-purple-500/20 text-purple-300 hover:bg-purple-500 hover:text-white transition" title="Editar no Depto. de Vendas">
-              <i data-lucide="edit-3" class="w-4 h-4"></i>
-            </a>
-          </div>
-        </div>
-      `).join('');
-
-      if (window.lucide) lucide.createIcons();
-    }
-
-    // =========================================================================
-    // MODAL AI POCKET COURSE ARCHITECT
-    // =========================================================================
-    function openAiPocketModal() {
-      initAiPocketPresets();
-      document.getElementById('aiPocketCourseModal').classList.remove('hidden');
-      document.getElementById('aiPocketResultContainer').classList.add('hidden');
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function closeAiPocketModal() {
-      document.getElementById('aiPocketCourseModal').classList.add('hidden');
-    }
-
-    let currentSelectedPocketPreset = null;
-
-    function initAiPocketPresets() {
-      const container = document.getElementById('aiPocketPresetsContainer');
-      if (!container || !window.aefPocketCourseAI) return;
-
-      const presets = window.aefPocketCourseAI.getPresets();
-      container.innerHTML = Object.entries(presets).map(([k, p]) => `
-        <button type="button" id="presetBtn_${k}" onclick="handleSelectPocketPreset('${k}')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-white/5">
-          <span>${p.label}</span>
-        </button>
-      `).join('');
-    }
-
-    function handleSelectPocketPreset(key) {
-      if (!window.aefPocketCourseAI) return;
-      const presets = window.aefPocketCourseAI.getPresets();
-      const preset = presets[key];
-      if (!preset) return;
-
-      currentSelectedPocketPreset = key;
-      document.getElementById('aiPocketPromptInput').value = preset.defaultPrompt;
-
-      // Atualiza destaque visual dos botões de preset
-      Object.keys(presets).forEach(k => {
-        const btn = document.getElementById('presetBtn_' + k);
-        if (btn) {
-          if (k === key) {
-            btn.className = "px-2.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md border border-amber-400";
-          } else {
-            btn.className = "px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-white/5";
-          }
-        }
-      });
-
-      showToast(`Preset "${preset.label}" selecionado!`);
-    }
-
-    async function handleRunAiPocketCourse() {
-      const promptText = document.getElementById('aiPocketPromptInput').value.trim();
-      const btn = document.getElementById('btnRunAiPocket');
-      if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Projetando Curso...`;
-
-      try {
-        if (!window.aefPocketCourseAI) throw new Error('Motor aefPocketCourseAI não carregado.');
-        const generated = await window.aefPocketCourseAI.generatePocketCourse(promptText, currentSelectedPocketPreset);
-        activeAiPocketData = generated;
-
-        // Render preview
-        document.getElementById('resPocketBadge').innerText = generated.badge;
-        document.getElementById('resPocketTitle').innerText = generated.title;
-        document.getElementById('resPocketPromise').innerText = generated.description;
-
-        const lessonsList = document.getElementById('resPocketLessonsList');
-        const lessons = generated.modules[0].lessons;
-        lessonsList.innerHTML = lessons.map(l => `
-          <div class="p-2.5 rounded-xl bg-[#0A192F] border border-white/10 flex items-center justify-between gap-2">
-            <div>
-              <span class="font-bold text-white block">${l.title}</span>
-              <span class="text-[10px] text-amber-300 italic block mt-0.5">💡 ${l.goldenTip}</span>
-            </div>
-            <span class="px-2 py-0.5 rounded font-mono text-[10px] bg-emerald-500/20 text-emerald-300 font-bold shrink-0">
-              🎧 ${l.duration}
-            </span>
-          </div>
-        `).join('');
-
-        document.getElementById('aiPocketResultContainer').classList.remove('hidden');
-        if (window.lucide) lucide.createIcons();
-      } catch (err) {
-        alert('Erro ao projetar Pocket Course: ' + err.message);
-      } finally {
-        if (btn) btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Projetar Pocket Course</span>`;
-        if (window.lucide) lucide.createIcons();
-      }
-    }
-
-    async function handleSaveAiPocketCourse() {
-      if (!activeAiPocketData) return;
-
-      try {
-        showToast('🚀 Salvando Pocket Course no ecossistema...');
-        
-        // Injetar no catálogo local
-        ALL_COURSES[activeAiPocketData.id] = activeAiPocketData;
-        if (window.aefCloudSync && typeof window.aefCloudSync.saveCourse === 'function') {
-          await window.aefCloudSync.saveCourse(activeAiPocketData);
-        } else if (typeof directSaveCourseCloud === 'function') {
-          await directSaveCourseCloud(activeAiPocketData);
-        }
-
-        // Atualizar seletor de cursos
-        initHeaderCourseSelect();
-        handleSelectCourse(activeAiPocketData.id);
-        
-        closeAiPocketModal();
-
-        // Alterna direto para o Estúdio de Criativos para gerar os 6 formatos da capa!
-        switchStation('creatives');
-        showToast('✨ Pocket Course criado com sucesso! Gere o Kit de Imagens agora.');
-      } catch (err) {
-        alert('Erro ao salvar Pocket Course: ' + err.message);
-      }
-    }
-
-    // Checagem de URL parameters na inicialização (?station=creatives)
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const stationParam = urlParams.get('station');
-        const courseParam = urlParams.get('course');
-
-        if (courseParam && ALL_COURSES[courseParam]) {
-          handleSelectCourse(courseParam);
-        }
-        if (stationParam && ['pedagogica', 'creatives', 'vendas'].includes(stationParam)) {
-          setTimeout(() => switchStation(stationParam), 200);
-        }
-      } catch (e) {}
-    });
   </script>
 </body>
 </html>
