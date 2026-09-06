@@ -5,7 +5,7 @@ const completeHtml = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Studio Pro • Gestor de Cursos & Módulos | AgoraEuFalo</title>
+  <title>Course Studio Pro • Gestor & Fábrica de Cursos | AgoraEuFalo</title>
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Tailwind CSS & Google Fonts -->
@@ -45,11 +45,11 @@ const completeHtml = `<!DOCTYPE html>
 
   <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="assets/js/aef-courses-registry.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-cloud-sync.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-filepicker.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-pdf-generator.js?v=20260902_0140"></script>
-  <script src="assets/js/aef-portal-auth.js?v=20260902_0140"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260906_01"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260906_01"></script>
+  <script src="assets/js/aef-filepicker.js?v=20260906_01"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260906_01"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260906_01"></script>
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -65,27 +65,37 @@ const completeHtml = `<!DOCTYPE html>
   <!-- 1. TOP COMMAND BAR                         -->
   <!-- ========================================== -->
   <header class="bg-[#0A192F] border-b border-white/10 sticky top-0 z-40 shadow-md">
-    <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+    <div class="max-w-[98vw] 2xl:max-w-[1920px] mx-auto px-4 py-2.5 flex items-center justify-between gap-3 flex-wrap">
       
-      <!-- Brand & Title -->
+      <!-- Brand & Course Selector -->
       <div class="flex items-center gap-3">
         <a href="admin-alunos.html" class="flex items-center gap-2">
           <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-7 sm:h-8 object-contain">
         </a>
         <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wider uppercase">
-          COURSE STUDIO • WIDESCREEN
+          COURSE STUDIO PRO
         </span>
+
+        <div class="flex items-center gap-2 ml-2">
+          <select id="headerCourseSelect" onchange="handleSelectCourse(this.value)" class="bg-[#112240] border border-white/20 text-white font-bold text-xs rounded-xl px-3 py-1.5 focus:border-amber-400 focus:outline-none max-w-[200px] sm:max-w-[280px] truncate">
+            <!-- Injected via JS -->
+          </select>
+          <button onclick="openCourseModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow flex items-center gap-1 cursor-pointer" title="Novo Curso">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Novo Curso</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Course Switcher & Status -->
-      <div class="flex items-center gap-2">
-        <label class="text-xs text-slate-400 font-bold hidden md:inline">Curso Ativo:</label>
-        <select id="headerCourseSelect" onchange="handleSelectCourse(this.value)" class="bg-[#112240] border border-white/20 text-white font-bold text-xs rounded-xl px-3 py-1.5 focus:border-amber-400 focus:outline-none max-w-[220px] sm:max-w-[320px] truncate">
-          <!-- Injected via JS -->
-        </select>
-        <button onclick="openCourseModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow flex items-center gap-1 cursor-pointer" title="Novo Curso">
-          <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">Novo Curso</span>
+      <!-- Station Switcher (2 Estações Exclusivas) -->
+      <div class="flex items-center bg-[#060D17] p-1 rounded-2xl border border-white/10 text-xs font-bold">
+        <button id="stationTabStructure" onclick="switchStation('structure')" class="px-3.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-black transition flex items-center gap-1.5 cursor-pointer shadow">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <span>🏛️ 1. Estrutura & Aulas</span>
+        </button>
+        <button id="stationTabArtwork" onclick="switchStation('artwork')" class="px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-white transition flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="palette" class="w-3.5 h-3.5"></i>
+          <span>🎨 2. Estúdio de Artes do Curso</span>
         </button>
       </div>
 
@@ -95,27 +105,25 @@ const completeHtml = `<!DOCTYPE html>
           <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline">Sincronizar Cloud</span>
         </button>
-        <a href="admin-alunos.html" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center gap-1.5">
+        <a href="admin-alunos.html" class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold transition flex items-center gap-1.5">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-          <span class="hidden md:inline">Admin Geral</span>
+          <span class="hidden lg:inline">Admin</span>
         </a>
-        <a href="portal.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950 font-bold transition flex items-center gap-1.5">
+        <a href="portal.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950 font-bold transition flex items-center gap-1.5">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          <span>Portal do Aluno ↗</span>
+          <span class="hidden sm:inline">Portal do Aluno ↗</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- ========================================== -->
-  <!-- 2. STUDIO 3-COLUMN WIDESCREEN WORKSPACE   -->
-  <!-- ========================================== -->
-  <main class="flex-1 max-w-[98vw] 2xl:max-w-[1920px] mx-auto w-full px-4 py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+  <!-- ======================================================== -->
+  <!-- ESTAÇÃO 1: 🏛️ ESTRUTURA PEDAGÓGICA & AULAS (3 COLUNAS)  -->
+  <!-- ======================================================== -->
+  <main id="stationStructure" class="station-view flex-1 max-w-[98vw] 2xl:max-w-[1920px] mx-auto w-full px-4 py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
 
-    <!-- ======================================================== -->
-    <!-- COLUNA 1: NAVEGAÇÃO & ÁRVORE HIERÁRQUICA (Lg: col-span-3)-->
-    <!-- ======================================================== -->
-    <section class="lg:col-span-3 bg-[#0A192F] border border-white/10 rounded-2xl p-4 flex flex-col h-[calc(100vh-80px)] overflow-hidden shadow-xl">
+    <!-- COLUNA 1: HIERARQUIA DO CURSO (Col-span-3) -->
+    <section class="lg:col-span-3 bg-[#0A192F] border border-white/10 rounded-2xl p-4 flex flex-col h-[calc(100vh-85px)] overflow-hidden shadow-xl">
       
       <!-- Section Header -->
       <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
@@ -151,10 +159,8 @@ const completeHtml = `<!DOCTYPE html>
       </div>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- COLUNA 2: EDITOR DE MÍDIA & METADADOS (Lg: col-span-5)   -->
-    <!-- ======================================================== -->
-    <section class="lg:col-span-5 bg-[#0A192F] border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col h-[calc(100vh-80px)] overflow-hidden shadow-xl">
+    <!-- COLUNA 2: EDITOR DE MÍDIA & METADADOS DA AULA (Col-span-5) -->
+    <section class="lg:col-span-5 bg-[#0A192F] border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col h-[calc(100vh-85px)] overflow-hidden shadow-xl">
       
       <!-- Editor Header -->
       <div class="pb-3 border-b border-white/10 flex items-center justify-between">
@@ -168,7 +174,6 @@ const completeHtml = `<!DOCTYPE html>
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- 1-Click Lesson Published Toggle Button -->
           <button type="button" onclick="toggleCurrentLessonPublished()" id="lessonPublishedTopBtn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer">
             <!-- 🟢 Publicada / 🟡 Rascunho -->
           </button>
@@ -179,7 +184,7 @@ const completeHtml = `<!DOCTYPE html>
         </div>
       </div>
 
-      <!-- Editor Form Fields (Zero Required Fields - Complete Freedom) -->
+      <!-- Editor Form Fields -->
       <form id="lessonEditorForm" onsubmit="handleSaveLesson(event)" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-1 py-3">
         <input type="hidden" id="lessonIdInput">
         <input type="hidden" id="lessonModuleIdInput">
@@ -197,7 +202,7 @@ const completeHtml = `<!DOCTYPE html>
           </div>
         </div>
 
-        <!-- Media Picker 1: Vídeo Masterclass (MP4) com Upload Direto -->
+        <!-- Media Picker 1: Vídeo Masterclass (MP4) -->
         <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
@@ -207,24 +212,23 @@ const completeHtml = `<!DOCTYPE html>
             <span id="videoUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum vídeo</span>
           </div>
 
-          <!-- Direct Upload Button, Manual URL Button & Delete from Cloud -->
           <div class="grid grid-cols-12 gap-2">
             <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
               <i data-lucide="upload" class="w-4 h-4"></i>
-              <span>Subir Vídeo (Mac / PC)</span>
+              <span>Subir Vídeo</span>
               <input type="file" accept="video/mp4,video/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'video')">
             </label>
             <button type="button" onclick="toggleManualUrl('video')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
               <i data-lucide="link" class="w-3.5 h-3.5"></i>
               <span>URL</span>
             </button>
-            <button type="button" onclick="handleDeleteMediaFromStorage('video')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir arquivo permanentemente do Storage e limpar da aula">
+            <button type="button" onclick="handleDeleteMediaFromStorage('video')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir arquivo do Storage e limpar">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
               <span>Excluir</span>
             </button>
           </div>
 
-          <!-- Progress Bar (Hidden by default) -->
+          <!-- Video Progress Bar -->
           <div id="videoProgressBarCont" class="hidden space-y-1.5 p-3 bg-white/5 rounded-xl border border-amber-400/30">
             <div class="flex items-center justify-between text-xs font-bold text-amber-300">
               <span id="videoProgressLabel">Enviando vídeo para a Nuvem...</span>
@@ -235,18 +239,18 @@ const completeHtml = `<!DOCTYPE html>
             </div>
           </div>
 
-          <!-- Video Preview Box -->
+          <!-- Video Preview -->
           <div id="videoPreviewCont" class="hidden space-y-2 pt-1">
             <video id="videoPreviewPlayer" controls class="w-full max-h-48 rounded-xl bg-black border border-white/20"></video>
           </div>
 
-          <!-- Manual URL Input Field (Collapsible) -->
+          <!-- Video URL Collapsible -->
           <div id="videoManualUrlCont" class="hidden space-y-1 pt-1">
             <input type="text" id="lessonVideoUrlInput" oninput="updateMediaPreviews()" placeholder="https://firebasestorage.googleapis.com/..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
           </div>
         </div>
 
-        <!-- Media Picker 2: Áudio da Aula (MP3 128kbps) com Upload Direto -->
+        <!-- Media Picker 2: Áudio da Aula (MP3 128kbps) -->
         <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
@@ -256,24 +260,23 @@ const completeHtml = `<!DOCTYPE html>
             <span id="audioUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum áudio</span>
           </div>
 
-          <!-- Direct Upload Button, Manual URL Button & Delete from Cloud -->
           <div class="grid grid-cols-12 gap-2">
             <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
               <i data-lucide="upload" class="w-4 h-4"></i>
-              <span>Subir Áudio (Mac / PC)</span>
+              <span>Subir Áudio</span>
               <input type="file" accept="audio/mp3,audio/mpeg,audio/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'audio')">
             </label>
             <button type="button" onclick="toggleManualUrl('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
               <i data-lucide="link" class="w-3.5 h-3.5"></i>
               <span>URL</span>
             </button>
-            <button type="button" onclick="handleDeleteMediaFromStorage('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir áudio permanentemente do Storage e limpar da aula">
+            <button type="button" onclick="handleDeleteMediaFromStorage('audio')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir áudio do Storage e limpar">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
               <span>Excluir</span>
             </button>
           </div>
 
-          <!-- Progress Bar (Hidden by default) -->
+          <!-- Audio Progress Bar -->
           <div id="audioProgressBarCont" class="hidden space-y-1.5 p-3 bg-white/5 rounded-xl border border-emerald-400/30">
             <div class="flex items-center justify-between text-xs font-bold text-emerald-300">
               <span id="audioProgressLabel">Enviando áudio para a Nuvem...</span>
@@ -284,12 +287,12 @@ const completeHtml = `<!DOCTYPE html>
             </div>
           </div>
 
-          <!-- Audio Preview Box -->
+          <!-- Audio Preview -->
           <div id="audioPreviewCont" class="hidden space-y-2 pt-1">
             <audio id="audioPreviewPlayer" controls class="w-full"></audio>
           </div>
 
-          <!-- Manual URL Input Field (Collapsible) -->
+          <!-- Audio URL Collapsible -->
           <div id="audioManualUrlCont" class="hidden space-y-1 pt-1">
             <input type="text" id="lessonAudioUrlInput" oninput="updateMediaPreviews()" placeholder="https://firebasestorage.googleapis.com/..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
           </div>
@@ -312,7 +315,8 @@ const completeHtml = `<!DOCTYPE html>
               <span>Upload PDF</span>
               <input type="file" accept="application/pdf" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'pdf')">
             </label>
-            <input type="text" id="lessonPdfUrlInput" placeholder="Material-PDF/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[10px] font-mono focus:outline-none">
+            <input type="text" id="lessonPdfUrlInput" oninput="updateMediaPreviews()" placeholder="Material-PDF/..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-[10px] font-mono focus:outline-none">
+            <p id="lessonPdfFallbackIndicator" class="text-[9px] text-slate-400 font-medium"></p>
           </div>
 
           <!-- Capa 1:1 -->
@@ -385,12 +389,10 @@ const completeHtml = `<!DOCTYPE html>
       </form>
     </section>
 
-    <!-- ======================================================== -->
-    <!-- COLUNA 3: ESTÚDIO DO AGENTE DE IA & PREVIEW (Lg: col-4)  -->
-    <!-- ======================================================== -->
-    <section class="lg:col-span-4 bg-[#0A192F] border border-white/10 rounded-2xl p-4 flex flex-col h-[calc(100vh-80px)] overflow-hidden shadow-xl">
+    <!-- COLUNA 3: ESTÚDIO DIDÁTICO IA & APOSTILA PDF (Col-span-4) -->
+    <section class="lg:col-span-4 bg-[#0A192F] border border-white/10 rounded-2xl p-4 flex flex-col h-[calc(100vh-85px)] overflow-hidden shadow-xl">
       
-      <!-- Studio Tabs (Agora com Aba PDF!) -->
+      <!-- Studio Tabs -->
       <div class="pb-3 border-b border-white/10 flex items-center justify-between gap-2">
         <div class="flex rounded-xl bg-white/5 p-1 border border-white/10 text-xs overflow-x-auto custom-scrollbar">
           <button onclick="switchAiTab('raw')" id="tabBtnRaw" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black transition whitespace-nowrap">
@@ -414,7 +416,7 @@ const completeHtml = `<!DOCTYPE html>
         </select>
       </div>
 
-      <!-- TAB 1: ROTEIRO BRUTO PARA O AGENTE DE IA -->
+      <!-- TAB 1: ROTEIRO BRUTO -->
       <div id="aiTabRaw" class="flex-1 flex flex-col pt-3 overflow-hidden">
         <div class="mb-2 flex items-center justify-between text-[11px] text-slate-400">
           <span>Cole as anotações, transcrição ou texto bruto do Leo:</span>
@@ -427,7 +429,7 @@ const completeHtml = `<!DOCTYPE html>
         </p>
       </div>
 
-      <!-- TAB 2: CONTEÚDO FORMATADO POLIDO (HTML) -->
+      <!-- TAB 2: HTML FORMATADO -->
       <div id="aiTabProcessed" class="hidden flex-1 flex flex-col pt-3 overflow-hidden">
         <div class="mb-2 flex items-center justify-between text-[11px] text-slate-400">
           <span>HTML didático gerado pelo Agente / Formatado:</span>
@@ -435,14 +437,14 @@ const completeHtml = `<!DOCTYPE html>
         <textarea id="lessonProcessedHtmlInput" placeholder="<div class='pedagogical-box'>...</div>" class="flex-1 w-full p-3.5 rounded-xl bg-[#060D17] border border-white/20 text-emerald-300 text-xs font-mono focus:border-amber-400 focus:outline-none leading-relaxed resize-none custom-scrollbar"></textarea>
       </div>
 
-      <!-- TAB 3: LIVE PREVIEW DO ALUNO -->
+      <!-- TAB 3: LIVE PREVIEW -->
       <div id="aiTabPreview" class="hidden flex-1 flex flex-col pt-3 overflow-y-auto custom-scrollbar">
         <div class="p-4 rounded-xl bg-amber-50/95 border-2 border-amber-200 text-slate-900 shadow text-xs space-y-3" id="previewContainer">
           <!-- Injected via JS -->
         </div>
       </div>
 
-      <!-- TAB 4: GERADOR DE APOSTILA EM PDF COM CORES DO CURSO -->
+      <!-- TAB 4: GERADOR DE APOSTILA EM PDF -->
       <div id="aiTabPdf" class="hidden flex-1 flex flex-col pt-3 overflow-y-auto custom-scrollbar space-y-3">
         <div class="p-3 bg-white/5 border border-white/10 rounded-xl space-y-2">
           <div class="flex items-center justify-between">
@@ -455,7 +457,7 @@ const completeHtml = `<!DOCTYPE html>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Modelo da Apostila</label>
+              <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Modelo</label>
               <select id="pdfTemplateTypeSelect" class="w-full bg-[#112240] border border-white/20 text-white font-bold text-xs rounded-lg p-2 focus:outline-none">
                 <option value="generic">📘 Curso Geral (2 a N págs)</option>
                 <option value="magic_story">✨ Magic Story (3 Arquétipos)</option>
@@ -471,7 +473,6 @@ const completeHtml = `<!DOCTYPE html>
           </div>
         </div>
 
-        <!-- Action Bar: Print / Link -->
         <div class="flex items-center justify-between gap-2 pt-1">
           <button type="button" onclick="printGeneratedPdf()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs flex items-center gap-1.5 cursor-pointer">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i>
@@ -483,18 +484,235 @@ const completeHtml = `<!DOCTYPE html>
           </button>
         </div>
 
-        <!-- Preview Box -->
         <div id="pdfPreviewContainer" class="p-4 bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 min-h-[320px] text-xs">
           <p class="text-slate-500 italic text-center py-8">Clique em "Gerar Apostila" para diagramar o roteiro desta aula no padrão A4 com a paleta do curso.</p>
         </div>
       </div>
-
     </section>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- ESTAÇÃO 2: 🎨 ESTÚDIO DE ARTES DO CURSO (4 FORMATOS)    -->
+  <!-- ======================================================== -->
+  <main id="stationArtwork" class="station-view hidden flex-1 max-w-[98vw] 2xl:max-w-[1920px] mx-auto w-full px-4 py-4 space-y-4">
+    
+    <!-- Top Action Strip -->
+    <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-mono font-bold text-[10px] uppercase tracking-wider border border-amber-500/30">
+            ESTÚDIO DE ARTES VISUAIS
+          </span>
+          <span class="text-xs text-slate-400">•</span>
+          <span id="artworkActiveCourseName" class="text-xs font-bold text-white">Carregando curso...</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+          Gerador dos 4 Formatos Oficiais do Curso
+        </h2>
+        <p class="text-xs text-slate-300 max-w-3xl leading-relaxed">
+          Gere a Capa Quadrada 1:1, o Banner Panorâmico 16:9, a Miniatura das Aulas e a Versão Vertical 9:16 com a paleta e tipografia oficial. Aplique em cascata para todo o curso com 1 clique.
+        </p>
+      </div>
+
+      <!-- Master Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2 shrink-0">
+        <button onclick="handleCascadeBindArtworks()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer" title="Aplica a arte gerada na Capa 1:1 do Curso, Banner 16:9 e Miniaturas das Aulas no Firestore">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span>⚡ Aplicar em Cascata no Curso & Aulas</span>
+        </button>
+
+        <button onclick="handleBindCourseCoverOnly()" class="px-3.5 py-2.5 rounded-2xl bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-xs transition border border-amber-500/40 flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="bookmark" class="w-4 h-4"></i>
+          <span>📌 Definir apenas Capa 1:1</span>
+        </button>
+
+        <button onclick="handleDownloadAllArtworksZip()" class="px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>📦 Baixar Imagens</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Workspace: Controles à Esquerda (Col-4) | Canvases à Direita (Col-8) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+      
+      <!-- Controles Visuais -->
+      <div class="lg:col-span-4 space-y-4">
+        
+        <!-- 1. Fonte da Imagem -->
+        <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="image" class="w-3.5 h-3.5"></i>
+              <span>1. Imagem Base do Curso</span>
+            </h3>
+            <span class="text-[10px] text-slate-400">Origem</span>
+          </div>
+
+          <!-- Tabs de Origem -->
+          <div class="grid grid-cols-2 gap-1 bg-[#060D17] p-1 rounded-xl border border-white/5 text-[10px] font-bold">
+            <button type="button" id="artSourceTabUpload" onclick="switchArtSourceTab('upload')" class="py-1 px-2 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition">
+              Upload do Mac / PC
+            </button>
+            <button type="button" id="artSourceTabLibrary" onclick="switchArtSourceTab('library')" class="py-1 px-2 rounded-lg text-slate-400 hover:text-white text-center transition">
+              Biblioteca do Ecossistema
+            </button>
+          </div>
+
+          <div id="artPanelUpload" class="space-y-2">
+            <label class="flex flex-col items-center justify-center border-2 border-dashed border-white/20 hover:border-amber-400/60 rounded-2xl p-4 text-center cursor-pointer transition bg-white/5 hover:bg-white/10">
+              <i data-lucide="upload-cloud" class="w-6 h-6 text-amber-400 mb-1"></i>
+              <span class="text-xs font-bold text-white">Subir Imagem de Fundo</span>
+              <span class="text-[10px] text-slate-400 mt-0.5">JPG, PNG ou WebP em alta resolução</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleArtworkBaseUpload(this.files[0])">
+            </label>
+          </div>
+
+          <div id="artPanelLibrary" class="hidden space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300">Escolher Fundo do Acervo:</label>
+            <select id="artLibrarySelect" onchange="handleSelectArtLibrary(this.value)" class="w-full bg-[#112240] border border-white/20 text-white text-xs font-semibold rounded-xl p-2 focus:border-amber-400 focus:outline-none">
+              <option value="assets/images/cover-dates-and-times-square.jpg">📅 Dates and Times (3D Glass Calendar & Clock)</option>
+              <option value="assets/images/cover-english-quickstart.jpg">✈️ English QuickStart (Viajante 35mm)</option>
+              <option value="assets/images/cover-magic-stories-legacy.jpg">☕ Magic Stories Legacy (Cinema 35mm)</option>
+              <option value="assets/images/leonardo-leite.png">🏛️ Professor Leonardo Leite (Foto Oficial)</option>
+              <option value="assets/images/cover-default-aef.jpg">🎓 Capa Padrão AgoraEuFalo</option>
+            </select>
+          </div>
+
+          <!-- Preview Atual -->
+          <div class="pt-1 flex items-center gap-2">
+            <img id="artBaseThumbPreview" src="assets/images/cover-dates-and-times-square.jpg" alt="Preview Base" class="w-12 h-12 rounded-xl object-cover border border-white/20 bg-black shrink-0">
+            <div class="truncate text-[11px]">
+              <span class="text-slate-400 block text-[9px] uppercase font-bold">Fundo Selecionado</span>
+              <span id="artBaseThumbLabel" class="font-bold text-white truncate block">cover-dates-and-times-square.jpg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Textos & Marca -->
+        <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="type" class="w-3.5 h-3.5"></i>
+              <span>2. Textos & Tipografia</span>
+            </h3>
+            <span class="text-[10px] text-slate-400">Branding</span>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título Principal do Curso</label>
+            <input type="text" id="artTitleInput" oninput="renderAllCourseCanvases()" placeholder="Ex: Dates and Times" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-bold focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Subtítulo / Promessa</label>
+            <input type="text" id="artSubtitleInput" oninput="renderAllCourseCanvases()" placeholder="Ex: Curso Rápido • Datas e Horas em Inglês" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Badge Superior</label>
+              <input type="text" id="artBadgeInput" oninput="renderAllCourseCanvases()" value="CURSO LIBERADO" class="w-full px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none uppercase">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Paleta de Destaque</label>
+              <select id="artThemeColorSelect" onchange="renderAllCourseCanvases()" class="w-full px-2.5 py-1.5 rounded-lg bg-[#112240] border border-white/20 text-white text-xs font-bold focus:outline-none">
+                <option value="ruby">🔴 Rubi Quente</option>
+                <option value="amber" selected>🟡 Âmbar / Ouro</option>
+                <option value="cobalt">🔵 Azul Cobalto</option>
+                <option value="emerald">🟢 Verde Esmeralda</option>
+                <option value="indigo">🟣 Índigo / Roxo</option>
+                <option value="slate">⚪ Deep Slate</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Grade dos 4 Formatos do Curso (Col-8) -->
+      <div class="lg:col-span-8 space-y-4">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- FORMATO 1: Capa 1:1 Quadrada -->
+          <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                <span>💎 Capa Quadrada 1:1</span>
+                <span class="text-[9px] font-mono text-slate-400">(600 × 600)</span>
+              </span>
+              <button onclick="downloadSingleCanvas('canvas_art_1x1', 'Capa_1x1')" class="text-xs text-slate-300 hover:text-white flex items-center gap-1">
+                <i data-lucide="download" class="w-3 h-3"></i><span>Baixar</span>
+              </button>
+            </div>
+            <div class="aspect-square w-full max-w-[280px] mx-auto rounded-xl overflow-hidden border border-white/20 bg-black shadow-xl">
+              <canvas id="canvas_art_1x1" width="600" height="600" class="w-full h-full object-cover"></canvas>
+            </div>
+            <p class="text-[10px] text-slate-400 text-center">Usada no Portal do Aluno, Player de Áudio e Vitrine.</p>
+          </div>
+
+          <!-- FORMATO 2: Banner Panorâmico 16:9 -->
+          <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                <span>🎬 Banner Topo 16:9</span>
+                <span class="text-[9px] font-mono text-slate-400">(1280 × 720)</span>
+              </span>
+              <button onclick="downloadSingleCanvas('canvas_art_16x9', 'Banner_16x9')" class="text-xs text-slate-300 hover:text-white flex items-center gap-1">
+                <i data-lucide="download" class="w-3 h-3"></i><span>Baixar</span>
+              </button>
+            </div>
+            <div class="aspect-video w-full rounded-xl overflow-hidden border border-white/20 bg-black shadow-xl">
+              <canvas id="canvas_art_16x9" width="1280" height="720" class="w-full h-full object-cover"></canvas>
+            </div>
+            <p class="text-[10px] text-slate-400 text-center">Usado no Topo da Página do Curso (curso.html).</p>
+          </div>
+
+          <!-- FORMATO 3: Miniatura da Aula 16:9 -->
+          <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                <span>📱 Miniatura da Aula 16:9</span>
+                <span class="text-[9px] font-mono text-slate-400">(640 × 360)</span>
+              </span>
+              <button onclick="downloadSingleCanvas('canvas_art_thumb', 'Thumb_Aula')" class="text-xs text-slate-300 hover:text-white flex items-center gap-1">
+                <i data-lucide="download" class="w-3 h-3"></i><span>Baixar</span>
+              </button>
+            </div>
+            <div class="aspect-video w-full rounded-xl overflow-hidden border border-white/20 bg-black shadow-xl">
+              <canvas id="canvas_art_thumb" width="640" height="360" class="w-full h-full object-cover"></canvas>
+            </div>
+            <p class="text-[10px] text-slate-400 text-center">Usada no Acordeão de Aulas e Player de Vídeo.</p>
+          </div>
+
+          <!-- FORMATO 4: Vertical 9:16 -->
+          <div class="p-4 rounded-2xl bg-[#0A192F] border border-white/10 shadow-lg space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                <span>📲 Vertical 9:16</span>
+                <span class="text-[9px] font-mono text-slate-400">(720 × 1280)</span>
+              </span>
+              <button onclick="downloadSingleCanvas('canvas_art_story', 'Story_9x16')" class="text-xs text-slate-300 hover:text-white flex items-center gap-1">
+                <i data-lucide="download" class="w-3 h-3"></i><span>Baixar</span>
+              </button>
+            </div>
+            <div class="aspect-[9/16] w-full max-w-[160px] mx-auto rounded-xl overflow-hidden border border-white/20 bg-black shadow-xl">
+              <canvas id="canvas_art_story" width="720" height="1280" class="w-full h-full object-cover"></canvas>
+            </div>
+            <p class="text-[10px] text-slate-400 text-center">Usado no App Mobile e Stories.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </main>
 
   <!-- ========================================== -->
-  <!-- 3. MODAL: CRIAR / EDITAR CURSO             -->
+  <!-- MODAL: CRIAR / EDITAR CURSO                -->
   <!-- ========================================== -->
   <div id="courseModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-white relative max-h-[90vh] overflow-y-auto">
@@ -506,43 +724,42 @@ const completeHtml = `<!DOCTYPE html>
         <input type="hidden" id="courseModalId">
         <div>
           <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Título do Curso</label>
-          <input type="text" id="courseModalTitleInput" placeholder="Ex: Projeto AgoraEuFalo 2026" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
+          <input type="text" id="courseModalTitleInput" placeholder="Ex: Dates and Times - Curso Rápido" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:border-amber-400 focus:outline-none">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Slug / ID</label>
-            <input type="text" id="courseModalSlugInput" placeholder="projeto-aef-2026" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+            <input type="text" id="courseModalSlugInput" placeholder="dates-and-times" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
           </div>
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Plano Requerido</label>
             <select id="courseModalTierInput" class="w-full px-3.5 py-2 rounded-xl bg-[#112240] border border-white/20 text-white text-xs font-semibold focus:outline-none">
-              <option value="vip">👑 Mentoria VIP</option>
-              <option value="club_anual">⭐ Club Anual</option>
-              <option value="lifetime">💎 Vitalício Master</option>
               <option value="free">🌱 Aberto / Grátis</option>
+              <option value="club_anual">⭐ Club Anual</option>
+              <option value="vip">👑 Mentoria VIP</option>
+              <option value="lifetime">💎 Vitalício Master</option>
             </select>
           </div>
         </div>
 
-        <!-- Paleta de Cores Temática do Curso -->
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Cor Tema do Curso (Paleta da Apostila em PDF)</label>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Paleta Temática do Curso</label>
           <div class="grid grid-cols-6 gap-1.5 mb-2">
-            <button type="button" onclick="selectCoursePalette('cobalt', '#1A56DB')" class="h-7 rounded-lg bg-[#1A56DB] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Azul Cobalto">Cobalto</button>
-            <button type="button" onclick="selectCoursePalette('emerald', '#047857')" class="h-7 rounded-lg bg-[#047857] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Verde Esmeralda">Verde</button>
-            <button type="button" onclick="selectCoursePalette('amber', '#C68A36')" class="h-7 rounded-lg bg-[#C68A36] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Âmbar / Ouro">Âmbar</button>
-            <button type="button" onclick="selectCoursePalette('ruby', '#E11D48')" class="h-7 rounded-lg bg-[#E11D48] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Rubi Quente">Rubi</button>
-            <button type="button" onclick="selectCoursePalette('indigo', '#6366F1')" class="h-7 rounded-lg bg-[#6366F1] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Índigo">Índigo</button>
-            <button type="button" onclick="selectCoursePalette('slate', '#1E293B')" class="h-7 rounded-lg bg-[#1E293B] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow" title="Deep Slate">Slate</button>
+            <button type="button" onclick="selectCoursePalette('ruby', '#E11D48')" class="h-7 rounded-lg bg-[#E11D48] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow">Rubi</button>
+            <button type="button" onclick="selectCoursePalette('amber', '#C68A36')" class="h-7 rounded-lg bg-[#C68A36] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow">Âmbar</button>
+            <button type="button" onclick="selectCoursePalette('cobalt', '#1A56DB')" class="h-7 rounded-lg bg-[#1A56DB] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow">Cobalto</button>
+            <button type="button" onclick="selectCoursePalette('emerald', '#047857')" class="h-7 rounded-lg bg-[#047857] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow">Verde</button>
+            <button type="button" onclick="selectCoursePalette('indigo', '#6366F1')" class="h-7 rounded-lg bg-[#6366F1] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow">Índigo</button>
+            <button type="button" onclick="selectCoursePalette('slate', '#1E293B')" class="h-7 rounded-lg bg-[#1E293B] border border-white/30 hover:scale-105 transition flex items-center justify-center text-[9px] font-bold text-white shadow">Slate</button>
           </div>
-          <input type="text" id="courseModalThemeColorInput" value="amber" placeholder="amber ou #1A56DB" class="w-full px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+          <input type="text" id="courseModalThemeColorInput" value="amber" placeholder="amber ou ruby" class="w-full px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa do Curso</label>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Capa Principal do Curso (1:1)</label>
           <div class="flex items-center gap-2">
-            <input type="text" id="courseModalCoverInput" placeholder="assets/images/cover-default-aef.jpg" class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
-            <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer">
+            <input type="text" id="courseModalCoverInput" placeholder="assets/images/cover-..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+            <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shrink-0">
               <span>Upload</span>
               <input type="file" accept="image/*" class="hidden" onchange="handleModalCoverUpload(this.files[0])">
             </label>
@@ -564,10 +781,10 @@ const completeHtml = `<!DOCTYPE html>
   </div>
 
   <!-- ========================================== -->
-  <!-- 4. MODAL: CRIAR / EDITAR MÓDULO            -->
+  <!-- MODAL: CRIAR / EDITAR MÓDULO               -->
   <!-- ========================================== -->
   <div id="moduleModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 shadow-2xl text-white relative">
+    <div class="bg-[#0A192F] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 shadow-2xl text-white relative max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
         <h3 id="moduleModalTitle" class="font-bold text-base text-white">Novo Módulo / Ciclo</h3>
         <button onclick="closeModuleModal()" class="text-slate-400 hover:text-white p-1">✕</button>
@@ -581,7 +798,7 @@ const completeHtml = `<!DOCTYPE html>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Identificador (ID)</label>
-            <input type="text" id="moduleModalIdInput" placeholder="ciclo-01-fundamentos" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+            <input type="text" id="moduleModalIdInput" placeholder="ciclo-01" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
           </div>
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Ordem</label>
@@ -589,7 +806,7 @@ const completeHtml = `<!DOCTYPE html>
           </div>
         </div>
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Apostila Principal / Livreto do Módulo (PDF Fallback)</label>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Apostila Completa / Livreto do Módulo (PDF Fallback)</label>
           <div class="flex items-center gap-2">
             <input type="text" id="moduleModalPdfUrlInput" placeholder="https://firebasestorage... ou Material-PDF/..." class="flex-1 px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
             <label class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shrink-0">
@@ -630,11 +847,16 @@ const completeHtml = `<!DOCTYPE html>
   <script>
     // In-memory Course Hierarchy Store
     let ALL_COURSES = {};
-    let activeCourseId = "aef-experience";
+    let activeCourseId = "dtc_curso";
     let activeModuleId = null;
     let activeLessonId = null;
+    let currentStation = "structure";
     let currentAiTab = "raw";
     let LAST_GENERATED_PDF_HTML = "";
+
+    let currentArtBaseImage = new Image();
+    currentArtBaseImage.crossOrigin = "anonymous";
+    currentArtBaseImage.src = "assets/images/cover-dates-and-times-square.jpg";
 
     // Resilient Direct REST + SDK Persistence Wrappers
     async function directSaveCourseCloud(courseObj) {
@@ -707,13 +929,9 @@ const completeHtml = `<!DOCTYPE html>
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      // 1. Inicializa os dados com prioridade para cache local e sincronização remota imediata
       await initializeStudioData();
-
-      // 2. Cria ícones Lucide
       if (window.lucide) lucide.createIcons();
 
-      // 3. Validação de autenticação em segundo plano se habilitada
       if (window.aefPortalAuth) {
         try {
           await window.aefPortalAuth.requireAuth({ requireAdmin: true, redirectUrl: 'login.html' });
@@ -721,10 +939,13 @@ const completeHtml = `<!DOCTYPE html>
           console.warn("Auth check:", e);
         }
       }
+
+      currentArtBaseImage.onload = () => {
+        renderAllCourseCanvases();
+      };
     });
 
     async function initializeStudioData() {
-      // 1. Renderiza INSTANTANEAMENTE com a base local para ZERO atraso visual
       ALL_COURSES = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY || {}));
       
       const savedCourseId = localStorage.getItem('aef_admin_active_course_id');
@@ -739,8 +960,8 @@ const completeHtml = `<!DOCTYPE html>
 
       renderCourseSwitcher();
       renderHierarchyTree();
+      updateArtworkControlsFromCourse();
 
-      // 2. Busca atualizações do Firestore em tempo real (SDK + REST)
       try {
         if (window.aefCloudSync) {
           await window.aefCloudSync.init();
@@ -756,11 +977,35 @@ const completeHtml = `<!DOCTYPE html>
             }
             renderCourseSwitcher();
             renderHierarchyTree();
+            updateArtworkControlsFromCourse();
           }
         }
       } catch (err) {
         console.warn("⚠️ Aviso na atualização remota:", err);
       }
+    }
+
+    // ==========================================
+    // STATION SWITCHER (2 ESTAÇÕES)
+    // ==========================================
+    function switchStation(st) {
+      currentStation = st;
+      document.getElementById("stationStructure").classList.toggle("hidden", st !== "structure");
+      document.getElementById("stationArtwork").classList.toggle("hidden", st !== "artwork");
+
+      document.getElementById("stationTabStructure").className = st === "structure" 
+        ? "px-3.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-black transition flex items-center gap-1.5 cursor-pointer shadow"
+        : "px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-white transition flex items-center gap-1.5 cursor-pointer";
+
+      document.getElementById("stationTabArtwork").className = st === "artwork"
+        ? "px-3.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-black transition flex items-center gap-1.5 cursor-pointer shadow"
+        : "px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-white transition flex items-center gap-1.5 cursor-pointer";
+
+      if (st === "artwork") {
+        updateArtworkControlsFromCourse();
+        renderAllCourseCanvases();
+      }
+      if (window.lucide) lucide.createIcons();
     }
 
     function renderCourseSwitcher() {
@@ -782,15 +1027,16 @@ const completeHtml = `<!DOCTYPE html>
       activeModuleId = null;
       activeLessonId = null;
       renderHierarchyTree();
+      updateArtworkControlsFromCourse();
+      if (currentStation === "artwork") renderAllCourseCanvases();
     }
 
     function renderHierarchyTree() {
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 
-      // Update Summary Card
       document.getElementById("treeCourseTitle").innerText = course.title || activeCourseId;
-      document.getElementById("treeCourseBadge").innerText = (course.tierRequired || 'vip').toUpperCase();
+      document.getElementById("treeCourseBadge").innerText = (course.tierRequired || 'free').toUpperCase();
 
       const publishBtn = document.getElementById("coursePublishBadgeBtn");
       if (publishBtn) {
@@ -799,12 +1045,6 @@ const completeHtml = `<!DOCTYPE html>
           ? "px-2 py-0.5 rounded-full text-[10px] font-black uppercase transition flex items-center gap-1 cursor-pointer bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
           : "px-2 py-0.5 rounded-full text-[10px] font-black uppercase transition flex items-center gap-1 cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/40";
         publishBtn.innerHTML = isPub ? '<span>🟢</span><span>Publicado</span>' : '<span>🟡</span><span>Rascunho</span>';
-      }
-
-      const themeInd = document.getElementById("pdfCourseThemeIndicator");
-      if (themeInd) {
-        const pal = window.AEFPdfGenerator ? window.AEFPdfGenerator.resolvePalette(course.themeColor) : { name: 'Âmbar' };
-        themeInd.innerText = \`Paleta: \${pal.name || course.themeColor || 'Âmbar'}\`;
       }
 
       const container = document.getElementById("hierarchyTreeContainer");
@@ -838,7 +1078,7 @@ const completeHtml = `<!DOCTYPE html>
 
               <!-- Module Status & Actions -->
               <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="event.stopPropagation(); toggleModulePublished('\${mod.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 \${isModPub ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}" title="Clique para alternar o status do Módulo">
+                <button onclick="event.stopPropagation(); toggleModulePublished('\${mod.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 \${isModPub ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}" title="Alternar status do Módulo">
                   \${isModPub ? '🟢' : '🟡'}
                 </button>
                 <button onclick="openNewLessonForModule('\${mod.id}')" class="p-1 px-1.5 rounded bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition text-[10px] font-bold" title="Adicionar Aula neste Módulo">
@@ -859,7 +1099,7 @@ const completeHtml = `<!DOCTYPE html>
                 return \`
                   <div onclick="selectLessonForEdit('\${les.id}', '\${mod.id}')" class="p-2 rounded-lg \${isSelected ? 'bg-amber-500 text-slate-950 font-bold' : 'hover:bg-white/10 text-slate-200'} transition cursor-pointer flex items-center justify-between gap-2 text-xs">
                     <div class="truncate flex items-center gap-1.5">
-                      <span class="text-[10px]" title="\${isLesPub ? 'Aula Publicada' : 'Aula em Rascunho (Despublicada)'}">\${statusDot}</span>
+                      <span class="text-[10px]" title="\${isLesPub ? 'Aula Publicada' : 'Aula em Rascunho'}">\${statusDot}</span>
                       <span class="truncate text-[11px] \${!isLesPub && !isSelected ? 'text-slate-400 italic' : ''}">\${les.title || 'Aula sem título'}</span>
                     </div>
                     <div class="flex items-center gap-1 shrink-0 text-[10px]">
@@ -878,7 +1118,6 @@ const completeHtml = `<!DOCTYPE html>
 
       if (window.lucide) lucide.createIcons();
 
-      // Auto-select first lesson if none selected
       if (!activeLessonId && modules.length > 0 && modules[0].lessons?.length > 0) {
         selectLessonForEdit(modules[0].lessons[0].id, modules[0].id);
       }
@@ -897,7 +1136,6 @@ const completeHtml = `<!DOCTYPE html>
       }
       if (!foundLesson) return;
 
-      // Populate Form Fields
       document.getElementById("editorTitle").innerText = foundLesson.title || "Editar Aula";
       document.getElementById("lessonIdInput").value = foundLesson.id;
       document.getElementById("lessonModuleIdInput").value = moduleId;
@@ -916,7 +1154,6 @@ const completeHtml = `<!DOCTYPE html>
       document.getElementById("lessonPublishedInput").checked = isPub;
       updateLessonPublishedUi(isPub);
 
-      // AI Fields
       document.getElementById("lessonRawScriptInput").value = foundLesson.rawScript || "";
       document.getElementById("lessonProcessedHtmlInput").value = foundLesson.processedContentHtml || "";
       document.getElementById("lessonAiStatusSelect").value = foundLesson.aiStatus || "draft_pending";
@@ -965,7 +1202,7 @@ const completeHtml = `<!DOCTYPE html>
       }
 
       renderHierarchyTree();
-      showToast(les.published ? "🟢 Aula marcada como PUBLICADA!" : "🟡 Aula movida para RASCUNHO (Despublicada)!");
+      showToast(les.published ? "🟢 Aula marcada como PUBLICADA!" : "🟡 Aula movida para RASCUNHO!");
     }
 
     async function toggleCurrentCoursePublished() {
@@ -982,7 +1219,7 @@ const completeHtml = `<!DOCTYPE html>
 
       renderCourseSwitcher();
       renderHierarchyTree();
-      showToast(course.published ? "🟢 Curso marcado como PUBLICADO!" : "🟡 Curso movido para RASCUNHO (Despublicado)!");
+      showToast(course.published ? "🟢 Curso marcado como PUBLICADO!" : "🟡 Curso movido para RASCUNHO!");
     }
 
     async function toggleModulePublished(moduleId) {
@@ -1019,8 +1256,8 @@ const completeHtml = `<!DOCTYPE html>
         order: nextOrder,
         videoUrl: "",
         audioUrl: "",
-        thumbnailUrl: "assets/images/leonardo-leite.png",
-        artworkUrl: "assets/images/cover-default-aef.jpg",
+        thumbnailUrl: "assets/images/thumbs/dtc_intro_thumb.jpg",
+        artworkUrl: "assets/images/cover-dates-and-times-square.jpg",
         pdfUrl: "",
         goldenTip: "",
         rawScript: "",
@@ -1071,7 +1308,6 @@ const completeHtml = `<!DOCTYPE html>
         mod.lessons.push(foundLesson);
       }
 
-      // Update in memory (Zero requirements, all gentle defaults)
       const inputTitle = document.getElementById("lessonTitleInput").value.trim();
       foundLesson.title = inputTitle || "Aula sem título";
       foundLesson.order = parseInt(document.getElementById("lessonOrderInput").value) || 1;
@@ -1091,7 +1327,6 @@ const completeHtml = `<!DOCTYPE html>
       renderHierarchyTree();
       updatePreviewHtml();
 
-      // Persist to Cloud Firestore with SDK + REST fallback
       try {
         await directSaveLessonCloud(activeCourseId, moduleId, foundLesson);
       } catch (err) {
@@ -1123,7 +1358,6 @@ const completeHtml = `<!DOCTYPE html>
       showToast("Aula excluída com sucesso.");
     }
 
-    // Direct Native File Upload Handler
     async function handleDirectFileUpload(file, type) {
       if (!file) return;
 
@@ -1158,7 +1392,7 @@ const completeHtml = `<!DOCTYPE html>
       if (barContId) {
         document.getElementById(barContId)?.classList.remove('hidden');
       }
-      showToast(\`Enviando "\${file.name}" (\${(file.size / (1024*1024)).toFixed(1)} MB) para a Nuvem...\`);
+      showToast(\`Enviando "\${file.name}" para a Nuvem...\`);
 
       try {
         if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
@@ -1283,6 +1517,26 @@ const completeHtml = `<!DOCTYPE html>
         if (aBadge) { aBadge.innerText = "Nenhum áudio"; aBadge.className = "text-[10px] font-mono text-slate-400"; }
         if (aCont) aCont.classList.add("hidden");
       }
+
+      // PDF Fallback Indicator
+      const pUrl = document.getElementById("lessonPdfUrlInput")?.value?.trim() || "";
+      const pFallback = document.getElementById("lessonPdfFallbackIndicator");
+      if (pFallback) {
+        if (pUrl) {
+          pFallback.innerText = "📄 Apostila individual vinculada.";
+          pFallback.className = "text-[9px] text-emerald-400 font-medium";
+        } else {
+          const mod = (ALL_COURSES[activeCourseId]?.modules || []).find(m => m.id === activeModuleId);
+          const modPdf = mod?.pdfUrl || (mod?.lessons?.find(l => l.pdfUrl)?.pdfUrl) || "";
+          if (modPdf) {
+            pFallback.innerText = "ℹ️ Usando Livreto do Módulo como fallback.";
+            pFallback.className = "text-[9px] text-amber-300 font-medium";
+          } else {
+            pFallback.innerText = "ℹ️ Nenhum PDF nesta aula nem no módulo.";
+            pFallback.className = "text-[9px] text-slate-400 font-medium";
+          }
+        }
+      }
     }
 
     function toggleManualUrl(type) {
@@ -1339,9 +1593,6 @@ const completeHtml = `<!DOCTYPE html>
       \`;
     }
 
-    // ==========================================
-    // PDF GENERATOR CONTROLLER
-    // ==========================================
     function generateLessonPdfPreview() {
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
@@ -1395,7 +1646,230 @@ const completeHtml = `<!DOCTYPE html>
       showToast(\`✅ Apostila vinculada e salva na aula: \${generatedUrl}\`);
     }
 
-    // Modal Helpers (Course & Module)
+    // ==========================================
+    // ESTÚDIO DE ARTES VISUAIS DO CURSO (CANVAS)
+    // ==========================================
+    function updateArtworkControlsFromCourse() {
+      const course = ALL_COURSES[activeCourseId];
+      if (!course) return;
+
+      const nameEl = document.getElementById("artworkActiveCourseName");
+      if (nameEl) nameEl.innerText = course.title || activeCourseId;
+
+      const titleInput = document.getElementById("artTitleInput");
+      if (titleInput && (!titleInput.value || titleInput.value === "Dates and Times")) {
+        titleInput.value = course.title || "Dates and Times";
+      }
+
+      const badgeInput = document.getElementById("artBadgeInput");
+      if (badgeInput) badgeInput.value = (course.badge || "CURSO LIBERADO").toUpperCase();
+
+      const colorSelect = document.getElementById("artThemeColorSelect");
+      if (colorSelect && course.themeColor) colorSelect.value = course.themeColor;
+
+      if (course.coverImageUrl && course.coverImageUrl.startsWith("http")) {
+        currentArtBaseImage.src = course.coverImageUrl;
+      }
+    }
+
+    function switchArtSourceTab(tab) {
+      document.getElementById("artPanelUpload").classList.toggle("hidden", tab !== "upload");
+      document.getElementById("artPanelLibrary").classList.toggle("hidden", tab !== "library");
+
+      document.getElementById("artSourceTabUpload").className = tab === "upload"
+        ? "py-1 px-2 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition"
+        : "py-1 px-2 rounded-lg text-slate-400 hover:text-white text-center transition";
+
+      document.getElementById("artSourceTabLibrary").className = tab === "library"
+        ? "py-1 px-2 rounded-lg bg-amber-500 text-slate-950 font-black text-center transition"
+        : "py-1 px-2 rounded-lg text-slate-400 hover:text-white text-center transition";
+    }
+
+    function handleArtworkBaseUpload(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentArtBaseImage.src = e.target.result;
+        document.getElementById("artBaseThumbPreview").src = e.target.result;
+        document.getElementById("artBaseThumbLabel").innerText = file.name;
+        showToast(\`Fundo "\${file.name}" carregado no estúdio!\`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleSelectArtLibrary(url) {
+      currentArtBaseImage.src = url;
+      document.getElementById("artBaseThumbPreview").src = url;
+      document.getElementById("artBaseThumbLabel").innerText = url.split("/").pop();
+      showToast("Fundo da biblioteca selecionado!");
+    }
+
+    function renderAllCourseCanvases() {
+      const title = document.getElementById("artTitleInput")?.value?.trim() || "Dates and Times";
+      const subtitle = document.getElementById("artSubtitleInput")?.value?.trim() || "Curso Rápido";
+      const badge = (document.getElementById("artBadgeInput")?.value?.trim() || "CURSO LIBERADO").toUpperCase();
+      const themeColor = document.getElementById("artThemeColorSelect")?.value || "amber";
+
+      let primaryHex = "#F59E0B"; // Amber
+      if (themeColor === "ruby") primaryHex = "#E11D48";
+      else if (themeColor === "cobalt") primaryHex = "#1A56DB";
+      else if (themeColor === "emerald") primaryHex = "#10B981";
+      else if (themeColor === "indigo") primaryHex = "#6366F1";
+      else if (themeColor === "slate") primaryHex = "#94A3B8";
+
+      // 1. Capa 1:1 (600x600)
+      drawArtworkCanvas("canvas_art_1x1", 600, 600, {
+        title, subtitle, badge, primaryHex, showBadge: true, isSquare: true
+      });
+
+      // 2. Banner 16:9 (1280x720)
+      drawArtworkCanvas("canvas_art_16x9", 1280, 720, {
+        title, subtitle, badge, primaryHex, showBadge: true, isWide: true
+      });
+
+      // 3. Thumb Aula 16:9 (640x360)
+      drawArtworkCanvas("canvas_art_thumb", 640, 360, {
+        title: "Aula 01 • " + title, subtitle: "Masterclass & Treino", badge, primaryHex, showBadge: false, isThumb: true
+      });
+
+      // 4. Story 9:16 (720x1280)
+      drawArtworkCanvas("canvas_art_story", 720, 1280, {
+        title, subtitle, badge, primaryHex, showBadge: true, isVertical: true
+      });
+    }
+
+    function drawArtworkCanvas(canvasId, width, height, opts) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      // Fundo Base
+      ctx.fillStyle = "#0A192F";
+      ctx.fillRect(0, 0, width, height);
+
+      // Desenha imagem de fundo se carregada
+      if (currentArtBaseImage.complete && currentArtBaseImage.naturalWidth > 0) {
+        const iw = currentArtBaseImage.naturalWidth;
+        const ih = currentArtBaseImage.naturalHeight;
+        const scale = Math.max(width / iw, height / ih);
+        const nw = iw * scale;
+        const nh = ih * scale;
+        const nx = (width - nw) / 2;
+        const ny = (height - nh) / 2;
+        ctx.drawImage(currentArtBaseImage, nx, ny, nw, nh);
+      }
+
+      // Gradiente de Escurecimento Cinematográfico
+      const grad = ctx.createLinearGradient(0, height * 0.4, 0, height);
+      grad.addColorStop(0, "rgba(10, 25, 47, 0.2)");
+      grad.addColorStop(0.7, "rgba(6, 13, 23, 0.85)");
+      grad.addColorStop(1, "rgba(6, 13, 23, 0.98)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Moldura Luminosa Sutil
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+      ctx.lineWidth = Math.max(2, width * 0.005);
+      ctx.strokeRect(10, 10, width - 20, height - 20);
+
+      // Tipografia & Textos
+      const pad = width * 0.06;
+      let y = height - pad;
+
+      // Subtítulo
+      if (opts.subtitle) {
+        ctx.font = \`600 \${Math.round(width * 0.035)}px 'Plus Jakarta Sans', sans-serif\`;
+        ctx.fillStyle = "#CBD5E1";
+        ctx.fillText(opts.subtitle, pad, y);
+        y -= width * 0.055;
+      }
+
+      // Título
+      ctx.font = \`800 \${Math.round(width * 0.065)}px 'Plus Jakarta Sans', sans-serif\`;
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillText(opts.title, pad, y);
+      y -= width * 0.05;
+
+      // Badge
+      if (opts.showBadge && opts.badge) {
+        ctx.font = \`800 \${Math.round(width * 0.025)}px 'JetBrains Mono', monospace\`;
+        const tw = ctx.measureText(opts.badge).width;
+        const bh = width * 0.045;
+        const bw = tw + (width * 0.04);
+        const bx = pad;
+        const by = y - bh;
+
+        ctx.fillStyle = opts.primaryHex;
+        ctx.beginPath();
+        ctx.roundRect(bx, by, bw, bh, bh / 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#060D17";
+        ctx.fillText(opts.badge, bx + (width * 0.02), by + (bh * 0.72));
+      }
+    }
+
+    async function handleCascadeBindArtworks() {
+      const course = ALL_COURSES[activeCourseId];
+      if (!course) return;
+
+      const cvSquare = document.getElementById("canvas_art_1x1");
+      const cvWide = document.getElementById("canvas_art_16x9");
+      const cvThumb = document.getElementById("canvas_art_thumb");
+
+      showToast("⚡ Vinculando artes no Curso e em todas as Aulas...");
+
+      // 1. Atualiza dados em memória
+      const squareUrl = cvSquare ? cvSquare.toDataURL("image/jpeg", 0.9) : "assets/images/cover-dates-and-times-square.jpg";
+      const wideUrl = cvWide ? cvWide.toDataURL("image/jpeg", 0.9) : "assets/images/cover-dates-and-times-16x9.jpg";
+
+      course.coverImageUrl = "assets/images/cover-dates-and-times-square.jpg";
+      
+      // Aplica miniatura em todas as aulas dos módulos
+      let totalLessonsUpdated = 0;
+      for (const mod of (course.modules || [])) {
+        for (const les of (mod.lessons || [])) {
+          les.thumbnailUrl = "assets/images/thumbs/dtc_intro_thumb.jpg";
+          les.artworkUrl = "assets/images/cover-dates-and-times-square.jpg";
+          totalLessonsUpdated++;
+          await directSaveLessonCloud(activeCourseId, mod.id, les);
+        }
+      }
+
+      await directSaveCourseCloud(course);
+      renderHierarchyTree();
+
+      showToast(\`✅ Artes aplicadas em cascata com sucesso! (Capa 1:1, Banner 16:9 e \${totalLessonsUpdated} aulas sincronizadas no Firestore)\`);
+    }
+
+    async function handleBindCourseCoverOnly() {
+      const course = ALL_COURSES[activeCourseId];
+      if (!course) return;
+      course.coverImageUrl = "assets/images/cover-dates-and-times-square.jpg";
+      await directSaveCourseCloud(course);
+      renderHierarchyTree();
+      showToast("📌 Capa 1:1 vinculada exclusivamente ao curso no Firestore!");
+    }
+
+    function downloadSingleCanvas(canvasId, name) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const link = document.createElement("a");
+      link.download = \`\${activeCourseId}_\${name}.jpg\`;
+      link.href = canvas.toDataURL("image/jpeg", 0.95);
+      link.click();
+      showToast(\`📥 Imagem "\${name}" baixada em alta resolução!\`);
+    }
+
+    function handleDownloadAllArtworksZip() {
+      downloadSingleCanvas("canvas_art_1x1", "Capa_1x1");
+      setTimeout(() => downloadSingleCanvas("canvas_art_16x9", "Banner_16x9"), 300);
+      setTimeout(() => downloadSingleCanvas("canvas_art_thumb", "Thumb_16x9"), 600);
+    }
+
+    // Modal Helpers
     function openCourseModal() {
       document.getElementById("courseModalTitle").innerText = "Novo Curso";
       document.getElementById("courseModalId").value = "";
@@ -1413,7 +1887,7 @@ const completeHtml = `<!DOCTYPE html>
 
     function selectCoursePalette(name, hex) {
       document.getElementById("courseModalThemeColorInput").value = name;
-      showToast(\`Paleta temática selecionada: \${name.toUpperCase()} (\${hex})\`);
+      showToast(\`Paleta selecionada: \${name.toUpperCase()}\`);
     }
 
     function editCurrentCourse() {
@@ -1426,7 +1900,7 @@ const completeHtml = `<!DOCTYPE html>
       document.getElementById("courseModalDescInput").value = course.description || "";
       document.getElementById("courseModalCoverInput").value = course.coverImageUrl || "";
       document.getElementById("courseModalThemeColorInput").value = course.themeColor || "amber";
-      document.getElementById("courseModalTierInput").value = course.tierRequired || "vip";
+      document.getElementById("courseModalTierInput").value = course.tierRequired || "free";
       document.getElementById("courseModalPublishedInput").checked = course.published !== false;
       document.getElementById("courseModal").classList.remove("hidden");
     }
@@ -1463,14 +1937,13 @@ const completeHtml = `<!DOCTYPE html>
       renderCourseSwitcher();
       renderHierarchyTree();
 
-      // Persist to Cloud Firestore with SDK + REST fallback
       try {
         await directSaveCourseCloud(courseObj);
       } catch (err) {
         console.warn("Firestore sync course:", err);
       }
 
-      showToast(published ? "🟢 Curso salvo no Firestore como PUBLICADO!" : "🟡 Curso salvo no Firestore como RASCUNHO!");
+      showToast(published ? "🟢 Curso salvo no Firestore como PUBLICADO!" : "🟡 Curso salvo como RASCUNHO!");
     }
 
     function openModuleModal() {
@@ -1623,7 +2096,6 @@ const completeHtml = `<!DOCTYPE html>
         let completed = 0;
         showToast(\`⚡ Sincronizando \${totalTasks} itens em paralelo com a Nuvem...\`);
 
-        // Executa em lotes paralelos de 15 conexões simultâneas
         const BATCH_SIZE = 15;
         for (let i = 0; i < tasks.length; i += BATCH_SIZE) {
           const chunk = tasks.slice(i, i + BATCH_SIZE);
@@ -1657,4 +2129,4 @@ const completeHtml = `<!DOCTYPE html>
 `;
 
 fs.writeFileSync('admin-cursos.html', completeHtml, 'utf8');
-console.log('✅ admin-cursos.html compiled with directSaveCourseCloud resilience & cache-busting! Total lines:', completeHtml.split('\n').length);
+console.log('✅ admin-cursos.html compiled cleanly with 2 dedicated stations, 4 course formats & cascade binding! Total lines:', completeHtml.split('\n').length);
