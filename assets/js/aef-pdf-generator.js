@@ -3,20 +3,21 @@
  * Professor Leonardo Leite
  * 
  * Generates beautiful, print-ready, high-resolution A4 PDFs for both:
- * 1. Generic Courses (Dynamic Color, Flexible Page Flow: 2 to N pages, Adaptive Blocks)
+ * 1. Masterclass Clássica / Cursos Temáticos (Explicações Vivas, Tabelas de Melodia, Exercícios Pautados & Sacada de Ouro)
  * 2. Magic Stories (3 Canonical Archetypes: Deep Navy Cover, LR/VOC, Practice Workbook)
+ * 3. Guia de Consulta Rápida (Cheat Sheet A4)
  */
 
 (function (window) {
   'use strict';
 
   const COLOR_PALETTES = {
-    cobalt: { primary: '#1A56DB', bgLight: '#EFF6FF', border: '#BFDBFE', name: 'Azul Cobalto' },
-    emerald: { primary: '#047857', bgLight: '#ECFDF5', border: '#A7F3D0', name: 'Verde Esmeralda' },
-    amber: { primary: '#C68A36', bgLight: '#FDF8F0', border: '#FDE68A', name: 'Âmbar Real / Ouro' },
-    ruby: { primary: '#E11D48', bgLight: '#FFF1F2', border: '#FECDD3', name: 'Rubi Quente' },
-    indigo: { primary: '#6366F1', bgLight: '#EEF2FF', border: '#C7D2FE', name: 'Índigo Violeta' },
-    slate: { primary: '#1E293B', bgLight: '#F8FAFC', border: '#E2E8F0', name: 'Deep Slate' }
+    cobalt: { primary: '#1A56DB', bgLight: '#EFF6FF', border: '#BFDBFE', textDark: '#1E3A8A', name: 'Azul Cobalto' },
+    emerald: { primary: '#047857', bgLight: '#ECFDF5', border: '#A7F3D0', textDark: '#064E3B', name: 'Verde Esmeralda' },
+    amber: { primary: '#C68A36', bgLight: '#FDF8F0', border: '#FDE68A', textDark: '#78350F', name: 'Âmbar Real / Ouro' },
+    ruby: { primary: '#E11D48', bgLight: '#FFF1F2', border: '#FECDD3', textDark: '#881337', name: 'Rubi Quente' },
+    indigo: { primary: '#6366F1', bgLight: '#EEF2FF', border: '#C7D2FE', textDark: '#312E81', name: 'Índigo Violeta' },
+    slate: { primary: '#1E293B', bgLight: '#F8FAFC', border: '#CBD5E1', textDark: '#0F172A', name: 'Deep Slate' }
   };
 
   class AEFPdfGenerator {
@@ -24,19 +25,15 @@
       this.palettes = COLOR_PALETTES;
     }
 
-    /**
-     * Resolves course theme color palette
-     */
     resolvePalette(themeColor) {
       if (!themeColor) return COLOR_PALETTES.amber;
       if (COLOR_PALETTES[themeColor]) return COLOR_PALETTES[themeColor];
-      
-      // Custom HEX fallback
       if (themeColor.startsWith('#')) {
         return {
           primary: themeColor,
           bgLight: '#FAF8F5',
           border: '#EAE5DC',
+          textDark: '#0F172A',
           name: 'Custom'
         };
       }
@@ -44,118 +41,136 @@
     }
 
     /**
-     * Parses raw text or structured lesson notes into pedagogical blocks
+     * Limpa e desescapa quebras de linha e caracteres literais vindos de JSON/string
      */
-    parseContentBlocks(rawText, lessonTitle = '', goldenTip = '') {
-      const blocks = [];
-      const text = (rawText || '').trim();
-
-      if (!text) {
-        // Fallback default blocks if empty
-        blocks.push({
-          type: 'concept',
-          title: 'Conceito Central da Aula',
-          content: `<p class="text-slate-800 leading-relaxed font-medium">Esta aula foca na assimilação e automatização das estruturas fundamentais da fala. Ouça os blocos sonoros completos e repita com musicalidade.</p>`
-        });
-        if (goldenTip) {
-          blocks.push({
-            type: 'golden_tip',
-            title: 'Sacada de Ouro do Professor Leo',
-            content: `"${goldenTip}"`
-          });
-        }
-        return blocks;
-      }
-
-      // Check if text has sections demarcated by headers or bullet points
-      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-      let currentSection = { type: 'general', title: 'Notas Didáticas', lines: [] };
-
-      lines.forEach(line => {
-        const lower = line.toLowerCase();
-        if (lower.startsWith('###') || lower.startsWith('---') || lower.includes('conceito:') || lower.includes('propósito:')) {
-          if (currentSection.lines.length > 0) blocks.push(this._formatSection(currentSection));
-          currentSection = { type: 'concept', title: line.replace(/^[#\-\s:]+/, '') || 'Conceito & Propósito', lines: [] };
-        } else if (lower.includes('chunks:') || lower.includes('vocabulário:') || lower.includes('frases:')) {
-          if (currentSection.lines.length > 0) blocks.push(this._formatSection(currentSection));
-          currentSection = { type: 'chunks', title: 'Matriz de Chunks & Frases Vivas', lines: [] };
-        } else if (lower.includes('exercício') || lower.includes('prática:') || lower.includes('perguntas:') || lower.includes('listen & answer')) {
-          if (currentSection.lines.length > 0) blocks.push(this._formatSection(currentSection));
-          currentSection = { type: 'practice', title: 'Treino Prático & Fixação', lines: [] };
-        } else if (lower.includes('sacada de ouro') || lower.includes('golden tip')) {
-          if (currentSection.lines.length > 0) blocks.push(this._formatSection(currentSection));
-          currentSection = { type: 'golden_tip', title: 'Sacada de Ouro do Professor Leo', lines: [] };
-        } else {
-          currentSection.lines.push(line);
-        }
-      });
-
-      if (currentSection.lines.length > 0) {
-        blocks.push(this._formatSection(currentSection));
-      }
-
-      // Always guarantee Golden Tip box if present
-      if (goldenTip && !blocks.some(b => b.type === 'golden_tip')) {
-        blocks.push({
-          type: 'golden_tip',
-          title: 'Sacada de Ouro do Professor Leo',
-          content: `"${goldenTip}"`
-        });
-      }
-
-      return blocks;
-    }
-
-    _formatSection(section) {
-      if (section.type === 'chunks') {
-        const chunkPairs = [];
-        section.lines.forEach(l => {
-          if (l.includes('->') || l.includes(' - ') || l.includes('=')) {
-            const parts = l.split(/->|-|=/);
-            chunkPairs.push({ en: parts[0].trim(), pt: (parts[1] || '').trim() });
-          } else {
-            chunkPairs.push({ en: l, pt: '' });
-          }
-        });
-
-        const gridHtml = chunkPairs.map(cp => `
-          <div style="background:#FAF8F5; border:1px solid #EAE5DC; border-radius:10px; padding:10px 14px; margin-bottom:8px; page-break-inside:avoid;">
-            <div style="font-weight:800; color:#0A192F; font-size:15px; letter-spacing:0.3px;">${cp.en}</div>
-            ${cp.pt ? `<div style="font-size:12px; color:#92400E; font-weight:600; margin-top:2px;">💡 Ponto de Atenção / Melodia: ${cp.pt}</div>` : ''}
-          </div>
-        `).join('');
-
-        return { type: 'chunks', title: section.title, content: gridHtml };
-      }
-
-      if (section.type === 'practice') {
-        const practiceHtml = section.lines.map((l, i) => `
-          <div style="margin-bottom:14px; page-break-inside:avoid;">
-            <div style="font-weight:bold; color:#0A192F; font-size:13px; margin-bottom:4px;">${l.startsWith('1') || l.startsWith('2') || l.startsWith('•') ? l : `${i+1}. ${l}`}</div>
-            <div style="border-bottom:1px dashed #C68A36; height:18px; margin-bottom:6px;"></div>
-            <div style="border-bottom:1px dashed #EAE5DC; height:18px;"></div>
-          </div>
-        `).join('');
-        return { type: 'practice', title: section.title, content: practiceHtml };
-      }
-
-      return {
-        type: section.type,
-        title: section.title,
-        content: section.lines.map(l => `<p style="margin-bottom:8px; line-height:1.6; color:#1E293B; font-size:14px;">${l}</p>`).join('')
-      };
+    cleanText(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/\\r\\n/g, '\n')
+        .replace(/\\n/g, '\n')
+        .replace(/\\t/g, ' ')
+        .replace(/\\"/g, '"')
+        .trim();
     }
 
     /**
-     * Compiles complete printable HTML document with dynamic A4 stylesheet and course palette
+     * Formata markdown básico para HTML limpo
+     */
+    formatInlineMarkdown(text) {
+      if (!text) return '';
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code style="background:#F1F5F9; padding:2px 5px; border-radius:4px; font-family:monospace; font-size:0.9em; color:#0F172A;">$1</code>');
+    }
+
+    /**
+     * Compila o documento A4 completo para impressão
      */
     generatePrintableHtml(course, module, lesson, rawScript) {
       const palette = this.resolvePalette(course?.themeColor || 'amber');
       const courseTitle = course?.title || 'Curso AgoraEuFalo';
       const moduleTitle = module?.title || 'Módulo Oficial';
       const lessonTitle = lesson?.title || 'Aula Oficial';
-      const goldenTip = lesson?.goldenTip || '';
-      const blocks = this.parseContentBlocks(rawScript || lesson?.rawScript, lessonTitle, goldenTip);
+      const goldenTip = this.cleanText(lesson?.goldenTip || '');
+
+      let processedHtml = this.cleanText(lesson?.processedContentHtml || '');
+      let rawText = this.cleanText(rawScript || lesson?.rawScript || '');
+
+      let bodyContentHtml = '';
+
+      // CASO 1: A aula já possui HTML didático estruturado (processedContentHtml)
+      if (processedHtml && processedHtml.length > 20) {
+        bodyContentHtml = `
+          <div class="pedagogical-stream">
+            ${processedHtml}
+          </div>
+        `;
+      } 
+      // CASO 2: Processa o rawScript transformando em seções didáticas diagramadas
+      else if (rawText && rawText.length > 0) {
+        const paragraphs = rawText.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+        const sectionsHtml = [];
+
+        paragraphs.forEach((p, idx) => {
+          const lines = p.split('\n').map(l => l.trim()).filter(Boolean);
+
+          // Se é uma lista numerada ou tópicos
+          if (lines.some(l => /^\d+[\.\)]|^\•|^\-/.test(l))) {
+            const listItems = lines.map(l => {
+              const cleaned = l.replace(/^\d+[\.\)]\s*|^[\•\-]\s*/, '');
+              return `<li style="margin-bottom:8px; line-height:1.5;">${this.formatInlineMarkdown(cleaned)}</li>`;
+            }).join('');
+
+            sectionsHtml.push(`
+              <div class="pedagogical-box">
+                <div class="box-title">✦ Pontos Principais & Estruturas da Aula</div>
+                <ul style="padding-left:20px; margin:0; font-size:13pt; color:#1E293B;">
+                  ${listItems}
+                </ul>
+              </div>
+            `);
+          } 
+          // Se é parágrafo explicativo
+          else {
+            const textFormatted = lines.map(l => `<p style="margin-bottom:10px; line-height:1.6; font-size:13.5pt; color:#1E293B;">${this.formatInlineMarkdown(l)}</p>`).join('');
+            sectionsHtml.push(`
+              <div class="pedagogical-box">
+                <div class="box-title">✦ ${idx === 0 ? 'O Sentimento da Estrutura & Contexto da Aula' : 'Notas & Explicações Práticas'}</div>
+                <div class="box-body">
+                  ${textFormatted}
+                </div>
+              </div>
+            `);
+          }
+        });
+
+        // Bloco de Anotações Pautadas do Aluno
+        sectionsHtml.push(`
+          <div class="practice-box">
+            <div class="practice-title">📝 Anotações Pessoais & Pílulas de Treino</div>
+            <p style="font-size:11pt; color:#64748B; margin-bottom:12px;">Use este espaço para anotar as palavras contraintuitivas e as melodias sonoras que você identificou:</p>
+            <div class="notebook-line"></div>
+            <div class="notebook-line"></div>
+            <div class="notebook-line"></div>
+            <div class="notebook-line"></div>
+          </div>
+        `);
+
+        bodyContentHtml = sectionsHtml.join('');
+      } 
+      // CASO 3: Sem conteúdo ainda (Aviso acolhedor)
+      else {
+        bodyContentHtml = `
+          <div class="pedagogical-box">
+            <div class="box-title">✦ Orientações & Guia de Estudo</div>
+            <div class="box-body">
+              <p>Assista à masterclass com atenção focada aos blocos sonoros. Repita cada expressão em voz alta acompanhando a cadência e melodia natural do Professor Leonardo Leite.</p>
+            </div>
+          </div>
+          <div class="practice-box">
+            <div class="practice-title">📝 Anotações do Aluno</div>
+            <div class="notebook-line"></div>
+            <div class="notebook-line"></div>
+            <div class="notebook-line"></div>
+          </div>
+        `;
+      }
+
+      // Sacada de Ouro em Destaque Monumental
+      let goldenTipHtml = '';
+      if (goldenTip) {
+        goldenTipHtml = `
+          <div class="golden-box">
+            <div class="golden-header">
+              <span class="golden-badge">💡 A SACADA DE OURO DO PROFESSOR LEO</span>
+            </div>
+            <div class="golden-body">
+              "${this.formatInlineMarkdown(goldenTip)}"
+            </div>
+          </div>
+        `;
+      }
 
       return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -178,18 +193,19 @@
       background: #FFFFFF;
       margin: 0;
       padding: 0;
-      font-size: 14pt;
+      font-size: 13.5pt;
       line-height: 1.6;
     }
 
-    /* Header Banner Institucional */
+    /* Header Banner Institucional Nobre */
     .header-banner {
       background: linear-gradient(135deg, ${palette.primary}, #0A192F);
       color: #FFFFFF;
-      border-radius: 16px;
-      padding: 20px 24px;
+      border-radius: 18px;
+      padding: 22px 26px;
       margin-bottom: 24px;
       page-break-inside: avoid;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
     .header-tag {
       font-size: 9pt;
@@ -200,10 +216,11 @@
       margin-bottom: 6px;
     }
     .header-course-title {
-      font-size: 14pt;
+      font-size: 13pt;
       font-weight: 700;
-      opacity: 0.9;
+      opacity: 0.95;
       margin-bottom: 4px;
+      color: #E2E8F0;
     }
     .header-lesson-title {
       font-size: 20pt;
@@ -211,15 +228,16 @@
       line-height: 1.2;
       margin: 0;
       color: #FFFFFF;
+      letter-spacing: -0.5px;
     }
 
     /* Pedagogical Boxes */
     .pedagogical-box {
       background: #FAF8F5;
       border: 1.5px solid ${palette.border};
-      border-left: 5px solid ${palette.primary};
-      border-radius: 12px;
-      padding: 16px 20px;
+      border-left: 6px solid ${palette.primary};
+      border-radius: 14px;
+      padding: 18px 22px;
       margin-bottom: 20px;
       page-break-inside: avoid;
     }
@@ -228,8 +246,8 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      color: ${palette.primary};
-      margin-bottom: 10px;
+      color: ${palette.textDark};
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -240,30 +258,61 @@
       line-height: 1.6;
     }
 
-    /* Sacada de Ouro do Leo */
-    .golden-box {
-      background: #FFFBEB;
-      border: 2px solid #F59E0B;
+    /* Practice & Notebook Lines */
+    .practice-box {
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
       border-radius: 14px;
       padding: 18px 22px;
-      margin-top: 24px;
       margin-bottom: 20px;
       page-break-inside: avoid;
     }
-    .golden-title {
+    .practice-title {
       font-size: 11pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+    .notebook-line {
+      border-bottom: 1px dashed #CBD5E1;
+      height: 24px;
+      margin-bottom: 6px;
+    }
+
+    /* Sacada de Ouro do Professor Leo (Monumental) */
+    .golden-box {
+      background: #FFFBEB;
+      border: 2px solid #F59E0B;
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-top: 24px;
+      margin-bottom: 24px;
+      page-break-inside: avoid;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+    }
+    .golden-header {
+      margin-bottom: 8px;
+    }
+    .golden-badge {
+      font-size: 9.5pt;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #B45309;
-      margin-bottom: 8px;
+      background: #FEF3C7;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #FDE68A;
+      display: inline-block;
     }
     .golden-body {
-      font-size: 13.5pt;
+      font-size: 14pt;
       font-style: italic;
       color: #78350F;
       line-height: 1.6;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     /* Footer Institucional */
@@ -285,29 +334,15 @@
 
   <!-- Header Banner -->
   <div class="header-banner">
-    <div class="header-tag">✦ AgoraEuFalo • Professor Leonardo Leite</div>
+    <div class="header-tag">✦ AGORAEUFALO • PROFESSOR LEONARDO LEITE</div>
     <div class="header-course-title">${courseTitle} • ${moduleTitle}</div>
     <h1 class="header-lesson-title">${lessonTitle}</h1>
   </div>
 
-  <!-- Dynamic Content Blocks -->
+  <!-- Main Pedagogical Stream -->
   <main>
-    ${blocks.map(block => {
-      if (block.type === 'golden_tip') {
-        return `
-          <div class="golden-box">
-            <div class="golden-title">💡 ${block.title}</div>
-            <div class="golden-body">${block.content}</div>
-          </div>
-        `;
-      }
-      return `
-        <div class="pedagogical-box">
-          <div class="box-title">✦ ${block.title}</div>
-          <div class="box-body">${block.content}</div>
-        </div>
-      `;
-    }).join('')}
+    ${bodyContentHtml}
+    ${goldenTipHtml}
   </main>
 
   <!-- Institutional Footer -->
@@ -320,13 +355,10 @@
 </html>`;
     }
 
-    /**
-     * Opens print dialog for instant PDF compilation
-     */
     printDocument(htmlContent) {
-      const printWindow = window.open('', '_blank', 'width=800,height=900');
+      const printWindow = window.open('', '_blank', 'width=850,height=950');
       if (!printWindow) {
-        alert("Por favor, permita popups para abrir a janela de impressão da apostila em PDF.");
+        alert("Por favor, permita popups para abrir a janela de visualização e impressão da apostila.");
         return;
       }
       printWindow.document.open();
@@ -335,10 +367,9 @@
       printWindow.focus();
       setTimeout(() => {
         printWindow.print();
-      }, 500);
+      }, 600);
     }
   }
 
-  // Global Singleton Export
   window.AEFPdfGenerator = new AEFPdfGenerator();
 })(window);
