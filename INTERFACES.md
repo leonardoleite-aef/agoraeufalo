@@ -3,7 +3,7 @@
 
 Este documento é o inventário oficial de todas as interfaces ativas, interativas e administrativas do ecossistema **AgoraEuFalo**.
 
-> 🔄 **Regra de Manutenção:** Este arquivo é atualizado automaticamente sempre que uma interface for criada, modificada ou removida.
+> 🔄 **Regra de Manutenção:** Este arquivo é a fonte única de URLs oficiais e deve refletir a arquitetura pura dos 3 domínios em produção.
 
 ---
 
@@ -17,7 +17,40 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 
 ---
 
-## 🏛️ 1. Páginas Principais & Flagship (Públicas • `agoraeufalo.com.br`)
+## 🛠️ 1. Painéis Administrativos & Estúdios Master (`admin.agoraeufalo.com.br`)
+
+| Interface | URL Produção | Arquivo Local | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Admin Command Hub (Painel Central)** | [admin.agoraeufalo.com.br](https://admin.agoraeufalo.com.br/admin.html) | [`admin.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin.html) | Hub mestre de comando do Professor Leo estruturado em 6 blocos estratégicos com navegação unificada `aef-admin-nav.js`. |
+| **Login Administrativo Master** | [admin.agoraeufalo.com.br/admin-login.html](https://admin.agoraeufalo.com.br/admin-login.html) | [`admin-login.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-login.html) | Tela de autenticação exclusiva e blindada para o Professor Leo (`noindex, nofollow`) com login Google 1-clique. |
+| **CRM de Alunos & Tiers (RBAC)** | [admin.agoraeufalo.com.br/admin-alunos.html](https://admin.agoraeufalo.com.br/admin-alunos.html) | [`admin-alunos.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-alunos.html) | CRM em tempo real conectado ao Firestore, filtros por curso/origem, ordenação, paginação, exportação CSV e exclusão com 2FA. |
+| **Course Studio (Fábrica de Cursos)** | [admin.agoraeufalo.com.br/admin-cursos.html](https://admin.agoraeufalo.com.br/admin-cursos.html) | [`admin-cursos.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-cursos.html) | Estúdio 3-níveis de criação e gestão dinâmica de cursos, módulos e aulas integradas com sincronização bidirecional Firestore. |
+| **Departamento de Vendas (Checkouts)** | [admin.agoraeufalo.com.br/admin-vendas.html](https://admin.agoraeufalo.com.br/admin-vendas.html) | [`admin-vendas.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-vendas.html) | Gestão de ofertas comerciais, precificação Hotmart, links de checkout, triagem WhatsApp e gerador de páginas. |
+| **Webhooks & Automação** | [admin.agoraeufalo.com.br/admin-webhooks.html](https://admin.agoraeufalo.com.br/admin-webhooks.html) | [`admin-webhooks.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-webhooks.html) | Monitoramento de webhooks da Hotmart, simulações de compra e automação de e-mails transacionais. |
+| **PDF Factory Studio** | [admin.agoraeufalo.com.br/admin-pdf-factory.html](https://admin.agoraeufalo.com.br/admin-pdf-factory.html) | [`admin-pdf-factory.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-pdf-factory.html) | Laboratório editorial e construtor modular de apostilas em PDF nos 3 Arquétipos com ingestão de PDF.js e medidor de densidade. |
+| **Fábrica de Marketing & Blocks** | [admin.agoraeufalo.com.br/admin-marketing.html](https://admin.agoraeufalo.com.br/admin-marketing.html) | [`admin-marketing.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-marketing.html) | Fábrica criativa de peças de marketing (modais de paywall, cards in-feed, banners) conectados aos Tiers. |
+| **TTS Voice Studio** | [admin.agoraeufalo.com.br/tts-studio.html](https://admin.agoraeufalo.com.br/tts-studio.html) | [`tts-studio.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/tts-studio.html) | Estúdio de síntese de voz Gemini TTS (Dual/Single Speaker), encoder MP3 128k e exportação de áudios. |
+| **Blog Panel (CMS)** | [admin.agoraeufalo.com.br/blog-panel.html](https://admin.agoraeufalo.com.br/blog-panel.html) | [`blog-panel.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog-panel.html) | Editor e gerenciador de postagens do blog com pré-visualização em tempo real e sincronização de feeds. |
+| **SEO Manager** | [admin.agoraeufalo.com.br/seo-manager.html](https://admin.agoraeufalo.com.br/seo-manager.html) | [`seo-manager.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/seo-manager.html) | Painel de monitoramento de metadados, indexação e tags OpenGraph. |
+| **Gestão do Player Público (Sunset)** | [admin.agoraeufalo.com.br/admin-publico.html](https://admin.agoraeufalo.com.br/admin-publico.html) | [`admin-publico.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-publico.html) | Rota descontinuada com redirecionamento automático para `admin-alunos.html`. |
+
+---
+
+## 🎓 2. Área de Membros & Alunos (`app.agoraeufalo.com.br`)
+
+| Interface | URL Produção | Arquivo Local | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Dashboard do Aluno (Portal)** | [app.agoraeufalo.com.br](https://app.agoraeufalo.com.br/portal.html) | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | Portal do aluno com Hero MasterClass em Midnight Navy, telemetria de listening time, streak e catálogo de cursos. |
+| **Sala de Aula (Imersão MasterClass)** | [app.agoraeufalo.com.br/sala-de-aula.html](https://app.agoraeufalo.com.br/sala-de-aula.html) | [`sala-de-aula.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/sala-de-aula.html) | Sala de aula com vídeo player, conteúdo didático formatado, Sacada de Ouro, PDFs e botão *Enviar para Training Player*. |
+| **Vitrine do Curso (Acordeão de Aulas)** | [app.agoraeufalo.com.br/curso.html](https://app.agoraeufalo.com.br/curso.html) | [`curso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/curso.html) | Grade de módulos com miniaturas 16:9 de cada aula, durações e status de conclusão. |
+| **Training Player Universal** | [app.agoraeufalo.com.br/treino/player.html](https://app.agoraeufalo.com.br/treino/player.html) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player de áudio puro universal estilo Spotify com as 6 arenas de treino auditivo e oral. |
+| **Login do Aluno** | [app.agoraeufalo.com.br/login.html](https://app.agoraeufalo.com.br/login.html) | [`login.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/login.html) | Tela de autenticação com Magic Link, Google Auth e e-mail/senha. |
+| **Cadastro de Novo Aluno** | [app.agoraeufalo.com.br/cadastro.html](https://app.agoraeufalo.com.br/cadastro.html) | [`cadastro.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/cadastro.html) | Onboarding gratuito com criação de conta instantânea. |
+| **Resgate & Migração de Alunos** | [app.agoraeufalo.com.br/migracao/index.html](https://app.agoraeufalo.com.br/migracao/index.html) | [`migracao/index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/migracao/index.html) | Canal de resgate e ativação instantânea com 1 clique para alunos legados. |
+
+---
+
+## 🏛️ 3. Páginas Principais & Flagship (Públicas • `agoraeufalo.com.br`)
 
 | Interface | URL Produção | Arquivo Local | Descrição |
 | :--- | :--- | :--- | :--- |
@@ -32,40 +65,18 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 
 ---
 
-## 🛠️ 2. Painéis Administrativos & Estúdios Master (`admin.agoraeufalo.com.br`)
+## 👑 4. Espaços de Mentoria VIP (`app.agoraeufalo.com.br`)
 
-| Interface | URL Produção | Arquivo Local | Descrição |
+| Mentorado VIP | URL Vitrine do Curso | URL Sala de Aula Master | E-mail Cadastrado |
 | :--- | :--- | :--- | :--- |
-| **Admin Command Hub (Painel Central)** | [admin.agoraeufalo.com.br](https://admin.agoraeufalo.com.br/) | [`admin.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin.html) | Hub mestre de comando do Professor Leo estruturado em 6 blocos estratégicos com navegação unificada `aef-admin-nav.js`. |
-| **Login Administrativo Master** | [admin.agoraeufalo.com.br/admin-login.html](https://admin.agoraeufalo.com.br/admin-login.html) | [`admin-login.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-login.html) | Tela de autenticação exclusiva e blindada para o Professor Leo (`noindex, nofollow`) com login Google 1-clique. |
-| **CRM de Alunos & Tiers (RBAC)** | [admin.agoraeufalo.com.br/admin-alunos.html](https://admin.agoraeufalo.com.br/admin-alunos.html) | [`admin-alunos.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-alunos.html) | CRM em tempo real conectado ao Firestore, filtros por curso/origem, ordenação, paginação, exportação CSV e exclusão com 2FA. |
-| **Course Studio (Fábrica de Cursos)** | [admin.agoraeufalo.com.br/admin-cursos.html](https://admin.agoraeufalo.com.br/admin-cursos.html) | [`admin-cursos.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-cursos.html) | Estúdio 3-níveis de criação e gestão dinâmica de cursos, módulos e aulas integradas com sincronização bidirecional Firestore. |
-| **Departamento de Vendas (Checkouts)** | [admin.agoraeufalo.com.br/admin-vendas.html](https://admin.agoraeufalo.com.br/admin-vendas.html) | [`admin-vendas.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-vendas.html) | Gestão de ofertas comerciais, precificação Hotmart, links de checkout, triagem WhatsApp e gerador de páginas. |
-| **Webhooks & Automação** | [admin.agoraeufalo.com.br/admin-webhooks.html](https://admin.agoraeufalo.com.br/admin-webhooks.html) | [`admin-webhooks.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-webhooks.html) | Monitoramento de webhooks da Hotmart, simulações de compra e automação de e-mails transacionais. |
-| **PDF Factory Studio** | [admin.agoraeufalo.com.br/admin-pdf-factory.html](https://admin.agoraeufalo.com.br/admin-pdf-factory.html) | [`admin-pdf-factory.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-pdf-factory.html) | Laboratório editorial e construtor modular de apostilas em PDF nos 3 Arquétipos com ingestão de PDF.js e medidor de densidade. |
-| **Fábrica de Marketing & Blocks** | [admin.agoraeufalo.com.br/admin-marketing.html](https://admin.agoraeufalo.com.br/admin-marketing.html) | [`admin-marketing.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-marketing.html) | Fábrica criativa de peças de marketing (modais de paywall, cards in-feed, banners) conectados aos Tiers. |
-| **TTS Voice Studio** | [admin.agoraeufalo.com.br/tts-studio.html](https://admin.agoraeufalo.com.br/tts-studio.html) | [`tts-studio.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/tts-studio.html) | Estúdio de síntese de voz Gemini TTS (Dual/Single Speaker), encoder MP3 128k e exportação de áudios. |
-| **Blog Panel (CMS)** | [admin.agoraeufalo.com.br/blog-panel.html](https://admin.agoraeufalo.com.br/blog-panel.html) | [`blog-panel.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog-panel.html) | Editor e gerenciador de postagens do blog com pré-visualização em tempo real e sincronização de feeds. |
-| **SEO Manager** | [admin.agoraeufalo.com.br/seo-manager.html](https://admin.agoraeufalo.com.br/seo-manager.html) | [`seo-manager.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/seo-manager.html) | Painel de monitoramento de metadados, indexação e tags OpenGraph. |
-| **Gestão do Player Público (Sunset)** | [admin-publico.html](https://admin.agoraeufalo.com.br/admin-publico.html) | [`admin-publico.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-publico.html) | Rota descontinuada com redirecionamento automático para `admin-alunos.html`. |
+| **André Barrote** | [app.agoraeufalo.com.br/curso.html?curso=mentoria-andre](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-andre) | [app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-andre](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-andre) | `andrebarrote1992@gmail.com` |
+| **Estêvão Pinheiro** | [app.agoraeufalo.com.br/curso.html?curso=mentoria-estevao](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-estevao) | [app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-estevao](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-estevao) | `estevaopin@gmail.com` |
+| **Thomas** | [app.agoraeufalo.com.br/curso.html?curso=mentoria-thomas](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-thomas) | [app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-thomas](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-thomas) | `thomas@agoraeufalo.com.br` |
+| **Matheus** | [app.agoraeufalo.com.br/curso.html?curso=mentoria-matheus](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-matheus) | [app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-matheus](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-matheus) | `matheus@agoraeufalo.com.br` |
 
 ---
 
-## 🎓 3. Área de Membros & Alunos (`app.agoraeufalo.com.br`)
-
-| Interface | URL Produção | Arquivo Local | Descrição |
-| :--- | :--- | :--- | :--- |
-| **Dashboard do Aluno (Portal)** | [app.agoraeufalo.com.br](https://app.agoraeufalo.com.br/) | [`portal.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/portal.html) | Portal do aluno com Hero MasterClass em Midnight Navy, telemetria de listening time, streak e catálogo de cursos. |
-| **Sala de Aula (Imersão MasterClass)** | [app.agoraeufalo.com.br/sala-de-aula.html](https://app.agoraeufalo.com.br/sala-de-aula.html) | [`sala-de-aula.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/sala-de-aula.html) | Sala de aula com vídeo player, conteúdo didático formatado, Sacada de Ouro, PDFs e botão *Enviar para Training Player*. |
-| **Vitrine do Curso (Acordeão de Aulas)** | [app.agoraeufalo.com.br/curso.html](https://app.agoraeufalo.com.br/curso.html) | [`curso.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/curso.html) | Grade de módulos com miniaturas 16:9 de cada aula, durações e status de conclusão. |
-| **Training Player Universal** | [app.agoraeufalo.com.br/treino/player.html](https://app.agoraeufalo.com.br/treino/player.html) | [`treino/player.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/treino/player.html) | Player de áudio puro universal estilo Spotify com as 6 arenas de treino auditivo e oral. |
-| **Login do Aluno** | [app.agoraeufalo.com.br/login.html](https://app.agoraeufalo.com.br/login.html) | [`login.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/login.html) | Tela de autenticação com Magic Link, Google Auth e e-mail/senha. |
-| **Cadastro de Novo Aluno** | [app.agoraeufalo.com.br/cadastro.html](https://app.agoraeufalo.com.br/cadastro.html) | [`cadastro.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/cadastro.html) | Onboarding gratuito com criação de conta instantânea. |
-| **Resgate & Migração de Alunos** | [app.agoraeufalo.com.br/migracao/index.html](https://app.agoraeufalo.com.br/migracao/index.html) | [`migracao/index.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/migracao/index.html) | Canal de resgate e ativação instantânea com 1 clique para alunos legados. |
-
----
-
-## 📰 4. Blog & Artigos Didáticos (`agoraeufalo.com.br/blog/`)
+## 📰 5. Blog & Artigos Didáticos (`agoraeufalo.com.br/blog/`)
 
 | Interface | URL Produção | Arquivo Local | Descrição |
 | :--- | :--- | :--- | :--- |
@@ -76,14 +87,3 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 | **Post: Magic Story 01 (Grazi)** | [agoraeufalo.com.br/blog/magic-story-01-historia-da-grazi-treino-reflexo.html](https://agoraeufalo.com.br/blog/magic-story-01-historia-da-grazi-treino-reflexo.html) | [`blog/magic-story-01-historia-da-grazi-treino-reflexo.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog/magic-story-01-historia-da-grazi-treino-reflexo.html) | Mini-história de treino auditivo de reflexo com áudio Dual Speaker. |
 | **Post: Magic Story 02 (Tom)** | [agoraeufalo.com.br/blog/magic-story-02-historia-do-tom-present-perfect.html](https://agoraeufalo.com.br/blog/magic-story-02-historia-do-tom-present-perfect.html) | [`blog/magic-story-02-historia-do-tom-present-perfect.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog/magic-story-02-historia-do-tom-present-perfect.html) | Mini-história com foco no uso natural do Present Perfect. |
 | **Post: Treino Rápido de Ouvido** | [agoraeufalo.com.br/blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html](https://agoraeufalo.com.br/blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html) | [`blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html) | Técnicas para decodificar fala rápida e conexões sonoras de nativos. |
-
----
-
-## 👑 5. Espaços de Mentoria VIP (`curso.html?curso=mentoria-[slug]`)
-
-| Mentorado VIP | URL Vitrine do Curso | URL Sala de Aula Master | E-mail Cadastrado |
-| :--- | :--- | :--- | :--- |
-| **André Barrote** | [curso.html?curso=mentoria-andre](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-andre) | [sala-de-aula.html?curso=mentoria-andre](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-andre) | `andrebarrote1992@gmail.com` |
-| **Estêvão Pinheiro** | [curso.html?curso=mentoria-estevao](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-estevao) | [sala-de-aula.html?curso=mentoria-estevao](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-estevao) | `estevaopin@gmail.com` |
-| **Thomas** | [curso.html?curso=mentoria-thomas](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-thomas) | [sala-de-aula.html?curso=mentoria-thomas](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-thomas) | `thomas@agoraeufalo.com.br` |
-| **Matheus** | [curso.html?curso=mentoria-matheus](https://app.agoraeufalo.com.br/curso.html?curso=mentoria-matheus) | [sala-de-aula.html?curso=mentoria-matheus](https://app.agoraeufalo.com.br/sala-de-aula.html?curso=mentoria-matheus) | `matheus@agoraeufalo.com.br` |

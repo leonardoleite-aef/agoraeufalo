@@ -54,12 +54,12 @@
 
     getAppUrl(path = 'portal.html') {
       const clean = path.startsWith('/') ? path : `/${path}`;
-      return this.isLocal() ? clean : `https://agoraeufalo.com.br${clean}`;
+      return this.isLocal() ? clean : `https://app.agoraeufalo.com.br${clean}`;
     }
 
     getAdminUrl(path = 'admin.html') {
       const clean = path.startsWith('/') ? path : `/${path}`;
-      return this.isLocal() ? clean : `https://agoraeufalo.com.br${clean}`;
+      return this.isLocal() ? clean : `https://admin.agoraeufalo.com.br${clean}`;
     }
 
     init() {
