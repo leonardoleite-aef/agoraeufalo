@@ -15,3 +15,6 @@ tmp
 package-lock.json
 wrangler.json
 wrangler.toml
+.chrome-profile
+**/.chrome-profile/**
+
