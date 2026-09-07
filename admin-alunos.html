@@ -61,20 +61,20 @@
       <!-- Stats Overview Bar -->
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
         <div class="glass-card p-4 rounded-2xl">
-          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Usuários</p>
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Contatos Únicos</p>
           <p class="text-2xl font-black text-slate-900 mt-1" id="stat-total-students">0</p>
         </div>
         <div class="glass-card p-4 rounded-2xl border-amber-200 bg-amber-50/30">
           <p class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">👑 Mentorados VIP</p>
           <p class="text-2xl font-black text-amber-900 mt-1" id="stat-vip-students">0</p>
         </div>
-        <div class="glass-card p-4 rounded-2xl border-sky-200 bg-sky-50/30">
-          <p class="text-[10px] text-sky-800 font-bold uppercase tracking-wider">🎓 Membros Club / Cursos</p>
-          <p class="text-2xl font-black text-sky-900 mt-1" id="stat-pro-students">0</p>
+        <div class="glass-card p-4 rounded-2xl border-amber-200 bg-amber-50/50">
+          <p class="text-[10px] text-amber-900 font-bold uppercase tracking-wider">🎓 MS Legacy (926)</p>
+          <p class="text-2xl font-black text-amber-950 mt-1" id="stat-ms-legacy-students">0</p>
         </div>
-        <div class="glass-card p-4 rounded-2xl border-slate-200">
-          <p class="text-[10px] text-slate-600 font-bold uppercase tracking-wider">🌱 Alunos Free</p>
-          <p class="text-2xl font-black text-slate-800 mt-1" id="stat-free-students">0</p>
+        <div class="glass-card p-4 rounded-2xl border-emerald-200 bg-emerald-50/30">
+          <p class="text-[10px] text-emerald-800 font-bold uppercase tracking-wider">🌱 1º Legado (2.946)</p>
+          <p class="text-2xl font-black text-emerald-950 mt-1" id="stat-primeiro-legado-students">0</p>
         </div>
         <div class="glass-card p-4 rounded-2xl border-purple-200 bg-purple-50/30 col-span-2 sm:col-span-1">
           <p class="text-[10px] text-purple-800 font-bold uppercase tracking-wider">🔐 Administradores</p>
@@ -83,37 +83,43 @@
       </div>
 
       <!-- Filter and Search Bar -->
-      <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto no-scrollbar">
-          <button onclick="filterTier('all')" id="filter-btn-all" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition">
-            Todos
+      <div class="glass-card p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-1.5 overflow-x-auto w-full lg:w-auto no-scrollbar pb-1 lg:pb-0">
+          <button onclick="filterTier('all')" id="filter-btn-all" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition shrink-0">
+            Todos (<span id="pill-count-all">0</span>)
           </button>
-          <button onclick="filterTier('vip')" id="filter-btn-vip" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition">
-            👑 VIPs
+          <button onclick="filterTier('vip')" id="filter-btn-vip" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
+            👑 VIPs (<span id="pill-count-vip">0</span>)
           </button>
-          <button onclick="filterTier('club')" id="filter-btn-club" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-sky-50 hover:text-sky-900 border border-slate-200 transition">
+          <button onclick="filterTier('ms_legacy')" id="filter-btn-ms_legacy" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
+            🎓 MS Legacy (<span id="pill-count-ms">926</span>)
+          </button>
+          <button onclick="filterTier('primeiro_legado')" id="filter-btn-primeiro_legado" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-900 border border-slate-200 transition shrink-0">
+            🌱 1º Legado (<span id="pill-count-primeiro">2.946</span>)
+          </button>
+          <button onclick="filterTier('club')" id="filter-btn-club" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-sky-50 hover:text-sky-900 border border-slate-200 transition shrink-0">
             🎓 Club / Cursos
           </button>
-          <button onclick="filterTier('free')" id="filter-btn-free" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition">
+          <button onclick="filterTier('free')" id="filter-btn-free" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition shrink-0">
             🌱 Free
           </button>
-          <button onclick="filterTier('admin')" id="filter-btn-admin" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-purple-50 hover:text-purple-900 border border-slate-200 transition">
+          <button onclick="filterTier('admin')" id="filter-btn-admin" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-purple-50 hover:text-purple-900 border border-slate-200 transition shrink-0">
             🔐 Admins
           </button>
         </div>
 
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-          <div class="relative flex-1 sm:w-64">
+        <div class="flex items-center gap-2.5 w-full lg:w-auto">
+          <div class="relative flex-1 lg:w-64">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-            <input type="text" id="search-input" oninput="handleSearchInput(event)" placeholder="Buscar por nome ou e-mail..." class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+            <input type="text" id="search-input" oninput="handleSearchInput(event)" placeholder="Buscar por nome, e-mail ou tel..." class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
           </div>
           <button onclick="openCreateVipSpaceModal()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer shrink-0" title="Criar Sala de Aula & Curso Individual para Mentorado VIP">
             <i data-lucide="crown" class="w-4 h-4"></i>
-            <span>+ Novo Espaço VIP</span>
+            <span>+ Espaço VIP</span>
           </button>
           <button onclick="openAddStudentModal()" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider transition shadow flex items-center gap-1.5 cursor-pointer shrink-0">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
-            <span>Novo Aluno</span>
+            <span>Novo</span>
           </button>
         </div>
       </div>
@@ -136,10 +142,10 @@
             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100">
               <tr>
                 <th class="py-3 px-4">Aluno / Mentorado</th>
-                <th class="py-3 px-4">E-mail</th>
-                <th class="py-3 px-4">Tier / Plano</th>
-                <th class="py-3 px-4">Cursos Liberados</th>
-                <th class="py-3 px-4">Prescrições / Treinos</th>
+                <th class="py-3 px-4">E-mail / Telefone</th>
+                <th class="py-3 px-4">Tier / Categoria</th>
+                <th class="py-3 px-4">Cursos Concedidos</th>
+                <th class="py-3 px-4">Prescrições / Status</th>
                 <th class="py-3 px-4 text-right">Ações</th>
               </tr>
             </thead>
@@ -148,12 +154,32 @@
                 <td colspan="6" class="py-8 text-center text-slate-400">
                   <div class="flex items-center justify-center gap-2">
                     <i data-lucide="loader" class="w-4 h-4 animate-spin text-amber-500"></i>
-                    <span>Carregando base de alunos do Firestore...</span>
+                    <span>Carregando base de alunos e contatos legados...</span>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- Pagination Controls Bar -->
+        <div class="p-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/50">
+          <p class="text-xs text-slate-500" id="pagination-info">
+            Carregando contatos...
+          </p>
+          <div class="flex items-center gap-2">
+            <button id="btn-prev-page" onclick="changeStudentPage(-1)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 cursor-pointer">
+              <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+              <span>Anterior</span>
+            </button>
+            <span class="text-xs font-mono font-bold text-slate-700 bg-white px-3 py-1.5 rounded-xl border border-slate-200" id="current-page-badge">
+              Pág 1 / 1
+            </span>
+            <button id="btn-next-page" onclick="changeStudentPage(1)" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 cursor-pointer">
+              <span>Próxima</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -521,6 +547,10 @@
         : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5';
     }
 
+    let CURRENT_PAGE = 1;
+    const PAGE_SIZE = 50;
+    let FILTERED_COUNT = 0;
+
     async function loadAllStudentsData() {
       const tbody = document.getElementById('students-table-body');
       if (tbody) {
@@ -529,7 +559,7 @@
             <td colspan="6" class="py-8 text-center text-slate-400">
               <div class="flex items-center justify-center gap-2">
                 <i data-lucide="loader" class="w-4 h-4 animate-spin text-amber-500"></i>
-                <span>Sincronizando com Firestore...</span>
+                <span>Sincronizando 3.872 contatos legados e nuvem Firestore...</span>
               </div>
             </td>
           </tr>
@@ -537,20 +567,48 @@
         updateIcons();
       }
 
+      const combined = new Map();
+
+      // 1. Carrega a base consolidada de 3.872 alunos legados
+      try {
+        const resp = await fetch('data/alunos_master_todos_legados.json');
+        if (resp.ok) {
+          const masterData = await resp.json();
+          (masterData.alunos || []).forEach(leg => {
+            const email = (leg.email || '').toLowerCase().trim();
+            if (!email) return;
+            const isMS = leg.categoria === 'magic_stories_legacy' || leg.is_ms;
+            combined.set(email, {
+              id: email.split('@')[0],
+              name: leg.nome || email.split('@')[0],
+              email: email,
+              phone: leg.telefone || '',
+              tier: isMS ? 'ms_legacy' : 'primeiro_legado',
+              category: leg.categoria || (isMS ? 'magic_stories_legacy' : 'primeiro_legado_agoraeufalo'),
+              enrolledProducts: leg.curso_concedido ? [leg.curso_concedido] : (isMS ? ['ms-legacy'] : ['english-quickstart']),
+              role: 'student',
+              origem: leg.origem || 'legado'
+            });
+          });
+        }
+      } catch (e) {
+        console.warn("Could not load legacy students file, will rely on Firestore:", e);
+      }
+
+      // 2. Add Fallback Mentees
+      INITIAL_VIP_FALLBACK.forEach(m => {
+        const email = (m.email || '').toLowerCase().trim();
+        if (email) combined.set(email, { ...combined.get(email), ...m, tier: 'vip_mentorship' });
+      });
+
+      // 3. Sincroniza com Firestore (Single Source of Truth)
       try {
         if (window.aefPortalAuth) await window.aefPortalAuth.ready();
-        
-        // 1. Fetch from Firestore users and mentees
         const { users, vipMentees } = await window.aefPortalAuth.getAllStudentsAndMentees();
-        
-        const combined = new Map();
-
-        // Add Fallback Mentees
-        INITIAL_VIP_FALLBACK.forEach(m => combined.set(m.email.toLowerCase(), m));
 
         // Add Firestore Mentees
         vipMentees.forEach(m => {
-          const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase();
+          const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase().trim();
           const existing = combined.get(email) || {};
           combined.set(email, {
             ...existing,
@@ -564,7 +622,7 @@
 
         // Add Firestore Users
         users.forEach(u => {
-          const email = (u.email || '').toLowerCase();
+          const email = (u.email || '').toLowerCase().trim();
           if (!email) return;
           const existing = combined.get(email) || {};
           combined.set(email, {
@@ -578,15 +636,15 @@
             enrolledProducts: u.enrolledProducts || existing.enrolledProducts || []
           });
         });
-
-        ALL_STUDENTS_LIST = Array.from(combined.values());
       } catch (err) {
-        console.warn("Could not load users from Firestore, using baseline list:", err);
-        ALL_STUDENTS_LIST = [...INITIAL_VIP_FALLBACK];
+        console.warn("Could not load users from Firestore:", err);
       }
 
-      renderStudentsTable();
+      ALL_STUDENTS_LIST = Array.from(combined.values());
+
+      CURRENT_PAGE = 1;
       updateMetrics();
+      renderStudentsTable();
       renderAdminsTable();
       updateIcons();
     }
@@ -594,6 +652,8 @@
     function updateMetrics() {
       let total = ALL_STUDENTS_LIST.length;
       let vips = 0;
+      let msLegacy = 0;
+      let primeiroLegado = 0;
       let clubs = 0;
       let frees = 0;
       let admins = 0;
@@ -601,34 +661,62 @@
       ALL_STUDENTS_LIST.forEach(s => {
         const tier = s.tier || 'free';
         const role = s.role || 'student';
+        const cat = s.category || '';
 
         if (role === 'admin' || tier === 'admin_master') admins++;
         if (tier === 'vip_mentorship' || tier === 'vip') vips++;
+        else if (tier === 'ms_legacy' || cat === 'magic_stories_legacy' || (s.enrolledProducts && s.enrolledProducts.includes('ms-legacy') && tier !== 'vip_mentorship')) msLegacy++;
+        else if (tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo') primeiroLegado++;
         else if (tier === 'club_annual' || tier === 'pro' || tier === 'course_member') clubs++;
         else if (tier === 'free') frees++;
       });
 
-      document.getElementById('stat-total-students').innerText = total;
-      document.getElementById('stat-vip-students').innerText = vips;
-      document.getElementById('stat-pro-students').innerText = clubs;
-      document.getElementById('stat-free-students').innerText = frees;
-      document.getElementById('stat-admin-students').innerText = admins;
+      const elTotal = document.getElementById('stat-total-students');
+      if (elTotal) elTotal.innerText = total.toLocaleString('pt-BR');
+      const elVip = document.getElementById('stat-vip-students');
+      if (elVip) elVip.innerText = vips;
+      const elMs = document.getElementById('stat-ms-legacy-students');
+      if (elMs) elMs.innerText = msLegacy.toLocaleString('pt-BR');
+      const elPrimeiro = document.getElementById('stat-primeiro-legado-students');
+      if (elPrimeiro) elPrimeiro.innerText = primeiroLegado.toLocaleString('pt-BR');
+      const elAdmin = document.getElementById('stat-admin-students');
+      if (elAdmin) elAdmin.innerText = admins;
+
+      const pillAll = document.getElementById('pill-count-all');
+      if (pillAll) pillAll.innerText = total.toLocaleString('pt-BR');
+      const pillVip = document.getElementById('pill-count-vip');
+      if (pillVip) pillVip.innerText = vips;
+      const pillMs = document.getElementById('pill-count-ms');
+      if (pillMs) pillMs.innerText = msLegacy.toLocaleString('pt-BR');
+      const pillPrimeiro = document.getElementById('pill-count-primeiro');
+      if (pillPrimeiro) pillPrimeiro.innerText = primeiroLegado.toLocaleString('pt-BR');
     }
 
     function filterTier(tier) {
       CURRENT_FILTER = tier;
+      CURRENT_PAGE = 1;
       document.querySelectorAll('.filter-pill').forEach(btn => {
-        btn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition';
+        btn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition shrink-0';
       });
       const activeBtn = document.getElementById(`filter-btn-${tier}`);
-      if (activeBtn) activeBtn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition';
+      if (activeBtn) activeBtn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition shrink-0';
       renderStudentsTable();
     }
 
     function handleSearchInput(e) {
       SEARCH_QUERY = (e.target.value || '').trim().toLowerCase();
+      CURRENT_PAGE = 1;
       renderStudentsTable();
     }
+
+    window.changeStudentPage = (delta) => {
+      const totalPages = Math.ceil(FILTERED_COUNT / PAGE_SIZE) || 1;
+      const target = CURRENT_PAGE + delta;
+      if (target >= 1 && target <= totalPages) {
+        CURRENT_PAGE = target;
+        renderStudentsTable();
+      }
+    };
 
     function renderStudentsTable() {
       const tbody = document.getElementById('students-table-body');
@@ -637,41 +725,78 @@
       const filtered = ALL_STUDENTS_LIST.filter(s => {
         const matchesSearch = !SEARCH_QUERY || 
           (s.name && s.name.toLowerCase().includes(SEARCH_QUERY)) || 
-          (s.email && s.email.toLowerCase().includes(SEARCH_QUERY));
+          (s.email && s.email.toLowerCase().includes(SEARCH_QUERY)) ||
+          (s.phone && s.phone.includes(SEARCH_QUERY));
 
         if (!matchesSearch) return false;
 
         const tier = s.tier || 'free';
         const role = s.role || 'student';
+        const cat = s.category || '';
 
         if (CURRENT_FILTER === 'all') return true;
         if (CURRENT_FILTER === 'vip') return tier === 'vip_mentorship' || tier === 'vip';
+        if (CURRENT_FILTER === 'ms_legacy') return tier === 'ms_legacy' || cat === 'magic_stories_legacy' || (s.enrolledProducts && s.enrolledProducts.includes('ms-legacy') && tier !== 'vip_mentorship');
+        if (CURRENT_FILTER === 'primeiro_legado') return tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo';
         if (CURRENT_FILTER === 'club') return tier === 'club_annual' || tier === 'pro' || tier === 'course_member';
         if (CURRENT_FILTER === 'free') return tier === 'free';
         if (CURRENT_FILTER === 'admin') return role === 'admin' || tier === 'admin_master';
         return true;
       });
 
-      if (filtered.length === 0) {
+      FILTERED_COUNT = filtered.length;
+      const totalPages = Math.ceil(FILTERED_COUNT / PAGE_SIZE) || 1;
+      if (CURRENT_PAGE > totalPages) CURRENT_PAGE = totalPages;
+
+      const startIdx = (CURRENT_PAGE - 1) * PAGE_SIZE;
+      const pageItems = filtered.slice(startIdx, startIdx + PAGE_SIZE);
+
+      // Update Pagination UI
+      const paginationInfo = document.getElementById('pagination-info');
+      if (paginationInfo) {
+        if (FILTERED_COUNT === 0) {
+          paginationInfo.innerText = "Nenhum aluno encontrado.";
+        } else {
+          const from = startIdx + 1;
+          const to = Math.min(startIdx + PAGE_SIZE, FILTERED_COUNT);
+          paginationInfo.innerHTML = `Mostrando <strong class="text-slate-900">${from} - ${to}</strong> de <strong class="text-slate-900">${FILTERED_COUNT.toLocaleString('pt-BR')}</strong> contatos`;
+        }
+      }
+
+      const pageBadge = document.getElementById('current-page-badge');
+      if (pageBadge) pageBadge.innerText = `Pág ${CURRENT_PAGE} / ${totalPages}`;
+
+      const btnPrev = document.getElementById('btn-prev-page');
+      if (btnPrev) btnPrev.disabled = (CURRENT_PAGE <= 1);
+
+      const btnNext = document.getElementById('btn-next-page');
+      if (btnNext) btnNext.disabled = (CURRENT_PAGE >= totalPages);
+
+      if (pageItems.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="6" class="py-8 text-center text-slate-400">
-              Nenhum aluno encontrado para este filtro.
+              Nenhum contato encontrado para este filtro ou busca.
             </td>
           </tr>
         `;
         return;
       }
 
-      tbody.innerHTML = filtered.map(s => {
+      tbody.innerHTML = pageItems.map(s => {
         const tier = s.tier || 'free';
         const role = s.role || 'student';
+        const cat = s.category || '';
 
         let tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">🌱 FREE</span>';
         if (role === 'admin' || tier === 'admin_master') {
           tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-200 text-[10px] font-black">👑 ADMIN MESTRE</span>';
         } else if (tier === 'vip_mentorship' || tier === 'vip') {
           tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black">👑 MENTORADO VIP</span>';
+        } else if (tier === 'ms_legacy' || cat === 'magic_stories_legacy') {
+          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-300 text-[10px] font-black">🎓 MS LEGACY</span>';
+        } else if (tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo') {
+          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-300 text-[10px] font-bold">🌱 1º LEGADO</span>';
         } else if (tier === 'club_annual' || tier === 'pro' || tier === 'course_member') {
           tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-200 text-[10px] font-bold">🎓 CLUB ANUAL</span>';
         }
@@ -705,29 +830,29 @@
         }).join(' ') || '<span class="text-[10px] text-slate-400 italic">Nenhum</span>';
 
         const tracksCount = s.tracksCount || (tier.includes('vip') ? 1 : 0);
-
         const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(s.name || 'A').substring(0, 2).toUpperCase()}</div>`;
-
         const isVIP = tier === 'vip_mentorship' || tier === 'vip';
-
         const tracksLabel = tracksCount === 1 ? '1 faixa ativa' : `${tracksCount} faixas ativas`;
 
         return `
           <tr class="hover:bg-slate-50/80 transition">
-            <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2.5">
+            <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2.5">
               ${avatarHtml}
-              <div>
-                <p class="text-xs font-bold text-slate-900">${s.name}</p>
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-slate-900 truncate max-w-[180px]">${s.name}</p>
                 <span class="text-[10px] text-slate-400 font-mono">${s.id || ''}</span>
               </div>
             </td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">${s.email}</td>
-            <td class="py-3.5 px-4">${tierBadge}</td>
-            <td class="py-3.5 px-4 flex flex-wrap gap-1 items-center max-w-xs">${enrolledBadges}</td>
-            <td class="py-3.5 px-4 font-bold ${isVIP ? 'text-amber-800' : 'text-slate-500'}">
-              ${tracksCount > 0 ? tracksLabel : '—'}
+            <td class="py-3 px-4 font-mono text-slate-600">
+              <div>${s.email}</div>
+              ${s.phone ? `<span class="text-[10px] text-slate-400 font-sans block">${s.phone}</span>` : ''}
             </td>
-            <td class="py-3.5 px-4 text-right">
+            <td class="py-3 px-4">${tierBadge}</td>
+            <td class="py-3 px-4 flex flex-wrap gap-1 items-center max-w-xs">${enrolledBadges}</td>
+            <td class="py-3 px-4 font-bold ${isVIP ? 'text-amber-800' : 'text-slate-500'}">
+              ${tracksCount > 0 ? tracksLabel : (s.origem ? `<span class="text-[10px] text-slate-400 uppercase font-mono">${s.origem}</span>` : '—')}
+            </td>
+            <td class="py-3 px-4 text-right">
               <div class="flex items-center justify-end gap-1.5">
                 <button onclick="openEditStudentModal('${s.email}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>

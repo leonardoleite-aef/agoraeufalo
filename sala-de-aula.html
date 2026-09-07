@@ -202,9 +202,9 @@
             <span>Escutar essa aula no seu celular</span>
           </button>
 
-          <a id="pdfDownloadLink" href="Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf" target="_blank" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition">
+          <a id="pdfDownloadLink" href="javascript:void(0)" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition opacity-40 pointer-events-none cursor-not-allowed">
             <i data-lucide="download" class="w-3.5 h-3.5 text-[#C68A36]"></i>
-            <span>Apostila (PDF)</span>
+            <span id="pdfBtnLabel">Apostila (PDF)</span>
           </a>
 
           <button id="btnMarkComplete" onclick="toggleLessonCompletion()" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-emerald-50 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition cursor-pointer">
@@ -253,80 +253,47 @@
     </main>
 
     <!-- ======================================================================= -->
+    <!-- 3. RIGHT SIDEBAR: Grade Completa do Curso & Navegador de Aulas          -->
     <!-- ======================================================================= -->
-    <!-- 3. RIGHT SIDEBAR: Navegador de Aulas do Módulo (Playlist Oficial)       -->
-    <!-- ======================================================================= -->
-    <aside id="classroomRightSidebar" class="hidden lg:flex w-80 lg:w-96 shrink-0 flex-col bg-[#FAF8F5]/80 p-5 space-y-4 overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out">
+    <aside id="classroomRightSidebar" class="hidden lg:flex w-80 lg:w-96 shrink-0 flex-col bg-[#FAF8F5]/90 border-l border-[#EAE5DC] p-4 space-y-3.5 overflow-y-auto custom-scrollbar transition-all duration-300 ease-in-out">
       
-      <!-- Module Card & Dropdown Picker Header -->
-      <div class="space-y-2.5 pb-3 border-b border-[#EAE5DC]">
-        <!-- Module Dropdown Trigger Button -->
-        <div class="relative">
-          <button id="btnModulePicker" onclick="window.toggleModulePicker()" class="w-full p-3 rounded-2xl bg-white border border-[#EAE5DC] hover:border-[#C68A36]/50 shadow-xs flex items-center justify-between gap-3 transition cursor-pointer text-left group">
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-2 mb-0.5">
-                <span class="text-[9px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.2 rounded border border-[#C68A36]/30 uppercase" id="desktopModuleBadge">
-                  MÓDULO 01 DE 30
-                </span>
-                <span class="text-[10px] font-mono font-bold text-[#7A7369]" id="desktopModuleProgressBadge">0/6 Aulas</span>
-              </div>
-              <h3 class="font-black text-xs text-[#0A192F] truncate group-hover:text-[#C68A36] transition" id="desktopModuleName">
-                MS001 - Grazi
-              </h3>
-            </div>
-            <div class="w-7 h-7 rounded-xl bg-stone-100 group-hover:bg-[#F5EFE6] text-[#7A7369] group-hover:text-[#C68A36] flex items-center justify-center shrink-0 transition">
-              <i data-lucide="chevron-down" id="modulePickerChevron" class="w-4 h-4 transition-transform duration-200"></i>
-            </div>
-          </button>
-
-          <!-- Module Dropdown Popover List -->
-          <div id="modulePickerDropdown" class="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAE5DC] rounded-2xl shadow-xl z-30 p-2.5 space-y-2 hidden animate-in fade-in slide-in-from-top-2 duration-150">
-            <!-- Search Bar in Dropdown -->
-            <div class="relative">
-              <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
-              <input type="text" id="moduleSearchInput" oninput="window.filterModulesList(this.value)" placeholder="Buscar módulo ou história..." class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#0A192F] placeholder-stone-400 focus:outline-none focus:border-[#C68A36]">
-            </div>
-
-            <!-- List of Modules (Scrollable) -->
-            <div id="modulePickerItemsList" class="space-y-1 max-h-60 overflow-y-auto custom-scrollbar pr-0.5">
-              <!-- Rendered dynamically -->
+      <!-- Syllabus Header & Course Progress -->
+      <div class="space-y-3 pb-3 border-b border-[#EAE5DC]">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-xl bg-[#F5EFE6] text-[#C68A36] flex items-center justify-center font-bold text-xs shadow-2xs">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+            </span>
+            <div>
+              <h3 class="font-black text-xs text-[#0A192F] uppercase tracking-wider">Grade do Curso</h3>
+              <p class="text-[10px] text-[#7A7369]" id="desktopCourseProgressSummary">Carregando aulas...</p>
             </div>
           </div>
+          <span id="desktopProgressTextBadge" class="text-[11px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">0%</span>
         </div>
 
-        <!-- Weekly Lesson Progress Bar -->
-        <div class="space-y-1 px-1">
-          <div class="flex items-center justify-between text-[11px] font-bold text-[#7A7369]">
-            <span>Progresso da História</span>
-            <span id="moduleWeeklyProgressPercent" class="font-mono text-[#0A192F]">0%</span>
-          </div>
-          <div class="w-full bg-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
-            <div id="moduleWeeklyProgressBar" class="bg-[#C68A36] h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
-          </div>
+        <!-- Course Global Progress Bar -->
+        <div class="w-full bg-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
+          <div id="desktopCourseProgressBar" class="bg-[#C68A36] h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+        </div>
+
+        <!-- Search Bar in Syllabus -->
+        <div class="relative">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input type="text" id="syllabusSearchInput" oninput="window.filterSyllabusLessons(this.value)" placeholder="Buscar aula ou tópico..." class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white border border-stone-200 text-xs text-[#0A192F] placeholder-stone-400 focus:outline-none focus:border-[#C68A36] shadow-2xs">
         </div>
       </div>
 
-      <!-- Lista Interativa das 6 Aulas do Módulo Ativo -->
-      <div id="desktopLessonsList" class="space-y-2 flex-1">
+      <!-- Syllabus Modules Accordion Container -->
+      <div id="desktopCourseSyllabus" class="space-y-2.5 flex-1 overflow-y-auto custom-scrollbar pr-0.5">
         <!-- Rendered dynamically -->
       </div>
 
-      <!-- Bottom: Module Step Navigators + Full Syllabus Link -->
+      <!-- Bottom Actions -->
       <div class="pt-3 border-t border-[#EAE5DC] space-y-2">
-        <div class="flex items-center gap-2">
-          <button id="btnPrevModule" onclick="window.switchPrevModule()" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#F5EFE6] border border-[#EAE5DC] text-[#0A192F] text-[11px] font-bold flex items-center justify-center gap-1 transition shadow-2xs cursor-pointer">
-            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
-            <span class="truncate">Módulo Anterior</span>
-          </button>
-          <button id="btnNextModule" onclick="window.switchNextModule()" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#F5EFE6] border border-[#EAE5DC] text-[#0A192F] text-[11px] font-bold flex items-center justify-center gap-1 transition shadow-2xs cursor-pointer">
-            <span class="truncate">Próximo Módulo</span>
-            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-
         <a id="rightSidebarCourseLink" href="curso.html?curso=ms-legacy" class="w-full py-2 px-3 rounded-xl bg-[#F5EFE6] hover:bg-[#EAE0D0] text-[#C68A36] font-bold text-[11px] flex items-center justify-center gap-1.5 transition shadow-2xs">
           <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
-          <span>Ver Grade Completa no Curso</span>
+          <span>Ver Grade Geral no Curso</span>
         </a>
       </div>
 
@@ -354,7 +321,7 @@
         <button onclick="window.playNextLesson()" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-[#F5EFE6] text-[#0A192F] flex items-center justify-center transition" title="Próxima Aula">
           <i data-lucide="skip-forward" class="w-4 h-4"></i>
         </button>
-        <button onclick="window.toggleSyllabusDrawer()" class="w-9 h-9 rounded-full bg-[#F5EFE6] text-[#C68A36] flex items-center justify-center transition" title="Ver Todas as Aulas">
+        <button onclick="window.toggleSyllabusDrawer()" class="w-9 h-9 rounded-full bg-[#F5EFE6] text-[#C68A36] flex items-center justify-center transition" title="Ver Grade Completa">
           <i data-lucide="list" class="w-4 h-4"></i>
         </button>
       </div>
@@ -371,51 +338,17 @@
       
       <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
         <div>
-          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase" id="drawerModuleBadge">MÓDULO 01 DE 30</span>
-          <h3 class="font-black text-sm text-[#0A192F]" id="drawerModuleTitle">Navegador de Aulas</h3>
+          <span class="text-[10px] font-mono font-bold text-[#C68A36] uppercase" id="drawerCourseBadge">GRADE DO CURSO</span>
+          <h3 class="font-black text-sm text-[#0A192F]" id="drawerCourseTitle">Todas as Aulas & Módulos</h3>
         </div>
         <button onclick="window.toggleSyllabusDrawer()" class="w-8 h-8 rounded-full bg-stone-100 text-slate-600 flex items-center justify-center cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <!-- Mobile Module Dropdown Button -->
-      <div class="relative">
-        <button onclick="window.toggleMobileModulePicker()" id="btnMobileModulePicker" class="w-full p-3 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between gap-2 text-left cursor-pointer">
-          <div class="min-w-0 flex-1">
-            <p class="text-[9px] font-bold text-[#7A7369] uppercase">Módulo Selecionado:</p>
-            <p class="font-black text-xs text-[#0A192F] truncate" id="mobileSelectedModuleName">MS001 - Grazi</p>
-          </div>
-          <div class="px-2.5 py-1 rounded-lg bg-[#C68A36] text-white text-[10px] font-bold flex items-center gap-1 shrink-0">
-            <span>Trocar</span>
-            <i data-lucide="chevron-down" id="mobileModulePickerChevron" class="w-3 h-3 transition-transform"></i>
-          </div>
-        </button>
-
-        <!-- Mobile Module Popover List -->
-        <div id="mobileModulePickerDropdown" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAE5DC] rounded-2xl shadow-2xl z-30 p-2.5 space-y-2">
-          <input type="text" id="mobileModuleSearchInput" oninput="window.filterMobileModulesList(this.value)" placeholder="Buscar história ou módulo..." class="w-full px-3 py-2 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
-          <div id="mobileModulePickerItemsList" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar pr-0.5">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Mobile 6 Lessons List -->
-      <div id="drawerLessonsList" class="space-y-2 overflow-y-auto custom-scrollbar flex-1 pr-0.5">
+      <!-- Mobile Course Syllabus Container -->
+      <div id="drawerCourseSyllabus" class="space-y-2.5 overflow-y-auto custom-scrollbar flex-1 pr-0.5">
         <!-- Rendered dynamically -->
-      </div>
-
-      <!-- Mobile Module Nav Buttons -->
-      <div class="pt-2 border-t border-[#EAE5DC] flex items-center gap-2">
-        <button onclick="window.switchPrevModule()" class="flex-1 py-2.5 rounded-xl bg-stone-100 text-[#0A192F] text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
-          <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
-          <span>Módulo Anterior</span>
-        </button>
-        <button onclick="window.switchNextModule()" class="flex-1 py-2.5 rounded-xl bg-stone-100 text-[#0A192F] text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
-          <span>Próximo Módulo</span>
-          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-        </button>
       </div>
 
     </div>
@@ -597,19 +530,6 @@
         console.warn("⚠️ Live Firestore Sync in Classroom:", err);
       }
 
-      document.addEventListener("click", (e) => {
-        const dd = document.getElementById("modulePickerDropdown");
-        const btn = document.getElementById("btnModulePicker");
-        if (dd && !dd.classList.contains("hidden") && !dd.contains(e.target) && !btn.contains(e.target)) {
-          window.toggleModulePicker();
-        }
-
-        const mdd = document.getElementById("mobileModulePickerDropdown");
-        const mbtn = document.getElementById("btnMobileModulePicker");
-        if (mdd && !mdd.classList.contains("hidden") && !mdd.contains(e.target) && !mbtn.contains(e.target)) {
-          window.toggleMobileModulePicker();
-        }
-      });
     });
 
     function initClassroom(targetModuleId, targetLessonId) {
@@ -633,226 +553,199 @@
       if (mobileLink) mobileLink.href = courseUrl;
 
       const modules = activeCourse.modules || [];
+      const allLessons = getAllCourseLessons();
       
-      if (targetLessonId) {
-        const parentMod = modules.find(m => (m.lessons || []).some(l => l.id === targetLessonId));
-        if (parentMod) activeModule = parentMod;
-      } else if (targetModuleId) {
-        activeModule = modules.find(m => m.id === targetModuleId);
-      }
-      
-      if (!activeModule && modules.length > 0) {
-        activeModule = modules[0];
+      let initialLessonId = targetLessonId;
+      if (!initialLessonId && allLessons.length > 0) {
+        initialLessonId = allLessons[0].id;
       }
 
-      updateModuleUI(targetLessonId);
+      if (initialLessonId) {
+        const parentMod = modules.find(m => (m.lessons || []).some(l => l.id === initialLessonId));
+        if (parentMod) activeModule = parentMod;
+        selectLesson(initialLessonId);
+      } else if (targetModuleId) {
+        activeModule = modules.find(m => m.id === targetModuleId) || modules[0];
+        if (activeModule && activeModule.lessons && activeModule.lessons.length > 0) {
+          selectLesson(activeModule.lessons[0].id);
+        }
+      }
+      
+      renderCourseSyllabus();
     }
 
-    window.toggleModulePicker = () => {
-      const dd = document.getElementById('modulePickerDropdown');
-      const chevron = document.getElementById('modulePickerChevron');
-      if (dd) {
-        dd.classList.toggle('hidden');
-        if (!dd.classList.contains('hidden')) {
-          const search = document.getElementById('moduleSearchInput');
-          if (search) {
-            search.value = '';
-            search.focus();
-            window.filterModulesList('');
+    function getAllCourseLessons() {
+      if (!activeCourse || !activeCourse.modules) return [];
+      const isAdminView = window.location.search.includes('admin=true');
+      const all = [];
+      activeCourse.modules.forEach(mod => {
+        (mod.lessons || []).forEach(les => {
+          if (isAdminView || les.published !== false) {
+            all.push({ ...les, moduleId: mod.id, moduleTitle: mod.title, moduleBadge: mod.badge });
           }
-        }
-      }
-      if (chevron && dd) {
-        chevron.style.transform = dd.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-      }
-    };
+        });
+      });
+      return all;
+    }
 
-    window.toggleMobileModulePicker = () => {
-      const dd = document.getElementById('mobileModulePickerDropdown');
-      const chevron = document.getElementById('mobileModulePickerChevron');
-      if (dd) {
-        dd.classList.toggle('hidden');
-        if (!dd.classList.contains('hidden')) {
-          const search = document.getElementById('mobileModuleSearchInput');
-          if (search) {
-            search.value = '';
-            search.focus();
-            window.filterMobileModulesList('');
-          }
-        }
-      }
-      if (chevron && dd) {
-        chevron.style.transform = dd.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-      }
-    };
-
-    window.filterModulesList = (query) => {
-      const container = document.getElementById('modulePickerItemsList');
-      if (!container || !activeCourse) return;
-      const q = (query || '').toLowerCase().trim();
-      const modules = activeCourse.modules || [];
-      
-      const filtered = modules.filter(m => (m.title + ' ' + (m.badge || '')).toLowerCase().includes(q));
-      
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="p-3 text-center text-xs text-slate-400">Nenhum módulo encontrado.</div>';
-        return;
-      }
-
-      container.innerHTML = filtered.map((m, idx) => {
-        const isAct = activeModule && activeModule.id === m.id;
-        let completedCount = 0;
-        (m.lessons || []).forEach(l => { if (completedLessonIds.includes(l.id)) completedCount++; });
-        const isDone = completedCount === (m.lessons || []).length && (m.lessons || []).length > 0;
-
-        return `
-          <button onclick="switchModule('${m.id}'); window.toggleModulePicker();" class="w-full p-2 rounded-xl text-left text-xs font-bold flex items-center justify-between gap-2 transition cursor-pointer ${
-            isAct ? 'bg-[#C68A36] text-white shadow-2xs' : 'hover:bg-stone-100 text-[#0A192F]'
-          }">
-            <div class="min-w-0 truncate">
-              <span class="text-[9px] font-mono opacity-80 block">${m.badge || `MÓDULO 0${idx+1}`}</span>
-              <p class="truncate font-black text-xs">${m.title}</p>
-            </div>
-            <div class="shrink-0 flex items-center gap-1">
-              ${isDone ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold">✓</span>' : `<span class="text-[10px] font-mono opacity-70">${completedCount}/${(m.lessons||[]).length}</span>`}
-            </div>
-          </button>
-        `;
-      }).join('');
-    };
-
-    window.filterMobileModulesList = (query) => {
-      const container = document.getElementById('mobileModulePickerItemsList');
-      if (!container || !activeCourse) return;
-      const q = (query || '').toLowerCase().trim();
-      const modules = activeCourse.modules || [];
-      
-      const filtered = modules.filter(m => (m.title + ' ' + (m.badge || '')).toLowerCase().includes(q));
-      
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="p-3 text-center text-xs text-slate-400">Nenhum módulo encontrado.</div>';
-        return;
-      }
-
-      container.innerHTML = filtered.map((m, idx) => {
-        const isAct = activeModule && activeModule.id === m.id;
-        let completedCount = 0;
-        (m.lessons || []).forEach(l => { if (completedLessonIds.includes(l.id)) completedCount++; });
-        const isDone = completedCount === (m.lessons || []).length && (m.lessons || []).length > 0;
-
-        return `
-          <button onclick="switchModule('${m.id}'); window.toggleMobileModulePicker();" class="w-full p-2.5 rounded-xl text-left text-xs font-bold flex items-center justify-between gap-2 transition cursor-pointer ${
-            isAct ? 'bg-[#C68A36] text-white shadow-2xs' : 'hover:bg-stone-100 text-[#0A192F]'
-          }">
-            <div class="min-w-0 truncate">
-              <span class="text-[9px] font-mono opacity-80 block">${m.badge || `MÓDULO 0${idx+1}`}</span>
-              <p class="truncate font-black text-xs">${m.title}</p>
-            </div>
-            <div class="shrink-0 flex items-center gap-1">
-              ${isDone ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono font-bold">✓</span>' : `<span class="text-[10px] font-mono opacity-70">${completedCount}/${(m.lessons||[]).length}</span>`}
-            </div>
-          </button>
-        `;
-      }).join('');
-    };
-
-    window.switchPrevModule = () => {
-      if (!activeCourse || !activeModule) return;
-      const modules = activeCourse.modules || [];
-      const idx = modules.findIndex(m => m.id === activeModule.id);
-      if (idx > 0) {
-        switchModule(modules[idx - 1].id);
-        showToast(`Carregado: ${modules[idx - 1].title}`);
-      } else {
-        showToast("Você já está no primeiro módulo!");
-      }
-    };
-
-    window.switchNextModule = () => {
-      if (!activeCourse || !activeModule) return;
-      const modules = activeCourse.modules || [];
-      const idx = modules.findIndex(m => m.id === activeModule.id);
-      if (idx < modules.length - 1) {
-        switchModule(modules[idx + 1].id);
-        showToast(`Carregado: ${modules[idx + 1].title}`);
-      } else {
-        showToast("Você chegou ao último módulo!");
-      }
-    };
-
-    function switchModule(moduleId) {
+    function switchModuleAndLesson(moduleId, lessonId) {
       if (!activeCourse) return;
       const mod = (activeCourse.modules || []).find(m => m.id === moduleId);
-      if (!mod) return;
-
-      activeModule = mod;
-      updateModuleUI(null);
+      if (mod) activeModule = mod;
+      selectLesson(lessonId);
+      renderCourseSyllabus();
     }
 
-    function updateModuleUI(targetLessonId) {
-      if (!activeModule || !activeCourse) return;
+    window.toggleModuleAccordion = (accordionId) => {
+      const container = document.getElementById(accordionId);
+      const chevron = document.getElementById(`chevron-${accordionId}`);
+      if (container) {
+        container.classList.toggle('hidden');
+        if (chevron) {
+          chevron.classList.toggle('rotate-180', !container.classList.contains('hidden'));
+        }
+      }
+    };
 
-      const lessons = activeModule.lessons || [];
+    window.filterSyllabusLessons = (query) => {
+      renderCourseSyllabus(query);
+    };
+
+    function renderCourseSyllabus(searchFilter = '') {
+      if (!activeCourse) return;
       const modules = activeCourse.modules || [];
-      const currentModIdx = modules.findIndex(m => m.id === activeModule.id);
-      const totalModules = modules.length;
+      const q = (searchFilter || '').toLowerCase().trim();
+      const isAdminView = window.location.search.includes('admin=true');
 
-      // Module Index Badges
-      const modBadgeText = `MÓDULO 0${currentModIdx + 1} DE ${totalModules < 10 ? '0' + totalModules : totalModules}`;
-      
-      const desktopBadgeEl = document.getElementById("desktopModuleBadge");
-      if (desktopBadgeEl) desktopBadgeEl.innerText = modBadgeText;
+      const allCourseLessons = getAllCourseLessons();
+      let totalCompleted = 0;
+      allCourseLessons.forEach(l => {
+        if (completedLessonIds.includes(l.id)) totalCompleted++;
+      });
+      const globalPercent = allCourseLessons.length > 0 ? Math.round((totalCompleted / allCourseLessons.length) * 100) : 0;
 
-      const desktopNameEl = document.getElementById("desktopModuleName");
-      if (desktopNameEl) desktopNameEl.innerText = activeModule.title;
+      // Update Global Progress
+      const bar = document.getElementById("desktopCourseProgressBar");
+      const summary = document.getElementById("desktopCourseProgressSummary");
+      const badge = document.getElementById("desktopProgressTextBadge");
+      const desktopBarLeft = document.getElementById("desktopProgressBar");
+      const desktopTextLeft = document.getElementById("desktopProgressText");
 
-      const mobileSelectedEl = document.getElementById("mobileSelectedModuleName");
-      if (mobileSelectedEl) mobileSelectedEl.innerText = activeModule.title;
+      if (bar) bar.style.width = `${globalPercent}%`;
+      if (summary) summary.innerText = `${totalCompleted} de ${allCourseLessons.length} aulas concluídas`;
+      if (badge) badge.innerText = `${globalPercent}%`;
+      if (desktopBarLeft) desktopBarLeft.style.width = `${globalPercent}%`;
+      if (desktopTextLeft) desktopTextLeft.innerText = `${globalPercent}%`;
 
-      const drawerBadgeEl = document.getElementById("drawerModuleBadge");
-      if (drawerBadgeEl) drawerBadgeEl.innerText = modBadgeText;
+      const renderModulesHtml = (isMobile = false) => {
+        if (modules.length === 0) {
+          return `<div class="p-4 text-center text-xs text-slate-400">Nenhum módulo cadastrado neste curso.</div>`;
+        }
 
-      // Calculate Module Completed Lessons
-      let completedInMod = 0;
-      lessons.forEach(l => { if (completedLessonIds.includes(l.id)) completedInMod++; });
-      const modPercent = lessons.length > 0 ? Math.round((completedInMod / lessons.length) * 100) : 0;
+        return modules.map((mod, modIdx) => {
+          const modLessons = (mod.lessons || []).filter(l => isAdminView || l.published !== false);
+          
+          // Filter by search query if present
+          const filteredLessons = modLessons.filter(l => {
+            if (!q) return true;
+            return (l.title + ' ' + (l.description || '') + ' ' + mod.title).toLowerCase().includes(q);
+          });
 
-      const desktopProgBadge = document.getElementById("desktopModuleProgressBadge");
-      if (desktopProgBadge) desktopProgBadge.innerText = `${completedInMod}/${lessons.length} Aulas`;
+          if (q && filteredLessons.length === 0 && !mod.title.toLowerCase().includes(q)) {
+            return ''; // Hide module if no match
+          }
 
-      const weeklyPercentEl = document.getElementById("moduleWeeklyProgressPercent");
-      if (weeklyPercentEl) weeklyPercentEl.innerText = `${modPercent}%`;
+          const isCurrentModule = activeModule && activeModule.id === mod.id;
+          let completedInMod = 0;
+          modLessons.forEach(l => { if (completedLessonIds.includes(l.id)) completedInMod++; });
+          const isModDone = completedInMod === modLessons.length && modLessons.length > 0;
 
-      const weeklyBarEl = document.getElementById("moduleWeeklyProgressBar");
-      if (weeklyBarEl) weeklyBarEl.style.width = `${modPercent}%`;
+          const lessonsListHtml = filteredLessons.map((les, lIdx) => {
+            const isCurLesson = activeLesson && activeLesson.id === les.id;
+            const isLesDone = completedLessonIds.includes(les.id);
+            const clickAction = isMobile 
+              ? `switchModuleAndLesson('${mod.id}', '${les.id}'); window.toggleSyllabusDrawer();`
+              : `switchModuleAndLesson('${mod.id}', '${les.id}');`;
 
-      // Render Module Picker Items in Dropdowns
-      window.filterModulesList('');
-      window.filterMobileModulesList('');
+            return `
+              <div onclick="${clickAction}" class="p-2.5 rounded-xl transition cursor-pointer flex items-center justify-between gap-2.5 ${
+                isCurLesson 
+                  ? 'bg-[#FDF8F0] border-2 border-[#C68A36] shadow-2xs font-black' 
+                  : 'bg-white border border-[#EAE5DC] hover:border-slate-300 hover:bg-stone-50/70 font-medium'
+              }">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <div class="w-6 h-6 rounded-lg ${
+                    isLesDone 
+                      ? 'bg-emerald-500 text-white' 
+                      : (isCurLesson ? 'bg-[#C68A36] text-white' : 'bg-stone-100 text-slate-600')
+                  } flex items-center justify-center font-bold text-[10px] shrink-0 shadow-2xs">
+                    ${isLesDone ? '<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>' : (lIdx + 1)}
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-xs ${isCurLesson ? 'text-[#0A192F] font-black' : 'text-slate-700 font-bold'} truncate leading-tight">${les.title}</p>
+                    <div class="flex items-center gap-2 mt-0.5">
+                      <span class="text-[10px] text-[#7A7369] font-mono">${les.duration || '05:00'}</span>
+                      ${isLesDone ? '<span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1 rounded">Feito</span>' : ''}
+                    </div>
+                  </div>
+                </div>
+                <div class="shrink-0">
+                  <i data-lucide="${isCurLesson ? 'play-circle' : 'play'}" class="w-3.5 h-3.5 ${isCurLesson ? 'text-[#C68A36]' : 'text-slate-300'}"></i>
+                </div>
+              </div>
+            `;
+          }).join('');
 
-      let defaultLesson = null;
-      if (targetLessonId) {
-        defaultLesson = lessons.find(l => l.id === targetLessonId);
-      }
-      if (!defaultLesson && lessons.length > 0) {
-        defaultLesson = lessons[0];
-      }
+          const accordionId = `${isMobile ? 'mobile' : 'desktop'}-mod-${mod.id}`;
+          const isExpanded = isCurrentModule || !!q;
 
-      if (defaultLesson) {
-        selectLesson(defaultLesson.id);
-      }
+          return `
+            <div class="rounded-2xl border border-[#EAE5DC] bg-[#FAF8F5] overflow-hidden shadow-2xs">
+              <button onclick="window.toggleModuleAccordion('${accordionId}')" class="w-full p-3 bg-white hover:bg-stone-50 transition flex items-center justify-between gap-2.5 text-left cursor-pointer group">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="text-[9px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-1.5 py-0.2 rounded border border-[#C68A36]/30 uppercase">
+                      ${mod.badge || `MÓDULO 0${modIdx + 1}`}
+                    </span>
+                    <span class="text-[10px] font-mono text-[#7A7369]">
+                      ${isModDone ? '✓ Concluído' : `${completedInMod}/${modLessons.length} Aulas`}
+                    </span>
+                  </div>
+                  <h4 class="font-black text-xs text-[#0A192F] truncate group-hover:text-[#C68A36] transition">${mod.title}</h4>
+                </div>
+                <div class="w-6 h-6 rounded-lg bg-stone-100 group-hover:bg-[#F5EFE6] text-[#7A7369] group-hover:text-[#C68A36] flex items-center justify-center shrink-0 transition">
+                  <i data-lucide="chevron-down" id="chevron-${accordionId}" class="w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}"></i>
+                </div>
+              </button>
+              <div id="${accordionId}" class="p-2 space-y-1.5 bg-[#FAF8F5] ${isExpanded ? '' : 'hidden'} border-t border-[#EAE5DC]">
+                ${lessonsListHtml || '<p class="text-[11px] text-slate-400 p-2 italic">Nenhuma aula neste módulo.</p>'}
+              </div>
+            </div>
+          `;
+        }).join('');
+      };
 
-      updateCourseProgress();
+      const desktopContainer = document.getElementById("desktopCourseSyllabus");
+      if (desktopContainer) desktopContainer.innerHTML = renderModulesHtml(false);
+
+      const drawerContainer = document.getElementById("drawerCourseSyllabus");
+      if (drawerContainer) drawerContainer.innerHTML = renderModulesHtml(true);
+
+      updateIcons();
     }
 
     function selectLesson(lessonId) {
-      if (!activeModule) return;
-
-      const lessons = activeModule.lessons || [];
-      const found = lessons.find(l => l.id === lessonId);
+      const allCourseLessons = getAllCourseLessons();
+      const found = allCourseLessons.find(l => l.id === lessonId);
       if (!found) return;
 
       activeLesson = found;
+
+      // Garante que o activeModule corresponde ao módulo da aula
+      if (activeCourse && activeCourse.modules) {
+        const parentMod = activeCourse.modules.find(m => m.id === found.moduleId);
+        if (parentMod) activeModule = parentMod;
+      }
 
       // Salva no aefLearningTracker para persistência e continuidade
       if (window.aefLearningTracker && activeCourse && activeModule) {
@@ -895,14 +788,15 @@
       }
 
       document.getElementById("bottomTrayLessonTitle").innerText = found.title;
-      document.getElementById("bottomTrayStatusLabel").innerText = `Reproduzindo - Aula ${found.order} de ${lessons.length}`;
+      
+      const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === found.id);
+      document.getElementById("bottomTrayStatusLabel").innerText = `Reproduzindo - Aula ${currentGlobalIdx + 1} de ${allCourseLessons.length}`;
 
-      const currentIndex = lessons.findIndex(l => l.id === found.id);
       const btnPrev = document.getElementById("btnPrevLesson");
       const btnNext = document.getElementById("btnNextLesson");
 
       if (btnPrev) {
-        if (currentIndex === 0) {
+        if (currentGlobalIdx <= 0) {
           btnPrev.disabled = true;
           btnPrev.classList.add("opacity-40", "cursor-not-allowed");
           btnPrev.classList.remove("hover:bg-stone-200", "active:scale-95");
@@ -914,7 +808,7 @@
       }
 
       if (btnNext) {
-        if (currentIndex === lessons.length - 1) {
+        if (currentGlobalIdx === -1 || currentGlobalIdx >= allCourseLessons.length - 1) {
           btnNext.disabled = true;
           btnNext.classList.add("opacity-40", "cursor-not-allowed");
           btnNext.classList.remove("hover:bg-stone-200", "active:scale-95");
@@ -1124,7 +1018,7 @@
           pdfLink.removeAttribute("target");
           pdfLink.classList.add("opacity-40", "pointer-events-none", "cursor-not-allowed");
           if (pdfBtnLabel) pdfBtnLabel.innerText = "Material em Preparação";
-          pdfLink.title = "Nenhum PDF disponível no momento";
+          pdfLink.title = "Nenhum PDF disponível para esta aula introdutória";
         }
       }
 
@@ -1139,59 +1033,7 @@
         label.innerText = "Concluir Aula";
       }
 
-      renderDrawerLessons();
-      updateIcons();
-    }
-
-    function renderDrawerLessons() {
-      if (!activeModule) return;
-      const isAdminView = window.location.search.includes('admin=true');
-      const lessons = (activeModule.lessons || []).filter(l => isAdminView || l.published !== false);
-
-      const renderCard = (les, idx, onClickCode) => {
-        const isCurrent = activeLesson && activeLesson.id === les.id;
-        const isCompleted = completedLessonIds.includes(les.id);
-        return `
-          <div onclick="${onClickCode}" class="p-3.5 rounded-2xl transition cursor-pointer flex items-center justify-between gap-3 ${
-            isCurrent 
-              ? 'bg-[#FDF8F0] border-2 border-[#C68A36] shadow-xs' 
-              : 'bg-white border border-[#EAE5DC] hover:border-slate-300 hover:bg-stone-50/50'
-          }">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-8 h-8 rounded-full ${
-                isCompleted 
-                  ? 'bg-emerald-500 text-white' 
-                  : (isCurrent ? 'bg-[#C68A36] text-white' : 'bg-stone-100 text-slate-600')
-              } flex items-center justify-center font-black text-xs shrink-0 shadow-2xs">
-                ${isCompleted ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : (idx+1 < 10 ? '0'+(idx+1) : (idx+1))}
-              </div>
-              <div class="min-w-0">
-                <h4 class="font-bold text-xs ${isCurrent ? 'text-[#0A192F]' : 'text-slate-700'} truncate">${les.title}</h4>
-                <div class="flex items-center gap-2 mt-0.5">
-                  <span class="text-[10px] font-bold text-[#7A7369] flex items-center gap-1">
-                    <i data-lucide="clock" class="w-3 h-3"></i> ${les.duration || '05:00'}
-                  </span>
-                  ${isCompleted ? '<span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">Concluída</span>' : ''}
-                </div>
-              </div>
-            </div>
-            <div class="shrink-0 flex items-center">
-              <i data-lucide="${isCurrent ? 'play-circle' : 'play'}" class="w-4 h-4 ${isCurrent ? 'text-[#C68A36]' : 'text-slate-400'}"></i>
-            </div>
-          </div>
-        `;
-      };
-
-      const desktopList = document.getElementById("desktopLessonsList");
-      if (desktopList) {
-        desktopList.innerHTML = lessons.map((les, idx) => renderCard(les, idx, `selectLesson('${les.id}')`)).join('');
-      }
-
-      const drawerList = document.getElementById("drawerLessonsList");
-      if (drawerList) {
-        drawerList.innerHTML = lessons.map((les, idx) => renderCard(les, idx, `selectLesson('${les.id}'); window.toggleSyllabusDrawer();`)).join('');
-      }
-
+      renderCourseSyllabus();
       updateIcons();
     }
 
@@ -1210,21 +1052,7 @@
       }
 
       selectLesson(id);
-      updateCourseProgress();
-    }
-
-    function updateCourseProgress() {
-      const lessons = activeModule?.lessons || [];
-      let completedCount = 0;
-      lessons.forEach(les => {
-        if (completedLessonIds.includes(les.id)) completedCount++;
-      });
-
-      const percentage = lessons.length > 0 ? Math.round((completedCount / lessons.length) * 100) : 0;
-      const bar = document.getElementById("desktopProgressBar");
-      const text = document.getElementById("desktopProgressText");
-      if (bar) bar.style.width = `${percentage}%`;
-      if (text) text.innerText = `${percentage}%`;
+      renderCourseSyllabus();
     }
 
     function sendCurrentLessonToTrainingPlayer() {
@@ -1253,20 +1081,22 @@
     };
 
     window.playPrevLesson = () => {
-      const lessons = activeModule?.lessons || [];
-      if (!activeLesson || lessons.length === 0) return;
-      const currentIndex = lessons.findIndex(l => l.id === activeLesson.id);
-      if (currentIndex > 0) {
-        selectLesson(lessons[currentIndex - 1].id);
+      const allCourseLessons = getAllCourseLessons();
+      if (!activeLesson || allCourseLessons.length === 0) return;
+      const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === activeLesson.id);
+      if (currentGlobalIdx > 0) {
+        const prev = allCourseLessons[currentGlobalIdx - 1];
+        switchModuleAndLesson(prev.moduleId, prev.id);
       }
     };
 
     window.playNextLesson = () => {
-      const lessons = activeModule?.lessons || [];
-      if (!activeLesson || lessons.length === 0) return;
-      const currentIndex = lessons.findIndex(l => l.id === activeLesson.id);
-      if (currentIndex < lessons.length - 1) {
-        selectLesson(lessons[currentIndex + 1].id);
+      const allCourseLessons = getAllCourseLessons();
+      if (!activeLesson || allCourseLessons.length === 0) return;
+      const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === activeLesson.id);
+      if (currentGlobalIdx >= 0 && currentGlobalIdx < allCourseLessons.length - 1) {
+        const next = allCourseLessons[currentGlobalIdx + 1];
+        switchModuleAndLesson(next.moduleId, next.id);
       }
     };
 
