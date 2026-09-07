@@ -572,6 +572,14 @@
       return this.currentProfile.tier || 'free';
     }
 
+    getUserTier() {
+      return this.getActiveTier();
+    }
+
+    getTier() {
+      return this.getActiveTier();
+    }
+
     // Check if user has access to a specific tier/product
     hasAccess(requiredTier) {
       if (this.isAdmin()) return true; // God Mode real: Admin passa por todos os portões
@@ -597,32 +605,15 @@
             email: 'selexenglish@gmail.com',
             role: 'admin',
             tier: 'admin_master',
-            enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas']
+            enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'dtc_curso']
           };
           this._syncLocalStorage(this.currentProfile);
         }
         return true;
       }
 
-      try {
-        await this.ready();
-      } catch (e) {}
-
-      // Wait briefly for auth state to resolve if not yet initialized
-      if (this.auth && !this.auth.currentUser) {
-        await new Promise((resolve) => {
-          const unsubscribe = this.auth.onAuthStateChanged((user) => {
-            if (typeof unsubscribe === 'function') unsubscribe();
-            resolve(user);
-          });
-          setTimeout(() => resolve(null), 2000);
-        });
-      }
-
-      let user = this.auth?.currentUser;
-
-      // Fallback: Checa se há sessão válida persistida em localStorage
-      if (!user && typeof localStorage !== 'undefined') {
+      // 1. Checa se há sessão válida persistida em localStorage para resolução instantânea (0ms)
+      if (!this.currentUser && typeof localStorage !== 'undefined') {
         const cachedEmail = localStorage.getItem('aef_user_email');
         const isLoggedOut = localStorage.getItem('aef_logged_out') === 'true';
         if (cachedEmail && !isLoggedOut) {
@@ -636,14 +627,33 @@
               enrolledProducts: JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]')
             };
           }
-          user = {
+          this.currentUser = {
             uid: this.currentProfile.uid,
             email: this.currentProfile.email,
             displayName: this.currentProfile.name
           };
-          this.currentUser = user;
         }
       }
+
+      // 2. Se já tem perfil / usuário carregado, não precisa esperar timeout de rede
+      if (!this.currentUser) {
+        try {
+          await this.ready();
+        } catch (e) {}
+
+        // Wait briefly for auth state to resolve if not yet initialized
+        if (this.auth && !this.auth.currentUser) {
+          await new Promise((resolve) => {
+            const unsubscribe = this.auth.onAuthStateChanged((user) => {
+              if (typeof unsubscribe === 'function') unsubscribe();
+              resolve(user);
+            });
+            setTimeout(() => resolve(null), 1500);
+          });
+        }
+      }
+
+      let user = this.currentUser || this.auth?.currentUser;
 
       if (!user) {
         const defaultRedirect = requireAdmin 
@@ -727,18 +737,26 @@
         vipMentees: []
       };
 
+      if (!this.db) {
+        return results;
+      }
+
       try {
         // 1. Fetch from 'users' collection
         const usersSnap = await this.db.collection('users').get();
-        usersSnap.forEach(doc => {
-          results.users.push({ id: doc.id, ...doc.data() });
-        });
+        if (usersSnap && usersSnap.forEach) {
+          usersSnap.forEach(doc => {
+            results.users.push({ id: doc.id, ...doc.data() });
+          });
+        }
 
         // 2. Fetch from 'students' collection (VIP Mentee Profiles)
         const menteesSnap = await this.db.collection('students').get();
-        menteesSnap.forEach(doc => {
-          results.vipMentees.push({ id: doc.id, ...doc.data() });
-        });
+        if (menteesSnap && menteesSnap.forEach) {
+          menteesSnap.forEach(doc => {
+            results.vipMentees.push({ id: doc.id, ...doc.data() });
+          });
+        }
       } catch (e) {
         console.warn("Error fetching students and mentees:", e);
       }

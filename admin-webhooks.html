@@ -947,12 +947,13 @@
     });
 
     // Alternar Template no Simulador
-    function loadTemplate(key) {
+    function loadTemplate(key, btnEl = null) {
       document.querySelectorAll('.template-btn').forEach(btn => {
         btn.classList.remove('border-amber-400', 'bg-amber-500/10');
       });
-      if (event && event.currentTarget) {
-        event.currentTarget.classList.add('border-amber-400', 'bg-amber-500/10');
+      const targetBtn = btnEl || (typeof event !== 'undefined' && event && event.currentTarget ? event.currentTarget : null);
+      if (targetBtn && targetBtn.classList) {
+        targetBtn.classList.add('border-amber-400', 'bg-amber-500/10');
       }
 
       const tpl = JSON.parse(JSON.stringify(SIMULATOR_TEMPLATES[key] || SIMULATOR_TEMPLATES.purchase_club_anual));

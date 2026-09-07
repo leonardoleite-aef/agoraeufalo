@@ -348,16 +348,16 @@
 
       // Atualiza Hero Card
       const titleEl = document.getElementById("courseHeroTitle");
-      if (titleEl && COURSE_DATA.title) titleEl.innerText = COURSE_DATA.title;
+      if (titleEl && COURSE_DATA.title) titleEl.textContent = COURSE_DATA.title;
       
       const descEl = document.getElementById("courseHeroDescription");
-      if (descEl && COURSE_DATA.description) descEl.innerText = COURSE_DATA.description;
+      if (descEl && COURSE_DATA.description) descEl.textContent = COURSE_DATA.description;
       
       const imageEl = document.getElementById("courseHeroImage");
       if (imageEl && COURSE_DATA.coverImageUrl) imageEl.src = COURSE_DATA.coverImageUrl;
       
       const badgeEl = document.getElementById("courseHeroBadge");
-      if (badgeEl && COURSE_DATA.badge) badgeEl.innerText = COURSE_DATA.badge;
+      if (badgeEl && COURSE_DATA.badge) badgeEl.textContent = COURSE_DATA.badge;
 
       // Suporte a Google Meet e Mentoria VIP na barra lateral
       const isVIP = COURSE_DATA.tierRequired === 'vip' || COURSE_DATA.id.startsWith('mentoria-') || (COURSE_DATA.badge && COURSE_DATA.badge.includes('VIP'));
@@ -369,8 +369,8 @@
       if (isVIP && meetCard) {
         meetCard.classList.remove("hidden");
         if (meetBtn && COURSE_DATA.meetUrl) meetBtn.href = COURSE_DATA.meetUrl;
-        if (memberBadge) memberBadge.innerText = "MENTORIA VIP INDIVIDUAL";
-        if (nextTitle) nextTitle.innerText = "Espaço Exclusivo com o Leo";
+        if (memberBadge) memberBadge.textContent = "MENTORIA VIP INDIVIDUAL";
+        if (nextTitle) nextTitle.textContent = "Espaço Exclusivo com o Leo";
       }
 
       const courseProgress = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(COURSE_DATA.id) : null;
@@ -544,9 +544,12 @@
 
       // Update Global Progress
       const globalPercent = totalLessons > 0 ? Math.round((totalCompleted / totalLessons) * 100) : 0;
-      document.getElementById("courseCompletedLessonsLabel").innerText = `${totalCompleted}/${totalLessons} conteúdos`;
-      document.getElementById("courseProgressPercentageLabel").innerText = `${globalPercent}%`;
-      document.getElementById("courseHeroProgressBar").style.width = `${globalPercent}%`;
+      const compLabel = document.getElementById("courseCompletedLessonsLabel");
+      if (compLabel) compLabel.textContent = `${totalCompleted}/${totalLessons} conteúdos`;
+      const percLabel = document.getElementById("courseProgressPercentageLabel");
+      if (percLabel) percLabel.textContent = `${globalPercent}%`;
+      const pBar = document.getElementById("courseHeroProgressBar");
+      if (pBar) pBar.style.width = `${globalPercent}%`;
     }
 
     function toggleModuleAccordion(modId) {

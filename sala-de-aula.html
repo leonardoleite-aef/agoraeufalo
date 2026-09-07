@@ -503,7 +503,7 @@
       activeCourse = baseCourses[courseId] || COURSE_SEEDS[courseId] || baseCourses["ms-legacy"] || COURSE_SEEDS["ms-legacy"];
       
       const mobileHeaderTitle = document.getElementById("mobileCourseHeaderTitle");
-      if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.innerText = activeCourse.title;
+      if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.textContent = activeCourse.title;
 
       initClassroom(targetModuleId, targetLessonId);
       applySidebarStates();
@@ -531,7 +531,7 @@
           if (liveCourses && (liveCourses[courseId] || liveCourses[`mentoria-${rawParam}`])) {
             activeCourse = liveCourses[courseId] || liveCourses[`mentoria-${rawParam}`];
             COURSE_SEEDS[courseId] = activeCourse;
-            if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.innerText = activeCourse.title;
+            if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.textContent = activeCourse.title;
             initClassroom(targetModuleId, targetLessonId);
             updateIcons();
           }
@@ -642,10 +642,10 @@
       const desktopTextLeft = document.getElementById("desktopProgressText");
 
       if (bar) bar.style.width = `${globalPercent}%`;
-      if (summary) summary.innerText = `${totalCompleted} de ${allCourseLessons.length} aulas concluídas`;
-      if (badge) badge.innerText = `${globalPercent}%`;
+      if (summary) summary.textContent = `${totalCompleted} de ${allCourseLessons.length} aulas concluídas`;
+      if (badge) badge.textContent = `${globalPercent}%`;
       if (desktopBarLeft) desktopBarLeft.style.width = `${globalPercent}%`;
-      if (desktopTextLeft) desktopTextLeft.innerText = `${globalPercent}%`;
+      if (desktopTextLeft) desktopTextLeft.textContent = `${globalPercent}%`;
 
       const renderModulesHtml = (isMobile = false) => {
         if (modules.length === 0) {
@@ -784,23 +784,28 @@
       const topBreadcrumbCourse = document.getElementById("topBreadcrumbCourse");
       const topBreadcrumbModule = document.getElementById("topBreadcrumbModule");
       const topBreadcrumbLesson = document.getElementById("topBreadcrumbLesson");
-      if (topBreadcrumbCourse && activeCourse) topBreadcrumbCourse.innerText = (activeCourse.title || "Magic Stories Legacy").split('•')[0].trim();
-      if (topBreadcrumbModule && activeModule) topBreadcrumbModule.innerText = activeModule.shortTitle || activeModule.title;
-      if (topBreadcrumbLesson) topBreadcrumbLesson.innerText = found.title;
+      if (topBreadcrumbCourse && activeCourse) topBreadcrumbCourse.textContent = (activeCourse.title || "Magic Stories Legacy").split('•')[0].trim();
+      if (topBreadcrumbModule && activeModule) topBreadcrumbModule.textContent = activeModule.shortTitle || activeModule.title;
+      if (topBreadcrumbLesson) topBreadcrumbLesson.textContent = found.title;
 
-      document.getElementById("currentLessonTitle").innerText = found.title;
-      document.getElementById("currentLessonOrderBadge").innerText = `AULA 0${found.order}`;
-      document.getElementById("currentLessonDuration").innerText = found.duration || "05:00";
+      const titleEl = document.getElementById("currentLessonTitle");
+      if (titleEl) titleEl.textContent = found.title;
+      const orderEl = document.getElementById("currentLessonOrderBadge");
+      if (orderEl) orderEl.textContent = `AULA 0${found.order}`;
+      const durEl = document.getElementById("currentLessonDuration");
+      if (durEl) durEl.textContent = found.duration || "05:00";
       
       const descEl = document.getElementById("currentLessonDescription");
       if (descEl) {
-        descEl.innerText = found.description || "Treino prático do Método Magic Stories com o Professor Leonardo Leite.";
+        descEl.textContent = found.description || "Treino prático do Método Magic Stories com o Professor Leonardo Leite.";
       }
 
-      document.getElementById("bottomTrayLessonTitle").innerText = found.title;
+      const trayTitleEl = document.getElementById("bottomTrayLessonTitle");
+      if (trayTitleEl) trayTitleEl.textContent = found.title;
       
       const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === found.id);
-      document.getElementById("bottomTrayStatusLabel").innerText = `Reproduzindo - Aula ${currentGlobalIdx + 1} de ${allCourseLessons.length}`;
+      const trayStatusEl = document.getElementById("bottomTrayStatusLabel");
+      if (trayStatusEl) trayStatusEl.textContent = `Reproduzindo - Aula ${currentGlobalIdx + 1} de ${allCourseLessons.length}`;
 
       const btnPrev = document.getElementById("btnPrevLesson");
       const btnNext = document.getElementById("btnNextLesson");
@@ -967,7 +972,10 @@
       }
 
       // Suporte a CTA de Conversão no Último Minuto (Aluno Free em Módulo de Degustação)
-      const isFreeStudent = (!window.aefPortalAuth || window.aefPortalAuth.getUserTier() === 'free');
+      const currentStudentTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function') 
+        ? window.aefPortalAuth.getActiveTier() 
+        : (localStorage.getItem("aef_user_tier") || 'free');
+      const isFreeStudent = currentStudentTier === 'free';
       const isFreeModule = activeModule && (
         activeModule.isFreeTier === true || 
         (activeCourse && Array.isArray(activeCourse.freeModuleIds) && activeCourse.freeModuleIds.includes(activeModule.id)) ||
