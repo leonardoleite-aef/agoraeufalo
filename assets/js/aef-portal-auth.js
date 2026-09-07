@@ -623,9 +623,9 @@
 
       if (!user) {
         const defaultRedirect = requireAdmin 
-          ? (window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('admin-login.html') : 'admin-login.html')
-          : (window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('login.html') : 'login.html');
-        const targetUrl = (redirectUrl && redirectUrl !== 'login.html') ? redirectUrl : defaultRedirect;
+          ? (window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : '/login')
+          : (window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('login') : '/login');
+        const targetUrl = (redirectUrl && redirectUrl !== 'login.html' && redirectUrl !== '/login') ? redirectUrl : defaultRedirect;
         console.warn(`🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para ${targetUrl}`);
         try {
           if (requireAdmin) {
@@ -641,14 +641,15 @@
       if (requireAdmin && !this.isAdmin()) {
         console.warn("🔒 [AEFPortalAuth] Acesso negado: Requer privilégios de Administrador.");
         alert("Acesso restrito ao Professor Leonardo Leite e Administradores.");
-        const adminLoginTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('admin-login.html') : 'admin-login.html';
+        const adminLoginTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : '/login';
         window.location.replace(adminLoginTarget);
         return false;
       }
 
       if (requiredTier && !this.hasAccess(requiredTier)) {
         console.warn(`🔒 [AEFPortalAuth] Acesso negado: Requer plano ${requiredTier}`);
-        window.location.replace('portal.html?upgrade=true');
+        const upgradeTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('?upgrade=true') : '/?upgrade=true';
+        window.location.replace(upgradeTarget);
         return false;
       }
 

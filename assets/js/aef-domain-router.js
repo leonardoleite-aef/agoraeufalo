@@ -48,38 +48,18 @@
     }
 
     getPublicUrl(path = '') {
-      const clean = path.startsWith('/') ? path : `/${path}`;
+      const clean = path ? (path.startsWith('/') ? path : `/${path}`) : '/';
       return this.isLocal() ? clean : `https://agoraeufalo.com.br${clean}`;
     }
 
-    getAppUrl(path = 'portal.html') {
-      const clean = path.startsWith('/') ? path : `/${path}`;
+    getAppUrl(path = '') {
+      const clean = path ? (path.startsWith('/') ? path : `/${path}`) : '/';
       return this.isLocal() ? clean : `https://app.agoraeufalo.com.br${clean}`;
     }
 
-    getAdminUrl(path = 'admin.html') {
-      const clean = path.startsWith('/') ? path : `/${path}`;
+    getAdminUrl(path = '') {
+      const clean = path ? (path.startsWith('/') ? path : `/${path}`) : '/';
       return this.isLocal() ? clean : `https://admin.agoraeufalo.com.br${clean}`;
-    }
-
-    init() {
-      if (this.isLocal()) return;
-
-      const fullSuffix = this.search + this.hash;
-
-      // 1. Subdomínio ADMIN (admin.agoraeufalo.com.br)
-      if (this.isAdminDomain()) {
-        if (this.page === '' || this.page === 'index.html') {
-          window.location.replace('admin.html' + fullSuffix);
-        }
-      }
-
-      // 2. Subdomínio APP (app.agoraeufalo.com.br)
-      if (this.isAppDomain()) {
-        if (this.page === '' || this.page === 'index.html') {
-          window.location.replace('portal.html' + fullSuffix);
-        }
-      }
     }
   }
 
