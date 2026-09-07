@@ -42,6 +42,7 @@
   <script src="/assets/js/aef-offers-registry.js"></script>
   <script src="/assets/js/aef-block-engine.js"></script>
   <script src="/assets/js/aef-checkout-modal.js"></script>
+  <script src="/assets/js/aef-quizzes-registry.js"></script>
 
   <style>
     body {
@@ -522,7 +523,7 @@
       }
 
       if (tier === 'free') {
-        return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom' || cId === 'dtc_curso';
+        return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom' || cId === 'dtc_curso' || cId === 'quizzes';
       }
 
       if (tier === 'club_monthly' || tier === 'club_annual' || tier === 'course_member' || tier === 'pro' || tier === 'lifetime') {
@@ -759,6 +760,39 @@
         });
       }
 
+      if (state.courseId === 'quizzes') {
+        const reg = window.AEF_QUIZZES_REGISTRY || {};
+        return Object.keys(reg).map(k => {
+          const q = reg[k];
+          const tracks = (q.questions || []).map((quest, qIdx) => ({
+            id: `${q.id}-${quest.id}`,
+            title: `Questão ${qIdx + 1} • ${quest.questionText.slice(0, 32)}...`,
+            activity: 'listen_read',
+            duration: '01:00',
+            audioUrl: quest.audioUrl,
+            coverImage: '/assets/images/cover-default-aef.jpg',
+            goldenTip: quest.goldenTip,
+            sentences: quest.audioScript ? quest.audioScript.split('\n').map((l, sIdx) => ({
+              start: sIdx * 3,
+              end: (sIdx + 1) * 3,
+              speaker: l.includes(':') ? l.split(':')[0].trim() : 'Leo',
+              text: l.includes(':') ? l.split(':')[1].trim() : l,
+              spokenTranslation: ''
+            })) : []
+          }));
+          return {
+            id: q.id,
+            title: q.title,
+            shortTitle: q.title.split('•')[1]?.trim() || q.title,
+            badge: q.badge || 'QUIZ',
+            coverImage: '/assets/images/cover-default-aef.jpg',
+            summary: q.description || '',
+            goldenTip: q.questions?.[0]?.goldenTip || '',
+            tracks: tracks
+          };
+        });
+      }
+
       return [];
     }
 
@@ -786,6 +820,8 @@
         const title = (course.title || cKey).split('•')[0].trim();
         optionsHtml += `<option value="${cKey}" class="bg-slate-900 ${isAllowed ? 'text-slate-100' : 'text-amber-500/80'}">${lockIcon}${iconPrefix}${title}${badgeText}</option>`;
       });
+
+      optionsHtml += `<option value="quizzes" class="bg-slate-900 text-amber-300 font-bold">🎯 Quizzes de Escuta</option>`;
 
       // Categoria Especial Mentoria VIP
       if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {

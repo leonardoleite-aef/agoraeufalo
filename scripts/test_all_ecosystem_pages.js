@@ -11,6 +11,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 
 // Helper to load core scripts
 const AEF_COURSES_DATA = require(path.join(ROOT_DIR, 'assets/js/aef-courses-registry.js'));
+const AEF_QUIZZES_DATA = require(path.join(ROOT_DIR, 'assets/js/aef-quizzes-registry.js'));
 const authJs = fs.readFileSync(path.join(ROOT_DIR, 'assets/js/aef-portal-auth.js'), 'utf8');
 const domainRouterJs = fs.readFileSync(path.join(ROOT_DIR, 'assets/js/aef-domain-router.js'), 'utf8');
 
@@ -42,6 +43,7 @@ async function testPage(pageConfig) {
       win.AEF_COURSES_REGISTRY = AEF_COURSES_DATA;
       win.COURSES_REGISTRY = AEF_COURSES_DATA;
       win.COURSE_SEEDS = AEF_COURSES_DATA;
+      win.AEF_QUIZZES_REGISTRY = AEF_QUIZZES_DATA;
 
       if (!win.fetch) {
         win.fetch = async () => ({
@@ -233,6 +235,18 @@ async function runAllTests() {
         if (!select) throw new Error('Course select missing');
         const tree = doc.getElementById('hierarchyTreeContainer');
         if (!tree) throw new Error('Hierarchy tree missing');
+      }
+    },
+    {
+      name: 'Admin - Quiz Studio',
+      file: 'admin-quiz.html',
+      url: 'https://admin.agoraeufalo.com.br/quiz',
+      expectedElements: ['#quizSelect', '#quizTitleInput', '#questionsContainer', '#simulatorStage'],
+      actions: async (win, doc) => {
+        const select = doc.getElementById('quizSelect');
+        if (!select) throw new Error('Quiz select missing');
+        const container = doc.getElementById('questionsContainer');
+        if (!container) throw new Error('Questions container missing');
       }
     },
     {

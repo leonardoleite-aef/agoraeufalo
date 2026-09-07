@@ -42,6 +42,7 @@
   <script src="assets/js/aef-cloud-sync.js?v=20260902_1955"></script>
   <script src="assets/js/aef-portal-auth.js?v=20260902_1955"></script>
   <script src="assets/js/aef-learning-tracker.js"></script>
+  <script src="assets/js/aef-quizzes-registry.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -673,6 +674,7 @@
           const lessonsListHtml = filteredLessons.map((les, lIdx) => {
             const isCurLesson = activeLesson && activeLesson.id === les.id;
             const isLesDone = completedLessonIds.includes(les.id);
+            const isQuiz = les.type === 'quiz' || !!les.quizId;
             const clickAction = isMobile 
               ? `switchModuleAndLesson('${mod.id}', '${les.id}'); window.toggleSyllabusDrawer();`
               : `switchModuleAndLesson('${mod.id}', '${les.id}');`;
@@ -687,20 +689,21 @@
                   <div class="w-6 h-6 rounded-lg ${
                     isLesDone 
                       ? 'bg-emerald-500 text-white' 
-                      : (isCurLesson ? 'bg-[#C68A36] text-white' : 'bg-stone-100 text-slate-600')
+                      : (isCurLesson ? 'bg-[#C68A36] text-white' : (isQuiz ? 'bg-amber-500/20 text-amber-600' : 'bg-stone-100 text-slate-600'))
                   } flex items-center justify-center font-bold text-[10px] shrink-0 shadow-2xs">
-                    ${isLesDone ? '<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>' : (lIdx + 1)}
+                    ${isLesDone ? '<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>' : (isQuiz ? '<i data-lucide="target" class="w-3 h-3 text-amber-600"></i>' : (lIdx + 1))}
                   </div>
                   <div class="min-w-0 flex-1">
                     <p class="text-xs ${isCurLesson ? 'text-[#0A192F] font-black' : 'text-slate-700 font-bold'} truncate leading-tight">${les.title}</p>
                     <div class="flex items-center gap-2 mt-0.5">
                       <span class="text-[10px] text-[#7A7369] font-mono">${les.duration || '05:00'}</span>
+                      ${isQuiz ? '<span class="text-[9px] font-black text-amber-700 bg-amber-100/80 px-1.5 py-0.2 rounded border border-amber-300">🎯 Quiz</span>' : ''}
                       ${isLesDone ? '<span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1 rounded">Feito</span>' : ''}
                     </div>
                   </div>
                 </div>
                 <div class="shrink-0">
-                  <i data-lucide="${isCurLesson ? 'play-circle' : 'play'}" class="w-3.5 h-3.5 ${isCurLesson ? 'text-[#C68A36]' : 'text-slate-300'}"></i>
+                  <i data-lucide="${isCurLesson ? (isQuiz ? 'target' : 'play-circle') : (isQuiz ? 'target' : 'play')}" class="w-3.5 h-3.5 ${isCurLesson ? 'text-[#C68A36]' : 'text-slate-300'}"></i>
                 </div>
               </div>
             `;
@@ -925,8 +928,13 @@
         return;
       }
 
-      // 2. RENDERIZAÇÃO NORMAL PARA USUÁRIO AUTORIZADO
-      if (found.videoUrl) {
+      // 2. RENDERIZAÇÃO PARA USUÁRIO AUTORIZADO
+      const isQuizLesson = found.type === 'quiz' || !!found.quizId;
+      if (isQuizLesson) {
+        const quizReg = window.AEF_QUIZZES_REGISTRY || {};
+        const quizData = quizReg[found.quizId] || found.quizData || quizReg['quiz-dtc-horas-01'];
+        renderQuizArena(quizData, found);
+      } else if (found.videoUrl) {
         if (found.videoUrl.includes("youtube.com") || found.videoUrl.includes("youtu.be")) {
           videoStage.innerHTML = `
             <iframe class="w-full h-full" src="${found.videoUrl}?autoplay=0" title="${found.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -1153,6 +1161,311 @@
       `;
       document.body.appendChild(banner);
       if (window.lucide) lucide.createIcons();
+    }
+
+    // =========================================================================
+    // QUIZ ARENA CONTROLLER (LISTENING & UNDERSTANDING INTERACTIVE STAGE)
+    // =========================================================================
+    let currentQuizData = null;
+    let currentQuizIndex = 0;
+    let quizUserAnswers = {};
+    let quizSubmitted = {};
+
+    function renderQuizArena(quiz, lesson) {
+      currentQuizData = quiz || {
+        id: lesson.id,
+        title: lesson.title,
+        questions: []
+      };
+      currentQuizIndex = 0;
+      quizUserAnswers = {};
+      quizSubmitted = {};
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const videoStage = document.getElementById("videoStage");
+      if (!videoStage || !currentQuizData) return;
+
+      const questions = currentQuizData.questions || [];
+      if (questions.length === 0) {
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] text-white flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-400/40">🎯</div>
+            <h3 class="text-base font-black">${currentQuizData.title || 'Quiz de Escuta'}</h3>
+            <p class="text-xs text-slate-400 max-w-sm">Este quiz está sendo preparado com áudios Gemini TTS de alta fidelidade.</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentQuizIndex >= questions.length) {
+        renderQuizSummary();
+        return;
+      }
+
+      const q = questions[currentQuizIndex];
+      const qNum = currentQuizIndex + 1;
+      const totalQ = questions.length;
+      const selectedOptId = quizUserAnswers[currentQuizIndex];
+      const isAnswered = quizSubmitted[currentQuizIndex];
+      const isCorrect = isAnswered && q.options.find(o => o.id === selectedOptId)?.isCorrect;
+
+      videoStage.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] text-white flex flex-col p-4 sm:p-6 overflow-y-auto custom-scrollbar select-none">
+          <!-- Quiz Header -->
+          <div class="flex items-center justify-between gap-3 pb-3 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-mono font-black text-[10px] uppercase tracking-wider border border-amber-400/30">
+                🎯 QUIZ DE ESCUTA & COMPREENSÃO
+              </span>
+              <span class="text-xs text-slate-400 hidden sm:inline">•</span>
+              <span class="text-xs font-bold text-slate-300 truncate max-w-xs hidden sm:inline">${currentQuizData.title}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-xs font-mono font-black text-amber-400">Questão ${qNum}</span>
+              <span class="text-xs text-slate-500 font-mono">/ ${totalQ}</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-white/10 h-1.5 rounded-full my-3 overflow-hidden shrink-0">
+            <div class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-300" style="width: ${(qNum / totalQ) * 100}%"></div>
+          </div>
+
+          <!-- Arena Body -->
+          <div class="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full space-y-3.5 py-1">
+            <!-- Audio Trigger Card -->
+            ${q.audioUrl ? `
+              <div class="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3 shadow-lg">
+                <div class="flex items-center gap-3 min-w-0">
+                  <button onclick="playQuizAudio('${q.audioUrl}')" id="quizPlayBtn" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 flex items-center justify-center shadow-lg transition transform active:scale-95 cursor-pointer shrink-0">
+                    <i data-lucide="volume-2" id="quizPlayIcon" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                  </button>
+                  <div class="min-w-0">
+                    <p class="text-[10px] font-bold text-amber-300 uppercase tracking-wider">Estímulo Sonoro</p>
+                    <p class="text-xs text-slate-300 truncate">Ouça a fala para responder à questão</p>
+                  </div>
+                </div>
+                <audio id="quizAudioElement" src="${q.audioUrl}" preload="auto" class="hidden" onended="onQuizAudioEnded()"></audio>
+                <span class="text-[10px] font-mono text-slate-400 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 shrink-0">🎧 Aperte Play</span>
+              </div>
+            ` : ''}
+
+            <!-- Prompt -->
+            <div>
+              <h3 class="text-sm sm:text-base font-black text-white font-serif leading-snug">
+                ${q.questionText}
+              </h3>
+            </div>
+
+            <!-- Options -->
+            <div class="grid grid-cols-1 gap-2">
+              ${q.options.map((opt, idx) => {
+                let optStyle = "bg-white/5 border-white/15 hover:border-amber-400/60 hover:bg-white/10 text-slate-100";
+                let indicator = `<span class="w-6 h-6 rounded-lg bg-white/10 text-slate-300 font-mono text-xs flex items-center justify-center font-bold shrink-0">${String.fromCharCode(65 + idx)}</span>`;
+
+                if (isAnswered) {
+                  if (opt.isCorrect) {
+                    optStyle = "bg-emerald-500/20 border-2 border-emerald-400 text-emerald-200 font-bold shadow-md";
+                    indicator = `<span class="w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 text-xs flex items-center justify-center font-black shrink-0">✓</span>`;
+                  } else if (opt.id === selectedOptId && !opt.isCorrect) {
+                    optStyle = "bg-rose-500/20 border-2 border-rose-400 text-rose-200 font-bold shadow-md";
+                    indicator = `<span class="w-6 h-6 rounded-lg bg-rose-500 text-white text-xs flex items-center justify-center font-black shrink-0">✕</span>`;
+                  } else {
+                    optStyle = "bg-white/5 border-white/10 opacity-40 text-slate-400";
+                  }
+                } else if (selectedOptId === opt.id) {
+                  optStyle = "bg-amber-500/20 border-2 border-amber-400 text-amber-200 font-bold";
+                }
+
+                const clickAttr = isAnswered ? '' : `onclick="selectQuizOption('${opt.id}')"`;
+                return `
+                  <div ${clickAttr} class="p-3 sm:p-3.5 rounded-xl border transition cursor-pointer flex items-center gap-3 ${optStyle}">
+                    ${indicator}
+                    <span class="text-xs sm:text-sm leading-relaxed">${opt.text}</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Action Area -->
+            ${!isAnswered ? `
+              <div class="pt-2 flex justify-end">
+                <button onclick="submitQuizAnswer()" id="btnSubmitQuiz" ${!selectedOptId ? 'disabled' : ''} class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer ${!selectedOptId ? 'opacity-40 cursor-not-allowed' : 'active:scale-95'}">
+                  <span>Confirmar Resposta</span>
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </button>
+              </div>
+            ` : `
+              <!-- Sacada do Leo Feedback -->
+              <div class="space-y-2.5 pt-1">
+                ${isCorrect ? `
+                  <div class="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-200 text-xs flex items-start gap-2.5">
+                    <span class="text-lg shrink-0">🎯</span>
+                    <div>
+                      <p class="font-black text-emerald-300 uppercase tracking-wider text-[10px] mb-0.5">EXCELENTE! OUVIDO AFIADO!</p>
+                      <p class="leading-relaxed">${q.goldenTip || 'Você captou com precisão a intenção e os chunks da conversa!'}</p>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="p-3.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-200 text-xs flex items-start gap-2.5">
+                    <span class="text-lg shrink-0">💡</span>
+                    <div>
+                      <p class="font-black text-amber-300 uppercase tracking-wider text-[10px] mb-0.5">SACADA DO LEO:</p>
+                      <p class="leading-relaxed">${q.retryHint || q.goldenTip || 'Ouça novamente com atenção na melodia das palavras conectadas.'}</p>
+                    </div>
+                  </div>
+                `}
+
+                <div class="flex items-center justify-between gap-2 pt-1">
+                  ${!isCorrect ? `
+                    <button onclick="retryCurrentQuizQuestion()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+                      <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                      <span>Tentar Novamente</span>
+                    </button>
+                  ` : `<div></div>`}
+
+                  <button onclick="nextQuizQuestion()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
+                    <span>${qNum === totalQ ? 'Ver Resultado Final ➔' : 'Próxima Questão ➔'}</span>
+                  </button>
+                </div>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function selectQuizOption(optId) {
+      if (quizSubmitted[currentQuizIndex]) return;
+      quizUserAnswers[currentQuizIndex] = optId;
+      renderQuizQuestion();
+    }
+
+    function submitQuizAnswer() {
+      if (!quizUserAnswers[currentQuizIndex]) return;
+      quizSubmitted[currentQuizIndex] = true;
+      renderQuizQuestion();
+    }
+
+    function retryCurrentQuizQuestion() {
+      delete quizUserAnswers[currentQuizIndex];
+      delete quizSubmitted[currentQuizIndex];
+      renderQuizQuestion();
+    }
+
+    function nextQuizQuestion() {
+      currentQuizIndex++;
+      renderQuizQuestion();
+    }
+
+    function renderQuizSummary() {
+      const videoStage = document.getElementById("videoStage");
+      if (!videoStage || !currentQuizData) return;
+
+      const questions = currentQuizData.questions || [];
+      const totalQ = questions.length;
+      let correctCount = 0;
+      questions.forEach((q, idx) => {
+        const sel = quizUserAnswers[idx];
+        if (q.options.find(o => o.id === sel)?.isCorrect) correctCount++;
+      });
+
+      const accuracyPct = Math.round((correctCount / totalQ) * 100);
+      const isPassed = accuracyPct >= (currentQuizData.passingScore || 70);
+
+      videoStage.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] text-white flex flex-col items-center justify-center p-6 text-center space-y-4 select-none">
+          <div class="w-20 h-20 rounded-3xl ${isPassed ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-400/40' : 'bg-amber-500/20 text-amber-400 border-2 border-amber-400/40'} flex items-center justify-center text-4xl shadow-2xl">
+            ${isPassed ? '🏆' : '🎧'}
+          </div>
+
+          <div class="space-y-1.5 max-w-md">
+            <span class="px-3 py-1 rounded-full ${isPassed ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' : 'bg-amber-500/20 text-amber-300 border border-amber-400/40'} font-mono font-black text-[10px] uppercase tracking-wider">
+              ${isPassed ? (currentQuizData.badge || 'OUVIDO AFIADO') : 'TREINO CONCLUÍDO'}
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white font-serif">
+              ${isPassed ? 'Parabéns! Ouvido Afiado!' : 'Bom treino! A repetição transforma som em reflexo.'}
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Você acertou <strong>${correctCount} de ${totalQ} questões</strong> (${accuracyPct}% de precisão auditiva).
+            </p>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3 w-full max-w-xs justify-center">
+            <button onclick="finishQuizAndRecordProgress()" class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Concluir & Registrar Progresso</span>
+            </button>
+            <button onclick="restartQuiz()" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>Refazer Quiz</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizUserAnswers = {};
+      quizSubmitted = {};
+      renderQuizQuestion();
+    }
+
+    function finishQuizAndRecordProgress() {
+      if (activeCourse && activeLesson) {
+        if (window.aefLearningTracker) {
+          window.aefLearningTracker.markLessonCompleted(activeCourse.id, activeLesson.id);
+        }
+        if (!completedLessonIds.includes(activeLesson.id)) {
+          completedLessonIds.push(activeLesson.id);
+        }
+        localStorage.setItem("aef_completed_lessons", JSON.stringify(completedLessonIds));
+        renderCourseSyllabus();
+        showToast("🎉 Quiz concluído e registrado no seu histórico!");
+
+        const allCourseLessons = getAllCourseLessons();
+        const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === activeLesson.id);
+        if (currentGlobalIdx >= 0 && currentGlobalIdx < allCourseLessons.length - 1) {
+          setTimeout(() => {
+            selectLesson(allCourseLessons[currentGlobalIdx + 1].id);
+          }, 1000);
+        }
+      }
+    }
+
+    function playQuizAudio(url) {
+      const audioEl = document.getElementById("quizAudioElement");
+      const icon = document.getElementById("quizPlayIcon");
+      if (!audioEl) return;
+
+      if (audioEl.paused) {
+        audioEl.play().catch(e => console.warn("Audio play err:", e));
+        if (icon) {
+          icon.setAttribute("data-lucide", "pause");
+          if (window.lucide) lucide.createIcons();
+        }
+      } else {
+        audioEl.pause();
+        if (icon) {
+          icon.setAttribute("data-lucide", "volume-2");
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    function onQuizAudioEnded() {
+      const icon = document.getElementById("quizPlayIcon");
+      if (icon) {
+        icon.setAttribute("data-lucide", "volume-2");
+        if (window.lucide) lucide.createIcons();
+      }
     }
 
     function updateIcons() {

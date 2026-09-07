@@ -90,6 +90,15 @@
     "actionsResult": "OK"
   },
   {
+    "name": "Admin - Quiz Studio",
+    "file": "admin-quiz.html",
+    "url": "https://admin.agoraeufalo.com.br/quiz",
+    "status": "PASSED",
+    "missingElements": [],
+    "errors": [],
+    "actionsResult": "OK"
+  },
+  {
     "name": "Admin - CRM Alunos",
     "file": "admin-alunos.html",
     "url": "https://admin.agoraeufalo.com.br/alunos",

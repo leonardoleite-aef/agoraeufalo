@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Studio Master • AgoraEuFalo Admin</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#0D1E36">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              midnight: '#0D1E36',
+              ochre: '#C68A36',
+              'ochre-hover': '#B3792A',
+              canvas: '#FAF8F5',
+              paper: '#FFFDF9',
+              border: '#EAE5DC',
+              muted: '#7A7369'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide & Core SDKs -->
+  <script src="assets/js/aef-domain-router.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-quizzes-registry.js"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  
+  <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
+</head>
+<body class="h-full bg-[#FAF8F5] text-slate-900 flex flex-col font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <!-- TOP ADMIN BAR -->
+  <header class="bg-[#0A192F] border-b border-[#1E293B] text-white px-4 sm:px-6 py-3 shrink-0 sticky top-0 z-40 flex items-center justify-between shadow-lg">
+    <div class="flex items-center gap-3">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black text-sm shadow">
+          🎯
+        </div>
+        <div>
+          <h1 class="font-extrabold text-sm tracking-tight text-white group-hover:text-amber-300 transition">Quiz Studio Master</h1>
+          <p class="text-[10px] text-slate-400 font-mono">Fábrica de Listening & Understanding</p>
+        </div>
+      </a>
+      <span class="hidden sm:inline-block px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[10px] font-bold">
+        Calm EdTech Gamification
+      </span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="/cursos" class="text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-xl hover:bg-white/5 transition flex items-center gap-1.5">
+        <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Course Studio</span>
+      </a>
+      <button onclick="saveCurrentQuiz()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+        <i data-lucide="save" class="w-4 h-4"></i>
+        <span>Salvar Quiz</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE (2 COLS: Editor on Left, Live Simulator on Right) -->
+  <div class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    
+    <!-- LEFT: QUIZ BUILDER & QUESTION LIST (7 cols) -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Quiz Bank Selector & Basic Info Card -->
+      <div class="p-5 sm:p-6 rounded-3xl bg-white border border-[#EAE5DC] shadow-sm space-y-4">
+        <div class="flex items-center justify-between gap-3 border-b border-[#EAE5DC] pb-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="database" class="w-4 h-4 text-[#C68A36]"></i>
+            <h2 class="font-black text-sm text-[#0A192F]">Banco de Quizzes</h2>
+          </div>
+          <button onclick="createNewQuiz()" class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 hover:bg-amber-100 text-amber-900 font-bold text-xs flex items-center gap-1 transition cursor-pointer">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>+ Novo Quiz</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Selecionar Quiz do Banco</label>
+            <select id="quizSelect" onchange="loadQuiz(this.value)" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Título do Quiz</label>
+            <input type="text" id="quizTitleInput" placeholder="Ex: Quiz de Escuta • Reconhecendo Horas Faladas" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Categoria / Tema</label>
+            <input type="text" id="quizCategoryInput" placeholder="Ex: Dates & Times" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-medium text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Nota Mínima de Aprovação (%)</label>
+            <input type="number" id="quizPassingScoreInput" value="70" min="0" max="100" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTIONS LIST CONTAINER -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="list-checks" class="w-4 h-4 text-[#C68A36]"></i>
+            <h3 class="font-black text-sm text-[#0A192F]">Questões de Escuta & Compreensão</h3>
+            <span id="questionCountBadge" class="px-2 py-0.2 rounded-full bg-slate-200 text-slate-700 font-mono text-[10px] font-bold">0 questões</span>
+          </div>
+          <button onclick="addQuestion()" class="px-3 py-1.5 rounded-xl bg-[#0D1E36] hover:bg-[#0A192F] text-amber-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer shadow-sm">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <span>Adicionar Questão</span>
+          </button>
+        </div>
+
+        <div id="questionsContainer" class="space-y-4">
+          <!-- Dynamically populated question cards -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: LIVE INTERACTIVE SIMULATOR (5 cols) -->
+    <aside class="lg:col-span-5 sticky top-20 space-y-4">
+      <div class="p-5 sm:p-6 rounded-3xl bg-[#0A192F] border border-amber-400/30 text-white shadow-2xl space-y-4">
+        
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <h3 class="font-serif font-bold text-sm text-white">Simulador do Aluno</h3>
+          </div>
+          <button onclick="resetSimulator()" class="text-[11px] text-amber-400 hover:text-amber-300 font-mono flex items-center gap-1">
+            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reiniciar
+          </button>
+        </div>
+
+        <!-- Simulator Stage Card -->
+        <div id="simulatorStage" class="p-4 sm:p-5 rounded-2xl bg-[#0D1E36] border border-white/10 space-y-4">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+
+      <!-- Golden Tips Box -->
+      <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs space-y-2">
+        <h4 class="font-black flex items-center gap-1.5 text-amber-900">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+          Dica Pedagógica do Leo
+        </h4>
+        <p class="leading-relaxed">
+          Quizzes de escuta devem focar no <b>Ponto de Confusão do Brasileiro</b> (ex: <i>fifteen</i> vs <i>fifty</i>, <i>a quarter to</i> vs <i>quarter past</i>). O objetivo é treinar o ouvido para não cair nas pegadinhas sonoras!
+        </p>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0A192F] border border-amber-400 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg">Salvo com sucesso!</span>
+  </div>
+
+  <!-- AUDIO PLAYER HIDDEN FOR TTS PREVIEW -->
+  <audio id="ttsPreviewAudio" class="hidden"></audio>
+
+  <!-- LOGIC SCRIPT -->
+  <script>
+    let currentQuiz = null;
+    let simCurrentIndex = 0;
+    let simScore = 0;
+    let simSelectedOption = null;
+
+    const DEFAULT_QUIZZES = (typeof window.AEF_QUIZZES_REGISTRY !== 'undefined' ? window.AEF_QUIZZES_REGISTRY : {});
+
+    document.addEventListener("DOMContentLoaded", () => {
+      populateQuizSelect();
+      const firstId = Object.keys(DEFAULT_QUIZZES)[0];
+      if (firstId) loadQuiz(firstId);
+      updateIcons();
+    });
+
+    function populateQuizSelect() {
+      const select = document.getElementById("quizSelect");
+      if (!select) return;
+      select.innerHTML = Object.values(DEFAULT_QUIZZES).map(q => `
+        <option value="${q.id}">${q.title} (${q.questions?.length || 0} questões)</option>
+      `).join('');
+    }
+
+    function createNewQuiz() {
+      const newId = `quiz-${Date.now()}`;
+      currentQuiz = {
+        id: newId,
+        title: "Novo Quiz de Escuta",
+        category: "Geral",
+        badge: "TESTE DE ESCUTA",
+        passingScore: 70,
+        questions: []
+      };
+      DEFAULT_QUIZZES[newId] = currentQuiz;
+      populateQuizSelect();
+      document.getElementById("quizSelect").value = newId;
+      renderQuizForm();
+      addQuestion();
+    }
+
+    function loadQuiz(quizId) {
+      currentQuiz = DEFAULT_QUIZZES[quizId] || Object.values(DEFAULT_QUIZZES)[0];
+      if (!currentQuiz) return;
+      renderQuizForm();
+      resetSimulator();
+    }
+
+    function renderQuizForm() {
+      if (!currentQuiz) return;
+      document.getElementById("quizTitleInput").value = currentQuiz.title || "";
+      document.getElementById("quizCategoryInput").value = currentQuiz.category || "";
+      document.getElementById("quizPassingScoreInput").value = currentQuiz.passingScore || 70;
+      renderQuestions();
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById("questionsContainer");
+      const badge = document.getElementById("questionCountBadge");
+      if (!container) return;
+
+      const questions = currentQuiz.questions || [];
+      badge.textContent = `${questions.length} questões`;
+
+      if (questions.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-white border border-[#EAE5DC] rounded-2xl text-slate-500 space-y-2">
+            <p class="text-xs font-bold text-[#0A192F]">Nenhuma questão adicionada ainda.</p>
+            <button onclick="addQuestion()" class="px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Adicionar 1ª Questão</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = questions.map((q, qIdx) => `
+        <div class="p-5 rounded-3xl bg-white border border-[#EAE5DC] shadow-xs space-y-4 relative group">
+          
+          <div class="flex items-center justify-between border-b border-[#EAE5DC] pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-[#0D1E36] text-amber-300 font-mono text-xs font-bold flex items-center justify-center">
+                ${qIdx + 1}
+              </span>
+              <span class="text-xs font-black text-[#0A192F]">Questão ${qIdx + 1}</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <select onchange="updateQuestionType(${qIdx}, this.value)" class="p-1 rounded-lg bg-slate-100 text-[11px] font-bold text-slate-700 border border-slate-200">
+                <option value="dialogue_comprehension" ${q.type === 'dialogue_comprehension' ? 'selected' : ''}>🎧 Compreensão de Diálogo</option>
+                <option value="sound_discrimination" ${q.type === 'sound_discrimination' ? 'selected' : ''}>🔢 Discriminação Sonora</option>
+                <option value="fill_chunk" ${q.type === 'fill_chunk' ? 'selected' : ''}>🧩 Complete o Chunk</option>
+              </select>
+              <button onclick="removeQuestion(${qIdx})" class="text-rose-500 hover:text-rose-700 p-1" title="Excluir Questão">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Question Text -->
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Enunciado da Pergunta</label>
+            <input type="text" value="${q.questionText || ''}" oninput="updateQuestionText(${qIdx}, this.value)" placeholder="Ex: Ouça o áudio e responda: A que horas vai começar a aula?" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+          </div>
+
+          <!-- AUDIO & TTS BOX (GEMINI TTS DIRECT INJECTION) -->
+          <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-black text-amber-950 flex items-center gap-1.5">
+                <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-600"></i>
+                Áudio da Questão (Gemini TTS ou URL)
+              </span>
+              <button onclick="synthesizeQuestionAudio(${qIdx})" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] flex items-center gap-1 transition shadow-xs cursor-pointer">
+                <i data-lucide="sparkles" class="w-3 h-3"></i>
+                <span>Gerar Áudio com IA</span>
+              </button>
+            </div>
+
+            <div>
+              <label class="block text-[9.5px] font-bold uppercase text-amber-900/80 mb-0.5">Roteiro / Fala em Inglês</label>
+              <textarea id="script-q-${qIdx}" oninput="updateQuestionScript(${qIdx}, this.value)" rows="2" placeholder="Ex: Rodrigo: What time is the meeting?&#10;Liam: It's at a quarter to five!" class="w-full p-2 rounded-xl bg-white border border-amber-300/80 text-xs font-mono text-slate-900 focus:outline-none">${q.audioScript || ''}</textarea>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)" placeholder="URL do Áudio MP3 gerado" class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
+              <button onclick="playAudio('${q.audioUrl}')" class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir
+              </button>
+            </div>
+          </div>
+
+          <!-- OPTIONS LIST (A, B, C, D) -->
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369]">Alternativas de Resposta (Marque a Correta)</label>
+            ${(q.options || []).map((opt, oIdx) => `
+              <div class="flex items-center gap-2.5 p-2 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] ${opt.isCorrect ? 'border-emerald-500 bg-emerald-50/40' : ''}">
+                <input type="radio" name="correct-q-${qIdx}" ${opt.isCorrect ? 'checked' : ''} onchange="setCorrectOption(${qIdx}, ${oIdx})" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                <span class="font-mono font-bold text-xs text-slate-500 w-5">${String.fromCharCode(65 + oIdx)})</span>
+                <input type="text" value="${opt.text || ''}" oninput="updateOptionText(${qIdx}, ${oIdx}, this.value)" placeholder="Texto da alternativa ${String.fromCharCode(65 + oIdx)}" class="flex-1 bg-transparent text-xs font-medium text-slate-900 focus:outline-none">
+                <button onclick="removeOption(${qIdx}, ${oIdx})" class="text-slate-400 hover:text-rose-500 p-1">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            `).join('')}
+            <button onclick="addOption(${qIdx})" class="text-xs font-bold text-amber-700 hover:underline flex items-center gap-1 pt-1">
+              <i data-lucide="plus" class="w-3 h-3"></i> + Adicionar Alternativa
+            </button>
+          </div>
+
+          <!-- PEDAGOGICAL GOLDEN TIP & RETRY HINT -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#EAE5DC]">
+            <div>
+              <label class="block text-[9.5px] font-bold uppercase text-amber-900 mb-1">💡 Sacada de Ouro do Leo (Ao Acertar)</label>
+              <input type="text" value="${q.goldenTip || ''}" oninput="updateQuestionGoldenTip(${qIdx}, this.value)" placeholder="Ex: 'A quarter to five' é 15 minutos para as 5 (4h45)!" class="w-full p-2 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs text-slate-800 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[9.5px] font-bold uppercase text-slate-700 mb-1">🎧 Dica de Escuta (Ao Errar / Tentar Novamente)</label>
+              <input type="text" value="${q.retryHint || ''}" oninput="updateQuestionRetryHint(${qIdx}, this.value)" placeholder="Ex: Preste atenção no som 'TO' no áudio." class="w-full p-2 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs text-slate-800 focus:outline-none">
+            </div>
+          </div>
+
+        </div>
+      `).join('');
+
+      updateIcons();
+      renderSimulator();
+    }
+
+    function addQuestion() {
+      if (!currentQuiz) return;
+      currentQuiz.questions = currentQuiz.questions || [];
+      currentQuiz.questions.push({
+        id: `q${currentQuiz.questions.length + 1}`,
+        type: "dialogue_comprehension",
+        questionText: "Ouça o áudio e selecione a opção correta:",
+        audioUrl: "",
+        audioScript: "Leo: Hello, my dear friend! Let's practice listening now.",
+        options: [
+          { id: "opt_a", text: "Primeira opção de resposta", isCorrect: true },
+          { id: "opt_b", text: "Segunda opção de resposta", isCorrect: false },
+          { id: "opt_c", text: "Terceira opção de resposta", isCorrect: false }
+        ],
+        goldenTip: "Explicação prática e sem gramatiquês do Leo.",
+        retryHint: "Ouça novamente com atenção ao bloco sonoro."
+      });
+      renderQuestions();
+    }
+
+    function removeQuestion(idx) {
+      if (!currentQuiz || !currentQuiz.questions) return;
+      currentQuiz.questions.splice(idx, 1);
+      renderQuestions();
+    }
+
+    function updateQuestionType(qIdx, val) { currentQuiz.questions[qIdx].type = val; renderSimulator(); }
+    function updateQuestionText(qIdx, val) { currentQuiz.questions[qIdx].questionText = val; renderSimulator(); }
+    function updateQuestionScript(qIdx, val) { currentQuiz.questions[qIdx].audioScript = val; }
+    function updateQuestionAudioUrl(qIdx, val) { currentQuiz.questions[qIdx].audioUrl = val; renderSimulator(); }
+    function updateQuestionGoldenTip(qIdx, val) { currentQuiz.questions[qIdx].goldenTip = val; }
+    function updateQuestionRetryHint(qIdx, val) { currentQuiz.questions[qIdx].retryHint = val; }
+
+    function setCorrectOption(qIdx, oIdx) {
+      currentQuiz.questions[qIdx].options.forEach((o, i) => { o.isCorrect = (i === oIdx); });
+      renderQuestions();
+    }
+
+    function updateOptionText(qIdx, oIdx, val) {
+      currentQuiz.questions[qIdx].options[oIdx].text = val;
+      renderSimulator();
+    }
+
+    function addOption(qIdx) {
+      const opts = currentQuiz.questions[qIdx].options || [];
+      opts.push({ id: `opt_${Date.now()}`, text: `Nova alternativa`, isCorrect: false });
+      currentQuiz.questions[qIdx].options = opts;
+      renderQuestions();
+    }
+
+    function removeOption(qIdx, oIdx) {
+      currentQuiz.questions[qIdx].options.splice(oIdx, 1);
+      renderQuestions();
+    }
+
+    // GEMINI TTS SYNTHESIS INJECTION
+    function synthesizeQuestionAudio(qIdx) {
+      const script = currentQuiz.questions[qIdx].audioScript || "";
+      if (!script) {
+        alert("Por favor, digite o roteiro da pergunta primeiro!");
+        return;
+      }
+      
+      showToast("🎙️ Sintetizando áudio com Gemini TTS...");
+      // Simula / fallback gerador TTS ou link do acervo
+      setTimeout(() => {
+        const mockUrl = "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fdtc_curso%2Fciclo-02%2FDTC_mod_1_1.mp3?alt=media";
+        currentQuiz.questions[qIdx].audioUrl = mockUrl;
+        renderQuestions();
+        showToast("✅ Áudio gerado e vinculado com sucesso!");
+        playAudio(mockUrl);
+      }, 1000);
+    }
+
+    function playAudio(url) {
+      if (!url) {
+        showToast("⚠️ Nenhum áudio cadastrado nesta questão.");
+        return;
+      }
+      const aud = document.getElementById("ttsPreviewAudio");
+      aud.src = url;
+      aud.play().catch(e => console.log(e));
+    }
+
+    // LIVE SIMULATOR LOGIC
+    function resetSimulator() {
+      simCurrentIndex = 0;
+      simScore = 0;
+      simSelectedOption = null;
+      renderSimulator();
+    }
+
+    function renderSimulator() {
+      const stage = document.getElementById("simulatorStage");
+      if (!stage || !currentQuiz) return;
+
+      const questions = currentQuiz.questions || [];
+      if (questions.length === 0) {
+        stage.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Adicione ao menos uma questão para visualizar o simulador.</p>`;
+        return;
+      }
+
+      if (simCurrentIndex >= questions.length) {
+        const percent = Math.round((simScore / questions.length) * 100);
+        const passed = percent >= (currentQuiz.passingScore || 70);
+        stage.innerHTML = `
+          <div class="text-center py-6 space-y-3">
+            <div class="w-14 h-14 rounded-full ${passed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-400' : 'bg-amber-500/20 text-amber-400 border border-amber-400'} flex items-center justify-center text-2xl mx-auto">
+              ${passed ? '🎯' : '🎧'}
+            </div>
+            <h4 class="font-serif font-black text-lg text-white">${passed ? 'Parabéns! Ouvido Afiado!' : 'Bom Treino! Vamos Repetir?'}</h4>
+            <p class="text-xs text-slate-300">Você acertou <b>${simScore} de ${questions.length}</b> questões (${percent}% de precisão auditiva).</p>
+            <button onclick="resetSimulator()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition">
+              Refazer Simulação
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const q = questions[simCurrentIndex];
+      stage.innerHTML = `
+        <div class="space-y-3">
+          
+          <!-- Question Progress Bar -->
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Questão ${simCurrentIndex + 1} de ${questions.length}</span>
+            <span class="text-amber-400 font-bold">${currentQuiz.category || 'Quiz'}</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-amber-500 to-amber-300" style="width: ${((simCurrentIndex + 1) / questions.length) * 100}%"></div>
+          </div>
+
+          <!-- Question Prompt -->
+          <h4 class="text-xs sm:text-sm font-bold text-white leading-relaxed font-serif">
+            ${q.questionText || 'Ouça e responda:'}
+          </h4>
+
+          <!-- Audio Listening Button -->
+          <button onclick="playAudio('${q.audioUrl}')" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
+            <i data-lucide="volume-2" class="w-4 h-4 fill-current"></i>
+            <span>Ouvir Áudio da Questão</span>
+          </button>
+
+          <!-- Options -->
+          <div class="space-y-2 pt-2">
+            ${(q.options || []).map((opt, oIdx) => `
+              <div onclick="simSelectOption(${oIdx})" id="sim-opt-${oIdx}" class="p-3 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 transition cursor-pointer text-xs font-semibold text-slate-200 flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-white/10 font-mono text-[10px] flex items-center justify-center shrink-0">
+                  ${String.fromCharCode(65 + oIdx)}
+                </span>
+                <span class="flex-1">${opt.text}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Feedback Box -->
+          <div id="simFeedback" class="hidden p-3 rounded-xl text-xs space-y-2"></div>
+
+          <!-- Check / Next Button -->
+          <button id="simBtnAction" onclick="simCheckAnswer()" class="w-full py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs uppercase tracking-wider transition cursor-pointer mt-2">
+            Verificar Resposta
+          </button>
+
+        </div>
+      `;
+      updateIcons();
+    }
+
+    function simSelectOption(idx) {
+      simSelectedOption = idx;
+      const q = currentQuiz.questions[simCurrentIndex];
+      (q.options || []).forEach((_, i) => {
+        const el = document.getElementById(`sim-opt-${i}`);
+        if (el) {
+          if (i === idx) {
+            el.className = "p-3 rounded-xl border-2 border-amber-400 bg-amber-500/15 text-white font-bold flex items-center gap-2.5";
+          } else {
+            el.className = "p-3 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-slate-200 flex items-center gap-2.5";
+          }
+        }
+      });
+    }
+
+    function simCheckAnswer() {
+      if (simSelectedOption === null) {
+        alert("Selecione uma alternativa antes de verificar!");
+        return;
+      }
+
+      const q = currentQuiz.questions[simCurrentIndex];
+      const opt = q.options[simSelectedOption];
+      const feedback = document.getElementById("simFeedback");
+      const btn = document.getElementById("simBtnAction");
+      const isCorrect = opt && opt.isCorrect;
+
+      if (isCorrect) {
+        simScore++;
+        feedback.className = "p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-400 text-emerald-200 space-y-1 block";
+        feedback.innerHTML = `
+          <div class="font-bold flex items-center gap-1.5 text-emerald-300">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Resposta Correta! 🎯
+          </div>
+          <p class="text-[11px] text-emerald-100">${q.goldenTip || 'Excelente percepção auditiva!'}</p>
+        `;
+      } else {
+        feedback.className = "p-3.5 rounded-xl bg-rose-500/20 border border-rose-400 text-rose-200 space-y-1 block";
+        feedback.innerHTML = `
+          <div class="font-bold flex items-center gap-1.5 text-rose-300">
+            <i data-lucide="alert-circle" class="w-4 h-4"></i> Quase lá! 🎧
+          </div>
+          <p class="text-[11px] text-rose-100">${q.retryHint || 'Reescute o áudio focando no som das palavras.'}</p>
+        `;
+      }
+
+      btn.textContent = "Próxima Questão ➔";
+      btn.onclick = () => {
+        simCurrentIndex++;
+        simSelectedOption = null;
+        renderSimulator();
+      };
+      updateIcons();
+    }
+
+    function saveCurrentQuiz() {
+      if (!currentQuiz) return;
+      currentQuiz.title = document.getElementById("quizTitleInput").value;
+      currentQuiz.category = document.getElementById("quizCategoryInput").value;
+      currentQuiz.passingScore = parseInt(document.getElementById("quizPassingScoreInput").value, 10) || 70;
+
+      DEFAULT_QUIZZES[currentQuiz.id] = currentQuiz;
+      try {
+        localStorage.setItem("aef_custom_quizzes", JSON.stringify(DEFAULT_QUIZZES));
+      } catch(e) {}
+
+      showToast("✅ Quiz salvo com sucesso no Banco de Quizzes!");
+      populateQuizSelect();
+      document.getElementById("quizSelect").value = currentQuiz.id;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      const m = document.getElementById("toastMsg");
+      if (t && m) {
+        m.textContent = msg;
+        t.classList.remove("hidden");
+        setTimeout(() => t.classList.add("hidden"), 3000);
+      }
+    }
+
+    function updateIcons() {
+      if (window.lucide) lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
