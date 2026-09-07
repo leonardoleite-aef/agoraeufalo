@@ -93,10 +93,16 @@
             <i data-lucide="database" class="w-4 h-4 text-[#C68A36]"></i>
             <h2 class="font-black text-sm text-[#0A192F]">Banco de Quizzes</h2>
           </div>
-          <button onclick="createNewQuiz()" class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 hover:bg-amber-100 text-amber-900 font-bold text-xs flex items-center gap-1 transition cursor-pointer">
-            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-            <span>+ Novo Quiz</span>
-          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="createNewQuiz()" class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 hover:bg-amber-100 text-amber-900 font-bold text-xs flex items-center gap-1 transition cursor-pointer">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>+ Novo Quiz</span>
+            </button>
+            <button onclick="deleteCurrentQuiz()" class="px-2.5 py-1.5 rounded-xl bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-bold text-xs flex items-center gap-1 transition cursor-pointer" title="Excluir este Quiz">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span class="hidden sm:inline">Excluir</span>
+            </button>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -196,7 +202,21 @@
     let simScore = 0;
     let simSelectedOption = null;
 
-    const DEFAULT_QUIZZES = (typeof window.AEF_QUIZZES_REGISTRY !== 'undefined' ? window.AEF_QUIZZES_REGISTRY : {});
+    const REGISTRY_BACKUP = (typeof window.AEF_QUIZZES_REGISTRY !== 'undefined' ? JSON.parse(JSON.stringify(window.AEF_QUIZZES_REGISTRY)) : {});
+    let DEFAULT_QUIZZES = { ...REGISTRY_BACKUP };
+    
+    // Merge com customizações salvas no localStorage
+    try {
+      const saved = localStorage.getItem("aef_custom_quizzes");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && Object.keys(parsed).length > 0) {
+          DEFAULT_QUIZZES = { ...DEFAULT_QUIZZES, ...parsed };
+        }
+      }
+    } catch(e) {
+      console.warn("Erro ao ler localStorage de quizzes:", e);
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
       populateQuizSelect();
@@ -228,6 +248,27 @@
       document.getElementById("quizSelect").value = newId;
       renderQuizForm();
       addQuestion();
+    }
+
+    function deleteCurrentQuiz() {
+      if (!currentQuiz) return;
+      const keys = Object.keys(DEFAULT_QUIZZES);
+      if (keys.length <= 1) {
+        alert("Você precisa manter ao menos um quiz cadastrado no banco.");
+        return;
+      }
+      if (!confirm(`Deseja realmente excluir o quiz "${currentQuiz.title}"?`)) return;
+
+      const deletedId = currentQuiz.id;
+      delete DEFAULT_QUIZZES[deletedId];
+      try {
+        localStorage.setItem("aef_custom_quizzes", JSON.stringify(DEFAULT_QUIZZES));
+      } catch(e) {}
+
+      showToast("🗑️ Quiz excluído com sucesso!");
+      populateQuizSelect();
+      const nextId = Object.keys(DEFAULT_QUIZZES)[0];
+      if (nextId) loadQuiz(nextId);
     }
 
     function loadQuiz(quizId) {

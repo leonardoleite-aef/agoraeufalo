@@ -11,13 +11,13 @@ const AEF_QUIZZES_DATA = {
     "description": "Teste seu ouvido para captar as horas e períodos do dia em conversas reais.",
     "category": "Dates & Times",
     "badge": "OUVIDO AFIADO",
-    "passingScore": 75,
+    "passingScore": 70,
     "questions": [
       {
         "id": "q1",
         "type": "dialogue_comprehension",
         "questionText": "Ouça o diálogo e responda: A que horas vai começar a reunião?",
-        "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fdtc_curso%2Fciclo-02%2FDTC_mod_1_1.mp3?alt=media",
+        "audioUrl": "assets/audio/quiz/quiz_dtc_q1.mp3",
         "audioScript": "Rodrigo: Hello, my dear friend! What time is our meeting today?\nLiam: It is at a quarter to five in the afternoon!",
         "options": [
           { "id": "opt_a", "text": "Às 5:15 da tarde", "isCorrect": false },
@@ -25,14 +25,14 @@ const AEF_QUIZZES_DATA = {
           { "id": "opt_c", "text": "Às 5:45 da manhã", "isCorrect": false },
           { "id": "opt_d", "text": "Às 4:15 da tarde", "isCorrect": false }
         ],
-        "goldenTip": "Em inglês, 'a quarter to five' significa 15 minutos que faltam para as 5, ou seja, 4h45!",
-        "retryHint": "Preste atenção na palavra 'TO' no áudio. 'To' indica minutos que faltam para a hora seguinte."
+        "goldenTip": "Em inglês falado real, 'a quarter to five' significa 15 minutos que faltam para as 5, ou seja, 4h45 da tarde!",
+        "retryHint": "Preste atenção na palavra 'TO' no áudio. 'To' indica os minutos que faltam para a hora seguinte."
       },
       {
         "id": "q2",
         "type": "sound_discrimination",
-        "questionText": "Qual horário foi dito com naturalidade pelo falante?",
-        "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fdtc_curso%2Fciclo-02%2FDTC_mod_1_2.mp3?alt=media",
+        "questionText": "Qual horário exato foi dito pelo falante na gravação?",
+        "audioUrl": "assets/audio/quiz/quiz_dtc_q2.mp3",
         "audioScript": "Liam: The flight leaves at half past eight in the morning.",
         "options": [
           { "id": "opt_a", "text": "8:30 da manhã (Oito e meia)", "isCorrect": true },
@@ -47,8 +47,8 @@ const AEF_QUIZZES_DATA = {
         "id": "q3",
         "type": "fill_chunk",
         "questionText": "Ouça a frase e selecione a expressão que completa o bloco sonoro:",
-        "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fdtc_curso%2Fciclo-02%2FDTC_mod_1_1.mp3?alt=media",
-        "audioScript": "Leo: Don't worry! I'll be there in _____ minutes.",
+        "audioUrl": "assets/audio/quiz/quiz_dtc_q3.mp3",
+        "audioScript": "Leo: Do not worry! I will be there in a couple of minutes.",
         "options": [
           { "id": "opt_a", "text": "a couple of (em uns dois ou três minutos)", "isCorrect": true },
           { "id": "opt_b", "text": "a dozen of", "isCorrect": false },
@@ -71,17 +71,47 @@ const AEF_QUIZZES_DATA = {
       {
         "id": "q1",
         "type": "dialogue_comprehension",
-        "questionText": "Por que a Grazi decidiu mudar sua rotina?",
-        "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fms-legacy%2Fms001-grazi%2FMS001_LR.mp3?alt=media",
+        "questionText": "Por que a Grazi decidiu mudar sua rotina segundo o áudio?",
+        "audioUrl": "assets/audio/quiz/quiz_ms_grazi_q1.mp3",
         "audioScript": "Narrator: Grazi is tired of feeling stuck. She wants to speak English with confidence and change her career.",
         "options": [
-          { "id": "opt_a", "text": "Porque ela quer mudar de carreira e destravar o inglês", "isCorrect": true },
+          { "id": "opt_a", "text": "Porque ela quer mudar de carreira e destravar o inglês com confiança", "isCorrect": true },
           { "id": "opt_b", "text": "Porque ela vai fazer uma viagem curta de férias", "isCorrect": false },
           { "id": "opt_c", "text": "Porque o chefe dela a obrigou a fazer uma prova", "isCorrect": false },
           { "id": "opt_d", "text": "Porque ela não gosta de acordar cedo", "isCorrect": false }
         ],
         "goldenTip": "'Tired of feeling stuck' é o sentimento de estar estagnado. Quando ela decide mudar, a ação vira reflexo!",
-        "retryHint": "Ouça o início da história: 'Grazi is tired of feeling stuck...'"
+        "retryHint": "Ouça o início da frase: 'Grazi is tired of feeling stuck...'"
+      },
+      {
+        "id": "q2",
+        "type": "sound_discrimination",
+        "questionText": "O que a Grazi afirma com firmeza no áudio?",
+        "audioUrl": "assets/audio/quiz/quiz_ms_grazi_q2.mp3",
+        "audioScript": "Grazi: I cannot wait any longer. Today is the day I take action!",
+        "options": [
+          { "id": "opt_a", "text": "Que não pode mais esperar e vai agir hoje mesmo", "isCorrect": true },
+          { "id": "opt_b", "text": "Que vai esperar até o próximo ano", "isCorrect": false },
+          { "id": "opt_c", "text": "Que está com medo de tentar de novo", "isCorrect": false },
+          { "id": "opt_d", "text": "Que prefere estudar gramática primeiro", "isCorrect": false }
+        ],
+        "goldenTip": "'I cannot wait any longer' é a expressão viva de quem decidiu não adiar mais a própria vida.",
+        "retryHint": "Perceba o ritmo da fala: 'Today is the day I take action!'"
+      },
+      {
+        "id": "q3",
+        "type": "fill_chunk",
+        "questionText": "Complete o conselho do Professor Leo ouvido na gravação:",
+        "audioUrl": "assets/audio/quiz/quiz_ms_grazi_q3.mp3",
+        "audioScript": "Leo: Hello, my dear friend! Repeat the story until English becomes a reflex.",
+        "options": [
+          { "id": "opt_a", "text": "until English becomes a reflex (até o inglês virar reflexo)", "isCorrect": true },
+          { "id": "opt_b", "text": "until you pass the written test", "isCorrect": false },
+          { "id": "opt_c", "text": "by translating word by word", "isCorrect": false },
+          { "id": "opt_d", "text": "without listening to any audio", "isCorrect": false }
+        ],
+        "goldenTip": "O inglês entra pelo ouvido com a repetição da mesma história até a fala sair sem pensar!",
+        "retryHint": "Ouça o final da sentença: '...until English becomes a reflex.'"
       }
     ]
   },
@@ -91,7 +121,7 @@ const AEF_QUIZZES_DATA = {
     "description": "Teste seu raciocínio contextual e compreensão de chunks em 100% texto sem áudio prévio.",
     "category": "English QuickStart",
     "badge": "COMPREENSÃO TOTAL",
-    "passingScore": 75,
+    "passingScore": 70,
     "questions": [
       {
         "id": "q1",
