@@ -1457,15 +1457,35 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
     function populateQuizSelect() {
       const select = document.getElementById("lessonQuizSelect");
       if (!select) return;
-      const reg = window.AEF_QUIZZES_REGISTRY || {};
-      const keys = Object.keys(reg);
+
+      // Mescla o registry estático com os quizzes customizados salvos no localStorage
+      // (mesmo merge que o admin-quiz.html faz ao inicializar)
+      const REGISTRY_BASE = window.AEF_QUIZZES_REGISTRY || {};
+      const mergedReg = Object.assign({}, REGISTRY_BASE);
+      try {
+        const saved = localStorage.getItem("aef_custom_quizzes");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') {
+            for (const [id, qObj] of Object.entries(parsed)) {
+              if (qObj && typeof qObj === 'object') {
+                mergedReg[id] = Object.assign({}, REGISTRY_BASE[id] || {}, qObj);
+              }
+            }
+          }
+        }
+      } catch(e) {
+        console.warn("Erro ao ler localStorage de quizzes:", e);
+      }
+
+      const keys = Object.keys(mergedReg);
       if (keys.length === 0) {
         select.innerHTML = `<option value="">Nenhum quiz cadastrado no banco</option>`;
         return;
       }
       select.innerHTML = `<option value="">-- Selecione um Quiz do Banco --</option>` +
         keys.map(k => {
-          const q = reg[k];
+          const q = mergedReg[k];
           return `<option value="${q.id}">🎯 ${q.title} (${(q.questions || []).length} questões • ${q.category || 'Geral'})</option>`;
         }).join("");
     }
@@ -1481,12 +1501,33 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       radios.forEach(r => {
         r.checked = r.value === type;
       });
+
+      // Recarrega o select sempre que o painel de quiz é aberto,
+      // garantindo que quizzes novos criados em /quiz apareçam imediatamente
+      if (isQuiz) {
+        populateQuizSelect();
+      }
     }
 
     function handleQuizSelected(quizId) {
       if (!quizId) return;
-      const reg = window.AEF_QUIZZES_REGISTRY || {};
-      const quiz = reg[quizId];
+      // Usa o mesmo registry mesclado (estático + localStorage)
+      const REGISTRY_BASE = window.AEF_QUIZZES_REGISTRY || {};
+      const mergedReg = Object.assign({}, REGISTRY_BASE);
+      try {
+        const saved = localStorage.getItem("aef_custom_quizzes");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') {
+            for (const [id, qObj] of Object.entries(parsed)) {
+              if (qObj && typeof qObj === 'object') {
+                mergedReg[id] = Object.assign({}, REGISTRY_BASE[id] || {}, qObj);
+              }
+            }
+          }
+        }
+      } catch(e) {}
+      const quiz = mergedReg[quizId];
       if (!quiz) return;
 
       const titleInput = document.getElementById("lessonTitleInput");
