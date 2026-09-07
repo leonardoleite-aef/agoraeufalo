@@ -17,34 +17,36 @@ Aqui você não precisa entender de programação nem de linhas de comando. Este
 1. [O Hub Central do Admin (`admin.html`)](#1-o-hub-central-do-admin)
 2. [Jornada 1: Criando e Gerenciando Cursos e Módulos (Course Studio)](#2-jornada-1-criando-e-gerenciando-cursos-e-módulos)
 3. [Jornada 2: Cadastrando uma Aula Completa (A Matriz dos 5 Elementos)](#3-jornada-2-cadastrando-uma-aula-completa)
-4. [Jornada 3: Sintetizando Áudios de Alta Fidelidade no Gemini TTS Studio](#4-jornada-3-sintetizando-áudios-no-gemini-tts-studio)
-5. [Jornada 4: Gerando Apostilas Diagramadas em PDF (PDF Factory)](#5-jornada-4-gerando-apostilas-diagramadas-em-pdf)
-6. [Jornada 5: Gestão de Alunos, Matrículas e Mentoria VIP (CRM Alunos)](#6-jornada-5-gestão-de-alunos-matrículas-e-mentoria-vip)
-7. [Jornada 6: Gerenciando Vendas, Checkouts e Webhooks (Hotmart & Stripe)](#7-jornada-6-gerenciando-vendas-checkouts-e-webhooks)
-8. [Jornada 7: Criando Banners & Blocos de Marketing (Block Engine)](#8-jornada-7-criando-banners--blocos-de-marketing)
-9. [Jornada 8: Publicando Artigos no Blog e Otimizando SEO](#9-jornada-8-publicando-artigos-no-blog-e-otimizando-seo)
-10. [Guia de Primeiros Socorros & Dicas de Uso no Celular](#10-guia-de-primeiros-socorros--dicas-de-uso-no-celular)
+4. [Jornada 3: Criando Quizzes de Escuta & Compreensão (Quiz Studio)](#4-jornada-3-criando-quizzes-de-escuta--compreensão)
+5. [Jornada 4: Sintetizando Áudios de Alta Fidelidade no Gemini TTS Studio](#5-jornada-4-sintetizando-áudios-no-gemini-tts-studio)
+6. [Jornada 5: Gerando Apostilas Diagramadas em PDF (PDF Factory)](#6-jornada-5-gerando-apostilas-diagramadas-em-pdf)
+7. [Jornada 6: Gestão de Alunos, Matrículas e Mentoria VIP (CRM Alunos)](#7-jornada-6-gestão-de-alunos-matrículas-e-mentoria-vip)
+8. [Jornada 7: Gerenciando Vendas, Checkouts e Webhooks (Hotmart & Stripe)](#8-jornada-7-gerenciando-vendas-checkouts-e-webhooks)
+9. [Jornada 8: Criando Banners & Blocos de Marketing (Block Engine)](#9-jornada-8-criando-banners--blocos-de-marketing)
+10. [Jornada 9: Publicando Artigos no Blog e Otimizando SEO](#10-jornada-9-publicando-artigos-no-blog-e-otimizando-seo)
+11. [Guia de Primeiros Socorros & Dicas de Uso no Celular](#11-guia-de-primeiros-socorros--dicas-de-uso-no-celular)
 
 ---
 
 # 1. O Hub Central do Admin
 
-Ao acessar **`admin.agoraeufalo.com.br`** (ou `admin.html`), você é recebido pelo seu painel central unificado com acesso direto aos 10 estúdios:
+Ao acessar **`admin.agoraeufalo.com.br`** (ou `admin.html`), você é recebido pelo seu painel central unificado com acesso direto aos 11 estúdios:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        AGORAEUFALO ADMIN MASTER                        │
 ├────────────────────────────────────────────────────────────────────────┤
 │ 1. 🎓 Course Studio      ➔ Criação e edição da grade de cursos e aulas │
-│ 2. 👥 CRM de Alunos       ➔ Gestão de alunos, tiers e mentoria VIP     │
-│ 3. 💳 Vendas & Checkouts  ➔ Links de checkout Hotmart e Stripe         │
-│ 4. ⚡ Webhooks Monitor    ➔ Simulador e auditoria de compras em tempo  │
-│ 5. 🎨 Marketing Engine    ➔ Banners, caixas didáticas e CTAs           │
-│ 6. 📄 PDF Factory         ➔ Fábrica de apostilas A4 luxuosas           │
-│ 7. 🎙️ Gemini TTS Studio   ➔ Gravação de áudios com vozes de IA         │
-│ 8. ✍️ Blog CMS Panel      ➔ Redação e publicação de artigos longos     │
-│ 9. 🔍 SEO Manager         ➔ Indexação no Google e meta tags OpenGraph  │
-│ 10. 🚪 Ver Como Aluno     ➔ Atalho para entrar na sala como estudante  │
+│ 2. 🎯 Quiz Studio        ➔ Fábrica de testes de escuta e compreensão   │
+│ 3. 👥 CRM de Alunos       ➔ Gestão de alunos, tiers e mentoria VIP     │
+│ 4. 💳 Vendas & Checkouts  ➔ Links de checkout Hotmart e Stripe         │
+│ 5. ⚡ Webhooks Monitor    ➔ Simulador e auditoria de compras em tempo  │
+│ 6. 🎨 Marketing Engine    ➔ Banners, caixas didáticas e CTAs           │
+│ 7. 📄 PDF Factory         ➔ Fábrica de apostilas A4 luxuosas           │
+│ 8. 🎙️ Gemini TTS Studio   ➔ Gravação de áudios com vozes de IA         │
+│ 9. ✍️ Blog CMS Panel      ➔ Redação e publicação de artigos longos     │
+│ 10. 🔍 SEO Manager        ➔ Indexação no Google e meta tags OpenGraph  │
+│ 11. 🚪 Ver Como Aluno     ➔ Atalho para entrar na sala como estudante  │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -105,7 +107,84 @@ Toda Masterclass no ecossistema AgoraEuFalo opera sobre a **Matriz dos 5 Element
 
 ---
 
-# 4. Jornada 3: Sintetizando Áudios no Gemini TTS Studio
+# 4. Jornada 3: Criando Quizzes de Escuta & Compreensão (Quiz Studio)
+
+**Painel:** `admin-quiz.html` (Acesso rápido: `/quiz`)
+
+O **Quiz Studio** é o laboratório onde você cria, testa e gerencia testes interativos de áudio e leitura para treinar o reflexo auditivo e a compreensão imediata dos alunos.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│               OS 3 ARQUÉTIPOS PEDAGÓGICOS DE QUIZZES                   │
+├────────────────────────────────────────────────────────────────────────┤
+│ 🎧 1. Compreensão de Diálogo (Áudio) ➔ Perguntas sobre conversas reais │
+│ 🔢 2. Discriminação Sonora & Chunks  ➔ Foco na melodia e conectores    │
+│ 📝 3. Quiz Tradicional (100% Texto)  ➔ Sentimento da estrutura/leitura │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 🚀 Passo a Passo para Criar ou Editar um Quiz:
+
+1. **Configuração da Chave Gemini TTS (1-Clique):**
+   - No cabeçalho do Quiz Studio, clique no botão **`🔑 Chave Gemini`**.
+   - Cole sua API Key do Google AI Studio e clique em **`Salvar Chave`**. O botão ficará verde com o selo *"Gemini Conectada"*.
+
+2. **Selecionar ou Criar Novo Quiz:**
+   - Para editar um quiz existente: selecione no menu suspenso (ex: *Grazi Wants to Change* ou *Reconhecendo Horas DTC*).
+   - Para criar do zero: clique no botão **`+ Novo Quiz`** e defina o título, a categoria (ex: *Magic Stories*, *Dates & Times*, *English QuickStart*) e a nota de corte (ex: `70%`).
+
+3. **Adicionar e Configurar Questões:**
+   - Clique em **`+ Adicionar Questão`**.
+   - Escolha o **Tipo da Questão**:
+     - *🎧 Compreensão de Diálogo (Áudio)*
+     - *🔢 Discriminação Sonora (Áudio)*
+     - *🧩 Complete o Chunk (Áudio)*
+     - *📝 Quiz Tradicional (100% Texto)*
+   - Digite o **Enunciado da Pergunta** (ex: *"Ouça o áudio e responda: A que horas vai começar a reunião?"*).
+
+4. **Sintetizar o Áudio da Questão (Gemini TTS):**
+   - No campo **Roteiro / Fala em Inglês**, digite o diálogo ou frase.
+   - *Suporte a Locutor Único (Single):* Digite a frase direta (ex: `The flight leaves at half past eight in the morning.`).
+   - *Suporte a Diálogo (Dual Speaker):* Digite identificando os personagens por linha:
+     ```text
+     Rodrigo: Hello, my dear friend! What time is our meeting today?
+     Liam: It is at a quarter to five in the afternoon!
+     ```
+   - Escolha a voz principal (*Aoede*, *Puck*, *Charon/Leo*, *Kore*, *Fenrir*) e clique em **`🎙️ Sintetizar com Gemini TTS`**.
+   - Em 2 segundos, o áudio é sintetizado e pronto para audição com o botão **`Ouvir`**!
+   - *(Opcional)* Se você já gravou um arquivo MP3, pode colar a URL direta no campo de áudio.
+
+5. **Cadastrar Alternativas de Resposta:**
+   - Preencha as alternativas (A, B, C, D).
+   - Marque a bolinha (**Radio button**) da alternativa correta.
+
+6. **Pedagogia do Leo (Feedback Imediato):**
+   - **💡 Sacada de Ouro do Leo (Ao Acertar):** O elogio e a explicação prática do bloco sonoro (ex: *"Em inglês falado real, 'a quarter to five' significa 15 minutos que faltam para as 5, ou seja, 4h45 da tarde!"*).
+   - **🎧 Dica de Escuta (Ao Errar):** Dica acolhedora para o aluno reescutar prestando atenção no som certo (ex: *"Preste atenção na palavra 'TO' no áudio."*).
+
+7. **Simulador Interativo ao Vivo (Coluna Direita):**
+   - À medida que você edita, o simulador à direita reproduz exatamente a experiência do aluno.
+   - Clique em **`Ouvir Áudio da Questão`** para testar a reprodução do som.
+   - Clique em uma alternativa e em **`Verificar Resposta`** para ver o feedback visual e a Sacada de Ouro.
+
+8. **Salvar no Banco:**
+   - Clique em **`💾 Salvar Quiz no Banco`**. O quiz é persistido e fica disponível imediatamente em todo o ecossistema.
+
+---
+
+### 🔗 Como Vincular um Quiz a uma Aula no Course Studio:
+
+1. Abra o **Course Studio** (`admin-cursos.html` ou `/cursos`).
+2. Selecione o curso, módulo e a aula que deseja transformar em quiz.
+3. No topo da ficha da aula, na seção **Tipo de Conteúdo**, selecione a opção:
+   - **`🎯 Quiz de Escuta & Compreensão`** (em vez de *🎬 Masterclass com Vídeo/Áudio*).
+4. No campo **Banco de Quizzes Cadastrados**, escolha o quiz que você preparou no Quiz Studio.
+5. Clique em **`Salvar e Publicar Aula`**.
+6. *Resultado:* Na **Sala de Aula do Aluno** (`sala-de-aula.html`), essa aula será renderizada como uma arena interativa de quiz com áudio, barra de progresso, feedback em tempo real e cálculo de precisão auditiva!
+
+---
+
+# 5. Jornada 4: Sintetizando Áudios no Gemini TTS Studio
 
 **Painel:** `tts-studio.html` (Acesso rápido: `/tts`)
 
@@ -127,7 +206,7 @@ Quando você não tiver tempo de gravar uma explicação ou diálogo em estúdio
 
 ---
 
-# 5. Jornada 4: Gerando Apostilas Diagramadas em PDF
+# 6. Jornada 5: Gerando Apostilas Diagramadas em PDF
 
 **Painel:** `admin-pdf-factory.html` (Acesso rápido: `/pdf-factory`)
 
@@ -146,7 +225,7 @@ A **PDF Factory** transforma o conteúdo de qualquer aula em uma apostila de lux
 
 ---
 
-# 6. Jornada 5: Gestão de Alunos, Matrículas e Mentoria VIP
+# 7. Jornada 6: Gestão de Alunos, Matrículas e Mentoria VIP
 
 **Painel:** `admin-alunos.html` (Acesso rápido: `/alunos`)
 
@@ -169,7 +248,7 @@ flowchart TD
 
 ---
 
-# 7. Jornada 6: Gerenciando Vendas, Checkouts e Webhooks
+# 8. Jornada 7: Gerenciando Vendas, Checkouts e Webhooks
 
 **Painéis:** `admin-vendas.html` (`/vendas`) & `admin-webhooks.html` (`/webhooks`)
 
@@ -186,7 +265,7 @@ flowchart TD
 
 ---
 
-# 8. Jornada 7: Criando Banners & Blocos de Marketing
+# 9. Jornada 8: Criando Banners & Blocos de Marketing
 
 **Painel:** `admin-marketing.html` (Acesso rápido: `/marketing`)
 
@@ -203,7 +282,7 @@ O **Marketing Block Engine** permite criar caixas de destaque, avisos de matríc
 
 ---
 
-# 9. Jornada 8: Publicando Artigos no Blog e Otimizando SEO
+# 10. Jornada 9: Publicando Artigos no Blog e Otimizando SEO
 
 **Painéis:** `blog-panel.html` (`/blog`) & `seo-manager.html` (`/seo`)
 
@@ -217,15 +296,16 @@ Toda publicação de artigo no blog segue a regra institucional de **+5.000 cara
 
 ---
 
-# 10. Guia de Primeiros Socorros & Dicas de Uso no Celular
+# 11. Guia de Primeiros Socorros & Dicas de Uso no Celular
 
-### ❓ "Fiz uma alteração em uma aula mas o aluno diz que não atualizou no celular dele. O que fazer?"
-1. **Cache do Navegador:** O navegador do aluno pode ter guardado a página antiga na memória. Peça para ele fechar a aba e reabrir, ou dar um toque no botão de recarregar.
+### ❓ "Fiz uma alteração em uma aula ou quiz mas o aluno diz que não atualizou no celular dele. O que fazer?"
+1. **Cache do Navegador:** O navegador do aluno pode ter guardado a página antiga na memória. Peça para ele fechar a aba e reabrir, ou dar um toque no botão de recarregar (`Cmd + Shift + R` no computador ou puxar para baixo no celular).
 2. **Validação no Admin:** Entre em `admin-cursos.html`, selecione a aula e confirme se o status está como **`Publicada`** (verde) e não **`Rascunho`** (cinza).
 
 ### 📱 Como Usar o Painel Admin no Celular (iPhone / Android):
-- Todos os 10 painéis foram desenhados com tecnologia responsiva.
+- Todos os 11 painéis foram desenhados com tecnologia responsiva.
 - No celular, você pode:
+  - Criar e testar quizzes ouvindo os áudios diretamente no Safari/Chrome móvel.
   - Mudar o tier de um aluno no WhatsApp em 10 segundos pelo CRM.
   - Alterar o link do Google Meet antes da aula de Mentoria.
   - Ver as notificações de vendas do dia no painel de Vendas.

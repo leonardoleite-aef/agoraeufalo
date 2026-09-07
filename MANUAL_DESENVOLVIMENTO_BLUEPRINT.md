@@ -21,10 +21,11 @@ Ele foi escrito com dois objetivos complementares:
 3. [Arquitetura Híbrida de Dados: Single Source of Truth (Registry + Firestore)](#3-arquitetura-híbrida-de-dados-single-source-of-truth)
 4. [Sistema de Autenticação, Tiers & Guardas de Rota](#4-sistema-de-autenticação-tiers--guardas-de-rota)
 5. [Motor de Áudio & Training Player (Gemini TTS + Timestamps Milimétricos)](#5-motor-de-áudio--training-player)
-6. [PDF Factory & Fábrica Editorial Diagramada (ReportLab + Calm Design 40+)](#6-pdf-factory--fábrica-editorial-diagramada)
-7. [Esteira de Testes Automatizados Headless & CI/CD](#7-esteira-de-testes-automatizados-headless--cicd)
-8. [Casos Reais de Troubleshooting & Lições de Engenharia](#8-casos-reais-de-troubleshooting--lições-de-engenharia)
-9. [Guia de Replicação com Antigravity (Blueprint para Novos Projetos)](#9-guia-de-replicação-com-antigravity)
+6. [Quiz Studio & Interactive Quiz Engine (Gemini TTS + Audio Streaming 206)](#6-quiz-studio--interactive-quiz-engine)
+7. [PDF Factory & Fábrica Editorial Diagramada (ReportLab + Calm Design 40+)](#7-pdf-factory--fábrica-editorial-diagramada)
+8. [Esteira de Testes Automatizados Headless & CI/CD](#8-esteira-de-testes-automatizados-headless--cicd)
+9. [Casos Reais de Troubleshooting & Lições de Engenharia](#9-casos-reais-de-troubleshooting--lições-de-engenharia)
+10. [Guia de Replicação com Antigravity (Blueprint para Novos Projetos)](#10-guia-de-replicação-com-antigravity)
 
 ---
 
@@ -232,7 +233,50 @@ O **Training Player** ([`treino/player.html`](file:///Users/macbookpro/Desktop/a
 
 ---
 
-# 6. PDF Factory & Fábrica Editorial Diagramada
+# 6. Quiz Studio & Interactive Quiz Engine
+
+### 💡 O Conceito & Arquitetura Pedagógica
+Diferente de quizzes acadêmicos que apenas testam regras gramaticais em texto, o **Quiz Studio** ([`admin-quiz.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-quiz.html) / `/quiz`) implementa o **Motor de Discriminação Auditiva e Velocidade de Resposta** do ecossistema AgoraEuFalo.
+
+Ele é composto por 3 camadas integradas:
+1. **Base Canônica de Quizzes (`aef-quizzes-registry.js`):** Catálogo estático com 0ms de carregamento, enriquecido com dados do `localStorage` e sincronizado com o Firestore em `quizzes/{quizId}`.
+2. **Motor de Síntese In-Browser (Gemini TTS Direct Injection):** Gera áudios em tempo real via chamada REST direta do navegador para o endpoint `models/gemini-2.5-flash-preview-tts:generateContent`, convertendo PCM Base64 24kHz para Blob WAV sem intermediários.
+3. **Arena Interativa do Aluno (`sala-de-aula.html`):** Transforma qualquer aula do Course Studio em um quiz com barra de progresso visual, áudio com streaming range 206, feedback imediato e exibição monumental da *Sacada de Ouro do Leo*.
+
+```javascript
+// Schema Canônico de Quiz (aef-quizzes-registry.js)
+{
+  "id": "quiz-ms-grazi-01",
+  "title": "Quiz de Escuta • Grazi Wants to Change (MS001)",
+  "category": "Magic Stories",
+  "badge": "HISTÓRIA VIVA",
+  "passingScore": 70,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "dialogue_comprehension", // dialogue_comprehension | sound_discrimination | fill_chunk | text_comprehension
+      "questionText": "Por que a Grazi decidiu mudar sua rotina segundo o áudio?",
+      "audioUrl": "/assets/audio/quizzes/quiz_ms_grazi_q1.mp3",
+      "audioScript": "Grazi is tired of feeling stuck. She wants to speak English with confidence and change her career.",
+      "voice": "Aoede",
+      "options": [
+        { "id": "opt_a", "text": "Porque ela quer mudar de carreira e destravar o inglês com confiança", "isCorrect": true },
+        { "id": "opt_b", "text": "Porque ela vai fazer uma viagem curta de férias", "isCorrect": false }
+      ],
+      "goldenTip": "'Tired of feeling stuck' é o sentimento de estar estagnado. Quando ela decide mudar, a ação vira reflexo!",
+      "retryHint": "Ouça o início da frase: 'Grazi is tired of feeling stuck...'"
+    }
+  ]
+}
+```
+
+### 🎛️ Gestão de Áudio e Streaming Edge (HTTP 206 Partial Content):
+- **Range Requests:** Ao reproduzir arquivos MP3 em navegadores baseados em Chromium e WebKit (Safari), o navegador envia cabeçalhos `Range: bytes=0-`. O Cloudflare Edge Worker repassa o stream com status `206 Partial Content` e cabeçalho `Accept-Ranges: bytes`.
+- **Instância Dedicada de Áudio (`new Audio()`):** O controle de áudio no Quiz Studio utiliza instâncias atômicas com tratamento detalhado de erros (`err.code`, `err.message`) e listeners limpos de `onended` e `onerror`, eliminando conflitos de concorrência e abortos de requisição.
+
+---
+
+# 7. PDF Factory & Fábrica Editorial Diagramada
 
 ### 💡 O Conceito
 Para o aluno adulto (40+), o material impresso ou baixado em PDF no tablet é sagrado.
@@ -245,32 +289,33 @@ O ecossistema possui a **PDF Factory** ([`admin-pdf-factory.html`](file:///Users
 
 ---
 
-# 7. Esteira de Testes Automatizados Headless & CI/CD
+# 8. Esteira de Testes Automatizados Headless & CI/CD
 
 ### 💡 O Conceito (Como garantir que NADA quebre?)
-Em vez de testar manualmente 21 telas a cada mudança, criamos um robô de testes headless em Node.js com **JSDOM** ([`scripts/test_all_ecosystem_pages.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/scripts/test_all_ecosystem_pages.js)).
-
-Em **menos de 15 segundos**, ele:
-1. Carrega todas as 21 páginas dos domínios `app`, `admin` e `público`.
-2. Injeta o ambiente de produção, credenciais e banco de dados local.
-3. Dispara o evento `DOMContentLoaded` e executa todos os scripts.
-4. Clica e valida se acordeões, títulos, formulários, players e grades de aulas renderizaram com 100% de precisão.
-5. Gera o relatório canônico `test_report.json`.
+Em vez de testar manualmente as dezenas de telas a cada mudança, criamos robôs de teste automatizados em Node.js com **JSDOM** e **Puppeteer**:
+- [`scripts/test_all_ecosystem_pages.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/scripts/test_all_ecosystem_pages.js): Validação estrutural de DOM e carregamento de 21 páginas.
+- [`scripts/test_live_production_quiz.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/scripts/test_live_production_quiz.js): Validação end-to-end de streaming de áudio, respostas e feedback de quizzes diretamente no domínio de produção ao vivo (`admin.agoraeufalo.com.br/quiz`).
 
 ```bash
-# Execução da esteira de testes completa
+# 1. Execução dos testes estruturais de telas
 node scripts/test_all_ecosystem_pages.js
 
-# Build de produção (sincroniza HTML, CSS, JS e imagens para /dist)
+# 2. Execução dos testes de áudio e simulador
+node scripts/test_quiz_audio_simulator.js
+
+# 3. Build de produção (/dist)
 npm run build
 
-# Publicação instantânea no Cloudflare Edge
+# 4. Deploy no Cloudflare Edge
 npx wrangler deploy
+
+# 5. Validação automatizada diretamente no domínio de produção
+node scripts/test_live_production_quiz.js
 ```
 
 ---
 
-# 8. Casos Reais de Troubleshooting & Lições de Engenharia
+# 9. Casos Reais de Troubleshooting & Lições de Engenharia
 
 Esta seção registra os bugs reais que enfrentamos e como os solucionamos, para que o aprendizado nunca se perca:
 
@@ -289,9 +334,14 @@ Esta seção registra os bugs reais que enfrentamos e como os solucionamos, para
 - **Causa Raiz:** A biblioteca JSDOM não possui motor gráfico de layout completo, tornando a atribuição `element.innerText = '...'` ineficaz em certos nós virtuais.
 - **Solução:** Padronizamos o código para utilizar `element.textContent = '...'`, que é o padrão W3C universal, muito mais rápido e 100% compatível com navegadores e ambientes de teste automatizado.
 
+### 🐛 Caso 4: Áudios de Quiz retornando 404 em produção por bloqueio de plural no `.gitignore`
+- **Sintoma:** Ao clicar em *"Ouvir Áudio da Questão"* no Quiz Studio de produção, o navegador exibia o aviso *"Não foi possível iniciar o áudio automaticamente"*.
+- **Causa Raiz:** A regra `*.mp3` no `.gitignore` possuía exceção apenas para `!assets/audio/quiz/*.mp3` (singular). Como os arquivos estavam na pasta `assets/audio/quizzes/` (plural), foram ignorados pelo Git e não subiram no deploy, resultando em HTTP 404 retornado pelo Cloudflare.
+- **Solução:** Adicionamos as exceções `!assets/audio/quizzes/*.mp3` e `!dist/assets/audio/quizzes/*.mp3` no `.gitignore`, commitamos os arquivos MP3, reexecutamos o deploy e criamos a suíte de testes Puppeteer que valida as respostas HTTP 200 de streaming diretamente no CDN de produção.
+
 ---
 
-# 9. Guia de Replicação com Antigravity
+# 10. Guia de Replicação com Antigravity
 
 Quando você quiser criar um novo projeto SaaS, curso digital ou plataforma de membros do zero, forneça o seguinte **Prompt Blueprint** ao Antigravity:
 
@@ -302,7 +352,8 @@ Quando você quiser criar um novo projeto SaaS, curso digital ou plataforma de m
 > *2. Arquitetura Híbrida com catálogo canônico em `registry.js` (0ms FCP) e sincronização Firestore em segundo plano.*
 > *3. Autenticação instantânea via LocalStorage com fallback de nuvem e matriz de Tiers (Free, Club, VIP).*
 > *4. Design System Calm EdTech com Tailwind CSS, fontes 15-17pt para conforto visual e alto contraste.*
-> *5. Suíte de testes headless com JSDOM validando 100% das telas antes de cada deploy."*
+> *5. Motor de Quizzes Interativos com síntese Gemini TTS e streaming Range HTTP 206.*
+> *6. Suíte de testes headless com JSDOM e Puppeteer validando 100% das telas e streams de mídia antes de cada deploy."*
 
 ---
 

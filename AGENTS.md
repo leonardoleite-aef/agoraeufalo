@@ -283,5 +283,15 @@ Qualquer novo PDF/Apostila de aula gerado a partir do Módulo 2 deve seguir estr
     1. A experiência completa de quem já tem login salvo vs. visitante novo;
     2. A revisão fina de toda a copy, novas imagens temáticas e links de ofertas.
 
+---
+
+## 22. Diretriz Permanente de Documentação Viva & Entrega Completa de Funcionalidades (Living Documentation Protocol)
+Toda e qualquer nova funcionalidade, ferramenta, estúdio, painel administrativo, tipo de atividade pedagógica ou inovação de engenharia criada no ecossistema **AgoraEuFalo** deve, **obrigatoriamente e sem exceção**, cumprir a esteira de 5 passos antes de ser considerada concluída:
+1. **Atualização do Manual do Usuário Admin (`MANUAL_USUARIO_ADMIN.md`):** Criar/atualizar a jornada passo a passo prática para o Professor Leo e equipe, explicando detalhadamente onde clicar, o que preencher, os campos do formulário e exemplos de uso reais.
+2. **Atualização do Blueprint de Desenvolvimento (`MANUAL_DESENVOLVIMENTO_BLUEPRINT.md`):** Registrar as especificações técnicas, schemas de dados (JSON/Firestore), fluxo no Edge Router (`_worker.js`), motor de renderização e lições de troubleshooting/engenharia aprendidas.
+3. **Bateria de Testes Automatizados Headless (Puppeteer / Node.js):** Desenvolver ou atualizar scripts de teste automatizado (em `scripts/`) que naveguem como usuário real, testem cliques, submissões, streams de áudio/vídeo e asseverem o correto funcionamento técnico no DOM e na rede.
+4. **Inventário nos Mapas de Rotas & Interfaces (`INTERFACES.md`, `src/worker.js`, `MAPA_OFICIAL_DO_ECOSSISTEMA.md`):** Garantir que nenhuma rota ou arquivo fique órfão ou fora do mapa oficial de interfaces.
+5. **Build, Deploy e Verificação no Domínio de Produção ao Vivo:** Executar `npm run build`, `git push origin main`, `npx wrangler deploy` e validar a disponibilidade real e integridade de mídia (`HTTP 200`) diretamente na URL de produção antes de entregar o relatório.
+
 
 

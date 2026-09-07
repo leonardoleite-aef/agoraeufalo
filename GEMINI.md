@@ -69,6 +69,16 @@ Todas as aulas e treinos do ecossistema seguem a matriz pedagógica das 6 etapas
     3. **Smartphone Teaser:** Carrega a última lição do aluno ou a recomendação do dia.
   - **Revisão Conjunta:** Validar a experiência de aluno logado vs. visitante novo antes de virar a chave de `nova-home.html` para `index.html`.
 
+---
+
+## 7. Diretriz Permanente de Documentação Viva & Entrega Completa de Funcionalidades (Living Documentation Protocol)
+- Toda nova funcionalidade, painel, estúdio ou atividade criada no ecossistema deve cumprir rigorosamente o ciclo de 5 etapas antes de ser considerada concluída:
+  1. **Manual do Usuário Admin:** Inserir a jornada operacional passo a passo em [`MANUAL_USUARIO_ADMIN.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/MANUAL_USUARIO_ADMIN.md).
+  2. **Blueprint de Desenvolvimento:** Documentar a arquitetura técnica e schemas em [`MANUAL_DESENVOLVIMENTO_BLUEPRINT.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/MANUAL_DESENVOLVIMENTO_BLUEPRINT.md).
+  3. **Testes Automatizados Headless:** Criar/atualizar scripts de teste com Puppeteer/Node para verificação de ponta a ponta.
+  4. **Inventário de Rotas:** Atualizar [`INTERFACES.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/INTERFACES.md) e [`src/worker.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/src/worker.js).
+  5. **Deploy & Verificação em Produção:** Executar build, deploy Cloudflare e validar status HTTP 200 diretamente na URL de produção ao vivo.
+
 
 
 
