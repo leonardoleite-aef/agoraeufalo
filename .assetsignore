@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+.gemini
+.vscode
+node_modules
+scripts
+storage_staging
+tmp
+*.py
+*.pyc
+*.sh
+*.log
+*.so
+package-lock.json
+wrangler.json
+wrangler.toml
