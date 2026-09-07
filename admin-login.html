@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Administrativo Master | AgoraEuFalo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#F59E0B',
+              navy: '#0A192F',
+              dark: '#070B14',
+              card: '#0F172A',
+              border: '#1E293B'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- AgoraEuFalo Portal Auth SDK -->
+  <script src="assets/js/aef-portal-auth.js"></script>
+</head>
+<body class="bg-[#0A192F] text-slate-100 min-h-full flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 font-sans antialiased">
+
+  <!-- Top Simple Navigation Header -->
+  <header class="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img src="assets/images/AEF-Logo_2026_fundo_escuro-800x300.png" alt="AgoraEuFalo" class="h-8 sm:h-9 object-contain">
+      <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+        ADMIN BACKOFFICE
+      </span>
+    </div>
+    <a href="https://agoraeufalo.com.br" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-amber-400 transition">
+      <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+      <span>Ir para o Site Público</span>
+    </a>
+  </header>
+
+  <!-- Main Login Card Container -->
+  <main class="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
+    <div class="w-full max-w-md">
+      
+      <!-- Main Glass Card -->
+      <div class="bg-[#0F172A]/90 border-2 border-amber-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+        
+        <!-- Ambient Gold Glow -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Header -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-extrabold uppercase tracking-widest mb-3">
+            <i data-lucide="shield-lock" class="w-3.5 h-3.5"></i>
+            <span>Painel Restrito • God Mode</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-serif">
+            Acesso Administrativo
+          </h1>
+          <p class="text-slate-400 text-xs sm:text-sm mt-1 leading-relaxed">
+            Área restrita ao Professor Leonardo Leite e equipe autorizada.
+          </p>
+        </div>
+
+        <!-- Google One-Click Login Button -->
+        <button type="button" onclick="handleAdminGoogleLogin()" class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition shadow-sm border border-slate-200 cursor-pointer active:scale-[0.99] mb-5">
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Entrar com Google (Conta Mestre)</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="relative flex items-center justify-center mb-5">
+          <div class="border-t border-slate-700/60 w-full"></div>
+          <span class="bg-[#0F172A] px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ou senha direta</span>
+        </div>
+
+        <!-- Email & Password Form -->
+        <form id="adminLoginForm" onsubmit="handleAdminEmailLogin(event)" class="space-y-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-300">E-mail Administrativo</label>
+            <div class="relative">
+              <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+              <input type="email" id="adminEmailInput" required placeholder="selexenglish@gmail.com" class="w-full bg-[#070B14] border border-slate-700 focus:border-amber-400 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-mono">
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-300">Senha Master</label>
+            <div class="relative">
+              <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5"></i>
+              <input type="password" id="adminPasswordInput" required placeholder="••••••••" class="w-full bg-[#070B14] border border-slate-700 focus:border-amber-400 rounded-xl pl-10 pr-10 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 outline-none transition font-sans">
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-3 text-slate-500 hover:text-slate-300 transition">
+                <i id="eyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="btnAdminSubmit" class="w-full mt-2 py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/20 cursor-pointer active:scale-[0.99]">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>Autenticar no Hub Central</span>
+          </button>
+        </form>
+
+        <!-- Warning / Security Notice -->
+        <div class="mt-5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300/90 leading-relaxed flex items-start gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <span>Tentativas de acesso não autorizadas são registradas no sistema de auditoria do Google Cloud.</span>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-6 text-center text-xs text-slate-500 border-t border-slate-800/60">
+    <span>© 2026 AgoraEuFalo • Sistema Operacional EdTech do Professor Leonardo Leite.</span>
+  </footer>
+
+  <script>
+    function togglePasswordVisibility() {
+      const input = document.getElementById('adminPasswordInput');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function getTargetAdminRedirect() {
+      try {
+        const dest = sessionStorage.getItem('aef_admin_redirect');
+        if (dest && !dest.includes('admin-login.html')) {
+          sessionStorage.removeItem('aef_admin_redirect');
+          return dest;
+        }
+      } catch(e) {}
+      return "admin.html";
+    }
+
+    async function handleAdminGoogleLogin() {
+      try {
+        if (!window.aefPortalAuth) throw new Error("Auth SDK não inicializado");
+        const { user, profile } = await window.aefPortalAuth.signInWithGoogle();
+        
+        if (window.aefPortalAuth.isAdmin()) {
+          window.location.replace(getTargetAdminRedirect());
+        } else {
+          await window.aefPortalAuth.signOut();
+          alert("⛔ Acesso Negado: Esta conta não possui privilégios de Administrador no AgoraEuFalo.");
+        }
+      } catch (err) {
+        console.error("Erro no login Google admin:", err);
+        alert(`❌ Falha na autenticação: ${err.message}`);
+      }
+    }
+
+    async function handleAdminEmailLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmailInput').value.trim().toLowerCase();
+      const pass = document.getElementById('adminPasswordInput').value;
+      const btn = document.getElementById('btnAdminSubmit');
+
+      if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Autenticando...`;
+
+      try {
+        if (!window.aefPortalAuth) throw new Error("Auth SDK não inicializado");
+        const { user, profile } = await window.aefPortalAuth.signInWithEmail(email, pass);
+
+        if (window.aefPortalAuth.isAdmin()) {
+          window.location.replace(getTargetAdminRedirect());
+        } else {
+          await window.aefPortalAuth.signOut();
+          alert("⛔ Acesso Negado: Este e-mail não possui privilégios de Administrador.");
+        }
+      } catch (err) {
+        console.error("Erro no login Email admin:", err);
+        alert(`❌ Falha no login: ${err.message}`);
+      } finally {
+        if (btn) {
+          btn.innerHTML = `<i data-lucide="shield-check" class="w-4 h-4"></i><span>Autenticar no Hub Central</span>`;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.lucide) lucide.createIcons();
+
+      // Se já estiver autenticado como admin, redireciona direto
+      if (window.aefPortalAuth) {
+        await window.aefPortalAuth.ready();
+        if (window.aefPortalAuth.isAdmin()) {
+          window.location.replace(getTargetAdminRedirect());
+        }
+      }
+    });
+  </script>
+</body>
+</html>

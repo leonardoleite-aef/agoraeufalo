@@ -599,18 +599,24 @@
       let user = this.auth?.currentUser;
 
       if (!user) {
-        console.warn("🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para login.html");
+        const defaultRedirect = requireAdmin ? 'admin-login.html' : 'login.html';
+        const targetUrl = (redirectUrl && redirectUrl !== 'login.html') ? redirectUrl : defaultRedirect;
+        console.warn(`🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para ${targetUrl}`);
         try {
-          sessionStorage.setItem('aef_redirect_after_login', window.location.href);
+          if (requireAdmin) {
+            sessionStorage.setItem('aef_admin_redirect', window.location.href);
+          } else {
+            sessionStorage.setItem('aef_redirect_after_login', window.location.href);
+          }
         } catch(e) {}
-        window.location.replace(redirectUrl);
+        window.location.replace(targetUrl);
         return false;
       }
 
       if (requireAdmin && !this.isAdmin()) {
         console.warn("🔒 [AEFPortalAuth] Acesso negado: Requer privilégios de Administrador.");
         alert("Acesso restrito ao Professor Leonardo Leite e Administradores.");
-        window.location.replace('portal.html');
+        window.location.replace('admin-login.html');
         return false;
       }
 
