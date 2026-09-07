@@ -81,6 +81,29 @@
         this._syncLocalStorage(this.currentProfile);
       }
 
+      // Cross-domain URL impersonation auto-activation (admin. -> app.)
+      try {
+        if (typeof window !== 'undefined' && window.location.search) {
+          const params = new URLSearchParams(window.location.search);
+          const impTier = params.get('impersonate_tier');
+          if (impTier) {
+            const impStudent = params.get('impersonate_student');
+            const impPreset = params.get('impersonate_preset');
+            const state = {
+              tier: impTier,
+              studentId: impStudent,
+              studentName: impStudent ? (impStudent.charAt(0).toUpperCase() + impStudent.slice(1)) : (impTier === 'free' ? 'Aluno Free' : 'Membro Club'),
+              studentEmail: `${impStudent || 'aluno'}@simulado.agoraeufalo.com.br`,
+              preset: impPreset,
+              active: true,
+              timestamp: Date.now()
+            };
+            sessionStorage.setItem('aef_impersonate_state', JSON.stringify(state));
+            localStorage.setItem('aef_impersonate_state', JSON.stringify(state));
+          }
+        }
+      } catch(e) {}
+
       this._initPromise = this._loadFirebaseSDKs().catch(err => {
         console.warn('⚠️ [AEFPortalAuth] Firebase SDK offline ou modo local:', err);
       });

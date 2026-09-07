@@ -15,12 +15,24 @@ Disallow: /obrigado.html
 Disallow: /obrigado
 
 # Áreas Administrativas Internas & Fábricas de Conteúdo (SIGILO ABSOLUTO / PROIBIDO INDEXAR)
+Disallow: /admin*
 Disallow: /admin.html
 Disallow: /admin
+Disallow: /admin-login*
+Disallow: /admin-alunos*
+Disallow: /admin-cursos*
+Disallow: /admin-vendas*
+Disallow: /admin-webhooks*
+Disallow: /admin-marketing*
+Disallow: /admin-ofertas*
+Disallow: /admin-pdf-factory*
+Disallow: /tts-studio*
 Disallow: /tts-studio.html
 Disallow: /tts-studio
+Disallow: /seo-manager*
 Disallow: /seo-manager.html
 Disallow: /seo-manager
+Disallow: /blog-panel*
 Disallow: /blog-panel.html
 Disallow: /blog-panel
 Disallow: /treino/

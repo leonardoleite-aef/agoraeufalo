@@ -278,8 +278,13 @@
       sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
       try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
 
-      // Redireciona sempre para o portal para visualização imediata da experiência do aluno
-      window.location.href = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal.html') : 'portal.html';
+      // Redireciona sempre para o portal com parâmetros cross-domain
+      let queryParam = `impersonate_tier=${encodeURIComponent(stateObj.tier || 'free')}`;
+      if (stateObj.studentId) queryParam += `&impersonate_student=${encodeURIComponent(stateObj.studentId)}`;
+      if (stateObj.preset) queryParam += `&impersonate_preset=${encodeURIComponent(stateObj.preset)}`;
+      
+      const target = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl(`portal.html?${queryParam}`) : `portal.html?${queryParam}`;
+      window.location.href = target;
     }
   }
 
