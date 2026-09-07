@@ -47,6 +47,12 @@ export default {
       path = path.slice(0, -1);
     }
 
+    // Se for requisição para data/ (legado ou relativo do player), reescreve para /treino/data/
+    if (path.startsWith('/data/')) {
+      url.pathname = `/treino${path}`;
+      return env.ASSETS.fetch(new Request(url.toString(), request));
+    }
+
     // Se for arquivo estático com extensão (.css, .js, .png, .jpg, .svg, .ico, .mp3, .pdf, .json, etc)
     if (path.includes('.') && !path.endsWith('.html')) {
       return env.ASSETS.fetch(request);

@@ -13,7 +13,7 @@
   <meta http-equiv="Expires" content="0">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,21 +27,21 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Dados Canônicos dos Módulos e Alunos (Cache Busted) -->
-  <script src="data/magic-stories.js?v=20260901_2155"></script>
-  <script src="data/quickstart.js?v=20260901_2155"></script>
-  <script src="data/public.js?v=20260901_2155"></script>
-  <script src="data/estevao.js?v=20260901_2155"></script>
-  <script src="data/thomas.js?v=20260901_2155"></script>
-  <script src="data/andre.js?v=20260901_2155"></script>
-  <script src="data/matheus.js?v=20260901_2155"></script>
-  <script src="../assets/js/aef-domain-router.js"></script>
-  <script src="../assets/js/aef-courses-registry.js"></script>
-  <script src="../assets/js/aef-portal-auth.js"></script>
-  <script src="../assets/js/aef-cloud-sync.js"></script>
-  <script src="../assets/js/aef-learning-tracker.js"></script>
-  <script src="../assets/js/aef-offers-registry.js"></script>
-  <script src="../assets/js/aef-block-engine.js"></script>
-  <script src="../assets/js/aef-checkout-modal.js"></script>
+  <script src="/treino/data/magic-stories.js?v=20260907_0300"></script>
+  <script src="/treino/data/quickstart.js?v=20260907_0300"></script>
+  <script src="/treino/data/public.js?v=20260907_0300"></script>
+  <script src="/treino/data/estevao.js?v=20260907_0300"></script>
+  <script src="/treino/data/thomas.js?v=20260907_0300"></script>
+  <script src="/treino/data/andre.js?v=20260907_0300"></script>
+  <script src="/treino/data/matheus.js?v=20260907_0300"></script>
+  <script src="/assets/js/aef-domain-router.js"></script>
+  <script src="/assets/js/aef-courses-registry.js?v=20260907_0300"></script>
+  <script src="/assets/js/aef-portal-auth.js?v=20260907_0300"></script>
+  <script src="/assets/js/aef-cloud-sync.js?v=20260907_0300"></script>
+  <script src="/assets/js/aef-learning-tracker.js"></script>
+  <script src="/assets/js/aef-offers-registry.js"></script>
+  <script src="/assets/js/aef-block-engine.js"></script>
+  <script src="/assets/js/aef-checkout-modal.js"></script>
 
   <style>
     body {
@@ -142,7 +142,7 @@
     
     <!-- Botão Sair (Voltar ao Portal / Dashboard) -->
     <div class="flex items-center gap-1.5 shrink-0">
-      <a id="btn-exit" href="../portal.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 text-xs font-bold transition backdrop-blur-md border border-white/10 shrink-0" title="Sair para o Portal">
+      <a id="btn-exit" href="/" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-slate-200 text-xs font-bold transition backdrop-blur-md border border-white/10 shrink-0" title="Sair para o Portal">
         <i data-lucide="log-out" class="w-3.5 h-3.5 text-amber-400"></i>
         <span>Sair</span>
       </a>
@@ -197,7 +197,7 @@
     <!-- Container da Capa (1:1 Apple Style) -->
     <div class="w-full relative flex items-center justify-center min-h-0">
       <div id="stage-artwork-card" class="w-full aspect-square max-w-[240px] sm:max-w-[300px] max-h-[30vh] sm:max-h-[36vh] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-slate-900 relative group transition-transform duration-300">
-        <img id="track-cover-img" src="../assets/images/logo-fundo-escuro.png" alt="Capa da Lição" class="w-full h-full object-cover">
+        <img id="track-cover-img" src="/assets/images/logo-fundo-escuro.png" alt="Capa da Lição" class="w-full h-full object-cover">
         
         <!-- Badge da Atividade no Canto -->
         <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-[9px] font-mono-tag font-bold text-amber-300">
@@ -511,18 +511,22 @@
       const tier = profile.tier || 'free';
       const enrolled = profile.enrolledProducts || [];
 
+      // Checa se o curso existe no registry e é free ou se o usuário está matriculado nele
+      const regCourse = window.AEF_COURSES_REGISTRY ? window.AEF_COURSES_REGISTRY[courseId] : null;
+      if (regCourse && (regCourse.tierRequired === 'free' || regCourse.availableInFreeTier === true || courseId === 'dtc_curso')) {
+        return true;
+      }
+
+      if (enrolled.includes(cId) || enrolled.includes('all_access_master') || enrolled.includes('magic_stories_club')) {
+        return true;
+      }
+
       if (tier === 'free') {
-        // Aluno Free que possui cursos avulsos ou de resgate (ex: 'first-steps') tem acesso aos seus cursos
-        if (enrolled.includes(cId) || (cId === 'first-steps' && enrolled.includes('first-steps'))) {
-          return true;
-        }
-        // Aluno Free geral acessa apenas QuickStart (Degustação), Novidades e Minhas Coisas
-        return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom';
+        return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom' || cId === 'dtc_curso';
       }
 
       if (tier === 'club_monthly' || tier === 'club_annual' || tier === 'course_member' || tier === 'pro' || tier === 'lifetime') {
-        // Membro Club tem acesso total ao Magic Stories, QuickStart e Novidades; VIP é restrito
-        return cId !== 'vip';
+        return cId !== 'vip' || (profile.studentId && cId === `mentoria-${profile.studentId}`);
       }
 
       if (tier === 'vip' || tier === 'vip_mentorship') {
@@ -664,20 +668,11 @@
       if (mod) {
         state.activeModuleId = mod;
       } else if (aula) {
-        // Se foi passado trackId como ms_ms005 ou ms005-sunday-brunch ou ms005-lr
-        const cleanTrack = aula.toLowerCase().replace(/^ms_/, '');
-        if (curso === 'english-quickstart') {
-          const eqsModules = window.AEF_QUICKSTART?.modules || [];
-          const foundEqsMod = eqsModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
-          if (foundEqsMod) {
-            state.activeModuleId = foundEqsMod.id;
-          }
-        } else {
-          const msModules = window.AEF_MAGIC_STORIES?.modules || [];
-          const foundMsMod = msModules.find(m => m.id === cleanTrack || m.id.includes(cleanTrack) || (m.tracks || []).some(t => t.id === aula || t.id === cleanTrack || t.id.includes(cleanTrack)));
-          if (foundMsMod) {
-            state.activeModuleId = foundMsMod.id;
-          }
+        // Encontra o módulo correspondente à aula informada
+        const allMods = getAllModulesForCurrentCourse();
+        const foundMod = allMods.find(m => m.id === aula || m.id.includes(aula) || (m.tracks || []).some(t => t.id === aula || t.id.includes(aula) || aula.includes(t.id)));
+        if (foundMod) {
+          state.activeModuleId = foundMod.id;
         }
       }
 
@@ -704,9 +699,13 @@
       }
 
       if (state.courseId === 'ms-legacy' || state.courseId === 'magic-stories') {
-        return window.AEF_MAGIC_STORIES?.modules || [];
+        if (window.AEF_MAGIC_STORIES?.modules && window.AEF_MAGIC_STORIES.modules.length > 0) {
+          return window.AEF_MAGIC_STORIES.modules;
+        }
       } else if (state.courseId === 'english-quickstart' || state.courseId === 'eqs') {
-        return window.AEF_QUICKSTART?.modules || [];
+        if (window.AEF_QUICKSTART?.modules && window.AEF_QUICKSTART.modules.length > 0) {
+          return window.AEF_QUICKSTART.modules;
+        }
       } else if (state.courseId === 'vip') {
         const allVips = [
           { id: 'estevao', title: 'Estêvão (Executivo)', shortTitle: 'Estêvão', tracks: window.AEF_STUDENT_ESTEVAO?.tracks || [] },
@@ -729,6 +728,37 @@
           { id: 'custom-lab', title: 'Laboratório Pessoal', shortTitle: 'Minhas Coisas', tracks: userCustoms }
         ];
       }
+
+      // Consulta no Cadastro Canônico Geral de Cursos (Single Source of Truth)
+      const registry = window.AEF_COURSES_REGISTRY || {};
+      const regCourse = registry[state.courseId] || (state.courseId === 'magic-stories' ? registry['ms-legacy'] : (state.courseId === 'eqs' ? registry['english-quickstart'] : null));
+      if (regCourse && Array.isArray(regCourse.modules)) {
+        return regCourse.modules.map(mod => {
+          const tracks = (mod.lessons || []).map(les => ({
+            id: les.id,
+            moduleId: mod.id,
+            title: les.title,
+            activity: les.activity || (les.id.includes('voc') ? 'vocab' : (les.id.includes('la') ? 'listen_answer' : (les.id.includes('lrt') ? 'look_retell' : (les.id.includes('lask') ? 'listen_ask' : (les.id.includes('pro') ? 'pronunciation' : 'listen_read'))))),
+            duration: les.duration || '05:00',
+            audioUrl: les.audioUrl || les.videoUrl || '',
+            videoUrl: les.videoUrl || '',
+            coverImage: les.artworkUrl || les.thumbnailUrl || mod.coverImage || regCourse.coverImageUrl || '/assets/images/logo-fundo-escuro.png',
+            goldenTip: les.goldenTip || '',
+            sentences: les.sentences || []
+          }));
+          return {
+            id: mod.id,
+            title: mod.title,
+            shortTitle: mod.shortTitle || mod.title,
+            badge: mod.badge || `MÓDULO ${mod.id.toUpperCase()}`,
+            coverImage: mod.coverImage || regCourse.coverImageUrl || '/assets/images/logo-fundo-escuro.png',
+            summary: mod.description || '',
+            goldenTip: mod.goldenTip || '',
+            tracks: tracks
+          };
+        });
+      }
+
       return [];
     }
 
@@ -737,49 +767,39 @@
       if (!select) return;
 
       const profile = getPlayerAccessProfile();
+      const registry = window.AEF_COURSES_REGISTRY || {};
 
-      if (profile.tier === 'free') {
-        select.innerHTML = `
-          <option value="english-quickstart" class="bg-slate-900 text-amber-300 font-bold">⚡ QuickStart (Liberado)</option>
-          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades Free</option>
-          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
-          <option value="ms-legacy" class="bg-slate-900 text-amber-500/80">🔒 Magic Stories (Club)</option>
-          <option value="vip" class="bg-slate-900 text-amber-500/80">🔒 Mentoria VIP</option>
-        `;
-        if (!isCourseAllowedForUser(state.courseId, profile)) {
-          state.courseId = 'english-quickstart';
-        }
-      } else if (profile.tier === 'club_monthly' || profile.tier === 'club_annual' || profile.tier === 'course_member' || profile.tier === 'pro' || profile.tier === 'lifetime') {
-        select.innerHTML = `
-          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
-          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
-          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades</option>
-          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
-          <option value="vip" class="bg-slate-900 text-amber-500/80">🔒 Mentoria VIP</option>
-        `;
-        if (!isCourseAllowedForUser(state.courseId, profile)) {
-          state.courseId = 'ms-legacy';
-        }
-      } else if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
-        const sId = profile.studentId || 'andre';
-        const sName = profile.studentName || sId;
-        select.innerHTML = `
-          <option value="vip" class="bg-slate-900 text-amber-300 font-bold">👑 Minha Mentoria (${sName})</option>
-          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
-          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
-          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
-        `;
+      let optionsHtml = '';
+
+      // Lista ordenada de cursos do catálogo
+      const knownCourseIds = ['ms-legacy', 'english-quickstart', 'dtc_curso'];
+      const extraCourseIds = Object.keys(registry).filter(k => !knownCourseIds.includes(k) && !k.startsWith('mentoria-'));
+      const allCourseIds = [...knownCourseIds, ...extraCourseIds];
+
+      allCourseIds.forEach(cKey => {
+        const course = registry[cKey];
+        if (!course) return;
+        const isAllowed = isCourseAllowedForUser(cKey, profile);
+        const lockIcon = isAllowed ? '' : '🔒 ';
+        const iconPrefix = cKey === 'ms-legacy' ? '📖 ' : (cKey === 'english-quickstart' ? '⚡ ' : (cKey === 'dtc_curso' ? '📅 ' : '🎓 '));
+        const badgeText = isAllowed ? '' : ' (Club)';
+        const title = (course.title || cKey).split('•')[0].trim();
+        optionsHtml += `<option value="${cKey}" class="bg-slate-900 ${isAllowed ? 'text-slate-100' : 'text-amber-500/80'}">${lockIcon}${iconPrefix}${title}${badgeText}</option>`;
+      });
+
+      // Categoria Especial Mentoria VIP
+      if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
+        const sName = profile.studentName || profile.studentId || 'VIP';
+        optionsHtml += `<option value="vip" class="bg-slate-900 text-amber-300 font-bold">👑 Minha Mentoria (${sName})</option>`;
       } else {
-        // Admin Master Leo
-        select.innerHTML = `
-          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
-          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
-          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades</option>
-          <option value="vip" class="bg-slate-900 text-slate-100">👑 Mentoria VIP</option>
-          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
-        `;
+        const isVipAllowed = profile.isAdmin;
+        optionsHtml += `<option value="vip" class="bg-slate-900 ${isVipAllowed ? 'text-slate-100' : 'text-amber-500/80'}">${isVipAllowed ? '👑 ' : '🔒 '}Mentoria VIP</option>`;
       }
 
+      optionsHtml += `<option value="public" class="bg-slate-900 text-slate-100">💡 Novidades Free</option>`;
+      optionsHtml += `<option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>`;
+
+      select.innerHTML = optionsHtml;
       select.value = state.courseId;
     }
 
@@ -854,70 +874,77 @@
       try {
         const profile = getPlayerAccessProfile();
 
-        if (state.courseId === 'ms-legacy' || state.courseId === 'english-quickstart') {
+        if (state.courseId && state.courseId !== 'vip' && state.courseId !== 'public' && state.courseId !== 'custom') {
           const hierarchy = await window.aefCloudSync.getCoursesHierarchy();
+          if (!hierarchy) return;
+
+          if (window.AEF_COURSES_REGISTRY) {
+            Object.assign(window.AEF_COURSES_REGISTRY, hierarchy);
+          }
+
           const courseData = hierarchy[state.courseId];
           if (!courseData || !courseData.modules) return;
 
           const targetModules = (state.courseId === 'ms-legacy')
             ? window.AEF_MAGIC_STORIES?.modules
-            : window.AEF_QUICKSTART?.modules;
+            : (state.courseId === 'english-quickstart' ? window.AEF_QUICKSTART?.modules : null);
 
-          if (!targetModules) return;
+          if (targetModules) {
+            let updatedAny = false;
+            courseData.modules.forEach(cloudMod => {
+              let localMod = targetModules.find(m => m.id === cloudMod.id);
+              if (!localMod) {
+                localMod = {
+                  id: cloudMod.id,
+                  title: cloudMod.title || cloudMod.id,
+                  shortTitle: cloudMod.shortTitle || cloudMod.title,
+                  badge: cloudMod.badge || `MÓDULO ${cloudMod.id.toUpperCase()}`,
+                  coverImage: cloudMod.coverImage || '/assets/images/logo-fundo-escuro.png',
+                  tracks: []
+                };
+                targetModules.push(localMod);
+                updatedAny = true;
+              }
 
-          let updatedAny = false;
-          courseData.modules.forEach(cloudMod => {
-            let localMod = targetModules.find(m => m.id === cloudMod.id);
-            if (!localMod) {
-              localMod = {
-                id: cloudMod.id,
-                title: cloudMod.title || cloudMod.id,
-                shortTitle: cloudMod.shortTitle || cloudMod.title,
-                badge: cloudMod.badge || `MÓDULO ${cloudMod.id.toUpperCase()}`,
-                coverImage: cloudMod.coverImage || '../assets/images/logo-fundo-escuro.png',
-                tracks: []
-              };
-              targetModules.push(localMod);
-              updatedAny = true;
-            }
+              const cloudLessons = cloudMod.lessons || [];
+              if (cloudLessons.length === 0) return;
 
-            const cloudLessons = cloudMod.lessons || [];
-            if (cloudLessons.length === 0) return;
-
-            const existingTracksMap = new Map();
-            (localMod.tracks || []).forEach(t => {
-              if (t && t.id) existingTracksMap.set(t.id, t);
-            });
-
-            // Reconciliação estrita com Firestore (aulas excluídas somem do player!)
-            const reconciledTracks = [];
-            cloudLessons.forEach(cLes => {
-              if (cLes.published === false) return;
-              const localTrack = existingTracksMap.get(cLes.id) || {};
-
-              const sentences = (cLes.sentences && Array.isArray(cLes.sentences) && cLes.sentences.length > 0)
-                ? cLes.sentences
-                : (localTrack.sentences || []);
-
-              reconciledTracks.push({
-                id: cLes.id,
-                moduleId: cloudMod.id,
-                title: cLes.title || localTrack.title || 'Treino',
-                activity: cLes.activity || localTrack.activity || 'listen_read',
-                duration: cLes.duration || localTrack.duration || '02:00',
-                audioUrl: cLes.audioUrl || localTrack.audioUrl || '',
-                videoUrl: cLes.videoUrl || localTrack.videoUrl || '',
-                coverImage: cLes.artworkUrl || cLes.thumbnailUrl || localTrack.coverImage || '../assets/images/logo-fundo-escuro.png',
-                goldenTip: cLes.goldenTip || localTrack.goldenTip || '',
-                sentences: sentences
+              const existingTracksMap = new Map();
+              (localMod.tracks || []).forEach(t => {
+                if (t && t.id) existingTracksMap.set(t.id, t);
               });
+
+              const reconciledTracks = [];
+              cloudLessons.forEach(cLes => {
+                if (cLes.published === false) return;
+                const localTrack = existingTracksMap.get(cLes.id) || {};
+
+                const sentences = (cLes.sentences && Array.isArray(cLes.sentences) && cLes.sentences.length > 0)
+                  ? cLes.sentences
+                  : (localTrack.sentences || []);
+
+                reconciledTracks.push({
+                  id: cLes.id,
+                  moduleId: cloudMod.id,
+                  title: cLes.title || localTrack.title || 'Treino',
+                  activity: cLes.activity || localTrack.activity || 'listen_read',
+                  duration: cLes.duration || localTrack.duration || '02:00',
+                  audioUrl: cLes.audioUrl || localTrack.audioUrl || '',
+                  videoUrl: cLes.videoUrl || localTrack.videoUrl || '',
+                  coverImage: cLes.artworkUrl || cLes.thumbnailUrl || localTrack.coverImage || '/assets/images/logo-fundo-escuro.png',
+                  goldenTip: cLes.goldenTip || localTrack.goldenTip || '',
+                  sentences: sentences
+                });
+              });
+
+              localMod.tracks = reconciledTracks;
+              updatedAny = true;
             });
 
-            localMod.tracks = reconciledTracks;
-            updatedAny = true;
-          });
-
-          if (updatedAny) {
+            if (updatedAny) {
+              refreshPlayerActiveView();
+            }
+          } else {
             refreshPlayerActiveView();
           }
         } else if (state.courseId === 'vip') {
@@ -944,6 +971,8 @@
         console.warn("⚠️ [AEFPlayer] Aviso de sincronização com nuvem:", err);
       }
     }
+
+
 
     function refreshPlayerActiveView() {
       const tracks = getCurrentTracklist();
@@ -996,7 +1025,7 @@
         if (badgeEl) badgeEl.innerText = 'BLOQUEADO';
 
         const coverImg = document.getElementById('track-cover-img');
-        if (coverImg) coverImg.src = '../assets/images/logo-fundo-escuro.png';
+        if (coverImg) coverImg.src = '/assets/images/logo-fundo-escuro.png';
 
         renderLyrics();
         renderPlaylistDrawer();
@@ -1030,7 +1059,7 @@
       }
 
       const coverImg = document.getElementById('track-cover-img');
-      if (coverImg) coverImg.src = track?.coverImage || '../assets/images/logo-fundo-escuro.png';
+      if (coverImg) coverImg.src = track?.coverImage || '/assets/images/logo-fundo-escuro.png';
 
       // 2. Configura Áudio Puro MP3 (com fallback para videoUrl se necessário)
       const audioSrc = track?.audioUrl || track?.videoUrl || '';
@@ -1502,7 +1531,7 @@
       if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
       const track = getCurrentActiveTrack();
       const moduleTitle = getCurrentModuleTitle();
-      const coverUrl = new URL(track?.coverImage || '../assets/images/logo-fundo-escuro.png', window.location.href).href;
+      const coverUrl = new URL(track?.coverImage || '/assets/images/logo-fundo-escuro.png', window.location.href).href;
 
       navigator.mediaSession.metadata = new MediaMetadata({
         title: track?.title || 'AgoraEuFalo',
