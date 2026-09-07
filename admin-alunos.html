@@ -678,12 +678,30 @@
 
         const enrolledBadges = (s.enrolledProducts || []).map(p => {
           const names = {
-            'ms-legacy': 'Magic Stories',
-            'english-quickstart': 'QuickStart',
+            'ms-legacy': 'Magic Stories Club',
+            'english-quickstart': 'QuickStart (Free)',
+            'dtc_curso': 'Dates & Times',
             'frases-prontas': 'Frases Prontas',
-            'all_access_master': 'All Access'
+            'all_access_master': 'All Access Master',
+            'mentoria_vip': 'Mentoria VIP',
+            'free_starter_pack': 'Degustação Free',
+            'magic_stories_demo': 'MS Demo Free',
+            'mentoria-andre': 'VIP André',
+            'mentoria-estevao': 'VIP Estêvão',
+            'mentoria-thomas': 'VIP Thomas',
+            'mentoria-matheus': 'VIP Matheus',
+            'mentoria-graziela': 'VIP Grazi'
           };
-          return `<span class="px-1.5 py-0.5 rounded bg-slate-100 text-[9px] text-slate-600 font-mono">${names[p] || p}</span>`;
+          const label = names[p] || p.replace('mentoria-', 'VIP ').replace(/_/g, ' ');
+          let badgeClass = "bg-slate-100 text-slate-700 border-slate-200";
+          if (p.includes('vip') || p.includes('mentoria')) {
+            badgeClass = "bg-amber-50 text-amber-900 border-amber-200 font-bold";
+          } else if (p.includes('free') || p.includes('demo') || p === 'english-quickstart') {
+            badgeClass = "bg-emerald-50 text-emerald-800 border-emerald-200 font-bold";
+          } else if (p === 'ms-legacy' || p === 'dtc_curso' || p === 'all_access_master') {
+            badgeClass = "bg-sky-50 text-sky-900 border-sky-200 font-bold";
+          }
+          return `<span class="px-2 py-0.5 rounded-md border text-[10px] ${badgeClass}">${label}</span>`;
         }).join(' ') || '<span class="text-[10px] text-slate-400 italic">Nenhum</span>';
 
         const tracksCount = s.tracksCount || (tier.includes('vip') ? 1 : 0);
@@ -691,6 +709,8 @@
         const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(s.name || 'A').substring(0, 2).toUpperCase()}</div>`;
 
         const isVIP = tier === 'vip_mentorship' || tier === 'vip';
+
+        const tracksLabel = tracksCount === 1 ? '1 faixa ativa' : `${tracksCount} faixas ativas`;
 
         return `
           <tr class="hover:bg-slate-50/80 transition">
@@ -705,7 +725,7 @@
             <td class="py-3.5 px-4">${tierBadge}</td>
             <td class="py-3.5 px-4 flex flex-wrap gap-1 items-center max-w-xs">${enrolledBadges}</td>
             <td class="py-3.5 px-4 font-bold ${isVIP ? 'text-amber-800' : 'text-slate-500'}">
-              ${tracksCount > 0 ? `${tracksCount} faixas ativas` : '—'}
+              ${tracksCount > 0 ? tracksLabel : '—'}
             </td>
             <td class="py-3.5 px-4 text-right">
               <div class="flex items-center justify-end gap-1.5">

@@ -85,11 +85,11 @@
             <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275] group-hover:text-[#C68A36]"></i>
             <span>Visão Geral do Curso</span>
           </a>
-          <a href="sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs transition">
+          <a id="leftSidebarClassroomLink" href="sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs transition">
             <i data-lucide="play-circle" class="w-4 h-4 text-[#C68A36]"></i>
             <span>Sala de Aula</span>
           </a>
-          <a href="player.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
+          <a id="leftSidebarPlayerLink" href="player.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
             <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
             <span>Training Player</span>
           </a>
@@ -616,10 +616,17 @@
       if (!activeCourse) return;
 
       const courseUrl = `curso.html?curso=${activeCourse.id}`;
+      const classroomUrl = `sala-de-aula.html?curso=${activeCourse.id}`;
+      const playerUrl = `treino/player.html?curso=${activeCourse.id}`;
+
       const topLink = document.getElementById("topBreadcrumbCourseLink");
       if (topLink) topLink.href = courseUrl;
       const leftLink = document.getElementById("leftSidebarCourseLink");
       if (leftLink) leftLink.href = courseUrl;
+      const leftClassLink = document.getElementById("leftSidebarClassroomLink");
+      if (leftClassLink) leftClassLink.href = classroomUrl;
+      const leftPlayerLink = document.getElementById("leftSidebarPlayerLink");
+      if (leftPlayerLink) leftPlayerLink.href = playerUrl;
       const rightLink = document.getElementById("rightSidebarCourseLink");
       if (rightLink) rightLink.href = courseUrl;
       const mobileLink = document.getElementById("mobileCourseHeaderLink");
@@ -1089,24 +1096,14 @@
         document.getElementById("lessonGoldenTipText").innerText = `"${found.goldenTip}"`;
       }
 
-      // Fallback Hierárquico do PDF (Aula -> Livreto do Módulo -> Irmãos do Módulo -> Curso)
+      // Resolução do PDF da Aula ou Livreto do Módulo Oficial
       let resolvedPdf = (found.pdfUrl && found.pdfUrl.trim() !== "") ? found.pdfUrl.trim() : "";
       let isModuleBooklet = false;
 
-      if (!resolvedPdf && activeModule) {
-        if (activeModule.pdfUrl && activeModule.pdfUrl.trim() !== "") {
-          resolvedPdf = activeModule.pdfUrl.trim();
-          isModuleBooklet = true;
-        } else if (Array.isArray(activeModule.lessons)) {
-          const siblingWithPdf = activeModule.lessons.find(l => l.pdfUrl && l.pdfUrl.trim() !== "");
-          if (siblingWithPdf) {
-            resolvedPdf = siblingWithPdf.pdfUrl.trim();
-            isModuleBooklet = true;
-          }
-        }
-      }
-
-      if (!resolvedPdf && activeCourse && activeCourse.pdfUrl && activeCourse.pdfUrl.trim() !== "") {
+      if (!resolvedPdf && activeModule && activeModule.pdfUrl && activeModule.pdfUrl.trim() !== "") {
+        resolvedPdf = activeModule.pdfUrl.trim();
+        isModuleBooklet = true;
+      } else if (!resolvedPdf && activeCourse && activeCourse.pdfUrl && activeCourse.pdfUrl.trim() !== "") {
         resolvedPdf = activeCourse.pdfUrl.trim();
         isModuleBooklet = true;
       }
