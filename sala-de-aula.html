@@ -459,11 +459,6 @@
     };
 
     document.addEventListener("DOMContentLoaded", async () => {
-      if (window.aefPortalAuth) {
-        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
-        if (!authed) return;
-      }
-
       const urlParams = new URLSearchParams(window.location.search);
       let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno");
       let targetModuleId = urlParams.get("modulo");
@@ -514,7 +509,21 @@
       applySidebarStates();
       updateIcons();
 
-      // 2. Busca e sincronização com o Firestore em tempo real (Single Source of Truth)
+      // 2. Validação assíncrona de autenticação
+      if (window.aefPortalAuth) {
+        try {
+          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
+          if (!authed) return;
+          // Revalida a aula ativa com o usuário e tier autenticados
+          if (activeLesson) {
+            selectLesson(activeLesson.id);
+          }
+        } catch (authErr) {
+          console.warn("⚠️ Auth Check in Classroom:", authErr);
+        }
+      }
+
+      // 3. Busca e sincronização com o Firestore em tempo real (Single Source of Truth)
       try {
         if (window.aefCloudSync) {
           await window.aefCloudSync.init();
@@ -906,6 +915,8 @@
           markBtn.disabled = true;
           markBtn.classList.add("opacity-40", "cursor-not-allowed");
         }
+        renderCourseSyllabus();
+        updateIcons();
         return;
       }
 

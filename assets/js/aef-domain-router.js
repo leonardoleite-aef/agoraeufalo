@@ -18,7 +18,6 @@
       this.search = window.location.search || '';
       this.hash = window.location.hash || '';
       this.page = this.pathname.split('/').pop() || 'index.html';
-      this.init();
     }
 
     isLocal() {

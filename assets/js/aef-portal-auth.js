@@ -612,14 +612,38 @@
       if (this.auth && !this.auth.currentUser) {
         await new Promise((resolve) => {
           const unsubscribe = this.auth.onAuthStateChanged((user) => {
-            unsubscribe();
+            if (typeof unsubscribe === 'function') unsubscribe();
             resolve(user);
           });
-          setTimeout(() => resolve(null), 1200);
+          setTimeout(() => resolve(null), 2000);
         });
       }
 
       let user = this.auth?.currentUser;
+
+      // Fallback: Checa se há sessão válida persistida em localStorage
+      if (!user && typeof localStorage !== 'undefined') {
+        const cachedEmail = localStorage.getItem('aef_user_email');
+        const isLoggedOut = localStorage.getItem('aef_logged_out') === 'true';
+        if (cachedEmail && !isLoggedOut) {
+          if (!this.currentProfile) {
+            this.currentProfile = {
+              uid: localStorage.getItem('aef_user_uid') || 'cached-user',
+              name: localStorage.getItem('aef_user_name') || 'Aluno AgoraEuFalo',
+              email: cachedEmail,
+              tier: localStorage.getItem('aef_user_tier') || 'free',
+              role: localStorage.getItem('aef_user_role') || 'student',
+              enrolledProducts: JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]')
+            };
+          }
+          user = {
+            uid: this.currentProfile.uid,
+            email: this.currentProfile.email,
+            displayName: this.currentProfile.name
+          };
+          this.currentUser = user;
+        }
+      }
 
       if (!user) {
         const defaultRedirect = requireAdmin 
