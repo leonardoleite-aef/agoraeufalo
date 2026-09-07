@@ -44,7 +44,6 @@
             'admin-cursos.html': 'Course Factory',
             'admin-pdf-factory.html': 'PDF Factory',
             'tts-studio.html': 'TTS Voice Studio',
-            'admin-publico.html': 'Leads & Sugestões',
             'blog-panel.html': 'Blog CMS',
             'seo-manager.html': 'SEO Manager'
           };
@@ -65,7 +64,7 @@
     }
 
     isDarkTheme() {
-      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-webhooks.html', 'admin-marketing.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-publico.html', 'admin-pdf-factory.html'];
+      const darkPages = ['admin-cursos.html', 'admin-vendas.html', 'admin-webhooks.html', 'admin-marketing.html', 'admin-ofertas.html', 'tts-studio.html', 'admin-pdf-factory.html'];
       return darkPages.some(p => this.currentPath.includes(p)) || document.body.classList.contains('bg-[#060D17]') || document.body.classList.contains('bg-[#0A192F]') || document.body.classList.contains('bg-[#0B0F17]') || document.body.classList.contains('bg-[#080D1A]');
     }
 
@@ -151,9 +150,6 @@
               <a href="tts-studio.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('tts-studio.html')}">
                 <span>🎙️</span> <span>TTS Studio</span>
               </a>
-              <a href="admin-publico.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-publico.html')}">
-                <span>🌐</span> <span>Leads & Sugestões</span>
-              </a>
               <a href="blog-panel.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('blog-panel.html')}">
                 <span>📝</span> <span>Blog CMS</span>
               </a>
@@ -210,7 +206,6 @@
             <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
             <a href="admin-pdf-factory.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-pdf-factory.html')}">📄 PDF</a>
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
-            <a href="admin-publico.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-publico.html')}">🌐 Leads</a>
             <a href="blog-panel.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog-panel.html')}">📝 Blog</a>
             <a href="seo-manager.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('seo-manager.html')}">🔍 SEO</a>
             <a href="portal.html" class="px-2.5 py-1 rounded-lg shrink-0 text-amber-500 font-bold">👁️ Aluno</a>
