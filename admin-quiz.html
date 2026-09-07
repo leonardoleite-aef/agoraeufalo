@@ -239,8 +239,15 @@
       const saved = localStorage.getItem("aef_custom_quizzes");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed && Object.keys(parsed).length > 0) {
-          DEFAULT_QUIZZES = { ...DEFAULT_QUIZZES, ...parsed };
+        if (parsed && typeof parsed === 'object') {
+          for (const [id, qObj] of Object.entries(parsed)) {
+            if (!REGISTRY_BACKUP[id]) {
+              DEFAULT_QUIZZES[id] = qObj;
+            } else {
+              // Mantém os áudios e questões canônicas do registry sempre atualizadas
+              DEFAULT_QUIZZES[id] = REGISTRY_BACKUP[id];
+            }
+          }
         }
       }
     } catch(e) {
@@ -691,11 +698,17 @@
         showToast("⚠️ Nenhum áudio cadastrado nesta questão.");
         return;
       }
+
+      let resolvedUrl = url;
+      if (!resolvedUrl.startsWith('http') && !resolvedUrl.startsWith('/') && !resolvedUrl.startsWith('blob:')) {
+        resolvedUrl = '/' + resolvedUrl;
+      }
+
       const aud = document.getElementById("ttsPreviewAudio");
       if (!aud) return;
 
       // Se já está tocando o mesmo áudio, pausa
-      if (!aud.paused && aud.dataset.currentUrl === url) {
+      if (!aud.paused && aud.dataset.currentUrl === resolvedUrl) {
         aud.pause();
         resetAllAudioButtons();
         return;
@@ -704,8 +717,8 @@
       // Se estava tocando outro áudio, reseta botões
       resetAllAudioButtons();
 
-      aud.src = url;
-      aud.dataset.currentUrl = url;
+      aud.src = resolvedUrl;
+      aud.dataset.currentUrl = resolvedUrl;
       currentPlayingBtn = btnElement || null;
 
       aud.onended = () => {
@@ -724,6 +737,7 @@
         }
       }).catch(e => {
         console.warn("Audio play err:", e);
+        showToast("⚠️ Não foi possível iniciar o áudio automaticamente.");
         resetAllAudioButtons();
       });
     }

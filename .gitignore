@@ -26,6 +26,10 @@ Material-PDF/.chrome-profile/
 # 🏛️ CLOUD-PROTECTED MEDIA (REGRA 9: Zero Mídia Pesada no Git / 100% Firebase & GCP Storage)
 *.wav
 *.mp3
+!assets/audio/quiz/*.mp3
+!assets/audio/blog/**/*.mp3
+!dist/assets/audio/quiz/*.mp3
+!dist/assets/audio/blog/**/*.mp3
 *.m4a
 *.mov
 *.mp4

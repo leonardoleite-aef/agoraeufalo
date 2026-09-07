@@ -26,7 +26,7 @@ function copyRecursive(src, dest) {
 // 1. Copy all root HTML files and metadata
 const rootFiles = fs.readdirSync(rootDir);
 for (const file of rootFiles) {
-  if (file.endsWith('.html') || file.endsWith('.xml') || file.endsWith('.txt') || file.endsWith('.svg') || file.endsWith('.png') || file.endsWith('.ico')) {
+  if (file.endsWith('.html') || file.endsWith('.xml') || file.endsWith('.txt') || file.endsWith('.svg') || file.endsWith('.png') || file.endsWith('.ico') || file === '.assetsignore') {
     fs.copyFileSync(path.join(rootDir, file), path.join(distDir, file));
   }
 }

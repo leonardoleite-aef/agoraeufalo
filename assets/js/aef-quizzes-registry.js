@@ -17,7 +17,7 @@ const AEF_QUIZZES_DATA = {
         "id": "q1",
         "type": "dialogue_comprehension",
         "questionText": "Ouça o diálogo e responda: A que horas vai começar a reunião?",
-        "audioUrl": "assets/audio/quiz/quiz_dtc_q1.mp3",
+        "audioUrl": "/assets/audio/quizzes/quiz_dtc_q1.mp3",
         "audioScript": "Rodrigo: Hello, my dear friend! What time is our meeting today?\nLiam: It is at a quarter to five in the afternoon!",
         "options": [
           { "id": "opt_a", "text": "Às 5:15 da tarde", "isCorrect": false },
@@ -32,7 +32,7 @@ const AEF_QUIZZES_DATA = {
         "id": "q2",
         "type": "sound_discrimination",
         "questionText": "Qual horário exato foi dito pelo falante na gravação?",
-        "audioUrl": "assets/audio/quiz/quiz_dtc_q2.mp3",
+        "audioUrl": "/assets/audio/quizzes/quiz_dtc_q2.mp3",
         "audioScript": "Liam: The flight leaves at half past eight in the morning.",
         "options": [
           { "id": "opt_a", "text": "8:30 da manhã (Oito e meia)", "isCorrect": true },
@@ -47,7 +47,7 @@ const AEF_QUIZZES_DATA = {
         "id": "q3",
         "type": "fill_chunk",
         "questionText": "Ouça a frase e selecione a expressão que completa o bloco sonoro:",
-        "audioUrl": "assets/audio/quiz/quiz_dtc_q3.mp3",
+        "audioUrl": "/assets/audio/quizzes/quiz_dtc_q3.mp3",
         "audioScript": "Leo: Do not worry! I will be there in a couple of minutes.",
         "options": [
           { "id": "opt_a", "text": "a couple of (em uns dois ou três minutos)", "isCorrect": true },
@@ -72,7 +72,7 @@ const AEF_QUIZZES_DATA = {
         "id": "q1",
         "type": "dialogue_comprehension",
         "questionText": "Por que a Grazi decidiu mudar sua rotina segundo o áudio?",
-        "audioUrl": "assets/audio/quiz/quiz_ms_grazi_q1.mp3",
+        "audioUrl": "/assets/audio/quizzes/quiz_ms_grazi_q1.mp3",
         "audioScript": "Narrator: Grazi is tired of feeling stuck. She wants to speak English with confidence and change her career.",
         "options": [
           { "id": "opt_a", "text": "Porque ela quer mudar de carreira e destravar o inglês com confiança", "isCorrect": true },
@@ -87,7 +87,7 @@ const AEF_QUIZZES_DATA = {
         "id": "q2",
         "type": "sound_discrimination",
         "questionText": "O que a Grazi afirma com firmeza no áudio?",
-        "audioUrl": "assets/audio/quiz/quiz_ms_grazi_q2.mp3",
+        "audioUrl": "/assets/audio/quizzes/quiz_ms_grazi_q2.mp3",
         "audioScript": "Grazi: I cannot wait any longer. Today is the day I take action!",
         "options": [
           { "id": "opt_a", "text": "Que não pode mais esperar e vai agir hoje mesmo", "isCorrect": true },
@@ -102,7 +102,7 @@ const AEF_QUIZZES_DATA = {
         "id": "q3",
         "type": "fill_chunk",
         "questionText": "Complete o conselho do Professor Leo ouvido na gravação:",
-        "audioUrl": "assets/audio/quiz/quiz_ms_grazi_q3.mp3",
+        "audioUrl": "/assets/audio/quizzes/quiz_ms_grazi_q3.mp3",
         "audioScript": "Leo: Hello, my dear friend! Repeat the story until English becomes a reflex.",
         "options": [
           { "id": "opt_a", "text": "until English becomes a reflex (até o inglês virar reflexo)", "isCorrect": true },
