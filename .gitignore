@@ -27,8 +27,10 @@ Material-PDF/.chrome-profile/
 *.wav
 *.mp3
 !assets/audio/quiz/*.mp3
+!assets/audio/quizzes/*.mp3
 !assets/audio/blog/**/*.mp3
 !dist/assets/audio/quiz/*.mp3
+!dist/assets/audio/quizzes/*.mp3
 !dist/assets/audio/blog/**/*.mp3
 *.m4a
 *.mov

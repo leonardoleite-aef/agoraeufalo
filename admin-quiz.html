@@ -241,11 +241,8 @@
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object') {
           for (const [id, qObj] of Object.entries(parsed)) {
-            if (!REGISTRY_BACKUP[id]) {
-              DEFAULT_QUIZZES[id] = qObj;
-            } else {
-              // Mantém os áudios e questões canônicas do registry sempre atualizadas
-              DEFAULT_QUIZZES[id] = REGISTRY_BACKUP[id];
+            if (qObj && typeof qObj === 'object') {
+              DEFAULT_QUIZZES[id] = Object.assign({}, REGISTRY_BACKUP[id] || {}, qObj);
             }
           }
         }
@@ -691,6 +688,7 @@
       }
     }
 
+    let activeAudioInstance = null;
     let currentPlayingBtn = null;
 
     function playAudio(url, btnElement) {
@@ -704,12 +702,9 @@
         resolvedUrl = '/' + resolvedUrl;
       }
 
-      const aud = document.getElementById("ttsPreviewAudio");
-      if (!aud) return;
-
       // Se já está tocando o mesmo áudio, pausa
-      if (!aud.paused && aud.dataset.currentUrl === resolvedUrl) {
-        aud.pause();
+      if (activeAudioInstance && !activeAudioInstance.paused && (activeAudioInstance.src.endsWith(resolvedUrl) || activeAudioInstance.src === resolvedUrl)) {
+        activeAudioInstance.pause();
         resetAllAudioButtons();
         return;
       }
@@ -717,36 +712,61 @@
       // Se estava tocando outro áudio, reseta botões
       resetAllAudioButtons();
 
-      aud.src = resolvedUrl;
-      aud.dataset.currentUrl = resolvedUrl;
-      currentPlayingBtn = btnElement || null;
+      try {
+        const aud = new Audio(resolvedUrl);
+        activeAudioInstance = aud;
+        currentPlayingBtn = btnElement || null;
 
-      aud.onended = () => {
-        resetAllAudioButtons();
-      };
+        aud.onended = () => {
+          resetAllAudioButtons();
+        };
 
-      aud.play().then(() => {
-        if (btnElement) {
-          btnElement.dataset.playing = "true";
-          if (btnElement.id === "simAudioBtn") {
-            btnElement.innerHTML = `<i data-lucide="pause-circle" class="w-4 h-4 text-slate-950"></i> <span>Pausar Áudio</span>`;
-          } else {
-            btnElement.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5 text-amber-300"></i> Pausar`;
-          }
-          if (window.lucide) lucide.createIcons();
+        aud.onerror = (e) => {
+          console.error("Audio playback error:", aud.error, e);
+          const errCode = aud.error ? aud.error.code : "unknown";
+          showToast(`⚠️ Erro ao carregar áudio (${resolvedUrl}): Código ${errCode}`);
+          resetAllAudioButtons();
+        };
+
+        const playPromise = aud.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            if (btnElement) {
+              btnElement.dataset.playing = "true";
+              if (btnElement.id === "simAudioBtn") {
+                btnElement.innerHTML = `<i data-lucide="pause-circle" class="w-4 h-4 text-slate-950"></i> <span>Pausar Áudio</span>`;
+              } else {
+                btnElement.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5 text-amber-300"></i> Pausar`;
+              }
+              if (window.lucide) lucide.createIcons();
+            }
+          }).catch(e => {
+            console.warn("Audio play rejected:", e);
+            showToast("⚠️ Não foi possível iniciar o áudio: " + (e.message || "Interação necessária"));
+            resetAllAudioButtons();
+          });
         }
-      }).catch(e => {
-        console.warn("Audio play err:", e);
-        showToast("⚠️ Não foi possível iniciar o áudio automaticamente.");
+      } catch (err) {
+        console.error("Fatal audio error:", err);
+        showToast("⚠️ Erro ao inicializar player de áudio.");
         resetAllAudioButtons();
-      });
+      }
     }
 
     function resetAllAudioButtons() {
-      const aud = document.getElementById("ttsPreviewAudio");
-      if (aud) {
-        aud.pause();
-        aud.dataset.currentUrl = "";
+      if (activeAudioInstance) {
+        try {
+          activeAudioInstance.pause();
+          activeAudioInstance.currentTime = 0;
+        } catch(e) {}
+        activeAudioInstance = null;
+      }
+      const staticAud = document.getElementById("ttsPreviewAudio");
+      if (staticAud) {
+        try {
+          staticAud.pause();
+          staticAud.currentTime = 0;
+        } catch(e) {}
       }
       document.querySelectorAll("[data-playing='true']").forEach(btn => {
         btn.dataset.playing = "false";
