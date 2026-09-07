@@ -714,6 +714,30 @@
       await this.db.collection('students').doc(menteeId).set(payload, { merge: true });
       return payload;
     }
+
+    async deleteUserDoc(userId) {
+      await this.ready();
+      if (!this.db) return false;
+      try {
+        await this.db.collection('users').doc(userId).delete();
+        return true;
+      } catch (e) {
+        console.warn('Error deleting user doc from Firestore:', e);
+        return false;
+      }
+    }
+
+    async deleteMenteeDoc(menteeId) {
+      await this.ready();
+      if (!this.db) return false;
+      try {
+        await this.db.collection('students').doc(menteeId).delete();
+        return true;
+      } catch (e) {
+        console.warn('Error deleting mentee doc from Firestore:', e);
+        return false;
+      }
+    }
   }
 
   window.aefPortalAuth = new AEFPortalAuth();

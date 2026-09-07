@@ -124,6 +124,72 @@
         </div>
       </div>
 
+      <!-- Secondary Usability & Advanced Filter Bar -->
+      <div class="glass-card p-3 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs border-amber-200/50 bg-white/70">
+        <div class="flex flex-wrap items-center gap-2.5">
+          
+          <!-- Filter by Course -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold text-slate-500 flex items-center gap-1">
+              <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-600"></i> Curso:
+            </span>
+            <select id="filter-course-select" onchange="handleCourseFilterChange(this.value)" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 cursor-pointer">
+              <option value="all">Todos os Cursos</option>
+              <option value="ms-legacy">Magic Stories Club</option>
+              <option value="dtc_curso">Dates & Times (DTC)</option>
+              <option value="english-quickstart">English QuickStart</option>
+              <option value="frases-prontas">Frases Prontas</option>
+              <option value="all_access_master">All Access Master</option>
+              <option value="mentoria_vip">Mentoria VIP</option>
+            </select>
+          </div>
+
+          <!-- Filter by Origin -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold text-slate-500 flex items-center gap-1">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-600"></i> Origem:
+            </span>
+            <select id="filter-origin-select" onchange="handleOriginFilterChange(this.value)" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 cursor-pointer">
+              <option value="all">Todas as Origens</option>
+              <option value="hotmart">Hotmart / Compras</option>
+              <option value="magic_stories_legacy">MS Legacy (926)</option>
+              <option value="primeiro_legado_agoraeufalo">1º Legado (2.946)</option>
+              <option value="firestore">Nuvem / Firestore</option>
+            </select>
+          </div>
+
+          <!-- Sort Order -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold text-slate-500 flex items-center gap-1">
+              <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-amber-600"></i> Ordenar:
+            </span>
+            <select id="sort-students-select" onchange="handleSortChange(this.value)" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 cursor-pointer">
+              <option value="name_asc">Nome (A → Z)</option>
+              <option value="name_desc">Nome (Z → A)</option>
+              <option value="email_asc">E-mail (A → Z)</option>
+              <option value="courses_desc">Mais Cursos Matriculados</option>
+            </select>
+          </div>
+
+          <!-- Items per page -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-bold text-slate-500">Por pág:</span>
+            <select id="page-size-select" onchange="handlePageSizeChange(this.value)" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500 cursor-pointer">
+              <option value="25">25</option>
+              <option value="50" selected>50</option>
+              <option value="100">100</option>
+              <option value="250">250</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Export CSV button -->
+        <button onclick="exportFilteredStudentsToCSV()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Exportar lista filtrada para planilha Excel/CSV">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-amber-600"></i>
+          <span>Exportar CSV</span>
+        </button>
+      </div>
+
       <!-- Students Table Card -->
       <div class="glass-card rounded-3xl overflow-hidden shadow-sm">
         <div class="p-5 border-b border-slate-100 flex items-center justify-between">
@@ -341,7 +407,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
               <input type="checkbox" id="chk-prod-legacy" value="ms-legacy" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">Magic Stories Legacy</span>
+              <span class="font-bold text-slate-800">Magic Stories Club</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" id="chk-prod-dtc" value="dtc_curso" class="rounded text-amber-600 focus:ring-amber-500">
+              <span class="font-bold text-slate-800">Dates & Times (DTC)</span>
             </label>
             <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
               <input type="checkbox" id="chk-prod-quickstart" value="english-quickstart" class="rounded text-amber-600 focus:ring-amber-500">
@@ -351,16 +421,22 @@
               <input type="checkbox" id="chk-prod-frases" value="frases-prontas" class="rounded text-amber-600 focus:ring-amber-500">
               <span class="font-bold text-slate-800">Frases Prontas</span>
             </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer col-span-1 sm:col-span-2">
               <input type="checkbox" id="chk-prod-all" value="all_access_master" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">All Access Master</span>
+              <span class="font-bold text-slate-800">All Access Master (Acesso Total)</span>
             </label>
           </div>
         </div>
 
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2 cursor-pointer">
-          Salvar Alterações no Firestore
-        </button>
+        <div class="flex items-center gap-2.5 pt-2 border-t border-slate-100">
+          <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            <span>Excluir Aluno</span>
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer">
+            Salvar Alterações no Firestore
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -503,7 +579,61 @@
           </button>
         </div>
 
-      </form>
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: EXCLUIR ALUNO / REVOGAÇÃO TOTAL DE ACESSO (CONFIRMAÇÃO 2FA)        -->
+  <!-- ========================================================================= -->
+  <div id="delete-student-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card bg-white border-2 border-rose-300 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 relative">
+      
+      <!-- Top Red Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-rose-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-rose-100 text-rose-700 border border-rose-200 flex items-center justify-center font-black text-base shrink-0">
+            <i data-lucide="shield-alert" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-rose-950">Excluir Aluno & Revogar Acesso</h3>
+            <p class="text-[11px] text-rose-700/80">Confirmação de segurança com segundo fator</p>
+          </div>
+        </div>
+        <button onclick="closeDeleteStudentModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 flex items-center justify-center cursor-pointer">✕</button>
+      </div>
+
+      <!-- Warning Box & Consequences -->
+      <div class="bg-rose-50/90 border border-rose-200 rounded-2xl p-4 space-y-2.5 text-xs text-rose-950">
+        <p class="font-bold text-rose-900 flex items-center gap-1.5 text-xs">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600"></i>
+          <span>Atenção: Esta ação é definitiva e irreversível!</span>
+        </p>
+        <p class="leading-relaxed text-slate-700">
+          Você está prestes a excluir o registro de <strong id="delete-student-display-name" class="text-slate-950">Aluno</strong> (<code id="delete-student-display-email" class="text-rose-800 font-mono text-[11px]">email@agoraeufalo.com.br</code>).
+        </p>
+        <ul class="space-y-1.5 text-[11px] text-slate-700 list-disc list-inside">
+          <li><strong>Revogação Imediata:</strong> O aluno perderá acesso a todas as salas de aula, vídeos e apostilas.</li>
+          <li><strong>Exclusão na Nuvem:</strong> O documento do usuário no Firestore será permanentemente removido.</li>
+          <li><strong>Mentoria VIP:</strong> Se o aluno possuir espaço individual VIP, as prescrições serão desconectadas.</li>
+        </ul>
+      </div>
+
+      <!-- 2FA Input Challenge -->
+      <div class="space-y-2 pt-1">
+        <label class="block text-xs font-bold text-slate-800">
+          Para confirmar, digite <span id="delete-challenge-code" class="font-mono font-black text-rose-700 bg-rose-100 px-2 py-0.5 rounded border border-rose-200 select-all">EXCLUIR</span> no campo abaixo:
+        </label>
+        <input type="text" id="delete-confirm-input" oninput="handleDelete2FAInput(this.value)" placeholder="Digite a palavra EXCLUIR para desbloquear" class="w-full bg-white border-2 border-slate-300 focus:border-rose-500 rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-slate-900 placeholder-slate-400 focus:outline-none uppercase">
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeDeleteStudentModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition cursor-pointer">
+          Cancelar
+        </button>
+        <button type="button" id="btn-confirm-delete-action" onclick="executeStudentDelete()" disabled class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-black text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          <span>Sim, Excluir Definitivamente</span>
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -513,7 +643,14 @@
   <script>
     let ALL_STUDENTS_LIST = [];
     let CURRENT_FILTER = 'all';
+    let COURSE_FILTER = 'all';
+    let ORIGIN_FILTER = 'all';
+    let SORT_ORDER = 'name_asc';
     let SEARCH_QUERY = '';
+    let CURRENT_PAGE = 1;
+    let PAGE_SIZE = 50;
+    let FILTERED_COUNT = 0;
+    let PENDING_DELETE_STUDENT = null;
 
     const INITIAL_VIP_FALLBACK = [
       { id: "andre", name: "André Barrote", email: "andrebarrote1992@gmail.com", tier: "vip_mentorship", role: "student", tracksCount: 1, enrolledProducts: ["ms-legacy", "mentoria_vip", "mentoria-andre"] },
@@ -546,10 +683,6 @@
         ? 'px-4 py-2 rounded-xl text-xs font-black transition bg-slate-900 text-white shadow-sm flex items-center gap-1.5'
         : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition flex items-center gap-1.5';
     }
-
-    let CURRENT_PAGE = 1;
-    const PAGE_SIZE = 50;
-    let FILTERED_COUNT = 0;
 
     async function loadAllStudentsData() {
       const tbody = document.getElementById('students-table-body');
@@ -587,7 +720,7 @@
               category: leg.categoria || (isMS ? 'magic_stories_legacy' : 'primeiro_legado_agoraeufalo'),
               enrolledProducts: leg.curso_concedido ? [leg.curso_concedido] : (isMS ? ['ms-legacy'] : ['english-quickstart']),
               role: 'student',
-              origem: leg.origem || 'legado'
+              origem: leg.origem || (isMS ? 'magic_stories_legacy' : 'primeiro_legado_agoraeufalo')
             });
           });
         }
@@ -598,7 +731,7 @@
       // 2. Add Fallback Mentees
       INITIAL_VIP_FALLBACK.forEach(m => {
         const email = (m.email || '').toLowerCase().trim();
-        if (email) combined.set(email, { ...combined.get(email), ...m, tier: 'vip_mentorship' });
+        if (email) combined.set(email, { ...combined.get(email), ...m, tier: 'vip_mentorship', origem: 'vip' });
       });
 
       // 3. Sincroniza com Firestore (Single Source of Truth)
@@ -616,7 +749,8 @@
             id: m.id,
             tier: 'vip_mentorship',
             name: m.name || existing.name || m.id,
-            email: email
+            email: email,
+            origem: 'firestore'
           });
         });
 
@@ -633,7 +767,8 @@
             email: email,
             tier: u.tier || existing.tier || 'free',
             role: u.role || existing.role || 'student',
-            enrolledProducts: u.enrolledProducts || existing.enrolledProducts || []
+            enrolledProducts: u.enrolledProducts || existing.enrolledProducts || [],
+            origem: existing.origem || 'firestore'
           });
         });
       } catch (err) {
@@ -709,6 +844,29 @@
       renderStudentsTable();
     }
 
+    function handleCourseFilterChange(val) {
+      COURSE_FILTER = val;
+      CURRENT_PAGE = 1;
+      renderStudentsTable();
+    }
+
+    function handleOriginFilterChange(val) {
+      ORIGIN_FILTER = val;
+      CURRENT_PAGE = 1;
+      renderStudentsTable();
+    }
+
+    function handleSortChange(val) {
+      SORT_ORDER = val;
+      renderStudentsTable();
+    }
+
+    function handlePageSizeChange(val) {
+      PAGE_SIZE = parseInt(val, 10) || 50;
+      CURRENT_PAGE = 1;
+      renderStudentsTable();
+    }
+
     window.changeStudentPage = (delta) => {
       const totalPages = Math.ceil(FILTERED_COUNT / PAGE_SIZE) || 1;
       const target = CURRENT_PAGE + delta;
@@ -718,11 +876,9 @@
       }
     };
 
-    function renderStudentsTable() {
-      const tbody = document.getElementById('students-table-body');
-      if (!tbody) return;
-
-      const filtered = ALL_STUDENTS_LIST.filter(s => {
+    function getFilteredStudents() {
+      return ALL_STUDENTS_LIST.filter(s => {
+        // 1. Search Query
         const matchesSearch = !SEARCH_QUERY || 
           (s.name && s.name.toLowerCase().includes(SEARCH_QUERY)) || 
           (s.email && s.email.toLowerCase().includes(SEARCH_QUERY)) ||
@@ -733,17 +889,76 @@
         const tier = s.tier || 'free';
         const role = s.role || 'student';
         const cat = s.category || '';
+        const prods = s.enrolledProducts || [];
 
-        if (CURRENT_FILTER === 'all') return true;
-        if (CURRENT_FILTER === 'vip') return tier === 'vip_mentorship' || tier === 'vip';
-        if (CURRENT_FILTER === 'ms_legacy') return tier === 'ms_legacy' || cat === 'magic_stories_legacy' || (s.enrolledProducts && s.enrolledProducts.includes('ms-legacy') && tier !== 'vip_mentorship');
-        if (CURRENT_FILTER === 'primeiro_legado') return tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo';
-        if (CURRENT_FILTER === 'club') return tier === 'club_annual' || tier === 'pro' || tier === 'course_member';
-        if (CURRENT_FILTER === 'free') return tier === 'free';
-        if (CURRENT_FILTER === 'admin') return role === 'admin' || tier === 'admin_master';
+        // 2. Main Filter Pills
+        if (CURRENT_FILTER === 'vip' && !(tier === 'vip_mentorship' || tier === 'vip')) return false;
+        if (CURRENT_FILTER === 'ms_legacy' && !(tier === 'ms_legacy' || cat === 'magic_stories_legacy' || (prods.includes('ms-legacy') && tier !== 'vip_mentorship'))) return false;
+        if (CURRENT_FILTER === 'primeiro_legado' && !(tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo')) return false;
+        if (CURRENT_FILTER === 'club' && !(tier === 'club_annual' || tier === 'pro' || tier === 'course_member')) return false;
+        if (CURRENT_FILTER === 'free' && tier !== 'free') return false;
+        if (CURRENT_FILTER === 'admin' && !(role === 'admin' || tier === 'admin_master')) return false;
+
+        // 3. Secondary Course Filter
+        if (COURSE_FILTER !== 'all') {
+          if (!prods.includes(COURSE_FILTER)) return false;
+        }
+
+        // 4. Secondary Origin Filter
+        if (ORIGIN_FILTER !== 'all') {
+          const origem = s.origem || cat || '';
+          if (ORIGIN_FILTER === 'hotmart' && !origem.toLowerCase().includes('hotmart') && !s.origem?.includes('compra')) return false;
+          if (ORIGIN_FILTER === 'magic_stories_legacy' && origem !== 'magic_stories_legacy' && cat !== 'magic_stories_legacy') return false;
+          if (ORIGIN_FILTER === 'primeiro_legado_agoraeufalo' && origem !== 'primeiro_legado_agoraeufalo' && cat !== 'primeiro_legado_agoraeufalo') return false;
+          if (ORIGIN_FILTER === 'firestore' && origem !== 'firestore') return false;
+        }
+
         return true;
+      }).sort((a, b) => {
+        if (SORT_ORDER === 'name_asc') return (a.name || '').localeCompare(b.name || '');
+        if (SORT_ORDER === 'name_desc') return (b.name || '').localeCompare(a.name || '');
+        if (SORT_ORDER === 'email_asc') return (a.email || '').localeCompare(b.email || '');
+        if (SORT_ORDER === 'courses_desc') return (b.enrolledProducts?.length || 0) - (a.enrolledProducts?.length || 0);
+        return 0;
+      });
+    }
+
+    function exportFilteredStudentsToCSV() {
+      const filtered = getFilteredStudents();
+      if (!filtered || filtered.length === 0) {
+        alert("Nenhum contato para exportar com os filtros atuais.");
+        return;
+      }
+
+      const headers = ["Nome", "E-mail", "Telefone", "Tier / Plano", "Cursos Concedidos", "Origem"];
+      const rows = filtered.map(s => {
+        const prods = (s.enrolledProducts || []).join('; ');
+        return [
+          `"${(s.name || '').replace(/"/g, '""')}"`,
+          `"${(s.email || '').replace(/"/g, '""')}"`,
+          `"${(s.phone || '').replace(/"/g, '""')}"`,
+          `"${(s.tier || 'free').replace(/"/g, '""')}"`,
+          `"${prods.replace(/"/g, '""')}"`,
+          `"${(s.origem || s.category || '').replace(/"/g, '""')}"`
+        ].join(',');
       });
 
+      const csvContent = "\uFEFF" + [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `AgoraEuFalo_Alunos_${CURRENT_FILTER}_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function renderStudentsTable() {
+      const tbody = document.getElementById('students-table-body');
+      if (!tbody) return;
+
+      const filtered = getFilteredStudents();
       FILTERED_COUNT = filtered.length;
       const totalPages = Math.ceil(FILTERED_COUNT / PAGE_SIZE) || 1;
       if (CURRENT_PAGE > totalPages) CURRENT_PAGE = totalPages;
@@ -776,7 +991,7 @@
         tbody.innerHTML = `
           <tr>
             <td colspan="6" class="py-8 text-center text-slate-400">
-              Nenhum contato encontrado para este filtro ou busca.
+              Nenhum contato encontrado para os filtros selecionados.
             </td>
           </tr>
         `;
@@ -857,6 +1072,9 @@
                 <button onclick="openEditStudentModal('${s.email}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                 </button>
+                <button onclick="openDeleteStudentModal('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}', '${s.id || ''}', '${s.tier || 'free'}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 border border-rose-200 transition cursor-pointer" title="Excluir Aluno Permanentemente">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
                 ${isVIP ? `
                   <button onclick="openPrescribeModal('${s.id}', '${s.name}')" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Prescrever Áudio VIP">
                     <i data-lucide="mic" class="w-3 h-3 text-amber-700"></i>
@@ -869,7 +1087,7 @@
                   <a href="admin-cursos.html?curso=mentoria-${s.id}" target="_blank" class="p-1.5 rounded-lg bg-white/80 hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 transition" title="Editar Aulas & Módulos no Course Studio">
                     <i data-lucide="layers" class="w-3.5 h-3.5"></i>
                   </a>
-                  <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-[11px] font-bold transition inline-flex items-center gap-1" title="Abrir Player no Celular">
+                  <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-50 hover:text-amber-900 text-white text-[11px] font-bold transition inline-flex items-center gap-1" title="Abrir Player no Celular">
                     <span>Player</span> <span>↗</span>
                   </a>
                 ` : ''}
@@ -931,6 +1149,7 @@
 
       const prods = student.enrolledProducts || [];
       document.getElementById('chk-prod-legacy').checked = prods.includes('ms-legacy');
+      if (document.getElementById('chk-prod-dtc')) document.getElementById('chk-prod-dtc').checked = prods.includes('dtc_curso');
       document.getElementById('chk-prod-quickstart').checked = prods.includes('english-quickstart');
       document.getElementById('chk-prod-frases').checked = prods.includes('frases-prontas');
       document.getElementById('chk-prod-all').checked = prods.includes('all_access_master');
@@ -939,6 +1158,94 @@
     }
 
     function closeEditStudentModal() { document.getElementById('edit-student-modal').classList.add('hidden'); }
+
+    // =========================================================================
+    // DELETE STUDENT & 2FA SECURITY MODAL
+    // =========================================================================
+    function openDeleteStudentModal(email, name, id, tier) {
+      const student = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email.toLowerCase()) || { email, name, id, tier };
+      PENDING_DELETE_STUDENT = student;
+
+      document.getElementById('delete-student-display-name').innerText = student.name || 'Aluno';
+      document.getElementById('delete-student-display-email').innerText = student.email || '';
+      document.getElementById('delete-confirm-input').value = '';
+      
+      const btnConfirm = document.getElementById('btn-confirm-delete-action');
+      if (btnConfirm) {
+        btnConfirm.disabled = true;
+        btnConfirm.classList.add('opacity-40', 'cursor-not-allowed');
+      }
+
+      document.getElementById('delete-student-modal').classList.remove('hidden');
+      updateIcons();
+    }
+
+    function closeDeleteStudentModal() {
+      PENDING_DELETE_STUDENT = null;
+      document.getElementById('delete-student-modal').classList.add('hidden');
+    }
+
+    function handleDelete2FAInput(val) {
+      const clean = (val || '').trim().toUpperCase();
+      const btn = document.getElementById('btn-confirm-delete-action');
+      if (!btn) return;
+      
+      const targetEmail = PENDING_DELETE_STUDENT ? PENDING_DELETE_STUDENT.email.toUpperCase() : '';
+      if (clean === 'EXCLUIR' || (targetEmail && clean === targetEmail)) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-40', 'cursor-not-allowed');
+      } else {
+        btn.disabled = true;
+        btn.classList.add('opacity-40', 'cursor-not-allowed');
+      }
+    }
+
+    function triggerDeleteFromEditModal() {
+      const email = document.getElementById('edit-student-email').value;
+      const name = document.getElementById('edit-student-name').value;
+      const id = document.getElementById('edit-student-id').value;
+      const tier = document.getElementById('edit-student-tier').value;
+      
+      closeEditStudentModal();
+      openDeleteStudentModal(email, name, id, tier);
+    }
+
+    async function executeStudentDelete() {
+      if (!PENDING_DELETE_STUDENT) return;
+      const student = PENDING_DELETE_STUDENT;
+      const targetEmail = (student.email || '').toLowerCase().trim();
+      const targetId = student.id || student.uid || targetEmail.split('@')[0];
+
+      const btn = document.getElementById('btn-confirm-delete-action');
+      if (btn) btn.innerHTML = `<span class="animate-spin">⏳</span> Excluindo...`;
+
+      try {
+        // 1. Exclui do Firestore via SDK
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.deleteUserDoc(targetId);
+          if (student.tier === 'vip_mentorship' || student.tier === 'vip') {
+            await window.aefPortalAuth.deleteMenteeDoc(targetId);
+          }
+        }
+
+        // 2. Remove da lista em memória
+        ALL_STUDENTS_LIST = ALL_STUDENTS_LIST.filter(s => (s.email || '').toLowerCase().trim() !== targetEmail);
+
+        // 3. Atualiza UI e Métricas
+        updateMetrics();
+        renderStudentsTable();
+        closeDeleteStudentModal();
+
+        alert(`🗑️ Aluno "${student.name}" (${student.email}) foi excluído com sucesso.`);
+      } catch (err) {
+        console.error("Erro ao excluir aluno:", err);
+        alert(`❌ Erro ao excluir aluno: ${err.message}`);
+      } finally {
+        if (btn) btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i><span>Sim, Excluir Definitivamente</span>`;
+        updateIcons();
+      }
+    }
 
     function openPrescribeModal(menteeId, menteeName) {
       document.getElementById('prescribe-mentee-id').value = menteeId;
@@ -973,8 +1280,8 @@
       const isMaster = tier === 'admin_master';
 
       const enrolled = isMaster || isVIP 
-        ? ['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas']
-        : (tier === 'club_annual' ? ['ms-legacy', 'english-quickstart', 'frases-prontas'] : ['ms-legacy']);
+        ? ['all_access_master', 'mentoria_vip', 'ms-legacy', 'dtc_curso', 'english-quickstart', 'frases-prontas']
+        : (tier === 'club_annual' ? ['ms-legacy', 'dtc_curso', 'english-quickstart', 'frases-prontas'] : ['ms-legacy']);
 
       const newStudent = {
         id,
@@ -1016,6 +1323,7 @@
 
       const enrolled = [];
       if (document.getElementById('chk-prod-legacy').checked) enrolled.push('ms-legacy');
+      if (document.getElementById('chk-prod-dtc')?.checked) enrolled.push('dtc_curso');
       if (document.getElementById('chk-prod-quickstart').checked) enrolled.push('english-quickstart');
       if (document.getElementById('chk-prod-frases').checked) enrolled.push('frases-prontas');
       if (document.getElementById('chk-prod-all').checked) enrolled.push('all_access_master');
