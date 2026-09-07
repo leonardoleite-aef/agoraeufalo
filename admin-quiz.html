@@ -314,7 +314,7 @@
 
             <div class="flex items-center gap-2">
               <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)" placeholder="URL do Áudio MP3 gerado" class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
-              <button onclick="playAudio('${q.audioUrl}')" class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
+              <button onclick="playAudio('${q.audioUrl}', this)" class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
                 <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir
               </button>
             </div>
@@ -431,18 +431,70 @@
       }, 1000);
     }
 
-    function playAudio(url) {
+    let currentPlayingBtn = null;
+
+    function playAudio(url, btnElement) {
       if (!url) {
         showToast("⚠️ Nenhum áudio cadastrado nesta questão.");
         return;
       }
       const aud = document.getElementById("ttsPreviewAudio");
+      if (!aud) return;
+
+      // Se já está tocando o mesmo áudio, pausa
+      if (!aud.paused && aud.dataset.currentUrl === url) {
+        aud.pause();
+        resetAllAudioButtons();
+        return;
+      }
+
+      // Se estava tocando outro áudio, reseta botões
+      resetAllAudioButtons();
+
       aud.src = url;
-      aud.play().catch(e => console.log(e));
+      aud.dataset.currentUrl = url;
+      currentPlayingBtn = btnElement || null;
+
+      aud.onended = () => {
+        resetAllAudioButtons();
+      };
+
+      aud.play().then(() => {
+        if (btnElement) {
+          btnElement.dataset.playing = "true";
+          if (btnElement.id === "simAudioBtn") {
+            btnElement.innerHTML = `<i data-lucide="pause-circle" class="w-4 h-4 text-slate-950"></i> <span>Pausar Áudio</span>`;
+          } else {
+            btnElement.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5 text-amber-300"></i> Pausar`;
+          }
+          if (window.lucide) lucide.createIcons();
+        }
+      }).catch(e => {
+        console.warn("Audio play err:", e);
+        resetAllAudioButtons();
+      });
+    }
+
+    function resetAllAudioButtons() {
+      const aud = document.getElementById("ttsPreviewAudio");
+      if (aud) {
+        aud.pause();
+        aud.dataset.currentUrl = "";
+      }
+      document.querySelectorAll("[data-playing='true']").forEach(btn => {
+        btn.dataset.playing = "false";
+        if (btn.id === "simAudioBtn") {
+          btn.innerHTML = `<i data-lucide="volume-2" class="w-4 h-4 fill-current"></i> <span>Ouvir Áudio da Questão</span>`;
+        } else {
+          btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir`;
+        }
+      });
+      if (window.lucide) lucide.createIcons();
     }
 
     // LIVE SIMULATOR LOGIC
     function resetSimulator() {
+      resetAllAudioButtons();
       simCurrentIndex = 0;
       simScore = 0;
       simSelectedOption = null;
@@ -497,7 +549,7 @@
 
           <!-- Audio Listening Button (Only when audioUrl exists) -->
           ${q.audioUrl ? `
-            <button onclick="playAudio('${q.audioUrl}')" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
+            <button onclick="playAudio('${q.audioUrl}', this)" id="simAudioBtn" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
               <i data-lucide="volume-2" class="w-4 h-4 fill-current"></i>
               <span>Ouvir Áudio da Questão</span>
             </button>
