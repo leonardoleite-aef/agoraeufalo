@@ -181,7 +181,7 @@
               </div>
 
               <!-- Switch to Student View Button -->
-              <a href="portal.html" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Abrir Portal do Aluno">
+              <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal.html') : 'portal.html'}" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Abrir Portal do Aluno">
                 <span>Portal ↗</span>
               </a>
 
@@ -208,7 +208,7 @@
             <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
             <a href="blog-panel.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog-panel.html')}">📝 Blog</a>
             <a href="seo-manager.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('seo-manager.html')}">🔍 SEO</a>
-            <a href="portal.html" class="px-2.5 py-1 rounded-lg shrink-0 text-amber-500 font-bold">👁️ Aluno</a>
+            <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal.html') : 'portal.html'}" class="px-2.5 py-1 rounded-lg shrink-0 text-amber-500 font-bold">👁️ Aluno</a>
           </div>
         </header>
       `;
@@ -279,7 +279,7 @@
       try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
 
       // Redireciona sempre para o portal para visualização imediata da experiência do aluno
-      window.location.href = 'portal.html';
+      window.location.href = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal.html') : 'portal.html';
     }
   }
 

@@ -599,7 +599,9 @@
       let user = this.auth?.currentUser;
 
       if (!user) {
-        const defaultRedirect = requireAdmin ? 'admin-login.html' : 'login.html';
+        const defaultRedirect = requireAdmin 
+          ? (window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('admin-login.html') : 'admin-login.html')
+          : (window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('login.html') : 'login.html');
         const targetUrl = (redirectUrl && redirectUrl !== 'login.html') ? redirectUrl : defaultRedirect;
         console.warn(`🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para ${targetUrl}`);
         try {
@@ -616,7 +618,8 @@
       if (requireAdmin && !this.isAdmin()) {
         console.warn("🔒 [AEFPortalAuth] Acesso negado: Requer privilégios de Administrador.");
         alert("Acesso restrito ao Professor Leonardo Leite e Administradores.");
-        window.location.replace('admin-login.html');
+        const adminLoginTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('admin-login.html') : 'admin-login.html';
+        window.location.replace(adminLoginTarget);
         return false;
       }
 
