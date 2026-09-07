@@ -2,42 +2,14 @@
  * AgoraEuFalo - Subdomain & Ecosystem Cross-Domain Router
  * Professor Leonardo Leite
  * 
- * Manages domain-specific entrypoints, cross-domain link routing, and authentication handshakes:
- * 1. agoraeufalo.com.br       -> Public Site, Blog, Landing Pages, SEO
- * 2. app.agoraeufalo.com.br   -> Student Member Area (Portal, Classroom, Player, Courses)
- * 3. admin.agoraeufalo.com.br -> Backoffice Master (Course Studio, CRM, PDF Factory, Vendas)
+ * Manages domain entrypoints and cross-domain links:
+ * 1. agoraeufalo.com.br       -> Public Site, Blog, Landing Pages, Courses
+ * 2. app.agoraeufalo.com.br   -> Student Member Area (Portal, Classroom, Player)
+ * 3. admin.agoraeufalo.com.br -> Backoffice Master (Course Studio, CRM, PDF Factory)
  */
 
 (function (window) {
   'use strict';
-
-  const ADMIN_PAGES = [
-    'admin.html',
-    'admin-login.html',
-    'admin-alunos.html',
-    'admin-cursos.html',
-    'admin-vendas.html',
-    'admin-webhooks.html',
-    'admin-marketing.html',
-    'admin-ofertas.html',
-    'admin-pdf-factory.html',
-    'tts-studio.html',
-    'blog-panel.html',
-    'seo-manager.html'
-  ];
-
-  const APP_PAGES = [
-    'portal.html',
-    'sala-de-aula.html',
-    'curso.html',
-    'player.html',
-    'login.html',
-    'cadastro.html',
-    'recuperar-senha.html',
-    'meu-perfil.html',
-    'quick-start.html',
-    'mentoria.html'
-  ];
 
   class AEFDomainRouter {
     constructor() {
@@ -82,20 +54,12 @@
 
     getAppUrl(path = 'portal.html') {
       const clean = path.startsWith('/') ? path : `/${path}`;
-      return this.isLocal() ? clean : `https://app.agoraeufalo.com.br${clean}`;
+      return this.isLocal() ? clean : `https://agoraeufalo.com.br${clean}`;
     }
 
     getAdminUrl(path = 'admin.html') {
       const clean = path.startsWith('/') ? path : `/${path}`;
-      return this.isLocal() ? clean : `https://admin.agoraeufalo.com.br${clean}`;
-    }
-
-    isAdminPage(pageName = this.page) {
-      return ADMIN_PAGES.includes(pageName);
-    }
-
-    isAppPage(pageName = this.page) {
-      return APP_PAGES.includes(pageName) || this.pathname.startsWith('/treino/') || this.pathname.startsWith('/portal/');
+      return this.isLocal() ? clean : `https://agoraeufalo.com.br${clean}`;
     }
 
     init() {
@@ -103,41 +67,17 @@
 
       const fullSuffix = this.search + this.hash;
 
-      // 1. Regras do Subdomínio ADMIN (admin.agoraeufalo.com.br)
+      // 1. Subdomínio ADMIN (admin.agoraeufalo.com.br)
       if (this.isAdminDomain()) {
         if (this.page === '' || this.page === 'index.html') {
           window.location.replace('admin.html' + fullSuffix);
-          return;
-        }
-        // Se estiver no admin e tentar abrir uma página do aluno -> manda para o app
-        if (this.isAppPage()) {
-          window.location.replace(`https://app.agoraeufalo.com.br${this.pathname}${fullSuffix}`);
-          return;
         }
       }
 
-      // 2. Regras do Subdomínio APP (app.agoraeufalo.com.br)
+      // 2. Subdomínio APP (app.agoraeufalo.com.br)
       if (this.isAppDomain()) {
         if (this.page === '' || this.page === 'index.html') {
           window.location.replace('portal.html' + fullSuffix);
-          return;
-        }
-        // Se estiver no app e tentar abrir página de admin -> manda para o admin
-        if (this.isAdminPage()) {
-          window.location.replace(`https://admin.agoraeufalo.com.br${this.pathname}${fullSuffix}`);
-          return;
-        }
-      }
-
-      // 3. Regras do Domínio PÚBLICO (agoraeufalo.com.br / www)
-      if (this.isPublicDomain() && this.hostname !== 'leonardoleite-aef.github.io') {
-        if (this.isAdminPage()) {
-          window.location.replace(`https://admin.agoraeufalo.com.br${this.pathname}${fullSuffix}`);
-          return;
-        }
-        if (this.isAppPage()) {
-          window.location.replace(`https://app.agoraeufalo.com.br${this.pathname}${fullSuffix}`);
-          return;
         }
       }
     }
