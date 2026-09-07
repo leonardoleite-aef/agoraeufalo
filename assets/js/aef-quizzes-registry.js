@@ -84,6 +84,46 @@ const AEF_QUIZZES_DATA = {
         "retryHint": "Ouça o início da história: 'Grazi is tired of feeling stuck...'"
       }
     ]
+  },
+  "quiz-quickstart-text-01": {
+    "id": "quiz-quickstart-text-01",
+    "title": "Quiz Tradicional (Texto) • Sentimento das Estruturas Vivas",
+    "description": "Teste seu raciocínio contextual e compreensão de chunks em 100% texto sem áudio prévio.",
+    "category": "English QuickStart",
+    "badge": "COMPREENSÃO TOTAL",
+    "passingScore": 75,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "text_comprehension",
+        "questionText": "Qual das opções melhor expressa o sentimento coloquial de 'Já vai!' ou 'Já estou a caminho!' em inglês falado real?",
+        "audioUrl": "",
+        "audioScript": "",
+        "options": [
+          { "id": "opt_a", "text": "I am already going", "isCorrect": false },
+          { "id": "opt_b", "text": "I'm on my way! (ou 'Coming!')", "isCorrect": true },
+          { "id": "opt_c", "text": "I will go now", "isCorrect": false },
+          { "id": "opt_d", "text": "I am walking to there", "isCorrect": false }
+        ],
+        "goldenTip": "Em inglês falado do dia a dia, quando alguém te chama, você diz 'Coming!' ou 'I'm on my way!'. 'I am already going' soa como tradução literal dura.",
+        "retryHint": "Pense na expressão que os nativos usam no reflexo imediato quando alguém bate à porta ou chama."
+      },
+      {
+        "id": "q2",
+        "type": "text_comprehension",
+        "questionText": "No contexto da frase 'She is a 45-year-old woman', por que usamos 'is' (to be) em vez do verbo 'have' para idade?",
+        "audioUrl": "",
+        "audioScript": "",
+        "options": [
+          { "id": "opt_a", "text": "Porque em inglês a idade é um estado de ser ('to be'), e não uma posse que você carrega", "isCorrect": true },
+          { "id": "opt_b", "text": "Porque o verbo have é proibido com números", "isCorrect": false },
+          { "id": "opt_c", "text": "Porque a palavra woman exige um verbo no passado", "isCorrect": false },
+          { "id": "opt_d", "text": "Porque a regra gramatical foi inventada para provas", "isCorrect": false }
+        ],
+        "goldenTip": "Em inglês, idade, fome, sede, frio e calor são estados de ser ('I am 45', 'I am hungry'). Você É o estado, não POSSUI a idade!",
+        "retryHint": "Lembre-se do 'Sentimento da Estrutura': o inglês enxerga a idade como quem a pessoa É naquele momento."
+      }
+    ]
   }
 };
 

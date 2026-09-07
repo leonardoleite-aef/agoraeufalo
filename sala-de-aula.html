@@ -1235,7 +1235,7 @@
 
           <!-- Arena Body -->
           <div class="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full space-y-3.5 py-1">
-            <!-- Audio Trigger Card -->
+            <!-- Audio Trigger Card OR Text Mode Badge -->
             ${q.audioUrl ? `
               <div class="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3 shadow-lg">
                 <div class="flex items-center gap-3 min-w-0">
@@ -1250,7 +1250,15 @@
                 <audio id="quizAudioElement" src="${q.audioUrl}" preload="auto" class="hidden" onended="onQuizAudioEnded()"></audio>
                 <span class="text-[10px] font-mono text-slate-400 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 shrink-0">🎧 Aperte Play</span>
               </div>
-            ` : ''}
+            ` : `
+              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3 shadow-xs">
+                <div class="flex items-center gap-2 text-amber-300">
+                  <i data-lucide="file-text" class="w-4 h-4 text-amber-400"></i>
+                  <span class="text-xs font-bold font-mono uppercase tracking-wider">Leitura & Sentimento da Estrutura</span>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10">100% Texto</span>
+              </div>
+            `}
 
             <!-- Prompt -->
             <div>

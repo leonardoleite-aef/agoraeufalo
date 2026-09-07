@@ -275,10 +275,12 @@
             </div>
 
             <div class="flex items-center gap-2">
-              <select onchange="updateQuestionType(${qIdx}, this.value)" class="p-1 rounded-lg bg-slate-100 text-[11px] font-bold text-slate-700 border border-slate-200">
-                <option value="dialogue_comprehension" ${q.type === 'dialogue_comprehension' ? 'selected' : ''}>🎧 Compreensão de Diálogo</option>
-                <option value="sound_discrimination" ${q.type === 'sound_discrimination' ? 'selected' : ''}>🔢 Discriminação Sonora</option>
-                <option value="fill_chunk" ${q.type === 'fill_chunk' ? 'selected' : ''}>🧩 Complete o Chunk</option>
+              <select onchange="updateQuestionType(${qIdx}, this.value)" class="p-1.5 rounded-lg bg-slate-100 text-[11px] font-bold text-slate-800 border border-slate-300 focus:outline-none">
+                <option value="dialogue_comprehension" ${q.type === 'dialogue_comprehension' ? 'selected' : ''}>🎧 Compreensão de Diálogo (Áudio)</option>
+                <option value="sound_discrimination" ${q.type === 'sound_discrimination' ? 'selected' : ''}>🔢 Discriminação Sonora (Áudio)</option>
+                <option value="fill_chunk" ${q.type === 'fill_chunk' ? 'selected' : ''}>🧩 Complete o Chunk (Áudio)</option>
+                <option value="text_comprehension" ${q.type === 'text_comprehension' ? 'selected' : ''}>📝 Quiz Tradicional (100% Texto)</option>
+                <option value="text_vocab" ${q.type === 'text_vocab' ? 'selected' : ''}>🧠 Vocabulário & Estrutura (100% Texto)</option>
               </select>
               <button onclick="removeQuestion(${qIdx})" class="text-rose-500 hover:text-rose-700 p-1" title="Excluir Questão">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -289,15 +291,15 @@
           <!-- Question Text -->
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7A7369] mb-1">Enunciado da Pergunta</label>
-            <input type="text" value="${q.questionText || ''}" oninput="updateQuestionText(${qIdx}, this.value)" placeholder="Ex: Ouça o áudio e responda: A que horas vai começar a aula?" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
+            <input type="text" value="${q.questionText || ''}" oninput="updateQuestionText(${qIdx}, this.value)" placeholder="${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'Ex: Qual opção expressa melhor o sentimento da frase...' : 'Ex: Ouça o áudio e responda: A que horas vai começar a aula?'}" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
           </div>
 
           <!-- AUDIO & TTS BOX (GEMINI TTS DIRECT INJECTION) -->
-          <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-3">
+          <div class="p-4 rounded-2xl ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'bg-slate-50 border border-slate-200' : 'bg-amber-50/60 border border-amber-200/80'} space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-black text-amber-950 flex items-center gap-1.5">
-                <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-600"></i>
-                Áudio da Questão (Gemini TTS ou URL)
+              <span class="text-[11px] font-black ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-700' : 'text-amber-950'} flex items-center gap-1.5">
+                <i data-lucide="${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'file-text' : 'mic'}" class="w-3.5 h-3.5 ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-500' : 'text-amber-600'}"></i>
+                <span>${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'Áudio da Questão (Opcional no modo Texto)' : 'Áudio da Questão (Gemini TTS ou URL)'}</span>
               </span>
               <button onclick="synthesizeQuestionAudio(${qIdx})" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] flex items-center gap-1 transition shadow-xs cursor-pointer">
                 <i data-lucide="sparkles" class="w-3 h-3"></i>
@@ -493,11 +495,18 @@
             ${q.questionText || 'Ouça e responda:'}
           </h4>
 
-          <!-- Audio Listening Button -->
-          <button onclick="playAudio('${q.audioUrl}')" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
-            <i data-lucide="volume-2" class="w-4 h-4 fill-current"></i>
-            <span>Ouvir Áudio da Questão</span>
-          </button>
+          <!-- Audio Listening Button (Only when audioUrl exists) -->
+          ${q.audioUrl ? `
+            <button onclick="playAudio('${q.audioUrl}')" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
+              <i data-lucide="volume-2" class="w-4 h-4 fill-current"></i>
+              <span>Ouvir Áudio da Questão</span>
+            </button>
+          ` : `
+            <div class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-amber-300 font-mono text-[10px] flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Modo Tradicional (100% Texto / Leitura)</span>
+            </div>
+          `}
 
           <!-- Options -->
           <div class="space-y-2 pt-2">
