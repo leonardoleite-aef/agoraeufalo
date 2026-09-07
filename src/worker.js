@@ -52,59 +52,120 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
-    let targetFile = null;
-
+    // ============================================================
     // 1. SUBDOMÍNIO ADMIN (admin.agoraeufalo.com.br)
+    // ============================================================
     if (host === 'admin.agoraeufalo.com.br') {
-      const adminMap = {
-        '/': '/admin.html',
-        '/admin': '/admin.html',
-        '/login': '/admin-login.html',
-        '/admin-login': '/admin-login.html',
-        '/alunos': '/admin-alunos.html',
-        '/admin-alunos': '/admin-alunos.html',
-        '/cursos': '/admin-cursos.html',
-        '/admin-cursos': '/admin-cursos.html',
-        '/vendas': '/admin-vendas.html',
-        '/admin-vendas': '/admin-vendas.html',
-        '/webhooks': '/admin-webhooks.html',
-        '/admin-webhooks': '/admin-webhooks.html',
-        '/marketing': '/admin-marketing.html',
-        '/admin-marketing': '/admin-marketing.html',
-        '/ofertas': '/admin-ofertas.html',
-        '/admin-ofertas': '/admin-ofertas.html',
-        '/pdf-factory': '/admin-pdf-factory.html',
-        '/admin-pdf-factory': '/admin-pdf-factory.html',
-        '/tts': '/tts-studio.html',
-        '/tts-studio': '/tts-studio.html',
-        '/blog': '/blog-panel.html',
-        '/blog-panel': '/blog-panel.html',
-        '/seo': '/seo-manager.html',
-        '/seo-manager': '/seo-manager.html'
+      const adminLegacyRedirects = {
+        '/admin.html': '/',
+        '/admin': '/',
+        '/admin-login.html': '/login',
+        '/admin-login': '/login',
+        '/admin-alunos.html': '/alunos',
+        '/admin-alunos': '/alunos',
+        '/admin-cursos.html': '/cursos',
+        '/admin-cursos': '/cursos',
+        '/admin-vendas.html': '/vendas',
+        '/admin-vendas': '/vendas',
+        '/admin-webhooks.html': '/webhooks',
+        '/admin-webhooks': '/webhooks',
+        '/admin-marketing.html': '/marketing',
+        '/admin-marketing': '/marketing',
+        '/admin-ofertas.html': '/vendas',
+        '/admin-ofertas': '/vendas',
+        '/admin-pdf-factory.html': '/pdf-factory',
+        '/admin-pdf-factory': '/pdf-factory',
+        '/tts-studio.html': '/tts',
+        '/tts-studio': '/tts',
+        '/blog-panel.html': '/blog',
+        '/blog-panel': '/blog',
+        '/seo-manager.html': '/seo',
+        '/seo-manager': '/seo'
       };
-      targetFile = adminMap[path] || (path.endsWith('.html') ? path : `${path}.html`);
+
+      if (adminLegacyRedirects[path]) {
+        url.pathname = adminLegacyRedirects[path];
+        return Response.redirect(url.toString(), 301);
+      }
+
+      const adminFileMap = {
+        '/': '/admin.html',
+        '/login': '/admin-login.html',
+        '/alunos': '/admin-alunos.html',
+        '/cursos': '/admin-cursos.html',
+        '/vendas': '/admin-vendas.html',
+        '/webhooks': '/admin-webhooks.html',
+        '/marketing': '/admin-marketing.html',
+        '/pdf-factory': '/admin-pdf-factory.html',
+        '/tts': '/tts-studio.html',
+        '/blog': '/blog-panel.html',
+        '/seo': '/seo-manager.html'
+      };
+
+      const targetFile = adminFileMap[path] || (path.endsWith('.html') ? path : `${path}.html`);
+      url.pathname = targetFile;
+      return env.ASSETS.fetch(new Request(url.toString(), request));
     }
 
+    // ============================================================
     // 2. SUBDOMÍNIO DO ALUNO (app.agoraeufalo.com.br)
+    // ============================================================
     else if (host === 'app.agoraeufalo.com.br') {
-      const appMap = {
+      const appLegacyRedirects = {
+        '/portal.html': '/',
+        '/portal': '/',
+        '/login.html': '/login',
+        '/cadastro.html': '/cadastro',
+        '/sala-de-aula.html': '/sala',
+        '/sala-de-aula': '/sala',
+        '/curso.html': '/curso',
+        '/treino/player.html': '/player',
+        '/treino/player': '/player'
+      };
+
+      if (appLegacyRedirects[path]) {
+        url.pathname = appLegacyRedirects[path];
+        return Response.redirect(url.toString(), 301);
+      }
+
+      const appFileMap = {
         '/': '/portal.html',
-        '/portal': '/portal.html',
         '/login': '/login.html',
         '/cadastro': '/cadastro.html',
         '/sala': '/sala-de-aula.html',
-        '/sala-de-aula': '/sala-de-aula.html',
         '/curso': '/curso.html',
         '/player': '/treino/player.html',
-        '/treino/player': '/treino/player.html',
         '/migracao': '/migracao/index.html'
       };
-      targetFile = appMap[path] || (path.endsWith('.html') ? path : `${path}.html`);
+
+      const targetFile = appFileMap[path] || (path.endsWith('.html') ? path : `${path}.html`);
+      url.pathname = targetFile;
+      return env.ASSETS.fetch(new Request(url.toString(), request));
     }
 
+    // ============================================================
     // 3. DOMÍNIO PÚBLICO (agoraeufalo.com.br / www)
+    // ============================================================
     else {
-      const publicMap = {
+      const publicLegacyRedirects = {
+        '/index.html': '/',
+        '/index': '/',
+        '/projeto-aef.html': '/projeto-aef',
+        '/precos.html': '/precos',
+        '/ebook.html': '/ebook',
+        '/guia-magic-stories.html': '/guia-magic-stories',
+        '/contato.html': '/contato',
+        '/politica-de-privacidade.html': '/politica-de-privacidade',
+        '/termos-de-uso.html': '/termos-de-uso',
+        '/obrigado.html': '/obrigado'
+      };
+
+      if (publicLegacyRedirects[path]) {
+        url.pathname = publicLegacyRedirects[path];
+        return Response.redirect(url.toString(), 301);
+      }
+
+      const publicFileMap = {
         '/': '/index.html',
         '/projeto-aef': '/projeto-aef.html',
         '/precos': '/precos.html',
@@ -116,15 +177,10 @@ export default {
         '/termos-de-uso': '/termos-de-uso.html',
         '/obrigado': '/obrigado.html'
       };
-      targetFile = publicMap[path] || (path.endsWith('.html') ? path : `${path}.html`);
-    }
 
-    if (targetFile) {
+      const targetFile = publicFileMap[path] || (path.endsWith('.html') ? path : `${path}.html`);
       url.pathname = targetFile;
-      const modifiedRequest = new Request(url.toString(), request);
-      return env.ASSETS.fetch(modifiedRequest);
+      return env.ASSETS.fetch(new Request(url.toString(), request));
     }
-
-    return env.ASSETS.fetch(request);
   }
 };
