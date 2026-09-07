@@ -69,6 +69,11 @@
     </div>
 
     <div class="flex items-center gap-3">
+      <button onclick="openApiKeyModal()" id="apiKeyStatusBtn" class="text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-xl hover:bg-white/5 border border-white/10 transition flex items-center gap-1.5 cursor-pointer">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span id="apiKeyBtnText">Chave Gemini</span>
+      </button>
       <a href="/cursos" class="text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-xl hover:bg-white/5 transition flex items-center gap-1.5">
         <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i>
         <span>Course Studio</span>
@@ -184,6 +189,30 @@
       </div>
     </aside>
 
+  </div>
+
+  <!-- API KEY MODAL -->
+  <div id="apiKeyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#0A192F] border border-amber-400/40 rounded-3xl p-6 max-w-md w-full text-white shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="key" class="w-4 h-4 text-amber-400"></i>
+          <h3 class="font-serif font-black text-sm">Configuração da Gemini API</h3>
+        </div>
+        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white text-sm">✕</button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Insira sua <b>Gemini API Key</b> para sintetizar áudios em tempo real com as vozes canônicas do estúdio (Aoede, Puck, Charon).
+      </p>
+      <div>
+        <label class="block text-[10px] font-mono text-amber-300 uppercase mb-1">Gemini API Key</label>
+        <input type="password" id="geminiApiKeyInput" placeholder="Cole sua chave aqui..." class="w-full p-2.5 rounded-xl bg-[#0D1E36] border border-white/15 text-xs font-mono text-white focus:outline-none focus:border-amber-400">
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="closeApiKeyModal()" class="px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Cancelar</button>
+        <button onclick="saveApiKeyConfig()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition">Salvar Chave</button>
+      </div>
+    </div>
   </div>
 
   <!-- TOAST NOTIFICATION -->
@@ -337,24 +366,34 @@
 
           <!-- AUDIO & TTS BOX (GEMINI TTS DIRECT INJECTION) -->
           <div class="p-4 rounded-2xl ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'bg-slate-50 border border-slate-200' : 'bg-amber-50/60 border border-amber-200/80'} space-y-3">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between flex-wrap gap-2">
               <span class="text-[11px] font-black ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-700' : 'text-amber-950'} flex items-center gap-1.5">
                 <i data-lucide="${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'file-text' : 'mic'}" class="w-3.5 h-3.5 ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-500' : 'text-amber-600'}"></i>
                 <span>${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'Áudio da Questão (Opcional no modo Texto)' : 'Áudio da Questão (Gemini TTS ou URL)'}</span>
               </span>
-              <button onclick="synthesizeQuestionAudio(${qIdx})" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] flex items-center gap-1 transition shadow-xs cursor-pointer">
-                <i data-lucide="sparkles" class="w-3 h-3"></i>
-                <span>Gerar Áudio com IA</span>
-              </button>
+              
+              <div class="flex items-center gap-2">
+                <select id="voice-q-${qIdx}" onchange="updateQuestionVoice(${qIdx}, this.value)" class="p-1 rounded-lg bg-white border border-amber-300 text-[10px] font-bold text-slate-800 focus:outline-none">
+                  <option value="Aoede" ${(q.voice || 'Aoede') === 'Aoede' ? 'selected' : ''}>Voz: Aoede (Feminina / Clara)</option>
+                  <option value="Puck" ${q.voice === 'Puck' ? 'selected' : ''}>Voz: Puck (Masculina / Natural)</option>
+                  <option value="Charon" ${q.voice === 'Charon' ? 'selected' : ''}>Voz: Charon (Masculina / Profunda / Leo)</option>
+                  <option value="Kore" ${q.voice === 'Kore' ? 'selected' : ''}>Voz: Kore (Feminina / Serena)</option>
+                  <option value="Fenrir" ${q.voice === 'Fenrir' ? 'selected' : ''}>Voz: Fenrir (Masculina / Firme)</option>
+                </select>
+                <button onclick="synthesizeQuestionAudio(${qIdx}, this)" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] flex items-center gap-1 transition shadow-xs cursor-pointer">
+                  <i data-lucide="sparkles" class="w-3 h-3"></i>
+                  <span>🎙️ Sintetizar com Gemini TTS</span>
+                </button>
+              </div>
             </div>
 
             <div>
-              <label class="block text-[9.5px] font-bold uppercase text-amber-900/80 mb-0.5">Roteiro / Fala em Inglês</label>
+              <label class="block text-[9.5px] font-bold uppercase text-amber-900/80 mb-0.5">Roteiro / Fala em Inglês (Suporta Single Speaker ou Diálogo Dual Speaker)</label>
               <textarea id="script-q-${qIdx}" oninput="updateQuestionScript(${qIdx}, this.value)" rows="2" placeholder="Ex: Rodrigo: What time is the meeting?&#10;Liam: It's at a quarter to five!" class="w-full p-2 rounded-xl bg-white border border-amber-300/80 text-xs font-mono text-slate-900 focus:outline-none">${q.audioScript || ''}</textarea>
             </div>
 
             <div class="flex items-center gap-2">
-              <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)" placeholder="URL do Áudio MP3 gerado" class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
+              <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)" placeholder="URL do Áudio MP3 ou Blob gerado" class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
               <button onclick="playAudio('${q.audioUrl}', this)" class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
                 <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir
               </button>
@@ -406,6 +445,7 @@
         type: "dialogue_comprehension",
         questionText: "Ouça o áudio e selecione a opção correta:",
         audioUrl: "",
+        voice: "Aoede",
         audioScript: "Leo: Hello, my dear friend! Let's practice listening now.",
         options: [
           { id: "opt_a", text: "Primeira opção de resposta", isCorrect: true },
@@ -427,6 +467,7 @@
     function updateQuestionType(qIdx, val) { currentQuiz.questions[qIdx].type = val; renderSimulator(); }
     function updateQuestionText(qIdx, val) { currentQuiz.questions[qIdx].questionText = val; renderSimulator(); }
     function updateQuestionScript(qIdx, val) { currentQuiz.questions[qIdx].audioScript = val; }
+    function updateQuestionVoice(qIdx, val) { currentQuiz.questions[qIdx].voice = val; }
     function updateQuestionAudioUrl(qIdx, val) { currentQuiz.questions[qIdx].audioUrl = val; renderSimulator(); }
     function updateQuestionGoldenTip(qIdx, val) { currentQuiz.questions[qIdx].goldenTip = val; }
     function updateQuestionRetryHint(qIdx, val) { currentQuiz.questions[qIdx].retryHint = val; }
@@ -453,23 +494,194 @@
       renderQuestions();
     }
 
-    // GEMINI TTS SYNTHESIS INJECTION
-    function synthesizeQuestionAudio(qIdx) {
-      const script = currentQuiz.questions[qIdx].audioScript || "";
+    // =========================================================================
+    // GEMINI API KEY & REAL IN-BROWSER TTS SYNTHESIS ENGINE
+    // =========================================================================
+    function getGeminiApiKey() {
+      const key = localStorage.getItem("AEF_GEMINI_API_KEY") || "";
+      updateApiKeyStatusButton(key);
+      return key.trim();
+    }
+
+    function updateApiKeyStatusButton(key) {
+      const btn = document.getElementById("apiKeyStatusBtn");
+      const text = document.getElementById("apiKeyBtnText");
+      if (!btn || !text) return;
+      if (key && key.trim() !== "") {
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i><span id="apiKeyBtnText">Gemini Conectada</span>`;
+      } else {
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i><span id="apiKeyBtnText">Configurar Chave</span>`;
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openApiKeyModal() {
+      const modal = document.getElementById("apiKeyModal");
+      const input = document.getElementById("geminiApiKeyInput");
+      if (input) input.value = localStorage.getItem("AEF_GEMINI_API_KEY") || "";
+      if (modal) modal.classList.remove("hidden");
+    }
+
+    function closeApiKeyModal() {
+      const modal = document.getElementById("apiKeyModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function saveApiKeyConfig() {
+      const input = document.getElementById("geminiApiKeyInput");
+      if (input && input.value.trim()) {
+        localStorage.setItem("AEF_GEMINI_API_KEY", input.value.trim());
+        showToast("🔑 Chave Gemini salva com sucesso!");
+        closeApiKeyModal();
+      }
+    }
+
+    function pcmBase64ToWavBlob(base64Data, sampleRate = 24000, channels = 1, bitsPerSample = 16) {
+      const binaryString = atob(base64Data);
+      const len = binaryString.length;
+      
+      // Se já tem cabeçalho RIFF/WAV
+      if (len > 12 && binaryString.startsWith("RIFF")) {
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
+        return new Blob([bytes], { type: "audio/wav" });
+      }
+
+      const byteRate = sampleRate * channels * (bitsPerSample / 8);
+      const blockAlign = channels * (bitsPerSample / 8);
+      const wavHeader = new ArrayBuffer(44);
+      const view = new DataView(wavHeader);
+
+      const writeStr = (v, offset, str) => {
+        for (let i = 0; i < str.length; i++) v.setUint8(offset + i, str.charCodeAt(i));
+      };
+
+      writeStr(view, 0, 'RIFF');
+      view.setUint32(4, 36 + len, true);
+      writeStr(view, 8, 'WAVE');
+      writeStr(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, channels, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, byteRate, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, bitsPerSample, true);
+      writeStr(view, 36, 'data');
+      view.setUint32(40, len, true);
+
+      const pcmBytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) pcmBytes[i] = binaryString.charCodeAt(i);
+
+      return new Blob([wavHeader, pcmBytes], { type: 'audio/wav' });
+    }
+
+    async function synthesizeQuestionAudio(qIdx, btnElement) {
+      const q = currentQuiz.questions[qIdx];
+      const script = (q.audioScript || "").trim();
+      const voice = q.voice || "Aoede";
+      const apiKey = getGeminiApiKey();
+
       if (!script) {
-        alert("Por favor, digite o roteiro da pergunta primeiro!");
+        alert("Por favor, digite o roteiro/fala da questão antes de sintetizar!");
         return;
       }
-      
-      showToast("🎙️ Sintetizando áudio com Gemini TTS...");
-      // Simula / fallback gerador TTS ou link do acervo
-      setTimeout(() => {
-        const mockUrl = "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fdtc_curso%2Fciclo-02%2FDTC_mod_1_1.mp3?alt=media";
-        currentQuiz.questions[qIdx].audioUrl = mockUrl;
+
+      const originalBtnHtml = btnElement ? btnElement.innerHTML : "";
+      if (btnElement) {
+        btnElement.disabled = true;
+        btnElement.innerHTML = `<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> <span>Sintetizando...</span>`;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      showToast("🎙️ Conectando ao Gemini TTS (gemini-2.5-flash-preview-tts)...");
+
+      try {
+        let payload = null;
+
+        // Detecta se é diálogo com múltiplos locutores (ex: Rodrigo:... Liam:...)
+        const lines = script.split('\n').map(l => l.trim()).filter(Boolean);
+        const hasSpeakers = lines.some(l => l.includes(':'));
+
+        if (hasSpeakers && lines.length >= 2) {
+          const firstSpeaker = lines[0].split(':')[0].trim();
+          const secondSpeaker = lines[1].split(':')[0].trim();
+          payload = {
+            contents: [{ role: "user", parts: [{ text: script }] }],
+            generationConfig: {
+              responseModalities: ["AUDIO"],
+              speechConfig: {
+                multiSpeakerVoiceConfig: {
+                  speakerVoiceConfigs: [
+                    { speaker: firstSpeaker, voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } },
+                    { speaker: secondSpeaker, voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
+                  ]
+                }
+              }
+            }
+          };
+        } else {
+          payload = {
+            contents: [{ role: "user", parts: [{ text: script }] }],
+            generationConfig: {
+              responseModalities: ["AUDIO"],
+              speechConfig: {
+                voiceConfig: {
+                  prebuiltVoiceConfig: { voiceName: voice }
+                }
+              }
+            }
+          };
+        }
+
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          const errMsg = errData.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+          throw new Error(errMsg);
+        }
+
+        const resData = await response.json();
+        const candidate = resData.candidates?.[0];
+        let audioBase64 = null;
+
+        if (candidate?.content?.parts) {
+          for (const part of candidate.content.parts) {
+            if (part.inlineData && part.inlineData.data) {
+              audioBase64 = part.inlineData.data;
+              break;
+            }
+          }
+        }
+
+        if (!audioBase64) {
+          throw new Error("A API do Gemini não retornou os bytes de áudio esperados.");
+        }
+
+        const wavBlob = pcmBase64ToWavBlob(audioBase64, 24000);
+        const blobUrl = URL.createObjectURL(wavBlob);
+
+        currentQuiz.questions[qIdx].audioUrl = blobUrl;
         renderQuestions();
-        showToast("✅ Áudio gerado e vinculado com sucesso!");
-        playAudio(mockUrl);
-      }, 1000);
+        showToast("✅ Áudio sintetizado com sucesso pelo Gemini TTS!");
+        playAudio(blobUrl);
+
+      } catch (err) {
+        console.error("Erro na síntese Gemini TTS:", err);
+        alert(`Erro na síntese do Gemini TTS:\n${err.message}\n\nVerifique se a chave de API é válida em 'Chave Gemini'.`);
+      } finally {
+        if (btnElement) {
+          btnElement.disabled = false;
+          btnElement.innerHTML = originalBtnHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
     }
 
     let currentPlayingBtn = null;
