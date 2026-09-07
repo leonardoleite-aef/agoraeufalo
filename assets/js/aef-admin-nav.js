@@ -126,34 +126,34 @@
 
             <!-- Center: Navigation Links Across All 7 Tools -->
             <nav class="hidden lg:flex items-center gap-1 overflow-x-auto py-1 text-xs">
-              <a href="admin.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin.html')}">
+              <a href="admin" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin')}">
                 <span>🏛️</span> <span>Hub Central</span>
               </a>
-              <a href="admin-alunos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-alunos.html')}">
+              <a href="alunos" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('alunos')}">
                 <span>👥</span> <span>Alunos & CRM</span>
               </a>
-              <a href="admin-vendas.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-vendas.html')}">
+              <a href="vendas" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('vendas')}">
                 <span>⚡</span> <span>Vendas</span>
               </a>
-              <a href="admin-webhooks.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-webhooks.html')}">
+              <a href="webhooks" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('webhooks')}">
                 <span>🔗</span> <span>Webhooks</span>
               </a>
-              <a href="admin-marketing.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-marketing.html')}">
+              <a href="marketing" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('marketing')}">
                 <span>🎯</span> <span>Marketing</span>
               </a>
-              <a href="admin-cursos.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-cursos.html')}">
+              <a href="cursos" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('cursos')}">
                 <span>🏭</span> <span>Course Factory</span>
               </a>
-              <a href="admin-pdf-factory.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-pdf-factory.html')}">
+              <a href="pdf-factory" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('pdf-factory')}">
                 <span>📄</span> <span>PDF Factory</span>
               </a>
-              <a href="tts-studio.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('tts-studio.html')}">
+              <a href="tts" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('tts')}">
                 <span>🎙️</span> <span>TTS Studio</span>
               </a>
-              <a href="blog-panel.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('blog-panel.html')}">
+              <a href="blog" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('blog')}">
                 <span>📝</span> <span>Blog CMS</span>
               </a>
-              <a href="seo-manager.html" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('seo-manager.html')}">
+              <a href="seo" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('seo')}">
                 <span>🔍</span> <span>SEO</span>
               </a>
             </nav>
@@ -181,7 +181,7 @@
               </div>
 
               <!-- Switch to Student View Button -->
-              <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal.html') : 'portal.html'}" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Abrir Portal do Aluno">
+              <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal') : 'portal'}" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Abrir Portal do Aluno">
                 <span>Portal ↗</span>
               </a>
 
@@ -198,17 +198,17 @@
 
           <!-- Mobile Sub-Navigation Bar (Scrollable) -->
           <div class="lg:hidden px-3 py-1.5 border-t ${isDark ? 'border-white/10 bg-[#0A192F]' : 'border-slate-200/80 bg-white'} flex items-center gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
-            <a href="admin.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin.html')}">🏛️ Hub</a>
-            <a href="admin-alunos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-alunos.html')}">👥 Alunos</a>
-            <a href="admin-vendas.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-vendas.html')}">⚡ Vendas</a>
-            <a href="admin-webhooks.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-webhooks.html')}">🔗 Webhooks</a>
-            <a href="admin-marketing.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-marketing.html')}">🎯 Marketing</a>
-            <a href="admin-cursos.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos.html')}">📦 Cursos</a>
-            <a href="admin-pdf-factory.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-pdf-factory.html')}">📄 PDF</a>
-            <a href="tts-studio.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts-studio.html')}">🎙️ TTS</a>
-            <a href="blog-panel.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog-panel.html')}">📝 Blog</a>
-            <a href="seo-manager.html" class="px-2.5 py-1 rounded-lg shrink-0 ${active('seo-manager.html')}">🔍 SEO</a>
-            <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal.html') : 'portal.html'}" class="px-2.5 py-1 rounded-lg shrink-0 text-amber-500 font-bold">👁️ Aluno</a>
+            <a href="admin" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin')}">🏛️ Hub</a>
+            <a href="alunos" class="px-2.5 py-1 rounded-lg shrink-0 ${active('alunos')}">👥 Alunos</a>
+            <a href="vendas" class="px-2.5 py-1 rounded-lg shrink-0 ${active('vendas')}">⚡ Vendas</a>
+            <a href="webhooks" class="px-2.5 py-1 rounded-lg shrink-0 ${active('webhooks')}">🔗 Webhooks</a>
+            <a href="marketing" class="px-2.5 py-1 rounded-lg shrink-0 ${active('marketing')}">🎯 Marketing</a>
+            <a href="cursos" class="px-2.5 py-1 rounded-lg shrink-0 ${active('cursos')}">📦 Cursos</a>
+            <a href="pdf-factory" class="px-2.5 py-1 rounded-lg shrink-0 ${active('pdf-factory')}">📄 PDF</a>
+            <a href="tts" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts')}">🎙️ TTS</a>
+            <a href="blog" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog')}">📝 Blog</a>
+            <a href="seo" class="px-2.5 py-1 rounded-lg shrink-0 ${active('seo')}">🔍 SEO</a>
+            <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal') : 'portal'}" class="px-2.5 py-1 rounded-lg shrink-0 text-amber-500 font-bold">👁️ Aluno</a>
           </div>
         </header>
       `;
