@@ -155,11 +155,7 @@
       <!-- Dropdown 1: Menu de Cursos / Categorias -->
       <div class="flex items-center bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-2.5 py-1 shrink-0 max-w-[145px]">
         <select id="course-select" onchange="window.selectCourse(this.value)" class="bg-transparent text-[11px] font-bold text-amber-300 focus:outline-none cursor-pointer truncate pr-0.5">
-          <option value="ms-legacy" class="bg-slate-900 text-slate-100">📖 Magic Stories</option>
-          <option value="english-quickstart" class="bg-slate-900 text-slate-100">⚡ QuickStart (EQS)</option>
-          <option value="public" class="bg-slate-900 text-slate-100">💡 Novidades</option>
-          <option value="vip" class="bg-slate-900 text-slate-100">👑 Mentoria VIP</option>
-          <option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>
+          <!-- Populado dinamicamente por populateCourseSelect() com base no tier do aluno -->
         </select>
       </div>
 
@@ -591,17 +587,27 @@
         curso = 'vip';
       }
 
-      // Se nenhum curso foi passado na URL, define o curso padrão permitido para o perfil
+      // Se nenhum curso foi passado na URL, define o curso padrão permitido para o perfil (dinâmico)
       if (!curso) {
+        const reg = window.AEF_COURSES_REGISTRY || {};
         if (profile.tier === 'free') {
-          curso = 'english-quickstart';
+          // Primeiro curso free publicado do catálogo (zero hardcode)
+          curso = Object.keys(reg).find(k => {
+            const c = reg[k];
+            return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+          }) || 'dtc_curso';
         } else if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
           curso = 'vip';
           if (!mod) mod = profile.studentId || 'andre';
         } else {
-          curso = 'ms-legacy';
+          // Club / Pro: primeiro curso club publicado do catálogo
+          curso = Object.keys(reg).find(k => {
+            const c = reg[k];
+            return c && c.published !== false && c.tierRequired !== 'free' && c.tierRequired !== 'vip' && c.tierRequired !== 'enrolled_only' && !k.startsWith('mentoria-');
+          }) || 'ms-legacy';
         }
       }
+
 
       state.courseId = curso;
 
@@ -693,8 +699,11 @@
             videoUrl: les.videoUrl || '',
             coverImage: les.artworkUrl || les.thumbnailUrl || mod.coverImage || regCourse.coverImageUrl || '/assets/images/logo-fundo-escuro.png',
             goldenTip: les.goldenTip || '',
+            processedContentHtml: les.processedContentHtml || '',
+            rawScript: les.rawScript || '',
             sentences: les.sentences || []
           }));
+
           return {
             id: mod.id,
             title: mod.title,
@@ -750,6 +759,7 @@
 
       const profile = getPlayerAccessProfile();
       const registry = window.AEF_COURSES_REGISTRY || {};
+      const isFreeUser = !profile.isAdmin && profile.tier === 'free';
 
       let optionsHtml = '';
 
@@ -762,6 +772,10 @@
         const course = registry[cKey];
         if (!course) return;
         const isAllowed = isCourseAllowedForUser(cKey, profile);
+
+        // Para alunos free: ocultar cursos que não têm acesso (sem cadeado, sem confusão)
+        if (!isAllowed && isFreeUser) return;
+
         const lockIcon = isAllowed ? '' : '🔒 ';
         const iconPrefix = cKey === 'ms-legacy' ? '📖 ' : (cKey === 'english-quickstart' ? '⚡ ' : (cKey === 'dtc_curso' ? '📅 ' : '🎓 '));
         const badgeText = isAllowed ? '' : ' (Club)';
@@ -775,10 +789,11 @@
       if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
         const sName = profile.studentName || profile.studentId || 'VIP';
         optionsHtml += `<option value="vip" class="bg-slate-900 text-amber-300 font-bold">👑 Minha Mentoria (${sName})</option>`;
-      } else {
-        const isVipAllowed = profile.isAdmin;
-        optionsHtml += `<option value="vip" class="bg-slate-900 ${isVipAllowed ? 'text-slate-100' : 'text-amber-500/80'}">${isVipAllowed ? '👑 ' : '🔒 '}Mentoria VIP</option>`;
+      } else if (profile.isAdmin) {
+        // Admin vê VIP com acesso
+        optionsHtml += `<option value="vip" class="bg-slate-900 text-slate-100">👑 Mentoria VIP</option>`;
       }
+      // Alunos free e club sem VIP não veem a opção de Mentoria
 
       optionsHtml += `<option value="public" class="bg-slate-900 text-slate-100">💡 Novidades Free</option>`;
       optionsHtml += `<option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>`;
@@ -786,6 +801,7 @@
       select.innerHTML = optionsHtml;
       select.value = state.courseId;
     }
+
 
     window.selectCourse = (courseId) => {
       const profile = getPlayerAccessProfile();
@@ -917,8 +933,11 @@
                   videoUrl: cLes.videoUrl || localTrack.videoUrl || '',
                   coverImage: cLes.artworkUrl || cLes.thumbnailUrl || localTrack.coverImage || '/assets/images/logo-fundo-escuro.png',
                   goldenTip: cLes.goldenTip || localTrack.goldenTip || '',
+                  processedContentHtml: cLes.processedContentHtml || localTrack.processedContentHtml || '',
+                  rawScript: cLes.rawScript || localTrack.rawScript || '',
                   sentences: sentences
                 });
+
               });
 
               localMod.tracks = reconciledTracks;
@@ -1095,6 +1114,23 @@
       const track = getCurrentActiveTrack();
       const sentences = track?.sentences || [];
       if (sentences.length === 0) {
+        // Fallback: se a aula tem conteúdo didático HTML (ex: cursos de masterclass como DTC),
+        // exibe o HTML formatado no painel de letras em vez da mensagem de erro.
+        const contentHtml = track?.processedContentHtml || '';
+        if (contentHtml) {
+          container.innerHTML = `
+            <div class="pb-4">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider mb-4">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span>Notas da Aula</span>
+              </div>
+              <div class="rounded-2xl bg-amber-50/95 border border-amber-200 text-slate-900 overflow-auto p-4 text-xs leading-relaxed">
+                ${contentHtml}
+              </div>
+            </div>
+          `;
+          return;
+        }
         container.innerHTML = `
           <div class="text-center text-slate-400 text-sm py-12">
             <p>Nenhuma transcrição cadastrada para esta aula.</p>
@@ -1102,6 +1138,7 @@
         `;
         return;
       }
+
 
       container.innerHTML = sentences.map((s, idx) => `
         <div id="lyric-line-${idx}" onclick="window.seekToSentence(${idx})" class="lyrics-line transition-all duration-300 cursor-pointer p-2 rounded-xl hover:bg-white/5 ${idx === state.currentSentenceIndex ? 'lyrics-active' : 'lyrics-inactive'}">

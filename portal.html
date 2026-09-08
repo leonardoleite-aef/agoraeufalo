@@ -533,9 +533,10 @@
         id: "english-quickstart",
         title: "English QuickStart • Fundamentos da Fala",
         slug: "english-quickstart",
-        badge: "CURSO LIBERADO",
-        tierRequired: "free",
-        availableInFreeTier: true,
+        badge: "EXCLUSIVO CLUB",
+        tierRequired: "club_anual",
+        availableInFreeTier: false,
+        includedInClubSubscription: true,
         published: true,
         coverImageUrl: "assets/images/cover-english-quickstart.jpg?v=20260905",
         description: "O acelerador de fundamentos para destravar a escuta e a produção de fala inicial sem bloqueios.",
@@ -659,9 +660,47 @@
       }
       if (statCompletedEl) statCompletedEl.innerText = completedList.length;
 
-      // Resolução inteligente da Última Atividade ("Onde você parou")
+
+      // ——— HELPERS DE ACESSO E RECOMENDAÇÃO DINÂMICA ———
+      // Verifica se o aluno tem acesso a um curso específico com base no tier + enrollment
+      function hasAccessToCourse(courseId, tier, enrolled, adminFlag, courseMatrix) {
+        if (adminFlag) return true;
+        if (!courseId) return false;
+        if (enrolled.includes(courseId) || enrolled.includes('all_access_master')) return true;
+
+        const course = courseMatrix ? courseMatrix[courseId] : null;
+        if (!course) return false;
+
+        const isFreeCourse = course.tierRequired === 'free' || course.availableInFreeTier === true;
+        if (isFreeCourse) return true;
+
+        const isClubMember = ['club_annual', 'club_anual', 'club_monthly', 'course_member', 'pro', 'lifetime'].includes(tier);
+        const isVipTier = tier === 'vip' || tier === 'vip_mentorship';
+        const includedInClub = course.includedInClubSubscription !== false && course.tierRequired !== 'vip' && course.tierRequired !== 'enrolled_only';
+
+        if (isVipTier) return true;
+        if (isClubMember && includedInClub) return true;
+        return false;
+      }
+
+      // Retorna o PRIMEIRO curso publicado que o aluno tem acesso (zero hardcode)
+      function getHeroRecommendation(courseMatrix, tier, enrolled, adminFlag) {
+        const orderedIds = Object.keys(courseMatrix);
+        for (const id of orderedIds) {
+          const course = courseMatrix[id];
+          if (!course || course.published === false) continue;
+          if (id.startsWith('mentoria-')) continue;
+          if (course.tierRequired === 'vip' || course.tierRequired === 'enrolled_only') continue;
+          if (hasAccessToCourse(id, tier, enrolled, adminFlag, courseMatrix)) {
+            return { id, course };
+          }
+        }
+        return null;
+      }
+
+      // ——— RESOLUÇÃO DA ÚLTIMA ATIVIDADE E ELEMENTOS DO HERO ———
       const lastActivity = window.aefLearningTracker ? window.aefLearningTracker.getGlobalLastActivity() : null;
-      const isMentee = (userTier === 'vip' || userTier === 'vip_mentorship') || 
+      const isMentee = (userTier === 'vip' || userTier === 'vip_mentorship') ||
                        (studentEmail && studentEmail.toLowerCase().includes('andrebarrote'));
 
       const heroTag = document.getElementById("hero-course-tag");
@@ -671,15 +710,13 @@
       const heroCtaTrain = document.getElementById("hero-cta-train");
       const heroThumb = document.querySelector("#hero-lesson-title")?.closest("section")?.querySelector("img");
 
-      // Validação de Acesso: O aluno realmente tem direito ao curso onde parou?
-      const isFreeTier = effectiveTier === 'free';
-      const hasCourseAccess = lastActivity && lastActivity.lessonId && (
-        isAdmin ||
-        effectiveTier === 'admin_master' ||
-        (Array.isArray(enrolledProducts) && enrolledProducts.includes(lastActivity.courseId)) ||
-        (!isFreeTier && (lastActivity.courseId === 'ms-legacy' || lastActivity.courseId === 'frases-prontas' || lastActivity.courseId === 'english-quickstart')) ||
-        (isFreeTier && lastActivity.courseId === 'english-quickstart')
-      );
+      // ——— ACESSO DINÂMICO AO HISTÓRICO DO ALUNO ———
+      const localMatrix = window.AEF_COURSES_REGISTRY || OFFICIAL_COURSES_MATRIX;
+
+      // Validação de Acesso: o aluno realmente tem direito ao curso onde parou?
+      const hasCourseAccess = lastActivity && lastActivity.lessonId &&
+        hasAccessToCourse(lastActivity.courseId, effectiveTier, enrolledProducts, isAdmin, localMatrix);
+
 
       if (hasCourseAccess) {
         // Aluno já possui histórico e tem permissão: recupera exatamente onde parou!
@@ -697,14 +734,25 @@
         if (heroCtaTrain) heroCtaTrain.href = "/player?aluno=andre";
         if (heroThumb) heroThumb.src = "assets/images/cover-andre-barrote.jpg";
       } else {
-        // Aluno Free ou sem acesso ao histórico anterior: sempre recomenda English QuickStart
-        if (heroTag) heroTag.innerText = "English QuickStart • Fundamentos da Fala";
-        if (heroTitle) heroTitle.innerText = "Aula 0.1 • Como Estudar o QuickStart";
-        if (heroDesc) heroDesc.innerText = "Comece por aqui para alinhar o método e destravar sua escuta e fala desde o primeiro dia.";
-        if (heroCtaClass) heroCtaClass.href = "/sala?curso=english-quickstart&modulo=eqs-m0&aula=eqs01";
-        if (heroCtaTrain) heroCtaTrain.href = "/player?curso=english-quickstart&aula=eqs01";
-        if (heroThumb) heroThumb.src = "assets/images/thumbs/eqs/thumb_eqs_0_1.jpg";
+        // ——— RECOMENDAÇÃO 100% DINÂMICA — ZERO HARDCODE ———
+        // Busca o primeiro curso publicado que o aluno tem acesso real pelo tier/enrollment
+        const recommendation = getHeroRecommendation(localMatrix, effectiveTier, enrolledProducts, isAdmin);
+        if (recommendation) {
+          const { id: recId, course: recCourse } = recommendation;
+          const courseFirstModule = recCourse.modules?.[0];
+          const courseFirstLesson = courseFirstModule?.lessons?.[0];
+          const destLesson = courseFirstLesson ? `&modulo=${courseFirstModule.id}&aula=${courseFirstLesson.id}` : '';
+          if (heroTag) heroTag.innerText = recCourse.title || recId;
+          if (heroTitle) heroTitle.innerText = courseFirstLesson?.title || `Comece por aqui`;
+          if (heroDesc) heroDesc.innerText = recCourse.description || 'Clique para iniciar seu treino hoje.';
+          if (heroCtaClass) heroCtaClass.href = `/sala?curso=${recId}${destLesson}`;
+          if (heroCtaTrain) heroCtaTrain.href = `/player?curso=${recId}`;
+          if (heroThumb && recCourse.coverImageUrl) heroThumb.src = recCourse.coverImageUrl;
+        }
+        // Se não encontrar nenhum curso (ex: banco offline), o hero exibe o padrão HTML sem atualização
       }
+
+
 
       await renderCoursesShowcase(enrolledProducts, isAdmin, effectiveEmail, effectiveTier);
       updateIcons();
