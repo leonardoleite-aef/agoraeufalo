@@ -621,11 +621,20 @@
         const lines = script.split('\n').map(l => l.trim()).filter(Boolean);
         const hasSpeakers = lines.some(l => l.includes(':'));
 
+        // ✅ Preamble obrigatório (doc oficial TTS):
+        // "Validate your prompts by adding a clear preamble instructing the model
+        //  to synthesize speech, and explicitly label where the actual spoken transcript begins."
+        // Sem este preamble o modelo interpreta o roteiro como texto a ler em vez de áudio a sintetizar.
+
         if (hasSpeakers && lines.length >= 2) {
           const firstSpeaker = lines[0].split(':')[0].trim();
           const secondSpeaker = lines[1].split(':')[0].trim();
+
+          const preamble = `Synthesize the following dialogue as audio speech. Generate only audio output. Do not generate any text. Each speaker label indicates who should speak that line.\n\n[TRANSCRIPT]\n`;
+          const fullText = preamble + script;
+
           payload = {
-            contents: [{ role: "user", parts: [{ text: script }] }],
+            contents: [{ role: "user", parts: [{ text: fullText }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
@@ -639,8 +648,11 @@
             }
           };
         } else {
+          const preamble = `Read the following text aloud as audio speech. Generate only audio output. Do not generate any text response.\n\n[TRANSCRIPT]\n`;
+          const fullText = preamble + script;
+
           payload = {
-            contents: [{ role: "user", parts: [{ text: script }] }],
+            contents: [{ role: "user", parts: [{ text: fullText }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
