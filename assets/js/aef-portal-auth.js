@@ -3,7 +3,7 @@
  * Professor Leonardo Leite
  * 
  * Manages Firebase Authentication, Student Profiles, Product Access Tiers, and Real-time Sessions.
- * Includes Tier 0 (Admin Master / God Mode) with full ecosystem traversal and VIP mentee selector.
+ * Strictly enforces authenticated sessions across app. and admin. domains.
  */
 
 (function(window) {
@@ -32,20 +32,6 @@
     'leo@agoraeufalo.com.br'
   ];
 
-  function isLocalOrDevEnvironment() {
-    if (typeof window === 'undefined') return false;
-    const hostname = window.location.hostname || '';
-    const protocol = window.location.protocol || '';
-    return (
-      protocol === 'file:' ||
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname.startsWith('192.168.') ||
-      hostname.startsWith('10.') ||
-      hostname.endsWith('.local')
-    );
-  }
-
   class AEFPortalAuth {
     constructor() {
       this.app = null;
@@ -54,58 +40,8 @@
       this.currentUser = null;
       this.currentProfile = null;
 
-      // Apenas em ferramentas administrativas do backoffice ('admin-*.html') em ambiente local,
-      // inicializa o perfil do Professor Leo para testes. NUNCA para visitantes comuns ou na Home pública.
-      const isDev = isLocalOrDevEnvironment();
-      const isAdminPage = typeof window !== 'undefined' && (window.location.pathname.includes('admin') || window.location.search.includes('god_mode=1'));
-      const isExplicitlyLoggedOut = typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') === 'true';
-
-      if (isDev && isAdminPage && !isExplicitlyLoggedOut) {
-        const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
-        const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
-        const cachedName = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_name') : null;
-
-        this.currentUser = {
-          uid: 'dev-master-leo',
-          email: cachedEmail || 'selexenglish@gmail.com',
-          displayName: cachedName || 'Professor Leonardo Leite'
-        };
-        this.currentProfile = {
-          uid: 'dev-master-leo',
-          name: cachedName || 'Professor Leonardo Leite',
-          email: cachedEmail || 'selexenglish@gmail.com',
-          role: cachedRole || 'admin',
-          tier: 'admin_master',
-          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas']
-        };
-        this._syncLocalStorage(this.currentProfile);
-      }
-
-      // Cross-domain URL impersonation auto-activation (admin. -> app.)
-      try {
-        if (typeof window !== 'undefined' && window.location.search) {
-          const params = new URLSearchParams(window.location.search);
-          const impTier = params.get('impersonate_tier');
-          if (impTier) {
-            const impStudent = params.get('impersonate_student');
-            const impPreset = params.get('impersonate_preset');
-            const state = {
-              tier: impTier,
-              studentId: impStudent,
-              studentName: impStudent ? (impStudent.charAt(0).toUpperCase() + impStudent.slice(1)) : (impTier === 'free' ? 'Aluno Free' : 'Membro Club'),
-              studentEmail: `${impStudent || 'aluno'}@simulado.agoraeufalo.com.br`,
-              preset: impPreset,
-              active: true,
-              timestamp: Date.now()
-            };
-            sessionStorage.setItem('aef_impersonate_state', JSON.stringify(state));
-            localStorage.setItem('aef_impersonate_state', JSON.stringify(state));
-          }
-        }
-      } catch(e) {}
-
       this._initPromise = this._loadFirebaseSDKs().catch(err => {
-        console.warn('⚠️ [AEFPortalAuth] Firebase SDK offline ou modo local:', err);
+        console.warn('⚠️ [AEFPortalAuth] Firebase SDK offline:', err);
       });
     }
 
@@ -450,8 +386,8 @@
         localStorage.setItem('aef_logged_out', 'true');
       }
       if (typeof sessionStorage !== 'undefined') {
-        sessionStorage.removeItem('aef_impersonate_state');
-        sessionStorage.removeItem('AEF_MASTER_SESSION_AUTH');
+        sessionStorage.removeItem('aef_admin_redirect');
+        sessionStorage.removeItem('aef_redirect_after_login');
       }
     }
 
@@ -482,91 +418,33 @@
     }
 
     // =========================================================================
-    // IMPERSONATION ENGINE ("VER COMO ALUNO" / SIMULAÇÃO VOLÁTIL)
+    // USER ACCESS & TIER ENFORCEMENT (STANDARD TIERS)
     // =========================================================================
-    isRealAdmin() {
-      if (isLocalOrDevEnvironment()) return true;
+
+    isAdmin() {
       if (!this.currentProfile) {
         const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
         const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
-        return cachedRole === 'admin' || this.isMasterAdminEmail(cachedEmail);
+        const cachedTier = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_tier') : null;
+        return (cachedRole === 'admin' || cachedTier === 'admin_master' || this.isMasterAdminEmail(cachedEmail));
       }
       return this.currentProfile.role === 'admin' || 
              this.currentProfile.tier === 'admin_master' || 
              this.isMasterAdminEmail(this.currentProfile.email);
     }
 
-    getImpersonation() {
-      try {
-        const raw = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
-        return raw ? JSON.parse(raw) : null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    setImpersonation(tier, studentId = null, studentName = null, studentEmail = null, enrolledProducts = null, preset = null) {
-      if (!this.isRealAdmin() && !isLocalOrDevEnvironment()) return;
-      if (!tier || tier === 'admin_master') {
-        this.clearImpersonation();
-        return;
-      }
-      const state = {
-        tier: tier,
-        studentId: studentId,
-        studentName: studentName || (studentId ? `Aluno (${studentId})` : (tier === 'free' ? 'Aluno Free' : 'Membro Club')),
-        studentEmail: studentEmail || `${studentId || 'aluno'}@simulado.agoraeufalo.com.br`,
-        enrolledProducts: enrolledProducts,
-        preset: preset,
-        active: true,
-        timestamp: Date.now()
-      };
-      try {
-        sessionStorage.setItem('aef_impersonate_state', JSON.stringify(state));
-        localStorage.setItem('aef_impersonate_state', JSON.stringify(state));
-      } catch (e) {}
-      window.location.reload();
-    }
-
-    clearImpersonation() {
-      try {
-        sessionStorage.removeItem('aef_impersonate_state');
-        localStorage.removeItem('aef_impersonate_state');
-      } catch (e) {}
-      window.location.reload();
+    isRealAdmin() {
+      return this.isAdmin();
     }
 
     getEnrolledProducts() {
-      const imp = this.getImpersonation();
-      if (imp && imp.active) {
-        if (imp.enrolledProducts && Array.isArray(imp.enrolledProducts)) {
-          return imp.enrolledProducts;
-        }
-        if (imp.preset === 'first_steps_free' || (imp.tier === 'free' && imp.preset === 'first_steps')) {
-          return ['first-steps', 'english-quickstart'];
-        }
-        if (imp.tier === 'free') return ['english-quickstart'];
-        if (imp.tier === 'club_annual' || imp.tier === 'club_monthly') return ['ms-legacy', 'english-quickstart', 'frases-prontas'];
-        if (imp.tier === 'vip') return ['ms-legacy', 'english-quickstart', `mentoria-${imp.studentId || 'andre'}`];
-      }
       if (this.isAdmin()) {
-        return ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps'];
+        return ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'];
       }
       return this.currentProfile?.enrolledProducts || JSON.parse(localStorage.getItem("aef_enrolled_products") || '[]');
     }
 
-    isAdmin() {
-      // Se estiver em modo de simulação, comporta-se rigorosamente como o aluno simulado
-      const imp = this.getImpersonation();
-      if (imp && imp.active) {
-        return false;
-      }
-      return this.isRealAdmin();
-    }
-
     getActiveTier() {
-      const imp = this.getImpersonation();
-      if (imp && imp.active) return imp.tier;
       if (this.isAdmin()) return 'admin_master';
       if (!this.currentProfile) return localStorage.getItem('aef_user_tier') || 'free';
       return this.currentProfile.tier || 'free';
@@ -582,83 +460,62 @@
 
     // Check if user has access to a specific tier/product
     hasAccess(requiredTier) {
-      if (this.isAdmin()) return true; // God Mode real: Admin passa por todos os portões
-      const imp = this.getImpersonation();
-      const effectiveTier = (imp && imp.active) ? imp.tier : (this.currentProfile?.tier || localStorage.getItem('aef_user_tier') || 'free');
+      if (this.isAdmin()) return true;
+      const effectiveTier = this.getActiveTier();
       return this._compareTiers(effectiveTier, requiredTier);
     }
 
     /**
-     * Route Guard: Blocks unauthenticated anonymous access and redirects to login.html
+     * Route Guard: Blocks unauthenticated access and redirects to login
      */
-    async requireAuth({ redirectUrl = 'login.html', requiredTier = null, requireAdmin = false } = {}) {
-      if (isLocalOrDevEnvironment() && typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') !== 'true') {
-        if (!this.currentUser) {
-          this.currentUser = {
-            uid: 'dev-master-leo',
-            email: 'selexenglish@gmail.com',
-            displayName: 'Professor Leonardo Leite'
-          };
+    async requireAuth({ redirectUrl = null, requiredTier = null, requireAdmin = false } = {}) {
+      // 1. Checa se o usuário está explicitamente deslogado ou se o cache/localStorage foi limpo
+      const isLoggedOut = typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') === 'true';
+      const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
+
+      // Se há cache válido persistido e NÃO está deslogado, monta o perfil imediato (0ms)
+      if (!this.currentUser && cachedEmail && !isLoggedOut) {
+        if (!this.currentProfile) {
           this.currentProfile = {
-            uid: 'dev-master-leo',
-            name: 'Professor Leonardo Leite',
-            email: 'selexenglish@gmail.com',
-            role: 'admin',
-            tier: 'admin_master',
-            enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'dtc_curso']
-          };
-          this._syncLocalStorage(this.currentProfile);
-        }
-        return true;
-      }
-
-      // 1. Checa se há sessão válida persistida em localStorage para resolução instantânea (0ms)
-      if (!this.currentUser && typeof localStorage !== 'undefined') {
-        const cachedEmail = localStorage.getItem('aef_user_email');
-        const isLoggedOut = localStorage.getItem('aef_logged_out') === 'true';
-        if (cachedEmail && !isLoggedOut) {
-          if (!this.currentProfile) {
-            this.currentProfile = {
-              uid: localStorage.getItem('aef_user_uid') || 'cached-user',
-              name: localStorage.getItem('aef_user_name') || 'Aluno AgoraEuFalo',
-              email: cachedEmail,
-              tier: localStorage.getItem('aef_user_tier') || 'free',
-              role: localStorage.getItem('aef_user_role') || 'student',
-              enrolledProducts: JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]')
-            };
-          }
-          this.currentUser = {
-            uid: this.currentProfile.uid,
-            email: this.currentProfile.email,
-            displayName: this.currentProfile.name
+            uid: localStorage.getItem('aef_user_uid') || 'cached-user',
+            name: localStorage.getItem('aef_user_name') || 'Aluno AgoraEuFalo',
+            email: cachedEmail,
+            tier: localStorage.getItem('aef_user_tier') || 'free',
+            role: localStorage.getItem('aef_user_role') || 'student',
+            enrolledProducts: JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]')
           };
         }
+        this.currentUser = {
+          uid: this.currentProfile.uid,
+          email: this.currentProfile.email,
+          displayName: this.currentProfile.name
+        };
       }
 
-      // 2. Se já tem perfil / usuário carregado, não precisa esperar timeout de rede
+      // 2. Se NÃO tem sessão em cache e NÃO tem currentUser na instância, espera brevemente pelo Firebase Auth
       if (!this.currentUser) {
         try {
           await this.ready();
         } catch (e) {}
 
-        // Wait briefly for auth state to resolve if not yet initialized
         if (this.auth && !this.auth.currentUser) {
           await new Promise((resolve) => {
             const unsubscribe = this.auth.onAuthStateChanged((user) => {
               if (typeof unsubscribe === 'function') unsubscribe();
               resolve(user);
             });
-            setTimeout(() => resolve(null), 1500);
+            setTimeout(() => resolve(null), 1200);
           });
         }
       }
 
       let user = this.currentUser || this.auth?.currentUser;
 
+      // SE NÃO TEM USUÁRIO (apagou o cache, não logou, etc.) -> EXIGE LOGIN NOVAMENTE!
       if (!user) {
         const defaultRedirect = requireAdmin 
-          ? (window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : '/login')
-          : (window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('login') : '/login');
+          ? (window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : 'https://admin.agoraeufalo.com.br/login')
+          : (window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('login') : 'https://app.agoraeufalo.com.br/login');
         const targetUrl = (redirectUrl && redirectUrl !== 'login.html' && redirectUrl !== '/login') ? redirectUrl : defaultRedirect;
         console.warn(`🔒 [AEFPortalAuth] Acesso bloqueado: Usuário não autenticado. Redirecionando para ${targetUrl}`);
         try {
@@ -672,17 +529,19 @@
         return false;
       }
 
+      // SE REQUER ADMIN: apenas administradores reais
       if (requireAdmin && !this.isAdmin()) {
         console.warn("🔒 [AEFPortalAuth] Acesso negado: Requer privilégios de Administrador.");
         alert("Acesso restrito ao Professor Leonardo Leite e Administradores.");
-        const adminLoginTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : '/login';
+        const adminLoginTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : 'https://admin.agoraeufalo.com.br/login';
         window.location.replace(adminLoginTarget);
         return false;
       }
 
+      // SE REQUER TIER ESPECÍFICO: tratamento padrão do tier do usuário logado
       if (requiredTier && !this.hasAccess(requiredTier)) {
         console.warn(`🔒 [AEFPortalAuth] Acesso negado: Requer plano ${requiredTier}`);
-        const upgradeTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('?upgrade=true') : '/?upgrade=true';
+        const upgradeTarget = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('?upgrade=true') : 'https://app.agoraeufalo.com.br/?upgrade=true';
         window.location.replace(upgradeTarget);
         return false;
       }

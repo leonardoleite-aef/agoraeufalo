@@ -10,7 +10,6 @@
 
   // Destrói imediatamente qualquer overlay de senha legado vindo do cache do navegador
   try {
-    sessionStorage.setItem("AEF_MASTER_SESSION_AUTH", "true");
     const killLegacyGate = () => {
       const ov = document.getElementById('aef-auth-gate-overlay');
       if (ov) ov.remove();
@@ -31,6 +30,31 @@
       this.currentPath = p || 'admin';
       this.saveAdminLocation();
       this.init();
+      this.enforceAdminAuth();
+    }
+
+    async enforceAdminAuth() {
+      const p = window.location.pathname.toLowerCase();
+      if (p.includes('admin-login') || p.includes('/login')) return;
+
+      // Aguarda o aefPortalAuth inicializar se necessário
+      let attempts = 0;
+      while (!window.aefPortalAuth && attempts < 30) {
+        await new Promise(r => setTimeout(r, 50));
+        attempts++;
+      }
+
+      if (window.aefPortalAuth) {
+        try {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.requireAuth({ requireAdmin: true });
+        } catch (e) {
+          console.warn("🔒 [AEFAdminNav] Erro ao verificar autenticação de admin:", e);
+        }
+      } else {
+        const loginUrl = window.AEFDomainRouter ? window.AEFDomainRouter.getAdminUrl('login') : 'https://admin.agoraeufalo.com.br/login';
+        window.location.replace(loginUrl);
+      }
     }
 
     saveAdminLocation() {
@@ -183,25 +207,6 @@
             <!-- Right: View as Student & Master Profile Actions -->
             <div class="flex items-center gap-2 shrink-0">
               
-              <!-- Seletor God-Mode: Ver como Aluno -->
-              <div class="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-xl ${isDark ? 'bg-white/5 border border-white/10' : 'bg-slate-100 border border-slate-200'} text-xs">
-                <span class="text-[10px] font-bold ${isDark ? 'text-amber-400' : 'text-amber-800'} uppercase tracking-wider flex items-center gap-1">
-                  <span>👁️</span> <span class="hidden xl:inline">Ver como:</span>
-                </span>
-                <select id="aef-admin-impersonate-select" onchange="AEFAdminNav.handleImpersonate(this.value)" class="bg-transparent font-bold text-[11px] ${isDark ? 'text-slate-200' : 'text-slate-800'} focus:outline-none cursor-pointer">
-                  <option value="admin_master" class="bg-slate-900 text-amber-300">👑 Leo (God Mode)</option>
-                  <option value="free" class="bg-slate-900 text-slate-100">🌱 Aluno Free</option>
-                  <option value="first_steps_free" class="bg-slate-900 text-emerald-300 font-bold">🎁 Ex-Aluno First Steps (Tier Free)</option>
-                  <option value="club_annual" class="bg-slate-900 text-slate-100">🎓 Membro Club</option>
-                  <optgroup label="👑 Mentorados VIP" class="bg-slate-900 text-amber-400">
-                    <option value="vip:andre" class="bg-slate-900 text-slate-100">André (VIP)</option>
-                    <option value="vip:estevao" class="bg-slate-900 text-slate-100">Estêvão (VIP)</option>
-                    <option value="vip:thomas" class="bg-slate-900 text-slate-100">Thomas (VIP)</option>
-                    <option value="vip:matheus" class="bg-slate-900 text-slate-100">Matheus (VIP)</option>
-                  </optgroup>
-                </select>
-              </div>
-
               <!-- Switch to Student View Button -->
               <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl('portal') : 'portal'}" class="px-2.5 sm:px-3 py-1.5 rounded-xl ${isDark ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500 hover:text-slate-950' : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 border border-amber-200'} font-bold text-xs transition flex items-center gap-1.5" title="Abrir Portal do Aluno">
                 <span>Portal ↗</span>
@@ -234,79 +239,6 @@
           </div>
         </header>
       `;
-
-      // Sincroniza valor atual do impersonate
-      try {
-        const rawImp = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
-        if (rawImp) {
-          const imp = JSON.parse(rawImp);
-          const sel = document.getElementById('aef-admin-impersonate-select');
-          if (sel) {
-            if (imp.tier === 'vip' && imp.studentId) {
-              sel.value = `vip:${imp.studentId}`;
-            } else {
-              sel.value = imp.tier || 'free';
-            }
-          }
-        }
-      } catch (e) {}
-    }
-
-    static handleImpersonate(val) {
-      if (val === 'admin_master') {
-        sessionStorage.removeItem('aef_impersonate_state');
-        try { localStorage.removeItem('aef_impersonate_state'); } catch(e) {}
-        if (window.aefPortalAuth) {
-          try { window.aefPortalAuth.clearImpersonation(); return; } catch(e) {}
-        }
-        window.location.reload();
-        return;
-      }
-
-      let stateObj = null;
-      if (val === 'first_steps_free') {
-        stateObj = {
-          tier: 'free',
-          preset: 'first_steps_free',
-          studentId: 'ex_aluno_first_steps',
-          studentName: 'Ex-Aluno First Steps',
-          studentEmail: 'exaluno@resgate.agoraeufalo.com.br',
-          enrolledProducts: ['first-steps', 'english-quickstart'],
-          active: true,
-          timestamp: Date.now()
-        };
-      } else if (val.startsWith('vip:')) {
-        const sId = val.replace('vip:', '');
-        const names = { andre: 'André Barrote', estevao: 'Estêvão', thomas: 'Thomas', matheus: 'Matheus' };
-        stateObj = {
-          tier: 'vip',
-          studentId: sId,
-          studentName: names[sId] || (sId.charAt(0).toUpperCase() + sId.slice(1)),
-          studentEmail: `${sId}@vip.agoraeufalo.com.br`,
-          active: true,
-          timestamp: Date.now()
-        };
-      } else {
-        stateObj = {
-          tier: val,
-          studentId: null,
-          studentName: val === 'free' ? 'Aluno Free' : 'Membro Club',
-          studentEmail: `aluno-${val}@simulado.agoraeufalo.com.br`,
-          active: true,
-          timestamp: Date.now()
-        };
-      }
-
-      sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
-      try { localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj)); } catch(e) {}
-
-      // Redireciona sempre para o portal com parâmetros cross-domain
-      let queryParam = `impersonate_tier=${encodeURIComponent(stateObj.tier || 'free')}`;
-      if (stateObj.studentId) queryParam += `&impersonate_student=${encodeURIComponent(stateObj.studentId)}`;
-      if (stateObj.preset) queryParam += `&impersonate_preset=${encodeURIComponent(stateObj.preset)}`;
-      
-      const target = window.AEFDomainRouter ? window.AEFDomainRouter.getAppUrl(`portal.html?${queryParam}`) : `portal.html?${queryParam}`;
-      window.location.href = target;
     }
   }
 

@@ -156,6 +156,73 @@ export default {
     // 3. DOMÍNIO PÚBLICO (agoraeufalo.com.br / www)
     // ============================================================
     else {
+      // Cross-domain Redirects de rotas de aluno acessadas no domínio público
+      const appCrossDomainMap = {
+        '/portal': '/',
+        '/portal.html': '/',
+        '/sala': '/sala',
+        '/sala-de-aula': '/sala',
+        '/sala-de-aula.html': '/sala',
+        '/curso': '/curso',
+        '/curso.html': '/curso',
+        '/player': '/player',
+        '/treino/player': '/player',
+        '/treino/player.html': '/player',
+        '/login': '/login',
+        '/login.html': '/login',
+        '/cadastro': '/cadastro',
+        '/cadastro.html': '/cadastro',
+        '/migracao': '/migracao',
+        '/migracao/index.html': '/migracao'
+      };
+
+      if (appCrossDomainMap[path]) {
+        const dest = `https://app.agoraeufalo.com.br${appCrossDomainMap[path]}${url.search}`;
+        return Response.redirect(dest, 302);
+      }
+
+      // Cross-domain Redirects de rotas de admin acessadas no domínio público
+      const adminCrossDomainMap = {
+        '/admin': '/',
+        '/admin.html': '/',
+        '/admin-login': '/login',
+        '/admin-login.html': '/login',
+        '/alunos': '/alunos',
+        '/admin-alunos': '/alunos',
+        '/admin-alunos.html': '/alunos',
+        '/cursos': '/cursos',
+        '/admin-cursos': '/cursos',
+        '/admin-cursos.html': '/cursos',
+        '/quiz': '/quiz',
+        '/admin-quiz': '/quiz',
+        '/admin-quiz.html': '/quiz',
+        '/vendas': '/vendas',
+        '/admin-vendas': '/vendas',
+        '/admin-vendas.html': '/vendas',
+        '/webhooks': '/webhooks',
+        '/admin-webhooks': '/webhooks',
+        '/admin-webhooks.html': '/webhooks',
+        '/marketing': '/marketing',
+        '/admin-marketing': '/marketing',
+        '/admin-marketing.html': '/marketing',
+        '/pdf-factory': '/pdf-factory',
+        '/admin-pdf-factory': '/pdf-factory',
+        '/admin-pdf-factory.html': '/pdf-factory',
+        '/tts': '/tts',
+        '/tts-studio': '/tts',
+        '/tts-studio.html': '/tts',
+        '/blog-panel': '/blog',
+        '/blog-panel.html': '/blog',
+        '/seo': '/seo',
+        '/seo-manager': '/seo',
+        '/seo-manager.html': '/seo'
+      };
+
+      if (adminCrossDomainMap[path]) {
+        const dest = `https://admin.agoraeufalo.com.br${adminCrossDomainMap[path]}${url.search}`;
+        return Response.redirect(dest, 302);
+      }
+
       const publicLegacyRedirects = {
         '/index.html': '/',
         '/index': '/',

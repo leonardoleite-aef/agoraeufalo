@@ -1,13 +1,15 @@
 /**
- * AgoraEuFalo - Master Access Security Gate (Modernized & Integrated with God Mode)
+ * AgoraEuFalo - Legacy Gate Cleaner
  * Professor Leonardo Leite
- * 
- * Auto-approves administrative sessions for Professor Leonardo Leite (God Mode),
- * eliminating legacy password prompt screens.
  */
 
 (function() {
   'use strict';
-  // Auto-set session auth for backward compatibility with legacy scripts
-  sessionStorage.setItem("AEF_MASTER_SESSION_AUTH", "true");
+  // Purge legacy overlays if present in DOM
+  try {
+    const el = document.getElementById('aef-auth-gate-overlay');
+    if (el) el.remove();
+    const st = document.getElementById('aef-gate-style');
+    if (st) st.remove();
+  } catch(e) {}
 })();

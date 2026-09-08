@@ -66,50 +66,6 @@
 </head>
 <body class="aef-canvas-bg min-h-screen text-slate-900 font-sans antialiased selection:bg-amber-200 flex flex-col">
 
-  <!-- ========================================================================= -->
-  <!-- 0. MASTER GOD MODE DOCK & SELETOR DE TIERS (Professor Leo & Simulação)    -->
-  <!-- ========================================================================= -->
-  <div id="portal-god-mode-topbar" class="w-full bg-[#081220] text-white border-b border-amber-500/40 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-lg sticky top-0 z-50 transition-all">
-    <div class="flex items-center gap-2.5">
-      <div class="w-7 h-7 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-950 flex items-center justify-center font-black text-xs shadow-sm">
-        👑
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="font-extrabold text-amber-300 uppercase tracking-wider text-xs">God Mode Leo</span>
-        <span id="portal-god-mode-badge" class="px-2 py-0.5 rounded-md bg-purple-500/30 text-purple-200 text-[10px] font-mono font-black border border-purple-400/30">MASTER ADMIN</span>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-2 sm:gap-3">
-      <!-- Seletor Ativo de Visualização -->
-      <div class="flex items-center gap-1.5 bg-slate-900/90 px-3 py-1 rounded-xl border border-amber-400/40 shadow-inner">
-        <span class="text-[11px] font-bold text-amber-300 flex items-center gap-1 shrink-0">
-          <span>👁️</span> <span class="hidden sm:inline">Visualizar como:</span>
-        </span>
-        <select id="portal-god-mode-select" onchange="window.handlePortalImpersonate(this.value)" class="bg-transparent text-white text-xs font-bold focus:outline-none cursor-pointer">
-          <option value="admin_master" class="bg-slate-900 text-amber-300 font-bold">👑 Leo (God Mode Total)</option>
-          <option value="free" class="bg-slate-900 text-slate-100">🌱 Aluno Free (Degustação)</option>
-          <option value="first_steps_free" class="bg-slate-900 text-emerald-300 font-bold">🎁 Ex-Aluno First Steps (Tier Free)</option>
-          <option value="club_annual" class="bg-slate-900 text-slate-100">🎓 Membro Club (Anual)</option>
-          <optgroup label="👑 Mentorados VIP (1 a 1)" class="bg-slate-900 text-amber-400 font-bold">
-            <option value="vip:andre" class="bg-slate-900 text-slate-100">André Barrote (VIP)</option>
-            <option value="vip:estevao" class="bg-slate-900 text-slate-100">Estêvão (VIP Oxford)</option>
-            <option value="vip:thomas" class="bg-slate-900 text-slate-100">Thomas (VIP Tech Lead)</option>
-            <option value="vip:matheus" class="bg-slate-900 text-slate-100">Matheus (VIP Fluência)</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <a href="https://admin.agoraeufalo.com.br/" class="px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition flex items-center gap-1.5 shadow-xs" title="Ir para o Hub do Administrador">
-        <span>🏛️</span> <span class="hidden md:inline">Backoffice</span>
-      </a>
-
-      <button id="portal-exit-simulation-btn" onclick="window.clearPortalImpersonation()" class="hidden px-3 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-xs cursor-pointer">
-        ✕ Voltar ao Master
-      </button>
-    </div>
-  </div>
-
   <!-- AEF DYNAMIC MARKETING SLOT: Top Bar Banners -->
   <div data-aef-slot="global_top_bar"></div>
 
@@ -158,96 +114,6 @@
   <!-- 2. MAIN DASHBOARD WORKSPACE                                               -->
   <!-- ========================================================================= -->
   <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8 flex-1">
-
-    <!-- A0. ADMIN GOD MODE BAR (Visible only for Admins) -->
-    <section id="admin-god-mode-bar" class="hidden p-4 rounded-2xl bg-gradient-to-r from-purple-900 via-indigo-950 to-slate-900 text-white border border-purple-400/40 shadow-lg space-y-3">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black text-sm shadow">
-            👑
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-black text-amber-300 uppercase tracking-wider">Modo Professor & God Mode</span>
-              <span class="px-1.5 py-0.2 rounded bg-purple-500/40 text-[9px] font-mono font-bold text-purple-200">ADMIN MASTER</span>
-            </div>
-            <p class="text-[11px] text-slate-300">Acesso livre a todo o ecossistema, backoffice, salas de aula e prescrições de mentorados.</p>
-          </div>
-        </div>
-
-        <!-- Seletor God-Mode: Ver como Aluno -->
-        <div class="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-xl border border-white/20">
-          <span class="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1 shrink-0">
-            <span>👁️</span> <span>Ver como:</span>
-          </span>
-          <select id="portal-impersonate-select" onchange="window.handlePortalImpersonate(this.value)" class="bg-slate-900 text-amber-200 text-xs font-bold rounded-lg px-2 py-1 border border-white/20 focus:outline-none cursor-pointer">
-            <option value="admin_master" class="text-amber-300 font-bold">👑 Leo (God Mode Total)</option>
-            <option value="free" class="text-slate-200">🌱 Aluno Free (Degustação)</option>
-            <option value="first_steps_free" class="text-emerald-300 font-bold">🎁 Ex-Aluno First Steps (Tier Free)</option>
-            <option value="club_annual" class="text-slate-200">🎓 Membro Club (Anual)</option>
-            <optgroup label="👑 Mentorados VIP (1 a 1)" class="text-amber-400 font-bold">
-              <option value="vip:andre" class="text-slate-200">André (VIP Barrote)</option>
-              <option value="vip:estevao" class="text-slate-200">Estêvão (VIP Oxford)</option>
-              <option value="vip:thomas" class="text-slate-200">Thomas (VIP Tech Lead)</option>
-              <option value="vip:matheus" class="text-slate-200">Matheus (VIP Fluência)</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
-        <a href="https://admin.agoraeufalo.com.br/" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition flex items-center gap-1.5 shadow-sm">
-          <span>🏛️</span>
-          <span>Hub Central</span>
-        </a>
-        <a href="https://admin.agoraeufalo.com.br/alunos" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
-          <i data-lucide="users" class="w-3.5 h-3.5 text-amber-300"></i>
-          <span>CRM Alunos</span>
-        </a>
-        <a href="https://admin.agoraeufalo.com.br/vendas" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
-          <i data-lucide="tag" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>Vendas & Checkouts</span>
-        </a>
-        <a href="https://admin.agoraeufalo.com.br/cursos" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
-          <i data-lucide="book-open" class="w-3.5 h-3.5 text-sky-300"></i>
-          <span>Course Studio</span>
-        </a>
-        <a href="https://admin.agoraeufalo.com.br/tts-studio" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
-          <i data-lucide="mic" class="w-3.5 h-3.5 text-rose-300"></i>
-          <span>TTS Studio</span>
-        </a>
-        <a href="https://admin.agoraeufalo.com.br/blog-panel" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
-          <i data-lucide="newspaper" class="w-3.5 h-3.5 text-emerald-300"></i>
-          <span>CMS Blog</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- BANNER DE SIMULAÇÃO ATIVA (Exibido quando o Leo estiver simulando um aluno) -->
-    <div id="impersonation-active-banner" class="hidden p-3.5 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md border-2 border-amber-300">
-      <div class="flex items-center gap-2.5">
-        <span class="text-xl">👁️</span>
-        <div>
-          <span>Você está visualizando o portal como: </span>
-          <span id="impersonation-student-label" class="font-black underline">Aluno Free</span>
-          <span class="text-[10px] opacity-80 block sm:inline sm:ml-1">(Simulação visual ativa. Nenhuma alteração afetará o banco de dados)</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <select id="banner-impersonate-select" onchange="window.handlePortalImpersonate(this.value)" class="bg-slate-950 text-amber-300 text-xs font-bold rounded-xl px-2.5 py-1.5 border border-slate-900 focus:outline-none cursor-pointer">
-          <option value="free">🌱 Aluno Free</option>
-          <option value="first_steps_free">🎁 Ex-Aluno First Steps</option>
-          <option value="club_annual">🎓 Membro Club</option>
-          <option value="vip:andre">👑 André (VIP)</option>
-          <option value="vip:estevao">👑 Estêvão (VIP)</option>
-          <option value="vip:thomas">👑 Thomas (VIP)</option>
-          <option value="vip:matheus">👑 Matheus (VIP)</option>
-        </select>
-        <button onclick="window.clearPortalImpersonation()" class="px-3.5 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-extrabold text-[11px] uppercase tracking-wider transition shadow cursor-pointer shrink-0">
-          ✕ Voltar ao Master
-        </button>
-      </div>
-    </div>
 
     <!-- A. GREETING & STUDENT METRICS BAR (STATS DASHBOARD) -->
     <section class="space-y-4">
@@ -648,81 +514,6 @@
       }
     }
 
-    window.handlePortalImpersonate = function(val) {
-      if (val === 'admin_master') {
-        window.clearPortalImpersonation();
-        return;
-      }
-      
-      let stateObj = null;
-      if (val === 'first_steps_free') {
-        stateObj = {
-          tier: 'free',
-          preset: 'first_steps_free',
-          studentId: 'ex_aluno_first_steps',
-          studentName: 'Ex-Aluno First Steps',
-          studentEmail: 'exaluno@resgate.agoraeufalo.com.br',
-          enrolledProducts: ['first-steps', 'english-quickstart'],
-          active: true,
-          timestamp: Date.now()
-        };
-      } else if (val.startsWith('vip:')) {
-        const sId = val.replace('vip:', '');
-        const names = { andre: 'André Barrote', estevao: 'Estêvão', thomas: 'Thomas', matheus: 'Matheus' };
-        stateObj = {
-          tier: 'vip',
-          studentId: sId,
-          studentName: names[sId] || (sId.charAt(0).toUpperCase() + sId.slice(1)),
-          studentEmail: `${sId}@vip.agoraeufalo.com.br`,
-          active: true,
-          timestamp: Date.now()
-        };
-      } else {
-        stateObj = {
-          tier: val,
-          studentId: null,
-          studentName: val === 'free' ? 'Aluno Free' : 'Membro Club',
-          studentEmail: `aluno-${val}@simulado.agoraeufalo.com.br`,
-          active: true,
-          timestamp: Date.now()
-        };
-      }
-
-      try {
-        sessionStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
-        localStorage.setItem('aef_impersonate_state', JSON.stringify(stateObj));
-      } catch(e) {}
-
-      if (window.aefPortalAuth && typeof window.aefPortalAuth.setImpersonation === 'function') {
-        try {
-          window.aefPortalAuth.setImpersonation(
-            stateObj.tier, 
-            stateObj.studentId, 
-            stateObj.studentName, 
-            stateObj.studentEmail, 
-            stateObj.enrolledProducts, 
-            stateObj.preset
-          );
-          return;
-        } catch(e) {}
-      }
-      window.location.reload();
-    };
-
-    window.clearPortalImpersonation = function() {
-      try {
-        sessionStorage.removeItem('aef_impersonate_state');
-        localStorage.removeItem('aef_impersonate_state');
-      } catch(e) {}
-      if (window.aefPortalAuth && typeof window.aefPortalAuth.clearImpersonation === 'function') {
-        try {
-          window.aefPortalAuth.clearImpersonation();
-          return;
-        } catch(e) {}
-      }
-      window.location.reload();
-    };
-
     // Matriz de Cursos Oficial (Single Source of Truth)
     const OFFICIAL_COURSES_MATRIX = {
       "ms-legacy": {
@@ -778,122 +569,45 @@
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         if (window.aefPortalAuth) {
-          await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
+          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
+          if (!authed) return;
         }
       } catch (authErr) {
-        console.warn("Auth check fallback:", authErr);
+        console.warn("Auth check error in Portal:", authErr);
       }
-
-      const isExplicitlyLoggedOut = typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') === 'true';
-      const isLocalOrDev = !isExplicitlyLoggedOut && (
-        window.location.protocol === 'file:' ||
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.hostname.startsWith('192.168.') ||
-        window.location.hostname.startsWith('10.')
-      );
 
       const profile = (window.aefPortalAuth && window.aefPortalAuth.currentProfile) || {};
-      const studentName = profile.name || localStorage.getItem("aef_user_name") || (isLocalOrDev ? "Professor Leonardo Leite" : "Aluno");
-      const studentEmail = profile.email || localStorage.getItem("aef_user_email") || (isLocalOrDev ? "selexenglish@gmail.com" : "");
-      const userRole = profile.role || localStorage.getItem("aef_user_role") || (isLocalOrDev ? "admin" : "student");
-      const userTier = profile.tier || localStorage.getItem("aef_user_tier") || (isLocalOrDev ? "admin_master" : "free");
+      const studentName = profile.name || localStorage.getItem("aef_user_name") || "Aluno";
+      const studentEmail = profile.email || localStorage.getItem("aef_user_email") || "";
+      const userRole = profile.role || localStorage.getItem("aef_user_role") || "student";
+      const isAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || userRole === 'admin';
+      const userTier = isAdmin ? "admin_master" : (profile.tier || localStorage.getItem("aef_user_tier") || "free");
 
-      const isRealMasterAdmin = (window.aefPortalAuth && window.aefPortalAuth.isRealAdmin()) ||
-                                userRole === 'admin' ||
-                                userTier === 'admin_master' ||
-                                isLocalOrDev ||
-                                (studentEmail && (studentEmail.toLowerCase().includes('selexenglish@gmail.com') || studentEmail.toLowerCase().includes('leonardo')));
+      const effectiveName = studentName;
+      const effectiveEmail = studentEmail;
+      const effectiveTier = userTier;
 
-      let imp = window.aefPortalAuth ? window.aefPortalAuth.getImpersonation() : null;
-      if (!imp) {
-        try {
-          const raw = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
-          if (raw) imp = JSON.parse(raw);
-        } catch(e) {}
-      }
-      const isSimulating = imp && imp.active;
-
-      // Se estiver simulando, aplica propriedades do aluno simulado
-      const effectiveName = isSimulating ? imp.studentName : studentName;
-      const effectiveEmail = isSimulating ? imp.studentEmail : studentEmail;
-      const effectiveTier = isSimulating ? imp.tier : (userTier || 'free');
-      const isAdmin = !isSimulating && isRealMasterAdmin;
-
-      let enrolledProducts = profile.enrolledProducts || JSON.parse(localStorage.getItem("aef_enrolled_products") || '["ms-legacy"]');
-      if (isSimulating) {
-        if (imp.preset === 'first_steps_free' || (imp.enrolledProducts && imp.enrolledProducts.includes('first-steps'))) {
-          enrolledProducts = imp.enrolledProducts || ['first-steps', 'english-quickstart'];
-        } else if (effectiveTier === 'free') {
-          enrolledProducts = ['english-quickstart'];
-        } else if (effectiveTier === 'club_annual') {
-          enrolledProducts = ['ms-legacy', 'english-quickstart', 'frases-prontas'];
-        } else if (effectiveTier === 'vip') {
-          enrolledProducts = ['ms-legacy', 'english-quickstart', `mentoria-${imp.studentId || 'andre'}`];
-        }
-      } else if (isRealMasterAdmin) {
-        enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps'];
+      let enrolledProducts = profile.enrolledProducts || JSON.parse(localStorage.getItem("aef_enrolled_products") || '[]');
+      if (isAdmin) {
+        enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'];
       }
 
       const topGreeting = document.getElementById("top-user-greeting");
       const drawerName = document.getElementById("drawer-user-name");
       const tierBadge = document.getElementById("student-tier-badge");
-      const godModeTopBar = document.getElementById("portal-god-mode-topbar");
-      const godModeBadge = document.getElementById("portal-god-mode-badge");
-      const godModeSelect = document.getElementById("portal-god-mode-select");
-      const exitSimulationBtn = document.getElementById("portal-exit-simulation-btn");
-      const adminBar = document.getElementById("admin-god-mode-bar");
-      const impersonateBanner = document.getElementById("impersonation-active-banner");
-      const impersonateLabel = document.getElementById("impersonation-student-label");
-      const portalSelect = document.getElementById("portal-impersonate-select");
-      const bannerSelect = document.getElementById("banner-impersonate-select");
 
       if (topGreeting) topGreeting.innerText = effectiveName.split(" ")[0] || "Aluno";
       if (drawerName) drawerName.innerText = effectiveName;
 
-      // Sincroniza todos os seletores com o estado atual
-      const currentSelectVal = isSimulating 
-        ? (imp.preset || (imp.tier === 'vip' ? `vip:${imp.studentId || 'andre'}` : imp.tier))
-        : "admin_master";
-
-      if (godModeSelect) godModeSelect.value = currentSelectVal;
-      if (portalSelect) portalSelect.value = currentSelectVal;
-      if (bannerSelect && isSimulating) bannerSelect.value = currentSelectVal;
-
-      // Exibição de barras administrativas vs simulação
-      if (isRealMasterAdmin || isSimulating) {
-        if (godModeTopBar) godModeTopBar.classList.remove('hidden');
-        
-        if (isSimulating) {
-          if (godModeBadge) {
-            godModeBadge.className = "px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-mono font-black border border-amber-300 animate-pulse";
-            godModeBadge.innerText = `👁️ SIMULANDO: ${effectiveTier.toUpperCase()}`;
-          }
-          if (exitSimulationBtn) exitSimulationBtn.classList.remove('hidden');
-          if (adminBar) adminBar.classList.add('hidden');
-          if (impersonateBanner) impersonateBanner.classList.remove('hidden');
-          if (impersonateLabel) impersonateLabel.innerText = `${effectiveName} (${effectiveTier.toUpperCase()})`;
-          if (tierBadge) tierBadge.innerText = `👁️ VENDO COMO: ${effectiveName}`;
+      if (tierBadge) {
+        if (isAdmin) {
+          tierBadge.innerText = "👑 Administrador";
+        } else if (effectiveTier === 'vip_mentorship' || effectiveTier === 'vip') {
+          tierBadge.innerText = "👑 Mentorado VIP";
+        } else if (effectiveTier === 'club_annual' || effectiveTier === 'club_monthly' || effectiveTier === 'course_member' || effectiveTier === 'pro') {
+          tierBadge.innerText = "🎓 Membro Club";
         } else {
-          if (godModeBadge) {
-            godModeBadge.className = "px-2 py-0.5 rounded-md bg-purple-500/30 text-purple-200 text-[10px] font-mono font-black border border-purple-400/30";
-            godModeBadge.innerText = "MASTER ADMIN";
-          }
-          if (exitSimulationBtn) exitSimulationBtn.classList.add('hidden');
-          if (adminBar) adminBar.classList.remove('hidden');
-          if (impersonateBanner) impersonateBanner.classList.add('hidden');
-          if (tierBadge) tierBadge.innerText = "👑 SUPER-ADMIN (GOD MODE)";
-        }
-      } else {
-        if (godModeTopBar) godModeTopBar.classList.add('hidden');
-        if (adminBar) adminBar.classList.add('hidden');
-        if (impersonateBanner) impersonateBanner.classList.add('hidden');
-        if (effectiveTier === 'vip_mentorship' || effectiveTier === 'vip') {
-          if (tierBadge) tierBadge.innerText = "👑 Mentorado VIP";
-        } else if (effectiveTier === 'club_annual' || effectiveTier === 'pro' || effectiveTier === 'course_member') {
-          if (tierBadge) tierBadge.innerText = "🎓 Membro Club";
-        } else {
-          if (tierBadge) tierBadge.innerText = "🌱 Aluno Free";
+          tierBadge.innerText = "🌱 Aluno Free";
         }
       }
 

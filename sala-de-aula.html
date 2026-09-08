@@ -513,7 +513,7 @@
       // 2. Validação assíncrona de autenticação
       if (window.aefPortalAuth) {
         try {
-          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: 'login.html' });
+          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
           if (!authed) return;
           // Revalida a aula ativa com o usuário e tier autenticados
           if (activeLesson) {

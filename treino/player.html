@@ -147,9 +147,6 @@
         <i data-lucide="log-out" class="w-3.5 h-3.5 text-amber-400"></i>
         <span>Sair</span>
       </a>
-      <div id="player-sim-badge" class="hidden items-center gap-1 px-2 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-extrabold cursor-pointer" onclick="window.clearPlayerImpersonation()" title="Clique para sair do modo simulação e voltar ao Master">
-        <span>👁️</span> <span id="player-sim-text">Aluno</span> ✕
-      </div>
     </div>
 
     <!-- Seletor Duplo: [Curso / Categoria] + [Módulo / Aluno / Faixa] -->
@@ -419,71 +416,22 @@
       pendingPlayPromise: null
     };
 
-    window.clearPlayerImpersonation = function() {
-      try {
-        sessionStorage.removeItem('aef_impersonate_state');
-        localStorage.removeItem('aef_impersonate_state');
-      } catch(e) {}
-      if (window.aefPortalAuth && typeof window.aefPortalAuth.clearImpersonation === 'function') {
-        try { window.aefPortalAuth.clearImpersonation(); return; } catch(e) {}
-      }
-      window.location.reload();
-    };
-
     // MOTOR DE CONTROLE DE ACESSO & PERFIS DO PLAYER (TIER GUARD)
     function getPlayerAccessProfile() {
-      let imp = null;
-      if (window.aefPortalAuth && typeof window.aefPortalAuth.getImpersonation === 'function') {
-        imp = window.aefPortalAuth.getImpersonation();
-      }
-      if (!imp) {
-        try {
-          const raw = sessionStorage.getItem('aef_impersonate_state') || localStorage.getItem('aef_impersonate_state');
-          imp = raw ? JSON.parse(raw) : null;
-        } catch(e) {}
-      }
-
-      // 1. Modo Simulação Ativo (Ver como Aluno / God-Mode Impersonation)
-      if (imp && imp.active) {
-        let enrolled = imp.enrolledProducts;
-        if (!enrolled) {
-          if (imp.preset === 'first_steps_free') {
-            enrolled = ['first-steps', 'english-quickstart'];
-          } else if (imp.tier === 'free') {
-            enrolled = ['english-quickstart'];
-          } else if (imp.tier === 'club_annual') {
-            enrolled = ['ms-legacy', 'english-quickstart', 'frases-prontas'];
-          } else if (imp.tier === 'vip') {
-            enrolled = ['ms-legacy', 'english-quickstart', `mentoria-${imp.studentId || 'andre'}`];
-          }
-        }
-        return {
-          isSimulating: true,
-          isAdmin: false,
-          tier: imp.tier || 'free',
-          studentId: imp.studentId || null,
-          studentName: imp.studentName || (imp.tier === 'free' ? 'Aluno Free' : 'Aluno Simulado'),
-          enrolledProducts: enrolled || []
-        };
-      }
-
-      // 2. Master Admin Real (Professor Leo)
-      const isRealAdmin = window.aefPortalAuth && typeof window.aefPortalAuth.isRealAdmin === 'function'
-        ? window.aefPortalAuth.isRealAdmin()
-        : (localStorage.getItem('aef_user_role') === 'admin');
+      const isRealAdmin = window.aefPortalAuth && typeof window.aefPortalAuth.isAdmin === 'function'
+        ? window.aefPortalAuth.isAdmin()
+        : (localStorage.getItem('aef_user_role') === 'admin' || localStorage.getItem('aef_user_tier') === 'admin_master');
 
       if (isRealAdmin) {
         return {
-          isSimulating: false,
           isAdmin: true,
           tier: 'admin_master',
           studentId: null,
-          studentName: 'Professor Leo (Master)',
-          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps']
+          studentName: localStorage.getItem('aef_user_name') || 'Professor Leonardo Leite',
+          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso']
         };
       }
 
-      // 3. Usuário Real Autenticado ou Visitante
       const realTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function')
         ? window.aefPortalAuth.getActiveTier()
         : (localStorage.getItem('aef_user_tier') || 'free');
@@ -493,7 +441,6 @@
         : JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]');
 
       return {
-        isSimulating: false,
         isAdmin: false,
         tier: realTier,
         studentId: localStorage.getItem('aef_student_id') || null,
@@ -598,18 +545,19 @@
     };
 
     // INICIALIZAÇÃO
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       lucide.createIcons();
 
-      const profile = getPlayerAccessProfile();
-
-      // Checa se está em modo simulação (Ver como Aluno)
-      if (profile.isSimulating) {
-        const simBadge = document.getElementById('player-sim-badge');
-        const simText = document.getElementById('player-sim-text');
-        if (simBadge) simBadge.classList.remove('hidden');
-        if (simText) simText.innerText = profile.studentName || profile.tier;
+      if (window.aefPortalAuth) {
+        try {
+          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
+          if (!authed) return;
+        } catch (authErr) {
+          console.warn("Auth check error in Player:", authErr);
+        }
       }
+
+      const profile = getPlayerAccessProfile();
 
       parseUrlParams(profile);
       populateCourseSelect();

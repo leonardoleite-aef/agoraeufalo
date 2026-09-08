@@ -46,6 +46,7 @@
   <script src="assets/js/aef-portal-auth.js"></script>
   <script src="assets/js/aef-quizzes-registry.js"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
   
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
 </head>
@@ -251,7 +252,15 @@
       console.warn("Erro ao ler localStorage de quizzes:", e);
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (window.aefPortalAuth) {
+        try {
+          const authed = await window.aefPortalAuth.requireAuth({ requireAdmin: true });
+          if (!authed) return;
+        } catch (e) {
+          console.warn("Auth check error in Quiz Studio:", e);
+        }
+      }
       populateQuizSelect();
       const firstId = Object.keys(DEFAULT_QUIZZES)[0];
       if (firstId) loadQuiz(firstId);
