@@ -727,18 +727,27 @@
     }
 
     /**
-     * Retorna uma oferta pelo ID
+     * Retorna uma oferta pelo ID (compatível com chamadas síncronas e assíncronas)
      */
-    async getOfferById(id) {
-      if (!this.initialized) await this.init();
+    getOfferById(id) {
+      if (!this.offers || !Array.isArray(this.offers)) return null;
       return this.offers.find(o => o.id === id) || null;
+    }
+
+    /**
+     * Retorna uma oferta pelo ID do produto associado
+     */
+    getOfferByProductId(productId) {
+      if (!this.offers || !Array.isArray(this.offers)) return null;
+      return this.offers.find(o => o.productId === productId && o.status === 'active') || 
+             this.offers.find(o => o.productId === productId) || null;
     }
 
     /**
      * Retorna as ofertas de um produto específico
      */
-    async getOffersByProduct(productId) {
-      if (!this.initialized) await this.init();
+    getOffersByProduct(productId) {
+      if (!this.offers || !Array.isArray(this.offers)) return [];
       return this.offers.filter(o => o.productId === productId && o.status === 'active');
     }
 

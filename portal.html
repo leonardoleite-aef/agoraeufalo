@@ -516,28 +516,42 @@
 
     // Matriz de Cursos Oficial (Single Source of Truth)
     const OFFICIAL_COURSES_MATRIX = {
-      "ms-legacy": {
-        id: "ms-legacy",
-        title: "Magic Stories Legacy • O Acervo Clássico",
-        slug: "ms-legacy",
-        badge: "LEGACY CLUB",
-        tierRequired: "legacy_member",
+      "dtc_curso": {
+        id: "dtc_curso",
+        title: "Dates & Times • Curso Rápido",
+        slug: "dtc_curso",
+        badge: "CURSO LIBERADO",
+        tierRequired: "free",
+        availableInFreeTier: true,
         published: true,
-        coverImageUrl: "assets/images/cover-magic-stories-cinema.jpg?v=20260905",
-        description: "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas em PDF.",
-        totalLessons: 18,
+        coverImageUrl: "assets/images/cover-dates-and-times-square.jpg",
+        description: "Aprenda tudo sobre datas, horas, uso de tempo e períodos em inglês. Domine dias, meses, horas e expressões temporais para falar no reflexo.",
+        totalLessons: 8,
         completedLessons: 0
       },
       "english-quickstart": {
         id: "english-quickstart",
         title: "English QuickStart • Fundamentos da Fala",
         slug: "english-quickstart",
-        badge: "MÓDULO 1 LIVE",
-        tierRequired: "club_anual",
+        badge: "CURSO LIBERADO",
+        tierRequired: "free",
+        availableInFreeTier: true,
         published: true,
         coverImageUrl: "assets/images/cover-english-quickstart.jpg?v=20260905",
         description: "O acelerador de fundamentos para destravar a escuta e a produção de fala inicial sem bloqueios.",
         totalLessons: 5,
+        completedLessons: 0
+      },
+      "ms-legacy": {
+        id: "ms-legacy",
+        title: "Magic Stories Legacy • O Acervo Clássico",
+        slug: "ms-legacy",
+        badge: "LEGACY CLUB",
+        tierRequired: "club_anual",
+        published: true,
+        coverImageUrl: "assets/images/cover-magic-stories-cinema.jpg?v=20260905",
+        description: "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas em PDF.",
+        totalLessons: 18,
         completedLessons: 0
       },
       "frases-prontas": {
@@ -587,7 +601,18 @@
       const effectiveEmail = studentEmail;
       const effectiveTier = userTier;
 
-      let enrolledProducts = profile.enrolledProducts || JSON.parse(localStorage.getItem("aef_enrolled_products") || '[]');
+      let enrolledProducts = [];
+      try {
+        if (Array.isArray(profile.enrolledProducts)) {
+          enrolledProducts = profile.enrolledProducts;
+        } else {
+          const raw = localStorage.getItem("aef_enrolled_products");
+          const parsed = raw ? JSON.parse(raw) : [];
+          enrolledProducts = Array.isArray(parsed) ? parsed : [];
+        }
+      } catch (e) {
+        enrolledProducts = [];
+      }
       if (isAdmin) {
         enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'];
       }
@@ -754,170 +779,57 @@
       const normalizedCurrentEmail = (currentEmail || '').trim().toLowerCase();
       const isClubMember = currentTier === 'club_annual' || currentTier === 'club_anual' || currentTier === 'legacy_member';
 
+      if (!Array.isArray(enrolledProducts)) enrolledProducts = [];
+
       for (const [id, course] of Object.entries(courses)) {
-        // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
-        if (course.published === false) continue;
+        try {
+          // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
+          if (course.published === false) continue;
 
-        // Se for um curso VIP de outro mentorado e o usuário não for admin nem o dono, isola a privacidade
-        const isMentorshipCourse = course.tierRequired === 'vip' || id.startsWith('mentoria-');
-        const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
-        const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
+          // Se for um curso VIP de outro mentorado e o usuário não for admin nem o dono, isola a privacidade
+          const isMentorshipCourse = course.tierRequired === 'vip' || id.startsWith('mentoria-');
+          const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
+          const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
 
-        if (isMentorshipCourse && !isAdmin && !isOwner) {
-          continue;
-        }
-
-        totalVisible++;
-
-        const isIncludedInClub = course.includedInClubSubscription !== false && !isMentorshipCourse;
-        const isEnrolled = isAdmin || 
-                           isOwner || 
-                           enrolledProducts.includes(id) || 
-                           enrolledProducts.includes('all_access_master') ||
-                           ((currentTier === 'vip' || currentTier === 'vip_mentorship') && isOwner) ||
-                           (isClubMember && isIncludedInClub) ||
-                           course.tierRequired === 'free';
-
-        if (isEnrolled) {
-          enrolledCount++;
-          const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
-          const completedInThisCourse = courseProg.completedLessons || [];
-          
-          const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 5);
-          const progressPercent = totalLessons ? Math.min(100, Math.round((completedInThisCourse.length / totalLessons) * 100)) : 0;
-          
-          const resumeLessonId = courseProg.lastLessonId;
-          const resumeUrl = resumeLessonId 
-            ? `/sala?curso=${course.slug || course.id}&modulo=${courseProg.lastModuleId || ''}&aula=${resumeLessonId}`
-            : `/curso?curso=${course.slug || course.id}`;
-
-          gridHtml += `
-            <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-[#C68A36]/60 transition flex flex-col justify-between">
-              
-              <div>
-                <!-- Course Cover Image -->
-                <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                  <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
-                  <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
-                    ${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'CURSO ATIVO')}
-                  </span>
-                </div>
-
-                <!-- Course Body -->
-                <div class="p-4 sm:p-5 space-y-2">
-                  <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                  <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
-                </div>
-              </div>
-
-              <!-- Progress & Action -->
-              <div class="p-4 sm:p-5 pt-0 space-y-3">
-                <div class="space-y-1">
-                  <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
-                    <span>${completedInThisCourse.length}/${totalLessons} Aulas</span>
-                    <span class="text-[#C68A36] font-black">${progressPercent}%</span>
-                  </div>
-                  <div class="w-full bg-[#FAF8F5] border border-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
-                    <div class="bg-[#C68A36] h-full rounded-full transition-all duration-300" style="width: ${progressPercent}%;"></div>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                  <a href="/curso?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
-                    <span>Módulos</span>
-                  </a>
-                  <a href="${resumeUrl}" class="py-2.5 rounded-xl ${isMentorshipCourse ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-[#0D1E36] hover:bg-[#C68A36]'} text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs">
-                    <span>Continuar</span>
-                    <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-                  </a>
-                </div>
-              </div>
-
-            </div>
-          `;
-        } else {
-          // Curso que NÃO pertence ao plano do aluno
-          const hasFreeTasting = course.availableInFreeTier === true || 
-                                 (Array.isArray(course.freeModuleIds) && course.freeModuleIds.length > 0) || 
-                                 course.tierRequired === 'free';
-
-          // Link de checkout dinâmico da Hotmart (busca direto da Central de Ofertas do Leo)
-          let defaultCheckoutUrl = course.freeTierCtaUrl || 
-                                     course.standaloneCheckoutHotmart || 
-                                     'https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_card';
-
-          if (window.aefOffersRegistry) {
-            const offer = (course.attachedOfferId && window.aefOffersRegistry.getOfferById(course.attachedOfferId)) ||
-                          window.aefOffersRegistry.getOfferByProductId(id) ||
-                          window.aefOffersRegistry.getOfferById('ms-club-anual');
-            if (offer && offer.checkoutUrl && !offer.checkoutUrl.includes('OFFER_')) {
-              defaultCheckoutUrl = window.aefOffersRegistry.generateTrackingUrl(offer.id, 'portal_card');
-            }
+          if (isMentorshipCourse && !isAdmin && !isOwner) {
+            continue;
           }
 
-          if (hasFreeTasting) {
-            // CASO COM DEGUSTAÇÃO FREE: FAIXA 'EXPERIMENTE GRÁTIS'
+          totalVisible++;
+
+          const isIncludedInClub = course.includedInClubSubscription !== false && !isMentorshipCourse;
+          const isFreeCourse = course.tierRequired === 'free' || course.availableInFreeTier === true;
+          const isEnrolled = isAdmin || 
+                             isOwner || 
+                             enrolledProducts.includes(id) || 
+                             enrolledProducts.includes('all_access_master') ||
+                             ((currentTier === 'vip' || currentTier === 'vip_mentorship') && isOwner) ||
+                             (isClubMember && isIncludedInClub) ||
+                             isFreeCourse;
+
+          if (isEnrolled) {
+            enrolledCount++;
+            const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
+            const completedInThisCourse = courseProg.completedLessons || [];
+            
+            const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 5);
+            const progressPercent = totalLessons ? Math.min(100, Math.round((completedInThisCourse.length / totalLessons) * 100)) : 0;
+            
+            const resumeLessonId = courseProg.lastLessonId;
+            const resumeUrl = resumeLessonId 
+              ? `/sala?curso=${course.slug || course.id}&modulo=${courseProg.lastModuleId || ''}&aula=${resumeLessonId}`
+              : `/curso?curso=${course.slug || course.id}`;
+
             gridHtml += `
-              <div class="bg-white border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between relative group">
+              <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-[#C68A36]/60 transition flex flex-col justify-between">
                 
                 <div>
-                  <!-- Cover com Faixa Dourada 'EXPERIMENTE GRÁTIS' -->
+                  <!-- Course Cover Image -->
                   <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0A192F]/80 via-black/20 to-black/30"></div>
-                    
-                    <!-- Ribbon Dourada de Degustação -->
-                    <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1.5">
-                      <span>🎁</span>
-                      <span>EXPERIMENTE GRÁTIS</span>
-                    </span>
-
-                    <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/90 text-white font-mono font-bold text-[9px] uppercase tracking-wider shadow-sm backdrop-blur-xs">
-                      🌱 Aulas Abertas Liberadas
-                    </span>
-                  </div>
-
-                  <!-- Course Body -->
-                  <div class="p-4 sm:p-5 space-y-2">
-                    <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                    <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">
-                      ${course.description || 'Experimente o método de escuta atenta e fala no reflexo do Professor Leo.'}
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Action Buttons: Degustação + Desbloqueio -->
-                <div class="p-4 sm:p-5 pt-0 space-y-2">
-                  <div class="grid grid-cols-2 gap-2">
-                    <a href="/curso?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300/80 font-bold text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
-                      <span>Degustação</span>
-                      <i data-lucide="play" class="w-3 h-3 text-amber-600 fill-current"></i>
-                    </a>
-                    <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs cursor-pointer">
-                      <span>Desbloquear</span>
-                      <i data-lucide="lock" class="w-3 h-3"></i>
-                    </a>
-                  </div>
-                </div>
-
-              </div>
-            `;
-          } else {
-            // CASO EXCLUSIVO PAGO (SEM DEGUSTAÇÃO FREE)
-            const isStandaloneOnly = course.availableStandalone && course.includedInClubSubscription === false;
-            gridHtml += `
-              <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-slate-400 transition flex flex-col justify-between">
-                
-                <div>
-                  <!-- Cover com Faixa Azul-Marinho / Ouro de Conteúdo Exclusivo -->
-                  <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-85">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30"></div>
-                    
-                    <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-slate-900/90 text-amber-300 border border-amber-400/40 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1">
-                      <span>🔒</span>
-                      <span>${isStandaloneOnly ? 'VENDA AVULSA' : 'EXCLUSIVO AEF CLUB'}</span>
+                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
+                    <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
+                      ${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'CURSO ATIVO')}
                     </span>
                   </div>
 
@@ -928,17 +840,149 @@
                   </div>
                 </div>
 
-                <!-- Action Button -->
-                <div class="p-4 sm:p-5 pt-0">
-                  <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
-                    <span>Desbloquear Acesso</span>
-                  </a>
+                <!-- Progress & Action -->
+                <div class="p-4 sm:p-5 pt-0 space-y-3">
+                  <div class="space-y-1">
+                    <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
+                      <span>${completedInThisCourse.length}/${totalLessons} Aulas</span>
+                      <span class="text-[#C68A36] font-black">${progressPercent}%</span>
+                    </div>
+                    <div class="w-full bg-[#FAF8F5] border border-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
+                      <div class="bg-[#C68A36] h-full rounded-full transition-all duration-300" style="width: ${progressPercent}%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-2 pt-1">
+                    <a href="/curso?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
+                      <span>Módulos</span>
+                    </a>
+                    <a href="${resumeUrl}" class="py-2.5 rounded-xl ${isMentorshipCourse ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-[#0D1E36] hover:bg-[#C68A36]'} text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs">
+                      <span>Continuar</span>
+                      <i data-lucide="play" class="w-3 h-3 fill-current"></i>
+                    </a>
+                  </div>
                 </div>
 
               </div>
             `;
+          } else {
+            // Curso que NÃO pertence ao plano do aluno
+            const hasFreeTasting = course.availableInFreeTier === true || 
+                                   (Array.isArray(course.freeModuleIds) && course.freeModuleIds.length > 0) || 
+                                   course.tierRequired === 'free';
+
+            // Link de checkout dinâmico da Hotmart (busca direto da Central de Ofertas do Leo)
+            let defaultCheckoutUrl = course.freeTierCtaUrl || 
+                                       course.standaloneCheckoutHotmart || 
+                                       'https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_card';
+
+            if (window.aefOffersRegistry) {
+              try {
+                const reg = window.aefOffersRegistry;
+                let offer = null;
+                if (course.attachedOfferId && typeof reg.getOfferById === 'function') {
+                  offer = reg.getOfferById(course.attachedOfferId);
+                }
+                if (!offer && typeof reg.getOfferByProductId === 'function') {
+                  offer = reg.getOfferByProductId(id);
+                }
+                if (!offer && typeof reg.getOfferById === 'function') {
+                  offer = reg.getOfferById('ms-club-anual');
+                }
+                if (offer && offer.checkoutUrl && !offer.checkoutUrl.includes('OFFER_') && typeof reg.generateTrackingUrl === 'function') {
+                  defaultCheckoutUrl = reg.generateTrackingUrl(offer.id, 'portal_card');
+                }
+              } catch (offerErr) {
+                console.warn("Offer resolution fallback:", offerErr);
+              }
+            }
+
+            if (hasFreeTasting) {
+              // CASO COM DEGUSTAÇÃO FREE: FAIXA 'EXPERIMENTE GRÁTIS'
+              gridHtml += `
+                <div class="bg-white border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between relative group">
+                  
+                  <div>
+                    <!-- Cover com Faixa Dourada 'EXPERIMENTE GRÁTIS' -->
+                    <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                      <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                      <div class="absolute inset-0 bg-gradient-to-t from-[#0A192F]/80 via-black/20 to-black/30"></div>
+                      
+                      <!-- Ribbon Dourada de Degustação -->
+                      <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1.5">
+                        <span>🎁</span>
+                        <span>EXPERIMENTE GRÁTIS</span>
+                      </span>
+
+                      <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/90 text-white font-mono font-bold text-[9px] uppercase tracking-wider shadow-sm backdrop-blur-xs">
+                        🌱 Aulas Abertas Liberadas
+                      </span>
+                    </div>
+
+                    <!-- Course Body -->
+                    <div class="p-4 sm:p-5 space-y-2">
+                      <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                      <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">
+                        ${course.description || 'Experimente o método de escuta atenta e fala no reflexo do Professor Leo.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Action Buttons: Degustação + Desbloqueio -->
+                  <div class="p-4 sm:p-5 pt-0 space-y-2">
+                    <div class="grid grid-cols-2 gap-2">
+                      <a href="/curso?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300/80 font-bold text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
+                        <span>Degustação</span>
+                        <i data-lucide="play" class="w-3 h-3 text-amber-600 fill-current"></i>
+                      </a>
+                      <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs cursor-pointer">
+                        <span>Desbloquear</span>
+                        <i data-lucide="lock" class="w-3 h-3"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              `;
+            } else {
+              // CASO EXCLUSIVO PAGO (SEM DEGUSTAÇÃO FREE)
+              const isStandaloneOnly = course.availableStandalone && course.includedInClubSubscription === false;
+              gridHtml += `
+                <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-slate-400 transition flex flex-col justify-between">
+                  
+                  <div>
+                    <!-- Cover com Faixa Azul-Marinho / Ouro de Conteúdo Exclusivo -->
+                    <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                      <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-85">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30"></div>
+                      
+                      <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-slate-900/90 text-amber-300 border border-amber-400/40 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1">
+                        <span>🔒</span>
+                        <span>${isStandaloneOnly ? 'VENDA AVULSA' : 'EXCLUSIVO AEF CLUB'}</span>
+                      </span>
+                    </div>
+
+                    <!-- Course Body -->
+                    <div class="p-4 sm:p-5 space-y-2">
+                      <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                      <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
+                    </div>
+                  </div>
+
+                  <!-- Action Button -->
+                  <div class="p-4 sm:p-5 pt-0">
+                    <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                      <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
+                      <span>Desbloquear Acesso</span>
+                    </a>
+                  </div>
+
+                </div>
+              `;
+            }
           }
+        } catch (cardErr) {
+          console.error(`Erro ao renderizar curso ${id}:`, cardErr);
         }
       }
 
