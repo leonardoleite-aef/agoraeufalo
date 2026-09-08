@@ -1739,6 +1739,26 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       foundLesson.type = isQuiz ? 'quiz' : 'lesson';
       foundLesson.quizId = isQuiz ? (document.getElementById("lessonQuizSelect")?.value || '') : '';
 
+      // Se for quiz, embute o objeto completo do quiz na aula para garantia na nuvem
+      if (isQuiz && foundLesson.quizId) {
+        const REGISTRY_BASE = window.AEF_QUIZZES_REGISTRY || {};
+        const mergedReg = Object.assign({}, REGISTRY_BASE);
+        try {
+          const saved = localStorage.getItem("aef_custom_quizzes");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed && typeof parsed === 'object') Object.assign(mergedReg, parsed);
+          }
+        } catch(e) {}
+        if (mergedReg[foundLesson.quizId]) {
+          foundLesson.quizData = mergedReg[foundLesson.quizId];
+          foundLesson.quizDataJson = JSON.stringify(mergedReg[foundLesson.quizId]);
+        }
+      } else if (!isQuiz) {
+        delete foundLesson.quizData;
+        delete foundLesson.quizDataJson;
+      }
+
       const inputTitle = document.getElementById("lessonTitleInput").value.trim();
       foundLesson.title = inputTitle || (isQuiz ? "Quiz sem título" : "Aula sem título");
       foundLesson.order = parseInt(document.getElementById("lessonOrderInput").value) || 1;

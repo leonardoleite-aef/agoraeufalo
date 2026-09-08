@@ -674,7 +674,7 @@
           const lessonsListHtml = filteredLessons.map((les, lIdx) => {
             const isCurLesson = activeLesson && activeLesson.id === les.id;
             const isLesDone = completedLessonIds.includes(les.id);
-            const isQuiz = les.type === 'quiz' || !!les.quizId;
+            const isQuiz = les.type === 'quiz' || !!les.quizId || (les.title && (les.title.toLowerCase().includes('quiz') || les.title.toLowerCase() === 'anos'));
             const clickAction = isMobile 
               ? `switchModuleAndLesson('${mod.id}', '${les.id}'); window.toggleSyllabusDrawer();`
               : `switchModuleAndLesson('${mod.id}', '${les.id}');`;
@@ -929,10 +929,36 @@
       }
 
       // 2. RENDERIZAÇÃO PARA USUÁRIO AUTORIZADO
-      const isQuizLesson = found.type === 'quiz' || !!found.quizId;
+      const isQuizLesson = found.type === 'quiz' || !!found.quizId || (found.title && (found.title.toLowerCase().includes('quiz') || found.title.toLowerCase() === 'anos'));
       if (isQuizLesson) {
-        const quizReg = window.AEF_QUIZZES_REGISTRY || {};
-        const quizData = quizReg[found.quizId] || found.quizData || quizReg['quiz-dtc-horas-01'];
+        const REGISTRY_BASE = window.AEF_QUIZZES_REGISTRY || {};
+        const mergedReg = Object.assign({}, REGISTRY_BASE);
+        try {
+          const saved = localStorage.getItem("aef_custom_quizzes");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed && typeof parsed === 'object') Object.assign(mergedReg, parsed);
+          }
+        } catch(e) {}
+
+        let quizData = null;
+        if (found.quizId && mergedReg[found.quizId]) {
+          quizData = mergedReg[found.quizId];
+        } else if (found.quizData) {
+          quizData = typeof found.quizData === 'string' ? JSON.parse(found.quizData) : found.quizData;
+        } else if (found.quizDataJson) {
+          try { quizData = JSON.parse(found.quizDataJson); } catch(e) {}
+        } else if (found.quizId && REGISTRY_BASE[found.quizId]) {
+          quizData = REGISTRY_BASE[found.quizId];
+        } else {
+          // Busca inteligente por aproximação no ID ou título do quiz (ex: DTS_Anos)
+          const matchKey = Object.keys(mergedReg).find(k => 
+            (found.quizId && k.toLowerCase().includes(found.quizId.toLowerCase())) ||
+            (found.title && (k.toLowerCase().includes(found.title.toLowerCase()) || (mergedReg[k].title && mergedReg[k].title.toLowerCase().includes(found.title.toLowerCase()))))
+          );
+          quizData = matchKey ? mergedReg[matchKey] : (mergedReg['quiz-dtc-horas-01'] || Object.values(mergedReg)[0]);
+        }
+
         renderQuizArena(quizData, found);
       } else if (found.videoUrl) {
         if (found.videoUrl.includes("youtube.com") || found.videoUrl.includes("youtu.be")) {

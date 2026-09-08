@@ -985,6 +985,8 @@
         id: lid,
         courseId: courseId,
         moduleId: moduleId,
+        type: lessonData.type || (lessonData.quizId ? 'quiz' : 'lesson'),
+        quizId: lessonData.quizId || "",
         title: lessonData.title || "Aula sem título",
         order: parseInt(lessonData.order) || 1,
         videoUrl: lessonData.videoUrl || "",
@@ -1000,6 +1002,12 @@
         aiStatus: lessonData.aiStatus || "draft_pending",
         updatedAt: new Date().toISOString()
       };
+      if (lessonData.quizData) {
+        payload.quizData = typeof lessonData.quizData === 'object' ? lessonData.quizData : JSON.parse(lessonData.quizData);
+        payload.quizDataJson = JSON.stringify(payload.quizData);
+      } else if (lessonData.quizDataJson) {
+        payload.quizDataJson = lessonData.quizDataJson;
+      }
       if (lessonData.duration) payload.duration = lessonData.duration;
       if (lessonData.activity) payload.activity = lessonData.activity;
       if (lessonData.trainingTrackId) payload.trainingTrackId = lessonData.trainingTrackId;
@@ -1197,6 +1205,9 @@
                                 const baseObj = existingMap.get(lid) || {};
                                 const restObj = {
                                   id: lid,
+                                  type: lf.type?.stringValue || (lf.quizId?.stringValue ? 'quiz' : (baseObj.type || 'lesson')),
+                                  quizId: lf.quizId?.stringValue !== undefined ? lf.quizId.stringValue : (baseObj.quizId || ''),
+                                  quizDataJson: lf.quizDataJson?.stringValue || (baseObj.quizDataJson || ''),
                                   title: lf.title?.stringValue || baseObj.title || lid,
                                   order: parseInt(lf.order?.integerValue) || baseObj.order || (reconciledLessons.length + 1),
                                   videoUrl: lf.videoUrl?.stringValue !== undefined ? lf.videoUrl.stringValue : (baseObj.videoUrl || ""),
