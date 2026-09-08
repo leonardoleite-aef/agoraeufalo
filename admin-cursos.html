@@ -1317,18 +1317,81 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
           if (!this.hasApiKey()) throw new Error("Chave da API do Gemini necessária para gerar imagens.");
         }
 
-        const models = ['imagen-4.0-generate-001', 'imagen-3.0-generate-002'];
+        // 1. Modelos nativos Gemini Multimodal com suporte direto à geração de imagem (generateContent)
+        const geminiImageModels = [
+          'gemini-3.1-flash-image',
+          'gemini-2.5-flash-image',
+          'gemini-3.1-flash-image-preview',
+          'gemini-3-pro-image'
+        ];
+
+        const ratioInstruction = aspectRatio === '16:9'
+          ? 'Output a 16:9 widescreen horizontal aspect ratio image.'
+          : 'Output a 1:1 square aspect ratio image.';
+
+        const fullPrompt = `${prompt}\n\n${ratioInstruction}`;
+
         let lastError = null;
 
-        for (const model of models) {
+        for (const model of geminiImageModels) {
           try {
             if (onProgress) onProgress(`Gerando imagem (${aspectRatio}) com ${model}...`);
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${encodeURIComponent(this.getApiKey())}`;
-            
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(this.getApiKey())}`;
+
             const payload = {
-              instances: [
-                { prompt: prompt }
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: fullPrompt }]
+                }
               ],
+              generationConfig: {
+                responseModalities: ["IMAGE"]
+              }
+            };
+
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              const errJson = await response.json().catch(() => ({}));
+              const msg = errJson.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+              console.warn(`[Gemini Image API] Falha no modelo ${model}: ${msg}`);
+              lastError = new Error(`[${model}] ${msg}`);
+              continue;
+            }
+
+            const resData = await response.json();
+            const parts = resData.candidates?.[0]?.content?.parts || [];
+            for (const part of parts) {
+              const inline = part.inlineData || part.inline_data;
+              if (inline && inline.data) {
+                return {
+                  base64: inline.data,
+                  mimeType: inline.mimeType || inline.mime_type || 'image/jpeg'
+                };
+              }
+            }
+
+            console.warn(`[Gemini Image API] Modelo ${model} respondeu sem inlineData:`, resData);
+            lastError = new Error(`[${model}] Resposta sem dados de imagem`);
+          } catch (err) {
+            console.warn(`[Gemini Image API] Erro no modelo ${model}:`, err);
+            lastError = err;
+          }
+        }
+
+        // 2. Fallback para Imagen :predict (caso chave corporativa com Imagen habilitado)
+        const imagenModels = ['imagen-4.0-generate-001', 'imagen-3.0-generate-002'];
+        for (const model of imagenModels) {
+          try {
+            if (onProgress) onProgress(`Tentando fallback com ${model}...`);
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${encodeURIComponent(this.getApiKey())}`;
+            const payload = {
+              instances: [{ prompt: fullPrompt }],
               parameters: {
                 sampleCount: 1,
                 aspectRatio: aspectRatio,
@@ -1345,7 +1408,6 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
             if (!response.ok) {
               const errJson = await response.json().catch(() => ({}));
               const msg = errJson.error?.message || `HTTP ${response.status}: ${response.statusText}`;
-              console.warn(`[Imagen API] Falha no modelo ${model}: ${msg}`);
               lastError = new Error(`[${model}] ${msg}`);
               continue;
             }
@@ -1355,12 +1417,10 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
               || resData.predictions?.[0]?.image?.imageBytes 
               || resData.predictions?.[0]?.imageBytes;
 
-            if (!b64) {
-              throw new Error(`Modelo ${model} não retornou dados de imagem em base64.`);
+            if (b64) {
+              return { base64: b64, mimeType: 'image/jpeg' };
             }
-            return b64;
           } catch (err) {
-            console.warn(`[Imagen API] Erro no modelo ${model}:`, err);
             lastError = err;
           }
         }
@@ -2142,24 +2202,27 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       const tBadge = document.getElementById("thumbStatusBadge");
       if (tUrl) {
         if (tImg) {
-          tImg.src = tUrl;
-          tImg.classList.remove("hidden");
-          tImg.onerror = () => {
-            tImg.classList.add("hidden");
-            if (tPlaceholder) tPlaceholder.classList.remove("hidden");
-            if (tBadge) { tBadge.innerText = "⚠️ Link quebrado"; tBadge.className = "text-[9px] font-mono text-rose-400 font-bold"; }
-          };
           tImg.onload = () => {
             tImg.classList.remove("hidden");
             if (tPlaceholder) tPlaceholder.classList.add("hidden");
             if (tBadge) { tBadge.innerText = "● Miniatura Ativa"; tBadge.className = "text-[9px] font-mono text-emerald-400 font-bold"; }
           };
+          tImg.onerror = () => {
+            if (!tImg.getAttribute("src")) return;
+            tImg.classList.add("hidden");
+            if (tPlaceholder) tPlaceholder.classList.remove("hidden");
+            if (tBadge) { tBadge.innerText = "⚠️ Link quebrado"; tBadge.className = "text-[9px] font-mono text-rose-400 font-bold"; }
+          };
+          tImg.src = tUrl;
+          tImg.classList.remove("hidden");
         }
         if (tPlaceholder) tPlaceholder.classList.add("hidden");
         if (tBadge) { tBadge.innerText = "● Miniatura Ativa"; tBadge.className = "text-[9px] font-mono text-emerald-400 font-bold"; }
       } else {
         if (tImg) {
-          tImg.src = "";
+          tImg.onload = null;
+          tImg.onerror = null;
+          tImg.removeAttribute("src");
           tImg.classList.add("hidden");
         }
         if (tPlaceholder) tPlaceholder.classList.remove("hidden");
@@ -2173,24 +2236,27 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       const artBadge = document.getElementById("artworkStatusBadge");
       if (artUrl) {
         if (artImg) {
-          artImg.src = artUrl;
-          artImg.classList.remove("hidden");
-          artImg.onerror = () => {
-            artImg.classList.add("hidden");
-            if (artPlaceholder) artPlaceholder.classList.remove("hidden");
-            if (artBadge) { artBadge.innerText = "⚠️ Link quebrado"; artBadge.className = "text-[9px] font-mono text-rose-400 font-bold"; }
-          };
           artImg.onload = () => {
             artImg.classList.remove("hidden");
             if (artPlaceholder) artPlaceholder.classList.add("hidden");
             if (artBadge) { artBadge.innerText = "● Capa Ativa"; artBadge.className = "text-[9px] font-mono text-emerald-400 font-bold"; }
           };
+          artImg.onerror = () => {
+            if (!artImg.getAttribute("src")) return;
+            artImg.classList.add("hidden");
+            if (artPlaceholder) artPlaceholder.classList.remove("hidden");
+            if (artBadge) { artBadge.innerText = "⚠️ Link quebrado"; artBadge.className = "text-[9px] font-mono text-rose-400 font-bold"; }
+          };
+          artImg.src = artUrl;
+          artImg.classList.remove("hidden");
         }
         if (artPlaceholder) artPlaceholder.classList.add("hidden");
         if (artBadge) { artBadge.innerText = "● Capa Ativa"; artBadge.className = "text-[9px] font-mono text-emerald-400 font-bold"; }
       } else {
         if (artImg) {
-          artImg.src = "";
+          artImg.onload = null;
+          artImg.onerror = null;
+          artImg.removeAttribute("src");
           artImg.classList.add("hidden");
         }
         if (artPlaceholder) artPlaceholder.classList.remove("hidden");
@@ -2252,28 +2318,34 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
 
       try {
         // 1. Miniatura 16:9 (Vídeo)
-        showToast("🎨 [1/2] Gerando Miniatura 16:9 com Imagen...");
+        showToast("🎨 [1/2] Gerando Miniatura 16:9 com IA...");
         const thumbPrompt = `Cinematic 16:9 movie still, editorial high-end educational masterclass thumbnail for an English lesson titled "${lessonTitle}", in the course "${courseTitle}". Context and mood: "${goldenTip || lessonTitle}". Style: Apple EdTech aesthetic, deep navy (#0A192F) and warm glowing amber cinematic lighting, photorealistic, 35mm film still, sharp optics, 8k resolution, minimalist luxury composition, absolutely NO text, NO typography, NO words, NO letters, NO subtitles, NO watermarks.`;
 
-        const thumbB64 = await window.AEFStudioAI.generateVisualAsset(thumbPrompt, '16:9', (msg) => showToast(msg));
+        const thumbRes = await window.AEFStudioAI.generateVisualAsset(thumbPrompt, '16:9', (msg) => showToast(msg));
+        const thumbB64 = typeof thumbRes === 'object' ? thumbRes.base64 : thumbRes;
+        const thumbMime = (typeof thumbRes === 'object' && thumbRes.mimeType) ? thumbRes.mimeType : 'image/jpeg';
+        const thumbExt = thumbMime.includes('png') ? 'png' : 'jpg';
 
         // 2. Capa 1:1 (Áudio/Portal)
-        showToast("🎨 [2/2] Gerando Capa 1:1 Quadrada com Imagen...");
+        showToast("🎨 [2/2] Gerando Capa 1:1 Quadrada com IA...");
         const artworkPrompt = `High-end 1:1 square cover art, 3D glassmorphism and isometric art representing "${lessonTitle}", in the course "${courseTitle}". Aesthetic: Apple EdTech Calm design, deep navy background, translucent frosted glass shapes, warm amber and golden reflections, studio lighting, depth of field, 8k resolution, absolutely NO text, NO letters, NO numbers, NO labels, NO typography.`;
 
-        const artworkB64 = await window.AEFStudioAI.generateVisualAsset(artworkPrompt, '1:1', (msg) => showToast(msg));
+        const artworkRes = await window.AEFStudioAI.generateVisualAsset(artworkPrompt, '1:1', (msg) => showToast(msg));
+        const artworkB64 = typeof artworkRes === 'object' ? artworkRes.base64 : artworkRes;
+        const artworkMime = (typeof artworkRes === 'object' && artworkRes.mimeType) ? artworkRes.mimeType : 'image/jpeg';
+        const artworkExt = artworkMime.includes('png') ? 'png' : 'jpg';
 
         // 3. Upload ou DataURL
         const folder = `courses/${activeCourseId || 'general'}/${activeModuleId || 'media'}`;
-        let thumbUrl = `data:image/jpeg;base64,${thumbB64}`;
-        let artworkUrl = `data:image/jpeg;base64,${artworkB64}`;
+        let thumbUrl = `data:${thumbMime};base64,${thumbB64}`;
+        let artworkUrl = `data:${artworkMime};base64,${artworkB64}`;
 
         try {
           if (window.aefCloudSync) {
             showToast("☁️ Salvando imagens na nuvem (Cloud Storage)...");
             await window.aefCloudSync.init();
-            const thumbFile = base64ToFile(thumbB64, 'image/jpeg', `thumb_${Date.now()}.jpg`);
-            const artworkFile = base64ToFile(artworkB64, 'image/jpeg', `art_${Date.now()}.jpg`);
+            const thumbFile = base64ToFile(thumbB64, thumbMime, `thumb_${Date.now()}.${thumbExt}`);
+            const artworkFile = base64ToFile(artworkB64, artworkMime, `art_${Date.now()}.${artworkExt}`);
             thumbUrl = await window.aefCloudSync.uploadFileToStorage(thumbFile, folder);
             artworkUrl = await window.aefCloudSync.uploadFileToStorage(artworkFile, folder);
           }
@@ -2328,17 +2400,20 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       const courseDesc = document.getElementById("courseModalDescInput")?.value?.trim() || "";
 
       try {
-        showToast("🎨 Gerando Capa 1:1 do Curso com Imagen...");
+        showToast("🎨 Gerando Capa 1:1 do Curso com IA...");
         const coverPrompt = `Luxury editorial course cover art, 1:1 square ratio, representing an English course titled "${courseTitle}". Theme context: "${courseDesc || courseTitle}". Visual style: 3D glassmorphism, glowing translucent objects, deep navy (#0A192F) background with warm amber and gold light accents, minimalist Calm EdTech aesthetic, exquisite detail, 8k resolution, cinema lighting, absolutely NO text, NO words, NO letters, NO watermark.`;
 
-        const coverB64 = await window.AEFStudioAI.generateVisualAsset(coverPrompt, '1:1', (msg) => showToast(msg));
+        const coverRes = await window.AEFStudioAI.generateVisualAsset(coverPrompt, '1:1', (msg) => showToast(msg));
+        const coverB64 = typeof coverRes === 'object' ? coverRes.base64 : coverRes;
+        const coverMime = (typeof coverRes === 'object' && coverRes.mimeType) ? coverRes.mimeType : 'image/jpeg';
+        const coverExt = coverMime.includes('png') ? 'png' : 'jpg';
 
-        let coverUrl = `data:image/jpeg;base64,${coverB64}`;
+        let coverUrl = `data:${coverMime};base64,${coverB64}`;
         try {
           if (window.aefCloudSync) {
             showToast("☁️ Enviando capa do curso para a nuvem...");
             await window.aefCloudSync.init();
-            const coverFile = base64ToFile(coverB64, 'image/jpeg', `course_cover_${Date.now()}.jpg`);
+            const coverFile = base64ToFile(coverB64, coverMime, `course_cover_${Date.now()}.${coverExt}`);
             coverUrl = await window.aefCloudSync.uploadFileToStorage(coverFile, 'courses/covers');
           }
         } catch (uploadErr) {
