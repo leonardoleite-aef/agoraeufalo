@@ -477,15 +477,30 @@
                 class="w-full p-2 rounded-xl bg-white border border-amber-300/80 text-xs font-mono text-slate-900 focus:outline-none leading-relaxed">${q.audioScript || ''}</textarea>
             </div>
 
-            <!-- URL do áudio gerado + botão Ouvir -->
-            <div class="flex items-center gap-2">
-              <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)"
-                placeholder="URL do Áudio MP3 ou Blob gerado"
-                class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
-              <button onclick="playAudio('${q.audioUrl}', this)"
-                class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
-                <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir
-              </button>
+            <!-- URL do áudio gerado + botão Ouvir + Badge de Nuvem -->
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-2">
+                <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)"
+                  placeholder="URL do Áudio na Nuvem (Firebase Storage) ou MP3"
+                  class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
+                <button onclick="playQuestionAudio(${qIdx}, this)" id="playBtn-q-${qIdx}"
+                  class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer transition active:scale-95 shadow-sm">
+                  <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir
+                </button>
+              </div>
+
+              <!-- Indicador de Status Permanente da Nuvem vs Blob Temporário -->
+              ${q.audioUrl && q.audioUrl.startsWith('blob:') ? `
+                <div class="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-900 text-[10.5px] font-bold flex items-center gap-1.5">
+                  <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+                  <span>⚠️ Link temporário da sessão (blob:). Clique em "Sintetizar com Gemini TTS" para gravá-lo permanentemente na Nuvem para a Sala de Aula.</span>
+                </div>
+              ` : q.audioUrl && (q.audioUrl.startsWith('http') || q.audioUrl.startsWith('/')) ? `
+                <div class="px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-800 text-[10px] font-semibold flex items-center gap-1">
+                  <i data-lucide="cloud" class="w-3 h-3 text-emerald-600"></i>
+                  <span>☁️ Áudio salvo na Nuvem (Permanente & Disponível na Sala de Aula)</span>
+                </div>
+              ` : ''}
             </div>
           </div>
 
@@ -836,12 +851,37 @@
         }
 
         const wavBlob = pcmBase64ToWavBlob(audioBase64, 24000);
-        const blobUrl = URL.createObjectURL(wavBlob);
+        let permanentAudioUrl = `data:audio/wav;base64,${audioBase64}`;
 
-        currentQuiz.questions[qIdx].audioUrl = blobUrl;
+        // Upload transparente e permanente para o Google Cloud Storage / Firebase
+        try {
+          if (window.aefCloudSync) {
+            showToast("☁️ Gravando áudio permanente na Nuvem...");
+            await window.aefCloudSync.init();
+            const quizId = (currentQuiz.id || "quiz").replace(/[^a-zA-Z0-9_-]/g, "_");
+            const filename = `quiz_${quizId}_q${qIdx + 1}_${Date.now()}.wav`;
+            const wavFile = new File([wavBlob], filename, { type: "audio/wav" });
+            const cloudUrl = await window.aefCloudSync.uploadFileToStorage(wavFile, "quizzes/audio");
+            if (cloudUrl) {
+              permanentAudioUrl = cloudUrl;
+              console.log("☁️ [QuizStudio] Áudio gravado com sucesso na Nuvem:", permanentAudioUrl);
+            }
+          }
+        } catch (upErr) {
+          console.warn("⚠️ Upload para nuvem encontrou erro, mantendo Data URL persistente:", upErr);
+        }
+
+        currentQuiz.questions[qIdx].audioUrl = permanentAudioUrl;
+
+        // Auto-save no banco local para persistência garantida
+        DEFAULT_QUIZZES[currentQuiz.id] = currentQuiz;
+        try {
+          localStorage.setItem("aef_custom_quizzes", JSON.stringify(DEFAULT_QUIZZES));
+        } catch (e) {}
+
         renderQuestions();
-        showToast("✅ Áudio sintetizado com sucesso pelo Gemini TTS!");
-        playAudio(blobUrl);
+        showToast("✅ Áudio salvo permanentemente na Nuvem e pronto para a Sala de Aula!");
+        playQuestionAudio(qIdx, document.getElementById(`playBtn-q-${qIdx}`));
 
       } catch (err) {
         console.error("Erro na síntese Gemini TTS:", err);
@@ -901,8 +941,12 @@
 
         aud.onerror = (e) => {
           console.error("Audio playback error:", aud.error, e);
-          const errCode = aud.error ? aud.error.code : "unknown";
-          showToast(`⚠️ Erro ao carregar áudio (${resolvedUrl}): Código ${errCode}`);
+          if (resolvedUrl && resolvedUrl.startsWith('blob:')) {
+            showToast("⚠️ Link temporário (blob:) expirou após o reload da página. Clique no botão amarelo '🎙️ Sintetizar com Gemini TTS' para gravá-lo permanentemente na Nuvem!");
+          } else {
+            const errCode = aud.error ? aud.error.code : "unknown";
+            showToast(`⚠️ Erro ao carregar áudio (${resolvedUrl.substring(0, 45)}...): Código ${errCode}`);
+          }
           resetAllAudioButtons();
         };
 
@@ -920,7 +964,11 @@
             }
           }).catch(e => {
             console.warn("Audio play rejected:", e);
-            showToast("⚠️ Não foi possível iniciar o áudio: " + (e.message || "Interação necessária"));
+            if (resolvedUrl && resolvedUrl.startsWith('blob:')) {
+              showToast("⚠️ Link temporário (blob:) expirou após o reload da página. Clique em '🎙️ Sintetizar com Gemini TTS' para salvar permanentemente na Nuvem!");
+            } else {
+              showToast("⚠️ Não foi possível iniciar o áudio: " + (e.message || "Interação necessária"));
+            }
             resetAllAudioButtons();
           });
         }
@@ -929,6 +977,24 @@
         showToast("⚠️ Erro ao inicializar player de áudio.");
         resetAllAudioButtons();
       }
+    }
+
+    function playQuestionAudio(qIdx, btnElement) {
+      const q = currentQuiz?.questions?.[qIdx];
+      if (!q || !q.audioUrl) {
+        showToast("⚠️ Nenhum áudio cadastrado nesta questão.");
+        return;
+      }
+      playAudio(q.audioUrl, btnElement);
+    }
+
+    function playSimulatorAudio(btnElement) {
+      const q = currentQuiz?.questions?.[simCurrentIndex];
+      if (!q || !q.audioUrl) {
+        showToast("⚠️ Nenhum áudio cadastrado nesta questão.");
+        return;
+      }
+      playAudio(q.audioUrl, btnElement);
     }
 
     function resetAllAudioButtons() {
@@ -1014,7 +1080,7 @@
 
           <!-- Audio Listening Button (Only when audioUrl exists) -->
           ${q.audioUrl ? `
-            <button onclick="playAudio('${q.audioUrl}', this)" id="simAudioBtn" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
+            <button onclick="playSimulatorAudio(this)" id="simAudioBtn" class="w-full py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition active:scale-95 shadow-lg shadow-amber-500/20 cursor-pointer">
               <i data-lucide="volume-2" class="w-4 h-4 fill-current"></i>
               <span>Ouvir Áudio da Questão</span>
             </button>
