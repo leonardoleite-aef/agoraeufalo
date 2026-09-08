@@ -371,41 +371,124 @@
             <input type="text" value="${q.questionText || ''}" oninput="updateQuestionText(${qIdx}, this.value)" placeholder="${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'Ex: Qual opção expressa melhor o sentimento da frase...' : 'Ex: Ouça o áudio e responda: A que horas vai começar a aula?'}" class="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] text-xs font-bold text-[#0A192F] focus:outline-none focus:border-[#C68A36]">
           </div>
 
-          <!-- AUDIO & TTS BOX (GEMINI TTS DIRECT INJECTION) -->
+          <!-- AUDIO & TTS BOX — MODO EXPLÍCITO: SINGLE SPEAKER ou DIÁLOGO 2 VOZES -->
           <div class="p-4 rounded-2xl ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'bg-slate-50 border border-slate-200' : 'bg-amber-50/60 border border-amber-200/80'} space-y-3">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <span class="text-[11px] font-black ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-700' : 'text-amber-950'} flex items-center gap-1.5">
-                <i data-lucide="${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'file-text' : 'mic'}" class="w-3.5 h-3.5 ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-500' : 'text-amber-600'}"></i>
-                <span>${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'Áudio da Questão (Opcional no modo Texto)' : 'Áudio da Questão (Gemini TTS ou URL)'}</span>
-              </span>
-              
-              <div class="flex items-center gap-2">
-                <select id="voice-q-${qIdx}" onchange="updateQuestionVoice(${qIdx}, this.value)" class="p-1 rounded-lg bg-white border border-amber-300 text-[10px] font-bold text-slate-800 focus:outline-none">
-                  <option value="Aoede" ${(q.voice || 'Aoede') === 'Aoede' ? 'selected' : ''}>Voz: Aoede (Feminina / Clara)</option>
-                  <option value="Puck" ${q.voice === 'Puck' ? 'selected' : ''}>Voz: Puck (Masculina / Natural)</option>
-                  <option value="Charon" ${q.voice === 'Charon' ? 'selected' : ''}>Voz: Charon (Masculina / Profunda / Leo)</option>
-                  <option value="Kore" ${q.voice === 'Kore' ? 'selected' : ''}>Voz: Kore (Feminina / Serena)</option>
-                  <option value="Fenrir" ${q.voice === 'Fenrir' ? 'selected' : ''}>Voz: Fenrir (Masculina / Firme)</option>
+
+            <!-- Título do bloco -->
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'file-text' : 'mic'}" class="w-3.5 h-3.5 ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-500' : 'text-amber-600'}"></i>
+              <span class="text-[11px] font-black ${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'text-slate-700' : 'text-amber-950'}">${(q.type === 'text_comprehension' || q.type === 'text_vocab') ? 'Áudio da Questão (Opcional no modo Texto)' : 'Áudio da Questão (Gemini TTS)'}</span>
+            </div>
+
+            <!-- SELETOR DE MODO: Single Speaker | Diálogo 2 Vozes -->
+            <div class="grid grid-cols-2 gap-1.5 bg-white p-1 rounded-xl border border-amber-200">
+              <button type="button"
+                onclick="setAudioMode(${qIdx}, 'single')"
+                class="py-1.5 px-2 rounded-lg text-[11px] font-black flex items-center justify-center gap-1 transition cursor-pointer ${(q.audioMode || 'single') === 'single' ? 'bg-amber-500 text-slate-950 shadow' : 'text-slate-500 hover:text-slate-800'}">
+                🎤 Single Speaker
+              </button>
+              <button type="button"
+                onclick="setAudioMode(${qIdx}, 'dual')"
+                class="py-1.5 px-2 rounded-lg text-[11px] font-black flex items-center justify-center gap-1 transition cursor-pointer ${(q.audioMode || 'single') === 'dual' ? 'bg-[#0A192F] text-amber-300 shadow' : 'text-slate-500 hover:text-slate-800'}">
+                💬 Diálogo 2 Vozes
+              </button>
+            </div>
+
+            <!-- SINGLE SPEAKER: 1 seletor de voz -->
+            ${(q.audioMode || 'single') === 'single' ? `
+            <div class="flex items-center gap-2 flex-wrap">
+              <label class="text-[10px] font-bold uppercase text-amber-900/70 shrink-0">Voz:</label>
+              <select id="voice-q-${qIdx}" onchange="updateQuestionVoice(${qIdx}, this.value)"
+                class="flex-1 p-1.5 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-slate-800 focus:outline-none">
+                <option value="Aoede" ${(q.voice || 'Aoede') === 'Aoede' ? 'selected' : ''}>🟡 Aoede — Feminina / Clara</option>
+                <option value="Puck" ${q.voice === 'Puck' ? 'selected' : ''}>🔵 Puck — Masculina / Natural</option>
+                <option value="Charon" ${q.voice === 'Charon' ? 'selected' : ''}>🟤 Charon — Masculina / Profunda (Leo)</option>
+                <option value="Kore" ${q.voice === 'Kore' ? 'selected' : ''}>🟣 Kore — Feminina / Serena</option>
+                <option value="Fenrir" ${q.voice === 'Fenrir' ? 'selected' : ''}>⚫ Fenrir — Masculina / Firme</option>
+                <option value="Leda" ${q.voice === 'Leda' ? 'selected' : ''}>🟢 Leda — Feminina / Calorosa</option>
+                <option value="Orus" ${q.voice === 'Orus' ? 'selected' : ''}>🔴 Orus — Masculina / Assertiva</option>
+              </select>
+              <button onclick="synthesizeQuestionAudio(${qIdx}, this)"
+                class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] flex items-center gap-1 transition shadow cursor-pointer">
+                <i data-lucide="sparkles" class="w-3 h-3"></i>
+                🎙️ Sintetizar com Gemini TTS
+              </button>
+            </div>
+            ` : `
+            <!-- DUAL SPEAKER: Nome + Voz para cada locutor -->
+            <div class="space-y-2">
+              <!-- Locutor 1 -->
+              <div class="flex items-center gap-2 p-2 rounded-xl bg-white border border-amber-300/60">
+                <span class="text-[10px] font-black text-amber-700 shrink-0 w-16">Locutor 1:</span>
+                <input type="text"
+                  value="${q.speaker1Name || 'Rodrigo'}"
+                  oninput="updateSpeaker(${qIdx}, 1, 'name', this.value)"
+                  placeholder="Nome (ex: Rodrigo)"
+                  class="w-24 p-1 rounded-lg bg-amber-50 border border-amber-200 text-[11px] font-bold text-slate-900 focus:outline-none">
+                <select onchange="updateSpeaker(${qIdx}, 1, 'voice', this.value)"
+                  class="flex-1 p-1 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-slate-800 focus:outline-none">
+                  <option value="Aoede" ${(q.speaker1Voice || 'Aoede') === 'Aoede' ? 'selected' : ''}>🟡 Aoede — Fem. / Clara</option>
+                  <option value="Puck" ${q.speaker1Voice === 'Puck' ? 'selected' : ''}>🔵 Puck — Masc. / Natural</option>
+                  <option value="Charon" ${q.speaker1Voice === 'Charon' ? 'selected' : ''}>🟤 Charon — Masc. / Profunda (Leo)</option>
+                  <option value="Kore" ${q.speaker1Voice === 'Kore' ? 'selected' : ''}>🟣 Kore — Fem. / Serena</option>
+                  <option value="Fenrir" ${q.speaker1Voice === 'Fenrir' ? 'selected' : ''}>⚫ Fenrir — Masc. / Firme</option>
+                  <option value="Leda" ${q.speaker1Voice === 'Leda' ? 'selected' : ''}>🟢 Leda — Fem. / Calorosa</option>
+                  <option value="Orus" ${q.speaker1Voice === 'Orus' ? 'selected' : ''}>🔴 Orus — Masc. / Assertiva</option>
                 </select>
-                <button onclick="synthesizeQuestionAudio(${qIdx}, this)" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[10px] flex items-center gap-1 transition shadow-xs cursor-pointer">
-                  <i data-lucide="sparkles" class="w-3 h-3"></i>
-                  <span>🎙️ Sintetizar com Gemini TTS</span>
-                </button>
               </div>
+              <!-- Locutor 2 -->
+              <div class="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-300/60">
+                <span class="text-[10px] font-black text-slate-600 shrink-0 w-16">Locutor 2:</span>
+                <input type="text"
+                  value="${q.speaker2Name || 'Liam'}"
+                  oninput="updateSpeaker(${qIdx}, 2, 'name', this.value)"
+                  placeholder="Nome (ex: Liam)"
+                  class="w-24 p-1 rounded-lg bg-slate-50 border border-slate-200 text-[11px] font-bold text-slate-900 focus:outline-none">
+                <select onchange="updateSpeaker(${qIdx}, 2, 'voice', this.value)"
+                  class="flex-1 p-1 rounded-lg bg-white border border-slate-300 text-[11px] font-bold text-slate-800 focus:outline-none">
+                  <option value="Puck" ${(q.speaker2Voice || 'Puck') === 'Puck' ? 'selected' : ''}>🔵 Puck — Masc. / Natural</option>
+                  <option value="Aoede" ${q.speaker2Voice === 'Aoede' ? 'selected' : ''}>🟡 Aoede — Fem. / Clara</option>
+                  <option value="Charon" ${q.speaker2Voice === 'Charon' ? 'selected' : ''}>🟤 Charon — Masc. / Profunda (Leo)</option>
+                  <option value="Kore" ${q.speaker2Voice === 'Kore' ? 'selected' : ''}>🟣 Kore — Fem. / Serena</option>
+                  <option value="Fenrir" ${q.speaker2Voice === 'Fenrir' ? 'selected' : ''}>⚫ Fenrir — Masc. / Firme</option>
+                  <option value="Leda" ${q.speaker2Voice === 'Leda' ? 'selected' : ''}>🟢 Leda — Fem. / Calorosa</option>
+                  <option value="Orus" ${q.speaker2Voice === 'Orus' ? 'selected' : ''}>🔴 Orus — Masc. / Assertiva</option>
+                </select>
+              </div>
+              <button onclick="synthesizeQuestionAudio(${qIdx}, this)"
+                class="w-full py-1.5 rounded-lg bg-[#0A192F] hover:bg-[#112240] text-amber-300 font-black text-[11px] flex items-center justify-center gap-1.5 transition shadow cursor-pointer">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                🎙️ Sintetizar Diálogo com Gemini TTS
+              </button>
             </div>
+            `}
 
+            <!-- Script textarea (dinâmico conforme modo) -->
             <div>
-              <label class="block text-[9.5px] font-bold uppercase text-amber-900/80 mb-0.5">Roteiro / Fala em Inglês (Suporta Single Speaker ou Diálogo Dual Speaker)</label>
-              <textarea id="script-q-${qIdx}" oninput="updateQuestionScript(${qIdx}, this.value)" rows="2" placeholder="Ex: Rodrigo: What time is the meeting?&#10;Liam: It's at a quarter to five!" class="w-full p-2 rounded-xl bg-white border border-amber-300/80 text-xs font-mono text-slate-900 focus:outline-none">${q.audioScript || ''}</textarea>
+              <label class="block text-[9.5px] font-bold uppercase text-amber-900/80 mb-0.5">
+                ${(q.audioMode || 'single') === 'dual'
+                  ? `Roteiro do Diálogo — use o formato: ${q.speaker1Name || 'Rodrigo'}: frase / ${q.speaker2Name || 'Liam'}: frase`
+                  : 'Roteiro / Fala em Inglês'}
+              </label>
+              <textarea id="script-q-${qIdx}" oninput="updateQuestionScript(${qIdx}, this.value)" rows="3"
+                placeholder="${(q.audioMode || 'single') === 'dual'
+                  ? `${q.speaker1Name || 'Rodrigo'}: What time is the meeting?\n${q.speaker2Name || 'Liam'}: It\'s at a quarter to five!`
+                  : 'Ex: Hello, my dear friend! Let\'s practice listening now.'}"
+                class="w-full p-2 rounded-xl bg-white border border-amber-300/80 text-xs font-mono text-slate-900 focus:outline-none leading-relaxed">${q.audioScript || ''}</textarea>
             </div>
 
+            <!-- URL do áudio gerado + botão Ouvir -->
             <div class="flex items-center gap-2">
-              <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)" placeholder="URL do Áudio MP3 ou Blob gerado" class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
-              <button onclick="playAudio('${q.audioUrl}', this)" class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
+              <input type="text" value="${q.audioUrl || ''}" oninput="updateQuestionAudioUrl(${qIdx}, this.value)"
+                placeholder="URL do Áudio MP3 ou Blob gerado"
+                class="flex-1 p-2 rounded-xl bg-white border border-amber-300/80 text-[11px] font-mono text-slate-700">
+              <button onclick="playAudio('${q.audioUrl}', this)"
+                class="px-3 py-2 rounded-xl bg-[#0D1E36] text-amber-300 font-bold text-xs flex items-center gap-1 cursor-pointer">
                 <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir
               </button>
             </div>
           </div>
+
 
           <!-- OPTIONS LIST (A, B, C, D) -->
           <div class="space-y-2">
@@ -452,7 +535,12 @@
         type: "dialogue_comprehension",
         questionText: "Ouça o áudio e selecione a opção correta:",
         audioUrl: "",
-        voice: "Aoede",
+        audioMode: "single",          // 'single' | 'dual'
+        voice: "Aoede",               // single speaker voice
+        speaker1Name: "Rodrigo",      // dual speaker 1
+        speaker1Voice: "Aoede",
+        speaker2Name: "Liam",         // dual speaker 2
+        speaker2Voice: "Puck",
         audioScript: "Leo: Hello, my dear friend! Let's practice listening now.",
         options: [
           { id: "opt_a", text: "Primeira opção de resposta", isCorrect: true },
@@ -471,13 +559,39 @@
       renderQuestions();
     }
 
-    function updateQuestionType(qIdx, val) { currentQuiz.questions[qIdx].type = val; renderSimulator(); }
+    function updateQuestionType(qIdx, val) { currentQuiz.questions[qIdx].type = val; renderQuestions(); }
     function updateQuestionText(qIdx, val) { currentQuiz.questions[qIdx].questionText = val; renderSimulator(); }
     function updateQuestionScript(qIdx, val) { currentQuiz.questions[qIdx].audioScript = val; }
     function updateQuestionVoice(qIdx, val) { currentQuiz.questions[qIdx].voice = val; }
     function updateQuestionAudioUrl(qIdx, val) { currentQuiz.questions[qIdx].audioUrl = val; renderSimulator(); }
     function updateQuestionGoldenTip(qIdx, val) { currentQuiz.questions[qIdx].goldenTip = val; }
     function updateQuestionRetryHint(qIdx, val) { currentQuiz.questions[qIdx].retryHint = val; }
+
+    // Alterna entre modo Single Speaker e Diálogo 2 Vozes
+    function setAudioMode(qIdx, mode) {
+      currentQuiz.questions[qIdx].audioMode = mode;
+      // Inicializa campos dual se ainda não existirem
+      if (mode === 'dual') {
+        const q = currentQuiz.questions[qIdx];
+        if (!q.speaker1Name) q.speaker1Name = 'Rodrigo';
+        if (!q.speaker1Voice) q.speaker1Voice = 'Aoede';
+        if (!q.speaker2Name) q.speaker2Name = 'Liam';
+        if (!q.speaker2Voice) q.speaker2Voice = 'Puck';
+      }
+      renderQuestions();
+    }
+
+    // Atualiza nome ou voz de um locutor específico (1 ou 2)
+    function updateSpeaker(qIdx, speakerNum, field, val) {
+      const q = currentQuiz.questions[qIdx];
+      if (speakerNum === 1) {
+        if (field === 'name') q.speaker1Name = val;
+        else q.speaker1Voice = val;
+      } else {
+        if (field === 'name') q.speaker2Name = val;
+        else q.speaker2Voice = val;
+      }
+    }
 
     function setCorrectOption(qIdx, oIdx) {
       currentQuiz.questions[qIdx].options.forEach((o, i) => { o.isCorrect = (i === oIdx); });
@@ -617,18 +731,19 @@
       try {
         let payload = null;
 
-        // Detecta se é diálogo com múltiplos locutores (ex: Rodrigo:... Liam:...)
-        const lines = script.split('\n').map(l => l.trim()).filter(Boolean);
-        const hasSpeakers = lines.some(l => l.includes(':'));
+        // ✅ Usa o modo explícito escolhido pelo usuário (single | dual)
+        // Em vez da detecção frágil pelo ":" no texto
+        const audioMode = q.audioMode || 'single';
 
-        // ✅ Preamble obrigatório (doc oficial TTS):
-        // "Validate your prompts by adding a clear preamble instructing the model
-        //  to synthesize speech, and explicitly label where the actual spoken transcript begins."
-        // Sem este preamble o modelo interpreta o roteiro como texto a ler em vez de áudio a sintetizar.
+        // Preamble obrigatório para o classificador TTS (doc oficial Gemini):
+        // "Add a clear preamble instructing the model to synthesize speech,
+        //  and explicitly label where the actual spoken transcript begins."
 
-        if (hasSpeakers && lines.length >= 2) {
-          const firstSpeaker = lines[0].split(':')[0].trim();
-          const secondSpeaker = lines[1].split(':')[0].trim();
+        if (audioMode === 'dual') {
+          const sp1 = q.speaker1Name || 'Rodrigo';
+          const sp2 = q.speaker2Name || 'Liam';
+          const v1  = q.speaker1Voice || 'Aoede';
+          const v2  = q.speaker2Voice || 'Puck';
 
           const preamble = `Synthesize the following dialogue as audio speech. Generate only audio output. Do not generate any text. Each speaker label indicates who should speak that line.\n\n[TRANSCRIPT]\n`;
           const fullText = preamble + script;
@@ -640,8 +755,8 @@
               speechConfig: {
                 multiSpeakerVoiceConfig: {
                   speakerVoiceConfigs: [
-                    { speaker: firstSpeaker, voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } },
-                    { speaker: secondSpeaker, voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
+                    { speaker: sp1, voiceConfig: { prebuiltVoiceConfig: { voiceName: v1 } } },
+                    { speaker: sp2, voiceConfig: { prebuiltVoiceConfig: { voiceName: v2 } } }
                   ]
                 }
               }
@@ -663,6 +778,7 @@
             }
           };
         }
+
 
         // ✅ CORREÇÃO CRÍTICA: usa APENAS o header x-goog-api-key
         // NÃO colocar ?key= na URL junto com o header — causa "invalid authentication credentials"
