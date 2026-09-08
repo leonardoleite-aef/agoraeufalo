@@ -969,9 +969,8 @@
         <div>
           <label for="modelSelect" class="font-semibold text-slate-300 block mb-1">Modelo Gemini para Síntese de Voz (TTS)</label>
           <select id="modelSelect" class="w-full bg-[#0B0F17] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2 text-slate-200 outline-none cursor-pointer">
-            <option value="gemini-2.0-flash">gemini-2.0-flash (Recomendado • Alta Fidelidade 24kHz & TTS)</option>
-            <option value="gemini-2.5-flash">gemini-2.5-flash (Gemini 2.5 Flash)</option>
-            <option value="gemini-1.5-flash">gemini-1.5-flash (Gemini 1.5 Flash)</option>
+            <option value="gemini-2.5-flash-preview-tts">gemini-2.5-flash-preview-tts (Recomendado • Alta Fidelidade 24kHz & TTS)</option>
+            <option value="gemini-2.5-pro-preview-tts">gemini-2.5-pro-preview-tts (Gemini 2.5 Pro TTS • Estúdio Master)</option>
           </select>
         </div>
       </div>
@@ -1026,15 +1025,21 @@
     // 2. STATE MANAGEMENT & TOAST NOTIFICATION SYSTEM
     // =========================================================================
     let initialModel = localStorage.getItem('AEF_GEMINI_MODEL') || 'gemini-2.5-flash-preview-tts';
-    if (!initialModel || initialModel.includes('2.5-pro') || (initialModel.includes('2.5-flash') && !initialModel.includes('tts')) || initialModel.includes('3.7') || initialModel.includes('3.6')) {
+    if (!initialModel || !initialModel.includes('tts')) {
       initialModel = 'gemini-2.5-flash-preview-tts';
       localStorage.setItem('AEF_GEMINI_MODEL', initialModel);
+    }
+
+    const rawStoredKey = localStorage.getItem('AEF_GEMINI_API_KEY') || '';
+    const cleanStoredKey = rawStoredKey.replace(/\s+/g, '');
+    if (cleanStoredKey !== rawStoredKey) {
+      localStorage.setItem('AEF_GEMINI_API_KEY', cleanStoredKey);
     }
 
     const STATE = {
       productionMode: 'tts', // 'tts' or 'upload'
       mode: 'dual',
-      apiKey: localStorage.getItem('AEF_GEMINI_API_KEY') || '',
+      apiKey: cleanStoredKey,
       model: initialModel,
       currentAudioBlob: null,
       currentWavBlob: null,
@@ -1402,33 +1407,42 @@
     // 4. DETERMINISTIC GEMINI TTS CLIENT
     // =========================================================================
     async function requestGeminiTTS(payload, apiKey, preferredModel) {
-      const cleanKey = apiKey.trim();
-      if (!cleanKey) {
-        throw new Error("Chave da API não fornecida. Clique em 'API Key' para configurar.");
+      const cleanKey = (apiKey || '').replace(/\s+/g, '');
+      if (!cleanKey || cleanKey.length < 10) {
+        throw new Error("Chave da API não fornecida ou inválida. Clique em 'API Key' para configurar.");
       }
 
+      // Modelos canônicos de TTS oficiais do Google Gemini
       const modelsToTry = [
-        preferredModel,
-        'gemini-2.0-flash',
-        'gemini-2.5-flash',
-        'gemini-2.0-flash-exp'
+        preferredModel && preferredModel.includes('tts') ? preferredModel : 'gemini-2.5-flash-preview-tts',
+        'gemini-2.5-pro-preview-tts'
       ].filter((v, i, a) => v && a.indexOf(v) === i);
 
       let lastError = null;
 
       for (const model of modelsToTry) {
         try {
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(cleanKey)}`;
+          // ✅ CORREÇÃO CRÍTICA: usa APENAS o header x-goog-api-key
+          // NÃO colocar ?key= na URL junto com o header — causa "invalid authentication credentials"
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
           const headers = {
             'Content-Type': 'application/json',
             'x-goog-api-key': cleanKey
           };
 
-          const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(payload)
-          });
+          // Retry automático 1x em caso de erro 500 (recomendação oficial Gemini TTS)
+          let response = null;
+          for (let attempt = 1; attempt <= 2; attempt++) {
+            if (attempt > 1) {
+              await new Promise(r => setTimeout(r, 1500));
+            }
+            response = await fetch(endpoint, {
+              method: 'POST',
+              headers: headers,
+              body: JSON.stringify(payload)
+            });
+            if (response.status !== 500) break;
+          }
 
           if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
@@ -1516,11 +1530,13 @@
       }
 
       const sampleText = "Hello, how can I help you today?";
+      const preamble = `Read the following text aloud as audio speech. Generate only audio output. Do not generate any text response.\n\n[TRANSCRIPT]\n`;
+      const fullSampleText = preamble + sampleText;
       const preferredModel = STATE.model || 'gemini-2.5-flash-preview-tts';
 
       try {
         const payload = {
-          contents: [{ role: "user", parts: [{ text: sampleText }] }],
+          contents: [{ role: "user", parts: [{ text: fullSampleText }] }],
           generationConfig: {
             responseModalities: ["AUDIO"],
             speechConfig: {
@@ -2032,10 +2048,10 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
     // 9. FULL MASTER AUDIO GENERATION & CONVERSION (MP3 / WAV)
     // =========================================================================
     async function generateAudioTTS() {
-      const apiKey = STATE.apiKey.trim();
-      if (!apiKey) {
+      const apiKey = (STATE.apiKey || localStorage.getItem('AEF_GEMINI_API_KEY') || '').replace(/\s+/g, '');
+      if (!apiKey || apiKey.length < 10) {
         openConfigModal();
-        showToast("Por favor, insira sua chave da Gemini API.", "warning");
+        showToast("Por favor, insira uma chave válida da Gemini API (mínimo 10 caracteres).", "warning");
         return;
       }
 
@@ -2060,8 +2076,12 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
           const voiceName = document.getElementById('singleVoiceSelect')?.value || "Puck";
           metaSpeakers = voiceName;
 
+          // ✅ Preamble obrigatório Gemini TTS (Single Speaker)
+          const preamble = `Read the following text aloud as audio speech. Generate only audio output. Do not generate any text response.\n\n[TRANSCRIPT]\n`;
+          const fullText = preamble + script;
+
           requestBody = {
-            contents: [{ role: "user", parts: [{ text: script }] }],
+            contents: [{ role: "user", parts: [{ text: fullText }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
@@ -2078,8 +2098,12 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
           const voiceB = document.getElementById('speakerBVoiceSelect')?.value || "Puck";
           metaSpeakers = `${speakerA} (${voiceA}) & ${speakerB} (${voiceB})`;
 
+          // ✅ Preamble obrigatório Gemini TTS (Dual Speaker)
+          const preamble = `Synthesize the following dialogue as audio speech. Generate only audio output. Do not generate any text. Each speaker label indicates who should speak that line.\n\n[TRANSCRIPT]\n`;
+          const fullText = preamble + script;
+
           requestBody = {
-            contents: [{ role: "user", parts: [{ text: script }] }],
+            contents: [{ role: "user", parts: [{ text: fullText }] }],
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
@@ -2127,7 +2151,18 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
 
       } catch (err) {
         console.error("TTS Generation Error:", err);
-        showToast(`Falha na geração: ${err.message}`, "error", 7000);
+        const isAuthError = err.message && (
+          err.message.includes("authentication") ||
+          err.message.includes("credentials") ||
+          err.message.includes("API key") ||
+          err.message.includes("401")
+        );
+        if (isAuthError) {
+          openConfigModal();
+          showToast("❌ Erro de autenticação na chave Gemini. Verifique sua chave no modal de API Key.", "error", 8000);
+        } else {
+          showToast(`Falha na geração: ${err.message}`, "error", 7000);
+        }
       } finally {
         setGeneratingUI(false);
       }
@@ -2633,7 +2668,8 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
 
       // 2. Call Gemini API Multimodal
       const model = 'gemini-2.5-flash';
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey.trim())}`;
+      const cleanKey = (apiKey || '').replace(/\s+/g, '');
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
       const systemPrompt = `You are the master bilingual speech-to-text transcriber for Professor Leonardo Leite's AgoraEuFalo English Mentorship ecosystem.
 Listen carefully to this audio recording by Professor Leo, which naturally combines Brazilian Portuguese explanations and English spoken sentences/drills.
@@ -2675,7 +2711,10 @@ Example output format:
 
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': cleanKey
+        },
         body: JSON.stringify(payload)
       });
 
@@ -2762,11 +2801,11 @@ Example output format:
       try {
         const input = document.getElementById('apiKeyInput');
         const select = document.getElementById('modelSelect');
-        const key = input ? input.value.trim() : '';
+        const key = (input ? input.value : '').replace(/\s+/g, '');
         const model = select ? select.value : 'gemini-2.5-flash-preview-tts';
 
-        if (!key) {
-          showToast("Cole sua API Key do Google AI Studio antes de salvar.", "warning");
+        if (!key || key.length < 10) {
+          showToast("⚠️ Cole sua API Key completa do Google AI Studio antes de salvar (mínimo 10 caracteres).", "warning");
           if (input) input.focus();
           return;
         }
@@ -2779,7 +2818,7 @@ Example output format:
 
         updateApiKeyStatus();
         closeConfigModal();
-        showToast("Chave da API salva e conectada com sucesso!", "success");
+        showToast("🔑 Chave Gemini salva e conectada com sucesso!", "success");
       } catch (err) {
         console.error("Save API Key Error:", err);
         closeConfigModal();
@@ -2803,12 +2842,13 @@ Example output format:
       const text = document.getElementById('apiKeyStatusText');
       if (!badge || !text) return;
 
-      if (STATE.apiKey) {
+      const key = (STATE.apiKey || localStorage.getItem('AEF_GEMINI_API_KEY') || '').replace(/\s+/g, '');
+      if (key && key.length >= 10) {
         badge.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold cursor-pointer";
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>API Key Conectada</span>`;
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Gemini Conectada ✓</span>`;
       } else {
-        badge.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold cursor-pointer";
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span><span>Inserir API Key</span>`;
+        badge.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold cursor-pointer";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>Configurar Chave</span>`;
       }
     }
 
