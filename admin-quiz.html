@@ -256,6 +256,9 @@
       const firstId = Object.keys(DEFAULT_QUIZZES)[0];
       if (firstId) loadQuiz(firstId);
       updateIcons();
+      // Atualiza o botão de status da chave Gemini ao carregar
+      const storedKey = localStorage.getItem("AEF_GEMINI_API_KEY") || "";
+      updateApiKeyStatusButton(storedKey.replace(/\s+/g, ""));
     });
 
     function populateQuizSelect() {
@@ -502,17 +505,16 @@
     // GEMINI API KEY & REAL IN-BROWSER TTS SYNTHESIS ENGINE
     // =========================================================================
     function getGeminiApiKey() {
-      const key = localStorage.getItem("AEF_GEMINI_API_KEY") || "";
-      updateApiKeyStatusButton(key);
-      return key.trim();
+      // Lê e devolve apenas a chave — sem side-effects de UI durante a síntese
+      const raw = localStorage.getItem("AEF_GEMINI_API_KEY") || "";
+      return raw.replace(/\s+/g, ""); // Remove TODOS os espaços, \n, \r, tabs
     }
 
     function updateApiKeyStatusButton(key) {
       const btn = document.getElementById("apiKeyStatusBtn");
-      const text = document.getElementById("apiKeyBtnText");
-      if (!btn || !text) return;
-      if (key && key.trim() !== "") {
-        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i><span id="apiKeyBtnText">Gemini Conectada</span>`;
+      if (!btn) return;
+      if (key && key.replace(/\s+/g, "") !== "") {
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i><span id="apiKeyBtnText">Gemini Conectada ✓</span>`;
       } else {
         btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i><span id="apiKeyBtnText">Configurar Chave</span>`;
       }
@@ -533,11 +535,17 @@
 
     function saveApiKeyConfig() {
       const input = document.getElementById("geminiApiKeyInput");
-      if (input && input.value.trim()) {
-        localStorage.setItem("AEF_GEMINI_API_KEY", input.value.trim());
-        showToast("🔑 Chave Gemini salva com sucesso!");
-        closeApiKeyModal();
+      if (!input) return;
+      // Remove TODOS os whitespace (espaço, tab, \n, \r) que podem ser colados junto
+      const cleanKey = (input.value || "").replace(/\s+/g, "");
+      if (!cleanKey) {
+        showToast("⚠️ Chave vazia! Cole a chave do Google AI Studio.");
+        return;
       }
+      localStorage.setItem("AEF_GEMINI_API_KEY", cleanKey);
+      updateApiKeyStatusButton(cleanKey);
+      showToast("🔑 Chave Gemini salva! Pronto para sintetizar áudios.");
+      closeApiKeyModal();
     }
 
     function pcmBase64ToWavBlob(base64Data, sampleRate = 24000, channels = 1, bitsPerSample = 16) {
@@ -591,6 +599,12 @@
         return;
       }
 
+      // Validação da chave ANTES de chamar a API
+      if (!apiKey || apiKey.length < 10) {
+        alert("❌ Chave Gemini inválida ou não configurada!\n\nClique em 'Configurar Chave' e cole sua chave do Google AI Studio.\nA chave deve ter mais de 10 caracteres.");
+        return;
+      }
+
       const originalBtnHtml = btnElement ? btnElement.innerHTML : "";
       if (btnElement) {
         btnElement.disabled = true;
@@ -598,7 +612,7 @@
         if (window.lucide) lucide.createIcons();
       }
 
-      showToast("🎙️ Conectando ao Gemini TTS (gemini-2.5-flash-preview-tts)...");
+      showToast("🎙️ Conectando ao Gemini TTS...");
 
       try {
         let payload = null;
@@ -638,12 +652,28 @@
           };
         }
 
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-          body: JSON.stringify(payload)
-        });
+        // ✅ CORREÇÃO CRÍTICA: usa APENAS o header x-goog-api-key
+        // NÃO colocar ?key= na URL junto com o header — causa "invalid authentication credentials"
+        const MODEL = "gemini-2.5-flash-preview-tts";
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+
+        // Retry automático 1x em caso de erro 500 (recomendação oficial da doc TTS)
+        let response = null;
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          if (attempt > 1) {
+            showToast("🔄 Tentando novamente (erro 500 temporário do servidor)...");
+            await new Promise(r => setTimeout(r, 1500));
+          }
+          response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": apiKey   // ← único método de auth
+            },
+            body: JSON.stringify(payload)
+          });
+          if (response.status !== 500) break; // só retry em 500
+        }
 
         if (!response.ok) {
           const errData = await response.json().catch(() => ({}));
@@ -678,7 +708,17 @@
 
       } catch (err) {
         console.error("Erro na síntese Gemini TTS:", err);
-        alert(`Erro na síntese do Gemini TTS:\n${err.message}\n\nVerifique se a chave de API é válida em 'Chave Gemini'.`);
+        const isAuthError = err.message && (
+          err.message.includes("authentication") ||
+          err.message.includes("credentials") ||
+          err.message.includes("API key") ||
+          err.message.includes("401")
+        );
+        if (isAuthError) {
+          alert(`❌ Erro de autenticação na chave Gemini:\n"${err.message}"\n\n1. Clique em "Configurar Chave"\n2. Apague a chave atual\n3. Cole a chave novamente (sem espaços)\n4. Clique em Salvar`);
+        } else {
+          alert(`Erro na síntese do Gemini TTS:\n${err.message}`);
+        }
       } finally {
         if (btnElement) {
           btnElement.disabled = false;
@@ -687,6 +727,7 @@
         }
       }
     }
+
 
     let activeAudioInstance = null;
     let currentPlayingBtn = null;
