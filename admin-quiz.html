@@ -523,6 +523,15 @@
         </div>
       `).join('');
 
+      // Botão "Adicionar Questão" ao final da última questão
+      container.innerHTML += `
+        <button onclick="addQuestion()"
+          class="w-full py-3 rounded-2xl border-2 border-dashed border-[#C68A36]/40 hover:border-[#C68A36] bg-amber-50/40 hover:bg-amber-50 text-amber-800 font-black text-xs flex items-center justify-center gap-2 transition cursor-pointer group">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-[#C68A36] group-hover:scale-110 transition-transform"></i>
+          + Adicionar Questão
+        </button>
+      `;
+
       updateIcons();
       renderSimulator();
     }
