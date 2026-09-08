@@ -154,7 +154,8 @@ Toda aula no ecossistema segue rigorosamente este contrato de dados (1:1 com o s
   "moduleId": "ciclo-02",
   "videoUrl": "https://firebasestorage.googleapis.com/.../video.mp4",
   "audioUrl": "https://firebasestorage.googleapis.com/.../audio.mp3",
-  "thumbnailUrl": "assets/images/thumbs/dtc_intro_thumb.jpg",
+  "thumbnailUrl": "https://firebasestorage.googleapis.com/.../thumb.jpg",
+  "artworkUrl": "https://firebasestorage.googleapis.com/.../art.jpg",
   "pdfUrl": "Material-PDF/DTC_1_1_Horas_em_Ingles.pdf",
   "goldenTip": "Em inglês, primeiro você fala os minutos passados ou que faltam. Ex: 'quarter past five'.",
   "processedContentHtml": "<div class='space-y-4'>...</div>",
@@ -163,6 +164,26 @@ Toda aula no ecossistema segue rigorosamente este contrato de dados (1:1 com o s
   "published": true
 }
 ```
+
+### 🖼️ Pipeline de Geração de Kit Visual com IA (Google Imagen & Zero Mocks)
+
+O ecossistema implementa uma esteira industrial direta no `admin-cursos.html` para criação e sincronização de kits visuais sem necessidade de mocks estáticos:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│               PIPELINE VISUAL INDUSTRIAL (COURSE STUDIO)               │
+├────────────────────────────────────────────────────────────────────────┤
+│ 1. Trigger IA  ➔ Lê Título, Curso e Sacada de Ouro da Aula            │
+│ 2. Google Imagen ➔ Gera Miniatura 16:9 (Cinema 35mm) + Capa 1:1 (3D)  │
+│ 3. Cloud Storage ➔ Converte base64 em File e envia para Firebase       │
+│ 4. Previews Vivos ➔ Atualiza contêineres 16:9 e 1:1 com status badges  │
+│ 5. Direct Upload ➔ Suporte a upload manual de fotos e lixeira nuvem    │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+- **Mecanismo de Geração:** `window.AEFStudioAI.generateVisualAsset(prompt, aspectRatio)` consulta os endpoints REST do Google AI Studio (`imagen-4.0-generate-001` com fallback para `imagen-3.0-generate-002`), com parâmetros `personGeneration: 'allow_adult'` e `sampleCount: 1`.
+- **Diretriz Canônica de Prompts de Arte:** Prompts enfatizam fotografia cinematográfica 35mm, alto contraste Calm EdTech, azul-marinho nobre (`#0A192F`) e âmbar acolhedor, com proibição absoluta de texto embutido (`NO text, NO typography`).
+- **Eliminação Absoluta de Mocks:** Novas aulas são inicializadas com `thumbnailUrl: ""` e `artworkUrl: ""`. Em cascata, o sistema utiliza os canvases reais ou mantém as URLs existentes, eliminando qualquer injeção artificial de caminhos estáticos.
 
 ---
 

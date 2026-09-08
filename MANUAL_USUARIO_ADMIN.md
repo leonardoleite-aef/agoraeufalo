@@ -98,8 +98,15 @@ Toda Masterclass no ecossistema AgoraEuFalo opera sobre a **Matriz dos 5 Element
 2. **Duração:** Ex: `05:12`.
 3. **Vídeo (.MP4 ou YouTube):** Cole a URL do vídeo armazenado no Firebase Storage ou o link direto do YouTube.
 4. **Áudio (.MP3):** Cole a URL do áudio MP3 128k correspondente.
-5. **Miniatura 16:9 (`thumbnailUrl`):** Insira a imagem de capa da aula (ex: `assets/images/thumbs/dtc_intro_thumb.jpg`).
-6. **Apostila PDF (`pdfUrl`):** Insira o caminho do PDF oficial (ex: `Material-PDF/DTC_1_1_Horas_em_Ingles.pdf`).
+5. **🖼️ Kit Visual da Aula (Miniatura 16:9 + Capa 1:1) — Sem Mocks:**
+   - **Geração Automática com IA (1 Clique):** Clique no botão **`[ 🎨 Gerar Kit Visual com IA ]`**. A IA (Google Imagen) lê o título da aula, o contexto do curso e a Sacada de Ouro para gerar simultaneamente:
+     - **Miniatura 16:9:** Frame cinematográfico 35mm para o player de vídeo e listagem de aulas no acordeão.
+     - **Capa 1:1 Quadrada:** Arte 3D Glassmorphism Apple EdTech para o Training Player e portal de áudio.
+     - Ambas as imagens são automaticamente salvas no Google Cloud Storage e vinculadas à aula.
+   - **Upload Manual de Foto Própria:** Caso queira usar imagem própria ou foto de gravação, passe o mouse sobre a caixa da imagem e clique em **`[ Subir Foto ]`** (16:9) ou **`[ Subir Capa ]`** (1:1).
+   - **Edição Avançada de URLs:** Clique em *"Editar URLs de imagem manualmente ▾"* se preferir colar links diretos de CDN ou repositório.
+   - **Exclusão Rápida:** Ao passar o mouse sobre o preview ativo, o ícone de lixeira vermelha permite remover o arquivo do Cloud Storage e desvincular da aula instantaneamente.
+6. **Apostila PDF (`pdfUrl`):** Insira o caminho do PDF oficial (ex: `Material-PDF/DTC_1_1_Horas_em_Ingles.pdf`) ou faça upload direto.
 7. **💡 Sacada de Ouro do Leo:** Digite o insight mestre que o aluno não pode esquecer (ex: *"Em inglês, você sempre diz o que já passou ou o que falta para a hora seguinte. Ex: a quarter past five."*).
 8. **📝 Área Didática de Texto (`processedContentHtml`):** Digite ou cole o roteiro formatado, tabelas de sons e vocabulário com fundos claros (`bg-amber-50`).
 9. **📌 Botão 'Enviar para o Player':** Marque a caixa `Vincular ao Training Player` e informe o ID da faixa auditiva.
