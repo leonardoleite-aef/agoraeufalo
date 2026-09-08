@@ -176,11 +176,14 @@ const AEF_COURSES_DATA = {
     "id": "english-quickstart",
     "title": "English QuickStart • Fundamentos da Fala",
     "slug": "english-quickstart",
-    "badge": "FOUNDATION",
-    "tierRequired": "free",
+    "badge": "EXCLUSIVO CLUB",
+    "tierRequired": "club_anual",
+    "availableInFreeTier": false,
+    "includedInClubSubscription": true,
     "coverImageUrl": "assets/images/cover-english-quickstart.jpg?v=20260905",
     "description": "",
     "published": true,
+
     "modules": [
       {
         "id": "eqs-m0",

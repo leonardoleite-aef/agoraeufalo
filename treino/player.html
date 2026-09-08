@@ -362,7 +362,7 @@
       </h3>
 
       <p id="lock-modal-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
-        Este treino faz parte do acervo fechado dos alunos matriculados. Como <b>Aluno Free</b>, você tem acesso liberado ao <b>English QuickStart</b> e ao laboratório de treino.
+        Este treino faz parte do acervo fechado dos alunos matriculados. Alunos do plano gratuito têm acesso ao conteúdo liberado do catálogo.
       </p>
 
       <!-- Botões de Ação -->
@@ -374,7 +374,7 @@
 
         <button onclick="window.switchToFreeAllowedCourse()" class="w-full py-3 px-5 rounded-2xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2">
           <i data-lucide="headphones" class="w-4 h-4 text-amber-400"></i>
-          <span>Ouvir Treino Grátis (QuickStart)</span>
+          <span id="lock-modal-free-btn-text">Ouvir Treino Gratuito</span>
         </button>
       </div>
 
@@ -455,30 +455,40 @@
       const tier = profile.tier || 'free';
       const enrolled = profile.enrolledProducts || [];
 
-      // Checa se o curso existe no registry e é free ou se o usuário está matriculado nele
+      // Categorias especiais sempre abertas (navegação, lab pessoal)
+      if (cId === 'public' || cId === 'custom' || cId === 'quizzes') return true;
+
+      // Checa se o curso existe no registry — usa as flags do próprio curso (sem hardcode de IDs)
       const regCourse = window.AEF_COURSES_REGISTRY ? window.AEF_COURSES_REGISTRY[courseId] : null;
-      if (regCourse && (regCourse.tierRequired === 'free' || regCourse.availableInFreeTier === true || courseId === 'dtc_curso')) {
-        return true;
+      if (regCourse) {
+        const courseTierReq = regCourse.tierRequired || 'club_anual';
+        // Curso marcado como free ou availableInFreeTier
+        if (courseTierReq === 'free' || regCourse.availableInFreeTier === true) return true;
       }
 
+      // Aluno está matriculado explicitamente no produto?
       if (enrolled.includes(cId) || enrolled.includes('all_access_master') || enrolled.includes('magic_stories_club')) {
         return true;
       }
 
-      if (tier === 'free') {
-        return cId === 'english-quickstart' || cId === 'eqs' || cId === 'public' || cId === 'custom' || cId === 'dtc_curso' || cId === 'quizzes';
-      }
-
-      if (tier === 'club_monthly' || tier === 'club_annual' || tier === 'course_member' || tier === 'pro' || tier === 'lifetime') {
-        return cId !== 'vip' || (profile.studentId && cId === `mentoria-${profile.studentId}`);
+      // Tiers Club/Pro: acesso a todos os cursos incluídos no club (exceto VIP)
+      const clubTiers = ['club_monthly', 'club_annual', 'club_anual', 'course_member', 'pro', 'legacy_member', 'lifetime'];
+      if (clubTiers.includes(tier)) {
+        // Cursos VIP-only só para VIP
+        if (cId === 'vip' || (regCourse && regCourse.tierRequired === 'vip')) return false;
+        // Cursos com includedInClubSubscription: false requerem enrollment explícito
+        if (regCourse && regCourse.includedInClubSubscription === false) return false;
+        return true;
       }
 
       if (tier === 'vip' || tier === 'vip_mentorship') {
         return true;
       }
 
+      // Tier free: apenas o que o registry declara como free (verificado acima)
       return false;
     }
+
 
     window.showLockedPaywall = async (courseId = null) => {
       const modal = document.getElementById('player-lock-modal');
@@ -519,12 +529,29 @@
         if (ctaPrimary) ctaPrimary.href = 'https://wa.me/5511996160910?text=Ol%C3%A1%20Professor%20Leo!%20Gostaria%20de%20saber%20sobre%20as%20vagas%20da%20Mentoria%20VIP';
         if (ctaText) ctaText.innerText = 'Saber Mais Sobre a Mentoria VIP';
       } else {
-        if (badgeEl) badgeEl.innerText = 'EXCLUSIVO MAGIC STORIES CLUB';
-        if (titleEl) titleEl.innerText = 'Treino Exclusivo Magic Stories';
-        if (descEl) descEl.innerHTML = 'Este áudio faz parte do acervo fechado dos alunos do <b>Magic Stories Club</b>. No plano Free, você tem acesso liberado ao <b>English QuickStart</b> e ao laboratório de treino!';
-        if (ctaPrimary) ctaPrimary.href = 'https://wa.me/5511996160910?text=Ol%C3%A1%20Professor%20Leo!%20Quero%20destravar%20o%20Magic%20Stories%20Club';
-        if (ctaText) ctaText.innerText = 'Destravar Magic Stories no WhatsApp';
+        // Busca o primeiro curso free do catálogo dinamicamente para citar no texto do paywall
+        const reg = window.AEF_COURSES_REGISTRY || {};
+        const firstFreeId = Object.keys(reg).find(k => {
+          const c = reg[k];
+          return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+        });
+        const firstFreeTitle = (firstFreeId && reg[firstFreeId]?.title?.split('•')[0]?.trim()) || 'Dates & Times';
+
+        const courseTierLabel = (window.AEF_COURSES_REGISTRY?.[targetCourse]?.tierRequired === 'club_anual' ||
+          window.AEF_COURSES_REGISTRY?.[targetCourse]?.includedInClubSubscription)
+          ? 'AgoraEuFalo Club' : 'AgoraEuFalo Club';
+
+        if (badgeEl) badgeEl.innerText = `EXCLUSIVO ${courseTierLabel.toUpperCase()}`;
+        if (titleEl) titleEl.innerText = 'Conteúdo Exclusivo do Club';
+        if (descEl) descEl.innerHTML = `Este áudio faz parte do acervo fechado dos alunos do <b>${courseTierLabel}</b>. No plano gratuito, você tem acesso liberado ao <b>${firstFreeTitle}</b> e ao laboratório de treino!`;
+        if (ctaPrimary) ctaPrimary.href = 'https://wa.me/5511996160910?text=Ol%C3%A1%20Professor%20Leo!%20Quero%20destravar%20o%20AgoraEuFalo%20Club';
+        if (ctaText) ctaText.innerText = 'Destravar Acesso no WhatsApp';
+
+        // Atualizar também o botão de fallback com o nome do curso free
+        const freeBtnText = document.getElementById('lock-modal-free-btn-text');
+        if (freeBtnText && firstFreeTitle) freeBtnText.innerText = `Ouvir ${firstFreeTitle} Grátis`;
       }
+
 
       modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
@@ -537,8 +564,15 @@
 
     window.switchToFreeAllowedCourse = () => {
       window.closeLockModal();
-      window.selectCourse('english-quickstart');
+      // Busca dinamicamente o primeiro curso free disponível no registry (sem hardcode)
+      const reg = window.AEF_COURSES_REGISTRY || {};
+      const firstFreeCourse = Object.keys(reg).find(k => {
+        const c = reg[k];
+        return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+      }) || 'dtc_curso';
+      window.selectCourse(firstFreeCourse);
     };
+
 
     // INICIALIZAÇÃO
     document.addEventListener('DOMContentLoaded', async () => {
@@ -1486,17 +1520,26 @@
         if (sub) sub.innerText = 'Conteúdo Bloqueado';
         if (badge) badge.innerText = '0';
         if (container) {
-          container.innerHTML = `
-            <div class="text-center text-slate-300 py-8 px-4 space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center">
-                <i data-lucide="lock" class="w-6 h-6"></i>
+          container.innerHTML = (() => {
+            const reg = window.AEF_COURSES_REGISTRY || {};
+            const firstFreeId = Object.keys(reg).find(k => {
+              const c = reg[k];
+              return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+            });
+            const freeTitle = (firstFreeId && reg[firstFreeId]?.title?.split('•')[0]?.trim()) || 'Treino Gratuito';
+            return `
+              <div class="text-center text-slate-300 py-8 px-4 space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center">
+                  <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <p class="font-bold text-xs text-white">Faixas restritas para o seu plano</p>
+                <p class="text-[11px] text-slate-400 max-w-xs mx-auto">Faça upgrade da sua conta ou acesse o conteúdo gratuito disponível no catálogo.</p>
+                <button onclick="window.switchToFreeAllowedCourse()" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Ir para ${freeTitle}</button>
               </div>
-              <p class="font-bold text-xs text-white">Faixas restritas para o seu plano</p>
-              <p class="text-[11px] text-slate-400 max-w-xs mx-auto">Faça upgrade da sua conta ou troque para o English QuickStart gratuito.</p>
-              <button onclick="window.switchToFreeAllowedCourse()" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Ir para o QuickStart</button>
-            </div>
-          `;
+            `;
+          })();
           lucide.createIcons();
+
         }
         return;
       }

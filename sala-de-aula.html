@@ -843,8 +843,11 @@
       const currentTier = auth ? auth.getActiveTier() : 'free';
       const enrolled = (auth ? auth.getEnrolledProducts() : []) || [];
 
-      // Curso gratuito? (Ex: English QuickStart)
-      const isCourseFree = (activeCourse && (activeCourse.tierRequired === 'free' || activeCourse.id === 'english-quickstart'));
+      // Curso gratuito? — verificação dinâmica: sem hardcode de IDs de curso
+      const isCourseFree = activeCourse && (
+        activeCourse.tierRequired === 'free' ||
+        activeCourse.availableInFreeTier === true
+      );
 
       // Módulo é expressamente degustação gratuita?
       const isModuleFree = activeModule && (
@@ -857,10 +860,27 @@
                          enrolled.includes('all_access_master') ||
                          enrolled.includes('magic_stories_club');
 
-      // Usuário tem tier compatível com o curso?
-      const hasTierAccess = (currentTier === 'club_annual' || currentTier === 'club_monthly' || currentTier === 'vip' || currentTier === 'vip_mentorship' || currentTier === 'admin_master');
+      // Usuário tem tier compatível com o curso? — verificação dinâmica pelo tierRequired do curso
+      const clubTiers = ['club_annual', 'club_anual', 'club_monthly', 'course_member', 'pro', 'legacy_member', 'lifetime'];
+      const vipTiers  = ['vip', 'vip_mentorship'];
 
-      const isAuthorized = isAdmin || isCourseFree || isModuleFree || isEnrolled || (hasTierAccess && activeCourse.id === 'ms-legacy');
+      const hasTierAccess = (() => {
+        if (!activeCourse) return false;
+        const req = activeCourse.tierRequired || 'club_anual';
+        if (req === 'free') return true;
+        if (vipTiers.includes(currentTier)) return true;
+        if (clubTiers.includes(currentTier)) {
+          // Cursos VIP-only não são acessíveis por Club
+          if (req === 'vip') return false;
+          // Cursos marcados como includedInClubSubscription: false precisam de enrollment explícito
+          if (activeCourse.includedInClubSubscription === false) return false;
+          return true;
+        }
+        return false;
+      })();
+
+      const isAuthorized = isAdmin || isCourseFree || isModuleFree || isEnrolled || hasTierAccess;
+
 
       const videoStage = document.getElementById("videoStage");
 
@@ -1006,19 +1026,22 @@
       }
 
       // Suporte a CTA de Conversão no Último Minuto (Aluno Free em Módulo de Degustação)
-      const currentStudentTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function') 
-        ? window.aefPortalAuth.getActiveTier() 
+      const currentStudentTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function')
+        ? window.aefPortalAuth.getActiveTier()
         : (localStorage.getItem("aef_user_tier") || 'free');
       const isFreeStudent = currentStudentTier === 'free';
-      const isFreeModule = activeModule && (
-        activeModule.isFreeTier === true || 
-        (activeCourse && Array.isArray(activeCourse.freeModuleIds) && activeCourse.freeModuleIds.includes(activeModule.id)) ||
-        (activeCourse && activeCourse.availableInFreeTier === true && activeCourse.modules && activeCourse.modules[0]?.id === activeModule.id) ||
-        (activeCourse && activeCourse.tierRequired === 'free')
+      // isFreeModule agora usa a variável dinâmica isModuleFree já calculada acima,
+      // mais verificação de availableInFreeTier do curso (sem hardcode de IDs)
+      const isFreeModuleForCta = isModuleFree || (
+        activeCourse && (
+          activeCourse.availableInFreeTier === true ||
+          activeCourse.tierRequired === 'free'
+        ) && activeModule && activeCourse.modules && activeCourse.modules[0]?.id === activeModule.id
       );
 
       const vidEl = videoStage.querySelector("video");
-      if (vidEl && (isFreeStudent || isFreeModule)) {
+      if (vidEl && (isFreeStudent || isFreeModuleForCta)) {
+
         let ctaFired = false;
         vidEl.addEventListener("timeupdate", () => {
           if (ctaFired) return;
