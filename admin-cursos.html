@@ -156,6 +156,9 @@
           <button onclick="editCurrentCourse()" class="text-xs text-slate-400 hover:text-amber-400 p-1" title="Editar Metadados do Curso">
             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
           </button>
+          <button onclick="handleDeleteCourse()" class="text-xs text-slate-400 hover:text-rose-400 p-1" title="Excluir Curso">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
         </div>
       </div>
 
@@ -908,10 +911,16 @@
           <textarea id="courseModalDescInput" rows="2" class="w-full p-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:outline-none"></textarea>
         </div>
         <div class="flex items-center justify-between pt-2">
-          <label class="flex items-center gap-2 cursor-pointer bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
-            <input type="checkbox" id="courseModalPublishedInput" checked class="rounded accent-emerald-500 w-4 h-4">
-            <span class="text-xs text-emerald-400 font-bold">🟢 Publicado para Alunos</span>
-          </label>
+          <div class="flex items-center gap-2">
+            <label class="flex items-center gap-2 cursor-pointer bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
+              <input type="checkbox" id="courseModalPublishedInput" checked class="rounded accent-emerald-500 w-4 h-4">
+              <span class="text-xs text-emerald-400 font-bold">🟢 Publicado para Alunos</span>
+            </label>
+            <button type="button" id="btnDeleteCourseInModal" onclick="handleDeleteCourseFromModal()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer" title="Excluir Curso Permanentemente">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Excluir Curso</span>
+            </button>
+          </div>
           <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">Salvar Curso</button>
         </div>
       </form>
@@ -2815,7 +2824,9 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("courseModalSlugInput").value = "";
       document.getElementById("courseModalDescInput").value = "";
       document.getElementById("courseModalThemeColorInput").value = "amber";
+      document.getElementById("courseModalCoverInput").value = "";
       document.getElementById("courseModalPublishedInput").checked = true;
+      document.getElementById("btnDeleteCourseInModal")?.classList.add("hidden");
       document.getElementById("courseModal").classList.remove("hidden");
     }
 
@@ -2840,7 +2851,53 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("courseModalThemeColorInput").value = course.themeColor || "amber";
       document.getElementById("courseModalTierInput").value = course.tierRequired || "free";
       document.getElementById("courseModalPublishedInput").checked = course.published !== false;
+      document.getElementById("btnDeleteCourseInModal")?.classList.remove("hidden");
       document.getElementById("courseModal").classList.remove("hidden");
+    }
+
+    async function handleDeleteCourse(courseId) {
+      const cid = courseId || activeCourseId;
+      const course = ALL_COURSES[cid];
+      if (!course) {
+        showToast("Nenhum curso selecionado para excluir.");
+        return;
+      }
+
+      const isDraft = course.published === false;
+      const confirmText = isDraft
+        ? `Tem certeza que deseja excluir o curso em rascunho "${course.title || cid}"?\n\nEsta ação removerá o curso e todas as suas aulas permanentemente.`
+        : `⚠️ ATENÇÃO: O curso "${course.title || cid}" está PUBLICADO para alunos!\n\nTem certeza absoluta que deseja excluí-lo permanentemente?`;
+
+      if (!confirm(confirmText)) return;
+
+      showToast(`🗑️ Excluindo curso "${course.title || cid}" da Nuvem...`);
+
+      // 1. Apaga do Firestore via REST
+      try {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/${cid}`;
+        await fetch(restUrl, { method: "DELETE" });
+      } catch (err) {
+        console.warn("Erro ao deletar curso no Firestore:", err);
+      }
+
+      // 2. Apaga da memória local e redireciona para outro curso
+      delete ALL_COURSES[cid];
+      const remainingIds = Object.keys(ALL_COURSES);
+      activeCourseId = remainingIds.length > 0 ? remainingIds[0] : "";
+      activeModuleId = null;
+      activeLessonId = null;
+      localStorage.setItem('aef_admin_active_course_id', activeCourseId);
+
+      closeCourseModal();
+      renderCourseSwitcher();
+      renderHierarchyTree();
+      updateArtworkControlsFromCourse();
+      showToast(`✅ Curso "${course.title || cid}" foi excluído com sucesso!`);
+    }
+
+    function handleDeleteCourseFromModal() {
+      const id = document.getElementById("courseModalId")?.value || activeCourseId;
+      handleDeleteCourse(id);
     }
 
     async function handleSaveCourse(e) {
