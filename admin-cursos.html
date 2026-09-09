@@ -2645,45 +2645,37 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       }
 
       try {
-        // 1. Cria um iframe oculto para renderizar o HTML da apostila com fidelidade
-        const iframe = document.createElement('iframe');
-        iframe.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:794px;height:1123px;visibility:hidden;';
-        document.body.appendChild(iframe);
-        iframe.contentDocument.open();
-        iframe.contentDocument.write(LAST_GENERATED_PDF_HTML);
-        iframe.contentDocument.close();
-
-        // Aguarda o iframe carregar completamente
-        await new Promise(resolve => {
-          if (iframe.contentDocument.readyState === 'complete') return resolve();
-          iframe.onload = resolve;
-          setTimeout(resolve, 1200);
-        });
-
-        // 2. Gera o blob PDF via html2pdf.js (se disponível) ou via fallback blob de HTML
+        // 2. Gera o blob PDF via html2pdf.js passando o HTML completo como string
+        // (inclui <head> com todos os estilos — elimina divergência visual vs. preview)
         let pdfBlob = null;
 
         if (window.html2pdf) {
           showToast('🖨️ Compilando apostila A4...');
+
+          // Injeta margem lateral no body do HTML para evitar texto colado na borda
+          const htmlWithMargin = LAST_GENERATED_PDF_HTML.replace(
+            /(<body[^>]*style=["'])([^"']*)(["'])/i,
+            (m, pre, styles, post) => `${pre}${styles} padding: 0 18mm;${post}`
+          );
+
           pdfBlob = await html2pdf()
             .set({
-              margin: 0,
+              margin: [8, 15, 8, 15],       // [top, right, bottom, left] em mm
               filename: filename,
               image: { type: 'jpeg', quality: 0.92 },
-              html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+              html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
               jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
               pagebreak: { mode: ['avoid-all', 'css'] }
             })
-            .from(iframe.contentDocument.body)
+            .from(htmlWithMargin || LAST_GENERATED_PDF_HTML, 'string')
             .outputPdf('blob');
         } else {
           // Fallback: blob de HTML puro (abre no browser como PDF via print)
           pdfBlob = new Blob([LAST_GENERATED_PDF_HTML], { type: 'text/html' });
         }
 
-        document.body.removeChild(iframe);
-
         // 3. Upload para Firebase Storage
+
         showToast('☁️ Enviando para a Nuvem...');
 
         if (!window.aefCloudSync) throw new Error('CloudSync indisponível');
