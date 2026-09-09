@@ -243,29 +243,137 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
         systemInstruction: {
           parts: [{ text: systemPrompt }]
         },
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: "application/json"
-        }
-      };
+      safeParseAiJson(rawJson) {
+        if (!rawJson || typeof rawJson !== 'string') return {};
+        const trimmed = rawJson.trim();
 
-      const resData = await this.callGeminiApi(payload, onProgress);
-      const rawJson = resData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-      
-      let parsed = {};
-      try {
-        parsed = JSON.parse(rawJson);
-      } catch (e) {
-        const match = rawJson.match(/\{[\s\S]*\}/);
-        if (match) parsed = JSON.parse(match[0]);
+        // 1. Parse direto
+        try {
+          return JSON.parse(trimmed);
+        } catch (err1) {}
+
+        // 2. Extrai substring entre primeiro { e último }
+        try {
+          const firstBrace = trimmed.indexOf('{');
+          const lastBrace = trimmed.lastIndexOf('}');
+          if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+            return JSON.parse(trimmed.slice(firstBrace, lastBrace + 1));
+          }
+        } catch (err2) {}
+
+        // 3. Fallback inteligente via Regex
+        const result = { goldenTip: '', processedContentHtml: '', summary: '' };
+
+        const tipMatch = trimmed.match(/"goldenTip"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+        if (tipMatch) {
+          result.goldenTip = tipMatch[1].replace(/\\"/g, '"').replace(/\\n/g, ' ').trim();
+        }
+
+        const summaryMatch = trimmed.match(/"summary"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+        if (summaryMatch) {
+          result.summary = summaryMatch[1].replace(/\\"/g, '"').trim();
+        }
+
+        const htmlStartMatch = trimmed.match(/"processedContentHtml"\s*:\s*"/i);
+        if (htmlStartMatch) {
+          const startIdx = htmlStartMatch.index + htmlStartMatch[0].length;
+          let endIdx = trimmed.search(/",\s*"summary"/i);
+          if (endIdx === -1) endIdx = trimmed.lastIndexOf('"}');
+          if (endIdx === -1) endIdx = trimmed.lastIndexOf('}');
+          if (endIdx > startIdx) {
+            let extractedHtml = trimmed.slice(startIdx, endIdx)
+              .replace(/\\"/g, '"')
+              .replace(/\\n/g, '\n')
+              .replace(/\\t/g, ' ')
+              .trim();
+            if (extractedHtml.endsWith('"')) extractedHtml = extractedHtml.slice(0, -1);
+            result.processedContentHtml = extractedHtml;
+          }
+        }
+
+        if (result.processedContentHtml || result.goldenTip) {
+          return result;
+        }
+
+        return {
+          goldenTip: "Repita com cadência até a melodia da fala virar reflexo natural!",
+          processedContentHtml: `<div class="p-5 bg-amber-50 rounded-2xl border-2 border-amber-200 text-slate-900 leading-relaxed space-y-3">${trimmed}</div>`,
+          summary: "Didática da aula"
+        };
       }
 
-      return {
-        goldenTip: parsed.goldenTip || '',
-        processedContentHtml: parsed.processedContentHtml || '',
-        summary: parsed.summary || ''
-      };
-    }
+      async structureMasterclass(rawScript, lessonTitle = "", courseTitle = "", onProgress = null) {
+        if (!rawScript || rawScript.trim().length < 10) {
+          throw new Error("O roteiro bruto (rawScript) está muito curto ou vazio. Cole o texto ou transcreva a aula primeiro.");
+        }
+
+        const systemPrompt = `Você é o Arquiteto Pedagógico Sênior do ecossistema AgoraEuFalo, codificando a didática consagrada de mais de 35 anos de sala de aula do Professor Leonardo Leite.
+
+REGRAS PEDAGÓGICAS CANÔNICAS ABSOLUTAS:
+1. DIDÁTICA DO "SENTIMENTO DA ESTRUTURA" (ZERO JARGÕES GRAMATICAIS):
+   - Proibição absoluta de explicar a língua por nomenclaturas acadêmicas abstratas.
+   - Explique SEMPRE pela intenção, pelo sentimento da estrutura, pelo contexto emocional e prático de quando a frase é dita na vida real.
+2. A REGRA CANÔNICA DE "ZERO TRADUÇÕES ÓBVIAS":
+   - Proibição absoluta de traduzir números universais (ex: 1973, 2026), dias da semana óbvios ou palavras de compreensão universal.
+   - Traduções aplicam-se SOMENTE a expressões contraintuitivas, idiomáticas ou onde a lógica do inglês diverge do português falado brasileiro real.
+3. DESIGN CALM EDTECH DE ALTO CONTRASTE (ZERO CAIXAS ESCURAS):
+   - O HTML gerado deve usar exclusivamente caixas didáticas claras com Tailwind CSS (bg-amber-50/90, border-2 border-amber-200, bg-white, text-slate-900).
+4. EXTRAÇÃO DA SACADA DE OURO DO PROFESSOR LEO (goldenTip):
+   - Uma sacada monumental, prática, libertadora e acolhedora de 1 a 2 frases com a sabedoria direta do Professor Leo sobre a aula.
+
+FORMATO DE SAÍDA OBRIGATÓRIO:
+Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de código em volta) com a seguinte estrutura:
+{
+  "goldenTip": "A sacada de ouro prática do Professor Leo",
+  "processedContentHtml": "<div class=\\"space-y-6\\">...</div>",
+  "summary": "Resumo pedagógico em 2 linhas"
+}`;
+
+        const userMessage = `Título do Curso: ${courseTitle || 'Curso de Inglês AgoraEuFalo'}
+Título da Aula: ${lessonTitle || 'Aula'}
+Roteiro Bruto / Transcrição da Aula:
+"""
+${rawScript}
+"""
+
+Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML pedagógico completo estruturado nos padrões de luxo do AgoraEuFalo.`;
+
+        const payload = {
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: userMessage }]
+            }
+          ],
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 8192,
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "OBJECT",
+              properties: {
+                goldenTip: { type: "STRING" },
+                processedContentHtml: { type: "STRING" },
+                summary: { type: "STRING" }
+              },
+              required: ["goldenTip", "processedContentHtml"]
+            }
+          }
+        };
+
+        const resData = await this.callGeminiApi(payload, onProgress);
+        const rawJson = resData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+        const parsed = this.safeParseAiJson(rawJson);
+
+        return {
+          goldenTip: parsed.goldenTip || '',
+          processedContentHtml: parsed.processedContentHtml || '',
+          summary: parsed.summary || ''
+        };
+      }
   }
 
   window.AEFStudioAI = new AEFStudioAI();

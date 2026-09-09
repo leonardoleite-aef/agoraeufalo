@@ -1162,7 +1162,17 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
           },
           generationConfig: {
             temperature: 0.2,
-            responseMimeType: "application/json"
+            maxOutputTokens: 8192,
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "OBJECT",
+              properties: {
+                goldenTip: { type: "STRING" },
+                processedContentHtml: { type: "STRING" },
+                summary: { type: "STRING" }
+              },
+              required: ["goldenTip", "processedContentHtml"]
+            }
           }
         };
 
@@ -1173,8 +1183,11 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
         try {
           parsed = JSON.parse(rawJson);
         } catch (e) {
-          const match = rawJson.match(/\\{[\\s\\S]*\\}/);
-          if (match) parsed = JSON.parse(match[0]);
+          const firstBrace = rawJson.indexOf('{');
+          const lastBrace = rawJson.lastIndexOf('}');
+          if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+            try { parsed = JSON.parse(rawJson.slice(firstBrace, lastBrace + 1)); } catch(e2) {}
+          }
         }
 
         return {
