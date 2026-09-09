@@ -1247,51 +1247,6 @@ Retorne APENAS o texto da transcrição limpo e pontuado, sem introduções, sem
         return text.trim();
       }
 
-      async structureMasterclass(rawScript, lessonTitle = "", courseTitle = "", onProgress = null) {
-        if (!rawScript || rawScript.trim().length < 10) {
-          throw new Error("O roteiro bruto (rawScript) está muito curto ou vazio. Cole o texto ou transcreva a aula primeiro.");
-        }
-
-        const systemPrompt = `Você é o Arquiteto Pedagógico Sênior do ecossistema AgoraEuFalo, codificando a didática consagrada de mais de 35 anos de sala de aula do Professor Leonardo Leite.
-
-REGRAS PEDAGÓGICAS CANÔNICAS ABSOLUTAS:
-1. DIDÁTICA DO "SENTIMENTO DA ESTRUTURA" (ZERO JARGÕES GRAMATICAIS):
-   - Proibição absoluta de explicar a língua por nomenclaturas acadêmicas abstratas.
-   - Explique SEMPRE pela intenção, pelo sentimento da estrutura, pelo contexto emocional e prático de quando a frase é dita na vida real.
-2. A REGRA CANÔNICA DE "ZERO TRADUÇÕES ÓBVIAS":
-   - Proibição absoluta de traduzir números universais (ex: 1973, 2026), dias da semana óbvios ou palavras de compreensão universal.
-   - Traduções aplicam-se SOMENTE a expressões contraintuitivas, idiomáticas ou onde a lógica do inglês diverge do português falado brasileiro real.
-3. DESIGN CALM EDTECH DE ALTO CONTRASTE (ZERO CAIXAS ESCURAS):
-   - O HTML gerado deve usar exclusivamente caixas didáticas claras com Tailwind CSS (bg-amber-50/90, border-2 border-amber-200, bg-white, text-slate-900).
-4. EXTRAÇÃO DA SACADA DE OURO DO PROFESSOR LEO (goldenTip):
-   - Uma sacada monumental, prática, libertadora e acolhedora de 1 a 2 frases com a sabedoria direta do Professor Leo sobre a aula.
-
-FORMATO DE SAÍDA OBRIGATÓRIO:
-Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de código em volta) com a seguinte estrutura:
-{
-  "goldenTip": "A sacada de ouro prática do Professor Leo",
-  "processedContentHtml": "<div class=\\"space-y-6\\">...</div>",
-  "summary": "Resumo pedagógico em 2 linhas"
-}`;
-
-        const userMessage = `Título do Curso: ${courseTitle || 'Curso de Inglês AgoraEuFalo'}
-Título da Aula: ${lessonTitle || 'Aula'}
-Roteiro Bruto / Transcrição da Aula:
-"""
-${rawScript}
-"""
-
-Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML pedagógico completo estruturado nos padrões de luxo do AgoraEuFalo.`;
-
-        const payload = {
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: userMessage }]
-            }
-          ],
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
       safeParseAiJson(rawJson) {
         if (!rawJson || typeof rawJson !== 'string') return {};
         const trimmed = rawJson.trim();
