@@ -41,7 +41,6 @@
     }
   </script>
 
-  <!-- Lucide Icons & Core Cloud SDKs (com Cache Busting para atualização imediata) -->
   <script src="assets/js/aef-domain-router.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-courses-registry.js?v=20260906_01"></script>
@@ -52,6 +51,9 @@
   <script src="assets/js/aef-portal-auth.js?v=20260906_01"></script>
   <script src="assets/js/aef-studio-ai.js?v=20260906_01"></script>
   <script src="assets/js/aef-admin-nav.js?v=20260906_01"></script>
+  <!-- html2pdf.js: converte HTML em PDF binário real no navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
   <style>
     body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -2622,17 +2624,94 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
     }
 
     async function linkGeneratedPdfToLesson() {
-      const course = ALL_COURSES[activeCourseId];
-      const lessonTitle = document.getElementById("lessonTitleInput")?.value?.trim() || "aula";
+      if (!LAST_GENERATED_PDF_HTML) {
+        generateLessonPdfPreview();
+      }
+      if (!LAST_GENERATED_PDF_HTML) {
+        showToast('⚠️ Gere a apostila primeiro clicando em "Gerar Apostila".');
+        return;
+      }
+
+      const lessonTitle = document.getElementById('lessonTitleInput')?.value?.trim() || 'aula';
       const cleanSlug = lessonTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
       const filename = `Apostila_${activeCourseId}_${cleanSlug}.pdf`;
 
-      const generatedUrl = `Material-PDF/${filename}`;
-      const inputEl = document.getElementById("lessonPdfUrlInput");
-      if (inputEl) inputEl.value = generatedUrl;
+      // Feedback visual no botão
+      const btn = event?.currentTarget || document.querySelector('[onclick="linkGeneratedPdfToLesson()"]');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<svg class="animate-spin w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg><span>Gerando PDF...</span>';
+      }
 
-      await handleSaveLesson();
-      showToast(`✅ Apostila vinculada e salva na aula: ${generatedUrl}`);
+      try {
+        // 1. Cria um iframe oculto para renderizar o HTML da apostila com fidelidade
+        const iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:794px;height:1123px;visibility:hidden;';
+        document.body.appendChild(iframe);
+        iframe.contentDocument.open();
+        iframe.contentDocument.write(LAST_GENERATED_PDF_HTML);
+        iframe.contentDocument.close();
+
+        // Aguarda o iframe carregar completamente
+        await new Promise(resolve => {
+          if (iframe.contentDocument.readyState === 'complete') return resolve();
+          iframe.onload = resolve;
+          setTimeout(resolve, 1200);
+        });
+
+        // 2. Gera o blob PDF via html2pdf.js (se disponível) ou via fallback blob de HTML
+        let pdfBlob = null;
+
+        if (window.html2pdf) {
+          showToast('🖨️ Compilando apostila A4...');
+          pdfBlob = await html2pdf()
+            .set({
+              margin: 0,
+              filename: filename,
+              image: { type: 'jpeg', quality: 0.92 },
+              html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+              pagebreak: { mode: ['avoid-all', 'css'] }
+            })
+            .from(iframe.contentDocument.body)
+            .outputPdf('blob');
+        } else {
+          // Fallback: blob de HTML puro (abre no browser como PDF via print)
+          pdfBlob = new Blob([LAST_GENERATED_PDF_HTML], { type: 'text/html' });
+        }
+
+        document.body.removeChild(iframe);
+
+        // 3. Upload para Firebase Storage
+        showToast('☁️ Enviando para a Nuvem...');
+
+        if (!window.aefCloudSync) throw new Error('CloudSync indisponível');
+        await window.aefCloudSync.init();
+
+        // Cria um File com o nome canônico para o uploadFileToStorage identificar
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+        const folder = `courses/${activeCourseId}/pdfs`;
+
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(pdfFile, folder);
+
+        // 4. Salva a URL real do Firebase Storage na aula
+        const inputEl = document.getElementById('lessonPdfUrlInput');
+        if (inputEl) inputEl.value = downloadUrl;
+
+        await handleSaveLesson();
+        showToast(`✅ Apostila enviada e vinculada com sucesso!`);
+
+      } catch (err) {
+        console.error('Erro ao gerar/enviar PDF:', err);
+        showToast(`❌ Erro: ${err.message}. Tente usar "Visualizar / Imprimir" e faça upload manual.`);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
     }
 
     // ==========================================

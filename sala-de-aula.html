@@ -1082,22 +1082,60 @@
       const pdfLink = document.getElementById("pdfDownloadLink");
       const pdfBtnLabel = document.getElementById("pdfBtnLabel");
       if (pdfLink) {
-        if (resolvedPdf) {
+        // URL real do Firebase Storage começa com https://
+        // URLs legadas como "Material-PDF/..." são caminhos relativos que não existem no servidor → fallback
+        const isRealUrl = resolvedPdf && resolvedPdf.startsWith('https://');
+        const isLegacyPath = resolvedPdf && !isRealUrl;
+
+        if (isRealUrl) {
+          // PDF real na nuvem — abre diretamente
           pdfLink.href = resolvedPdf;
           pdfLink.target = "_blank";
+          pdfLink.onclick = null;
           pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
           if (pdfBtnLabel) {
             pdfBtnLabel.innerText = isModuleBooklet ? "Livreto do Módulo (PDF)" : "Apostila da Aula (PDF)";
           }
           pdfLink.title = isModuleBooklet ? "Baixar Livreto Completo do Módulo" : "Baixar Apostila desta Aula";
+        } else if (isLegacyPath && found.processedContentHtml) {
+          // Caminho legado sem arquivo real, mas existe conteúdo didático → fallback de impressão
+          pdfLink.href = "javascript:void(0)";
+          pdfLink.removeAttribute("target");
+          pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
+          if (pdfBtnLabel) pdfBtnLabel.innerText = "Apostila da Aula (PDF)";
+          pdfLink.title = "Abrir apostila para impressão/salvar como PDF";
+          pdfLink.onclick = (e) => {
+            e.preventDefault();
+            const w = window.open('', '_blank', 'width=850,height=950');
+            if (!w) { alert('Permita popups para abrir a apostila.'); return; }
+            w.document.open();
+            w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+              <title>Apostila — ${found.title || 'Aula AgoraEuFalo'}</title>
+              <style>
+                @media print { body { margin: 0; } }
+                body { font-family: 'Georgia', serif; max-width: 794px; margin: 0 auto; padding: 32px; background: #fff; color: #0F172A; font-size: 15pt; line-height: 1.65; }
+                h1, h2, h3 { font-weight: 700; }
+                table { border-collapse: collapse; width: 100%; }
+                td, th { border: 1px solid #CBD5E1; padding: 8px; }
+              </style>
+              </head><body>
+              <h1 style="color:#0A192F;">${found.title || 'Aula'}</h1>
+              ${found.processedContentHtml}
+              </body></html>`);
+            w.document.close();
+            w.focus();
+            setTimeout(() => w.print(), 600);
+          };
         } else {
           pdfLink.href = "javascript:void(0)";
           pdfLink.removeAttribute("target");
+          pdfLink.onclick = null;
           pdfLink.classList.add("opacity-40", "pointer-events-none", "cursor-not-allowed");
           if (pdfBtnLabel) pdfBtnLabel.innerText = "Material em Preparação";
           pdfLink.title = "Nenhum PDF disponível para esta aula introdutória";
         }
       }
+
 
       const isCompleted = completedLessonIds.includes(found.id);
       const markBtn = document.getElementById("btnMarkComplete");
