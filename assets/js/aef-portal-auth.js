@@ -160,7 +160,7 @@
         role: isMasterAdmin ? 'admin' : (isVipMentee ? 'vip_mentee' : 'student'),
         enrolledProducts: isMasterAdmin 
           ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
-          : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart', 'free_starter_pack'] : ['free_starter_pack', 'magic_stories_demo']),
+          : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart'] : []),
         stats: {
           streakDays: 1,
           totalListeningMinutes: 0,
@@ -245,7 +245,7 @@
           role: isMasterAdmin ? 'admin' : (isVipMentee ? 'vip_mentee' : 'student'),
           enrolledProducts: isMasterAdmin 
             ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
-            : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart', 'free_starter_pack'] : ['free_starter_pack', 'magic_stories_demo']),
+            : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart'] : []),
           stats: {
             streakDays: 1,
             totalListeningMinutes: 0,
@@ -331,7 +331,7 @@
               role: isMasterAdmin ? 'admin' : (isVipMentee ? 'vip_mentee' : 'student'),
               enrolledProducts: isMasterAdmin 
                 ? ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'] 
-                : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart', 'free_starter_pack'] : ['free_starter_pack', 'magic_stories_demo']),
+                : (isVipMentee ? ['mentoria-andre', 'ms-legacy', 'english-quickstart'] : []),
               stats: {
                 streakDays: 1,
                 totalListeningMinutes: 0,
