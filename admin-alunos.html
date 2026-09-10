@@ -1070,9 +1070,9 @@
           return `<span class="px-2 py-0.5 rounded-md border text-[10px] ${badgeClass}">${label}</span>`;
         }).join(' ') || '<span class="text-[10px] text-slate-400 italic">Nenhum</span>';
 
-        const tracksCount = s.tracksCount || (tier.includes('vip') ? 1 : 0);
+        const tracksCount = s.tracksCount || ((s.tier && s.tier.includes('vip')) || (s.categories && s.categories.includes('member_mentoria')) ? 1 : 0);
         const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(s.name || 'A').substring(0, 2).toUpperCase()}</div>`;
-        const isVIP = tier === 'vip_mentorship' || tier === 'vip';
+        const isVIP = (s.tier === 'vip_mentorship' || s.tier === 'vip') || (s.categories && s.categories.includes('member_mentoria'));
         const tracksLabel = tracksCount === 1 ? '1 faixa ativa' : `${tracksCount} faixas ativas`;
 
         return `
