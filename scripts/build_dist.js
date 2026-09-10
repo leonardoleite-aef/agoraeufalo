@@ -32,7 +32,7 @@ for (const file of rootFiles) {
 }
 
 // 2. Copy directories
-const dirsToCopy = ['assets', 'treino', 'blog', 'Material-PDF', 'aef_ebook', 'historico', 'migracao'];
+const dirsToCopy = ['assets', 'treino', 'blog', 'Material-PDF', 'aef_ebook', 'historico', 'migracao', 'data'];
 for (const dir of dirsToCopy) {
   copyRecursive(path.join(rootDir, dir), path.join(distDir, dir));
 }
