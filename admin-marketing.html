@@ -46,6 +46,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-offers-registry.js"></script>
   <script src="assets/js/aef-block-engine.js"></script>
   <script src="assets/js/aef-admin-nav.js"></script>
@@ -83,10 +84,10 @@
           </span>
         </div>
         <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          Fábrica de Peças de Marketing & Segmentação de Tiers
+          Fábrica de Peças de Marketing & Segmentação de Categorias
         </h1>
         <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-          Monte modais de paywall, cards in-feed e banners topo. Conecte cada peça criativa a uma <span class="text-amber-400 font-bold">Oferta Comercial de Vendas</span> e segmente exatamente quais tiers de alunos verão cada anúncio.
+          Monte modais de paywall, cards in-feed e banners topo. Conecte cada peça criativa a uma <span class="text-amber-400 font-bold">Oferta Comercial de Vendas</span> e segmente exatamente quais categorias de alunos verão cada anúncio.
         </p>
       </div>
 
@@ -332,41 +333,46 @@
           </div>
         </div>
 
-        <!-- 4. SEGMENTAÇÃO POR TIERS & STATUS -->
+        <!-- 4. SEGMENTAÇÃO POR CATEGORIAS & STATUS -->
         <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
-          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">4. Segmentação de Audiência (Tiers)</span>
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">4. Segmentação de Audiência (Categorias)</span>
 
           <div>
-            <span class="block font-bold text-slate-300 mb-2">Exibir esta peça para quais Tiers?</span>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <span class="block font-bold text-slate-300 mb-2">Exibir esta peça para quais Categorias?</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
               <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
-                <input type="checkbox" name="formTargetTiers" value="unauthenticated" class="accent-amber-400">
-                <span class="font-bold text-white text-xs">Visitante Não Logado</span>
+                <input type="checkbox" name="formTargetCategories" value="member_free" checked class="accent-amber-400">
+                <span class="font-bold text-white text-xs">🌱 Member Free</span>
               </label>
 
               <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
-                <input type="checkbox" name="formTargetTiers" value="free" checked class="accent-amber-400">
-                <span class="font-bold text-white text-xs">🌱 Aluno Free</span>
+                <input type="checkbox" name="formTargetCategories" value="member_pago" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">💰 Member Pago</span>
               </label>
 
               <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
-                <input type="checkbox" name="formTargetTiers" value="club_monthly" class="accent-amber-400">
-                <span class="font-bold text-white text-xs">🎓 Membro Club Mensal</span>
+                <input type="checkbox" name="formTargetCategories" value="member_mentoria" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">👑 Mentorado VIP</span>
               </label>
 
               <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
-                <input type="checkbox" name="formTargetTiers" value="club_annual" class="accent-amber-400">
-                <span class="font-bold text-white text-xs">🎓 Membro Club Anual</span>
+                <input type="checkbox" name="formTargetCategories" value="venda_avulsa" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">🛒 Venda Avulsa</span>
               </label>
 
               <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
-                <input type="checkbox" name="formTargetTiers" value="course_member" class="accent-amber-400">
-                <span class="font-bold text-white text-xs">📚 Aluno de Curso</span>
+                <input type="checkbox" name="formTargetCategories" value="legado_1" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">📦 Legado 1 (MS)</span>
               </label>
 
               <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
-                <input type="checkbox" name="formTargetTiers" value="vip" class="accent-amber-400">
-                <span class="font-bold text-white text-xs">👑 Mentoria VIP</span>
+                <input type="checkbox" name="formTargetCategories" value="legado_2" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">📦 Legado 2 (AEF)</span>
+              </label>
+
+              <label class="p-2 rounded-xl bg-[#112240] border border-white/10 flex items-center gap-2 cursor-pointer hover:border-amber-400/40">
+                <input type="checkbox" name="formTargetCategories" value="admin" class="accent-amber-400">
+                <span class="font-bold text-white text-xs">🔐 Admin Mestre</span>
               </label>
             </div>
           </div>
@@ -588,14 +594,25 @@
           formatIcon = "megaphone";
         }
 
-        const targetTiersText = (block.targeting?.targetTiers || []).map(t => {
-          if (t === 'free') return '🌱 Free';
-          if (t === 'club_annual') return '🎓 Club Anual';
-          if (t === 'club_monthly') return '🎓 Club Mensal';
-          if (t === 'vip') return '👑 VIP';
-          if (t === 'unauthenticated') return 'Visitante';
-          return t;
+        const rawCategories = block.targeting?.targetCategories || block.targeting?.targetTiers || [];
+        const targetCategoriesText = rawCategories.map(cat => {
+          if (window.AEFAccessEngine?.CATEGORY_LABELS?.[cat]) {
+            const item = window.AEFAccessEngine.CATEGORY_LABELS[cat];
+            return `${item.emoji} ${item.label}`;
+          }
+          if (cat === 'venda_avulsa') return '🛒 Venda Avulsa';
+          if (cat === 'member_free' || cat === 'free' || cat === 'unauthenticated') return '🌱 Member Free';
+          if (cat === 'member_pago') return '💰 Member Pago';
+          if (cat === 'member_mentoria') return '👑 Mentorado VIP';
+          if (cat === 'legado_1') return '📦 Legado 1 (MS)';
+          if (cat === 'legado_2') return '📦 Legado 2 (AEF)';
+          if (cat === 'admin') return '🔐 Admin Mestre';
+          if (cat === 'club_annual') return '🎓 Club Anual';
+          if (cat === 'club_monthly') return '🎓 Club Mensal';
+          if (cat === 'vip') return '👑 Mentorado VIP';
+          return cat;
         }).join(', ') || 'Todos';
+        const targetTiersText = targetCategoriesText;
 
         return `
           <div class="bg-[#0A192F] border ${isActive ? 'border-white/10 hover:border-amber-400/40' : 'border-white/5 opacity-75'} rounded-3xl p-5 shadow-xl flex flex-col justify-between space-y-4 transition group">
@@ -647,7 +664,7 @@
 
               <!-- Targeting Badge -->
               <div class="text-[10px] text-slate-400">
-                <span>Público-Alvo: <strong class="text-slate-200">${targetTiersText}</strong></span>
+                <span>Público-Alvo: <strong class="text-slate-200">${targetCategoriesText}</strong></span>
               </div>
             </div>
 
@@ -727,6 +744,11 @@
       document.getElementById('formStatus').value = "active";
       document.getElementById('formPriority').value = "80";
 
+      // Reset checkboxes de Categorias (default: member_free)
+      document.querySelectorAll('input[name="formTargetCategories"]').forEach(cb => {
+        cb.checked = (cb.value === 'member_free');
+      });
+
       populateOfferSelect();
       document.getElementById('blockModal').classList.remove('hidden');
     }
@@ -751,10 +773,20 @@
 
       populateOfferSelect(block.attachedOfferId);
 
-      // Checkboxes de Tiers
-      const selectedTiers = block.targeting?.targetTiers || [];
-      document.querySelectorAll('input[name="formTargetTiers"]').forEach(cb => {
-        cb.checked = selectedTiers.includes(cb.value);
+      // Checkboxes de Categorias
+      let selectedCategories = block.targeting?.targetCategories;
+      if (!selectedCategories || selectedCategories.length === 0) {
+        const legacyTiers = block.targeting?.targetTiers || [];
+        selectedCategories = legacyTiers.map(t => {
+          if (t === 'free' || t === 'unauthenticated') return 'member_free';
+          if (t === 'club_monthly' || t === 'club_annual') return 'member_pago';
+          if (t === 'vip') return 'member_mentoria';
+          if (t === 'course_member') return 'venda_avulsa';
+          return t;
+        });
+      }
+      document.querySelectorAll('input[name="formTargetCategories"]').forEach(cb => {
+        cb.checked = selectedCategories.includes(cb.value);
       });
 
       document.getElementById('blockModal').classList.remove('hidden');
@@ -772,7 +804,7 @@
       const slotId = document.getElementById('formSlotId').value;
       const attachedOfferId = document.getElementById('formAttachedOfferId').value;
 
-      const targetTiers = Array.from(document.querySelectorAll('input[name="formTargetTiers"]:checked')).map(cb => cb.value);
+      const targetCategories = Array.from(document.querySelectorAll('input[name="formTargetCategories"]:checked')).map(cb => cb.value);
 
       const blockData = {
         id: blockId,
@@ -784,7 +816,8 @@
           priority: parseInt(document.getElementById('formPriority').value || "80")
         },
         targeting: {
-          targetTiers: targetTiers.length > 0 ? targetTiers : ["free"],
+          targetCategories: targetCategories.length > 0 ? targetCategories : ["member_free"],
+          targetTiers: targetCategories.length > 0 ? targetCategories : ["member_free"],
           excludeTiers: ["vip"],
           excludeIfEnrolledProduct: ""
         },

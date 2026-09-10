@@ -38,6 +38,7 @@
   <script src="/assets/js/aef-courses-registry.js?v=20260907_0300"></script>
   <script src="/assets/js/aef-portal-auth.js?v=20260907_0300"></script>
   <script src="/assets/js/aef-cloud-sync.js?v=20260907_0300"></script>
+  <script src="../assets/js/aef-access-engine.js"></script>
   <script src="/assets/js/aef-learning-tracker.js"></script>
   <script src="/assets/js/aef-offers-registry.js"></script>
   <script src="/assets/js/aef-block-engine.js"></script>
@@ -412,36 +413,45 @@
       pendingPlayPromise: null
     };
 
-    // MOTOR DE CONTROLE DE ACESSO & PERFIS DO PLAYER (TIER GUARD)
+    // MOTOR DE CONTROLE DE ACESSO & PERFIS DO PLAYER (TIER GUARD VIA AEF ACCESS ENGINE)
     function getPlayerAccessProfile() {
-      const isRealAdmin = window.aefPortalAuth && typeof window.aefPortalAuth.isAdmin === 'function'
-        ? window.aefPortalAuth.isAdmin()
-        : (localStorage.getItem('aef_user_role') === 'admin' || localStorage.getItem('aef_user_tier') === 'admin_master');
+      const auth = window.aefPortalAuth;
+      const profile = (auth && auth.currentProfile) || {};
+      const isRealAdmin = (auth && typeof auth.isAdmin === 'function')
+        ? auth.isAdmin()
+        : (localStorage.getItem('aef_user_role') === 'admin');
 
       if (isRealAdmin) {
         return {
           isAdmin: true,
+          role: 'admin',
           tier: 'admin_master',
+          categories: profile.categories || ['admin'],
           studentId: null,
-          studentName: localStorage.getItem('aef_user_name') || 'Professor Leonardo Leite',
-          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso']
+          studentName: profile.name || localStorage.getItem('aef_user_name') || 'Professor Leonardo Leite',
+          enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'],
+          purchasedProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso']
         };
       }
 
-      const realTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function')
-        ? window.aefPortalAuth.getActiveTier()
-        : (localStorage.getItem('aef_user_tier') || 'free');
+      const realTier = (auth && typeof auth.getActiveTier === 'function')
+        ? auth.getActiveTier()
+        : 'free';
 
-      const realEnrolled = (window.aefPortalAuth && typeof window.aefPortalAuth.getEnrolledProducts === 'function')
-        ? window.aefPortalAuth.getEnrolledProducts()
+      const realEnrolled = (auth && typeof auth.getEnrolledProducts === 'function')
+        ? auth.getEnrolledProducts()
         : JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]');
 
       return {
         isAdmin: false,
+        role: profile.role || localStorage.getItem('aef_user_role') || 'student',
         tier: realTier,
-        studentId: localStorage.getItem('aef_student_id') || null,
-        studentName: localStorage.getItem('aef_user_name') || 'Aluno',
-        enrolledProducts: realEnrolled
+        categories: profile.categories,
+        subscription: profile.subscription,
+        studentId: profile.id || profile.studentId || localStorage.getItem('aef_student_id') || null,
+        studentName: profile.name || localStorage.getItem('aef_user_name') || 'Aluno',
+        enrolledProducts: realEnrolled,
+        purchasedProducts: realEnrolled
       };
     }
 
@@ -452,40 +462,24 @@
       // Master Admin Leo tem passe livre irrestrito
       if (profile.isAdmin) return true;
 
-      const tier = profile.tier || 'free';
-      const enrolled = profile.enrolledProducts || [];
-
       // Categorias especiais sempre abertas (navegação, lab pessoal)
       if (cId === 'public' || cId === 'custom' || cId === 'quizzes') return true;
 
-      // Checa se o curso existe no registry — usa as flags do próprio curso (sem hardcode de IDs)
-      const regCourse = window.AEF_COURSES_REGISTRY ? window.AEF_COURSES_REGISTRY[courseId] : null;
-      if (regCourse) {
-        const courseTierReq = regCourse.tierRequired || 'club_anual';
-        // Curso marcado como free ou availableInFreeTier
-        if (courseTierReq === 'free' || regCourse.availableInFreeTier === true) return true;
+      // Checa se é curso VIP do próprio aluno
+      if (cId.startsWith('mentoria-')) {
+        const menteeSlug = cId.replace('mentoria-', '');
+        if (profile.studentId && profile.studentId.toLowerCase() === menteeSlug.toLowerCase()) return true;
       }
 
-      // Aluno está matriculado explicitamente no produto?
-      if (enrolled.includes(cId) || enrolled.includes('all_access_master') || enrolled.includes('magic_stories_club')) {
-        return true;
+      // Regra centralizada via AEFAccessEngine
+      const AE = window.AEFAccessEngine;
+      const regCourse = window.AEF_COURSES_REGISTRY ? window.AEF_COURSES_REGISTRY[courseId] : { id: courseId };
+      const userObj = { ...profile, purchasedProducts: window.aefPortalAuth?.getEnrolledProducts() || profile.enrolledProducts || [] };
+
+      if (AE && typeof AE.hasAccess === 'function') {
+        return AE.hasAccess(userObj, regCourse);
       }
 
-      // Tiers Club/Pro: acesso a todos os cursos incluídos no club (exceto VIP)
-      const clubTiers = ['club_monthly', 'club_annual', 'club_anual', 'course_member', 'pro', 'legacy_member', 'lifetime'];
-      if (clubTiers.includes(tier)) {
-        // Cursos VIP-only só para VIP
-        if (cId === 'vip' || (regCourse && regCourse.tierRequired === 'vip')) return false;
-        // Cursos com includedInClubSubscription: false requerem enrollment explícito
-        if (regCourse && regCourse.includedInClubSubscription === false) return false;
-        return true;
-      }
-
-      if (tier === 'vip' || tier === 'vip_mentorship') {
-        return true;
-      }
-
-      // Tier free: apenas o que o registry declara como free (verificado acima)
       return false;
     }
 
@@ -531,15 +525,18 @@
       } else {
         // Busca o primeiro curso free do catálogo dinamicamente para citar no texto do paywall
         const reg = window.AEF_COURSES_REGISTRY || {};
+        const AE = window.AEFAccessEngine;
         const firstFreeId = Object.keys(reg).find(k => {
           const c = reg[k];
-          return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+          if (!c || c.published === false || k.startsWith('mentoria-')) return false;
+          if (AE && typeof AE.resolveCourseCategories === 'function') {
+            return AE.resolveCourseCategories(c).includes('member_free');
+          }
+          return false;
         });
         const firstFreeTitle = (firstFreeId && reg[firstFreeId]?.title?.split('•')[0]?.trim()) || 'Dates & Times';
 
-        const courseTierLabel = (window.AEF_COURSES_REGISTRY?.[targetCourse]?.tierRequired === 'club_anual' ||
-          window.AEF_COURSES_REGISTRY?.[targetCourse]?.includedInClubSubscription)
-          ? 'AgoraEuFalo Club' : 'AgoraEuFalo Club';
+        const courseTierLabel = 'AgoraEuFalo Club';
 
         if (badgeEl) badgeEl.innerText = `EXCLUSIVO ${courseTierLabel.toUpperCase()}`;
         if (titleEl) titleEl.innerText = 'Conteúdo Exclusivo do Club';
@@ -566,9 +563,14 @@
       window.closeLockModal();
       // Busca dinamicamente o primeiro curso free disponível no registry (sem hardcode)
       const reg = window.AEF_COURSES_REGISTRY || {};
+      const AE = window.AEFAccessEngine;
       const firstFreeCourse = Object.keys(reg).find(k => {
         const c = reg[k];
-        return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+        if (!c || c.published === false || k.startsWith('mentoria-')) return false;
+        if (AE && typeof AE.resolveCourseCategories === 'function') {
+          return AE.resolveCourseCategories(c).includes('member_free');
+        }
+        return false;
       }) || 'dtc_curso';
       window.selectCourse(firstFreeCourse);
     };
@@ -624,20 +626,36 @@
       // Se nenhum curso foi passado na URL, define o curso padrão permitido para o perfil (dinâmico)
       if (!curso) {
         const reg = window.AEF_COURSES_REGISTRY || {};
-        if (profile.tier === 'free') {
+        const AE = window.AEFAccessEngine;
+        const userObj = { ...profile, purchasedProducts: window.aefPortalAuth?.getEnrolledProducts() || profile.enrolledProducts || [] };
+        
+        const userCats = AE ? AE.resolveUserCategories(userObj) : [];
+        const isFreeOnly = AE ? (userCats.length === 1 && userCats[0] === 'member_free') : false;
+        const isMentorship = AE ? AE.hasCategory(userObj, 'member_mentoria') : false;
+
+        if (isFreeOnly) {
           // Primeiro curso free publicado do catálogo (zero hardcode)
           curso = Object.keys(reg).find(k => {
             const c = reg[k];
-            return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+            if (!c || c.published === false || k.startsWith('mentoria-')) return false;
+            if (AE && typeof AE.resolveCourseCategories === 'function') {
+              return AE.resolveCourseCategories(c).includes('member_free');
+            }
+            return false;
           }) || 'dtc_curso';
-        } else if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
+        } else if (isMentorship) {
           curso = 'vip';
           if (!mod) mod = profile.studentId || 'andre';
         } else {
           // Club / Pro: primeiro curso club publicado do catálogo
           curso = Object.keys(reg).find(k => {
             const c = reg[k];
-            return c && c.published !== false && c.tierRequired !== 'free' && c.tierRequired !== 'vip' && c.tierRequired !== 'enrolled_only' && !k.startsWith('mentoria-');
+            if (!c || c.published === false || k.startsWith('mentoria-')) return false;
+            if (AE && typeof AE.resolveCourseCategories === 'function') {
+              const cats = AE.resolveCourseCategories(c);
+              return cats.includes('member_pago') && !cats.includes('member_free');
+            }
+            return false;
           }) || 'ms-legacy';
         }
       }
@@ -701,8 +719,9 @@
           { id: 'thomas', title: 'Thomas (Tech Lead)', shortTitle: 'Thomas', tracks: window.AEF_STUDENT_THOMAS?.tracks || [] },
           { id: 'andre', title: 'André (Entrevistas)', shortTitle: 'André', tracks: window.AEF_STUDENT_ANDRE?.tracks || [] },
           { id: 'matheus', title: 'Matheus (Fluência)', shortTitle: 'Matheus', tracks: window.AEF_STUDENT_MATHEUS?.tracks || [] }
-        ];
-        if (profile.tier === 'vip' && profile.studentId) {
+        const AE = window.AEFAccessEngine;
+        const userObj = { ...profile, purchasedProducts: window.aefPortalAuth?.getEnrolledProducts() || profile.enrolledProducts || [] };
+        if (AE && AE.hasCategory(userObj, 'member_mentoria') && profile.studentId) {
           const onlyThisStudent = allVips.filter(v => v.id === profile.studentId);
           return onlyThisStudent.length > 0 ? onlyThisStudent : allVips;
         }
@@ -793,7 +812,10 @@
 
       const profile = getPlayerAccessProfile();
       const registry = window.AEF_COURSES_REGISTRY || {};
-      const isFreeUser = !profile.isAdmin && profile.tier === 'free';
+      const AE = window.AEFAccessEngine;
+      const userObj = { ...profile, purchasedProducts: window.aefPortalAuth?.getEnrolledProducts() || profile.enrolledProducts || [] };
+      
+      const isFreeUser = !profile.isAdmin && AE && !AE.hasCategory(userObj, 'member_pago');
 
       let optionsHtml = '';
 
@@ -820,7 +842,8 @@
       optionsHtml += `<option value="quizzes" class="bg-slate-900 text-amber-300 font-bold">🎯 Quizzes de Escuta</option>`;
 
       // Categoria Especial Mentoria VIP
-      if (profile.tier === 'vip' || profile.tier === 'vip_mentorship') {
+      const isMentoria = AE ? AE.hasCategory(userObj, 'member_mentoria') : false;
+      if (isMentoria) {
         const sName = profile.studentName || profile.studentId || 'VIP';
         optionsHtml += `<option value="vip" class="bg-slate-900 text-amber-300 font-bold">👑 Minha Mentoria (${sName})</option>`;
       } else if (profile.isAdmin) {
@@ -1522,9 +1545,14 @@
         if (container) {
           container.innerHTML = (() => {
             const reg = window.AEF_COURSES_REGISTRY || {};
+            const AE = window.AEFAccessEngine;
             const firstFreeId = Object.keys(reg).find(k => {
               const c = reg[k];
-              return c && c.published !== false && (c.tierRequired === 'free' || c.availableInFreeTier === true) && !k.startsWith('mentoria-');
+              if (!c || c.published === false || k.startsWith('mentoria-')) return false;
+              if (AE && typeof AE.resolveCourseCategories === 'function') {
+                return AE.resolveCourseCategories(c).includes('member_free');
+              }
+              return false;
             });
             const freeTitle = (firstFreeId && reg[firstFreeId]?.title?.split('•')[0]?.trim()) || 'Treino Gratuito';
             return `

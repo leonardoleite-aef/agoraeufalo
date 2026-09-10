@@ -9,30 +9,34 @@
 const FIRESTORE_PROJECT_ID = "agoraeufalo-3463a";
 const FIRESTORE_API_KEY = "AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk";
 
-// Mapeamento Oficial de Produtos & Tiers do AgoraEuFalo
-const PRODUCT_TIER_MAPPING = {
+// Mapeamento Oficial de Produtos & Categorias do AgoraEuFalo
+const PRODUCT_CATEGORY_MAPPING = {
   // Magic Stories Club (Anual & Mensal)
   "8460579": {
-    tier: "club_annual",
+    categories: ["member_free", "member_pago"],
+    subscription: { billingPeriod: "annual" },
     role: "student",
     enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas"],
     productName: "Magic Stories Club"
   },
   "MAGIC_STORIES_CLUB": {
-    tier: "club_annual",
+    categories: ["member_free", "member_pago"],
+    subscription: { billingPeriod: "annual" },
     role: "student",
     enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas"],
     productName: "Magic Stories Club (Assinatura Anual)"
   },
   // Projeto AgoraEuFalo 2026 (Mentoria VIP)
   "PROJETO_AEF_2026": {
-    tier: "vip_mentorship",
+    categories: ["member_free", "member_pago", "member_mentoria"],
+    subscription: { billingPeriod: "annual" },
     role: "student",
     enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas", "all_access_master", "mentoria_vip"],
     productName: "Projeto AgoraEuFalo 2026 (Mentoria VIP)"
   },
   "MENTORIA_VIP": {
-    tier: "vip_mentorship",
+    categories: ["member_free", "member_pago", "member_mentoria"],
+    subscription: { billingPeriod: "annual" },
     role: "student",
     enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas", "all_access_master", "mentoria_vip"],
     productName: "Mentoria VIP Individual AgoraEuFalo"
@@ -150,20 +154,21 @@ export default {
       const studentId = email.replace(/[^a-zA-Z0-9]/g, "_");
       const nowIso = new Date().toISOString();
 
-      // 7. Mapeamento de Tiers e Regras de Negócio
-      let mapping = PRODUCT_TIER_MAPPING[prodId] || PRODUCT_TIER_MAPPING["8460579"];
+      // 7. Mapeamento de Categorias e Regras de Negócio
+      let mapping = PRODUCT_CATEGORY_MAPPING[prodId] || PRODUCT_CATEGORY_MAPPING["8460579"];
       if (offerCode.includes("VIP") || prodName.toUpperCase().includes("VIP") || prodName.includes("2026")) {
-        mapping = PRODUCT_TIER_MAPPING["PROJETO_AEF_2026"];
+        mapping = PRODUCT_CATEGORY_MAPPING["PROJETO_AEF_2026"];
       } else if (offerCode.includes("MENSAL")) {
         mapping = {
-          tier: "club_monthly",
+          categories: ["member_free", "member_pago"],
+          subscription: { billingPeriod: "monthly" },
           role: "student",
           enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas"],
           productName: "Magic Stories Club • Assinatura Mensal"
         };
       }
 
-      let targetTier = mapping.tier;
+      let targetCategories = [...mapping.categories];
       let targetCourses = mapping.enrolledProducts;
       let accessStatus = "active";
       let summary = "";
@@ -175,7 +180,7 @@ export default {
           if (isRecurrent && recurrenceNumber > 1) {
             summary = `🔄 Recorrência #${recurrenceNumber} Aprovada. Assinatura mantida para ${name}.`;
           } else {
-            summary = `🎉 1ª Compra Aprovada! Aluno ${name} matriculado como '${targetTier}'.`;
+            summary = `🎉 1ª Compra Aprovada! Aluno ${name} matriculado com categorias [${targetCategories.join(', ')}].`;
           }
           break;
 
@@ -195,10 +200,10 @@ export default {
             accessStatus = "canceled_grace";
             summary = `🛑 Assinatura Cancelada. Acesso mantido até ${expDate.toLocaleDateString("pt-BR")}.`;
           } else {
-            targetTier = "free";
+            targetCategories = ["member_free"];
             targetCourses = [];
             accessStatus = "canceled_immediate";
-            summary = `🛑 Assinatura Cancelada. Acesso rebaixado para Tier 'free'.`;
+            summary = `🛑 Assinatura Cancelada. Acesso rebaixado para member_free.`;
           }
           break;
 
@@ -208,7 +213,7 @@ export default {
 
         case "PURCHASE_REFUNDED":
         case "PURCHASE_CHARGEBACK":
-          targetTier = "free";
+          targetCategories = ["member_free"];
           targetCourses = [];
           accessStatus = "revoked";
           summary = `💸 Compra Reembolsada/Contestada. Acesso revogado imediatamente.`;
@@ -220,12 +225,30 @@ export default {
       }
 
       // 8. Gravação no Google Cloud Firestore (users/{studentId})
+      // Compute backward-compat tier from categories
+      const legacyTier = targetCategories.includes('member_mentoria') ? 'vip_mentorship'
+        : targetCategories.includes('member_pago') ? (mapping.subscription?.billingPeriod === 'monthly' ? 'club_monthly' : 'club_annual')
+        : 'free';
+
       const userPayload = {
         uid: studentId,
         email: email,
         name: name,
         phone: phone,
-        tier: targetTier,
+        // NEW: Multi-category system
+        categories: targetCategories,
+        subscription: {
+          billingPeriod: mapping.subscription?.billingPeriod || "annual",
+          status: accessStatus,
+          expiresAt: expiresAt,
+          graceUntil: graceUntil,
+          gateway: "hotmart",
+          lastEvent: event,
+          updatedAt: nowIso
+        },
+        purchasedProducts: [],
+        // BACKWARD COMPAT (keep for transition)
+        tier: legacyTier,
         role: "student",
         enrolledProducts: targetCourses,
         subscriptionState: {
@@ -252,8 +275,8 @@ export default {
 
       await writeFirestore("users", studentId, userPayload);
 
-      // 9. Se for VIP, garante registro em students/{studentId}
-      if (targetTier === "vip_mentorship" && event === "PURCHASE_APPROVED") {
+      // 9. Se for VIP (member_mentoria), garante registro em students/{studentId}
+      if (targetCategories.includes("member_mentoria") && event === "PURCHASE_APPROVED") {
         await writeFirestore("students", studentId, {
           id: studentId,
           name: name,
@@ -291,7 +314,7 @@ export default {
         eventId: eventId,
         event: event,
         student: email,
-        tier: targetTier,
+        tier: legacyTier,
         message: summary
       }), {
         status: 200,

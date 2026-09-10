@@ -46,6 +46,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-email-engine.js"></script>
   <script src="assets/js/aef-offers-registry.js"></script>
   <script src="assets/js/aef-webhook-handler.js"></script>
@@ -93,7 +94,7 @@
           Gestão de Webhooks, Matrículas & Ciclo de Assinaturas
         </h1>
         <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-          Monitoramento em tempo real de eventos da Hotmart (compras, renovações, inadimplências e cancelamentos). Concessão automática de Tiers, desbloqueio de cursos no Firestore e simulador de testes integrado.
+          Monitoramento em tempo real de eventos da Hotmart (compras, renovações, inadimplências e cancelamentos). Concessão automática de Categorias, desbloqueio de cursos no Firestore e simulador de testes integrado.
         </p>
       </div>
 
@@ -486,7 +487,7 @@
             <span>PURCHASE_APPROVED</span>
           </div>
           <p class="text-slate-300 text-[11px] leading-relaxed">
-            Concede Tier <strong class="text-white font-mono">club_annual</strong> ou <strong class="text-white font-mono">vip_mentorship</strong>. Libera o catálogo completo de cursos e dispara e-mail com Magic Link.
+            Concede categorias <strong class="text-white font-mono">member_pago</strong> ou <strong class="text-white font-mono">member_mentoria</strong>. Libera o catálogo completo de cursos e dispara e-mail com Magic Link.
           </p>
         </div>
 
@@ -496,7 +497,7 @@
             <span>RECORRÊNCIA #2+</span>
           </div>
           <p class="text-slate-300 text-[11px] leading-relaxed">
-            Mantém o Tier ativo sem interrupção. Registra nova transação e estende a validade da assinatura para o próximo ciclo de 12 meses.
+            Mantém as categorias ativas sem interrupção. Registra nova transação e estende a validade da assinatura para o próximo ciclo de cobrança.
           </p>
         </div>
 
@@ -516,7 +517,7 @@
             <span>CANCELLATION & REFUND</span>
           </div>
           <p class="text-slate-300 text-[11px] leading-relaxed">
-            Cancelamento mantém acesso até <strong class="text-white font-mono">date_next_charge</strong>. Reembolso ou chargeback revogam o acesso imediatamente para Tier <strong class="text-white font-mono">free</strong>.
+            Cancelamento mantém acesso até <strong class="text-white font-mono">date_next_charge</strong>. Reembolso ou chargeback revogam o acesso imediatamente para a categoria base <strong class="text-white font-mono">member_free</strong>.
           </p>
         </div>
       </div>
@@ -574,6 +575,12 @@
             <span class="text-[9px] uppercase font-bold text-slate-400 block">Valor:</span>
             <span class="font-bold text-emerald-400 block truncate" id="inspector-amount"></span>
           </div>
+        </div>
+
+        <!-- Categorias Concedidas (Multi-Category System) -->
+        <div id="inspector-categories-row" class="hidden flex-wrap items-center gap-2 text-xs py-2 px-3 rounded-xl bg-white/5 border border-white/10">
+          <span class="text-[9px] uppercase font-bold text-slate-400 font-mono">Categorias Atribuídas:</span>
+          <div id="inspector-categories-badges" class="flex flex-wrap items-center gap-1.5"></div>
         </div>
 
         <!-- Payload JSON Formatado -->
@@ -681,6 +688,64 @@
   <script>
     let activeLogs = [];
     let currentInspectedLog = null;
+
+    // Harmonização do AEFAccessEngine para suportar renderCategoryBadges com Array de categorias ou Objeto
+    if (window.AEFAccessEngine && typeof window.AEFAccessEngine.renderCategoryBadges === 'function') {
+      const _origRenderBadges = window.AEFAccessEngine.renderCategoryBadges;
+      window.AEFAccessEngine.renderCategoryBadges = function (userOrCategories) {
+        if (Array.isArray(userOrCategories)) {
+          return _origRenderBadges({ categories: userOrCategories });
+        }
+        return _origRenderBadges(userOrCategories);
+      };
+    }
+
+    /**
+     * Renderiza badges amigáveis de categorias para a UI de Webhooks.
+     * Suporta o formato novo (Array de categorias como ["member_free", "member_pago"]),
+     * objetos contendo { categories } ou legado { tier }.
+     */
+    function renderCategoryBadges(data) {
+      if (!data) return '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[10px] font-mono">🌱 member_free</span>';
+
+      if (window.AEFAccessEngine && typeof window.AEFAccessEngine.renderCategoryBadges === 'function') {
+        if (Array.isArray(data)) {
+          return window.AEFAccessEngine.renderCategoryBadges({ categories: data });
+        }
+        if (typeof data === 'object') {
+          if (Array.isArray(data.categories)) {
+            return window.AEFAccessEngine.renderCategoryBadges(data);
+          }
+          if (data.tier) {
+            const migrated = window.AEFAccessEngine.migrateTierToCategories ? window.AEFAccessEngine.migrateTierToCategories(data.tier) : [data.tier];
+            return window.AEFAccessEngine.renderCategoryBadges({ categories: migrated, tier: data.tier });
+          }
+          return window.AEFAccessEngine.renderCategoryBadges(data);
+        }
+        if (typeof data === 'string') {
+          const migrated = window.AEFAccessEngine.migrateTierToCategories ? window.AEFAccessEngine.migrateTierToCategories(data) : [data];
+          return window.AEFAccessEngine.renderCategoryBadges({ categories: migrated, tier: data });
+        }
+      }
+
+      // Fallback amigável caso a biblioteca esteja ausente
+      const cats = Array.isArray(data)
+        ? data
+        : (data?.categories || (data?.tier ? [data.tier] : [String(data)]));
+
+      const badgeMap = {
+        member_free:     { emoji: '🌱', label: 'FREE',        classes: 'bg-slate-100 text-slate-600 border-slate-200' },
+        member_pago:     { emoji: '💰', label: 'PAGO',        classes: 'bg-amber-100 text-amber-900 border-amber-300' },
+        member_mentoria: { emoji: '👑', label: 'MENTORADO',   classes: 'bg-amber-100 text-amber-900 border-amber-300' },
+        legado_1:        { emoji: '📦', label: 'LEGADO 1',    classes: 'bg-amber-100 text-amber-900 border-amber-300' },
+        legado_2:        { emoji: '📦', label: 'LEGADO 2',    classes: 'bg-emerald-50 text-emerald-900 border-emerald-300' }
+      };
+
+      return cats.map(c => {
+        const item = badgeMap[c] || { emoji: '🏷️', label: c, classes: 'bg-slate-800 text-slate-300 border-slate-700' };
+        return `<span class="px-2 py-0.5 rounded-full ${item.classes} text-[10px] font-bold inline-flex items-center gap-0.5">${item.emoji} ${escapeHtml(item.label)}</span>`;
+      }).join(' ');
+    }
 
     // Modelos de Template para Simulação
     const SIMULATOR_TEMPLATES = {
@@ -1028,10 +1093,19 @@
 
         resBox.classList.remove('hidden', 'bg-rose-500/10', 'border-rose-500/30', 'text-rose-300');
         resBox.classList.add('bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-300');
+        // Resolve categorias (Array de categorias do novo backend ou migração de tier legado)
+        const categories = result.categories || (result.tier ? (window.AEFAccessEngine?.migrateTierToCategories ? window.AEFAccessEngine.migrateTierToCategories(result.tier) : [result.tier]) : ['member_free']);
+        const categoryBadgesHtml = renderCategoryBadges(categories);
+        const enrolledCount = Array.isArray(result.enrolledProducts) ? result.enrolledProducts.length : 0;
+
         resText.innerHTML = `
-          <strong>${result.summary}</strong><br>
-          <span class="text-slate-300 text-[10px]">
-            ID Usuário: <code class="font-mono text-amber-300">${result.studentId}</code> • Tier: <code class="font-mono text-emerald-300">${result.tier}</code> • Cursos: <strong>${result.enrolledProducts.length}</strong>
+          <strong>${escapeHtml(result.summary || 'Webhook processado com sucesso!')}</strong><br>
+          <span class="text-slate-300 text-[10px] inline-flex items-center flex-wrap gap-1.5 mt-1">
+            <span>ID Usuário: <code class="font-mono text-amber-300">${escapeHtml(result.studentId || '-')}</code></span>
+            <span>•</span>
+            <span class="inline-flex items-center gap-1">Categorias: ${categoryBadgesHtml}</span>
+            <span>•</span>
+            <span>Cursos: <strong>${enrolledCount}</strong></span>
           </span>
         `;
 
@@ -1150,6 +1224,11 @@
           statusDot = `<span class="inline-flex items-center gap-1 text-rose-400 font-bold text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Erro</span>`;
         }
 
+        const logCats = log.categories || (log.tier ? (window.AEFAccessEngine?.migrateTierToCategories ? window.AEFAccessEngine.migrateTierToCategories(log.tier) : [log.tier]) : null);
+        const catBadgesHtml = logCats && logCats.length > 0
+          ? `<div class="mt-1 flex flex-wrap gap-1">${renderCategoryBadges(logCats)}</div>`
+          : '';
+
         return `
           <tr class="hover:bg-white/5 transition">
             <td class="py-3 px-4 font-mono text-[11px] text-slate-400">${timeFormatted}</td>
@@ -1157,6 +1236,7 @@
             <td class="py-3 px-4">
               <span class="text-white font-bold block truncate max-w-[180px]">${escapeHtml(log.buyerName || 'Aluno')}</span>
               <span class="text-[10px] font-mono text-amber-300/90 block truncate max-w-[180px]">${escapeHtml(log.buyerEmail || '')}</span>
+              ${catBadgesHtml}
             </td>
             <td class="py-3 px-4">
               <span class="text-slate-200 block truncate max-w-[200px]">${escapeHtml(log.productName || 'Magic Stories Club')}</span>
@@ -1189,6 +1269,21 @@
       document.getElementById('inspector-email').innerText = log.buyerEmail || "-";
       document.getElementById('inspector-tx').innerText = log.transactionId || "-";
       document.getElementById('inspector-amount').innerText = log.amountFormatted || "-";
+
+      const logCats = log.categories || (log.tier ? (window.AEFAccessEngine?.migrateTierToCategories ? window.AEFAccessEngine.migrateTierToCategories(log.tier) : [log.tier]) : null);
+      const catRow = document.getElementById('inspector-categories-row');
+      const catBadges = document.getElementById('inspector-categories-badges');
+      if (catRow && catBadges) {
+        if (logCats && logCats.length > 0) {
+          catRow.classList.remove('hidden');
+          catRow.classList.add('flex');
+          catBadges.innerHTML = renderCategoryBadges(logCats);
+        } else {
+          catRow.classList.add('hidden');
+          catRow.classList.remove('flex');
+          catBadges.innerHTML = '';
+        }
+      }
 
       document.getElementById('inspector-json').innerText = JSON.stringify(log.rawPayload || log, null, 2);
 

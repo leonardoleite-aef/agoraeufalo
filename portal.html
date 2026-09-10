@@ -47,6 +47,7 @@
   <script src="assets/js/aef-domain-router.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
   <script src="assets/js/aef-learning-tracker.js"></script>
   <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
@@ -625,8 +626,20 @@
       if (topGreeting) topGreeting.innerText = effectiveName.split(" ")[0] || "Aluno";
       if (drawerName) drawerName.innerText = effectiveName;
 
+      const currentUser = {
+        ...(profile || {}),
+        role: userRole,
+        tier: effectiveTier,
+        categories: profile.categories,
+        purchasedProducts: enrolledProducts,
+        enrolledProducts: enrolledProducts,
+        subscription: profile.subscription
+      };
+
       if (tierBadge) {
-        if (isAdmin) {
+        if (window.AEFAccessEngine && typeof window.AEFAccessEngine.getPrimaryBadgeLabel === 'function') {
+          tierBadge.innerText = window.AEFAccessEngine.getPrimaryBadgeLabel(currentUser);
+        } else if (isAdmin) {
           tierBadge.innerText = "👑 Administrador";
         } else if (effectiveTier === 'vip_mentorship' || effectiveTier === 'vip') {
           tierBadge.innerText = "👑 Mentorado VIP";
@@ -662,14 +675,28 @@
 
 
       // ——— HELPERS DE ACESSO E RECOMENDAÇÃO DINÂMICA ———
-      // Verifica se o aluno tem acesso a um curso específico com base no tier + enrollment
+      // Verifica se o aluno tem acesso a um curso específico com base no engine centralizado
       function hasAccessToCourse(courseId, tier, enrolled, adminFlag, courseMatrix) {
-        if (adminFlag) return true;
-        if (!courseId) return false;
-        if (enrolled.includes(courseId) || enrolled.includes('all_access_master')) return true;
-
         const course = courseMatrix ? courseMatrix[courseId] : null;
         if (!course) return false;
+
+        const AE = window.AEFAccessEngine;
+        if (AE && typeof AE.hasAccess === 'function') {
+          const userObj = {
+            ...(profile || {}),
+            role: adminFlag ? 'admin' : (profile.role || userRole || 'student'),
+            tier: tier || effectiveTier,
+            categories: profile.categories,
+            purchasedProducts: enrolled || enrolledProducts || [],
+            enrolledProducts: enrolled || enrolledProducts || [],
+            subscription: profile.subscription
+          };
+          return AE.hasAccess(userObj, course);
+        }
+
+        if (adminFlag) return true;
+        if (!courseId) return false;
+        if (enrolled && (enrolled.includes(courseId) || enrolled.includes('all_access_master'))) return true;
 
         const isFreeCourse = course.tierRequired === 'free' || course.availableInFreeTier === true;
         if (isFreeCourse) return true;
@@ -804,6 +831,8 @@
                 freeModuleIds: f.freeModuleIds?.arrayValue?.values ? f.freeModuleIds.arrayValue.values.map(v => v.stringValue) : [],
                 freeTierCtaMessage: f.freeTierCtaMessage?.stringValue || '',
                 freeTierCtaUrl: f.freeTierCtaUrl?.stringValue || '',
+                accessCategories: f.accessCategories?.arrayValue?.values ? f.accessCategories.arrayValue.values.map(v => v.stringValue) : [],
+                availableForPurchase: f.availableForPurchase?.booleanValue ?? false,
                 availableStandalone: f.availableStandalone?.booleanValue ?? false,
                 standalonePrice: f.standalonePrice?.stringValue || '',
                 standaloneCheckoutHotmart: f.standaloneCheckoutHotmart?.stringValue || '',
@@ -847,13 +876,20 @@
 
           const isIncludedInClub = course.includedInClubSubscription !== false && !isMentorshipCourse;
           const isFreeCourse = course.tierRequired === 'free' || course.availableInFreeTier === true;
-          const isEnrolled = isAdmin || 
-                             isOwner || 
-                             enrolledProducts.includes(id) || 
-                             enrolledProducts.includes('all_access_master') ||
-                             ((currentTier === 'vip' || currentTier === 'vip_mentorship') && isOwner) ||
-                             (isClubMember && isIncludedInClub) ||
-                             isFreeCourse;
+
+          const userForCard = {
+            ...(profile || {}),
+            role: isAdmin ? 'admin' : (profile.role || 'student'),
+            tier: currentTier,
+            categories: profile.categories,
+            purchasedProducts: enrolledProducts,
+            enrolledProducts: enrolledProducts,
+            subscription: profile.subscription
+          };
+
+          const isEnrolled = isOwner || (window.AEFAccessEngine 
+            ? window.AEFAccessEngine.hasAccess(userForCard, course)
+            : (isAdmin || isOwner || enrolledProducts.includes(id) || enrolledProducts.includes('all_access_master') || (isClubMember && isIncludedInClub) || isFreeCourse));
 
           if (isEnrolled) {
             enrolledCount++;

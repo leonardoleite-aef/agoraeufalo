@@ -53,6 +53,7 @@
   <!-- AgoraEuFalo Central Audio Hub, Cloud Sync, FilePicker & Registry -->
   <script src="assets/js/aef-domain-router.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-filepicker.js"></script>
@@ -732,37 +733,37 @@
       <!-- Scrollable Form Body -->
       <div class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
         
-        <!-- 3-Tier Destination Selector -->
+        <!-- 3-Categoria Destination Selector -->
         <div class="space-y-2.5 p-3.5 rounded-xl bg-[#0B0F17] border border-amber-500/30">
           <label class="font-bold text-amber-400 block uppercase tracking-wider text-[11px] flex items-center justify-between">
-            <span>1. Destino do Treino por Tier de Aluno</span>
+            <span>1. Destino do Treino por Categoria de Aluno</span>
             <span class="text-[10px] text-slate-400 font-normal">Single Source of Truth</span>
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] cursor-pointer transition select-none">
               <input type="radio" name="publishTier" value="tier1_suggestions" onchange="handleTierChange(this.value)" class="w-4 h-4 text-amber-500 focus:ring-0 bg-[#0B0F17] border-[#2D3D60] cursor-pointer">
               <div>
-                <span class="block font-bold text-amber-300 text-xs">🌱 Tier 1: Sugestões</span>
+                <span class="block font-bold text-amber-300 text-xs">🌱 Categoria 1 (Aberto/Global)</span>
                 <span class="block text-[10px] text-slate-400">Público / Free / Todos</span>
               </div>
             </label>
             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] cursor-pointer transition select-none">
               <input type="radio" name="publishTier" value="tier2_courses" onchange="handleTierChange(this.value)" class="w-4 h-4 text-amber-500 focus:ring-0 bg-[#0B0F17] border-[#2D3D60] cursor-pointer">
               <div>
-                <span class="block font-bold text-sky-300 text-xs">🎓 Tier 2: Cursos</span>
+                <span class="block font-bold text-sky-300 text-xs">🎓 Categoria 2 (Alunos de Curso)</span>
                 <span class="block text-[10px] text-slate-400">Aulas / Club / Pro</span>
               </div>
             </label>
             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-amber-500/40 cursor-pointer transition select-none">
               <input type="radio" name="publishTier" value="tier3_vip" checked onchange="handleTierChange(this.value)" class="w-4 h-4 text-amber-500 focus:ring-0 bg-[#0B0F17] border-[#2D3D60] cursor-pointer">
               <div>
-                <span class="block font-bold text-purple-300 text-xs">👑 Tier 3: VIP</span>
+                <span class="block font-bold text-purple-300 text-xs">👑 Categoria 3 (Mentoria VIP)</span>
                 <span class="block text-[10px] text-slate-400">Mentoria 1 a 1</span>
               </div>
             </label>
           </div>
 
-          <!-- Tier 3 Specific: Mentees Checkboxes -->
+          <!-- Categoria 3 Specific: Mentees Checkboxes -->
           <div id="publishStudentsContainer" class="space-y-1.5 pt-2 border-t border-[#1F2B45]">
             <span class="text-[10px] font-bold text-slate-300 uppercase">Selecione o(s) Mentorado(s) VIP:</span>
             <div id="publishStudentsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
@@ -2948,13 +2949,13 @@ Example output format:
       const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
 
       let assignedTo = ['public'];
-      let targetLabel = "🌱 Tier 1: Sugestões do Leo (Público)";
+      let targetLabel = "🌱 Categoria 1: Sugestões do Leo (Público)";
 
       if (tier === 'tier3_vip') {
         const selectedCheckboxes = document.querySelectorAll('input[name="publishRecipient"]:checked');
         assignedTo = Array.from(selectedCheckboxes).map(cb => cb.value);
         if (assignedTo.length === 0) {
-          showToast("Selecione pelo menos um mentorado VIP para o Tier 3.", "warning");
+          showToast("Selecione pelo menos um mentorado VIP para a Categoria 3.", "warning");
           return;
         }
         const menteeNames = assignedTo.map(id => {
@@ -2967,7 +2968,7 @@ Example output format:
         targetLabel = `👑 Mentoria VIP (${menteeNames.join(', ')})`;
       } else if (tier === 'tier2_courses') {
         assignedTo = ['courses_all'];
-        targetLabel = "🎓 Tier 2: Cursos (Área de Membros)";
+        targetLabel = "🎓 Categoria 2: Cursos (Área de Membros)";
       }
 
       if (!STATE.currentAudioBlob && !STATE.uploadedFile) {

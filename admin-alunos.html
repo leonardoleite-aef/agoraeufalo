@@ -21,6 +21,7 @@
   <script src="assets/js/aef-domain-router.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
@@ -60,24 +61,29 @@
     <section id="section-students" class="space-y-6">
       
       <!-- Stats Overview Bar -->
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
         <div class="glass-card p-4 rounded-2xl">
-          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Contatos Únicos</p>
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total de Contatos</p>
           <p class="text-2xl font-black text-slate-900 mt-1" id="stat-total-students">0</p>
         </div>
         <div class="glass-card p-4 rounded-2xl border-amber-200 bg-amber-50/30">
-          <p class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">👑 Mentorados VIP</p>
-          <p class="text-2xl font-black text-amber-900 mt-1" id="stat-vip-students">0</p>
+          <p class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">💰 Membros Pagos</p>
+          <p class="text-2xl font-black text-amber-900 mt-1" id="stat-pago-students">0</p>
+          <p class="text-[9px] text-amber-700 mt-0.5" id="stat-pago-detail">Anual: 0 · Mensal: 0 · Vitalício: 0</p>
         </div>
         <div class="glass-card p-4 rounded-2xl border-amber-200 bg-amber-50/50">
-          <p class="text-[10px] text-amber-900 font-bold uppercase tracking-wider">🎓 MS Legacy (926)</p>
+          <p class="text-[10px] text-amber-900 font-bold uppercase tracking-wider">👑 Mentorados VIP</p>
+          <p class="text-2xl font-black text-amber-950 mt-1" id="stat-vip-students">0</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl border-amber-200 bg-amber-50/30">
+          <p class="text-[10px] text-amber-900 font-bold uppercase tracking-wider">📦 Legado 1 (MS)</p>
           <p class="text-2xl font-black text-amber-950 mt-1" id="stat-ms-legacy-students">0</p>
         </div>
         <div class="glass-card p-4 rounded-2xl border-emerald-200 bg-emerald-50/30">
-          <p class="text-[10px] text-emerald-800 font-bold uppercase tracking-wider">🌱 1º Legado (2.946)</p>
+          <p class="text-[10px] text-emerald-800 font-bold uppercase tracking-wider">📦 Legado 2 (AEF)</p>
           <p class="text-2xl font-black text-emerald-950 mt-1" id="stat-primeiro-legado-students">0</p>
         </div>
-        <div class="glass-card p-4 rounded-2xl border-purple-200 bg-purple-50/30 col-span-2 sm:col-span-1">
+        <div class="glass-card p-4 rounded-2xl border-purple-200 bg-purple-50/30">
           <p class="text-[10px] text-purple-800 font-bold uppercase tracking-wider">🔐 Administradores</p>
           <p class="text-2xl font-black text-purple-900 mt-1" id="stat-admin-students">0</p>
         </div>
@@ -86,25 +92,25 @@
       <!-- Filter and Search Bar -->
       <div class="glass-card p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-1.5 overflow-x-auto w-full lg:w-auto no-scrollbar pb-1 lg:pb-0">
-          <button onclick="filterTier('all')" id="filter-btn-all" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition shrink-0">
+          <button onclick="filterCategory('all')" id="filter-btn-all" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition shrink-0">
             Todos (<span id="pill-count-all">0</span>)
           </button>
-          <button onclick="filterTier('vip')" id="filter-btn-vip" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
+          <button onclick="filterCategory('member_pago')" id="filter-btn-member_pago" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
+            💰 Pagos (<span id="pill-count-pago">0</span>)
+          </button>
+          <button onclick="filterCategory('member_mentoria')" id="filter-btn-member_mentoria" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
             👑 VIPs (<span id="pill-count-vip">0</span>)
           </button>
-          <button onclick="filterTier('ms_legacy')" id="filter-btn-ms_legacy" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
-            🎓 MS Legacy (<span id="pill-count-ms">926</span>)
+          <button onclick="filterCategory('legado_1')" id="filter-btn-legado_1" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-amber-50 hover:text-amber-900 border border-slate-200 transition shrink-0">
+            📦 Legado 1 (<span id="pill-count-legado1">0</span>)
           </button>
-          <button onclick="filterTier('primeiro_legado')" id="filter-btn-primeiro_legado" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-900 border border-slate-200 transition shrink-0">
-            🌱 1º Legado (<span id="pill-count-primeiro">2.946</span>)
+          <button onclick="filterCategory('legado_2')" id="filter-btn-legado_2" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-900 border border-slate-200 transition shrink-0">
+            📦 Legado 2 (<span id="pill-count-legado2">0</span>)
           </button>
-          <button onclick="filterTier('club')" id="filter-btn-club" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-sky-50 hover:text-sky-900 border border-slate-200 transition shrink-0">
-            🎓 Club / Cursos
-          </button>
-          <button onclick="filterTier('free')" id="filter-btn-free" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition shrink-0">
+          <button onclick="filterCategory('free_only')" id="filter-btn-free_only" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition shrink-0">
             🌱 Free
           </button>
-          <button onclick="filterTier('admin')" id="filter-btn-admin" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-purple-50 hover:text-purple-900 border border-slate-200 transition shrink-0">
+          <button onclick="filterCategory('admin')" id="filter-btn-admin" class="filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-purple-50 hover:text-purple-900 border border-slate-200 transition shrink-0">
             🔐 Admins
           </button>
         </div>
@@ -338,14 +344,42 @@
           <input type="email" id="new-student-email" required placeholder="ex: joao@gmail.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Plano / Nível *</label>
-          <select id="new-student-tier" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-            <option value="vip_mentorship">👑 Mentorado VIP (Prescrições 1 a 1)</option>
-            <option value="club_annual">🎓 Magic Stories Club (Anual)</option>
-            <option value="pro">🚀 Projeto 2026 Pro</option>
-            <option value="free">🌱 Aluno Gratuito (Free)</option>
-            <option value="admin_master">👑 Administrador Mestre</option>
-          </select>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Categorias de Acesso *</label>
+          <div class="space-y-1.5" id="new-student-categories">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="new-cat" value="member_free" checked class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">🌱 Member Free</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="new-cat" value="member_pago" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">💰 Member Pago</span>
+            </label>
+            <div id="new-billing-period-row" class="hidden pl-8 py-1">
+              <select id="new-billing-period" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+                <option value="annual">📅 Anual</option>
+                <option value="monthly">📅 Mensal</option>
+                <option value="lifetime">💎 Vitalício</option>
+              </select>
+            </div>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="new-cat" value="member_mentoria" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">👑 Mentorado VIP</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="new-cat" value="legado_1" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">📦 Legado 1 (MS-Legacy)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="new-cat" value="legado_2" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">📦 Legado 2 (AEF Primeiro)</span>
+            </label>
+          </div>
+          <div class="mt-2">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 cursor-pointer">
+              <input type="checkbox" id="new-is-admin" class="rounded text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
+              <span class="font-bold text-purple-800 text-xs">🔐 Admin Mestre (role: admin)</span>
+            </label>
+          </div>
         </div>
         <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2 cursor-pointer">
           Salvar Aluno no Firestore
@@ -381,53 +415,76 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Tier / Plano de Acesso</label>
-            <select id="edit-student-tier" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-bold">
-              <option value="free">🌱 Aluno Free (Lead)</option>
-              <option value="club_annual">🎓 Magic Stories Club (Anual)</option>
-              <option value="pro">🚀 Projeto 2026 Pro</option>
-              <option value="vip_mentorship">👑 Mentoria VIP Individual</option>
-              <option value="admin_master">👑 Administrador Mestre</option>
-            </select>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Categorias de Acesso</label>
+          <div class="space-y-1.5" id="edit-student-categories">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="edit-cat" value="member_free" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">🌱 Member Free</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="edit-cat" value="member_pago" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">💰 Member Pago</span>
+            </label>
+            <div id="edit-billing-period-row" class="hidden pl-8 py-1">
+              <select id="edit-billing-period" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+                <option value="annual">📅 Anual</option>
+                <option value="monthly">📅 Mensal</option>
+                <option value="lifetime">💎 Vitalício</option>
+              </select>
+            </div>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="edit-cat" value="member_mentoria" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">👑 Mentorado VIP</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="edit-cat" value="legado_1" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">📦 Legado 1 (MS-Legacy)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="edit-cat" value="legado_2" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+              <span class="font-bold text-slate-800 text-xs">📦 Legado 2 (AEF Primeiro)</span>
+            </label>
           </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Papel no Sistema (Role)</label>
-            <select id="edit-student-role" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-              <option value="student">Aluno / Usuário</option>
-              <option value="moderator">Moderador</option>
-              <option value="admin">Administrador Total</option>
-            </select>
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 cursor-pointer">
+              <input type="checkbox" id="edit-is-admin" class="rounded text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
+              <span class="font-bold text-purple-800 text-xs">🔐 Admin Mestre</span>
+            </label>
+            <div>
+              <select id="edit-student-role" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+                <option value="student">Aluno / Usuário</option>
+                <option value="moderator">Moderador</option>
+                <option value="admin">Administrador Total</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <!-- Enrolled Products Checkboxes -->
+        <!-- Compras Avulsas (Purchased Products) -->
         <div class="space-y-2 pt-2 border-t border-slate-100">
-          <label class="block text-[11px] font-bold text-slate-700">Cursos & Produtos Matriculados</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+          <label class="block text-[11px] font-bold text-slate-700">Compras Avulsas (Produtos Adquiridos)</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" id="edit-purchased-products">
             <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" id="chk-prod-legacy" value="ms-legacy" class="rounded text-amber-600 focus:ring-amber-500">
+              <input type="checkbox" name="edit-purchased" value="ms-legacy" class="rounded text-amber-600 focus:ring-amber-500">
               <span class="font-bold text-slate-800">Magic Stories Club</span>
             </label>
             <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" id="chk-prod-dtc" value="dtc_curso" class="rounded text-amber-600 focus:ring-amber-500">
+              <input type="checkbox" name="edit-purchased" value="dtc_curso" class="rounded text-amber-600 focus:ring-amber-500">
               <span class="font-bold text-slate-800">Dates & Times (DTC)</span>
             </label>
             <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" id="chk-prod-quickstart" value="english-quickstart" class="rounded text-amber-600 focus:ring-amber-500">
+              <input type="checkbox" name="edit-purchased" value="english-quickstart" class="rounded text-amber-600 focus:ring-amber-500">
               <span class="font-bold text-slate-800">English QuickStart</span>
             </label>
             <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" id="chk-prod-frases" value="frases-prontas" class="rounded text-amber-600 focus:ring-amber-500">
+              <input type="checkbox" name="edit-purchased" value="frases-prontas" class="rounded text-amber-600 focus:ring-amber-500">
               <span class="font-bold text-slate-800">Frases Prontas</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer col-span-1 sm:col-span-2">
-              <input type="checkbox" id="chk-prod-all" value="all_access_master" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">All Access Master (Acesso Total)</span>
             </label>
           </div>
         </div>
+
+
 
         <div class="flex items-center gap-2.5 pt-2 border-t border-slate-100">
           <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
@@ -786,55 +843,43 @@
     }
 
     function updateMetrics() {
-      let total = ALL_STUDENTS_LIST.length;
-      let vips = 0;
-      let msLegacy = 0;
-      let primeiroLegado = 0;
-      let clubs = 0;
-      let frees = 0;
-      let admins = 0;
-
-      ALL_STUDENTS_LIST.forEach(s => {
-        const tier = s.tier || 'free';
-        const role = s.role || 'student';
-        const cat = s.category || '';
-
-        if (role === 'admin' || tier === 'admin_master') admins++;
-        if (tier === 'vip_mentorship' || tier === 'vip') vips++;
-        else if (tier === 'ms_legacy' || cat === 'magic_stories_legacy' || (s.enrolledProducts && s.enrolledProducts.includes('ms-legacy') && tier !== 'vip_mentorship')) msLegacy++;
-        else if (tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo') primeiroLegado++;
-        else if (tier === 'club_annual' || tier === 'pro' || tier === 'course_member') clubs++;
-        else if (tier === 'free') frees++;
-      });
+      const AE = window.AEFAccessEngine;
+      const counts = AE ? AE.computeCategoryCounts(ALL_STUDENTS_LIST) : { total: ALL_STUDENTS_LIST.length };
 
       const elTotal = document.getElementById('stat-total-students');
-      if (elTotal) elTotal.innerText = total.toLocaleString('pt-BR');
+      if (elTotal) elTotal.innerText = (counts.total || 0).toLocaleString('pt-BR');
+      const elPago = document.getElementById('stat-pago-students');
+      if (elPago) elPago.innerText = (counts.member_pago || 0).toLocaleString('pt-BR');
+      const elPagoDetail = document.getElementById('stat-pago-detail');
+      if (elPagoDetail) elPagoDetail.innerText = `Anual: ${counts.pago_annual || 0} · Mensal: ${counts.pago_monthly || 0} · Vitalício: ${counts.pago_lifetime || 0}`;
       const elVip = document.getElementById('stat-vip-students');
-      if (elVip) elVip.innerText = vips;
+      if (elVip) elVip.innerText = (counts.member_mentoria || 0);
       const elMs = document.getElementById('stat-ms-legacy-students');
-      if (elMs) elMs.innerText = msLegacy.toLocaleString('pt-BR');
+      if (elMs) elMs.innerText = (counts.legado_1 || 0).toLocaleString('pt-BR');
       const elPrimeiro = document.getElementById('stat-primeiro-legado-students');
-      if (elPrimeiro) elPrimeiro.innerText = primeiroLegado.toLocaleString('pt-BR');
+      if (elPrimeiro) elPrimeiro.innerText = (counts.legado_2 || 0).toLocaleString('pt-BR');
       const elAdmin = document.getElementById('stat-admin-students');
-      if (elAdmin) elAdmin.innerText = admins;
+      if (elAdmin) elAdmin.innerText = (counts.admin || 0);
 
       const pillAll = document.getElementById('pill-count-all');
-      if (pillAll) pillAll.innerText = total.toLocaleString('pt-BR');
+      if (pillAll) pillAll.innerText = (counts.total || 0).toLocaleString('pt-BR');
+      const pillPago = document.getElementById('pill-count-pago');
+      if (pillPago) pillPago.innerText = (counts.member_pago || 0).toLocaleString('pt-BR');
       const pillVip = document.getElementById('pill-count-vip');
-      if (pillVip) pillVip.innerText = vips;
-      const pillMs = document.getElementById('pill-count-ms');
-      if (pillMs) pillMs.innerText = msLegacy.toLocaleString('pt-BR');
-      const pillPrimeiro = document.getElementById('pill-count-primeiro');
-      if (pillPrimeiro) pillPrimeiro.innerText = primeiroLegado.toLocaleString('pt-BR');
+      if (pillVip) pillVip.innerText = (counts.member_mentoria || 0);
+      const pillL1 = document.getElementById('pill-count-legado1');
+      if (pillL1) pillL1.innerText = (counts.legado_1 || 0).toLocaleString('pt-BR');
+      const pillL2 = document.getElementById('pill-count-legado2');
+      if (pillL2) pillL2.innerText = (counts.legado_2 || 0).toLocaleString('pt-BR');
     }
 
-    function filterTier(tier) {
-      CURRENT_FILTER = tier;
+    function filterCategory(cat) {
+      CURRENT_FILTER = cat;
       CURRENT_PAGE = 1;
       document.querySelectorAll('.filter-pill').forEach(btn => {
         btn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 transition shrink-0';
       });
-      const activeBtn = document.getElementById(`filter-btn-${tier}`);
+      const activeBtn = document.getElementById(`filter-btn-${cat}`);
       if (activeBtn) activeBtn.className = 'filter-pill px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white transition shrink-0';
       renderStudentsTable();
     }
@@ -878,7 +923,13 @@
     };
 
     function getFilteredStudents() {
-      return ALL_STUDENTS_LIST.filter(s => {
+      const AE = window.AEFAccessEngine;
+      // Pre-filter by category using the access engine
+      let list = (AE && CURRENT_FILTER !== 'all')
+        ? AE.filterStudentsByCategory(ALL_STUDENTS_LIST, CURRENT_FILTER)
+        : ALL_STUDENTS_LIST;
+
+      return list.filter(s => {
         // 1. Search Query
         const matchesSearch = !SEARCH_QUERY || 
           (s.name && s.name.toLowerCase().includes(SEARCH_QUERY)) || 
@@ -887,30 +938,18 @@
 
         if (!matchesSearch) return false;
 
-        const tier = s.tier || 'free';
-        const role = s.role || 'student';
-        const cat = s.category || '';
-        const prods = s.enrolledProducts || [];
-
-        // 2. Main Filter Pills
-        if (CURRENT_FILTER === 'vip' && !(tier === 'vip_mentorship' || tier === 'vip')) return false;
-        if (CURRENT_FILTER === 'ms_legacy' && !(tier === 'ms_legacy' || cat === 'magic_stories_legacy' || (prods.includes('ms-legacy') && tier !== 'vip_mentorship'))) return false;
-        if (CURRENT_FILTER === 'primeiro_legado' && !(tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo')) return false;
-        if (CURRENT_FILTER === 'club' && !(tier === 'club_annual' || tier === 'pro' || tier === 'course_member')) return false;
-        if (CURRENT_FILTER === 'free' && tier !== 'free') return false;
-        if (CURRENT_FILTER === 'admin' && !(role === 'admin' || tier === 'admin_master')) return false;
-
-        // 3. Secondary Course Filter
+        // 2. Secondary Course Filter
+        const prods = s.purchasedProducts || s.enrolledProducts || [];
         if (COURSE_FILTER !== 'all') {
           if (!prods.includes(COURSE_FILTER)) return false;
         }
 
-        // 4. Secondary Origin Filter
+        // 3. Secondary Origin Filter
         if (ORIGIN_FILTER !== 'all') {
-          const origem = s.origem || cat || '';
+          const origem = s.origem || s.category || '';
           if (ORIGIN_FILTER === 'hotmart' && !origem.toLowerCase().includes('hotmart') && !s.origem?.includes('compra')) return false;
-          if (ORIGIN_FILTER === 'magic_stories_legacy' && origem !== 'magic_stories_legacy' && cat !== 'magic_stories_legacy') return false;
-          if (ORIGIN_FILTER === 'primeiro_legado_agoraeufalo' && origem !== 'primeiro_legado_agoraeufalo' && cat !== 'primeiro_legado_agoraeufalo') return false;
+          if (ORIGIN_FILTER === 'magic_stories_legacy' && origem !== 'magic_stories_legacy' && s.category !== 'magic_stories_legacy') return false;
+          if (ORIGIN_FILTER === 'primeiro_legado_agoraeufalo' && origem !== 'primeiro_legado_agoraeufalo' && s.category !== 'primeiro_legado_agoraeufalo') return false;
           if (ORIGIN_FILTER === 'firestore' && origem !== 'firestore') return false;
         }
 
@@ -1000,22 +1039,8 @@
       }
 
       tbody.innerHTML = pageItems.map(s => {
-        const tier = s.tier || 'free';
-        const role = s.role || 'student';
-        const cat = s.category || '';
-
-        let tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">🌱 FREE</span>';
-        if (role === 'admin' || tier === 'admin_master') {
-          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-200 text-[10px] font-black">👑 ADMIN MESTRE</span>';
-        } else if (tier === 'vip_mentorship' || tier === 'vip') {
-          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black">👑 MENTORADO VIP</span>';
-        } else if (tier === 'ms_legacy' || cat === 'magic_stories_legacy') {
-          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-300 text-[10px] font-black">🎓 MS LEGACY</span>';
-        } else if (tier === 'primeiro_legado' || cat === 'primeiro_legado_agoraeufalo') {
-          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-300 text-[10px] font-bold">🌱 1º LEGADO</span>';
-        } else if (tier === 'club_annual' || tier === 'pro' || tier === 'course_member') {
-          tierBadge = '<span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-200 text-[10px] font-bold">🎓 CLUB ANUAL</span>';
-        }
+        const AE = window.AEFAccessEngine;
+        const tierBadge = AE ? AE.renderCategoryBadges(s) : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">🌱 FREE</span>';
 
         const enrolledBadges = (s.enrolledProducts || []).map(p => {
           const names = {
@@ -1141,19 +1166,35 @@
     function openEditStudentModal(email) {
       const student = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email.toLowerCase());
       if (!student) return;
+      const AE = window.AEFAccessEngine;
 
       document.getElementById('edit-student-id').value = student.id || student.uid || '';
       document.getElementById('edit-student-name').value = student.name || '';
       document.getElementById('edit-student-email').value = student.email || '';
-      document.getElementById('edit-student-tier').value = student.tier || 'free';
-      document.getElementById('edit-student-role').value = student.role || 'student';
+      
+      // Set category checkboxes
+      const cats = AE ? AE.resolveUserCategories(student) : ['member_free'];
+      document.querySelectorAll('#edit-student-categories input[name="edit-cat"]').forEach(chk => {
+        chk.checked = cats.includes(chk.value);
+      });
 
-      const prods = student.enrolledProducts || [];
-      document.getElementById('chk-prod-legacy').checked = prods.includes('ms-legacy');
-      if (document.getElementById('chk-prod-dtc')) document.getElementById('chk-prod-dtc').checked = prods.includes('dtc_curso');
-      document.getElementById('chk-prod-quickstart').checked = prods.includes('english-quickstart');
-      document.getElementById('chk-prod-frases').checked = prods.includes('frases-prontas');
-      document.getElementById('chk-prod-all').checked = prods.includes('all_access_master');
+      // Show/hide billing period and set value
+      const hasPago = cats.includes('member_pago');
+      const billingRow = document.getElementById('edit-billing-period-row');
+      if (billingRow) billingRow.classList.toggle('hidden', !hasPago);
+      const bp = student.subscription?.billingPeriod || (AE ? AE.migrateTierToBillingPeriod(student.tier) : 'annual');
+      if (bp) document.getElementById('edit-billing-period').value = bp;
+
+      // Admin toggle
+      const isAdminUser = AE ? AE.isAdmin(student) : false;
+      document.getElementById('edit-is-admin').checked = isAdminUser;
+      document.getElementById('edit-student-role').value = student.role || (isAdminUser ? 'admin' : 'student');
+
+      // Purchased products
+      const purchased = student.purchasedProducts || student.enrolledProducts || [];
+      document.querySelectorAll('#edit-purchased-products input[name="edit-purchased"]').forEach(chk => {
+        chk.checked = purchased.includes(chk.value);
+      });
 
       document.getElementById('edit-student-modal').classList.remove('hidden');
     }
@@ -1205,7 +1246,7 @@
       const email = document.getElementById('edit-student-email').value;
       const name = document.getElementById('edit-student-name').value;
       const id = document.getElementById('edit-student-id').value;
-      const tier = document.getElementById('edit-student-tier').value;
+      const tier = 'free'; // backward compat placeholder
       
       closeEditStudentModal();
       openDeleteStudentModal(email, name, id, tier);
@@ -1274,32 +1315,55 @@
       e.preventDefault();
       const name = document.getElementById('new-student-name').value.trim();
       const email = document.getElementById('new-student-email').value.trim().toLowerCase();
-      const tier = document.getElementById('new-student-tier').value;
       const id = name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-      const isVIP = tier === 'vip_mentorship';
-      const isMaster = tier === 'admin_master';
+      // Collect categories from checkboxes
+      const categories = [];
+      document.querySelectorAll('#new-student-categories input[name="new-cat"]:checked').forEach(chk => {
+        categories.push(chk.value);
+      });
+      if (!categories.includes('member_free')) categories.push('member_free');
 
-      const enrolled = isMaster || isVIP 
-        ? ['all_access_master', 'mentoria_vip', 'ms-legacy', 'dtc_curso', 'english-quickstart', 'frases-prontas']
-        : (tier === 'club_annual' ? ['ms-legacy', 'dtc_curso', 'english-quickstart', 'frases-prontas'] : ['ms-legacy']);
+      const isAdmin = document.getElementById('new-is-admin').checked;
+      const role = isAdmin ? 'admin' : 'student';
+      const hasPago = categories.includes('member_pago');
+      const hasMentoria = categories.includes('member_mentoria');
+      const billingPeriod = hasPago ? (document.getElementById('new-billing-period')?.value || 'annual') : null;
+
+      // Build backward-compat tier
+      const legacyTier = isAdmin ? 'admin_master' 
+        : hasMentoria ? 'vip_mentorship'
+        : hasPago ? (billingPeriod === 'monthly' ? 'club_monthly' : billingPeriod === 'lifetime' ? 'lifetime' : 'club_annual')
+        : 'free';
 
       const newStudent = {
         id,
         uid: id,
         name,
         email,
-        tier,
-        role: isMaster ? 'admin' : 'student',
-        enrolledProducts: enrolled,
-        createdAt: new Date().toISOString()
+        categories,
+        role,
+        purchasedProducts: [],
+        tier: legacyTier, // backward compat
+        enrolledProducts: [], // backward compat
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
+
+      if (hasPago) {
+        newStudent.subscription = {
+          billingPeriod: billingPeriod,
+          status: 'active',
+          gateway: 'manual',
+          lastEvent: 'ADMIN_CREATED'
+        };
+      }
 
       try {
         if (window.aefPortalAuth) {
           await window.aefPortalAuth.ready();
-          await window.aefPortalAuth.updateUserTierAndRole(id, tier, newStudent.role, enrolled);
-          if (isVIP) {
+          await window.aefPortalAuth.updateUserTierAndRole(id, legacyTier, role, [], newStudent);
+          if (hasMentoria) {
             await window.aefPortalAuth.saveMenteeDoc(id, newStudent);
           }
         }
@@ -1319,22 +1383,59 @@
       const id = document.getElementById('edit-student-id').value;
       const email = document.getElementById('edit-student-email').value.trim().toLowerCase();
       const name = document.getElementById('edit-student-name').value.trim();
-      const tier = document.getElementById('edit-student-tier').value;
       const role = document.getElementById('edit-student-role').value;
 
-      const enrolled = [];
-      if (document.getElementById('chk-prod-legacy').checked) enrolled.push('ms-legacy');
-      if (document.getElementById('chk-prod-dtc')?.checked) enrolled.push('dtc_curso');
-      if (document.getElementById('chk-prod-quickstart').checked) enrolled.push('english-quickstart');
-      if (document.getElementById('chk-prod-frases').checked) enrolled.push('frases-prontas');
-      if (document.getElementById('chk-prod-all').checked) enrolled.push('all_access_master');
+      // Collect categories from checkboxes
+      const categories = [];
+      document.querySelectorAll('#edit-student-categories input[name="edit-cat"]:checked').forEach(chk => {
+        categories.push(chk.value);
+      });
+      if (!categories.includes('member_free')) categories.push('member_free');
+
+      // Admin toggle
+      const isAdminChecked = document.getElementById('edit-is-admin').checked;
+      const effectiveRole = isAdminChecked ? 'admin' : role;
+
+      // Purchased products
+      const purchasedProducts = [];
+      document.querySelectorAll('#edit-purchased-products input[name="edit-purchased"]:checked').forEach(chk => {
+        purchasedProducts.push(chk.value);
+      });
+
+      const hasPago = categories.includes('member_pago');
+      const hasMentoria = categories.includes('member_mentoria');
+      const billingPeriod = hasPago ? (document.getElementById('edit-billing-period')?.value || 'annual') : null;
+
+      // Build backward-compat tier
+      const legacyTier = isAdminChecked ? 'admin_master'
+        : hasMentoria ? 'vip_mentorship'
+        : hasPago ? (billingPeriod === 'monthly' ? 'club_monthly' : billingPeriod === 'lifetime' ? 'lifetime' : 'club_annual')
+        : 'free';
+
+      const updateData = {
+        categories,
+        purchasedProducts,
+        tier: legacyTier,
+        role: effectiveRole,
+        enrolledProducts: purchasedProducts, // backward compat
+        updatedAt: new Date().toISOString()
+      };
+
+      if (hasPago) {
+        updateData.subscription = {
+          billingPeriod: billingPeriod,
+          status: 'active',
+          gateway: 'manual',
+          lastEvent: 'ADMIN_UPDATED'
+        };
+      }
 
       try {
         if (window.aefPortalAuth) {
           await window.aefPortalAuth.ready();
-          await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], tier, role, enrolled);
-          if (tier === 'vip_mentorship') {
-            await window.aefPortalAuth.saveMenteeDoc(id || email.split('@')[0], { name, email, tier, role, enrolledProducts: enrolled });
+          await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], legacyTier, effectiveRole, purchasedProducts, updateData);
+          if (hasMentoria) {
+            await window.aefPortalAuth.saveMenteeDoc(id || email.split('@')[0], { name, email, ...updateData });
           }
         }
       } catch (err) {
@@ -1343,7 +1444,7 @@
 
       const idx = ALL_STUDENTS_LIST.findIndex(s => s.email.toLowerCase() === email);
       if (idx >= 0) {
-        ALL_STUDENTS_LIST[idx] = { ...ALL_STUDENTS_LIST[idx], name, tier, role, enrolledProducts: enrolled };
+        ALL_STUDENTS_LIST[idx] = { ...ALL_STUDENTS_LIST[idx], name, ...updateData };
       }
 
       renderStudentsTable();
@@ -1621,11 +1722,37 @@
       }
     }
 
+    // Billing period toggle: show/hide when member_pago is checked
+    function setupBillingToggles() {
+      // Create modal
+      const newPagoChk = document.querySelector('#new-student-categories input[value="member_pago"]');
+      if (newPagoChk) {
+        newPagoChk.addEventListener('change', () => {
+          document.getElementById('new-billing-period-row')?.classList.toggle('hidden', !newPagoChk.checked);
+        });
+      }
+      // Edit modal
+      const editPagoChk = document.querySelector('#edit-student-categories input[value="member_pago"]');
+      if (editPagoChk) {
+        editPagoChk.addEventListener('change', () => {
+          document.getElementById('edit-billing-period-row')?.classList.toggle('hidden', !editPagoChk.checked);
+        });
+      }
+      // Admin checkbox syncs with role dropdown
+      const editAdminChk = document.getElementById('edit-is-admin');
+      if (editAdminChk) {
+        editAdminChk.addEventListener('change', () => {
+          if (editAdminChk.checked) document.getElementById('edit-student-role').value = 'admin';
+        });
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.aefPortalAuth) {
         const authed = await window.aefPortalAuth.requireAuth({ requireAdmin: true, redirectUrl: 'login.html' });
         if (!authed) return;
       }
+      setupBillingToggles();
       loadAllStudentsData();
       updateIcons();
     });

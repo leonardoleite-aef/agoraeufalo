@@ -46,6 +46,7 @@
   <script src="assets/js/aef-courses-registry.js?v=20260906_01"></script>
   <script src="assets/js/aef-quizzes-registry.js?v=20260906_01"></script>
   <script src="assets/js/aef-cloud-sync.js?v=20260906_01"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-filepicker.js?v=20260906_01"></script>
   <script src="assets/js/aef-pdf-generator.js?v=20260906_01"></script>
   <script src="assets/js/aef-portal-auth.js?v=20260906_01"></script>
@@ -874,13 +875,31 @@
             <input type="text" id="courseModalSlugInput" placeholder="dates-and-times" class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
           </div>
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Plano Requerido</label>
-            <select id="courseModalTierInput" class="w-full px-3.5 py-2 rounded-xl bg-[#112240] border border-white/20 text-white text-xs font-semibold focus:outline-none">
-              <option value="free">🌱 Aberto / Grátis</option>
-              <option value="club_anual">⭐ Club Anual</option>
-              <option value="vip">👑 Mentoria VIP</option>
-              <option value="lifetime">💎 Vitalício Master</option>
-            </select>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-300 mb-1">Categorias de Acesso</label>
+            <div class="space-y-1.5" id="courseModalAccessCategories">
+              <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112240]/60 border border-white/10 hover:border-amber-400/40 cursor-pointer transition">
+                <input type="checkbox" id="chk-cat-free" value="member_free" class="rounded text-amber-500 bg-[#0B0F17] border-white/20 focus:ring-0 w-3.5 h-3.5">
+                <span class="text-xs text-white/90 font-semibold">🌱 Member Free</span>
+              </label>
+              <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112240]/60 border border-white/10 hover:border-amber-400/40 cursor-pointer transition">
+                <input type="checkbox" id="chk-cat-pago" value="member_pago" class="rounded text-amber-500 bg-[#0B0F17] border-white/20 focus:ring-0 w-3.5 h-3.5">
+                <span class="text-xs text-white/90 font-semibold">💰 Member Pago</span>
+              </label>
+              <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112240]/60 border border-white/10 hover:border-amber-400/40 cursor-pointer transition">
+                <input type="checkbox" id="chk-cat-avulsa" value="venda_avulsa" class="rounded text-amber-500 bg-[#0B0F17] border-white/20 focus:ring-0 w-3.5 h-3.5">
+                <span class="text-xs text-white/90 font-semibold">🛒 Venda Avulsa</span>
+              </label>
+              <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112240]/60 border border-white/10 hover:border-amber-400/40 cursor-pointer transition">
+                <input type="checkbox" id="chk-cat-legado1" value="legado_1" class="rounded text-amber-500 bg-[#0B0F17] border-white/20 focus:ring-0 w-3.5 h-3.5">
+                <span class="text-xs text-white/90 font-semibold">📦 Legado 1 (MS-Legacy)</span>
+              </label>
+              <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#112240]/60 border border-white/10 hover:border-amber-400/40 cursor-pointer transition">
+                <input type="checkbox" id="chk-cat-legado2" value="legado_2" class="rounded text-amber-500 bg-[#0B0F17] border-white/20 focus:ring-0 w-3.5 h-3.5">
+                <span class="text-xs text-white/90 font-semibold">📦 Legado 2 (AEF Primeiro)</span>
+              </label>
+            </div>
+            <!-- Hidden input for backward compat -->
+            <input type="hidden" id="courseModalTierInput" value="free">
           </div>
         </div>
 
@@ -1636,8 +1655,12 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
 
-      document.getElementById("treeCourseTitle").innerText = course.title || activeCourseId;
-      document.getElementById("treeCourseBadge").innerText = (course.tierRequired || 'free').toUpperCase();
+      const AE = window.AEFAccessEngine;
+      const cats = (Array.isArray(course.accessCategories) && course.accessCategories.length > 0)
+        ? course.accessCategories
+        : (AE ? AE.migrateTierRequiredToCategories(course.tierRequired) : [course.tierRequired || 'free']);
+      const badgeText = cats.map(c => c.replace('member_', '').replace('_', ' ')).join(' + ').toUpperCase();
+      document.getElementById("treeCourseBadge").innerText = badgeText || (course.tierRequired || 'free').toUpperCase();
 
       const publishBtn = document.getElementById("coursePublishBadgeBtn");
       if (publishBtn) {
@@ -3069,6 +3092,10 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("courseModalThemeColorInput").value = "amber";
       document.getElementById("courseModalCoverInput").value = "";
       document.getElementById("courseModalPublishedInput").checked = true;
+      document.querySelectorAll('#courseModalAccessCategories input[type="checkbox"]').forEach(chk => {
+        chk.checked = (chk.value === 'member_pago');
+      });
+      document.getElementById("courseModalTierInput").value = "club_anual";
       document.getElementById("btnDeleteCourseInModal")?.classList.add("hidden");
       document.getElementById("courseModal").classList.remove("hidden");
     }
@@ -3085,6 +3112,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
     function editCurrentCourse() {
       const course = ALL_COURSES[activeCourseId];
       if (!course) return;
+      const AE = window.AEFAccessEngine;
       document.getElementById("courseModalTitle").innerText = "Editar Metadados do Curso";
       document.getElementById("courseModalId").value = course.id;
       document.getElementById("courseModalTitleInput").value = course.title || "";
@@ -3094,6 +3122,27 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("courseModalThemeColorInput").value = course.themeColor || "amber";
       document.getElementById("courseModalTierInput").value = course.tierRequired || "free";
       document.getElementById("courseModalPublishedInput").checked = course.published !== false;
+
+      // Popula checkboxes com base em accessCategories ou migração de tierRequired
+      let cats = [];
+      if (Array.isArray(course.accessCategories) && course.accessCategories.length > 0) {
+        cats = [...course.accessCategories];
+      } else if (AE && typeof AE.migrateTierRequiredToCategories === 'function') {
+        cats = AE.migrateTierRequiredToCategories(course.tierRequired);
+      } else if (course.tierRequired === 'free') {
+        cats = ['member_free', 'member_pago', 'legado_1', 'legado_2'];
+      } else {
+        cats = ['member_pago'];
+      }
+
+      if (course.availableForPurchase && !cats.includes('venda_avulsa')) {
+        cats.push('venda_avulsa');
+      }
+
+      document.querySelectorAll('#courseModalAccessCategories input[type="checkbox"]').forEach(chk => {
+        chk.checked = cats.includes(chk.value);
+      });
+
       document.getElementById("btnDeleteCourseInModal")?.classList.remove("hidden");
       document.getElementById("courseModal").classList.remove("hidden");
     }
@@ -3150,19 +3199,40 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       const id = document.getElementById("courseModalId").value.trim() || rawSlug || `curso-${Date.now()}`;
       const title = rawTitle || "Novo Curso";
       const slug = rawSlug || id;
-      const tier = document.getElementById("courseModalTierInput").value;
       const themeColor = document.getElementById("courseModalThemeColorInput").value.trim() || "amber";
       const cover = document.getElementById("courseModalCoverInput").value.trim() || "assets/images/cover-default-aef.jpg";
       const desc = document.getElementById("courseModalDescInput").value.trim();
       const published = document.getElementById("courseModalPublishedInput").checked;
 
+      // Coleta categorias de acesso selecionadas nos checkboxes
+      const selectedCats = [];
+      document.querySelectorAll('#courseModalAccessCategories input[type="checkbox"]:checked').forEach(chk => {
+        selectedCats.push(chk.value);
+      });
+      const isAvailableForPurchase = selectedCats.includes('venda_avulsa') || document.getElementById('chk-cat-avulsa')?.checked === true;
+
+      // Cálculo de tierRequired para compatibilidade com versões legadas
+      let tier = "club_anual";
+      if (selectedCats.includes("member_free")) {
+        tier = "free";
+      } else if (selectedCats.includes("member_pago")) {
+        tier = "club_anual";
+      } else if (selectedCats.includes("legado_1") || selectedCats.includes("legado_2")) {
+        tier = "legacy_member";
+      } else if (isAvailableForPurchase) {
+        tier = "enrolled_only";
+      }
+      document.getElementById("courseModalTierInput").value = tier;
+
       const courseObj = ALL_COURSES[id] || { modules: [] };
       courseObj.id = id;
       courseObj.title = title;
       courseObj.slug = slug;
+      courseObj.accessCategories = selectedCats;
+      courseObj.availableForPurchase = isAvailableForPurchase;
       courseObj.tierRequired = tier;
       courseObj.themeColor = themeColor;
-      courseObj.badge = tier === "vip" ? "MENTORIA VIP" : "CURSO LIBERADO";
+      courseObj.badge = tier === "vip" ? "MENTORIA VIP" : (selectedCats.includes("member_free") ? "CURSO GRATUITO" : "CURSO LIBERADO");
       courseObj.coverImageUrl = cover;
       courseObj.description = desc;
       courseObj.published = published;

@@ -46,6 +46,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-offers-registry.js"></script>
   <script src="assets/js/aef-admin-nav.js"></script>
 
@@ -267,20 +268,48 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Slug / Código Interno (URL)</label>
+            <input type="text" id="formSlug" placeholder="ex: ms-club-anual-2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+          </div>
+
+          <!-- Multi-Category Selection & Billing Period -->
+          <div class="pt-2 border-t border-white/10 space-y-3">
             <div>
-              <label class="block font-bold text-slate-300 mb-1">Slug / Código Interno (URL)</label>
-              <input type="text" id="formSlug" placeholder="ex: ms-club-anual-2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block font-bold text-slate-300">Categorias Concedidas ao Aluno (Multi-Select) *</label>
+                <span class="text-[10px] text-amber-400 font-medium">Permite múltiplas categorias</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-[#112240]/60 p-3 rounded-xl border border-white/10" id="grantedCategoriesGroup">
+                <label class="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer select-none transition">
+                  <input type="checkbox" name="formGrantedCategories" value="member_free" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-[#0A192F] border-white/20 accent-amber-500">
+                  <span class="text-xs font-semibold text-slate-300">🌱 Member Free</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer select-none transition">
+                  <input type="checkbox" name="formGrantedCategories" value="member_pago" checked class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-[#0A192F] border-white/20 accent-amber-500">
+                  <span class="text-xs font-bold text-amber-300">💰 Member Pago</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer select-none transition">
+                  <input type="checkbox" name="formGrantedCategories" value="member_mentoria" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-[#0A192F] border-white/20 accent-amber-500">
+                  <span class="text-xs font-bold text-purple-300">👑 Mentoria VIP</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer select-none transition">
+                  <input type="checkbox" name="formGrantedCategories" value="legado_1" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-[#0A192F] border-white/20 accent-amber-500">
+                  <span class="text-xs font-semibold text-amber-200">📦 Legado 1 (MS)</span>
+                </label>
+                <label class="flex items-center gap-2 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer select-none transition">
+                  <input type="checkbox" name="formGrantedCategories" value="legado_2" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 bg-[#0A192F] border-white/20 accent-amber-500">
+                  <span class="text-xs font-semibold text-emerald-300">📦 Legado 2 (AEF)</span>
+                </label>
+              </div>
             </div>
 
             <div>
-              <label class="block font-bold text-slate-300 mb-1">Tier Concedido ao Aluno</label>
-              <select id="formGrantedTier" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
-                <option value="club_annual">🎓 Membro Club Anual (club_annual)</option>
-                <option value="club_monthly">🎓 Membro Club Mensal (club_monthly)</option>
-                <option value="course_member">📚 Aluno de Curso Individual (course_member)</option>
-                <option value="vip">👑 Mentoria VIP Individual (vip)</option>
-                <option value="free">🌱 Aluno Free / Degustação (free)</option>
+              <label class="block font-bold text-slate-300 mb-1">Período de Assinatura / Validade (billingPeriod) *</label>
+              <select id="formBillingPeriod" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
+                <option value="annual">📅 Anual (annual - 12 meses de vigência)</option>
+                <option value="monthly">🔄 Mensal (monthly - cobrança recorrente a cada 30 dias)</option>
+                <option value="lifetime">💎 Vitalício (lifetime - sem data de expiração)</option>
               </select>
             </div>
           </div>
@@ -712,6 +741,41 @@
       renderOffersGrid();
     }
 
+    function renderOfferCategoryBadges(offer) {
+      let cats = offer.grantedCategories;
+      if (!cats || !Array.isArray(cats) || cats.length === 0) {
+        if (window.AEFAccessEngine && typeof window.AEFAccessEngine.migrateTierToCategories === 'function') {
+          cats = window.AEFAccessEngine.migrateTierToCategories(offer.grantedTier);
+        } else {
+          cats = offer.grantedTier === 'vip' ? ['member_pago', 'member_mentoria'] : (offer.grantedTier === 'free' ? ['member_free'] : ['member_pago']);
+        }
+      }
+
+      const categoryMeta = {
+        member_free:     { emoji: '🌱', label: 'Member Free', color: 'bg-slate-500/20 text-slate-300 border-slate-400/30' },
+        member_pago:     { emoji: '💰', label: 'Member Pago', color: 'bg-amber-500/20 text-amber-300 border-amber-400/30' },
+        member_mentoria: { emoji: '👑', label: 'Mentoria VIP', color: 'bg-purple-500/20 text-purple-300 border-purple-400/30' },
+        legado_1:        { emoji: '📦', label: 'Legado 1',    color: 'bg-amber-500/20 text-amber-300 border-amber-400/30' },
+        legado_2:        { emoji: '📦', label: 'Legado 2',    color: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30' }
+      };
+
+      const periodLabels = {
+        monthly: 'Mensal',
+        annual: 'Anual',
+        lifetime: 'Vitalício'
+      };
+
+      return cats.map(cat => {
+        const meta = categoryMeta[cat] || { emoji: '🏷️', label: cat, color: 'bg-slate-500/20 text-slate-300 border-slate-400/30' };
+        let bpSuffix = '';
+        if (cat === 'member_pago' && offer.subscription?.billingPeriod) {
+          const bp = offer.subscription.billingPeriod;
+          bpSuffix = ` • ${periodLabels[bp] || bp}`;
+        }
+        return `<span class="px-2 py-0.5 rounded-full border ${meta.color} text-[10px] font-bold inline-flex items-center gap-1 shadow-sm">${meta.emoji} ${meta.label}${bpSuffix}</span>`;
+      }).join(' ');
+    }
+
     function renderOffersGrid() {
       const container = document.getElementById('offersContainer');
       if (!container) return;
@@ -846,9 +910,11 @@
                 <p class="text-xs font-bold text-white leading-snug">
                   ${offer.pricing?.installmentsText || ''}
                 </p>
-                <div class="pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px] text-slate-400 font-medium">
-                  <span>Tier: <strong class="text-slate-200">${offer.grantedTier}</strong></span>
-                  <span>${offer.pricing?.billingType === 'subscription' ? '🔄 Assinatura' : '📦 Pagamento Único'}</span>
+                <div class="pt-2 border-t border-white/5 flex items-center justify-between gap-2 text-[10px] text-slate-400 font-medium">
+                  <div class="flex items-center gap-1 flex-wrap">
+                    ${renderOfferCategoryBadges(offer)}
+                  </div>
+                  <span class="whitespace-nowrap font-mono font-bold">${offer.pricing?.billingType === 'subscription' ? '🔄 Assinatura' : (offer.pricing?.billingType === 'free' ? '🎁 Grátis' : '📦 Pagamento Único')}</span>
                 </div>
               </div>
 
@@ -1039,7 +1105,10 @@
       document.getElementById('formProductId').value = "ms-club";
       document.getElementById('formHotmartProductId').value = "8460579";
       document.getElementById('formBadge').value = "OFERTA OFICIAL";
-      document.getElementById('formGrantedTier').value = "club_annual";
+      document.querySelectorAll('input[name="formGrantedCategories"]').forEach(cb => {
+        cb.checked = (cb.value === 'member_pago');
+      });
+      document.getElementById('formBillingPeriod').value = "annual";
       document.getElementById('formBillingType').value = "subscription";
       document.getElementById('formRegularPrice').value = "997.00";
       document.getElementById('formOfferPrice').value = "497.00";
@@ -1067,7 +1136,31 @@
       document.getElementById('formProductId').value = offer.productId || "ms-club";
       document.getElementById('formHotmartProductId').value = offer.hotmartProductId || offer.hotmartSetupSpec?.hotmartProductId || (offer.productId === 'ms-club' ? '8460579' : '');
       document.getElementById('formBadge').value = offer.badge || "OFERTA";
-      document.getElementById('formGrantedTier').value = offer.grantedTier || "club_annual";
+
+      // Resolve grantedCategories (suporte ao novo formato e fallback para tier legado)
+      let cats = offer.grantedCategories;
+      if (!cats || !Array.isArray(cats) || cats.length === 0) {
+        if (window.AEFAccessEngine && typeof window.AEFAccessEngine.migrateTierToCategories === 'function') {
+          cats = window.AEFAccessEngine.migrateTierToCategories(offer.grantedTier);
+        } else {
+          cats = offer.grantedTier === 'vip' ? ['member_pago', 'member_mentoria'] : (offer.grantedTier === 'free' ? ['member_free'] : ['member_pago']);
+        }
+      }
+      document.querySelectorAll('input[name="formGrantedCategories"]').forEach(cb => {
+        cb.checked = cats.includes(cb.value);
+      });
+
+      // Resolve billingPeriod
+      let bp = offer.subscription?.billingPeriod;
+      if (!bp && window.AEFAccessEngine && typeof window.AEFAccessEngine.migrateTierToBillingPeriod === 'function') {
+        bp = window.AEFAccessEngine.migrateTierToBillingPeriod(offer.grantedTier);
+      }
+      if (!bp) {
+        bp = offer.pricing?.billingType === 'subscription' && offer.accessDuration?.value === 1 ? 'monthly' :
+          (offer.accessDuration?.isLifetime ? 'lifetime' : 'annual');
+      }
+      document.getElementById('formBillingPeriod').value = bp || 'annual';
+
       document.getElementById('formBillingType').value = offer.pricing?.billingType || "subscription";
       document.getElementById('formRegularPrice').value = offer.pricing?.regularPrice || 997;
       document.getElementById('formOfferPrice').value = offer.pricing?.offerPrice || 497;
@@ -1116,6 +1209,24 @@
       if (prodId === 'ms-club') {
         const hmInput = document.getElementById('formHotmartProductId');
         if (!hmInput.value) hmInput.value = '8460579';
+        document.querySelectorAll('input[name="formGrantedCategories"]').forEach(cb => {
+          cb.checked = (cb.value === 'member_pago');
+        });
+        document.getElementById('formBillingPeriod').value = 'annual';
+      } else if (prodId === 'mentoria-vip') {
+        document.querySelectorAll('input[name="formGrantedCategories"]').forEach(cb => {
+          cb.checked = (cb.value === 'member_pago' || cb.value === 'member_mentoria');
+        });
+        document.getElementById('formBillingPeriod').value = 'annual';
+      } else if (prodId === 'all-access-lifetime') {
+        document.querySelectorAll('input[name="formGrantedCategories"]').forEach(cb => {
+          cb.checked = (cb.value === 'member_pago');
+        });
+        document.getElementById('formBillingPeriod').value = 'lifetime';
+      } else {
+        document.querySelectorAll('input[name="formGrantedCategories"]').forEach(cb => {
+          cb.checked = (cb.value === 'member_pago');
+        });
       }
     }
 
@@ -1129,6 +1240,13 @@
       const provider = document.querySelector('input[name="formProvider"]:checked')?.value || 'hotmart';
       const checkoutUrl = document.getElementById('formCheckoutUrl').value.trim();
 
+      const grantedCategories = Array.from(document.querySelectorAll('input[name="formGrantedCategories"]:checked')).map(cb => cb.value);
+      if (grantedCategories.length === 0) {
+        alert('Por favor, selecione ao menos uma categoria concedida para a oferta.');
+        return;
+      }
+      const billingPeriod = document.getElementById('formBillingPeriod').value || 'annual';
+
       const prodTitles = {
         'ms-club': 'Magic Stories Club',
         'english-quickstart': 'English QuickStart',
@@ -1136,6 +1254,10 @@
         'mentoria-vip': 'Mentoria VIP Individual',
         'all-access-lifetime': 'Membro Fundador (All-Access)'
       };
+
+      const billingType = document.getElementById('formBillingType').value;
+      const isLifetime = billingPeriod === 'lifetime';
+      const durationMonths = billingPeriod === 'monthly' ? 1 : (isLifetime ? 999 : 12);
 
       const offerData = {
         id: offerId,
@@ -1150,9 +1272,21 @@
         checkoutUrl: checkoutUrl,
         whatsappNumber: document.getElementById('formWhatsappNumber').value.trim(),
         whatsappPrefillText: document.getElementById('formWhatsappPrefill').value.trim(),
-        grantedTier: document.getElementById('formGrantedTier').value,
+        grantedCategories: grantedCategories,
+        subscription: {
+          billingPeriod: billingPeriod
+        },
+        // Compatibilidade reversa com consumidores legados
+        grantedTier: grantedCategories.includes('member_mentoria') ? 'vip' :
+          (grantedCategories.includes('member_free') && grantedCategories.length === 1 ? 'free' :
+          (billingPeriod === 'monthly' ? 'club_monthly' : 'club_annual')),
+        accessDuration: {
+          type: "months",
+          value: durationMonths,
+          isLifetime: isLifetime
+        },
         pricing: {
-          billingType: document.getElementById('formBillingType').value,
+          billingType: billingType,
           regularPrice: parseFloat(document.getElementById('formRegularPrice').value || "0"),
           offerPrice: parseFloat(document.getElementById('formOfferPrice').value || "0"),
           currency: "BRL",
@@ -1167,7 +1301,9 @@
         hotmartSetupSpec: {
           hotmartProductId: hotmartProductId,
           suggestedProductName: title,
-          format: document.getElementById('formBillingType').value === 'subscription' ? 'Assinatura' : 'Curso Online',
+          format: billingPeriod === 'monthly' ? 'Assinatura Mensal' :
+            (billingPeriod === 'annual' && billingType === 'subscription' ? 'Assinatura Anual' :
+            (isLifetime ? 'Pagamento Único Vitalício' : (billingType === 'free' ? 'Ativação Gratuita' : 'Curso Online'))),
           suggestedOfferCode: document.getElementById('formOfferCode').value.trim(),
           regularPriceFormatted: `R$ ${parseFloat(document.getElementById('formRegularPrice').value || "0").toFixed(2).replace('.', ',')}`,
           offerPriceFormatted: `R$ ${parseFloat(document.getElementById('formOfferPrice').value || "0").toFixed(2).replace('.', ',')}`,

@@ -28,7 +28,10 @@
       checkoutUrl: "https://pay.hotmart.com/T107479074N?off=mgwnab3h",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Quero tirar uma dúvida sobre a matrícula no Magic Stories Club Anual.",
-      grantedTier: "club_annual",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "annual"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -79,7 +82,10 @@
       checkoutUrl: "https://pay.hotmart.com/T107479074N?off=fwk42n3u",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Gostaria de saber mais sobre a assinatura mensal do Magic Stories Club.",
-      grantedTier: "club_monthly",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "monthly"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -129,7 +135,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_EQS_COMPLETO",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Quero destravar todas as aulas do English QuickStart.",
-      grantedTier: "course_member",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "annual"
+      },
       grantedCourses: ["english-quickstart"],
       accessDuration: {
         type: "months",
@@ -178,7 +187,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_FP_VITALICIO",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Gostaria de adquirir o curso Frases Prontas no plano vitalício.",
-      grantedTier: "course_member",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "lifetime"
+      },
       grantedCourses: ["frases-prontas"],
       accessDuration: {
         type: "months",
@@ -227,7 +239,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_FP_OTO_97",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Leo! Vi a oferta relâmpago do Frases Prontas por R$ 97 e quero confirmar minha vaga.",
-      grantedTier: "course_member",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "annual"
+      },
       grantedCourses: ["frases-prontas"],
       accessDuration: {
         type: "months",
@@ -276,7 +291,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_MENTORIA_VIP_2026",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Quero aplicar para a Mentoria VIP Individual 1 a 1 de 6 meses. Gostaria de entender o processo de triagem e vagas disponíveis.",
-      grantedTier: "vip",
+      grantedCategories: ["member_pago", "member_mentoria"],
+      subscription: {
+        billingPeriod: "annual"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -325,7 +343,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_ALL_ACCESS_LIFETIME",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Leo! Tenho interesse no Plano Fundador Vitalício Total do AgoraEuFalo.",
-      grantedTier: "club_annual",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "lifetime"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -375,7 +396,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_TRIAL_7D_CLUB",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Leo! Ativei meu trial de 7 dias grátis e queria tirar uma dúvida.",
-      grantedTier: "club_annual",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "monthly"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -426,7 +450,10 @@
       checkoutUrl: "migracao/index.html?oferta=migracao-resgate-gratis",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Fui aluno de turmas anteriores e gostaria de resgatar meu acesso gratuito ao First Steps na nova plataforma.",
-      grantedTier: "free",
+      grantedCategories: ["member_free"],
+      subscription: {
+        billingPeriod: "annual"
+      },
       grantedCourses: ["first-steps", "english-quickstart"],
       accessDuration: {
         type: "months",
@@ -477,7 +504,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_MIGRACAO_CLUB_297",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Professor Leo! Quero fazer o upgrade com desconto de ex-aluno para o Magic Stories Club Anual por R$ 297.",
-      grantedTier: "club_annual",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "annual"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -528,7 +558,10 @@
       checkoutUrl: "https://pay.hotmart.com/OFFER_MIGRACAO_HISTORICO_997",
       whatsappNumber: "+55 11 99616-0910",
       whatsappPrefillText: "Olá Leo! Sou ex-aluno de turmas históricas e quero garantir a vaga de Membro Vitalício Total por R$ 997.",
-      grantedTier: "club_annual",
+      grantedCategories: ["member_pago"],
+      subscription: {
+        billingPeriod: "lifetime"
+      },
       grantedCourses: ["ms-legacy", "english-quickstart", "frases-prontas"],
       accessDuration: {
         type: "months",
@@ -595,6 +628,28 @@
               parsed.forEach(item => {
                 if (item && item.id) {
                   const existing = offerMap.get(item.id) || {};
+                  // Migra do formato legado se o item em cache não possuir grantedCategories ou subscription
+                  if (!item.grantedCategories || !Array.isArray(item.grantedCategories) || item.grantedCategories.length === 0) {
+                    if (existing.grantedCategories) {
+                      item.grantedCategories = [...existing.grantedCategories];
+                    } else if (item.grantedTier) {
+                      item.grantedCategories = item.grantedTier === 'vip' 
+                        ? ['member_pago', 'member_mentoria'] 
+                        : (item.grantedTier === 'free' ? ['member_free'] : ['member_pago']);
+                    } else {
+                      item.grantedCategories = ['member_pago'];
+                    }
+                  }
+                  if (!item.subscription || !item.subscription.billingPeriod) {
+                    if (existing.subscription) {
+                      item.subscription = { ...existing.subscription };
+                    } else {
+                      item.subscription = {
+                        billingPeriod: item.accessDuration?.isLifetime ? 'lifetime' : 
+                          (item.pricing?.billingType === 'subscription' && item.accessDuration?.value === 1 ? 'monthly' : 'annual')
+                      };
+                    }
+                  }
                   offerMap.set(item.id, { ...existing, ...item });
                 }
               });
@@ -779,6 +834,24 @@
         if (!offerData.hotmartSetupSpec.hotmartProductId && offerData.hotmartProductId) {
           offerData.hotmartSetupSpec.hotmartProductId = offerData.hotmartProductId;
         }
+      }
+
+      // Normaliza categorias concedidas e subscription no modelo multi-categoria
+      if (!offerData.grantedCategories || !Array.isArray(offerData.grantedCategories) || offerData.grantedCategories.length === 0) {
+        if (offerData.grantedTier) {
+          offerData.grantedCategories = offerData.grantedTier === 'vip'
+            ? ['member_pago', 'member_mentoria']
+            : (offerData.grantedTier === 'free' ? ['member_free'] : ['member_pago']);
+        } else {
+          offerData.grantedCategories = ['member_pago'];
+        }
+      }
+      if (!offerData.subscription || typeof offerData.subscription !== 'object') {
+        offerData.subscription = {};
+      }
+      if (!offerData.subscription.billingPeriod) {
+        offerData.subscription.billingPeriod = offerData.accessDuration?.isLifetime ? 'lifetime' :
+          (offerData.pricing?.billingType === 'subscription' && offerData.accessDuration?.value === 1 ? 'monthly' : 'annual');
       }
 
       // Atualiza localmente
@@ -974,8 +1047,17 @@
         isPendingHotmartLink: f.isPendingHotmartLink?.booleanValue ?? true,
         checkoutUrl: f.checkoutUrl?.stringValue || "",
         whatsappNumber: f.whatsappNumber?.stringValue || "+55 11 99616-0910",
-        whatsappPrefillText: f.whatsappPrefillText?.stringValue || "",
-        grantedTier: f.grantedTier?.stringValue || "club_annual",
+        grantedCategories: f.grantedCategories?.arrayValue?.values?.map(v => v.stringValue) || 
+          (f.grantedTier?.stringValue ? (
+            f.grantedTier.stringValue === 'vip' ? ["member_pago", "member_mentoria"] :
+            f.grantedTier.stringValue === 'free' ? ["member_free"] :
+            ["member_pago"]
+          ) : ["member_pago"]),
+        subscription: {
+          billingPeriod: f.subscription?.mapValue?.fields?.billingPeriod?.stringValue || 
+            (f.accessDuration?.mapValue?.fields?.isLifetime?.booleanValue ? "lifetime" :
+            (f.pricing?.mapValue?.fields?.billingType?.stringValue === 'subscription' && f.accessDuration?.mapValue?.fields?.value?.integerValue === "1" ? "monthly" : "annual"))
+        },
         grantedCourses: f.grantedCourses?.arrayValue?.values?.map(v => v.stringValue) || [],
         accessDuration: {
           type: f.accessDuration?.mapValue?.fields?.type?.stringValue || "months",

@@ -40,6 +40,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
   <script src="assets/js/aef-cloud-sync.js?v=20260902_1955"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-portal-auth.js?v=20260902_1955"></script>
   <script src="assets/js/aef-learning-tracker.js"></script>
   <script src="assets/js/aef-quizzes-registry.js"></script>
@@ -460,28 +461,65 @@
     };
 
     document.addEventListener("DOMContentLoaded", async () => {
+      // 1. Mostrar loading spinner
+      const workspace = document.getElementById("classroomMainWorkspace");
+      if (workspace) workspace.style.display = 'none';
+      
+      const spinner = document.createElement('div');
+      spinner.id = 'classroom-loading';
+      spinner.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-white/90 backdrop-blur-sm';
+      spinner.innerHTML = `
+        <div class="flex flex-col items-center gap-4">
+          <div class="w-12 h-12 border-4 border-[#C68A36]/30 border-t-[#C68A36] rounded-full animate-spin"></div>
+          <p class="font-bold text-[#0A192F] animate-pulse">Carregando Sala de Aula...</p>
+        </div>
+      `;
+      document.body.appendChild(spinner);
+
+      // 2. Validação assíncrona de autenticação
+      let userProfile = null;
+      if (window.aefPortalAuth) {
+        try {
+          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
+          if (!authed) return;
+          userProfile = window.aefPortalAuth.getProfile();
+        } catch (authErr) {
+          console.warn("⚠️ Auth Check in Classroom:", authErr);
+          return;
+        }
+      }
+
+      // 3. Inicializa bases e sync
+      let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
+      if (window.aefCloudSync) {
+        try {
+          await window.aefCloudSync.init();
+          const liveCourses = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
+          if (liveCourses) {
+            baseCourses = { ...baseCourses, ...liveCourses };
+          }
+        } catch (err) {
+          console.warn("⚠️ Live Firestore Sync in Classroom:", err);
+        }
+      }
+
+      // 4. Resolve o Course ID
       const urlParams = new URLSearchParams(window.location.search);
       let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno");
       let targetModuleId = urlParams.get("modulo");
       let targetLessonId = urlParams.get("aula");
 
-      // Consulta a última atividade salva caso a página seja aberta sem parâmetros
       const lastActivity = window.aefLearningTracker ? window.aefLearningTracker.getGlobalLastActivity() : null;
-
-      if (!rawParam && lastActivity && lastActivity.courseId) {
-        rawParam = lastActivity.courseId;
-        if (!targetLessonId) targetLessonId = lastActivity.lessonId;
-        if (!targetModuleId) targetModuleId = lastActivity.moduleId;
-      } else if (!rawParam) {
-        rawParam = "ms-legacy";
-      }
 
       let courseId = rawParam;
 
-      // 1. Renderização imediata da base local para zero atraso visual
-      let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
+      if (!courseId && lastActivity && lastActivity.courseId) {
+        courseId = lastActivity.courseId;
+        if (!targetLessonId) targetLessonId = lastActivity.lessonId;
+        if (!targetModuleId) targetModuleId = lastActivity.moduleId;
+      }
 
-      if (!baseCourses[courseId] && baseCourses[`mentoria-${courseId}`]) {
+      if (courseId && !baseCourses[courseId] && baseCourses[`mentoria-${courseId}`]) {
         courseId = `mentoria-${courseId}`;
       } else if (urlParams.get("curso") === "mentoria" && urlParams.get("aluno")) {
         const menteeSlug = urlParams.get("aluno");
@@ -490,7 +528,52 @@
         }
       }
 
-      // Se passou o curso mas não especificou a aula, busca a última aula assistida deste curso específico
+      // 5. Verifica Acesso
+      let hasAccess = false;
+      if (courseId && baseCourses[courseId]) {
+        hasAccess = window.AEFAccessEngine ? window.AEFAccessEngine.hasAccess(courseId, userProfile) : true;
+      }
+
+      if (!courseId || (courseId && !hasAccess)) {
+        if (courseId && !hasAccess && rawParam) {
+           // Solicitou curso sem ter acesso
+           spinner.innerHTML = `
+             <div class="flex flex-col items-center gap-4 max-w-md text-center p-8 bg-white rounded-3xl shadow-2xl border border-red-100">
+               <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-2">
+                 <i data-lucide="lock" class="w-8 h-8"></i>
+               </div>
+               <h2 class="text-2xl font-black text-[#0A192F]">Acesso Bloqueado</h2>
+               <p class="text-sm text-slate-600 mb-4">Você não tem acesso a este curso ou sua assinatura expirou.</p>
+               <a href="portal.html" class="px-6 py-3 bg-[#C68A36] text-white font-bold rounded-xl hover:bg-[#B3792A] transition shadow-md">Voltar ao Portal</a>
+             </div>
+           `;
+           if (window.lucide) window.lucide.createIcons();
+           return;
+        }
+
+        // Não tem courseId na URL (ou lastActivity falhou), busca o primeiro disponível
+        courseId = null;
+        for (const cid in baseCourses) {
+          if (window.AEFAccessEngine && window.AEFAccessEngine.hasAccess(cid, userProfile)) {
+            courseId = cid;
+            break;
+          }
+        }
+      }
+
+      if (!courseId || !baseCourses[courseId]) {
+        spinner.innerHTML = `
+          <div class="flex flex-col items-center gap-4 max-w-md text-center p-8 bg-white rounded-3xl shadow-2xl border border-[#EAE5DC]">
+             <h2 class="text-2xl font-black text-[#0A192F]">Nenhum Curso</h2>
+             <p class="text-sm text-slate-600 mb-4">Você não possui cursos disponíveis na sua conta.</p>
+             <a href="portal.html" class="px-6 py-3 bg-[#C68A36] text-white font-bold rounded-xl hover:bg-[#B3792A] transition shadow-md">Voltar ao Portal</a>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      // Se passou o curso mas não especificou a aula, busca a última aula assistida
       if (!targetLessonId && window.aefLearningTracker) {
         const courseProg = window.aefLearningTracker.getCourseProgress(courseId);
         if (courseProg && courseProg.lastLessonId) {
@@ -501,46 +584,18 @@
         }
       }
 
-      activeCourse = baseCourses[courseId] || COURSE_SEEDS[courseId] || baseCourses["ms-legacy"] || COURSE_SEEDS["ms-legacy"];
+      activeCourse = baseCourses[courseId];
+      COURSE_SEEDS[courseId] = activeCourse;
       
       const mobileHeaderTitle = document.getElementById("mobileCourseHeaderTitle");
       if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.textContent = activeCourse.title;
 
+      spinner.remove();
+      if (workspace) workspace.style.display = '';
+
       initClassroom(targetModuleId, targetLessonId);
       applySidebarStates();
       updateIcons();
-
-      // 2. Validação assíncrona de autenticação
-      if (window.aefPortalAuth) {
-        try {
-          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
-          if (!authed) return;
-          // Revalida a aula ativa com o usuário e tier autenticados
-          if (activeLesson) {
-            selectLesson(activeLesson.id);
-          }
-        } catch (authErr) {
-          console.warn("⚠️ Auth Check in Classroom:", authErr);
-        }
-      }
-
-      // 3. Busca e sincronização com o Firestore em tempo real (Single Source of Truth)
-      try {
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.init();
-          const liveCourses = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
-          if (liveCourses && (liveCourses[courseId] || liveCourses[`mentoria-${rawParam}`])) {
-            activeCourse = liveCourses[courseId] || liveCourses[`mentoria-${rawParam}`];
-            COURSE_SEEDS[courseId] = activeCourse;
-            if (mobileHeaderTitle && activeCourse) mobileHeaderTitle.textContent = activeCourse.title;
-            initClassroom(targetModuleId, targetLessonId);
-            updateIcons();
-          }
-        }
-      } catch (err) {
-        console.warn("⚠️ Live Firestore Sync in Classroom:", err);
-      }
-
     });
 
     function initClassroom(targetModuleId, targetLessonId) {
@@ -837,17 +892,10 @@
         }
       }
 
-      // 1. CHECAGEM DE ACESSO E PAYWALL RIGOROSA
+      // 1. CHECAGEM DE ACESSO E PAYWALL RIGOROSA (AEF ACCESS ENGINE)
       const auth = window.aefPortalAuth;
-      const isAdmin = auth ? auth.isAdmin() : false;
-      const currentTier = auth ? auth.getActiveTier() : 'free';
-      const enrolled = (auth ? auth.getEnrolledProducts() : []) || [];
-
-      // Curso gratuito? — verificação dinâmica: sem hardcode de IDs de curso
-      const isCourseFree = activeCourse && (
-        activeCourse.tierRequired === 'free' ||
-        activeCourse.availableInFreeTier === true
-      );
+      const user = auth ? { ...(auth.getProfile() || {}), purchasedProducts: (auth.getEnrolledProducts() || []) } : null;
+      const AE = window.AEFAccessEngine;
 
       // Módulo é expressamente degustação gratuita?
       const isModuleFree = activeModule && (
@@ -855,31 +903,16 @@
         (activeCourse && Array.isArray(activeCourse.freeModuleIds) && activeCourse.freeModuleIds.includes(activeModule.id))
       );
 
-      // Aluno está matriculado no produto?
-      const isEnrolled = enrolled.includes(activeCourse.id) ||
-                         enrolled.includes('all_access_master') ||
-                         enrolled.includes('magic_stories_club');
-
-      // Usuário tem tier compatível com o curso? — verificação dinâmica pelo tierRequired do curso
-      const clubTiers = ['club_annual', 'club_anual', 'club_monthly', 'course_member', 'pro', 'legacy_member', 'lifetime'];
-      const vipTiers  = ['vip', 'vip_mentorship'];
-
-      const hasTierAccess = (() => {
-        if (!activeCourse) return false;
-        const req = activeCourse.tierRequired || 'club_anual';
-        if (req === 'free') return true;
-        if (vipTiers.includes(currentTier)) return true;
-        if (clubTiers.includes(currentTier)) {
-          // Cursos VIP-only não são acessíveis por Club
-          if (req === 'vip') return false;
-          // Cursos marcados como includedInClubSubscription: false precisam de enrollment explícito
-          if (activeCourse.includedInClubSubscription === false) return false;
-          return true;
-        }
-        return false;
-      })();
-
-      const isAuthorized = isAdmin || isCourseFree || isModuleFree || isEnrolled || hasTierAccess;
+      const isAuthorized = AE
+        ? (AE.hasAccess(user, activeCourse) || AE.hasModuleAccess(user, activeCourse, activeModule))
+        : (() => {
+            const isAdmin = auth ? auth.isAdmin() : false;
+            const currentTier = auth ? auth.getActiveTier() : 'free';
+            const enrolled = (auth ? auth.getEnrolledProducts() : []) || [];
+            const isCourseFree = activeCourse && (activeCourse.tierRequired === 'free' || activeCourse.availableInFreeTier === true);
+            const isEnrolled = enrolled.includes(activeCourse?.id) || enrolled.includes('all_access_master');
+            return isAdmin || isCourseFree || isModuleFree || isEnrolled;
+          })();
 
 
       const videoStage = document.getElementById("videoStage");
@@ -1180,8 +1213,8 @@
       else if (activeLesson.id.includes("-lask") || activeLesson.id.includes("lask")) activityTab = "listen_ask";
       else if (activeLesson.id.includes("-pro") || activeLesson.id.includes("pro")) activityTab = "pronunciation";
 
-      const courseId = activeCourse?.id || "ms-legacy";
-      const studentId = activeCourse?.studentId || (courseId.startsWith("mentoria-") ? courseId.replace("mentoria-", "") : "");
+      const courseId = activeCourse?.id;
+      const studentId = activeCourse?.studentId || (courseId && courseId.startsWith("mentoria-") ? courseId.replace("mentoria-", "") : "");
 
       if (studentId) {
         window.location.href = `treino/player.html?aluno=${studentId}&aula=${activeLesson.id}&activity=${activityTab}`;
