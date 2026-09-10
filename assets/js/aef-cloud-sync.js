@@ -874,6 +874,35 @@
               }))
             }
           };
+        } else if (k === 'media' && Array.isArray(v)) {
+          fields[k] = {
+            arrayValue: {
+              values: v.map(m => {
+                const mf = {
+                  type: { stringValue: m.type || 'video_youtube' },
+                  url: { stringValue: m.url || '' },
+                  title: { stringValue: m.title || '' }
+                };
+                if (m.durationStr) mf.durationStr = { stringValue: m.durationStr };
+                if (m.thumbnailUrl) mf.thumbnailUrl = { stringValue: m.thumbnailUrl };
+                return { mapValue: { fields: mf } };
+              })
+            }
+          };
+        } else if (k === 'downloads' && Array.isArray(v)) {
+          fields[k] = {
+            arrayValue: {
+              values: v.map(d => ({
+                mapValue: {
+                  fields: {
+                    type: { stringValue: d.type || 'pdf' },
+                    url: { stringValue: d.url || '' },
+                    title: { stringValue: d.title || '' }
+                  }
+                }
+              }))
+            }
+          };
         } else if (typeof v === 'string') {
           fields[k] = { stringValue: v };
         } else if (typeof v === 'number') {
@@ -1020,6 +1049,22 @@
           text: s.text || "",
           spokenTranslation: s.spokenTranslation || s.translation || "",
           notes: s.notes || ""
+        }));
+      }
+      if (lessonData.media && Array.isArray(lessonData.media)) {
+        payload.media = lessonData.media.map(m => ({
+          type: m.type || 'video_youtube',
+          url: m.url || '',
+          title: m.title || '',
+          durationStr: m.durationStr || '',
+          thumbnailUrl: m.thumbnailUrl || ''
+        }));
+      }
+      if (lessonData.downloads && Array.isArray(lessonData.downloads)) {
+        payload.downloads = lessonData.downloads.map(d => ({
+          type: d.type || 'pdf',
+          url: d.url || '',
+          title: d.title || ''
         }));
       }
 
@@ -1234,7 +1279,25 @@
                                       spokenTranslation: sf.spokenTranslation?.stringValue || sf.translation?.stringValue || "",
                                       notes: sf.notes?.stringValue || ""
                                     };
-                                  })) : (baseObj.sentences || [])
+                                  })) : (baseObj.sentences || []),
+                                  media: (lf.media?.arrayValue?.values || []).map(mv => {
+                                    const mf = mv.mapValue?.fields || {};
+                                    return {
+                                      type: mf.type?.stringValue || 'video_youtube',
+                                      url: mf.url?.stringValue || '',
+                                      title: mf.title?.stringValue || '',
+                                      durationStr: mf.durationStr?.stringValue || '',
+                                      thumbnailUrl: mf.thumbnailUrl?.stringValue || ''
+                                    };
+                                  }),
+                                  downloads: (lf.downloads?.arrayValue?.values || []).map(dv => {
+                                    const df = dv.mapValue?.fields || {};
+                                    return {
+                                      type: df.type?.stringValue || 'pdf',
+                                      url: df.url?.stringValue || '',
+                                      title: df.title?.stringValue || ''
+                                    };
+                                  })
                                 };
                                 const mergedObj = Object.assign({}, baseObj, restObj);
                                 reconciledLessons.push(mergedObj);

@@ -261,51 +261,45 @@
         </div>
 
         <div id="lessonNormalMediaBox" class="space-y-4">
-        <!-- Media Picker 1: Vídeo Masterclass (MP4) -->
-        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
-              <i data-lucide="video" class="w-4 h-4"></i>
-              <span>Vídeo Masterclass (.MP4)</span>
-            </label>
-            <span id="videoUploadBadge" class="text-[10px] font-mono text-slate-400">Nenhum vídeo</span>
-          </div>
-
-          <div class="grid grid-cols-12 gap-2">
-            <label class="col-span-6 flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider cursor-pointer shadow transition">
-              <i data-lucide="upload" class="w-4 h-4"></i>
-              <span>Subir Vídeo</span>
-              <input type="file" accept="video/mp4,video/*" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'video')">
-            </label>
-            <button type="button" onclick="toggleManualUrl('video')" class="col-span-3 px-2 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold text-xs flex items-center justify-center gap-1">
-              <i data-lucide="link" class="w-3.5 h-3.5"></i>
-              <span>URL</span>
-            </button>
-            <button type="button" onclick="handleDeleteMediaFromStorage('video')" class="col-span-3 px-2 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer" title="Excluir arquivo do Storage e limpar">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-              <span>Excluir</span>
+        <!-- ========================================== -->
+        <!-- 🎥 SEÇÃO DINÂMICA: MÍDIAS DA AULA (MULTI-MEDIA) -->
+        <!-- ========================================== -->
+        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-400/30">
+                <i data-lucide="video" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                  <span>Mídias da Aula</span>
+                  <span id="mediaCountBadge" class="px-1.5 py-0.5 rounded-full bg-white/10 text-slate-400 text-[10px] font-mono">0</span>
+                </h4>
+                <p class="text-[10px] text-slate-400">Vídeos (YouTube, Vimeo, MP4) e Áudios vinculados</p>
+              </div>
+            </div>
+            <button type="button" onclick="addLessonMediaRow()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow transition active:scale-95 cursor-pointer">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Adicionar Mídia</span>
             </button>
           </div>
 
-          <!-- Video Progress Bar -->
-          <div id="videoProgressBarCont" class="hidden space-y-1.5 p-3 bg-white/5 rounded-xl border border-amber-400/30">
-            <div class="flex items-center justify-between text-xs font-bold text-amber-300">
-              <span id="videoProgressLabel">Enviando vídeo para a Nuvem...</span>
-              <span id="videoProgressPct" class="font-mono">0%</span>
-            </div>
-            <div class="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
-              <div id="videoProgressBar" class="bg-gradient-to-r from-amber-500 to-amber-300 h-2.5 rounded-full transition-all duration-200" style="width: 0%"></div>
-            </div>
+          <!-- Dynamic Media List Container -->
+          <div id="lessonMediaListContainer" class="space-y-2"></div>
+
+          <!-- Empty State -->
+          <div id="lessonMediaEmptyState" class="p-4 rounded-xl border border-dashed border-white/15 text-center bg-white/[0.02]">
+            <p class="text-xs text-slate-400">Nenhuma mídia vinculada a esta aula.</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">Clique em <span class="text-amber-400 font-bold">+ Adicionar Mídia</span> para incluir vídeos ou áudios.</p>
           </div>
 
-          <!-- Video Preview -->
-          <div id="videoPreviewCont" class="hidden space-y-2 pt-1">
-            <video id="videoPreviewPlayer" controls class="w-full max-h-48 rounded-xl bg-black border border-white/20"></video>
-          </div>
-
-          <!-- Video URL Collapsible -->
-          <div id="videoManualUrlCont" class="hidden space-y-1 pt-1">
-            <input type="text" id="lessonVideoUrlInput" oninput="updateMediaPreviews()" placeholder="https://firebasestorage.googleapis.com/..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+          <!-- Video Preview Player (quando houver vídeo direto MP4) -->
+          <div id="videoPreviewCont" class="hidden space-y-1.5 pt-1">
+            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <i data-lucide="play-circle" class="w-3 h-3 text-amber-400"></i>
+              <span>Preview de Vídeo Direto</span>
+            </label>
+            <video id="videoPreviewPlayer" controls class="w-full max-h-44 rounded-xl bg-black border border-white/20"></video>
           </div>
         </div>
 
@@ -357,23 +351,38 @@
           </div>
         </div>
 
-        <!-- Media Picker 3: Apostila em PDF -->
-        <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
-          <div class="flex items-center justify-between">
-            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1 truncate">
-              <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
-              <span>Apostila Diagramada (PDF)</span>
-            </label>
-            <button type="button" onclick="handleDeleteMediaFromStorage('pdf')" class="text-slate-400 hover:text-rose-400 p-0.5" title="Excluir PDF da Nuvem"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
+        <!-- ========================================== -->
+        <!-- 📥 SEÇÃO DINÂMICA: DOWNLOADS & MATERIAIS DE APOIO -->
+        <!-- ========================================== -->
+        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-400/30">
+                <i data-lucide="download" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                  <span>Downloads & Materiais de Apoio</span>
+                  <span id="downloadCountBadge" class="px-1.5 py-0.5 rounded-full bg-white/10 text-slate-400 text-[10px] font-mono">0</span>
+                </h4>
+                <p class="text-[10px] text-slate-400">Apostilas PDF, MP3 para download e arquivos complementares</p>
+              </div>
+            </div>
+            <button type="button" onclick="addLessonDownloadRow()" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow transition active:scale-95 cursor-pointer">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Adicionar Download</span>
+            </button>
           </div>
-          <div class="flex items-center gap-2">
-            <label class="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer border border-white/10 transition shrink-0">
-              <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-              <span>Upload PDF</span>
-              <input type="file" accept="application/pdf" class="hidden" onchange="handleDirectFileUpload(this.files[0], 'pdf')">
-            </label>
-            <input type="text" id="lessonPdfUrlInput" oninput="updateMediaPreviews()" placeholder="Material-PDF/..." class="flex-1 px-2.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none">
+
+          <!-- Dynamic Downloads List Container -->
+          <div id="lessonDownloadListContainer" class="space-y-2"></div>
+
+          <!-- Empty State -->
+          <div id="lessonDownloadEmptyState" class="p-4 rounded-xl border border-dashed border-white/15 text-center bg-white/[0.02]">
+            <p class="text-xs text-slate-400">Nenhum download cadastrado nesta aula.</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">Clique em <span class="text-emerald-400 font-bold">+ Adicionar Download</span> para vincular apostilas PDF ou arquivos.</p>
           </div>
+
           <p id="lessonPdfFallbackIndicator" class="text-[9px] text-slate-400 font-medium"></p>
         </div>
 
@@ -1085,7 +1094,36 @@
       const fields = {};
       for (const [k, v] of Object.entries(lesObj)) {
         if (v === undefined) continue;
-        if (typeof v === 'string') fields[k] = { stringValue: v };
+        if (k === 'media' && Array.isArray(v)) {
+          fields[k] = {
+            arrayValue: {
+              values: v.map(m => {
+                const mf = {
+                  type: { stringValue: m.type || 'video_youtube' },
+                  url: { stringValue: m.url || '' },
+                  title: { stringValue: m.title || '' }
+                };
+                if (m.durationStr) mf.durationStr = { stringValue: m.durationStr };
+                if (m.thumbnailUrl) mf.thumbnailUrl = { stringValue: m.thumbnailUrl };
+                return { mapValue: { fields: mf } };
+              })
+            }
+          };
+        } else if (k === 'downloads' && Array.isArray(v)) {
+          fields[k] = {
+            arrayValue: {
+              values: v.map(d => ({
+                mapValue: {
+                  fields: {
+                    type: { stringValue: d.type || 'pdf' },
+                    url: { stringValue: d.url || '' },
+                    title: { stringValue: d.title || '' }
+                  }
+                }
+              }))
+            }
+          };
+        } else if (typeof v === 'string') fields[k] = { stringValue: v };
         else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
         else if (typeof v === 'number') fields[k] = { integerValue: String(v) };
       }
@@ -1730,9 +1768,9 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
                     </div>
                     <div class="flex items-center gap-1 shrink-0 text-[10px]">
                       ${isQuiz ? '<i data-lucide="target" class="w-3 h-3 text-amber-400"></i>' : ''}
-                      ${!isQuiz && les.videoUrl ? '<i data-lucide="video" class="w-3 h-3"></i>' : ''}
-                      ${!isQuiz && les.audioUrl ? '<i data-lucide="volume-2" class="w-3 h-3"></i>' : ''}
-                      ${les.pdfUrl ? '<i data-lucide="file-text" class="w-3 h-3 text-amber-400"></i>' : ''}
+                      ${!isQuiz && (les.videoUrl || (les.media && les.media.some(m => m.url && (m.type?.startsWith('video') || m.type === 'video_youtube' || m.type === 'video_mp4' || m.type === 'video_vimeo')))) ? '<i data-lucide="video" class="w-3 h-3"></i>' : ''}
+                      ${!isQuiz && (les.audioUrl || (les.media && les.media.some(m => m.url && m.type === 'audio_mp3'))) ? '<i data-lucide="volume-2" class="w-3 h-3"></i>' : ''}
+                      ${(les.pdfUrl || (les.downloads && les.downloads.some(d => d.url && d.type === 'pdf'))) ? '<i data-lucide="file-text" class="w-3 h-3 text-amber-400"></i>' : ''}
                     </div>
                   </div>
                 `;
@@ -1836,6 +1874,306 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       }
     }
 
+    function escapeHtmlAttr(str) {
+      if (!str) return '';
+      return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // ==========================================
+    // MULTI-MEDIA DYNAMIC ROWS (lesson.media)
+    // ==========================================
+    function addLessonMediaRow(data = {}) {
+      const container = document.getElementById("lessonMediaListContainer");
+      if (!container) return;
+
+      const type = data.type || "video_youtube";
+      const title = data.title || "";
+      const url = data.url || "";
+
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "lesson-media-row p-3 rounded-xl bg-slate-900/80 border border-white/10 space-y-2 transition hover:border-amber-400/30";
+      rowDiv.innerHTML = `
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <span class="media-row-idx text-[10px] font-mono text-amber-400/80 font-bold shrink-0">#</span>
+            <select class="media-type-select px-2.5 py-1.5 rounded-lg bg-slate-800 border border-white/20 text-amber-300 text-xs font-bold focus:border-amber-400 focus:outline-none shrink-0">
+              <option value="video_youtube" ${type === 'video_youtube' ? 'selected' : ''}>Vídeo (YouTube)</option>
+              <option value="video_mp4" ${type === 'video_mp4' ? 'selected' : ''}>Vídeo (MP4 / Nuvem)</option>
+              <option value="video_vimeo" ${type === 'video_vimeo' ? 'selected' : ''}>Vídeo (Vimeo)</option>
+              <option value="audio_mp3" ${type === 'audio_mp3' ? 'selected' : ''}>Áudio (MP3)</option>
+            </select>
+            <input type="text" value="${escapeHtmlAttr(title)}" placeholder="Título da mídia (ex: Vídeo Principal)" class="media-title-input flex-1 min-w-[120px] px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-xs placeholder:text-slate-500 focus:border-amber-400 focus:outline-none">
+          </div>
+          <button type="button" onclick="removeLessonMediaRow(this)" class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 transition cursor-pointer shrink-0" title="Remover mídia">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" value="${escapeHtmlAttr(url)}" oninput="updateMediaCount(); updateMediaPreviews();" placeholder="URL da mídia (https://youtube.com/... ou storage)" class="media-url-input flex-1 px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-mono placeholder:text-slate-500 focus:border-amber-400 focus:outline-none">
+          <label class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] flex items-center gap-1 cursor-pointer transition shrink-0" title="Subir arquivo de vídeo ou áudio para a nuvem">
+            <i data-lucide="upload" class="w-3 h-3 text-amber-400"></i>
+            <span>Upload</span>
+            <input type="file" accept="video/*,audio/*" class="hidden" onchange="handleMediaRowFileUpload(this)">
+          </label>
+        </div>
+      `;
+
+      container.appendChild(rowDiv);
+      if (window.lucide) lucide.createIcons();
+      updateMediaCount();
+      updateMediaPreviews();
+    }
+
+    function removeLessonMediaRow(btn) {
+      const row = btn.closest(".lesson-media-row");
+      if (row) {
+        row.remove();
+        updateMediaCount();
+        updateMediaPreviews();
+      }
+    }
+
+    function updateMediaCount() {
+      const container = document.getElementById("lessonMediaListContainer");
+      const emptyState = document.getElementById("lessonMediaEmptyState");
+      const badge = document.getElementById("mediaCountBadge");
+      if (!container) return;
+      const rows = container.querySelectorAll(".lesson-media-row");
+      const count = rows.length;
+      if (badge) badge.innerText = String(count);
+      if (emptyState) {
+        emptyState.classList.toggle("hidden", count > 0);
+      }
+      rows.forEach((row, i) => {
+        const idxEl = row.querySelector(".media-row-idx");
+        if (idxEl) idxEl.innerText = `#${i + 1}`;
+      });
+    }
+
+    function getLessonMediaArray() {
+      const container = document.getElementById("lessonMediaListContainer");
+      if (!container) return [];
+      const rows = container.querySelectorAll(".lesson-media-row");
+      const items = [];
+      rows.forEach(row => {
+        const type = row.querySelector(".media-type-select")?.value || "video_youtube";
+        const title = row.querySelector(".media-title-input")?.value?.trim() || "";
+        const url = row.querySelector(".media-url-input")?.value?.trim() || "";
+        if (url || title) {
+          items.push({ type, title, url });
+        }
+      });
+      return items;
+    }
+
+    function renderLessonMediaRows(mediaList, fallbackVideoUrl) {
+      const container = document.getElementById("lessonMediaListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      let items = Array.isArray(mediaList) ? [...mediaList] : [];
+      if (items.length === 0 && fallbackVideoUrl) {
+        const isMp4 = fallbackVideoUrl.includes(".mp4") || fallbackVideoUrl.includes("firebasestorage");
+        items.push({
+          type: isMp4 ? "video_mp4" : "video_youtube",
+          url: fallbackVideoUrl,
+          title: "Vídeo Principal"
+        });
+      }
+
+      items.forEach(item => addLessonMediaRow(item));
+      updateMediaCount();
+    }
+
+    async function handleMediaRowFileUpload(fileInput) {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      const row = fileInput.closest(".lesson-media-row");
+      if (!row) return;
+
+      const folder = `courses/${activeCourseId || 'general'}/${activeModuleId || 'media'}`;
+      showToast(`Enviando "${file.name}" para a Nuvem...`);
+
+      try {
+        if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
+        await window.aefCloudSync.init();
+
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, folder);
+
+        const urlInput = row.querySelector(".media-url-input");
+        if (urlInput) urlInput.value = downloadUrl;
+
+        const titleInput = row.querySelector(".media-title-input");
+        if (titleInput && !titleInput.value.trim()) {
+          titleInput.value = file.name.replace(/\.[^/.]+$/, "");
+        }
+
+        const typeSelect = row.querySelector(".media-type-select");
+        if (typeSelect) {
+          if (file.type.startsWith("audio/") || file.name.endsWith(".mp3")) {
+            typeSelect.value = "audio_mp3";
+          } else {
+            typeSelect.value = "video_mp4";
+          }
+        }
+
+        LAST_UPLOADED_MEDIA_FILE = file;
+        updateMediaCount();
+        updateMediaPreviews();
+        showToast(`✅ "${file.name}" enviado com sucesso!`);
+      } catch (err) {
+        console.error("Erro no upload da mídia:", err);
+        showToast(`❌ Erro no upload: ${err.message}`);
+      }
+    }
+
+    // ==========================================
+    // DOWNLOADS DYNAMIC ROWS (lesson.downloads)
+    // ==========================================
+    function addLessonDownloadRow(data = {}) {
+      const container = document.getElementById("lessonDownloadListContainer");
+      if (!container) return;
+
+      const type = data.type || "pdf";
+      const title = data.title || "";
+      const url = data.url || "";
+
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "lesson-download-row p-3 rounded-xl bg-slate-900/80 border border-white/10 space-y-2 transition hover:border-emerald-400/30";
+      rowDiv.innerHTML = `
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 flex-1 min-w-0">
+            <span class="download-row-idx text-[10px] font-mono text-emerald-400/80 font-bold shrink-0">#</span>
+            <select class="download-type-select px-2.5 py-1.5 rounded-lg bg-slate-800 border border-white/20 text-emerald-300 text-xs font-bold focus:border-emerald-400 focus:outline-none shrink-0">
+              <option value="pdf" ${type === 'pdf' ? 'selected' : ''}>Apostila (PDF)</option>
+              <option value="mp3" ${type === 'mp3' ? 'selected' : ''}>Áudio (MP3)</option>
+              <option value="zip" ${type === 'zip' ? 'selected' : ''}>Arquivo (ZIP)</option>
+            </select>
+            <input type="text" value="${escapeHtmlAttr(title)}" placeholder="Título do download (ex: Apostila Diagramada)" class="download-title-input flex-1 min-w-[120px] px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 text-white text-xs placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none">
+          </div>
+          <button type="button" onclick="removeLessonDownloadRow(this)" class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 transition cursor-pointer shrink-0" title="Remover download">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" value="${escapeHtmlAttr(url)}" oninput="updateDownloadCount(); updateMediaPreviews();" placeholder="URL para download (https://... ou Material-PDF/...)" class="download-url-input flex-1 px-2.5 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-mono placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none">
+          <label class="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] flex items-center gap-1 cursor-pointer transition shrink-0" title="Subir arquivo de download para a nuvem">
+            <i data-lucide="upload" class="w-3 h-3 text-emerald-400"></i>
+            <span>Upload</span>
+            <input type="file" accept="application/pdf,audio/*,.zip" class="hidden" onchange="handleDownloadRowUpload(this)">
+          </label>
+        </div>
+      `;
+
+      container.appendChild(rowDiv);
+      if (window.lucide) lucide.createIcons();
+      updateDownloadCount();
+      updateMediaPreviews();
+    }
+
+    function removeLessonDownloadRow(btn) {
+      const row = btn.closest(".lesson-download-row");
+      if (row) {
+        row.remove();
+        updateDownloadCount();
+        updateMediaPreviews();
+      }
+    }
+
+    function updateDownloadCount() {
+      const container = document.getElementById("lessonDownloadListContainer");
+      const emptyState = document.getElementById("lessonDownloadEmptyState");
+      const badge = document.getElementById("downloadCountBadge");
+      if (!container) return;
+      const rows = container.querySelectorAll(".lesson-download-row");
+      const count = rows.length;
+      if (badge) badge.innerText = String(count);
+      if (emptyState) {
+        emptyState.classList.toggle("hidden", count > 0);
+      }
+      rows.forEach((row, i) => {
+        const idxEl = row.querySelector(".download-row-idx");
+        if (idxEl) idxEl.innerText = `#${i + 1}`;
+      });
+    }
+
+    function getLessonDownloadsArray() {
+      const container = document.getElementById("lessonDownloadListContainer");
+      if (!container) return [];
+      const rows = container.querySelectorAll(".lesson-download-row");
+      const items = [];
+      rows.forEach(row => {
+        const type = row.querySelector(".download-type-select")?.value || "pdf";
+        const title = row.querySelector(".download-title-input")?.value?.trim() || "";
+        const url = row.querySelector(".download-url-input")?.value?.trim() || "";
+        if (url || title) {
+          items.push({ type, title, url });
+        }
+      });
+      return items;
+    }
+
+    function renderLessonDownloadRows(downloadList, fallbackPdfUrl) {
+      const container = document.getElementById("lessonDownloadListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      let items = Array.isArray(downloadList) ? [...downloadList] : [];
+      if (items.length === 0 && fallbackPdfUrl) {
+        items.push({
+          type: "pdf",
+          url: fallbackPdfUrl,
+          title: "Apostila Diagramada"
+        });
+      }
+
+      items.forEach(item => addLessonDownloadRow(item));
+      updateDownloadCount();
+    }
+
+    async function handleDownloadRowUpload(fileInput) {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      const row = fileInput.closest(".lesson-download-row");
+      if (!row) return;
+
+      const folder = `courses/${activeCourseId || 'general'}/${activeModuleId || 'downloads'}`;
+      showToast(`Enviando download "${file.name}"...`);
+
+      try {
+        if (!window.aefCloudSync) throw new Error("CloudSync indisponível");
+        await window.aefCloudSync.init();
+
+        const downloadUrl = await window.aefCloudSync.uploadFileToStorage(file, folder);
+
+        const urlInput = row.querySelector(".download-url-input");
+        if (urlInput) urlInput.value = downloadUrl;
+
+        const titleInput = row.querySelector(".download-title-input");
+        if (titleInput && !titleInput.value.trim()) {
+          titleInput.value = file.name.replace(/\.[^/.]+$/, "");
+        }
+
+        const typeSelect = row.querySelector(".download-type-select");
+        if (typeSelect) {
+          if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+            typeSelect.value = "pdf";
+          } else if (file.type.startsWith("audio/") || file.name.endsWith(".mp3")) {
+            typeSelect.value = "mp3";
+          } else if (file.name.endsWith(".zip")) {
+            typeSelect.value = "zip";
+          }
+        }
+
+        updateDownloadCount();
+        updateMediaPreviews();
+        showToast(`✅ "${file.name}" enviado com sucesso!`);
+      } catch (err) {
+        console.error("Erro no upload do arquivo:", err);
+        showToast(`❌ Erro no upload: ${err.message}`);
+      }
+    }
+
     function selectLessonForEdit(lessonId, moduleId) {
       activeLessonId = lessonId;
       activeModuleId = moduleId;
@@ -1864,9 +2202,14 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("lessonTitleInput").value = foundLesson.title || "";
       document.getElementById("lessonDurationInput").value = foundLesson.duration || "";
       document.getElementById("lessonOrderInput").value = foundLesson.order || 1;
-      document.getElementById("lessonVideoUrlInput").value = foundLesson.videoUrl || "";
-      document.getElementById("lessonAudioUrlInput").value = foundLesson.audioUrl || "";
-      document.getElementById("lessonPdfUrlInput").value = foundLesson.pdfUrl || "";
+
+      // Dynamic Media & Downloads population
+      renderLessonMediaRows(foundLesson.media, foundLesson.videoUrl);
+      renderLessonDownloadRows(foundLesson.downloads, foundLesson.pdfUrl);
+
+      const audioInp = document.getElementById("lessonAudioUrlInput");
+      if (audioInp) audioInp.value = foundLesson.audioUrl || "";
+
       document.getElementById("lessonArtworkUrlInput").value = foundLesson.artworkUrl || "";
       document.getElementById("lessonThumbnailUrlInput").value = foundLesson.thumbnailUrl || "";
       document.getElementById("lessonGoldenTipInput").value = foundLesson.goldenTip || "";
@@ -1979,6 +2322,8 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
         order: nextOrder,
         type: "lesson",
         quizId: "",
+        media: [],
+        downloads: [],
         videoUrl: "",
         audioUrl: "",
         thumbnailUrl: "",
@@ -2061,12 +2406,30 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       foundLesson.title = inputTitle || (isQuiz ? "Quiz sem título" : "Aula sem título");
       foundLesson.duration = document.getElementById("lessonDurationInput")?.value?.trim() || "";
       foundLesson.order = parseInt(document.getElementById("lessonOrderInput").value) || 1;
-      foundLesson.videoUrl = document.getElementById("lessonVideoUrlInput").value.trim();
-      foundLesson.audioUrl = document.getElementById("lessonAudioUrlInput").value.trim();
-      foundLesson.pdfUrl = document.getElementById("lessonPdfUrlInput").value.trim();
-      foundLesson.artworkUrl = document.getElementById("lessonArtworkUrlInput").value.trim();
-      foundLesson.thumbnailUrl = document.getElementById("lessonThumbnailUrlInput").value.trim();
-      foundLesson.goldenTip = document.getElementById("lessonGoldenTipInput").value.trim();
+
+      // Multi-Media and Downloads schema serialization
+      const mediaList = getLessonMediaArray();
+      const downloadList = getLessonDownloadsArray();
+      foundLesson.media = mediaList;
+      foundLesson.downloads = downloadList;
+
+      // Backward compatibility: keep legacy videoUrl and pdfUrl synchronized
+      const firstVideo = mediaList.find(m => m.type && (m.type.startsWith('video') || m.type === 'video_youtube' || m.type === 'video_mp4' || m.type === 'video_vimeo'));
+      foundLesson.videoUrl = firstVideo ? (firstVideo.url || "") : "";
+
+      const firstPdf = downloadList.find(d => d.type === 'pdf');
+      foundLesson.pdfUrl = firstPdf ? (firstPdf.url || "") : "";
+
+      const audioInp = document.getElementById("lessonAudioUrlInput");
+      foundLesson.audioUrl = audioInp ? audioInp.value.trim() : (foundLesson.audioUrl || "");
+      if (!foundLesson.audioUrl) {
+        const firstAudio = mediaList.find(m => m.type === 'audio_mp3');
+        if (firstAudio?.url) foundLesson.audioUrl = firstAudio.url;
+      }
+
+      foundLesson.artworkUrl = document.getElementById("lessonArtworkUrlInput")?.value?.trim() || "";
+      foundLesson.thumbnailUrl = document.getElementById("lessonThumbnailUrlInput")?.value?.trim() || "";
+      foundLesson.goldenTip = document.getElementById("lessonGoldenTipInput")?.value?.trim() || "";
       foundLesson.hasTrainingTrack = document.getElementById("lessonHasTrainingTrackInput").checked;
       foundLesson.published = document.getElementById("lessonPublishedInput").checked;
       foundLesson.rawScript = document.getElementById("lessonRawScriptInput").value;
@@ -2172,6 +2535,20 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
           if (inp) inp.value = downloadUrl;
         }
 
+        if (type === 'video' && typeof addLessonMediaRow === 'function') {
+          addLessonMediaRow({
+            type: 'video_mp4',
+            url: downloadUrl,
+            title: file.name ? file.name.replace(/\.[^/.]+$/, "") : 'Vídeo da Aula'
+          });
+        } else if (type === 'pdf' && typeof addLessonDownloadRow === 'function') {
+          addLessonDownloadRow({
+            type: 'pdf',
+            url: downloadUrl,
+            title: file.name ? file.name.replace(/\.[^/.]+$/, "") : 'Apostila PDF'
+          });
+        }
+
         if (type === 'video' || type === 'audio') {
           LAST_UPLOADED_MEDIA_FILE = file;
         }
@@ -2249,12 +2626,12 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
     }
 
     function updateMediaPreviews() {
-      const vUrl = document.getElementById("lessonVideoUrlInput")?.value?.trim() || "";
+      const mediaList = typeof getLessonMediaArray === 'function' ? getLessonMediaArray() : [];
+      const firstDirectVideo = mediaList.find(m => m.url && (m.type === 'video_mp4' || m.url.includes('.mp4') || m.url.includes('firebasestorage')));
+      const vUrl = firstDirectVideo ? firstDirectVideo.url : (document.getElementById("lessonVideoUrlInput")?.value?.trim() || "");
       const vPrev = document.getElementById("videoPreviewPlayer");
-      const vBadge = document.getElementById("videoUploadBadge");
       const vCont = document.getElementById("videoPreviewCont");
       if (vUrl) {
-        if (vBadge) { vBadge.innerText = "● Vídeo Ativo"; vBadge.className = "text-[10px] font-mono text-emerald-400 font-bold"; }
         if (vPrev && vUrl.startsWith("http")) {
           vPrev.src = vUrl;
           vPrev.onloadedmetadata = () => {
@@ -2266,7 +2643,6 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
           if (vCont) vCont.classList.remove("hidden");
         }
       } else {
-        if (vBadge) { vBadge.innerText = "Nenhum vídeo"; vBadge.className = "text-[10px] font-mono text-slate-400"; }
         if (vCont) vCont.classList.add("hidden");
       }
 
@@ -2292,15 +2668,17 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       }
 
       // PDF Fallback Indicator
-      const pUrl = document.getElementById("lessonPdfUrlInput")?.value?.trim() || "";
+      const downloadList = typeof getLessonDownloadsArray === 'function' ? getLessonDownloadsArray() : [];
+      const firstPdf = downloadList.find(d => d.type === 'pdf' && d.url);
+      const pUrl = firstPdf ? firstPdf.url : (document.getElementById("lessonPdfUrlInput")?.value?.trim() || "");
       const pFallback = document.getElementById("lessonPdfFallbackIndicator");
       if (pFallback) {
         if (pUrl) {
-          pFallback.innerText = "📄 Apostila individual vinculada.";
+          pFallback.innerText = "📄 Apostila vinculada em Downloads.";
           pFallback.className = "text-[9px] text-emerald-400 font-medium";
         } else {
           const mod = (ALL_COURSES[activeCourseId]?.modules || []).find(m => m.id === activeModuleId);
-          const modPdf = mod?.pdfUrl || (mod?.lessons?.find(l => l.pdfUrl)?.pdfUrl) || "";
+          const modPdf = mod?.pdfUrl || (mod?.lessons?.find(l => l.pdfUrl || (l.downloads && l.downloads.some(d => d.type === 'pdf')))?.pdfUrl) || "";
           if (modPdf) {
             pFallback.innerText = "ℹ️ Usando Livreto do Módulo como fallback.";
             pFallback.className = "text-[9px] text-amber-300 font-medium";
@@ -2710,7 +3088,14 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
 
         const downloadUrl = await window.aefCloudSync.uploadFileToStorage(pdfFile, folder);
 
-        // 4. Salva a URL real do Firebase Storage na aula
+        // 4. Salva a URL real do Firebase Storage na aula (como download)
+        if (typeof addLessonDownloadRow === 'function') {
+          addLessonDownloadRow({
+            type: 'pdf',
+            url: downloadUrl,
+            title: `Apostila Diagramada (${cleanSlug})`
+          });
+        }
         const inputEl = document.getElementById('lessonPdfUrlInput');
         if (inputEl) inputEl.value = downloadUrl;
 

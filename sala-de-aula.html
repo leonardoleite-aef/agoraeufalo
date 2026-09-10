@@ -80,29 +80,17 @@
 
         <!-- Vertical Navigation Menu -->
         <nav class="space-y-1 text-xs font-bold">
-          <a href="portal.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
-            <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Dashboard</span>
+          <a href="portal.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition" title="Voltar ao Portal do Aluno">
+            <i data-lucide="arrow-left" class="w-4 h-4 text-[#8C8275]"></i>
+            <span>Voltar ao Portal</span>
           </a>
-          <a id="leftSidebarCourseLink" href="curso.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition group" title="Página Inicial do Curso">
+          <a id="leftSidebarCourseLink" href="curso.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition group" title="Módulos do Curso">
             <i data-lucide="book-open" class="w-4 h-4 text-[#8C8275] group-hover:text-[#C68A36]"></i>
-            <span>Visão Geral do Curso</span>
+            <span>Módulos do Curso</span>
           </a>
-          <a id="leftSidebarClassroomLink" href="sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs transition">
+          <a id="leftSidebarClassroomLink" href="sala-de-aula.html?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs transition" title="Sala de Aula">
             <i data-lucide="play-circle" class="w-4 h-4 text-[#C68A36]"></i>
             <span>Sala de Aula</span>
-          </a>
-          <a id="leftSidebarPlayerLink" href="player.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
-            <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Training Player</span>
-          </a>
-          <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
-            <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Aulas ao Vivo</span>
-          </a>
-          <a href="blog/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#6E675F] hover:text-[#2C2416] hover:bg-[#F9F6F0] transition">
-            <i data-lucide="newspaper" class="w-4 h-4 text-[#8C8275]"></i>
-            <span>Blog do Leo</span>
           </a>
         </nav>
       </div>
@@ -175,6 +163,11 @@
         </button>
       </div>
 
+      <!-- Multi-Media Switcher / Stage Tabs (Rendered dynamically when lesson has multiple media items) -->
+      <div id="mediaTabsBar" class="hidden bg-[#071322] px-4 py-2.5 border-b border-white/10 flex items-center gap-2 overflow-x-auto custom-scrollbar shrink-0">
+        <!-- Rendered dynamically -->
+      </div>
+
       <!-- Cinema Video Player (with 16:9 Thumbnail Poster) -->
       <div class="bg-[#0A192F] aspect-video w-full relative overflow-hidden shadow-md flex items-center justify-center">
         <div class="w-full h-full" id="videoStage">
@@ -198,17 +191,20 @@
           </button>
         </div>
 
-        <!-- Right: Escutar no Celular, PDF, Complete Buttons -->
+        <!-- Right: Escutar no Celular, Downloads, Complete Buttons -->
         <div class="flex items-center gap-2 shrink-0">
           <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3.5 py-2 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer active:scale-95" title="Escutar essa aula no seu celular">
             <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
             <span>Escutar essa aula no seu celular</span>
           </button>
 
-          <a id="pdfDownloadLink" href="javascript:void(0)" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition opacity-40 pointer-events-none cursor-not-allowed">
-            <i data-lucide="download" class="w-3.5 h-3.5 text-[#C68A36]"></i>
-            <span id="pdfBtnLabel">Apostila (PDF)</span>
-          </a>
+          <!-- Dynamic Downloads Area (Supports Multiple Downloads or Fallback) -->
+          <div id="lessonDownloadsActionArea" class="flex items-center gap-2 shrink-0">
+            <a id="pdfDownloadLink" href="javascript:void(0)" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition opacity-40 pointer-events-none cursor-not-allowed">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+              <span id="pdfBtnLabel">Apostila (PDF)</span>
+            </a>
+          </div>
 
           <button id="btnMarkComplete" onclick="toggleLessonCompletion()" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-emerald-50 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition cursor-pointer">
             <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i>
@@ -235,7 +231,26 @@
           </p>
         </div>
 
-        <!-- Card 2: Processed Content Stream (Cascading Cards) -->
+        <!-- Card 2: Materiais Didáticos & Downloads da Aula (Multi-downloads) -->
+        <div id="lessonMaterialsCard" class="hidden p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3">
+          <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-xl bg-[#F5EFE6] text-[#C68A36] flex items-center justify-center font-bold text-xs shadow-2xs">
+                <i data-lucide="folder-down" class="w-4 h-4 text-[#C68A36]"></i>
+              </div>
+              <div>
+                <h3 class="font-black text-xs uppercase tracking-wider text-[#0A192F]">Materiais de Apoio & Downloads</h3>
+                <p class="text-[10px] text-[#7A7369]">Arquivos de estudo, apostilas e materiais complementares</p>
+              </div>
+            </div>
+            <span id="lessonMaterialsCount" class="text-[10px] font-mono font-bold text-[#C68A36] bg-[#FDF8F0] px-2 py-0.5 rounded border border-[#C68A36]/30">0 itens</span>
+          </div>
+          <div id="lessonMaterialsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Card 3: Processed Content Stream (Cascading Cards) -->
         <div id="lessonProcessedContentContainer" class="space-y-4">
           <!-- Rendered dynamically -->
         </div>
@@ -366,6 +381,8 @@
     let activeCourse = null;
     let activeModule = null;
     let activeLesson = null;
+    let currentLessonMediaList = [];
+    let activeMediaIndex = 0;
     let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
 
     let isLeftSidebarCollapsed = localStorage.getItem('aef_classroom_left_collapsed') === 'true';
@@ -802,6 +819,418 @@
       updateIcons();
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatYouTubeEmbedUrl(url) {
+      if (!url) return '';
+      if (url.includes('/embed/')) {
+        return url.includes('?') ? url : `${url}?autoplay=0&rel=0`;
+      }
+      const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+      const match = url.match(regExp);
+      if (match && match[1]) {
+        return `https://www.youtube.com/embed/${match[1]}?autoplay=0&rel=0`;
+      }
+      return url;
+    }
+
+    function formatVimeoEmbedUrl(url) {
+      if (!url) return '';
+      if (url.includes('player.vimeo.com/video/')) return url;
+      const match = url.match(/(?:vimeo\.com\/)(\d+)/);
+      if (match && match[1]) {
+        return `https://player.vimeo.com/video/${match[1]}`;
+      }
+      return url;
+    }
+
+    function resolveLessonMedia(found) {
+      if (Array.isArray(found.media) && found.media.length > 0) {
+        return found.media.map(m => ({ ...m }));
+      }
+      const list = [];
+      if (found.videoUrl && found.videoUrl.trim() !== '') {
+        const vUrl = found.videoUrl.trim();
+        let vType = 'video_mp4';
+        if (vUrl.includes('youtube.com') || vUrl.includes('youtu.be')) {
+          vType = 'video_youtube';
+        } else if (vUrl.includes('vimeo.com')) {
+          vType = 'video_vimeo';
+        }
+        list.push({
+          type: vType,
+          url: vUrl,
+          title: 'Vídeo Principal',
+          thumbnailUrl: found.thumbnailUrl || ''
+        });
+        if (found.audioUrl && found.audioUrl.trim() !== '') {
+          list.push({
+            type: 'audio_mp3',
+            url: found.audioUrl.trim(),
+            title: 'Áudio MP3',
+            thumbnailUrl: found.artworkUrl || found.thumbnailUrl || ''
+          });
+        }
+      } else if (found.audioUrl && found.audioUrl.trim() !== '') {
+        list.push({
+          type: 'audio_mp3',
+          url: found.audioUrl.trim(),
+          title: 'Áudio da Aula',
+          thumbnailUrl: found.artworkUrl || found.thumbnailUrl || ''
+        });
+      }
+      return list;
+    }
+
+    function attachVideoConversionCta(container) {
+      if (!container) return;
+      const currentStudentTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function')
+        ? window.aefPortalAuth.getActiveTier()
+        : (localStorage.getItem("aef_user_tier") || 'free');
+      const isFreeStudent = currentStudentTier === 'free';
+      const isFreeModuleForCta = (activeModule && activeModule.isFreeTier === true) || (
+        activeCourse && (
+          activeCourse.availableInFreeTier === true ||
+          activeCourse.tierRequired === 'free'
+        ) && activeModule && activeCourse.modules && activeCourse.modules[0]?.id === activeModule.id
+      );
+
+      const vidEl = container.querySelector("video");
+      if (vidEl && (isFreeStudent || isFreeModuleForCta)) {
+        let ctaFired = false;
+        vidEl.addEventListener("timeupdate", () => {
+          if (ctaFired) return;
+          if (vidEl.duration && vidEl.duration > 75 && vidEl.currentTime >= (vidEl.duration - 60)) {
+            ctaFired = true;
+            triggerLastMinuteConversionCta();
+          }
+        });
+      }
+    }
+
+    function renderActiveMedia(mediaItem, foundLesson) {
+      const videoStage = document.getElementById("videoStage");
+      if (!videoStage) return;
+
+      if (!mediaItem) {
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-4 text-center space-y-2">
+            <div class="w-12 h-12 rounded-2xl bg-[#C68A36]/20 text-[#C68A36] border border-[#C68A36]/40 flex items-center justify-center shadow-lg">
+              <i data-lucide="headphones" class="w-6 h-6 text-[#C68A36]"></i>
+            </div>
+            <h3 class="text-sm font-black text-white">${escapeHtml(foundLesson ? foundLesson.title : 'Aula')}</h3>
+            <p class="text-xs text-slate-300">Treino didático & leitura de conteúdo.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const mType = mediaItem.type || 'video_mp4';
+
+      if (mType === 'video_youtube') {
+        const embedUrl = formatYouTubeEmbedUrl(mediaItem.url);
+        videoStage.innerHTML = `
+          <iframe class="w-full h-full border-0" src="${embedUrl}" title="${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Vídeo'))}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        `;
+      } else if (mType === 'video_vimeo') {
+        const embedUrl = formatVimeoEmbedUrl(mediaItem.url);
+        videoStage.innerHTML = `
+          <iframe class="w-full h-full border-0" src="${embedUrl}" title="${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Vídeo'))}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        `;
+      } else if (mType === 'audio_mp3') {
+        const coverImg = mediaItem.thumbnailUrl || (foundLesson ? (foundLesson.artworkUrl || foundLesson.thumbnailUrl) : '') || 'assets/images/cover-default-aef.jpg';
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] via-[#0A192F] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-3.5 select-none">
+            <div class="relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-2xl border-2 border-[#C68A36]/40 bg-slate-900">
+              <img src="${coverImg}" alt="${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Áudio'))}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-[#C68A36] text-white flex items-center justify-center shadow-lg">
+                  <i data-lucide="volume-2" class="w-5 h-5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-1 max-w-md">
+              <span class="px-2.5 py-0.5 rounded-full bg-[#C68A36]/20 text-[#C68A36] border border-[#C68A36]/30 font-black text-[10px] uppercase tracking-wider">
+                Áudio de Imersão & Reflexo
+              </span>
+              <h3 class="text-sm sm:text-base font-black text-white leading-tight font-serif">${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Áudio'))}</h3>
+            </div>
+            <div class="w-full max-w-md bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-xl">
+              <audio controls playsinline class="w-full" src="${mediaItem.url}"></audio>
+            </div>
+          </div>
+        `;
+      } else {
+        const posterImg = mediaItem.thumbnailUrl || (foundLesson ? foundLesson.thumbnailUrl : '') || '';
+        videoStage.innerHTML = `
+          <video controls playsinline poster="${posterImg}" class="w-full h-full object-contain bg-black" src="${mediaItem.url}"></video>
+        `;
+      }
+
+      attachVideoConversionCta(videoStage);
+    }
+
+    function renderMediaTabs() {
+      const tabsBar = document.getElementById("mediaTabsBar");
+      if (!tabsBar) return;
+
+      if (!currentLessonMediaList || currentLessonMediaList.length <= 1) {
+        tabsBar.innerHTML = "";
+        tabsBar.classList.add("hidden");
+        return;
+      }
+
+      tabsBar.classList.remove("hidden");
+      tabsBar.innerHTML = currentLessonMediaList.map((item, idx) => {
+        const isActive = idx === activeMediaIndex;
+        let icon = "play-circle";
+        if (item.type === "audio_mp3") icon = "headphones";
+        else if (item.type === "video_youtube") icon = "video";
+        else if (item.type === "video_vimeo") icon = "film";
+
+        const title = item.title || (item.type === "audio_mp3" ? `Áudio ${idx + 1}` : `Vídeo ${idx + 1}`);
+
+        return `
+          <button onclick="window.switchActiveMedia(${idx})" class="${isActive ? 'bg-[#C68A36] text-white font-bold shadow-xs border border-[#C68A36]' : 'bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white font-medium border border-white/10'} px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-2 transition cursor-pointer shrink-0 active:scale-95">
+            <i data-lucide="${icon}" class="w-3.5 h-3.5"></i>
+            <span>${escapeHtml(title)}</span>
+            ${item.durationStr ? `<span class="opacity-70 text-[10px] font-mono">(${item.durationStr})</span>` : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.switchActiveMedia = (idx) => {
+      if (!currentLessonMediaList || !currentLessonMediaList[idx]) return;
+      activeMediaIndex = idx;
+      renderMediaTabs();
+      renderActiveMedia(currentLessonMediaList[idx], activeLesson);
+      updateIcons();
+    };
+
+    function resolveLessonDownloads(found) {
+      if (Array.isArray(found.downloads) && found.downloads.length > 0) {
+        return found.downloads.map(d => ({
+          type: d.type || 'pdf',
+          url: (d.url || '').trim(),
+          title: d.title || (d.type === 'mp3' ? 'Áudio de Apoio' : d.type === 'zip' ? 'Pacote Completo (ZIP)' : 'Apostila (PDF)')
+        }));
+      }
+
+      // Fallback: single pdfUrl from lesson, module, or course
+      let resolvedPdf = (found.pdfUrl && found.pdfUrl.trim() !== "") ? found.pdfUrl.trim() : "";
+      let isModuleBooklet = false;
+
+      if (!resolvedPdf && activeModule && activeModule.pdfUrl && activeModule.pdfUrl.trim() !== "") {
+        resolvedPdf = activeModule.pdfUrl.trim();
+        isModuleBooklet = true;
+      } else if (!resolvedPdf && activeCourse && activeCourse.pdfUrl && activeCourse.pdfUrl.trim() !== "") {
+        resolvedPdf = activeCourse.pdfUrl.trim();
+        isModuleBooklet = true;
+      }
+
+      if (resolvedPdf) {
+        return [{
+          type: 'pdf',
+          url: resolvedPdf,
+          title: isModuleBooklet ? 'Livreto do Módulo (PDF)' : 'Apostila da Aula (PDF)'
+        }];
+      }
+
+      return [];
+    }
+
+    function renderLessonDownloads(found, isAuthorized) {
+      const downloadsArea = document.getElementById("lessonDownloadsActionArea");
+      const materialsCard = document.getElementById("lessonMaterialsCard");
+      const materialsList = document.getElementById("lessonMaterialsList");
+      const materialsCount = document.getElementById("lessonMaterialsCount");
+
+      if (!isAuthorized) {
+        if (downloadsArea) {
+          downloadsArea.innerHTML = `
+            <a id="pdfDownloadLink" href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-amber-300 transition" title="Exclusivo para Assinantes">
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span id="pdfBtnLabel">🔒 Downloads Exclusivos</span>
+            </a>
+          `;
+        }
+        if (materialsCard) {
+          materialsCard.classList.remove("hidden");
+          if (materialsCount) materialsCount.textContent = "Bloqueado";
+          if (materialsList) {
+            materialsList.innerHTML = `
+              <div class="col-span-full p-4 rounded-xl bg-[#0A192F] text-white text-center space-y-2 border border-amber-400/30">
+                <p class="text-xs text-slate-300">Os materiais didáticos e downloads estão disponíveis para assinantes do AgoraEuFalo Club.</p>
+                <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs">
+                  <span>Destravar Downloads no Club ➔</span>
+                </a>
+              </div>
+            `;
+          }
+        }
+        return;
+      }
+
+      const downloads = resolveLessonDownloads(found);
+
+      // 1. Pedagogical Materials Card
+      if (materialsCard) {
+        if (downloads.length === 0) {
+          materialsCard.classList.add("hidden");
+        } else {
+          materialsCard.classList.remove("hidden");
+          if (materialsCount) materialsCount.textContent = `${downloads.length} ${downloads.length === 1 ? 'item' : 'itens'}`;
+          if (materialsList) {
+            materialsList.innerHTML = downloads.map((item) => {
+              const dType = (item.type || 'pdf').toLowerCase();
+              let icon = 'file-text';
+              let badgeText = 'PDF';
+              let badgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+              if (dType === 'mp3' || dType === 'audio') {
+                icon = 'headphones';
+                badgeText = 'MP3';
+                badgeClass = 'bg-sky-50 text-sky-700 border-sky-200';
+              } else if (dType === 'zip') {
+                icon = 'archive';
+                badgeText = 'ZIP';
+                badgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
+              }
+
+              const isRealUrl = item.url && item.url.startsWith('https://');
+              const isPrintable = dType === 'pdf' && !isRealUrl && found.processedContentHtml;
+
+              let actionAttr = '';
+              if (isRealUrl) {
+                actionAttr = `href="${item.url}" target="_blank" download`;
+              } else if (isPrintable) {
+                actionAttr = `href="javascript:void(0)" onclick="window.printLessonApostila()"`;
+              } else {
+                actionAttr = `href="javascript:void(0)" class="opacity-40 cursor-not-allowed pointer-events-none"`;
+              }
+
+              return `
+                <div class="flex items-center justify-between p-3 rounded-xl bg-[#FAF8F5] border border-[#EAE5DC] hover:border-[#C68A36]/40 transition group">
+                  <div class="flex items-center gap-3 min-w-0 pr-2">
+                    <div class="w-9 h-9 rounded-xl bg-white border border-[#EAE5DC] flex items-center justify-center text-[#C68A36] shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                      <i data-lucide="${icon}" class="w-4 h-4"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-1.5 mb-0.5">
+                        <span class="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 rounded border ${badgeClass}">
+                          ${badgeText}
+                        </span>
+                      </div>
+                      <p class="text-xs font-bold text-[#0A192F] truncate" title="${escapeHtml(item.title)}">
+                        ${escapeHtml(item.title)}
+                      </p>
+                    </div>
+                  </div>
+                  <a ${actionAttr} class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#C68A36] text-[#0A192F] hover:text-white border border-[#EAE5DC] hover:border-[#C68A36] text-[11px] font-bold flex items-center gap-1.5 transition shrink-0 shadow-2xs cursor-pointer" title="Baixar ${escapeHtml(item.title)}">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>Baixar</span>
+                  </a>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      }
+
+      // 2. Action Pills Area
+      if (downloadsArea) {
+        if (downloads.length === 0) {
+          downloadsArea.innerHTML = `
+            <a id="pdfDownloadLink" href="javascript:void(0)" class="px-3.5 py-2 rounded-xl bg-stone-100 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 opacity-40 pointer-events-none cursor-not-allowed" title="Nenhum material para download">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+              <span id="pdfBtnLabel">Material em Preparação</span>
+            </a>
+          `;
+        } else if (downloads.length === 1) {
+          const item = downloads[0];
+          const dType = (item.type || 'pdf').toLowerCase();
+          let icon = 'download';
+          if (dType === 'mp3') icon = 'headphones';
+          else if (dType === 'file-text' || dType === 'pdf') icon = 'file-text';
+          const isRealUrl = item.url && item.url.startsWith('https://');
+          const isPrintable = dType === 'pdf' && !isRealUrl && found.processedContentHtml;
+
+          let actionAttr = '';
+          if (isRealUrl) {
+            actionAttr = `href="${item.url}" target="_blank"`;
+          } else if (isPrintable) {
+            actionAttr = `href="javascript:void(0)" onclick="window.printLessonApostila()"`;
+          } else {
+            actionAttr = `href="javascript:void(0)" class="opacity-40 cursor-not-allowed pointer-events-none"`;
+          }
+
+          downloadsArea.innerHTML = `
+            <a id="pdfDownloadLink" ${actionAttr} class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition cursor-pointer" title="Baixar ${escapeHtml(item.title)}">
+              <i data-lucide="${icon}" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+              <span id="pdfBtnLabel">${escapeHtml(item.title)}</span>
+            </a>
+          `;
+        } else {
+          downloadsArea.innerHTML = downloads.map((item, idx) => {
+            const dType = (item.type || 'pdf').toLowerCase();
+            let icon = 'download';
+            if (dType === 'mp3') icon = 'headphones';
+            else if (dType === 'file-text' || dType === 'pdf') icon = 'file-text';
+            const isRealUrl = item.url && item.url.startsWith('https://');
+            const isPrintable = dType === 'pdf' && !isRealUrl && found.processedContentHtml;
+
+            let actionAttr = '';
+            if (isRealUrl) {
+              actionAttr = `href="${item.url}" target="_blank"`;
+            } else if (isPrintable) {
+              actionAttr = `href="javascript:void(0)" onclick="window.printLessonApostila()"`;
+            } else {
+              actionAttr = `href="javascript:void(0)" class="opacity-40 cursor-not-allowed pointer-events-none"`;
+            }
+
+            const isFirst = idx === 0;
+            return `
+              <a ${isFirst ? 'id="pdfDownloadLink"' : ''} ${actionAttr} class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 shrink-0 border border-stone-200 transition cursor-pointer" title="Baixar ${escapeHtml(item.title)}">
+                <i data-lucide="${icon}" class="w-3.5 h-3.5 text-[#C68A36]"></i>
+                <span ${isFirst ? 'id="pdfBtnLabel"' : ''}>${escapeHtml(item.title)}</span>
+              </a>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    window.printLessonApostila = () => {
+      if (!activeLesson || !activeLesson.processedContentHtml) return;
+      const w = window.open('', '_blank', 'width=850,height=950');
+      if (!w) { alert('Permita popups para abrir a apostila.'); return; }
+      w.document.open();
+      w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+        <title>Apostila — ${escapeHtml(activeLesson.title || 'Aula AgoraEuFalo')}</title>
+        <style>
+          @media print { body { margin: 0; } }
+          body { font-family: 'Georgia', serif; max-width: 794px; margin: 0 auto; padding: 28px 36px; background: #fff; color: #0F172A; font-size: 15pt; line-height: 1.65; }
+          h1, h2, h3 { font-weight: 700; }
+          table { border-collapse: collapse; width: 100%; }
+          td, th { border: 1px solid #CBD5E1; padding: 8px; }
+        </style>
+        </head><body>
+        <h1 style="color:#0A192F;">${escapeHtml(activeLesson.title || 'Aula')}</h1>
+        ${activeLesson.processedContentHtml}
+        </body></html>`);
+      w.document.close();
+      w.focus();
+      setTimeout(() => w.print(), 600);
+    };
+
     function selectLesson(lessonId) {
       const allCourseLessons = getAllCourseLessons();
       const found = allCourseLessons.find(l => l.id === lessonId);
@@ -919,6 +1348,12 @@
 
       // BLOQUEIO DE ACESSO SE NÃO FOR AUTORIZADO (PAYWALL CARD)
       if (!isAuthorized) {
+        const tabsBar = document.getElementById("mediaTabsBar");
+        if (tabsBar) {
+          tabsBar.innerHTML = "";
+          tabsBar.classList.add("hidden");
+        }
+
         videoStage.innerHTML = `
           <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-4 select-none">
             <div class="w-16 h-16 rounded-3xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-3xl shadow-xl">
@@ -961,15 +1396,8 @@
           processedContainer.classList.remove("hidden");
         }
 
-        // Bloqueia download do PDF
-        const pdfLink = document.getElementById("pdfDownloadLink");
-        const pdfBtnLabel = document.getElementById("pdfBtnLabel");
-        if (pdfLink) {
-          pdfLink.href = "https://pay.hotmart.com/T107479074N?off=mgwnab3h";
-          pdfLink.target = "_blank";
-          pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
-          if (pdfBtnLabel) pdfBtnLabel.innerText = "🔒 PDF Exclusivo de Assinantes";
-        }
+        // Bloqueia downloads e materiais
+        renderLessonDownloads(found, false);
 
         const markBtn = document.getElementById("btnMarkComplete");
         if (markBtn) {
@@ -984,6 +1412,12 @@
       // 2. RENDERIZAÇÃO PARA USUÁRIO AUTORIZADO
       const isQuizLesson = found.type === 'quiz' || !!found.quizId || (found.title && (found.title.toLowerCase().includes('quiz') || found.title.toLowerCase() === 'anos'));
       if (isQuizLesson) {
+        const tabsBar = document.getElementById("mediaTabsBar");
+        if (tabsBar) {
+          tabsBar.innerHTML = "";
+          tabsBar.classList.add("hidden");
+        }
+
         const REGISTRY_BASE = window.AEF_QUIZZES_REGISTRY || {};
         const mergedReg = Object.assign({}, REGISTRY_BASE);
         try {
@@ -1013,76 +1447,11 @@
         }
 
         renderQuizArena(quizData, found);
-      } else if (found.videoUrl) {
-        if (found.videoUrl.includes("youtube.com") || found.videoUrl.includes("youtu.be")) {
-          videoStage.innerHTML = `
-            <iframe class="w-full h-full" src="${found.videoUrl}?autoplay=0" title="${found.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          `;
-        } else {
-          videoStage.innerHTML = `
-            <video controls playsinline poster="${found.thumbnailUrl || ''}" class="w-full h-full object-contain bg-black" src="${found.videoUrl}"></video>
-          `;
-        }
-      } else if (found.audioUrl) {
-        const coverImg = found.artworkUrl || found.thumbnailUrl || 'assets/images/cover-default-aef.jpg';
-        videoStage.innerHTML = `
-          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] via-[#0A192F] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-3.5">
-            <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden shadow-2xl border-2 border-[#C68A36]/40">
-              <img src="${coverImg}" alt="${found.title}" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <div class="w-10 h-10 rounded-full bg-[#C68A36] text-white flex items-center justify-center shadow-lg">
-                  <i data-lucide="volume-2" class="w-5 h-5"></i>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-1 max-w-md">
-              <span class="px-2.5 py-0.5 rounded-full bg-[#C68A36]/20 text-[#C68A36] border border-[#C68A36]/30 font-black text-[10px] uppercase tracking-wider">
-                Áudio de Imersão & Reflexo
-              </span>
-              <h3 class="text-sm sm:text-base font-black text-white leading-tight font-serif">${found.title}</h3>
-            </div>
-            <div class="w-full max-w-md bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-xl">
-              <audio controls playsinline class="w-full" src="${found.audioUrl}"></audio>
-            </div>
-          </div>
-        `;
       } else {
-        videoStage.innerHTML = `
-          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-4 text-center space-y-2">
-            <div class="w-12 h-12 rounded-2xl bg-[#C68A36]/20 text-[#C68A36] border border-[#C68A36]/40 flex items-center justify-center shadow-lg">
-              <i data-lucide="headphones" class="w-6 h-6 text-[#C68A36]"></i>
-            </div>
-            <h3 class="text-sm font-black text-white">${found.title}</h3>
-            <p class="text-xs text-slate-300">Treino didático & leitura de conteúdo.</p>
-          </div>
-        `;
-      }
-
-      // Suporte a CTA de Conversão no Último Minuto (Aluno Free em Módulo de Degustação)
-      const currentStudentTier = (window.aefPortalAuth && typeof window.aefPortalAuth.getActiveTier === 'function')
-        ? window.aefPortalAuth.getActiveTier()
-        : (localStorage.getItem("aef_user_tier") || 'free');
-      const isFreeStudent = currentStudentTier === 'free';
-      // isFreeModule agora usa a variável dinâmica isModuleFree já calculada acima,
-      // mais verificação de availableInFreeTier do curso (sem hardcode de IDs)
-      const isFreeModuleForCta = isModuleFree || (
-        activeCourse && (
-          activeCourse.availableInFreeTier === true ||
-          activeCourse.tierRequired === 'free'
-        ) && activeModule && activeCourse.modules && activeCourse.modules[0]?.id === activeModule.id
-      );
-
-      const vidEl = videoStage.querySelector("video");
-      if (vidEl && (isFreeStudent || isFreeModuleForCta)) {
-
-        let ctaFired = false;
-        vidEl.addEventListener("timeupdate", () => {
-          if (ctaFired) return;
-          if (vidEl.duration && vidEl.duration > 75 && vidEl.currentTime >= (vidEl.duration - 60)) {
-            ctaFired = true;
-            triggerLastMinuteConversionCta();
-          }
-        });
+        currentLessonMediaList = resolveLessonMedia(found);
+        activeMediaIndex = 0;
+        renderMediaTabs();
+        renderActiveMedia(currentLessonMediaList[0], found);
       }
 
       const processedContainer = document.getElementById("lessonProcessedContentContainer");
@@ -1100,74 +1469,8 @@
         document.getElementById("lessonGoldenTipText").innerText = `"${found.goldenTip}"`;
       }
 
-      // Resolução do PDF da Aula ou Livreto do Módulo Oficial
-      let resolvedPdf = (found.pdfUrl && found.pdfUrl.trim() !== "") ? found.pdfUrl.trim() : "";
-      let isModuleBooklet = false;
-
-      if (!resolvedPdf && activeModule && activeModule.pdfUrl && activeModule.pdfUrl.trim() !== "") {
-        resolvedPdf = activeModule.pdfUrl.trim();
-        isModuleBooklet = true;
-      } else if (!resolvedPdf && activeCourse && activeCourse.pdfUrl && activeCourse.pdfUrl.trim() !== "") {
-        resolvedPdf = activeCourse.pdfUrl.trim();
-        isModuleBooklet = true;
-      }
-
-      const pdfLink = document.getElementById("pdfDownloadLink");
-      const pdfBtnLabel = document.getElementById("pdfBtnLabel");
-      if (pdfLink) {
-        // URL real do Firebase Storage começa com https://
-        // URLs legadas como "Material-PDF/..." são caminhos relativos que não existem no servidor → fallback
-        const isRealUrl = resolvedPdf && resolvedPdf.startsWith('https://');
-        const isLegacyPath = resolvedPdf && !isRealUrl;
-
-        if (isRealUrl) {
-          // PDF real na nuvem — abre diretamente
-          pdfLink.href = resolvedPdf;
-          pdfLink.target = "_blank";
-          pdfLink.onclick = null;
-          pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
-          if (pdfBtnLabel) {
-            pdfBtnLabel.innerText = isModuleBooklet ? "Livreto do Módulo (PDF)" : "Apostila da Aula (PDF)";
-          }
-          pdfLink.title = isModuleBooklet ? "Baixar Livreto Completo do Módulo" : "Baixar Apostila desta Aula";
-        } else if (isLegacyPath && found.processedContentHtml) {
-          // Caminho legado sem arquivo real, mas existe conteúdo didático → fallback de impressão
-          pdfLink.href = "javascript:void(0)";
-          pdfLink.removeAttribute("target");
-          pdfLink.classList.remove("opacity-40", "pointer-events-none", "cursor-not-allowed");
-          if (pdfBtnLabel) pdfBtnLabel.innerText = "Apostila da Aula (PDF)";
-          pdfLink.title = "Abrir apostila para impressão/salvar como PDF";
-          pdfLink.onclick = (e) => {
-            e.preventDefault();
-            const w = window.open('', '_blank', 'width=850,height=950');
-            if (!w) { alert('Permita popups para abrir a apostila.'); return; }
-            w.document.open();
-            w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-              <title>Apostila — ${found.title || 'Aula AgoraEuFalo'}</title>
-              <style>
-                @media print { body { margin: 0; } }
-                body { font-family: 'Georgia', serif; max-width: 794px; margin: 0 auto; padding: 28px 36px; background: #fff; color: #0F172A; font-size: 15pt; line-height: 1.65; }
-                h1, h2, h3 { font-weight: 700; }
-                table { border-collapse: collapse; width: 100%; }
-                td, th { border: 1px solid #CBD5E1; padding: 8px; }
-              </style>
-              </head><body>
-              <h1 style="color:#0A192F;">${found.title || 'Aula'}</h1>
-              ${found.processedContentHtml}
-              </body></html>`);
-            w.document.close();
-            w.focus();
-            setTimeout(() => w.print(), 600);
-          };
-        } else {
-          pdfLink.href = "javascript:void(0)";
-          pdfLink.removeAttribute("target");
-          pdfLink.onclick = null;
-          pdfLink.classList.add("opacity-40", "pointer-events-none", "cursor-not-allowed");
-          if (pdfBtnLabel) pdfBtnLabel.innerText = "Material em Preparação";
-          pdfLink.title = "Nenhum PDF disponível para esta aula introdutória";
-        }
-      }
+      // Renderiza múltiplos downloads / materiais ou fallback
+      renderLessonDownloads(found, true);
 
 
       const isCompleted = completedLessonIds.includes(found.id);

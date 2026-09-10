@@ -75,4 +75,40 @@ export interface AEFModule {
   id: string;
   title: string;
   isFreeTier?: boolean;          // Explicitly free module regardless of course access rules
+  lessons?: AEFLesson[];
 }
+
+export type MediaType = "video_youtube" | "video_vimeo" | "video_mp4" | "audio_mp3";
+export interface AEFMedia {
+  type: MediaType;
+  url: string;
+  title: string;
+  durationStr?: string;
+  thumbnailUrl?: string;
+}
+
+export type DownloadType = "pdf" | "mp3" | "zip";
+export interface AEFDownload {
+  type: DownloadType;
+  url: string;
+  title: string;
+}
+
+// Lesson representation inside a Module
+export interface AEFLesson {
+  id: string;
+  title: string;
+  description?: string;
+  thumbnailUrl?: string; // Legacy/Main 16:9 thumbnail
+  artworkUrl?: string;   // 1:1 artwork
+  
+  // -- NEW SCHEMA (Multi-Media) --
+  media: AEFMedia[];
+  downloads: AEFDownload[];
+  
+  // -- BACKWARD COMPATIBILITY (Legacy) --
+  videoUrl?: string;
+  pdfUrl?: string;
+  audioUrl?: string;
+}
+

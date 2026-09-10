@@ -96,15 +96,88 @@
         <a href="/player" class="hover:text-white transition">Training Player</a>
       </nav>
 
-      <!-- Right: Direct Training CTA + Profile Avatar -->
+      <!-- Right: Direct Training CTA + Profile Dropdown -->
       <div class="flex items-center gap-2.5">
         <a href="/player" class="px-3.5 py-1.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
           <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
           <span>Player</span>
         </a>
 
-        <div onclick="window.openMemberProfileModal()" class="w-8 h-8 rounded-full bg-white/10 text-amber-300 flex items-center justify-center font-bold text-xs border border-white/20 cursor-pointer shadow-xs" title="Meu Perfil">
-          <span id="header-avatar-initials">LL</span>
+        <!-- Profile Dropdown Container -->
+        <div class="relative" id="profile-dropdown-wrapper">
+          <button 
+            type="button" 
+            onclick="window.toggleProfileDropdown(event)" 
+            class="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 transition cursor-pointer active:scale-95 focus:outline-none" 
+            id="profile-dropdown-btn"
+            aria-expanded="false"
+            aria-haspopup="true"
+            title="Menu do Perfil"
+          >
+            <div class="w-7 h-7 rounded-full bg-[#C68A36] text-white flex items-center justify-center font-black text-xs shadow-xs">
+              <span id="header-avatar-initials">LL</span>
+            </div>
+            <span class="hidden sm:inline-block text-xs font-bold text-slate-200 max-w-[110px] truncate" id="header-user-display-name">Aluno</span>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-300 transition-transform duration-200" id="profile-chevron-icon"></i>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div 
+            id="profile-dropdown-menu" 
+            class="absolute right-0 mt-2 w-64 bg-[#0D1E36] border border-white/15 rounded-2xl shadow-2xl p-2 hidden z-50 animate-in fade-in zoom-in duration-150 backdrop-blur-md"
+          >
+            <!-- User Info Header in Dropdown -->
+            <div class="p-3 border-b border-white/10">
+              <p class="text-xs font-black text-white truncate" id="dropdown-user-name">Aluno AgoraEuFalo</p>
+              <p class="text-[11px] text-slate-400 truncate" id="dropdown-user-email">aluno@email.com</p>
+              <div class="mt-2 flex flex-wrap gap-1" id="dropdown-user-badge">
+                <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[9px] font-mono font-bold uppercase">
+                  Membro Free
+                </span>
+              </div>
+            </div>
+
+            <!-- Dropdown Options -->
+            <div class="py-1 space-y-0.5">
+              <button 
+                type="button" 
+                onclick="window.openMemberProfileModal(); window.closeProfileDropdown();" 
+                class="w-full px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-200 hover:text-white hover:bg-white/10 flex items-center gap-2.5 transition cursor-pointer"
+              >
+                <i data-lucide="user" class="w-4 h-4 text-[#C68A36]"></i>
+                <span>Meu Perfil</span>
+              </button>
+
+              <a 
+                href="/sala?curso=ms-legacy" 
+                class="w-full px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-200 hover:text-white hover:bg-white/10 flex items-center gap-2.5 transition cursor-pointer"
+              >
+                <i data-lucide="book-open" class="w-4 h-4 text-sky-400"></i>
+                <span>Sala de Aula</span>
+              </a>
+
+              <a 
+                href="https://wa.me/5531999817975?text=Olá%20Leo!%20Estou%20no%20portal%20do%20aluno%20e%20preciso%20de%20ajuda." 
+                target="_blank" 
+                class="w-full px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-200 hover:text-white hover:bg-white/10 flex items-center gap-2.5 transition cursor-pointer"
+              >
+                <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span>Suporte no WhatsApp</span>
+              </a>
+            </div>
+
+            <!-- Logout Row -->
+            <div class="pt-1 border-t border-white/10">
+              <button 
+                type="button" 
+                onclick="window.handleUserLogout()" 
+                class="w-full px-3 py-2.5 rounded-xl text-left text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 flex items-center gap-2.5 transition cursor-pointer"
+              >
+                <i data-lucide="log-out" class="w-4 h-4 text-rose-400"></i>
+                <span>Sair (Logout)</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -171,6 +244,9 @@
 
       </div>
     </section>
+
+    <!-- MASSIVE HERO BANNER FOR MEMBER_FREE (UPSELL ENGINE) -->
+    <div id="massive-free-upsell-banner"></div>
 
     <!-- B. HERO CARD: "CONTINUAR DE ONDE PAROU" -->
     <section class="bg-gradient-to-br from-[#0D1E36] via-[#112240] to-[#0A192F] rounded-2xl sm:rounded-3xl overflow-hidden relative shadow-xl p-5 sm:p-7 text-white space-y-4">
@@ -365,28 +441,46 @@
     <!-- AEF DYNAMIC MARKETING SLOT: Below Hero Showcase -->
     <div data-aef-slot="portal_hero_below"></div>
 
-    <!-- C. SEÇÃO 1: "MEUS CURSOS MATRICULADOS" (GRADE DE CARDS) -->
-    <!-- C. GRADE UNIFICADA: "MEUS CURSOS & TREINAMENTOS AGORAEUFALO" -->
-    <section id="meus-cursos" class="space-y-4">
-      
+    <!-- C. SEÇÃO 1: "MEUS ACESSOS" (APENAS CURSOS COM ACESSO LIBERADO) -->
+    <section id="secao-meus-acessos" class="space-y-4">
       <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
         <div>
           <h3 class="font-black text-base sm:text-lg text-[#0A192F] flex items-center gap-2">
-            <i data-lucide="book-open" class="w-5 h-5 text-[#C68A36]"></i>
-            <span>Meus Cursos & Treinamentos</span>
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
+            <span>Meus Acessos</span>
           </h3>
-          <p class="text-xs text-[#7A7369]">Cursos liberados na sua conta e programas com degustação gratuita:</p>
+          <p class="text-xs text-[#7A7369]">Treinamentos e cursos liberados na sua conta para estudo e prática imediata:</p>
         </div>
-        <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-mono text-[11px] font-bold" id="enrolled-courses-count">
-          0 CURSOS
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 font-mono text-[11px] font-bold" id="my-access-count">
+          0 LIBERADOS
         </span>
       </div>
 
-      <!-- Unified Courses Grid (All Courses in 1 High-End Catalog) -->
-      <div id="enrolledCoursesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- My Access Grid -->
+      <div id="myAccessGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <!-- Injected dynamically via JS -->
       </div>
+    </section>
 
+    <!-- D. SEÇÃO 2: "CATÁLOGO COMPLETO DE CURSOS" (UPSELL ENGINE COM LOCK ICONS) -->
+    <section id="secao-catalogo-completo" class="space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-[#EAE5DC]">
+        <div>
+          <h3 class="font-black text-base sm:text-lg text-[#0A192F] flex items-center gap-2">
+            <i data-lucide="layout-grid" class="w-5 h-5 text-[#C68A36]"></i>
+            <span>Catálogo Completo de Treinamentos</span>
+          </h3>
+          <p class="text-xs text-[#7A7369]">Conheça todos os programas do AgoraEuFalo. Cursos sem acesso exibem o cadeado e modal de upgrade:</p>
+        </div>
+        <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-mono text-[11px] font-bold" id="all-courses-count">
+          0 TREINAMENTOS
+        </span>
+      </div>
+
+      <!-- Complete Catalog Grid -->
+      <div id="allCoursesCatalogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Injected dynamically via JS -->
+      </div>
     </section>
 
     <!-- AEF DYNAMIC MARKETING SLOT: Courses In-Feed -->
@@ -454,26 +548,30 @@
       </nav>
     </div>
 
-    <!-- Drawer Bottom: Student Profile Card -->
-    <div class="pt-4 border-t border-[#EAE5DC]">
+    <!-- Drawer Bottom: Student Profile Card & Logout -->
+    <div class="pt-4 border-t border-[#EAE5DC] space-y-2">
       <div onclick="window.openMemberProfileModal(); window.togglePortalDrawer();" class="flex items-center gap-3 p-2 rounded-2xl hover:bg-[#FAF8F5] transition cursor-pointer">
         <div class="w-9 h-9 rounded-full bg-[#C68A36] text-white font-bold text-xs flex items-center justify-center shadow-xs">
-          LL
+          <span id="drawer-avatar-initials">LL</span>
         </div>
         <div class="leading-tight min-w-0 flex-1">
           <p class="font-black text-xs text-[#0A192F] truncate" id="drawer-user-name">Leonardo Leite</p>
-          <p class="text-[10px] font-bold text-[#8C8275] uppercase tracking-wider">Membro VIP</p>
+          <p class="text-[10px] font-bold text-[#8C8275] uppercase tracking-wider" id="drawer-user-tier">Membro VIP</p>
         </div>
         <i data-lucide="chevron-right" class="w-4 h-4 text-[#8C8275]"></i>
       </div>
+      <button onclick="window.handleUserLogout()" class="w-full py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer">
+        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+        <span>Sair da Conta</span>
+      </button>
     </div>
 
   </aside>
 
   <!-- ========================================================================= -->
-  <!-- 4. PROFILE MODAL                                                          -->
+  <!-- 4. PROFILE MODAL (EDITAR NOME, TELEFONE E VER CATEGORIAS/TIER)            -->
   <!-- ========================================================================= -->
-  <div id="member-profile-modal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+  <div id="member-profile-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="aef-modal-card max-w-md w-full p-6 relative animate-in fade-in zoom-in duration-200">
       <button onclick="window.closeMemberProfileModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1 text-sm cursor-pointer" title="Fechar">
         <i data-lucide="x" class="w-4 h-4"></i>
@@ -481,27 +579,140 @@
 
       <div class="text-center mb-4">
         <div class="w-14 h-14 mx-auto mb-2 rounded-2xl bg-[#C68A36] text-white flex items-center justify-center text-lg font-black shadow-md">
-          <span>LL</span>
+          <span id="modal-avatar-initials">LL</span>
         </div>
         <h3 class="text-base font-black text-[#0A192F]">Meu Perfil</h3>
-        <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-extrabold text-[9px] uppercase tracking-wider inline-block mt-1">
-          MENTORADO VIP
-        </span>
+        <p class="text-xs text-[#7A7369]">Gerencie seus dados e confira suas categorias de acesso</p>
+        
+        <!-- Categorias e Tiers Ativos -->
+        <div class="mt-3 p-3 bg-slate-50 rounded-2xl border border-slate-200/80 text-center space-y-1.5">
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 block">Categorias & Permissões Ativas:</span>
+          <div id="modal-profile-categories" class="flex flex-wrap items-center justify-center gap-1.5">
+            <span class="px-2.5 py-0.5 rounded-full bg-[#FDF8F0] border border-[#C68A36]/30 text-[#C68A36] font-extrabold text-[10px] uppercase tracking-wider inline-block">
+              Membro Free
+            </span>
+          </div>
+        </div>
       </div>
 
-      <form onsubmit="window.handleSavePortalProfile(event)" class="space-y-3 text-left">
+      <form onsubmit="window.handleSavePortalProfile(event)" class="space-y-3.5 text-left">
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Seu Nome</label>
-          <input type="text" id="modal-profile-input-name" required class="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:outline-none focus:border-[#C68A36]">
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Seu Nome Completo</label>
+          <input type="text" id="modal-profile-input-name" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:outline-none focus:border-[#C68A36] focus:ring-1 focus:ring-[#C68A36]">
         </div>
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">E-mail</label>
-          <input type="email" id="modal-profile-input-email" readonly class="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 text-xs font-medium cursor-not-allowed">
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">WhatsApp / Telefone</label>
+          <input type="tel" id="modal-profile-input-phone" placeholder="(11) 99999-9999" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-medium focus:outline-none focus:border-[#C68A36] focus:ring-1 focus:ring-[#C68A36]">
         </div>
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition shadow-md cursor-pointer mt-2">
-          Salvar
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">E-mail (Cadastrado)</label>
+          <input type="email" id="modal-profile-input-email" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 text-xs font-medium cursor-not-allowed">
+        </div>
+
+        <div id="modal-profile-status" class="hidden text-xs text-center font-bold py-1"></div>
+
+        <button type="submit" id="modal-profile-submit-btn" class="w-full py-3 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-black text-xs uppercase tracking-wider transition shadow-md cursor-pointer mt-2 flex items-center justify-center gap-2 active:scale-95">
+          <i data-lucide="save" class="w-3.5 h-3.5"></i>
+          <span>Salvar Alterações</span>
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 5. UPSELL MODAL (DESBLOQUEIO DE CURSOS NÃO LIBERADOS)                     -->
+  <!-- ========================================================================= -->
+  <div id="upsell-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border-2 border-[#C68A36]/60 rounded-3xl max-w-lg w-full p-6 sm:p-7 text-white shadow-2xl space-y-5 relative overflow-hidden animate-in fade-in zoom-in duration-200">
+      
+      <!-- Ambient Glow -->
+      <div class="absolute -right-20 -top-20 w-60 h-60 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Close button -->
+      <button onclick="window.closeUpsellModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 text-sm cursor-pointer z-10" title="Fechar">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 border-b border-white/10 pb-4">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 border border-amber-400/30">
+          <i data-lucide="lock" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold text-[9px] uppercase tracking-wider border border-amber-400/30 inline-block" id="upsell-modal-course-badge">
+            EXCLUSIVO CLUB
+          </span>
+          <h3 class="text-lg sm:text-xl font-black text-white mt-1 leading-tight" id="upsell-modal-course-title">
+            Desbloquear Treinamento
+          </h3>
+        </div>
+      </div>
+
+      <!-- Course Preview Box -->
+      <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex gap-3.5 items-center">
+        <img id="upsell-modal-course-img" src="assets/images/cover-default-aef.jpg" alt="Cover" class="w-20 h-20 rounded-xl object-cover shrink-0 border border-white/10">
+        <div class="min-w-0 flex-1 space-y-1">
+          <span class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider block">CONTEÚDO PROTEGIDO</span>
+          <p class="text-xs text-slate-300 line-clamp-3 leading-relaxed" id="upsell-modal-course-desc">
+            Faça o upgrade para o Magic Stories Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.
+          </p>
+        </div>
+      </div>
+
+      <!-- Benefits Checklist -->
+      <div class="space-y-2 text-xs text-slate-200">
+        <div class="flex items-start gap-2.5">
+          <i data-lucide="check-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <span>Acesso completo ao <b>Training Player Mobile PWA</b> para treinar com a tela apagada.</span>
+        </div>
+        <div class="flex items-start gap-2.5">
+          <i data-lucide="check-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <span>Todas as 30 histórias originais com áudio em alta definição e apostilas em PDF.</span>
+        </div>
+        <div class="flex items-start gap-2.5">
+          <i data-lucide="check-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <span>Encontros ao vivo no Google Meet para tirar dúvidas diretamente com o Professor Leo.</span>
+        </div>
+      </div>
+
+      <!-- Price & CTA -->
+      <div class="pt-2 border-t border-white/10 space-y-2.5">
+        <div class="flex items-baseline justify-between text-xs">
+          <span class="text-slate-400 font-medium">Investimento no Plano Oficial:</span>
+          <span class="text-amber-400 font-black text-sm">12x de R$ 51,40</span>
+        </div>
+
+        <a 
+          id="upsell-modal-checkout-btn"
+          href="https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_upsell_modal" 
+          data-open-checkout="true"
+          class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 cursor-pointer active:scale-95"
+        >
+          <i data-lucide="sparkles" class="w-4 h-4 fill-current"></i>
+          <span>QUERO FAZER O UPGRADE AGORA</span>
+        </a>
+
+        <div class="flex items-center justify-between pt-1">
+          <a 
+            id="upsell-modal-whatsapp-btn"
+            href="https://wa.me/5531999817975?text=Olá%20Leo!%20Quero%20fazer%20o%20upgrade%20para%20o%20Magic%20Stories%20Club." 
+            target="_blank"
+            class="text-[11px] text-slate-400 hover:text-emerald-400 flex items-center gap-1.5 transition"
+          >
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Dúvidas? Fale no WhatsApp</span>
+          </a>
+
+          <button 
+            type="button" 
+            onclick="window.closeUpsellModal()" 
+            class="text-[11px] text-slate-400 hover:text-white transition cursor-pointer"
+          >
+            Voltar ao Dashboard
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -582,6 +793,386 @@
       }
     };
 
+    // Fonte Canônica do Catálogo do Portal (Disponível Globalmente)
+    window.AEFCoursesMatrix = window.AEFCoursesMatrix || Object.assign({}, OFFICIAL_COURSES_MATRIX, window.AEF_COURSES_REGISTRY || {});
+
+    // ——— 1. PROFILE DROPDOWN UX CONTROLLER ———
+    window.toggleProfileDropdown = (e) => {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById("profile-dropdown-menu");
+      const chevron = document.getElementById("profile-chevron-icon");
+      if (!menu) return;
+      const isHidden = menu.classList.contains("hidden");
+      if (isHidden) {
+        menu.classList.remove("hidden");
+        if (chevron) chevron.classList.add("rotate-180");
+      } else {
+        menu.classList.add("hidden");
+        if (chevron) chevron.classList.remove("rotate-180");
+      }
+    };
+
+    window.closeProfileDropdown = () => {
+      const menu = document.getElementById("profile-dropdown-menu");
+      const chevron = document.getElementById("profile-chevron-icon");
+      if (menu && !menu.classList.contains("hidden")) {
+        menu.classList.add("hidden");
+        if (chevron) chevron.classList.remove("rotate-180");
+      }
+    };
+
+    document.addEventListener("click", (e) => {
+      const wrapper = document.getElementById("profile-dropdown-wrapper");
+      if (wrapper && !wrapper.contains(e.target)) {
+        window.closeProfileDropdown();
+      }
+    });
+
+    window.handleUserLogout = async () => {
+      try {
+        if (window.aefPortalAuth && typeof window.aefPortalAuth.signOut === 'function') {
+          await window.aefPortalAuth.signOut();
+        }
+      } catch (err) {
+        console.warn("Logout warning:", err);
+      }
+      try {
+        localStorage.removeItem("aef_user_name");
+        localStorage.removeItem("aef_user_email");
+        localStorage.removeItem("aef_user_phone");
+        localStorage.removeItem("aef_user_role");
+        localStorage.removeItem("aef_user_tier");
+        localStorage.removeItem("aef_enrolled_products");
+        localStorage.setItem("aef_logged_out", "true");
+      } catch(e) {}
+      window.location.href = "/login";
+    };
+
+    // ——— 2. SINCRONIZAÇÃO VISUAL DE PERFIL ———
+    window.refreshUserProfileUI = (name, phone, tier, email) => {
+      const effName = name || localStorage.getItem("aef_user_name") || "Aluno";
+      const effEmail = email || localStorage.getItem("aef_user_email") || "";
+      const initials = effName.split(" ").map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() || "AL";
+      const firstName = effName.split(" ")[0] || "Aluno";
+
+      const headerInitials = document.getElementById("header-avatar-initials");
+      const drawerInitials = document.getElementById("drawer-avatar-initials");
+      const modalInitials = document.getElementById("modal-avatar-initials");
+      const headerDisplayName = document.getElementById("header-user-display-name");
+      const dropdownUserName = document.getElementById("dropdown-user-name");
+      const dropdownUserEmail = document.getElementById("dropdown-user-email");
+      const drawerName = document.getElementById("drawer-user-name");
+      const topGreeting = document.getElementById("top-user-greeting");
+
+      if (headerInitials) headerInitials.innerText = initials;
+      if (drawerInitials) drawerInitials.innerText = initials;
+      if (modalInitials) modalInitials.innerText = initials;
+      if (headerDisplayName) headerDisplayName.innerText = firstName;
+      if (dropdownUserName) dropdownUserName.innerText = effName;
+      if (dropdownUserEmail) dropdownUserEmail.innerText = effEmail;
+      if (drawerName) drawerName.innerText = effName;
+      if (topGreeting) topGreeting.innerText = firstName;
+    };
+
+    // ——— 3. PROFILE MODAL CONTROLLER COM SYNC FIRESTORE ———
+    window.openMemberProfileModal = () => {
+      const modal = document.getElementById("member-profile-modal");
+      const auth = window.aefPortalAuth;
+      const profile = (auth && auth.currentProfile) || {};
+      
+      const name = profile.name || localStorage.getItem("aef_user_name") || "Aluno";
+      const email = profile.email || localStorage.getItem("aef_user_email") || "";
+      const phone = profile.phone || localStorage.getItem("aef_user_phone") || "";
+
+      const nameInput = document.getElementById("modal-profile-input-name");
+      const emailInput = document.getElementById("modal-profile-input-email");
+      const phoneInput = document.getElementById("modal-profile-input-phone");
+      const statusEl = document.getElementById("modal-profile-status");
+      const categoriesContainer = document.getElementById("modal-profile-categories");
+
+      if (nameInput) nameInput.value = name;
+      if (emailInput) emailInput.value = email;
+      if (phoneInput) phoneInput.value = phone;
+      if (statusEl) statusEl.classList.add("hidden");
+
+      window.refreshUserProfileUI(name, phone, profile.tier, email);
+
+      if (categoriesContainer) {
+        const userObj = {
+          ...(profile || {}),
+          role: profile.role || localStorage.getItem("aef_user_role") || "student",
+          tier: profile.tier || localStorage.getItem("aef_user_tier") || "free",
+          categories: profile.categories
+        };
+        if (window.AEFAccessEngine && typeof window.AEFAccessEngine.renderCategoryBadges === 'function') {
+          categoriesContainer.innerHTML = window.AEFAccessEngine.renderCategoryBadges(userObj);
+        } else {
+          categoriesContainer.innerHTML = `<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold uppercase">${userObj.tier}</span>`;
+        }
+      }
+
+      if (modal) {
+        modal.classList.remove("hidden");
+        updateIcons();
+      }
+    };
+
+    window.closeMemberProfileModal = () => {
+      const modal = document.getElementById("member-profile-modal");
+      if (modal) modal.classList.add("hidden");
+    };
+
+    window.handleSavePortalProfile = async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById("modal-profile-submit-btn");
+      const statusEl = document.getElementById("modal-profile-status");
+      const nameInput = document.getElementById("modal-profile-input-name");
+      const phoneInput = document.getElementById("modal-profile-input-phone");
+      
+      const name = nameInput ? nameInput.value.trim() : "";
+      const phone = phoneInput ? phoneInput.value.trim() : "";
+      if (!name) return;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Salvando...</span>`;
+      }
+
+      try {
+        const auth = window.aefPortalAuth;
+        let uid = (auth && auth.currentUser && auth.currentUser.uid) || 
+                  (auth && auth.currentProfile && auth.currentProfile.uid);
+
+        if (!uid && window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
+          uid = window.firebase.auth().currentUser.uid;
+        }
+
+        let db = (auth && auth.db) || 
+                 (window.firebase && window.firebase.firestore && window.firebase.firestore()) || 
+                 (window.aefCloudSync && window.aefCloudSync.db);
+
+        if (!db && window.aefCloudSync) {
+          await window.aefCloudSync.init();
+          db = window.aefCloudSync.db;
+        }
+
+        // Sincronização direta com Firestore: this.db.collection('users').doc(user.uid).update(...)
+        if (uid && db) {
+          await db.collection('users').doc(uid).update({
+            name: name,
+            phone: phone,
+            updatedAt: new Date().toISOString()
+          });
+          console.log("☁️ [Firestore] Usuário atualizado no Firestore doc:", uid);
+        }
+
+        if (auth && auth.currentProfile) {
+          auth.currentProfile.name = name;
+          auth.currentProfile.phone = phone;
+        }
+        localStorage.setItem("aef_user_name", name);
+        localStorage.setItem("aef_user_phone", phone);
+
+        window.refreshUserProfileUI(name, phone);
+
+        if (statusEl) {
+          statusEl.className = "text-xs text-center font-bold text-emerald-600 block py-1";
+          statusEl.innerText = "✓ Perfil e WhatsApp atualizados no banco com sucesso!";
+        }
+
+        setTimeout(() => {
+          window.closeMemberProfileModal();
+          if (statusEl) statusEl.classList.add("hidden");
+        }, 1100);
+
+      } catch (err) {
+        console.error("Erro ao sincronizar perfil com Firestore:", err);
+        localStorage.setItem("aef_user_name", name);
+        localStorage.setItem("aef_user_phone", phone);
+        window.refreshUserProfileUI(name, phone);
+        if (statusEl) {
+          statusEl.className = "text-xs text-center font-bold text-amber-600 block py-1";
+          statusEl.innerText = "Salvo localmente (modo offline ou sincronização pendente).";
+        }
+        setTimeout(() => {
+          window.closeMemberProfileModal();
+          if (statusEl) statusEl.classList.add("hidden");
+        }, 1500);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i data-lucide="save" class="w-3.5 h-3.5"></i><span>Salvar Alterações</span>`;
+          updateIcons();
+        }
+      }
+    };
+
+    // ——— 4. UPSELL MODAL (DESBLOQUEIO DE CURSOS) ———
+    window.openUpsellModal = (courseId) => {
+      const modal = document.getElementById("upsell-modal");
+      if (!modal) return;
+      
+      const matrix = window.AEFCoursesMatrix || window.AEF_COURSES_REGISTRY || OFFICIAL_COURSES_MATRIX;
+      const course = (matrix && matrix[courseId]) || { id: courseId, title: "Treinamento AgoraEuFalo" };
+      
+      const titleEl = document.getElementById("upsell-modal-course-title");
+      const descEl = document.getElementById("upsell-modal-course-desc");
+      const imgEl = document.getElementById("upsell-modal-course-img");
+      const badgeEl = document.getElementById("upsell-modal-course-badge");
+      const checkoutBtn = document.getElementById("upsell-modal-checkout-btn");
+      const whatsappBtn = document.getElementById("upsell-modal-whatsapp-btn");
+
+      if (titleEl) titleEl.innerText = `Desbloquear ${course.title || 'Treinamento'}`;
+      if (descEl) descEl.innerText = course.description || "Faça o upgrade para o Magic Stories Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.";
+      if (imgEl) imgEl.src = course.coverImageUrl || "assets/images/cover-default-aef.jpg";
+      if (badgeEl) badgeEl.innerText = course.badge || "EXCLUSIVO CLUB";
+
+      let checkoutUrl = course.standaloneCheckoutHotmart || course.freeTierCtaUrl || "https://pay.hotmart.com/T107479074N?off=mgwnab3h";
+      if (window.aefOffersRegistry && typeof window.aefOffersRegistry.getOfferById === 'function') {
+        try {
+          const offer = window.aefOffersRegistry.getOfferById("ms-club-anual");
+          if (offer && offer.checkoutUrl && !offer.checkoutUrl.includes("OFFER_")) {
+            checkoutUrl = window.aefOffersRegistry.generateTrackingUrl 
+              ? window.aefOffersRegistry.generateTrackingUrl("ms-club-anual", `upsell_${courseId}`) 
+              : offer.checkoutUrl;
+          }
+        } catch(e) {}
+      }
+
+      if (checkoutBtn) {
+        checkoutBtn.href = checkoutUrl;
+        checkoutBtn.setAttribute("data-checkout-url", checkoutUrl);
+      }
+
+      if (whatsappBtn) {
+        whatsappBtn.href = `https://wa.me/5531999817975?text=${encodeURIComponent(`Olá Professor Leo! Estou no portal do aluno e quero tirar uma dúvida sobre o plano Magic Stories Club para ter acesso ao curso ${course.title || courseId}.`)}`;
+      }
+
+      modal.classList.remove("hidden");
+      updateIcons();
+    };
+
+    window.closeUpsellModal = () => {
+      const modal = document.getElementById("upsell-modal");
+      if (modal) modal.classList.add("hidden");
+    };
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        window.closeUpsellModal();
+        window.closeMemberProfileModal();
+        window.closeProfileDropdown();
+      }
+    });
+
+    // ——— 5. RENDERIZADOR DO MASSIVE HERO BANNER PARA MEMBER_FREE ———
+    function renderMassiveFreeUpsellBanner(isOnlyFree) {
+      const container = document.getElementById("massive-free-upsell-banner");
+      if (!container) return;
+
+      if (!isOnlyFree) {
+        container.innerHTML = "";
+        return;
+      }
+
+      container.innerHTML = `
+        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#060D1A] via-[#0A192F] to-[#112240] border-2 border-amber-400/50 p-6 sm:p-9 shadow-2xl text-white space-y-6 animate-in fade-in zoom-in duration-300">
+          <div class="absolute -top-24 -right-24 w-80 h-80 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-sky-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative z-10 space-y-5">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 text-xs font-mono font-black uppercase tracking-wider shadow-md">
+                <span>⭐</span>
+                <span>PLANO PRINCIPAL • MATRÍCULAS ABERTAS</span>
+              </span>
+              <span class="px-2.5 py-1 rounded-full bg-white/10 text-amber-300 font-mono font-bold text-[11px] uppercase tracking-wider border border-white/10">
+                MAGIC STORIES CLUB ANUAL
+              </span>
+            </div>
+
+            <div class="max-w-3xl space-y-2">
+              <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                Destrave Seu Inglês Falado com o <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-200">Magic Stories Club</span>
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                Você está na conta gratuita. Faça o upgrade agora para ter acesso irrestrito a todas as 30 Histórias Clássicas, Frases Prontas, Training Player Mobile PWA (com tela apagada) e Encontros ao Vivo com o Professor Leo!
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+              <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                  <i data-lucide="headphones" class="w-4 h-4"></i>
+                  <span>Training Player PWA</span>
+                </div>
+                <p class="text-[11px] text-slate-300 leading-snug">Treine com a tela do celular apagada no carro, academia ou caminhada.</p>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span>30 Magic Stories</span>
+                </div>
+                <p class="text-[11px] text-slate-300 leading-snug">O acervo histórico gravado com atores nativos e quebra em chunks.</p>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                  <i data-lucide="zap" class="w-4 h-4"></i>
+                  <span>Fala no Reflexo</span>
+                </div>
+                <p class="text-[11px] text-slate-300 leading-snug">Técnica Listen & Answer (LA) para automatizar respostas sem travar.</p>
+              </div>
+
+              <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                  <i data-lucide="video" class="w-4 h-4"></i>
+                  <span>Aulas ao Vivo (Meet)</span>
+                </div>
+                <p class="text-[11px] text-slate-300 leading-snug">Encontros quinzenais direto com o Professor Leonardo Leite.</p>
+              </div>
+            </div>
+
+            <div class="p-5 sm:p-6 rounded-2xl bg-white/5 border border-amber-400/30 flex flex-col md:flex-row md:items-center justify-between gap-5">
+              <div>
+                <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">OFERTA EXCLUSIVA DO PORTAL:</span>
+                <div class="flex items-baseline gap-2 mt-0.5">
+                  <span class="text-xs text-slate-400 line-through">R$ 997/ano</span>
+                  <span class="text-2xl sm:text-3xl font-black text-white">12x de R$ 51,40</span>
+                  <span class="text-xs text-amber-300 font-bold">(ou R$ 497 à vista)</span>
+                </div>
+                <span class="text-[10px] text-slate-400 block mt-1">🛡️ 7 dias de garantia incondicional • Acesso imediato no seu e-mail</span>
+              </div>
+
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <a 
+                  href="https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_massive_hero" 
+                  data-open-checkout="true" 
+                  data-checkout-url="https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_massive_hero"
+                  class="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 active:scale-95 cursor-pointer text-center"
+                >
+                  <i data-lucide="sparkles" class="w-4 h-4 fill-current"></i>
+                  <span>QUERO ENTRAR NO CLUB AGORA</span>
+                </a>
+
+                <a 
+                  href="https://wa.me/5531999817975?text=Olá%20Leo!%20Sou%20aluno%20Free%20no%20Portal%20e%20quero%20saber%20mais%20sobre%20o%20Magic%20Stories%20Club." 
+                  target="_blank" 
+                  class="px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 border border-white/15 text-center"
+                >
+                  <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+                  <span>Tirar Dúvidas</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      `;
+    }
+
+    // ——— 6. INICIALIZAÇÃO DO PORTAL ———
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         if (window.aefPortalAuth) {
@@ -595,13 +1186,12 @@
       const profile = (window.aefPortalAuth && window.aefPortalAuth.currentProfile) || {};
       const studentName = profile.name || localStorage.getItem("aef_user_name") || "Aluno";
       const studentEmail = profile.email || localStorage.getItem("aef_user_email") || "";
+      const studentPhone = profile.phone || localStorage.getItem("aef_user_phone") || "";
       const userRole = profile.role || localStorage.getItem("aef_user_role") || "student";
       const isAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || userRole === 'admin';
       const userTier = isAdmin ? "admin_master" : (profile.tier || localStorage.getItem("aef_user_tier") || "free");
 
       const effectiveName = studentName;
-      const effectiveEmail = studentEmail;
-      const effectiveTier = userTier;
 
       let enrolledProducts = [];
       try {
@@ -619,45 +1209,49 @@
         enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'];
       }
 
-      const topGreeting = document.getElementById("top-user-greeting");
-      const drawerName = document.getElementById("drawer-user-name");
-      const tierBadge = document.getElementById("student-tier-badge");
-
-      if (topGreeting) topGreeting.innerText = effectiveName.split(" ")[0] || "Aluno";
-      if (drawerName) drawerName.innerText = effectiveName;
+      // Sincroniza labels e nomes no DOM
+      window.refreshUserProfileUI(effectiveName, studentPhone, userTier, studentEmail);
 
       const currentUser = {
         ...(profile || {}),
-        role: userRole,
-        tier: effectiveTier,
+        uid: (profile && profile.uid) || (window.aefPortalAuth?.currentUser?.uid),
+        role: isAdmin ? 'admin' : userRole,
+        tier: userTier,
         categories: profile.categories,
         purchasedProducts: enrolledProducts,
         enrolledProducts: enrolledProducts,
         subscription: profile.subscription
       };
 
-      if (tierBadge) {
-        if (window.AEFAccessEngine && typeof window.AEFAccessEngine.getPrimaryBadgeLabel === 'function') {
-          tierBadge.innerText = window.AEFAccessEngine.getPrimaryBadgeLabel(currentUser);
-        } else if (isAdmin) {
-          tierBadge.innerText = "👑 Administrador";
-        } else if (effectiveTier === 'vip_mentorship' || effectiveTier === 'vip') {
-          tierBadge.innerText = "👑 Mentorado VIP";
-        } else if (effectiveTier === 'club_annual' || effectiveTier === 'club_monthly' || effectiveTier === 'course_member' || effectiveTier === 'pro') {
-          tierBadge.innerText = "🎓 Membro Club";
-        } else {
-          tierBadge.innerText = "🌱 Aluno Free";
-        }
+      const tierBadge = document.getElementById("student-tier-badge");
+      const drawerTier = document.getElementById("drawer-user-tier");
+      const dropdownBadge = document.getElementById("dropdown-user-badge");
+
+      let badgeLabel = "🌱 Aluno Free";
+      if (window.AEFAccessEngine && typeof window.AEFAccessEngine.getPrimaryBadgeLabel === 'function') {
+        badgeLabel = window.AEFAccessEngine.getPrimaryBadgeLabel(currentUser);
+      } else if (isAdmin) {
+        badgeLabel = "👑 Administrador";
+      } else if (userTier === 'vip_mentorship' || userTier === 'vip') {
+        badgeLabel = "👑 Mentorado VIP";
+      } else if (userTier === 'club_annual' || userTier === 'club_monthly' || userTier === 'course_member' || userTier === 'pro') {
+        badgeLabel = "🎓 Membro Club";
       }
 
-      // Re-renderiza blocos dinâmicos do Marketing Block Engine com base no tier e produtos efetivos
+      if (tierBadge) tierBadge.innerText = badgeLabel;
+      if (drawerTier) drawerTier.innerText = badgeLabel;
+      if (dropdownBadge) {
+        dropdownBadge.innerHTML = `<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[9px] font-mono font-bold uppercase">${badgeLabel}</span>`;
+      }
+
+      // Re-renderiza blocos dinâmicos do Marketing Block Engine se ativo
       if (window.aefBlockEngine) {
         try {
-          window.aefBlockEngine.renderAllSlots(effectiveTier, enrolledProducts);
+          window.aefBlockEngine.renderAllSlots(userTier, enrolledProducts);
         } catch(e) {}
       }
 
-      // Carrega estatísticas reais de Listening Time e Aulas Concluídas do Aluno
+      // Estatísticas reais de Listening Time e Aulas Concluídas
       const studentId = (userTier === 'vip' || userTier === 'vip_mentorship') && studentEmail ? studentEmail.split('@')[0] : 'public';
       const listeningStats = window.aefLearningTracker ? window.aefLearningTracker.getListeningStats(studentId) : {};
       const completedList = window.aefLearningTracker ? window.aefLearningTracker.getCompletedLessons() : [];
@@ -673,25 +1267,14 @@
       }
       if (statCompletedEl) statCompletedEl.innerText = completedList.length;
 
-
-      // ——— HELPERS DE ACESSO E RECOMENDAÇÃO DINÂMICA ———
-      // Verifica se o aluno tem acesso a um curso específico com base no engine centralizado
+      // ——— RECOMENDAÇÃO DO HERO "CONTINUAR DE ONDE PAROU" ———
       function hasAccessToCourse(courseId, tier, enrolled, adminFlag, courseMatrix) {
         const course = courseMatrix ? courseMatrix[courseId] : null;
         if (!course) return false;
 
         const AE = window.AEFAccessEngine;
         if (AE && typeof AE.hasAccess === 'function') {
-          const userObj = {
-            ...(profile || {}),
-            role: adminFlag ? 'admin' : (profile.role || userRole || 'student'),
-            tier: tier || effectiveTier,
-            categories: profile.categories,
-            purchasedProducts: enrolled || enrolledProducts || [],
-            enrolledProducts: enrolled || enrolledProducts || [],
-            subscription: profile.subscription
-          };
-          return AE.hasAccess(userObj, course);
+          return AE.hasAccess(currentUser, course);
         }
 
         if (adminFlag) return true;
@@ -710,7 +1293,6 @@
         return false;
       }
 
-      // Retorna o PRIMEIRO curso publicado que o aluno tem acesso (zero hardcode)
       function getHeroRecommendation(courseMatrix, tier, enrolled, adminFlag) {
         const orderedIds = Object.keys(courseMatrix);
         for (const id of orderedIds) {
@@ -725,7 +1307,6 @@
         return null;
       }
 
-      // ——— RESOLUÇÃO DA ÚLTIMA ATIVIDADE E ELEMENTOS DO HERO ———
       const lastActivity = window.aefLearningTracker ? window.aefLearningTracker.getGlobalLastActivity() : null;
       const isMentee = (userTier === 'vip' || userTier === 'vip_mentorship') ||
                        (studentEmail && studentEmail.toLowerCase().includes('andrebarrote'));
@@ -737,16 +1318,11 @@
       const heroCtaTrain = document.getElementById("hero-cta-train");
       const heroThumb = document.querySelector("#hero-lesson-title")?.closest("section")?.querySelector("img");
 
-      // ——— ACESSO DINÂMICO AO HISTÓRICO DO ALUNO ———
-      const localMatrix = window.AEF_COURSES_REGISTRY || OFFICIAL_COURSES_MATRIX;
-
-      // Validação de Acesso: o aluno realmente tem direito ao curso onde parou?
+      const localMatrix = window.AEFCoursesMatrix;
       const hasCourseAccess = lastActivity && lastActivity.lessonId &&
-        hasAccessToCourse(lastActivity.courseId, effectiveTier, enrolledProducts, isAdmin, localMatrix);
-
+        hasAccessToCourse(lastActivity.courseId, userTier, enrolledProducts, isAdmin, localMatrix);
 
       if (hasCourseAccess) {
-        // Aluno já possui histórico e tem permissão: recupera exatamente onde parou!
         if (heroTag) heroTag.innerText = `${lastActivity.courseTitle} • ${lastActivity.moduleTitle || 'Módulo Ativo'}`;
         if (heroTitle) heroTitle.innerText = lastActivity.lessonTitle || "Continuar Prática Ativa";
         if (heroDesc) heroDesc.innerText = `Você estava aqui! Clique para continuar seus treinos de escuta, fala e reflexo imediato.`;
@@ -761,9 +1337,7 @@
         if (heroCtaTrain) heroCtaTrain.href = "/player?aluno=andre";
         if (heroThumb) heroThumb.src = "assets/images/cover-andre-barrote.jpg";
       } else {
-        // ——— RECOMENDAÇÃO 100% DINÂMICA — ZERO HARDCODE ———
-        // Busca o primeiro curso publicado que o aluno tem acesso real pelo tier/enrollment
-        const recommendation = getHeroRecommendation(localMatrix, effectiveTier, enrolledProducts, isAdmin);
+        const recommendation = getHeroRecommendation(localMatrix, userTier, enrolledProducts, isAdmin);
         if (recommendation) {
           const { id: recId, course: recCourse } = recommendation;
           const courseFirstModule = recCourse.modules?.[0];
@@ -776,15 +1350,23 @@
           if (heroCtaTrain) heroCtaTrain.href = `/player?curso=${recId}`;
           if (heroThumb && recCourse.coverImageUrl) heroThumb.src = recCourse.coverImageUrl;
         }
-        // Se não encontrar nenhum curso (ex: banco offline), o hero exibe o padrão HTML sem atualização
       }
 
-
-
-      await renderCoursesShowcase(enrolledProducts, isAdmin, effectiveEmail, effectiveTier);
+      // Renderiza as seções Meus Acessos e Catálogo Completo
+      await renderCoursesShowcase(enrolledProducts, isAdmin, studentEmail, userTier);
       updateIcons();
 
-      // Checa se é chegada de boas-vindas do Onboarding (?welcome=true)
+      // Listener para reatividade caso o perfil do aluno mude em tempo real
+      window.addEventListener('aef:auth-changed', async (e) => {
+        const p = e.detail?.profile;
+        if (p) {
+          window.refreshUserProfileUI(p.name, p.phone, p.tier, p.email);
+          await renderCoursesShowcase(p.enrolledProducts || [], isAdmin, p.email, p.tier);
+          updateIcons();
+        }
+      });
+
+      // Boas-vindas do Onboarding (?welcome=true)
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('welcome') === 'true') {
         const welcomeModal = document.getElementById('welcome-portal-modal');
@@ -800,11 +1382,12 @@
       }
     });
 
+    // ——— 7. UPSELL ENGINE & CATÁLOGOS DE CURSOS ———
     async function renderCoursesShowcase(enrolledProducts, isAdmin = false, currentEmail = '', currentTier = 'free') {
-      const baseMatrix = window.AEF_COURSES_REGISTRY || OFFICIAL_COURSES_MATRIX;
-      let courses = Object.assign({}, baseMatrix);
+      window.AEFCoursesMatrix = window.AEFCoursesMatrix || Object.assign({}, OFFICIAL_COURSES_MATRIX, window.AEF_COURSES_REGISTRY || {});
+      let courses = window.AEFCoursesMatrix;
 
-      // Busca matriz atualizada no Firestore se disponível
+      // Carrega hierarquia atualizada do Firestore se disponível
       try {
         if (window.aefCloudSync) await window.aefCloudSync.init();
         const res = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
@@ -839,31 +1422,55 @@
                 standaloneCheckoutStripe: f.standaloneCheckoutStripe?.stringValue || ''
               };
             });
-            courses = Object.assign({}, baseMatrix, cloudCourses);
+            Object.assign(window.AEFCoursesMatrix, cloudCourses);
+            courses = window.AEFCoursesMatrix;
           }
         }
       } catch (err) {
         console.log("Using registered courses matrix fallback:", err);
       }
 
-      const enrolledContainer = document.getElementById("enrolledCoursesGrid");
-      const enrolledCountBadge = document.getElementById("enrolled-courses-count");
+      const profile = (window.aefPortalAuth && window.aefPortalAuth.currentProfile) || {};
+      const userRole = profile.role || localStorage.getItem("aef_user_role") || "student";
+      const userObj = {
+        ...(profile || {}),
+        uid: (profile && profile.uid) || (window.aefPortalAuth?.currentUser?.uid),
+        role: isAdmin ? 'admin' : userRole,
+        tier: currentTier,
+        categories: profile.categories,
+        purchasedProducts: enrolledProducts || [],
+        enrolledProducts: enrolledProducts || [],
+        subscription: profile.subscription
+      };
 
-      let gridHtml = "";
-      let enrolledCount = 0;
-      let totalVisible = 0;
+      // Se o usuário é unicamente 'member_free', ativa o Massive Hero Banner do Upsell Engine
+      let isOnlyFree = false;
+      if (window.AEFAccessEngine && typeof window.AEFAccessEngine.resolveUserCategories === 'function') {
+        const cats = window.AEFAccessEngine.resolveUserCategories(userObj);
+        const nonFreeCats = cats.filter(c => c !== 'member_free');
+        isOnlyFree = !isAdmin && (nonFreeCats.length === 0);
+      } else {
+        isOnlyFree = !isAdmin && (currentTier === 'free') && (!enrolledProducts || enrolledProducts.length === 0);
+      }
+      renderMassiveFreeUpsellBanner(isOnlyFree);
+
+      const myAccessContainer = document.getElementById("myAccessGrid");
+      const myAccessCountBadge = document.getElementById("my-access-count");
+      const allCoursesContainer = document.getElementById("allCoursesCatalogGrid");
+      const allCoursesCountBadge = document.getElementById("all-courses-count");
+
+      let myAccessHtml = "";
+      let allCoursesHtml = "";
+      let myAccessCount = 0;
+      let totalVisibleCatalog = 0;
 
       const normalizedCurrentEmail = (currentEmail || '').trim().toLowerCase();
-      const isClubMember = currentTier === 'club_annual' || currentTier === 'club_anual' || currentTier === 'legacy_member';
-
-      if (!Array.isArray(enrolledProducts)) enrolledProducts = [];
 
       for (const [id, course] of Object.entries(courses)) {
         try {
-          // Ignora cursos não publicados (rascunhos guardados pelo Leo no admin)
           if (course.published === false) continue;
 
-          // Se for um curso VIP de outro mentorado e o usuário não for admin nem o dono, isola a privacidade
+          // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade
           const isMentorshipCourse = course.tierRequired === 'vip' || id.startsWith('mentoria-');
           const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
           const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
@@ -872,59 +1479,44 @@
             continue;
           }
 
-          totalVisible++;
+          totalVisibleCatalog++;
 
-          const isIncludedInClub = course.includedInClubSubscription !== false && !isMentorshipCourse;
-          const isFreeCourse = course.tierRequired === 'free' || course.availableInFreeTier === true;
+          // Verificação canônica com o AEFAccessEngine
+          const hasAccess = window.AEFAccessEngine 
+            ? window.AEFAccessEngine.hasAccess(userObj, course)
+            : (isAdmin || isOwner || enrolledProducts.includes(id) || course.tierRequired === 'free');
 
-          const userForCard = {
-            ...(profile || {}),
-            role: isAdmin ? 'admin' : (profile.role || 'student'),
-            tier: currentTier,
-            categories: profile.categories,
-            purchasedProducts: enrolledProducts,
-            enrolledProducts: enrolledProducts,
-            subscription: profile.subscription
-          };
+          const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
+          const completedInThisCourse = courseProg.completedLessons || [];
+          const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 8);
+          const progressPercent = totalLessons ? Math.min(100, Math.round((completedInThisCourse.length / totalLessons) * 100)) : 0;
+          
+          const resumeLessonId = courseProg.lastLessonId;
+          const resumeUrl = resumeLessonId 
+            ? `/sala?curso=${course.slug || course.id}&modulo=${courseProg.lastModuleId || ''}&aula=${resumeLessonId}`
+            : `/curso?curso=${course.slug || course.id}`;
 
-          const isEnrolled = isOwner || (window.AEFAccessEngine 
-            ? window.AEFAccessEngine.hasAccess(userForCard, course)
-            : (isAdmin || isOwner || enrolledProducts.includes(id) || enrolledProducts.includes('all_access_master') || (isClubMember && isIncludedInClub) || isFreeCourse));
-
-          if (isEnrolled) {
-            enrolledCount++;
-            const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
-            const completedInThisCourse = courseProg.completedLessons || [];
-            
-            const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 5);
-            const progressPercent = totalLessons ? Math.min(100, Math.round((completedInThisCourse.length / totalLessons) * 100)) : 0;
-            
-            const resumeLessonId = courseProg.lastLessonId;
-            const resumeUrl = resumeLessonId 
-              ? `/sala?curso=${course.slug || course.id}&modulo=${courseProg.lastModuleId || ''}&aula=${resumeLessonId}`
-              : `/curso?curso=${course.slug || course.id}`;
-
-            gridHtml += `
+          // ——— 1. SEÇÃO "MEUS ACESSOS" (APENAS QUEM TEM ACESSO LIBERADO) ———
+          if (hasAccess) {
+            myAccessCount++;
+            myAccessHtml += `
               <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-[#C68A36]/60 transition flex flex-col justify-between">
-                
                 <div>
-                  <!-- Course Cover Image -->
                   <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
                     <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
-                    <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm">
-                      ${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'CURSO ATIVO')}
+                    <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
+                      <span>✓</span>
+                      <span>${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'LIBERADO')}</span>
                     </span>
                   </div>
 
-                  <!-- Course Body -->
                   <div class="p-4 sm:p-5 space-y-2">
                     <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
                     <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
                   </div>
                 </div>
 
-                <!-- Progress & Action -->
                 <div class="p-4 sm:p-5 pt-0 space-y-3">
                   <div class="space-y-1">
                     <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
@@ -946,135 +1538,114 @@
                     </a>
                   </div>
                 </div>
+              </div>
+            `;
+          }
 
+          // ——— 2. SEÇÃO "CATÁLOGO COMPLETO DE CURSOS" (RENDERIZA TODOS OS CURSOS) ———
+          if (hasAccess) {
+            // Card Liberado
+            allCoursesHtml += `
+              <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-emerald-500/50 transition flex flex-col justify-between group">
+                <div>
+                  <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
+                    <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
+                      <span>✓</span>
+                      <span>ACESSO LIBERADO</span>
+                    </span>
+                  </div>
+
+                  <div class="p-4 sm:p-5 space-y-2">
+                    <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
+                    <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
+                  </div>
+                </div>
+
+                <div class="p-4 sm:p-5 pt-0">
+                  <a href="/curso?curso=${course.slug || course.id}" class="w-full py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                    <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                    <span>Acessar Treinamento</span>
+                  </a>
+                </div>
               </div>
             `;
           } else {
-            // Curso que NÃO pertence ao plano do aluno
-            const hasFreeTasting = course.availableInFreeTier === true || 
-                                   (Array.isArray(course.freeModuleIds) && course.freeModuleIds.length > 0) || 
-                                   course.tierRequired === 'free';
+            // Card Bloqueado com Cadeado 🔒 e Gatilho para o Upsell Modal
+            allCoursesHtml += `
+              <div onclick="window.openUpsellModal('${course.id}')" class="bg-white border-2 border-slate-200/90 hover:border-amber-400/80 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition flex flex-col justify-between relative group cursor-pointer">
+                <div>
+                  <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
+                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0A192F]/90 via-black/40 to-black/30"></div>
+                    
+                    <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1.5">
+                      <span class="text-xs">🔒</span>
+                      <span>BLOQUEADO • UPGRADE</span>
+                    </span>
 
-            // Link de checkout dinâmico da Hotmart (busca direto da Central de Ofertas do Leo)
-            let defaultCheckoutUrl = course.freeTierCtaUrl || 
-                                       course.standaloneCheckoutHotmart || 
-                                       'https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=portal_card';
-
-            if (window.aefOffersRegistry) {
-              try {
-                const reg = window.aefOffersRegistry;
-                let offer = null;
-                if (course.attachedOfferId && typeof reg.getOfferById === 'function') {
-                  offer = reg.getOfferById(course.attachedOfferId);
-                }
-                if (!offer && typeof reg.getOfferByProductId === 'function') {
-                  offer = reg.getOfferByProductId(id);
-                }
-                if (!offer && typeof reg.getOfferById === 'function') {
-                  offer = reg.getOfferById('ms-club-anual');
-                }
-                if (offer && offer.checkoutUrl && !offer.checkoutUrl.includes('OFFER_') && typeof reg.generateTrackingUrl === 'function') {
-                  defaultCheckoutUrl = reg.generateTrackingUrl(offer.id, 'portal_card');
-                }
-              } catch (offerErr) {
-                console.warn("Offer resolution fallback:", offerErr);
-              }
-            }
-
-            if (hasFreeTasting) {
-              // CASO COM DEGUSTAÇÃO FREE: FAIXA 'EXPERIMENTE GRÁTIS'
-              gridHtml += `
-                <div class="bg-white border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-amber-400 transition flex flex-col justify-between relative group">
-                  
-                  <div>
-                    <!-- Cover com Faixa Dourada 'EXPERIMENTE GRÁTIS' -->
-                    <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                      <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                      <div class="absolute inset-0 bg-gradient-to-t from-[#0A192F]/80 via-black/20 to-black/30"></div>
-                      
-                      <!-- Ribbon Dourada de Degustação -->
-                      <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1.5">
-                        <span>🎁</span>
-                        <span>EXPERIMENTE GRÁTIS</span>
-                      </span>
-
-                      <span class="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-500/90 text-white font-mono font-bold text-[9px] uppercase tracking-wider shadow-sm backdrop-blur-xs">
-                        🌱 Aulas Abertas Liberadas
-                      </span>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="w-11 h-11 rounded-full bg-slate-950/80 border border-amber-400/50 text-amber-400 flex items-center justify-center shadow-lg group-hover:scale-110 transition duration-200">
+                        <i data-lucide="lock" class="w-5 h-5"></i>
+                      </div>
                     </div>
+                  </div>
 
-                    <!-- Course Body -->
-                    <div class="p-4 sm:p-5 space-y-2">
+                  <div class="p-4 sm:p-5 space-y-2">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm">🔒</span>
                       <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                      <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">
-                        ${course.description || 'Experimente o método de escuta atenta e fala no reflexo do Professor Leo.'}
-                      </p>
                     </div>
+                    <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || 'Treinamento exclusivo do ecossistema AgoraEuFalo. Clique para desbloquear seu acesso.'}</p>
                   </div>
-
-                  <!-- Action Buttons: Degustação + Desbloqueio -->
-                  <div class="p-4 sm:p-5 pt-0 space-y-2">
-                    <div class="grid grid-cols-2 gap-2">
-                      <a href="/curso?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300/80 font-bold text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
-                        <span>Degustação</span>
-                        <i data-lucide="play" class="w-3 h-3 text-amber-600 fill-current"></i>
-                      </a>
-                      <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-[11px] uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-xs cursor-pointer">
-                        <span>Desbloquear</span>
-                        <i data-lucide="lock" class="w-3 h-3"></i>
-                      </a>
-                    </div>
-                  </div>
-
                 </div>
-              `;
-            } else {
-              // CASO EXCLUSIVO PAGO (SEM DEGUSTAÇÃO FREE)
-              const isStandaloneOnly = course.availableStandalone && course.includedInClubSubscription === false;
-              gridHtml += `
-                <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-slate-400 transition flex flex-col justify-between">
-                  
-                  <div>
-                    <!-- Cover com Faixa Azul-Marinho / Ouro de Conteúdo Exclusivo -->
-                    <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                      <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-85">
-                      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30"></div>
-                      
-                      <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-slate-900/90 text-amber-300 border border-amber-400/40 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1">
-                        <span>🔒</span>
-                        <span>${isStandaloneOnly ? 'VENDA AVULSA' : 'EXCLUSIVO AEF CLUB'}</span>
-                      </span>
-                    </div>
 
-                    <!-- Course Body -->
-                    <div class="p-4 sm:p-5 space-y-2">
-                      <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                      <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
-                    </div>
-                  </div>
-
-                  <!-- Action Button -->
-                  <div class="p-4 sm:p-5 pt-0">
-                    <a href="${defaultCheckoutUrl}" data-open-checkout="true" data-checkout-url="${defaultCheckoutUrl}" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
-                      <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
-                      <span>Desbloquear Acesso</span>
-                    </a>
-                  </div>
-
+                <div class="p-4 sm:p-5 pt-0">
+                  <button type="button" onclick="event.stopPropagation(); window.openUpsellModal('${course.id}')" class="w-full py-2.5 rounded-xl bg-slate-900 group-hover:bg-[#C68A36] text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400 group-hover:text-white"></i>
+                    <span>Desbloquear Curso</span>
+                  </button>
                 </div>
-              `;
-            }
+              </div>
+            `;
           }
         } catch (cardErr) {
           console.error(`Erro ao renderizar curso ${id}:`, cardErr);
         }
       }
 
-      if (enrolledContainer) {
-        enrolledContainer.innerHTML = gridHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso disponível no momento.</p>`;
+      // Renderiza Seção "Meus Acessos"
+      if (myAccessContainer) {
+        if (myAccessCount > 0) {
+          myAccessContainer.innerHTML = myAccessHtml;
+        } else {
+          myAccessContainer.innerHTML = `
+            <div class="col-span-full p-6 sm:p-8 rounded-2xl bg-white border border-[#EAE5DC] text-center space-y-3">
+              <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/10 text-[#C68A36] flex items-center justify-center">
+                <i data-lucide="lock" class="w-6 h-6"></i>
+              </div>
+              <h4 class="font-black text-sm sm:text-base text-[#0A192F]">Nenhum Treinamento Pago Liberado</h4>
+              <p class="text-xs text-[#7A7369] max-w-md mx-auto">
+                Você está no plano Free. Conheça as opções no Catálogo Completo abaixo ou faça o upgrade para o Magic Stories Club.
+              </p>
+              <button onclick="window.openUpsellModal('ms-legacy')" class="px-5 py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition cursor-pointer">
+                Conhecer o Magic Stories Club ➔
+              </button>
+            </div>
+          `;
+        }
       }
-      if (enrolledCountBadge) {
-        enrolledCountBadge.innerText = `${enrolledCount} MATRICULADOS • ${totalVisible} DISPONÍVEIS`;
+      if (myAccessCountBadge) {
+        myAccessCountBadge.innerText = `${myAccessCount} LIBERADO${myAccessCount === 1 ? '' : 'S'}`;
+      }
+
+      // Renderiza Seção "Catálogo Completo de Cursos"
+      if (allCoursesContainer) {
+        allCoursesContainer.innerHTML = allCoursesHtml || `<p class="text-xs text-[#7A7369] p-4 col-span-full">Nenhum curso disponível no momento.</p>`;
+      }
+      if (allCoursesCountBadge) {
+        allCoursesCountBadge.innerText = `${totalVisibleCatalog} TREINAMENTOS DISPONÍVEIS`;
       }
     }
 
@@ -1091,31 +1662,6 @@
         overlay.classList.add("hidden");
         menu.classList.add("-translate-x-full");
       }
-    };
-
-    window.openMemberProfileModal = () => {
-      const modal = document.getElementById("member-profile-modal");
-      const name = localStorage.getItem("aef_user_name") || "Leonardo Leite";
-      const email = localStorage.getItem("aef_user_email") || "leonardo@agoraeufalo.com.br";
-      document.getElementById("modal-profile-input-name").value = name;
-      document.getElementById("modal-profile-input-email").value = email;
-      if (modal) modal.classList.remove("hidden");
-    };
-
-    window.closeMemberProfileModal = () => {
-      const modal = document.getElementById("member-profile-modal");
-      if (modal) modal.classList.add("hidden");
-    };
-
-    window.handleSavePortalProfile = (e) => {
-      e.preventDefault();
-      const name = document.getElementById("modal-profile-input-name").value.trim();
-      localStorage.setItem("aef_user_name", name);
-      const drawerName = document.getElementById("drawer-user-name");
-      const topGreeting = document.getElementById("top-user-greeting");
-      if (drawerName) drawerName.innerText = name;
-      if (topGreeting) topGreeting.innerText = name.split(" ")[0];
-      window.closeMemberProfileModal();
     };
   </script>
 
