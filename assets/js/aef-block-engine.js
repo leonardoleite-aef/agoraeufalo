@@ -190,7 +190,7 @@
       },
       content: {
         badgeText: "🚀 CRÉDITO DE FIDELIDADE",
-        headline: "Abata o Valor do Seu Curso Anterior no Magic Stories Club",
+        headline: "Abata o Valor do Seu Curso Anterior no AgoraEuFalo English Club",
         subhead: "Você já investiu na sua evolução com o Professor Leo. Reconhecemos a sua jornada dando crédito para migrar para o Club Anual por apenas R$ 297.",
         bodyHtml: `
           <ul class="space-y-2 text-xs text-slate-300 mb-3">

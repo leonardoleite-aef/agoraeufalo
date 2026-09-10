@@ -19,13 +19,13 @@ const PRODUCT_TIER_MAPPING = {
     tier: 'club_annual',
     role: 'student',
     enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas'],
-    productName: 'Magic Stories Club (Assinatura Anual)'
+    productName: 'AgoraEuFalo English Club (Assinatura Anual)'
   },
   'MAGIC_STORIES_CLUB': {
     tier: 'club_annual',
     role: 'student',
     enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas'],
-    productName: 'Magic Stories Club'
+    productName: 'AgoraEuFalo English Club'
   },
   'PROJETO_AEF_2026': {
     tier: 'vip_mentorship',
@@ -104,7 +104,7 @@ async function handleWebhook(body, headers = {}) {
   const email = (buyer.email || body.email || '').trim().toLowerCase();
   const name = (buyer.name || body.name || email.split('@')[0] || 'Aluno AgoraEuFalo').trim();
   const phone = buyer.checkout_phone || buyer.phone || '';
-  const prodName = product.name || 'Magic Stories Club';
+  const prodName = product.name || 'AgoraEuFalo English Club';
   const prodId = String(product.id || '8460579');
   const offerCode = purchase.offer?.code || '';
   const transactionId = purchase.transaction || `tx_${Date.now()}`;

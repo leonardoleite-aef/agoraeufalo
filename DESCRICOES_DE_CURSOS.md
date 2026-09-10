@@ -6,7 +6,7 @@ Este documento centraliza as descrições comerciais, técnicas e institucionais
 ---
 
 ## 📑 Sumário de Produtos & Cursos
-1. [AgoraEuFalo Club • Assinatura Oficial (Magic Stories Club)](#1-agoraeufalo-club--assinatura-oficial-magic-stories-club)
+1. [AgoraEuFalo Club • Assinatura Oficial (AgoraEuFalo English Club)](#1-agoraeufalo-club--assinatura-oficial-magic-stories-club)
 2. *English QuickStart • A Fundação Auditiva (Aguardando redação)*
 3. *Frases Prontas • Automação de Chunks Nativos (Aguardando redação)*
 4. *First Steps • Treinamento de Entrada / Alunos Históricos (Aguardando redação)*
@@ -14,10 +14,10 @@ Este documento centraliza as descrições comerciais, técnicas e institucionais
 
 ---
 
-## 1. AgoraEuFalo Club • Assinatura Oficial (Magic Stories Club)
+## 1. AgoraEuFalo Club • Assinatura Oficial (AgoraEuFalo English Club)
 
 ### 🏷️ Ficha Técnica do Produto
-- **Nome Sugerido na Hotmart:** AgoraEuFalo • Magic Stories Club (Anual)
+- **Nome Sugerido na Hotmart:** AgoraEuFalo • AgoraEuFalo English Club (Anual)
 - **ID do Produto na Hotmart:** 8460579
 - **Código da Oferta Principal:** `CLUB_ANUAL_2026`
 - **Formato:** Assinatura Anual (Recorrência a cada 12 meses) ou Mensal

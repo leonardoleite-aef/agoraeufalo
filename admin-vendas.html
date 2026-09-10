@@ -184,7 +184,7 @@
           Todas (<span id="count-all">0</span>)
         </button>
         <button onclick="setFilter('ms-club')" id="tab-ms-club" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
-          🎓 Magic Stories Club
+          🎓 AgoraEuFalo English Club
         </button>
         <button onclick="setFilter('courses')" id="tab-courses" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white shrink-0 transition cursor-pointer">
           📚 Cursos Avulsos
@@ -247,14 +247,14 @@
           
           <div>
             <label class="block font-bold text-slate-300 mb-1">Título Interno da Oferta *</label>
-            <input type="text" id="formTitle" required placeholder="Ex: Magic Stories Club • Assinatura Anual (Plano Oficial)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+            <input type="text" id="formTitle" required placeholder="Ex: AgoraEuFalo English Club • Assinatura Anual (Plano Oficial)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block font-bold text-slate-300 mb-1">Produto Associado *</label>
               <select id="formProductId" onchange="handleProductSelectChange(this.value)" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none cursor-pointer">
-                <option value="ms-club">🎓 Magic Stories Club</option>
+                <option value="ms-club">🎓 AgoraEuFalo English Club</option>
                 <option value="english-quickstart">📚 English QuickStart</option>
                 <option value="frases-prontas">🗣️ Frases Prontas</option>
                 <option value="mentoria-vip">👑 Mentoria VIP Individual</option>
@@ -1196,7 +1196,7 @@
 
     function handleProductSelectChange(prodId) {
       const prodNames = {
-        'ms-club': 'Magic Stories Club',
+        'ms-club': 'AgoraEuFalo English Club',
         'english-quickstart': 'English QuickStart',
         'frases-prontas': 'Frases Prontas',
         'mentoria-vip': 'Mentoria VIP Individual',
@@ -1248,7 +1248,7 @@
       const billingPeriod = document.getElementById('formBillingPeriod').value || 'annual';
 
       const prodTitles = {
-        'ms-club': 'Magic Stories Club',
+        'ms-club': 'AgoraEuFalo English Club',
         'english-quickstart': 'English QuickStart',
         'frases-prontas': 'Frases Prontas',
         'mentoria-vip': 'Mentoria VIP Individual',

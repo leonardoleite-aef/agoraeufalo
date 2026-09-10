@@ -64,7 +64,7 @@
     },
     {
       id: "trial-7-dias-gratis",
-      title: "Degustação 7 Dias Grátis • Magic Stories Club",
+      title: "Degustação 7 Dias Grátis • AgoraEuFalo English Club",
       slug: "trial-7-dias-gratis",
       badge: "7 DIAS GRÁTIS",
       status: "active",

@@ -17,25 +17,25 @@
       tier: 'club_annual',
       role: 'student',
       enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas'],
-      productName: 'Magic Stories Club'
+      productName: 'AgoraEuFalo English Club'
     },
     'MAGIC_STORIES_CLUB': {
       tier: 'club_annual',
       role: 'student',
       enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas'],
-      productName: 'Magic Stories Club (Assinatura Anual)'
+      productName: 'AgoraEuFalo English Club (Assinatura Anual)'
     },
     'MS_CLUB_ANUAL': {
       tier: 'club_annual',
       role: 'student',
       enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas'],
-      productName: 'Magic Stories Club • Assinatura Anual'
+      productName: 'AgoraEuFalo English Club • Assinatura Anual'
     },
     'MS_CLUB_MENSAL': {
       tier: 'club_monthly',
       role: 'student',
       enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas'],
-      productName: 'Magic Stories Club • Assinatura Mensal'
+      productName: 'AgoraEuFalo English Club • Assinatura Mensal'
     },
     'PROJETO_AEF_2026': {
       tier: 'vip_mentorship',
@@ -259,7 +259,7 @@
       const email = (buyer.email || payload.email || '').trim().toLowerCase();
       const name = (buyer.name || payload.name || email.split('@')[0] || 'Aluno AgoraEuFalo').trim();
       const phone = buyer.checkout_phone || buyer.phone || payload.phone || '';
-      const prodName = product.name || payload.product_name || 'Magic Stories Club';
+      const prodName = product.name || payload.product_name || 'AgoraEuFalo English Club';
       const prodId = product.id || payload.product_id || '8460579';
       const offerCode = purchase.offer?.code || payload.offer_code || '';
       const transactionId = purchase.transaction || data.transaction || `tx_${Date.now()}`;

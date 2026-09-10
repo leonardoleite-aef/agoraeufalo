@@ -654,7 +654,7 @@
         <div class="min-w-0 flex-1 space-y-1">
           <span class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider block">CONTEÚDO PROTEGIDO</span>
           <p class="text-xs text-slate-300 line-clamp-3 leading-relaxed" id="upsell-modal-course-desc">
-            Faça o upgrade para o Magic Stories Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.
+            Faça o upgrade para o AgoraEuFalo English Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.
           </p>
         </div>
       </div>
@@ -1023,7 +1023,7 @@
       const whatsappBtn = document.getElementById("upsell-modal-whatsapp-btn");
 
       if (titleEl) titleEl.innerText = `Desbloquear ${course.title || 'Treinamento'}`;
-      if (descEl) descEl.innerText = course.description || "Faça o upgrade para o Magic Stories Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.";
+      if (descEl) descEl.innerText = course.description || "Faça o upgrade para o AgoraEuFalo English Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.";
       if (imgEl) imgEl.src = course.coverImageUrl || "assets/images/cover-default-aef.jpg";
       if (badgeEl) badgeEl.innerText = course.badge || "EXCLUSIVO CLUB";
 
@@ -1045,7 +1045,7 @@
       }
 
       if (whatsappBtn) {
-        whatsappBtn.href = `https://wa.me/5531999817975?text=${encodeURIComponent(`Olá Professor Leo! Estou no portal do aluno e quero tirar uma dúvida sobre o plano Magic Stories Club para ter acesso ao curso ${course.title || courseId}.`)}`;
+        whatsappBtn.href = `https://wa.me/5531999817975?text=${encodeURIComponent(`Olá Professor Leo! Estou no portal do aluno e quero tirar uma dúvida sobre o plano AgoraEuFalo English Club para ter acesso ao curso ${course.title || courseId}.`)}`;
       }
 
       modal.classList.remove("hidden");
@@ -1093,7 +1093,7 @@
 
             <div class="max-w-3xl space-y-2">
               <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-                Destrave Seu Inglês Falado com o <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-200">Magic Stories Club</span>
+                Destrave Seu Inglês Falado com o <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-200">AgoraEuFalo English Club</span>
               </h2>
               <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
                 Você está na conta gratuita. Faça o upgrade agora para ter acesso irrestrito a todas as 30 Histórias Clássicas, Frases Prontas, Training Player Mobile PWA (com tela apagada) e Encontros ao Vivo com o Professor Leo!
@@ -1627,10 +1627,10 @@
               </div>
               <h4 class="font-black text-sm sm:text-base text-[#0A192F]">Nenhum Treinamento Pago Liberado</h4>
               <p class="text-xs text-[#7A7369] max-w-md mx-auto">
-                Você está no plano Free. Conheça as opções no Catálogo Completo abaixo ou faça o upgrade para o Magic Stories Club.
+                Você está no plano Free. Conheça as opções no Catálogo Completo abaixo ou faça o upgrade para o AgoraEuFalo English Club.
               </p>
               <button onclick="window.openUpsellModal('ms-legacy')" class="px-5 py-2.5 rounded-xl bg-[#C68A36] hover:bg-[#B3792A] text-white font-bold text-xs uppercase tracking-wider transition cursor-pointer">
-                Conhecer o Magic Stories Club ➔
+                Conhecer o AgoraEuFalo English Club ➔
               </button>
             </div>
           `;

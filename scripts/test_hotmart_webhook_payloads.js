@@ -3,7 +3,7 @@
  * Professor Leonardo Leite
  * 
  * Executa simulações completas de teste dos cenários canônicos:
- * 1. PURCHASE_APPROVED (1ª Compra Aprovada - Magic Stories Club)
+ * 1. PURCHASE_APPROVED (1ª Compra Aprovada - AgoraEuFalo English Club)
  * 2. PURCHASE_DELAYED (Cobrança Atrasada / Inadimplência)
  * 3. SUBSCRIPTION_CANCELLATION (Cancelamento de Assinatura)
  * 4. PURCHASE_REFUNDED (Reembolso / Revogação de Acesso)
@@ -80,7 +80,7 @@ async function runCliTests() {
   const now = new Date().toISOString();
 
   // Teste 1: Compra Aprovada
-  console.log('1️⃣ Simulando: PURCHASE_APPROVED (Magic Stories Club Anual)...');
+  console.log('1️⃣ Simulando: PURCHASE_APPROVED (AgoraEuFalo English Club Anual)...');
   await writeFirestoreDoc('users', studentId, {
     uid: studentId,
     email: testEmail,
@@ -91,7 +91,7 @@ async function runCliTests() {
     lastTransaction: {
       gateway: 'hotmart_cli_test',
       event: 'PURCHASE_APPROVED',
-      productName: 'Magic Stories Club',
+      productName: 'AgoraEuFalo English Club',
       amount: 497.00,
       processedAt: now
     },
@@ -104,10 +104,10 @@ async function runCliTests() {
     provider: 'hotmart',
     buyerEmail: testEmail,
     buyerName: 'Aluno Teste Webhook',
-    productName: 'Magic Stories Club',
+    productName: 'AgoraEuFalo English Club',
     amountFormatted: 'R$ 497,00',
     status: 'processed',
-    resultSummary: 'Matrícula confirmada no Magic Stories Club (Tier: club_annual).',
+    resultSummary: 'Matrícula confirmada no AgoraEuFalo English Club (Tier: club_annual).',
     processedAt: now
   });
 
@@ -119,7 +119,7 @@ async function runCliTests() {
     provider: 'hotmart',
     buyerEmail: testEmail,
     buyerName: 'Aluno Teste Webhook',
-    productName: 'Magic Stories Club',
+    productName: 'AgoraEuFalo English Club',
     amountFormatted: 'R$ 497,00',
     status: 'warning',
     resultSummary: 'Cobrança atrasada (Grace period ativado).',

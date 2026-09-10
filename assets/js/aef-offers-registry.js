@@ -16,10 +16,10 @@
   const CANONICAL_OFFERS_SEED = [
     {
       id: "ms-club-anual",
-      title: "Magic Stories Club • Assinatura Anual (Plano Oficial)",
+      title: "AgoraEuFalo English Club • Assinatura Anual (Plano Oficial)",
       slug: "ms-club-anual",
       productId: "ms-club",
-      productTitle: "Magic Stories Club",
+      productTitle: "AgoraEuFalo English Club",
       hotmartProductId: "8460579",
       badge: "PLANO OFICIAL",
       status: "active",
@@ -27,7 +27,7 @@
       isPendingHotmartLink: false,
       checkoutUrl: "https://pay.hotmart.com/T107479074N?off=mgwnab3h",
       whatsappNumber: "+55 11 99616-0910",
-      whatsappPrefillText: "Olá Professor Leo! Quero tirar uma dúvida sobre a matrícula no Magic Stories Club Anual.",
+      whatsappPrefillText: "Olá Professor Leo! Quero tirar uma dúvida sobre a matrícula no AgoraEuFalo English Club Anual.",
       grantedCategories: ["member_pago"],
       subscription: {
         billingPeriod: "annual"
@@ -56,7 +56,7 @@
       },
       hotmartSetupSpec: {
         hotmartProductId: "8460579",
-        suggestedProductName: "AgoraEuFalo • Magic Stories Club (Anual)",
+        suggestedProductName: "AgoraEuFalo • AgoraEuFalo English Club (Anual)",
         format: "Assinatura Anual (Recorrência a cada 12 meses)",
         suggestedOfferCode: "CLUB_ANUAL_2026",
         regularPriceFormatted: "R$ 997,00",
@@ -70,10 +70,10 @@
     },
     {
       id: "ms-club-mensal",
-      title: "Magic Stories Club • Assinatura Mensal",
+      title: "AgoraEuFalo English Club • Assinatura Mensal",
       slug: "ms-club-mensal",
       productId: "ms-club",
-      productTitle: "Magic Stories Club",
+      productTitle: "AgoraEuFalo English Club",
       hotmartProductId: "8460579",
       badge: "RECORRÊNCIA MENSAL",
       status: "active",
@@ -81,7 +81,7 @@
       isPendingHotmartLink: false,
       checkoutUrl: "https://pay.hotmart.com/T107479074N?off=fwk42n3u",
       whatsappNumber: "+55 11 99616-0910",
-      whatsappPrefillText: "Olá Professor Leo! Gostaria de saber mais sobre a assinatura mensal do Magic Stories Club.",
+      whatsappPrefillText: "Olá Professor Leo! Gostaria de saber mais sobre a assinatura mensal do AgoraEuFalo English Club.",
       grantedCategories: ["member_pago"],
       subscription: {
         billingPeriod: "monthly"
@@ -110,7 +110,7 @@
       },
       hotmartSetupSpec: {
         hotmartProductId: "8460579",
-        suggestedProductName: "AgoraEuFalo • Magic Stories Club (Mensal)",
+        suggestedProductName: "AgoraEuFalo • AgoraEuFalo English Club (Mensal)",
         format: "Assinatura Mensal (Cobrança recorrente todo mês)",
         suggestedOfferCode: "CLUB_MENSAL_59",
         regularPriceFormatted: "R$ 79,00/mês",
@@ -384,10 +384,10 @@
     },
     {
       id: "trial-7-dias-gratis",
-      title: "Degustação 7 Dias Grátis • Magic Stories Club",
+      title: "Degustação 7 Dias Grátis • AgoraEuFalo English Club",
       slug: "trial-7-dias-gratis",
       productId: "ms-club",
-      productTitle: "Magic Stories Club",
+      productTitle: "AgoraEuFalo English Club",
       hotmartProductId: "8460579",
       badge: "🎁 7 DIAS GRÁTIS",
       status: "active",
@@ -424,7 +424,7 @@
       },
       hotmartSetupSpec: {
         hotmartProductId: "8460579",
-        suggestedProductName: "Magic Stories Club • Período de Testes 7 Dias",
+        suggestedProductName: "AgoraEuFalo English Club • Período de Testes 7 Dias",
         format: "Assinatura com Período de Teste Gratuito",
         suggestedOfferCode: "TRIAL_7D_FREE",
         regularPriceFormatted: "R$ 59,00/mês",
@@ -494,7 +494,7 @@
       title: "Upgrade de Fidelidade • Transição com Crédito para o Club Anual",
       slug: "migracao-upgrade-club",
       productId: "ms-club",
-      productTitle: "Magic Stories Club (Upgrade Exclusivo)",
+      productTitle: "AgoraEuFalo English Club (Upgrade Exclusivo)",
       hotmartProductId: "8460579",
       category: "migration",
       badge: "🚀 UPGRADE FIDELIDADE",
@@ -503,7 +503,7 @@
       isPendingHotmartLink: true,
       checkoutUrl: "https://pay.hotmart.com/OFFER_MIGRACAO_CLUB_297",
       whatsappNumber: "+55 11 99616-0910",
-      whatsappPrefillText: "Olá Professor Leo! Quero fazer o upgrade com desconto de ex-aluno para o Magic Stories Club Anual por R$ 297.",
+      whatsappPrefillText: "Olá Professor Leo! Quero fazer o upgrade com desconto de ex-aluno para o AgoraEuFalo English Club Anual por R$ 297.",
       grantedCategories: ["member_pago"],
       subscription: {
         billingPeriod: "annual"
@@ -532,7 +532,7 @@
       },
       hotmartSetupSpec: {
         hotmartProductId: "8460579",
-        suggestedProductName: "Magic Stories Club Anual • Upgrade Alunos Anteriores",
+        suggestedProductName: "AgoraEuFalo English Club Anual • Upgrade Alunos Anteriores",
         format: "Assinatura Anual com Desconto Especial de Migração",
         suggestedOfferCode: "MIGRACAO_CLUB_297",
         regularPriceFormatted: "R$ 497,00",
@@ -1039,7 +1039,7 @@
         title: f.title?.stringValue || id,
         slug: f.slug?.stringValue || id,
         productId: prodId,
-        productTitle: f.productTitle?.stringValue || "Magic Stories Club",
+        productTitle: f.productTitle?.stringValue || "AgoraEuFalo English Club",
         hotmartProductId: hmId,
         badge: f.badge?.stringValue || "OFERTA",
         status: f.status?.stringValue || "active",

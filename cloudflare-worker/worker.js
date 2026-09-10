@@ -11,20 +11,20 @@ const FIRESTORE_API_KEY = "AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk";
 
 // Mapeamento Oficial de Produtos & Categorias do AgoraEuFalo
 const PRODUCT_CATEGORY_MAPPING = {
-  // Magic Stories Club (Anual & Mensal)
+  // AgoraEuFalo English Club (Anual & Mensal)
   "8460579": {
     categories: ["member_free", "member_pago"],
     subscription: { billingPeriod: "annual" },
     role: "student",
     enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas"],
-    productName: "Magic Stories Club"
+    productName: "AgoraEuFalo English Club"
   },
   "MAGIC_STORIES_CLUB": {
     categories: ["member_free", "member_pago"],
     subscription: { billingPeriod: "annual" },
     role: "student",
     enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas"],
-    productName: "Magic Stories Club (Assinatura Anual)"
+    productName: "AgoraEuFalo English Club (Assinatura Anual)"
   },
   // Projeto AgoraEuFalo 2026 (Mentoria VIP)
   "PROJETO_AEF_2026": {
@@ -131,7 +131,7 @@ export default {
       const name = (buyer.name || payload.name || (email ? email.split("@")[0] : "Aluno AgoraEuFalo")).trim();
       const phone = buyer.checkout_phone || buyer.phone || "";
       const prodId = String(product.id || payload.product_id || "8460579");
-      const prodName = product.name || payload.product_name || "Magic Stories Club";
+      const prodName = product.name || payload.product_name || "AgoraEuFalo English Club";
       const offerCode = (purchase.offer?.code || payload.offer_code || "").toUpperCase();
       const txId = purchase.transaction || data.transaction || `tx_${Date.now()}`;
       const priceVal = purchase.price?.value || payload.price || 0;
@@ -164,7 +164,7 @@ export default {
           subscription: { billingPeriod: "monthly" },
           role: "student",
           enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas"],
-          productName: "Magic Stories Club • Assinatura Mensal"
+          productName: "AgoraEuFalo English Club • Assinatura Mensal"
         };
       }
 
