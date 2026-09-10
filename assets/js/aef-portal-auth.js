@@ -220,6 +220,27 @@
           lastLoginAt: new Date().toISOString()
         });
       }
+
+      if (profile) {
+        const cleanEmail = email.toLowerCase().trim();
+        const legacyId = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
+        if (legacyId !== cred.user.uid) {
+          const legacyDoc = await this.db.collection('users').doc(legacyId).get();
+          if (legacyDoc.exists) {
+             const legacyData = legacyDoc.data();
+             profile.tier = legacyData.tier || profile.tier;
+             profile.categories = legacyData.categories || profile.categories || [];
+             profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), ...(legacyData.enrolledProducts || [])]));
+             profile.subscription = legacyData.subscription || profile.subscription;
+             profile.purchasedProducts = legacyData.purchasedProducts || profile.purchasedProducts;
+             profile.lastTransaction = legacyData.lastTransaction || profile.lastTransaction;
+
+             await this.db.collection('users').doc(cred.user.uid).set(profile, { merge: true });
+             await this.db.collection('users').doc(legacyId).delete();
+          }
+        }
+      }
+
       this.currentProfile = profile;
       this._syncLocalStorage(profile);
       return { user: cred.user, profile };
@@ -277,6 +298,26 @@
           profile.avatarUrl = user.photoURL;
         }
         await this.db.collection('users').doc(user.uid).update(updates);
+      }
+
+      if (profile) {
+        const cleanEmail = user.email.toLowerCase().trim();
+        const legacyId = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
+        if (legacyId !== user.uid) {
+          const legacyDoc = await this.db.collection('users').doc(legacyId).get();
+          if (legacyDoc.exists) {
+             const legacyData = legacyDoc.data();
+             profile.tier = legacyData.tier || profile.tier;
+             profile.categories = legacyData.categories || profile.categories || [];
+             profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), ...(legacyData.enrolledProducts || [])]));
+             profile.subscription = legacyData.subscription || profile.subscription;
+             profile.purchasedProducts = legacyData.purchasedProducts || profile.purchasedProducts;
+             profile.lastTransaction = legacyData.lastTransaction || profile.lastTransaction;
+
+             await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
+             await this.db.collection('users').doc(legacyId).delete();
+          }
+        }
       }
 
       this.currentProfile = profile;
