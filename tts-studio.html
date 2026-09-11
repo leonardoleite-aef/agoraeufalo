@@ -1309,7 +1309,7 @@
     // 3. INITIALIZATION
     // =========================================================================
     document.addEventListener('DOMContentLoaded', async () => {
-      if (window.aefPortalAuth) await window.aefPortalAuth.init();
+      if (window.aefPortalAuth && typeof window.aefPortalAuth.ready === 'function') await window.aefPortalAuth.ready();
       // Load courses for publish modal
       if (window.aefCloudSync) {
         window.aefCloudSync.getCoursesHierarchy().then(hierarchy => {
