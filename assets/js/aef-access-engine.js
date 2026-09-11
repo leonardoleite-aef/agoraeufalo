@@ -152,17 +152,29 @@
       return true;
     }
 
-    // 4. Resolve e filtra categorias ativas
+    // 4. Resolve e filtra categorias ativas do aluno
     let userCats = resolveUserCategories(user);
     
     // Se não tiver assinatura ativa, remove 'member_pago' e 'member_mentoria'
-    // pois o acesso deve cair de volta para 'member_free' + 'venda_avulsa'
+    // pois o acesso deve cair de volta para 'member_free'
     if (userCats.includes(MEMBER_CATEGORIES.PAGO) || userCats.includes(MEMBER_CATEGORIES.MENTORIA)) {
       if (!isSubscriptionActive(user)) {
         userCats = userCats.filter(c => c !== MEMBER_CATEGORIES.PAGO && c !== MEMBER_CATEGORIES.MENTORIA);
       }
     }
 
+    // 5. Verifica o Modelo de Acesso do Curso (Nova Taxonomia)
+    if (course.accessTier) {
+      if (course.accessTier === 'free') return true;
+      if (course.accessTier === 'all_access') {
+        return userCats.some(cat => [MEMBER_CATEGORIES.PAGO, MEMBER_CATEGORIES.MENTORIA, MEMBER_CATEGORIES.LEGADO_1, MEMBER_CATEGORIES.LEGADO_2].includes(cat));
+      }
+      if (course.accessTier === 'standalone') {
+        return false; // Apenas compras diretas dão acesso (já validado no passo 3)
+      }
+    }
+
+    // Fallback Legado
     const courseCats = resolveCourseCategories(course);
     return userCats.some(cat => courseCats.includes(cat));
   }

@@ -56,18 +56,30 @@ export interface AEFUser {
   updatedAt?: string;
 }
 
+// Nova Taxonomia de Cursos
+export type CourseCategory = 
+  | 'magic_stories' 
+  | 'foundations' 
+  | 'survival' 
+  | 'real_english';
+
+export type CourseAccessTier = 
+  | 'all_access' 
+  | 'standalone' 
+  | 'free';
+
 // Course/Product representation
 export interface AEFCourse {
   id: string;
   title: string;
+  slug?: string;
   
-  // -- NEW SCHEMA --
-  accessCategories: UserCategory[];
-  availableForPurchase: boolean; // Indicates if it acts as a standalone "Venda Avulsa" product
-  freeModuleIds?: string[];      // Module IDs that are explicitly free, even in paid courses
-  
-  // -- BACKWARD COMPATIBILITY (Legacy) --
-  tierRequired: string;
+  // -- NEW TAXONOMY --
+  categories: CourseCategory[];
+  accessTier: CourseAccessTier;
+  priceInCents?: number;
+  isPublished?: boolean;
+  sortOrder?: number;
 }
 
 // Module representation inside a Course

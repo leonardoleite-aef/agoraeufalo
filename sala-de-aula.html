@@ -902,7 +902,7 @@
       const isFreeStudent = currentStudentTier === 'free';
       const isFreeModuleForCta = (activeModule && activeModule.isFreeTier === true) || (
         activeCourse && (
-          activeCourse.availableInFreeTier === true ||
+          activeCourse.accessTier === 'free' ||
           activeCourse.tierRequired === 'free'
         ) && activeModule && activeCourse.modules && activeCourse.modules[0]?.id === activeModule.id
       );
@@ -1342,7 +1342,7 @@
             const isAdmin = auth ? auth.isAdmin() : false;
             const currentTier = auth ? auth.getActiveTier() : 'free';
             const enrolled = (auth ? auth.getEnrolledProducts() : []) || [];
-            const isCourseFree = activeCourse && (activeCourse.tierRequired === 'free' || activeCourse.availableInFreeTier === true);
+            const isCourseFree = activeCourse && (activeCourse.accessTier === 'free' || activeCourse.tierRequired === 'free');
             const isEnrolled = enrolled.includes(activeCourse?.id) || enrolled.includes('all_access_master');
             return isAdmin || isCourseFree || isModuleFree || isEnrolled;
           })();

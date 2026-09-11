@@ -713,75 +713,8 @@
       }
     }
 
-    // Matriz de Cursos Oficial (Single Source of Truth)
-    const OFFICIAL_COURSES_MATRIX = {
-      "dtc_curso": {
-        id: "dtc_curso",
-        title: "Dates & Times • Curso Rápido",
-        slug: "dtc_curso",
-        badge: "CURSO LIBERADO",
-        tierRequired: "free",
-        availableInFreeTier: true,
-        published: true,
-        coverImageUrl: "assets/images/cover-dates-and-times-square.jpg",
-        description: "Aprenda tudo sobre datas, horas, uso de tempo e períodos em inglês. Domine dias, meses, horas e expressões temporais para falar no reflexo.",
-        totalLessons: 8,
-        completedLessons: 0
-      },
-      "english-quickstart": {
-        id: "english-quickstart",
-        title: "English QuickStart • Fundamentos da Fala",
-        slug: "english-quickstart",
-        badge: "EXCLUSIVO CLUB",
-        tierRequired: "club_anual",
-        availableInFreeTier: false,
-        includedInClubSubscription: true,
-        published: true,
-        coverImageUrl: "assets/images/cover-english-quickstart.jpg?v=20260905",
-        description: "O acelerador de fundamentos para destravar a escuta e a produção de fala inicial sem bloqueios.",
-        totalLessons: 5,
-        completedLessons: 0
-      },
-      "ms-legacy": {
-        id: "ms-legacy",
-        title: "Magic Stories Legacy • O Acervo Clássico",
-        slug: "ms-legacy",
-        badge: "LEGACY CLUB",
-        tierRequired: "club_anual",
-        published: true,
-        coverImageUrl: "assets/images/cover-magic-stories-cinema.jpg?v=20260905",
-        description: "O acervo histórico das 30 histórias clássicas do Método Magic Stories, com áudios narrados originais, quebra em chunks, treinos de reflexo e apostilas em PDF.",
-        totalLessons: 18,
-        completedLessons: 0
-      },
-      "frases-prontas": {
-        id: "frases-prontas",
-        title: "Frases Prontas • Automação Oral",
-        slug: "frases-prontas",
-        badge: "EM BREVE",
-        tierRequired: "club_anual",
-        published: true,
-        coverImageUrl: "assets/images/cover-frases-prontas.jpg",
-        description: "3 Módulos de expressões fixas da vida real para falar no reflexo sem traduzir mentalmente do português.",
-        totalLessons: 18,
-        completedLessons: 0
-      },
-      "first-steps": {
-        id: "first-steps",
-        title: "First Steps • Os Primeiros Passos no AgoraEuFalo",
-        slug: "first-steps",
-        badge: "EX-ALUNO",
-        tierRequired: "enrolled_only",
-        published: true,
-        coverImageUrl: "assets/images/cover-default-aef.jpg",
-        description: "O treinamento histórico que deu início à jornada no Método AgoraEuFalo. Acesso de resgate liberado exclusivamente para alunos das turmas clássicas.",
-        totalLessons: 10,
-        completedLessons: 0
-      }
-    };
-
     // Fonte Canônica do Catálogo do Portal (Disponível Globalmente)
-    window.AEFCoursesMatrix = window.AEFCoursesMatrix || Object.assign({}, OFFICIAL_COURSES_MATRIX, window.AEF_COURSES_REGISTRY || {});
+    window.AEFCoursesMatrix = window.AEFCoursesMatrix || Object.assign({}, window.AEF_COURSES_REGISTRY || {});
 
     // ——— 1. PROFILE DROPDOWN UX CONTROLLER ———
     window.toggleProfileDropdown = (e) => {
@@ -1402,6 +1335,9 @@
                 freeTierCtaMessage: f.freeTierCtaMessage?.stringValue || '',
                 freeTierCtaUrl: f.freeTierCtaUrl?.stringValue || '',
                 accessCategories: f.accessCategories?.arrayValue?.values ? f.accessCategories.arrayValue.values.map(v => v.stringValue) : [],
+                categories: f.categories?.arrayValue?.values ? f.categories.arrayValue.values.map(v => v.stringValue) : [],
+                accessTier: f.accessTier?.stringValue || '',
+                priceInCents: f.priceInCents?.integerValue ? parseInt(f.priceInCents.integerValue, 10) : null,
                 availableForPurchase: f.availableForPurchase?.booleanValue ?? false,
                 availableStandalone: f.availableStandalone?.booleanValue ?? false,
                 standalonePrice: f.standalonePrice?.stringValue || '',
@@ -1476,9 +1412,28 @@
 
           const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
           const completedInThisCourse = courseProg.completedLessons || [];
-          const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 8);
-          const progressPercent = totalLessons ? Math.min(100, Math.round((completedInThisCourse.length / totalLessons) * 100)) : 0;
+          const hasTotalLessons = course.totalLessons !== undefined || (course.modules && course.modules.length > 0);
+          const totalLessons = course.totalLessons || (course.modules ? course.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 0);
+          const progressPercent = (totalLessons && totalLessons > 0) ? Math.min(100, Math.round((completedInThisCourse.length / totalLessons) * 100)) : 0;
           
+          const progressHtml = hasTotalLessons && totalLessons > 0 ? `
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
+                <span>${completedInThisCourse.length}/${totalLessons} Aulas</span>
+                <span class="text-[#C68A36] font-black">${progressPercent}%</span>
+              </div>
+              <div class="w-full bg-[#FAF8F5] border border-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#C68A36] h-full rounded-full transition-all duration-300" style="width: ${progressPercent}%;"></div>
+              </div>
+            </div>
+          ` : `
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
+                <span>Aulas em andamento</span>
+              </div>
+            </div>
+          `;
+
           const resumeLessonId = courseProg.lastLessonId;
           const resumeUrl = resumeLessonId 
             ? `/sala?curso=${course.slug || course.id}&modulo=${courseProg.lastModuleId || ''}&aula=${resumeLessonId}`
@@ -1502,19 +1457,15 @@
                   <div class="p-4 sm:p-5 space-y-2">
                     <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
                     <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
+                    <!-- CATEGORY TAGS -->
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                      ${(course.categories || []).map(cat => `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">${cat === 'magic_stories' ? '🪄 Magic Stories' : cat === 'foundations' ? '🧱 Foundations' : cat === 'survival' ? '🆘 Survival' : cat === 'real_english' ? '🎙️ Real English' : cat}</span>`).join('')}
+                    </div>
                   </div>
                 </div>
 
                 <div class="p-4 sm:p-5 pt-0 space-y-3">
-                  <div class="space-y-1">
-                    <div class="flex items-center justify-between text-[11px] font-mono font-bold text-[#7A7369]">
-                      <span>${completedInThisCourse.length}/${totalLessons} Aulas</span>
-                      <span class="text-[#C68A36] font-black">${progressPercent}%</span>
-                    </div>
-                    <div class="w-full bg-[#FAF8F5] border border-[#EAE5DC] rounded-full h-1.5 overflow-hidden">
-                      <div class="bg-[#C68A36] h-full rounded-full transition-all duration-300" style="width: ${progressPercent}%;"></div>
-                    </div>
-                  </div>
+                  ${progressHtml}
 
                   <div class="grid grid-cols-2 gap-2 pt-1">
                     <a href="/curso?curso=${course.slug || course.id}" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-1 shadow-2xs">
@@ -1532,9 +1483,19 @@
 
           // ——— 2. SEÇÃO "CATÁLOGO COMPLETO DE CURSOS" (RENDERIZA TODOS OS CURSOS) ———
           if (!hasAccess) {
-            // Card Bloqueado com Cadeado 🔒 e Gatilho para o Upsell Modal
+            
+            const catLabels = {
+              'magic_stories': '🪄 Magic Stories',
+              'foundations': '🧱 Foundations',
+              'survival': '🆘 Survival',
+              'real_english': '🎙️ Real English'
+            };
+            
+            let catHtml = (course.categories || []).map(cat => `<span class="px-2 py-1 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">${catLabels[cat] || cat}</span>`).join('');
+
+            // Card Bloqueado com Cadeado 🔒 e Gatilho para a Landing Page (Vitrine)
             allCoursesHtml += `
-              <div onclick="window.openUpsellModal('${course.id}')" class="bg-white border-2 border-slate-200/90 hover:border-amber-400/80 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition flex flex-col justify-between relative group cursor-pointer">
+              <div onclick="window.location.href='/curso?curso=${course.slug || course.id}'" class="bg-white border-2 border-slate-200/90 hover:border-amber-400/80 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition flex flex-col justify-between relative group cursor-pointer">
                 <div>
                   <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
                     <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover opacity-75 group-hover:opacity-90 group-hover:scale-105 transition duration-300">
@@ -1542,7 +1503,7 @@
                     
                     <span class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-slate-950/90 text-amber-300 border border-amber-400/50 font-mono font-black text-[9px] uppercase tracking-wider shadow-md flex items-center gap-1.5">
                       <span class="text-xs">🔒</span>
-                      <span>BLOQUEADO • UPGRADE</span>
+                      <span>BLOQUEADO</span>
                     </span>
 
                     <div class="absolute inset-0 flex items-center justify-center">
@@ -1558,14 +1519,19 @@
                       <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
                     </div>
                     <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || 'Treinamento exclusivo do ecossistema AgoraEuFalo. Clique para desbloquear seu acesso.'}</p>
+                    
+                    <!-- CATEGORY TAGS (Blog Archive Style) -->
+                    <div class="flex flex-wrap gap-1.5 pt-2">
+                      ${catHtml}
+                    </div>
                   </div>
                 </div>
 
                 <div class="p-4 sm:p-5 pt-0">
-                  <button type="button" onclick="event.stopPropagation(); window.openUpsellModal('${course.id}')" class="w-full py-2.5 rounded-xl bg-slate-900 group-hover:bg-[#C68A36] text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
-                    <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400 group-hover:text-white"></i>
-                    <span>Desbloquear Curso</span>
-                  </button>
+                  <a href="/curso?curso=${course.slug || course.id}" class="w-full py-2.5 rounded-xl bg-slate-900 group-hover:bg-[#C68A36] text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+                    <span>Ver Página do Curso</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  </a>
                 </div>
               </div>
             `;
