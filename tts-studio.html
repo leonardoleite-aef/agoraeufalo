@@ -1424,12 +1424,10 @@
 
       for (const model of modelsToTry) {
         try {
-          // ✅ CORREÇÃO CRÍTICA: usa APENAS o header x-goog-api-key
-          // NÃO colocar ?key= na URL junto com o header — causa "invalid authentication credentials"
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+          // ✅ CORREÇÃO: Usar ?key= na URL para evitar problemas de CORS/headers em alguns navegadores
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${cleanKey}`;
           const headers = {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': cleanKey
+            'Content-Type': 'application/json'
           };
 
           // Retry automático 1x em caso de erro 500 (recomendação oficial Gemini TTS)
@@ -2161,7 +2159,7 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
         );
         if (isAuthError) {
           openConfigModal();
-          showToast("❌ Erro de autenticação na chave Gemini. Verifique sua chave no modal de API Key.", "error", 8000);
+          showToast(`❌ Erro de autenticação na chave Gemini: ${err.message}`, "error", 10000);
         } else {
           showToast(`Falha na geração: ${err.message}`, "error", 7000);
         }
