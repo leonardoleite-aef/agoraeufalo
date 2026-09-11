@@ -2669,7 +2669,7 @@ Speak out loud every day, connect with the emotion of the words, and let fluency
       // 2. Call Gemini API Multimodal
       const model = 'gemini-3.7-flash';
       const cleanKey = (apiKey || '').replace(/\s+/g, '');
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${cleanKey}`;
 
       const systemPrompt = `You are the master bilingual speech-to-text transcriber for Professor Leonardo Leite's AgoraEuFalo English Mentorship ecosystem.
 Listen carefully to this audio recording by Professor Leo, which naturally combines Brazilian Portuguese explanations and English spoken sentences/drills.
@@ -2713,7 +2713,7 @@ Example output format:
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-goog-api-key': cleanKey
+          
         },
         body: JSON.stringify(payload)
       });
