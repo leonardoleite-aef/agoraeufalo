@@ -73,7 +73,7 @@
   <!-- ========================================================================= -->
   <!-- 1. TOP APP HEADER                                                         -->
   <!-- ========================================================================= -->
-  <header class="bg-[#0D1E36] text-white border-b border-white/10 sticky top-[45px] z-40 shadow-sm">
+  <header class="bg-[#0D1E36] text-white border-b border-white/10 sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
       
       <!-- Left: Hamburger Drawer Trigger + Logo -->
@@ -91,9 +91,7 @@
 
       <!-- Desktop Center Nav Links -->
       <nav class="hidden md:flex items-center gap-6 text-xs font-bold text-slate-300">
-        <a href="/" class="text-white border-b-2 border-[#C68A36] pb-0.5">Dashboard</a>
-        <a href="/sala?curso=ms-legacy" class="hover:text-white transition">Sala de Aula</a>
-        <a href="/player" class="hover:text-white transition">Training Player</a>
+        <!-- Links removidos: A navegação de cursos é feita pelos próprios cards na dashboard. -->
       </nav>
 
       <!-- Right: Direct Training CTA + Profile Dropdown -->
@@ -524,26 +522,15 @@
       </div>
 
       <!-- Drawer Nav Links -->
+      <!-- Vertical Navigation Menu -->
       <nav class="space-y-1 text-xs font-bold">
-        <a href="/" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#F5EFE6] text-[#2C2416] border border-[#E8E0D2] shadow-xs">
+        <a href="portal.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl bg-[#FAF8F5] text-[#C68A36] transition">
           <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#C68A36]"></i>
-          <span>Dashboard Geral</span>
+          <span>Dashboard</span>
         </a>
-        <a href="/sala?curso=ms-legacy" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="play-circle" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Sala de Aula</span>
-        </a>
-        <a href="/player" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+        <a href="player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Training Player</span>
-        </a>
-        <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Aulas ao Vivo (Meet)</span>
-        </a>
-        <a href="https://agoraeufalo.com.br/blog" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
-          <i data-lucide="newspaper" class="w-4 h-4 text-[#8C8275]"></i>
-          <span>Blog & Sacadas do Leo</span>
         </a>
       </nav>
     </div>
