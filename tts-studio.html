@@ -1308,7 +1308,8 @@
     // =========================================================================
     // 3. INITIALIZATION
     // =========================================================================
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.aefPortalAuth) await window.aefPortalAuth.init();
       // Load courses for publish modal
       if (window.aefCloudSync) {
         window.aefCloudSync.getCoursesHierarchy().then(hierarchy => {
@@ -3046,17 +3047,18 @@ Example output format:
         const trackData = {
           id: trackId,
           title: data.title,
+          type: 'lesson',
           category: data.category,
           duration: data.durationStr,
           durationSec: durationSec,
           summary: data.summary,
           goldenTip: data.goldenTip,
-          videoUrl: data.videoUrlInput || "",
           speakers: STATE.currentMeta?.speakers || "Gemini HD",
           scriptRaw: STATE.currentMeta?.script || "",
           sentences: data.isVideo ? [] : finalSentences,
-          assignedTo: data.assignedTo,
-          coverImage: coverImg
+          thumbnailUrl: coverImg,
+          coverImageUrl: coverImg,
+          hasTrainingTrack: true
         };
 
         if (window.aefAudioHub) {
@@ -3085,6 +3087,26 @@ Example output format:
             } catch (upErr) {
               console.warn("⚠️ Upload de áudio falhou:", upErr);
             }
+          }
+
+          // Build media array required by Course Editor (admin-cursos.html)
+          trackData.media = [];
+          if (data.isVideo && (trackData.videoUrl || data.videoUrlInput)) {
+            trackData.media.push({
+              type: 'video_mp4',
+              url: trackData.videoUrl || data.videoUrlInput,
+              title: "Vídeo Principal",
+              durationStr: trackData.duration,
+              thumbnailUrl: trackData.thumbnailUrl
+            });
+          } else if (trackData.audioUrl) {
+            trackData.media.push({
+              type: 'audio_mp3',
+              url: trackData.audioUrl,
+              title: "Áudio Principal",
+              durationStr: trackData.duration,
+              thumbnailUrl: trackData.thumbnailUrl
+            });
           }
 
           if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando na Hierarquia do Curso...</span>`;

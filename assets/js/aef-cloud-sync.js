@@ -438,6 +438,57 @@
           .collection("modules").doc(moduleId)
           .collection("lessons").doc(lessonId)
           .set(payload, { merge: true });
+      } else {
+        console.warn("[AEFCloudSync] Fallback REST para salvar lesson...");
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}?`;
+        const fields = {};
+        for (const [k, v] of Object.entries(payload)) {
+          if (v === undefined) continue;
+          if (k === 'media' && Array.isArray(v)) {
+            fields[k] = {
+              arrayValue: {
+                values: v.map(m => {
+                  const mf = {
+                    type: { stringValue: m.type || 'video_youtube' },
+                    url: { stringValue: m.url || '' },
+                    title: { stringValue: m.title || '' }
+                  };
+                  if (m.durationStr) mf.durationStr = { stringValue: m.durationStr };
+                  if (m.thumbnailUrl) mf.thumbnailUrl = { stringValue: m.thumbnailUrl };
+                  return { mapValue: { fields: mf } };
+                })
+              }
+            };
+          } else if (k === 'sentences' && Array.isArray(v)) {
+            fields[k] = {
+              arrayValue: {
+                values: v.map(s => {
+                  const sf = {
+                    start: { doubleValue: s.start || 0 },
+                    text: { stringValue: s.text || '' },
+                    speaker: { stringValue: s.speaker || '' }
+                  };
+                  if (s.spokenTranslation) sf.spokenTranslation = { stringValue: s.spokenTranslation };
+                  if (s.notes) sf.notes = { stringValue: s.notes };
+                  return { mapValue: { fields: sf } };
+                })
+              }
+            };
+          } else if (k === 'assignedTo' && Array.isArray(v)) {
+             fields[k] = { arrayValue: { values: v.map(str => ({ stringValue: str })) } };
+          } else if (typeof v === 'boolean') {
+            fields[k] = { booleanValue: v };
+          } else if (typeof v === 'number') {
+            fields[k] = { doubleValue: v };
+          } else if (typeof v === 'string') {
+            fields[k] = { stringValue: v };
+          }
+        }
+        await fetch(restUrl + "updateMask.fieldPaths=" + Object.keys(fields).join("&updateMask.fieldPaths="), {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: restUrl.split('?')[0].replace('https://firestore.googleapis.com/v1/', ''), fields: fields })
+        });
       }
       return payload;
     }
