@@ -822,7 +822,7 @@
 
         try {
           if (syncEngine && typeof syncEngine.getCoursesHierarchy === 'function') {
-            hierarchy = await syncEngine.getCoursesHierarchy(window.AEF_COURSES_REGISTRY || null); console.log("getCoursesHierarchy returned", hierarchy);
+            hierarchy = await syncEngine.getCoursesHierarchy(window.AEF_COURSES_REGISTRY || null);
           } else if (window.AEF_COURSES_REGISTRY) {
             hierarchy = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY));
           }

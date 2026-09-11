@@ -129,7 +129,9 @@ export default {
         '/sala-de-aula': '/sala',
         '/curso.html': '/curso',
         '/treino/player.html': '/player',
-        '/treino/player': '/player'
+        '/player.html': '/player',
+        '/treino/player': '/player',
+        '/player.html': '/player'
       };
 
       if (appLegacyRedirects[path]) {
@@ -143,7 +145,7 @@ export default {
         '/cadastro': '/cadastro.html',
         '/sala': '/sala-de-aula.html',
         '/curso': '/curso.html',
-        '/player': '/treino/player.html',
+        '/player': '/player.html',
         '/migracao': '/migracao/index.html'
       };
 
@@ -167,7 +169,9 @@ export default {
         '/curso.html': '/curso',
         '/player': '/player',
         '/treino/player': '/player',
+        '/player.html': '/player',
         '/treino/player.html': '/player',
+        '/player.html': '/player',
         '/login': '/login',
         '/login.html': '/login',
         '/cadastro': '/cadastro',
