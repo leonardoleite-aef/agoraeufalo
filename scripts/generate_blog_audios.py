@@ -12,7 +12,7 @@ import urllib.request
 import lameenc
 
 API_KEY = os.environ.get("GEMINI_API_KEY", "")
-MODEL = "gemini-2.5-flash-preview-tts"
+MODEL = "gemini-3.1-flash-tts-preview"
 
 POST_1_ITEMS = [
     {

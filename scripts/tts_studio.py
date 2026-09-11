@@ -26,7 +26,7 @@ import urllib.request
 import urllib.error
 import subprocess
 
-GEMINI_DEFAULT_MODEL = "gemini-2.5-flash-preview-tts"
+GEMINI_DEFAULT_MODEL = "gemini-3.1-flash-tts-preview"
 
 def get_api_key():
     key = os.environ.get("GEMINI_API_KEY")
