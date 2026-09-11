@@ -1419,10 +1419,11 @@
 
       const profile = (window.aefPortalAuth && window.aefPortalAuth.currentProfile) || {};
       const userRole = profile.role || localStorage.getItem("aef_user_role") || "student";
+      const dynamicIsAdmin = (window.aefPortalAuth && window.aefPortalAuth.isAdmin()) || userRole === 'admin' || isAdmin;
       const userObj = {
         ...(profile || {}),
         uid: (profile && profile.uid) || (window.aefPortalAuth?.currentUser?.uid),
-        role: isAdmin ? 'admin' : userRole,
+        role: dynamicIsAdmin ? 'admin' : userRole,
         tier: currentTier,
         categories: profile.categories,
         purchasedProducts: enrolledProducts || [],
@@ -1435,9 +1436,9 @@
       if (window.AEFAccessEngine && typeof window.AEFAccessEngine.resolveUserCategories === 'function') {
         const cats = window.AEFAccessEngine.resolveUserCategories(userObj);
         const nonFreeCats = cats.filter(c => c !== 'member_free');
-        isOnlyFree = !isAdmin && (nonFreeCats.length === 0);
+        isOnlyFree = !dynamicIsAdmin && (nonFreeCats.length === 0);
       } else {
-        isOnlyFree = !isAdmin && (currentTier === 'free') && (!enrolledProducts || enrolledProducts.length === 0);
+        isOnlyFree = !dynamicIsAdmin && (currentTier === 'free') && (!enrolledProducts || enrolledProducts.length === 0);
       }
       renderMassiveFreeUpsellBanner(isOnlyFree);
 
@@ -1530,35 +1531,7 @@
           }
 
           // ——— 2. SEÇÃO "CATÁLOGO COMPLETO DE CURSOS" (RENDERIZA TODOS OS CURSOS) ———
-          if (hasAccess) {
-            // Card Liberado
-            allCoursesHtml += `
-              <div class="bg-white border border-[#EAE5DC] rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-emerald-500/50 transition flex flex-col justify-between group">
-                <div>
-                  <div class="relative w-full h-36 bg-[#0D1E36] overflow-hidden">
-                    <img src="${course.coverImageUrl || 'assets/images/cover-default-aef.jpg'}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
-                    <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
-                      <span>✓</span>
-                      <span>ACESSO LIBERADO</span>
-                    </span>
-                  </div>
-
-                  <div class="p-4 sm:p-5 space-y-2">
-                    <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
-                    <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
-                  </div>
-                </div>
-
-                <div class="p-4 sm:p-5 pt-0">
-                  <a href="/curso?curso=${course.slug || course.id}" class="w-full py-2.5 rounded-xl bg-[#0D1E36] hover:bg-[#C68A36] text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
-                    <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-                    <span>Acessar Treinamento</span>
-                  </a>
-                </div>
-              </div>
-            `;
-          } else {
+          if (!hasAccess) {
             // Card Bloqueado com Cadeado 🔒 e Gatilho para o Upsell Modal
             allCoursesHtml += `
               <div onclick="window.openUpsellModal('${course.id}')" class="bg-white border-2 border-slate-200/90 hover:border-amber-400/80 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition flex flex-col justify-between relative group cursor-pointer">

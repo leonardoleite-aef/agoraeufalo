@@ -500,6 +500,10 @@
           const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
           if (!authed) return;
           userProfile = window.aefPortalAuth.getProfile();
+          if (userProfile) {
+            userProfile.role = window.aefPortalAuth.isAdmin() ? 'admin' : (userProfile.role || 'student');
+            userProfile.purchasedProducts = window.aefPortalAuth.getEnrolledProducts() || userProfile.enrolledProducts || [];
+          }
         } catch (authErr) {
           console.warn("⚠️ Auth Check in Classroom:", authErr);
           return;
@@ -548,7 +552,7 @@
       // 5. Verifica Acesso
       let hasAccess = false;
       if (courseId && baseCourses[courseId]) {
-        hasAccess = window.AEFAccessEngine ? window.AEFAccessEngine.hasAccess(courseId, userProfile) : true;
+        hasAccess = window.AEFAccessEngine ? window.AEFAccessEngine.hasAccess(userProfile, baseCourses[courseId]) : true;
       }
 
       if (!courseId || (courseId && !hasAccess)) {
@@ -571,7 +575,7 @@
         // Não tem courseId na URL (ou lastActivity falhou), busca o primeiro disponível
         courseId = null;
         for (const cid in baseCourses) {
-          if (window.AEFAccessEngine && window.AEFAccessEngine.hasAccess(cid, userProfile)) {
+          if (window.AEFAccessEngine && window.AEFAccessEngine.hasAccess(userProfile, baseCourses[cid])) {
             courseId = cid;
             break;
           }

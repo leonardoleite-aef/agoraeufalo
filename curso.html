@@ -362,7 +362,7 @@
 
       // Suporte a Google Meet, Categorias e Mentoria VIP na barra lateral via AEFAccessEngine
       const auth = window.aefPortalAuth;
-      const user = auth ? { ...(auth.getProfile() || {}), purchasedProducts: (auth.getEnrolledProducts() || []) } : null;
+      const user = auth ? { ...(auth.getProfile() || {}), purchasedProducts: (auth.getEnrolledProducts() || []), role: auth.isAdmin() ? 'admin' : ((auth.getProfile()||{}).role || 'student') } : null;
       const AE = window.AEFAccessEngine;
       const userCats = user && AE ? AE.resolveUserCategories(user) : [];
       const hasCourseAccess = AE ? AE.hasAccess(user, COURSE_DATA) : true;

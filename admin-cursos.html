@@ -1698,7 +1698,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
         ? course.accessCategories
         : (AE ? AE.migrateTierRequiredToCategories(course.tierRequired) : [course.tierRequired || 'free']);
       const badgeText = cats.map(c => c.replace('member_', '').replace('_', ' ')).join(' + ').toUpperCase();
-      document.getElementById("treeCourseBadge").innerText = badgeText || (course.tierRequired || 'free').toUpperCase();
+      document.getElementById("treeCourseTitle").innerText = course.title || course.id;
 
       const publishBtn = document.getElementById("coursePublishBadgeBtn");
       if (publishBtn) {
