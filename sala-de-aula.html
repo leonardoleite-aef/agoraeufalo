@@ -171,7 +171,7 @@
       <!-- Cinema Video Player (with 16:9 Thumbnail Poster) -->
       <div class="bg-[#0A192F] aspect-video w-full relative overflow-hidden shadow-md flex items-center justify-center">
         <div class="w-full h-full" id="videoStage">
-          <video id="mainVideoPlayer" controls playsinline poster="assets/images/thumbs/ms001/thumb_ms001_lr.jpg" class="w-full h-full object-contain bg-black"></video>
+          <video id="mainVideoPlayer" controls controlsList="nodownload" oncontextmenu="return false;" playsinline poster="assets/images/thumbs/ms001/thumb_ms001_lr.jpg" class="w-full h-full object-contain bg-black"></video>
         </div>
       </div>
 
@@ -968,14 +968,14 @@
               <h3 class="text-sm sm:text-base font-black text-white leading-tight font-serif">${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Áudio'))}</h3>
             </div>
             <div class="w-full max-w-md bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-xl">
-              <audio controls playsinline class="w-full" src="${mediaItem.url}"></audio>
+              <audio controls controlsList="nodownload" oncontextmenu="return false;" playsinline class="w-full" src="${mediaItem.url}"></audio>
             </div>
           </div>
         `;
       } else {
         const posterImg = mediaItem.thumbnailUrl || (foundLesson ? foundLesson.thumbnailUrl : '') || '';
         videoStage.innerHTML = `
-          <video controls playsinline poster="${posterImg}" class="w-full h-full object-contain bg-black" src="${mediaItem.url}"></video>
+          <video controls controlsList="nodownload" oncontextmenu="return false;" playsinline poster="${posterImg}" class="w-full h-full object-contain bg-black" src="${mediaItem.url}"></video>
         `;
       }
 
