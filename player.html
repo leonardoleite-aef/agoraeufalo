@@ -1,23 +1,1834 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AgoraEuFalo • English Personal Training Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AgoraEuFalo Player • Treino de Fala e Escuta</title>
+  <meta name="description" content="AgoraEuFalo Player — Seu personal training de inglês no piloto automático. Escuta ativa, reflexo oral e automatização.">
+  <meta name="theme-color" content="#071224">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AEF Player">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <meta name="theme-color" content="#0A192F">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Preserva parâmetros (ex: ?aluno=andre) e redireciona instantaneamente para o Player PWA
-    const search = window.location.search || "";
-    const hash = window.location.hash || "";
-    window.location.replace("treino/player.html" + search + hash);
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            aef: {
+              midnight: '#071224',
+              navy: '#0A192F',
+              card: '#0D1E36',
+              surface: '#112240',
+              hover: '#1B3152',
+              amber: '#F59E0B',
+              'amber-dark': '#D97706',
+              'amber-light': '#FCD34D',
+              border: 'rgba(255, 255, 255, 0.08)'
+            }
+          }
+        }
+      }
+    }
   </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core AEF Ecosystem Scripts -->
+  <script src="assets/js/aef-domain-router.js"></script>
+  <script src="assets/js/aef-courses-registry.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
+  <script src="assets/js/aef-learning-tracker.js"></script>
+
+  <style>
+    /* iOS Safe Area & Base */
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #071224;
+      color: #F8FAFC;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      padding-top: var(--sat);
+      padding-bottom: var(--sab);
+    }
+
+    /* Range Scrubber Customization (Spotify Style) */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      height: 4px;
+      outline: none;
+      transition: height 0.15s ease;
+    }
+    input[type="range"]:hover, input[type="range"]:active {
+      height: 6px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #F59E0B;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+      transition: transform 0.1s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:active {
+      transform: scale(1.3);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #F59E0B;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Scrollbar Utility */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Interactive Karaoke Lyrics */
+    .lyrics-active {
+      color: #F59E0B;
+      font-weight: 700;
+      opacity: 1;
+      transform: scale(1.02);
+      text-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+    }
+    .lyrics-inactive {
+      color: #94A3B8;
+      opacity: 0.45;
+      font-weight: 500;
+    }
+    .lyrics-inactive:hover {
+      opacity: 0.85;
+    }
+
+    /* Ambient Glow Background */
+    .ambient-glow {
+      position: fixed;
+      top: -25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, rgba(7, 18, 36, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Equalizer Bar Animation */
+    @keyframes eqWave {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .eq-bar-1 { animation: eqWave 0.8s ease-in-out infinite; }
+    .eq-bar-2 { animation: eqWave 0.9s ease-in-out infinite 0.2s; }
+    .eq-bar-3 { animation: eqWave 0.7s ease-in-out infinite 0.4s; }
+  </style>
 </head>
-<body style="margin:0; background:#0A192F; display:flex; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; color:#FCD34D;">
-  <div style="text-align:center;">
-    <div style="font-size:32px; margin-bottom:12px;">🎙️</div>
-    <h2 style="font-size:16px; font-weight:700; color:#FFFFFF; margin:0 0 6px 0;">AgoraEuFalo Player</h2>
-    <p style="font-size:12px; color:#94A3B8; margin:0;">Iniciando seu treino de fala...</p>
+<body class="h-full bg-[#071224] text-slate-100 flex flex-col overflow-hidden antialiased selection:bg-amber-500/30 selection:text-amber-200">
+
+  <!-- Ambient Glow -->
+  <div class="ambient-glow"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 0. APP SHELL CONTAINER (MAIN SCROLL AREA)                                 -->
+  <!-- ========================================================================= -->
+  <div id="app-container" class="relative z-10 flex-1 flex flex-col h-full overflow-hidden">
+
+    <!-- TOP GLOBAL BAR -->
+    <header class="w-full max-w-2xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between shrink-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
+          <i data-lucide="headphones" class="w-4 h-4 text-slate-950"></i>
+        </div>
+        <div>
+          <h1 class="text-xs font-bold tracking-wider uppercase text-amber-400 font-mono">AgoraEuFalo</h1>
+          <p class="text-[10px] text-slate-400 font-medium -mt-0.5">Spotify Web Player</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Link para o Portal do Aluno -->
+        <a id="btn-portal-link" href="portal.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 active:scale-95 text-slate-300 hover:text-white text-xs font-semibold transition border border-white/10" title="Ir para o Portal">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span class="hidden sm:inline">Portal</span>
+        </a>
+
+        <!-- Avatar / User Profile -->
+        <div id="user-avatar-btn" class="w-8 h-8 rounded-full bg-slate-800 border border-amber-400/40 flex items-center justify-center text-xs font-bold text-amber-300 overflow-hidden shadow-inner cursor-pointer" title="Perfil do Aluno">
+          <span id="user-initials">AEF</span>
+          <img id="user-avatar-img" class="w-full h-full object-cover hidden" alt="Avatar">
+        </div>
+      </div>
+    </header>
+
+    <!-- VIEWS CONTAINER (SCROLLABLE) -->
+    <main id="views-viewport" class="flex-1 overflow-y-auto no-scrollbar pb-36 px-4 pt-1 max-w-2xl mx-auto w-full">
+
+      <!-- ===================================================================== -->
+      <!-- VIEW 1: HOME / INÍCIO                                                 -->
+      <!-- ===================================================================== -->
+      <section id="view-home" class="space-y-6 transition-opacity duration-200">
+        
+        <!-- Header Saudação -->
+        <div class="pt-2">
+          <p id="home-greeting-time" class="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider">BOM DIA</p>
+          <h2 id="home-greeting-name" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-0.5">
+            Olá, Aluno!
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">O que você vai treinar hoje no seu piloto automático?</p>
+        </div>
+
+        <!-- Hero Card: Continuar de Onde Parou -->
+        <div id="resume-workout-card" class="hidden relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0E223D] via-[#0A192F] to-[#071224] border border-amber-500/25 p-4 sm:p-5 shadow-2xl group transition-all duration-300 hover:border-amber-500/40">
+          <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3.5 min-w-0 flex-1">
+              <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-lg shrink-0 border border-white/10 bg-slate-900">
+                <img id="resume-thumb-img" src="assets/images/cover-default-aef.jpg" alt="Capa" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-slate-950/30"></div>
+                <div class="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[8px] font-mono font-bold">
+                  ÚLTIMO
+                </div>
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <span class="inline-block text-[10px] font-mono text-amber-400 font-semibold uppercase tracking-wider truncate" id="resume-course-title">
+                  CURSO ATIVO
+                </span>
+                <h3 class="text-sm sm:text-base font-bold text-white truncate mt-0.5" id="resume-lesson-title">
+                  Continuar Treino
+                </h3>
+                <p class="text-xs text-slate-400 truncate mt-0.5" id="resume-module-title">
+                  Clique para continuar ouvindo
+                </p>
+              </div>
+            </div>
+
+            <button id="btn-resume-play" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-xl shadow-amber-500/30 transition-transform active:scale-90 shrink-0 cursor-pointer" title="Continuar">
+              <i data-lucide="play" class="w-6 h-6 fill-current ml-0.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Seção: Seus Cursos & Treinos (Biblioteca Autorizada) -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+              <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200 font-mono">Seus Cursos & Treinos</h3>
+            </div>
+            <span id="home-courses-count" class="text-[11px] font-mono text-slate-400">Carregando...</span>
+          </div>
+
+          <!-- Carrossel / Grid de Cursos Acessíveis -->
+          <div id="home-courses-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
+            <!-- Injetado Dinamicamente -->
+            <div class="col-span-2 sm:col-span-3 py-8 text-center text-slate-400 text-xs flex flex-col items-center justify-center gap-2">
+              <div class="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+              <span>Sincronizando seus cursos da nuvem...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção: Mais Conteúdos do Clube (Degustação / Disponíveis) -->
+        <div id="home-other-courses-section" class="hidden space-y-3 pt-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-slate-500"></div>
+              <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 font-mono">Outros Cursos do Ecossistema</h3>
+            </div>
+            <span class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">DEGUSTAÇÃO</span>
+          </div>
+
+          <div id="home-other-courses-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
+            <!-- Injetado Dinamicamente -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- VIEW 2: BIBLIOTECA COMPLETA                                           -->
+      <!-- ===================================================================== -->
+      <section id="view-library" class="hidden space-y-5 transition-opacity duration-200">
+        
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-white">Sua Biblioteca</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Explore todos os módulos, histórias e treinos disponíveis.</p>
+        </div>
+
+        <!-- Campo de Busca -->
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input type="text" id="library-search-input" placeholder="Buscar cursos, aulas, vocabulário..." oninput="window.filterLibrary(this.value)" class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 transition">
+        </div>
+
+        <!-- Chips de Filtro -->
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs">
+          <button onclick="window.setLibraryFilter('all')" id="chip-all" class="px-3.5 py-1.5 rounded-full bg-amber-500 text-slate-950 font-bold transition shrink-0 shadow-xs">Todos</button>
+          <button onclick="window.setLibraryFilter('active')" id="chip-active" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition shrink-0">Disponíveis</button>
+          <button onclick="window.setLibraryFilter('ms')" id="chip-ms" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition shrink-0">Magic Stories</button>
+          <button onclick="window.setLibraryFilter('quickstart')" id="chip-quickstart" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition shrink-0">QuickStart</button>
+        </div>
+
+        <!-- Lista da Biblioteca -->
+        <div id="library-list-container" class="space-y-3">
+          <!-- Injetado dinamicamente -->
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- VIEW 3: COURSE / PLAYLIST VIEW (SPOTIFY ALBUM STYLE)                   -->
+      <!-- ===================================================================== -->
+      <section id="view-course" class="hidden space-y-6 transition-opacity duration-200">
+        
+        <!-- Top Navigation do Álbum -->
+        <div class="flex items-center justify-between">
+          <button onclick="window.navigateTo('home')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold transition active:scale-95 border border-white/10">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            <span>Voltar</span>
+          </button>
+
+          <span id="course-view-badge" class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300">
+            CURSO
+          </span>
+        </div>
+
+        <!-- Hero do Curso (Album Artwork + Detalhes) -->
+        <div class="flex flex-col sm:flex-row items-center sm:items-end gap-5 text-center sm:text-left pt-2">
+          <!-- Capa 1:1 Grande -->
+          <div class="w-44 h-44 sm:w-48 sm:h-48 rounded-3xl overflow-hidden shadow-2xl shadow-black/80 border border-white/15 bg-slate-900 shrink-0 relative group">
+            <img id="course-hero-cover" src="assets/images/cover-default-aef.jpg" alt="Capa do Curso" class="w-full h-full object-cover">
+          </div>
+
+          <div class="min-w-0 flex-1 space-y-2">
+            <p class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest" id="course-hero-kicker">CURSO OFICIAL</p>
+            <h2 id="course-hero-title" class="font-serif text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+              Título do Curso
+            </h2>
+            <p id="course-hero-desc" class="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed">
+              Descrição do curso...
+            </p>
+            <div class="flex items-center justify-center sm:justify-start gap-3 text-xs text-slate-400 font-mono pt-1">
+              <span id="course-hero-modules-count">0 módulos</span>
+              <span>•</span>
+              <span id="course-hero-lessons-count">0 aulas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra de Ações: Botão Play Master + Shuffle -->
+        <div class="flex items-center justify-between border-y border-white/10 py-3.5">
+          <div class="flex items-center gap-3">
+            <button onclick="window.playCourseFromBeginning()" class="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-2 shadow-xl shadow-amber-500/30 transition active:scale-95 cursor-pointer">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+              <span>Começar Treino</span>
+            </button>
+            <button onclick="window.toggleShuffleCourse()" id="btn-course-shuffle" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition active:scale-95" title="Ordem Aleatória">
+              <i data-lucide="shuffle" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <span id="course-hero-access-status" class="text-[11px] font-mono text-emerald-400 font-semibold flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Acesso Liberado
+          </span>
+        </div>
+
+        <!-- Lista de Módulos & Aulas (Tracklist) -->
+        <div id="course-modules-container" class="space-y-4">
+          <!-- Injetado dinamicamente -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ======================================================================= -->
+    <!-- 4. STICKY MINI PLAYER BAR (ABOVE BOTTOM NAV)                            -->
+    <!-- ======================================================================= -->
+    <aside id="mini-player-bar" class="hidden fixed bottom-[72px] sm:bottom-[76px] left-3 right-3 sm:max-w-xl sm:mx-auto z-30 bg-[#0E2038]/95 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-2.5 shadow-2xl transition-all duration-300 cursor-pointer" onclick="window.expandNowPlaying()">
+      
+      <!-- Mini Scrubber Progress Line (1px) -->
+      <div class="absolute top-0 left-3 right-3 h-[2px] bg-white/15 rounded-full overflow-hidden">
+        <div id="mini-player-progress-bar" class="h-full bg-amber-500 w-0 transition-all duration-100"></div>
+      </div>
+
+      <div class="flex items-center justify-between gap-3 pt-0.5">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+          <div class="w-11 h-11 rounded-xl overflow-hidden bg-slate-900 shrink-0 border border-white/15 relative">
+            <img id="mini-thumb-img" src="assets/images/cover-default-aef.jpg" alt="Thumb" class="w-full h-full object-cover">
+          </div>
+          <div class="min-w-0 flex-1">
+            <h4 id="mini-track-title" class="text-xs font-bold text-white truncate">Nenhuma aula selecionada</h4>
+            <p id="mini-track-sub" class="text-[11px] text-amber-300/90 truncate">Selecione para ouvir</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0" onclick="event.stopPropagation()">
+          <button onclick="window.togglePlayPause()" id="mini-play-btn" class="w-9 h-9 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center hover:bg-amber-400 active:scale-90 transition" title="Play/Pause">
+            <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5" id="mini-play-icon"></i>
+          </button>
+          <button onclick="window.closeMiniPlayer()" class="p-1.5 text-slate-400 hover:text-white active:scale-90 transition" title="Fechar">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======================================================================= -->
+    <!-- 5. FIXED MOBILE BOTTOM NAVIGATION                                       -->
+    <!-- ======================================================================= -->
+    <nav id="bottom-nav" class="fixed inset-x-0 bottom-0 z-40 bg-[#071224]/95 backdrop-blur-2xl border-t border-white/10 max-w-2xl mx-auto flex items-center justify-around py-2 sm:py-2.5 px-6">
+      
+      <!-- Tab 1: Início -->
+      <button onclick="window.navigateTo('home')" id="nav-btn-home" class="flex flex-col items-center gap-1 text-amber-400 transition active:scale-95 group">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-bold">Início</span>
+      </button>
+
+      <!-- Tab 2: Biblioteca -->
+      <button onclick="window.navigateTo('library')" id="nav-btn-library" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition active:scale-95 group">
+        <i data-lucide="library" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium group-hover:font-bold">Biblioteca</span>
+      </button>
+
+      <!-- Tab 3: Portal do Aluno -->
+      <a href="portal.html" id="nav-btn-portal" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition active:scale-95 group">
+        <i data-lucide="compass" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium group-hover:font-bold">Portal</span>
+      </a>
+
+    </nav>
+
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- 6. FULLSCREEN NOW PLAYING MODAL (SLIDE-UP SPOTIFY / APPLE MUSIC)         -->
+  <!-- ========================================================================= -->
+  <div id="now-playing-modal" class="fixed inset-0 z-50 bg-[#071224] flex flex-col justify-between overflow-hidden transform translate-y-full transition-transform duration-300 ease-out">
+    
+    <!-- Modal Ambient Glow -->
+    <div class="ambient-glow"></div>
+
+    <!-- Top Bar: Minimizar, Título & Mais Opções -->
+    <header class="relative z-20 w-full max-w-lg mx-auto px-5 pt-3 pb-1 flex items-center justify-between shrink-0">
+      <button onclick="window.minimizeNowPlaying()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-90 text-slate-200 transition border border-white/10" title="Minimizar">
+        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center min-w-0 px-2 flex-1">
+        <p class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest truncate" id="np-course-header-tag">TOCANDO DO CURSO</p>
+        <h3 class="text-xs font-bold text-white truncate" id="np-course-header-title">AgoraEuFalo Experience</h3>
+      </div>
+
+      <button onclick="window.togglePedagogicalContent()" id="btn-top-notes" class="p-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-90 text-amber-300 transition border border-white/10" title="Ver Material Didático">
+        <i data-lucide="file-text" class="w-5 h-5"></i>
+      </button>
+    </header>
+
+    <!-- Palco Central de Mídia (Vídeo ou Capa 1:1) -->
+    <div class="relative z-10 flex-1 min-h-0 flex flex-col justify-center items-center px-6 py-2 max-w-lg mx-auto w-full">
+      
+      <!-- Video Stage (Rendered when track has videoUrl) -->
+      <div id="video-stage" class="w-full hidden aspect-video rounded-2xl overflow-hidden bg-black border border-white/15 shadow-2xl relative mb-2">
+        <video id="core-video" class="w-full h-full object-contain" playsinline controls preload="metadata"></video>
+      </div>
+
+      <!-- Audio Cover Stage (Rendered when playing audio) -->
+      <div id="audio-stage" class="w-full flex flex-col items-center justify-center">
+        <div id="np-artwork-card" class="w-full aspect-square max-w-[250px] sm:max-w-[280px] max-h-[34vh] sm:max-h-[38vh] rounded-3xl overflow-hidden shadow-2xl shadow-black/80 border border-white/15 bg-slate-900 relative group transition-transform duration-300">
+          <img id="np-cover-img" src="assets/images/cover-default-aef.jpg" alt="Capa da Aula" class="w-full h-full object-cover">
+          
+          <!-- Badge da Atividade no Canto Superior -->
+          <div class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-[9px] font-mono font-bold text-amber-300" id="np-badge-text">
+            LISTEN & READ
+          </div>
+
+          <!-- Pulsing Status Equalizer -->
+          <div id="np-pulse-indicator" class="hidden absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-mono font-black flex items-center gap-1.5 shadow-lg">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+            <span>TOCANDO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Título da Aula & Módulo -->
+      <div class="w-full text-center mt-3.5 mb-1 px-2 shrink-0">
+        <h2 id="np-track-title" class="font-serif font-bold text-base sm:text-lg text-white truncate tracking-wide">
+          Aula 01: Listen & Read
+        </h2>
+        <p id="np-track-subhead" class="text-xs text-amber-400 font-mono mt-0.5 truncate">
+          Módulo 01 • Introdução ao Treino
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Controles de Reprodução (Spotify Ergonomic Dock) -->
+    <footer class="relative z-20 w-full max-w-lg mx-auto px-6 pb-6 sm:pb-8 pt-1 space-y-2.5 shrink-0">
+      
+      <!-- Scrubber / Linha do Tempo -->
+      <div class="w-full space-y-1">
+        <input type="range" id="audio-seek-bar" min="0" max="100" value="0" step="0.1" oninput="window.handleSeek(this.value)" class="w-full cursor-pointer">
+        <div class="flex items-center justify-between text-[11px] font-mono font-medium text-slate-400 px-0.5">
+          <span id="time-current">00:00</span>
+          <span id="time-total">00:00</span>
+        </div>
+      </div>
+
+      <!-- Controles Principais de 5 Botões -->
+      <div class="flex items-center justify-between px-2 pt-0.5">
+        <!-- Anterior -->
+        <button onclick="window.playPrevLesson()" class="p-3 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Aula Anterior">
+          <i data-lucide="skip-back" class="w-5 h-5 fill-current"></i>
+        </button>
+
+        <!-- Voltar 10s -->
+        <button onclick="window.seekOffset(-10)" class="p-3 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Voltar 10 segundos">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Play / Pause Master -->
+        <button onclick="window.togglePlayPause()" id="np-btn-play" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-xl shadow-amber-500/30 transition-transform active:scale-90 cursor-pointer shrink-0" title="Tocar / Pausar">
+          <i data-lucide="play" class="w-7 h-7 fill-current ml-0.5" id="np-icon-play"></i>
+        </button>
+
+        <!-- Avançar 10s -->
+        <button onclick="window.seekOffset(10)" class="p-3 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Avançar 10 segundos">
+          <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Próxima -->
+        <button onclick="window.playNextLesson()" class="p-3 rounded-full text-slate-300 hover:text-white transition hover:bg-white/10 active:scale-90" title="Próxima Aula">
+          <i data-lucide="skip-forward" class="w-5 h-5 fill-current"></i>
+        </button>
+      </div>
+
+      <!-- Barra de Utilidades: Contínuo, Velocidade e Material Didático -->
+      <div class="flex items-center justify-between px-1 pt-1 gap-2">
+        <!-- Reprodução Contínua -->
+        <button onclick="window.toggleContinuousPlay()" id="btn-continuous-play" class="flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 transition active:scale-95 py-1 px-3 rounded-full bg-white/5 border border-white/10 shrink-0">
+          <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+          <span id="text-continuous-play">Contínuo: ON</span>
+        </button>
+
+        <!-- Velocidade -->
+        <button onclick="window.cyclePlaybackRate()" id="btn-speed" class="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-white transition active:scale-95 py-1 px-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 shrink-0">
+          <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="text-speed">1.0x</span>
+        </button>
+
+        <!-- Botão Abrir Gaveta Didática -->
+        <button onclick="window.togglePedagogicalContent()" id="btn-drawer-notes" class="flex items-center gap-1.5 text-xs font-bold text-slate-300 hover:text-white transition active:scale-95 py-1 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 shrink-0">
+          <i data-lucide="quote" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="btn-drawer-notes-label">Letra & Dicas</span>
+        </button>
+      </div>
+
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- 7. GAVETA DESLIZANTE PEDAGÓGICA (LETRA, DICA DE OURO, NOTAS DE ESTUDO)-->
+    <!-- ===================================================================== -->
+    <div id="pedagogical-sheet" class="fixed inset-x-0 bottom-0 z-40 bg-[#071224]/95 backdrop-blur-2xl border-t border-white/15 rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[85vh] h-[85vh]">
+      
+      <!-- Top Handle & Tabs -->
+      <div class="px-6 pt-3 pb-2.5 border-b border-white/10 shrink-0 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span class="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">Estudo Ativo</span>
+          </div>
+
+          <!-- Fechar Gaveta -->
+          <button onclick="window.togglePedagogicalContent()" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">
+            <i data-lucide="chevron-down" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- 3 Abas Didáticas -->
+        <div class="flex items-center gap-2">
+          <button onclick="window.switchContentTab('lyrics')" id="tab-btn-lyrics" class="flex-1 py-1.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold transition text-center shadow-xs">
+            Transcrição
+          </button>
+          <button onclick="window.switchContentTab('goldentip')" id="tab-btn-goldentip" class="flex-1 py-1.5 rounded-xl bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition text-center">
+            Dica de Ouro
+          </button>
+          <button onclick="window.switchContentTab('notes')" id="tab-btn-notes" class="flex-1 py-1.5 rounded-xl bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition text-center">
+            Notas & PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Aba 1: Transcrição & Karaoke -->
+      <div id="content-tab-lyrics" class="flex-1 overflow-y-auto px-6 py-4 space-y-4 no-scrollbar text-left scroll-smooth">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-[11px] font-mono text-slate-400">Toque em qualquer frase para ouvir</span>
+          <button onclick="window.toggleTranslation()" id="btn-trans-toggle" class="px-2.5 py-1 rounded-full bg-white/10 text-[10px] font-bold text-slate-300 hover:text-white border border-white/10">
+            Tradução: <span id="trans-toggle-state" class="text-amber-400">OFF</span>
+          </button>
+        </div>
+        <div id="lyrics-sentences-container" class="space-y-4 pb-12">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- Aba 2: Dica de Ouro do Professor Leonardo -->
+      <div id="content-tab-goldentip" class="hidden flex-1 overflow-y-auto px-6 py-6 no-scrollbar pb-12">
+        <div class="rounded-3xl bg-gradient-to-br from-amber-500/20 via-amber-600/10 to-transparent border border-amber-500/30 p-5 space-y-3 text-left">
+          <div class="flex items-center gap-2 text-amber-400">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <h4 class="text-sm font-bold uppercase tracking-wider font-mono">Dica de Ouro de Fala</h4>
+          </div>
+          <p id="golden-tip-text" class="text-sm text-amber-100 leading-relaxed font-medium">
+            Nenhuma dica de ouro cadastrada para esta lição.
+          </p>
+        </div>
+      </div>
+
+      <!-- Aba 3: Notas Didáticas & PDF -->
+      <div id="content-tab-notes" class="hidden flex-1 overflow-y-auto px-6 py-6 space-y-4 no-scrollbar pb-12 text-left">
+        <div id="lesson-pdf-box" class="hidden p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-white">Material Complementar PDF</p>
+              <p class="text-[11px] text-slate-400">Baixar apostila da lição</p>
+            </div>
+          </div>
+          <a id="lesson-pdf-link" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition">
+            Baixar
+          </a>
+        </div>
+
+        <div id="lesson-processed-html" class="rounded-2xl bg-slate-900 border border-white/10 p-4 text-xs text-slate-200 leading-relaxed space-y-3">
+          <p class="text-slate-400 italic">Sem anotações complementares para esta aula.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Audio Element Oculto -->
+  <audio id="core-audio" preload="auto" playsinline></audio>
+
+  <!-- ========================================================================= -->
+  <!-- 8. MODAL DE CONTEÚDO BLOQUEADO (PAYWALL / SEM ACESSO)                     -->
+  <!-- ========================================================================= -->
+  <div id="lock-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-sm bg-[#0D1E36] border border-amber-500/40 rounded-3xl p-6 text-center space-y-4 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="window.closeLockModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center border border-amber-500/30">
+        <i data-lucide="lock" class="w-7 h-7"></i>
+      </div>
+
+      <div class="space-y-1">
+        <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">CONTEÚDO EXCLUSIVO</span>
+        <h3 class="text-base font-bold text-white" id="lock-modal-title">Treino Restrito a Membros</h3>
+        <p class="text-xs text-slate-300 leading-relaxed" id="lock-modal-desc">
+          Este curso faz parte do ecossistema avançado do AgoraEuFalo English Club ou Mentoria VIP.
+        </p>
+      </div>
+
+      <div class="pt-2 space-y-2">
+        <a id="lock-modal-cta" href="portal.html" class="block w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-amber-500/20">
+          Ver Planos no Portal
+        </a>
+        <button onclick="window.closeLockModal()" class="block w-full py-2 text-xs font-semibold text-slate-400 hover:text-white transition">
+          Voltar aos Treinos Liberados
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 transform -translate-y-10 opacity-0">
+    <div class="px-4 py-2 rounded-full bg-slate-900/90 text-amber-300 border border-amber-500/30 shadow-2xl text-xs font-bold font-mono tracking-wide backdrop-blur-md flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+      <span id="toast-message">Mensagem</span>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 9. APPLICATION ENGINE SCRIPT (SPA CORE)                                   -->
+  <!-- ========================================================================= -->
+  <script>
+    (function(window) {
+      'use strict';
+
+      // 1. Alias reconciliation
+      if (!window.AEFCloudSync && window.aefCloudSync) window.AEFCloudSync = window.aefCloudSync;
+      if (!window.AEFPortalAuth && window.aefPortalAuth) window.AEFPortalAuth = window.aefPortalAuth;
+
+      // 2. Global Player State
+      const state = {
+        user: null,
+        courses: {},
+        accessibleCourses: [],
+        otherCourses: [],
+        currentView: 'home', // 'home' | 'library' | 'course'
+        selectedCourseId: null,
+        activeCourse: null,
+        activeModule: null,
+        activeLesson: null,
+        activeLessonIndex: 0,
+        flatLessonsList: [],
+        isPlaying: false,
+        playbackRate: 1.0,
+        isContinuousPlay: true,
+        showTranslation: false,
+        currentSentenceIndex: -1,
+        activeContentTab: 'lyrics',
+        isPedagogicalOpen: false,
+        mediaType: 'audio', // 'audio' | 'video'
+        pendingPlayPromise: null,
+        audioElement: null,
+        videoElement: null,
+        _lastListeningTrackMs: null
+      };
+
+      const SPEED_STEPS = [1.0, 1.25, 1.5, 0.75];
+
+      // =======================================================================
+      // INITIALIZATION
+      // =======================================================================
+      async function initApp() {
+        console.log('🚀 [AEF Player] Iniciando Modern Spotify SPA Player...');
+
+        state.audioElement = document.getElementById('core-audio');
+        state.videoElement = document.getElementById('core-video');
+
+        setupMediaEvents();
+        updateGreeting();
+
+        // Check or restore authentication profile
+        try {
+          if (window.aefPortalAuth) {
+            await window.aefPortalAuth.ready();
+            state.user = window.aefPortalAuth.currentProfile;
+            if (!state.user && window.aefPortalAuth.currentUser) {
+              state.user = await window.aefPortalAuth.getProfile(window.aefPortalAuth.currentUser.uid);
+            }
+          }
+        } catch (e) {
+          console.warn('[AEF Player] Auth check error, using local session:', e);
+        }
+
+        // Fallback profile from localStorage if offline/delayed
+        if (!state.user && typeof localStorage !== 'undefined') {
+          const cachedEmail = localStorage.getItem('aef_user_email');
+          if (cachedEmail) {
+            state.user = {
+              uid: localStorage.getItem('aef_user_uid') || 'local-user',
+              name: localStorage.getItem('aef_user_name') || 'Aluno AgoraEuFalo',
+              email: cachedEmail,
+              tier: localStorage.getItem('aef_user_tier') || 'free',
+              role: localStorage.getItem('aef_user_role') || 'student',
+              enrolledProducts: JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]')
+            };
+          }
+        }
+
+        renderUserProfileUI();
+
+        // Fetch dynamic courses hierarchy
+        await loadCoursesData();
+
+        // Handle URL Deep-Linking (e.g. ?curso=dtc_curso ou ?aula=...)
+        handleUrlParams();
+
+        // Render Resume Activity card if exists
+        loadResumeCard();
+
+        // Render Lucide Icons
+        lucide.createIcons();
+      }
+
+      function updateGreeting() {
+        const hour = new Date().getHours();
+        let greeting = "BOM DIA";
+        if (hour >= 12 && hour < 18) greeting = "BOA TARDE";
+        else if (hour >= 18 || hour < 5) greeting = "BOA NOITE";
+
+        const greetingEl = document.getElementById('home-greeting-time');
+        if (greetingEl) greetingEl.innerText = greeting;
+      }
+
+      function renderUserProfileUI() {
+        const name = state.user?.name || localStorage.getItem('aef_user_name') || 'Aluno';
+        const nameEl = document.getElementById('home-greeting-name');
+        if (nameEl) nameEl.innerText = `Olá, ${name.split(' ')[0]}!`;
+
+        const initialsEl = document.getElementById('user-initials');
+        const avatarImg = document.getElementById('user-avatar-img');
+        const initials = name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'AEF';
+
+        if (state.user?.avatarUrl && avatarImg) {
+          avatarImg.src = state.user.avatarUrl;
+          avatarImg.classList.remove('hidden');
+          if (initialsEl) initialsEl.classList.add('hidden');
+        } else if (initialsEl) {
+          initialsEl.innerText = initials;
+          initialsEl.classList.remove('hidden');
+          if (avatarImg) avatarImg.classList.add('hidden');
+        }
+      }
+
+      // =======================================================================
+      // DYNAMIC DATA FETCHING (CloudSync + AccessEngine)
+      // =======================================================================
+      async function loadCoursesData() {
+        const syncEngine = window.AEFCloudSync || window.aefCloudSync;
+        let hierarchy = {};
+
+        try {
+          if (syncEngine && typeof syncEngine.getCoursesHierarchy === 'function') {
+            hierarchy = await syncEngine.getCoursesHierarchy(window.AEF_COURSES_REGISTRY || null);
+          } else if (window.AEF_COURSES_REGISTRY) {
+            hierarchy = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY));
+          }
+        } catch (err) {
+          console.warn('⚠️ [AEF Player] Falha no getCoursesHierarchy, usando registry base:', err);
+          hierarchy = window.AEF_COURSES_REGISTRY || {};
+        }
+
+        state.courses = hierarchy || {};
+
+        // Filter courses with AEFAccessEngine
+        const allList = Object.values(state.courses).filter(c => c && c.id);
+        
+        state.accessibleCourses = allList.filter(c => {
+          if (!window.AEFAccessEngine) return true;
+          return window.AEFAccessEngine.hasAccess(state.user, c);
+        });
+
+        state.otherCourses = allList.filter(c => {
+          if (!window.AEFAccessEngine) return false;
+          return !window.AEFAccessEngine.hasAccess(state.user, c);
+        });
+
+        // Update home counter
+        const counterEl = document.getElementById('home-courses-count');
+        if (counterEl) {
+          counterEl.innerText = `${state.accessibleCourses.length} ${state.accessibleCourses.length === 1 ? 'curso' : 'cursos'}`;
+        }
+
+        renderHomeCourses();
+        renderLibraryCourses();
+      }
+
+      // =======================================================================
+      // VIEW RENDERING: HOME
+      // =======================================================================
+      function renderHomeCourses() {
+        const grid = document.getElementById('home-courses-grid');
+        if (!grid) return;
+
+        if (state.accessibleCourses.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-2 sm:col-span-3 py-10 px-4 text-center rounded-2xl bg-white/5 border border-white/10 space-y-2">
+              <i data-lucide="book-open" class="w-8 h-8 text-amber-400 mx-auto"></i>
+              <p class="text-sm font-bold text-white">Nenhum curso liberado ainda</p>
+              <p class="text-xs text-slate-400 max-w-xs mx-auto">Acesse o portal do aluno para verificar sua assinatura ou liberação de cursos.</p>
+              <a href="portal.html" class="inline-block mt-2 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Ir para o Portal</a>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        grid.innerHTML = state.accessibleCourses.map(course => {
+          const cover = course.coverImageUrl || 'assets/images/cover-default-aef.jpg';
+          const modulesCount = (course.modules || []).length;
+          let totalLessons = 0;
+          (course.modules || []).forEach(m => totalLessons += (m.lessons || []).length);
+          const badge = course.badge || 'TREINO DIÁRIO';
+
+          return `
+            <div onclick="window.openCourse('${course.id}')" class="group relative flex flex-col p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-500/40 transition-all duration-200 cursor-pointer text-left shadow-lg active:scale-95">
+              <!-- Square 1:1 Cover Art -->
+              <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-900 mb-2.5 shadow-md border border-white/5">
+                <img src="${cover}" alt="${course.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <div class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-[9px] font-mono font-bold text-amber-300">
+                  ${badge}
+                </div>
+                <!-- Play Hover Overlay -->
+                <div class="absolute right-2 bottom-2 w-9 h-9 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all shadow-lg shadow-amber-500/40">
+                  <i data-lucide="play" class="w-4 h-4 fill-current ml-0.5"></i>
+                </div>
+              </div>
+
+              <!-- Title & Meta -->
+              <h4 class="font-bold text-xs sm:text-sm text-white line-clamp-1 group-hover:text-amber-300 transition-colors">${course.title}</h4>
+              <p class="text-[11px] text-slate-400 line-clamp-2 mt-0.5 leading-snug">${course.description || 'Treinamento prático de fala e escuta ativa.'}</p>
+              
+              <div class="flex items-center gap-1 text-[10px] font-mono text-amber-400/80 mt-2 pt-1 border-t border-white/5">
+                <span>${modulesCount} mod</span>
+                <span>•</span>
+                <span>${totalLessons} aulas</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Outros Cursos (Bloqueados / Upgrade)
+        const otherSection = document.getElementById('home-other-courses-section');
+        const otherGrid = document.getElementById('home-other-courses-grid');
+        if (otherSection && otherGrid) {
+          if (state.otherCourses.length > 0) {
+            otherSection.classList.remove('hidden');
+            otherGrid.innerHTML = state.otherCourses.map(course => {
+              const cover = course.coverImageUrl || 'assets/images/cover-default-aef.jpg';
+              return `
+                <div onclick="window.showPaywall('${course.id}')" class="group relative flex flex-col p-3 rounded-2xl bg-white/5 border border-white/5 opacity-75 hover:opacity-100 transition-all duration-200 cursor-pointer text-left">
+                  <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-900 mb-2.5">
+                    <img src="${cover}" alt="${course.title}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-300">
+                    <div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-950/80 border border-white/20 text-amber-400 flex items-center justify-center">
+                      <i data-lucide="lock" class="w-3 h-3"></i>
+                    </div>
+                  </div>
+                  <h4 class="font-bold text-xs text-slate-200 line-clamp-1">${course.title}</h4>
+                  <span class="text-[10px] font-mono text-amber-400 mt-1">Exclusivo do Clube</span>
+                </div>
+              `;
+            }).join('');
+          } else {
+            otherSection.classList.add('hidden');
+          }
+        }
+
+        lucide.createIcons();
+      }
+
+      // =======================================================================
+      // VIEW RENDERING: LIBRARY
+      // =======================================================================
+      function renderLibraryCourses(filterType = 'all', searchQuery = '') {
+        const container = document.getElementById('library-list-container');
+        if (!container) return;
+
+        let list = [...state.accessibleCourses];
+
+        if (filterType === 'ms') {
+          list = list.filter(c => c.id.includes('magic') || c.id.includes('ms'));
+        } else if (filterType === 'quickstart') {
+          list = list.filter(c => c.id.includes('quickstart') || c.id.includes('dtc'));
+        }
+
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase().trim();
+          list = list.filter(c => (c.title || '').toLowerCase().includes(q) || (c.description || '').toLowerCase().includes(q));
+        }
+
+        if (list.length === 0) {
+          container.innerHTML = `
+            <div class="p-8 text-center text-slate-400 text-xs">
+              <p>Nenhum curso encontrado para este filtro.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = list.map(course => {
+          const cover = course.coverImageUrl || 'assets/images/cover-default-aef.jpg';
+          const modules = course.modules || [];
+          let totalLessons = 0;
+          modules.forEach(m => totalLessons += (m.lessons || []).length);
+
+          return `
+            <div onclick="window.openCourse('${course.id}')" class="flex items-center gap-3.5 p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition cursor-pointer active:scale-95">
+              <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-900 shrink-0 border border-white/10">
+                <img src="${cover}" alt="${course.title}" class="w-full h-full object-cover">
+              </div>
+              <div class="min-w-0 flex-1">
+                <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">${course.badge || 'CURSO'}</span>
+                <h4 class="font-bold text-sm text-white truncate">${course.title}</h4>
+                <p class="text-xs text-slate-400 truncate mt-0.5">${course.description || 'Treino prático de escuta'}</p>
+                <div class="flex items-center gap-2 text-[10px] font-mono text-slate-400 mt-1">
+                  <span>${modules.length} módulos</span>
+                  <span>•</span>
+                  <span>${totalLessons} aulas</span>
+                </div>
+              </div>
+              <button class="p-2.5 rounded-full bg-white/5 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition shrink-0">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+      }
+
+      window.setLibraryFilter = (filterType) => {
+        ['chip-all', 'chip-active', 'chip-ms', 'chip-quickstart'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.className = "px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-semibold transition shrink-0";
+          }
+        });
+        const activeChip = document.getElementById(`chip-${filterType}`);
+        if (activeChip) {
+          activeChip.className = "px-3.5 py-1.5 rounded-full bg-amber-500 text-slate-950 font-bold transition shrink-0 shadow-xs";
+        }
+        const searchVal = document.getElementById('library-search-input')?.value || '';
+        renderLibraryCourses(filterType, searchVal);
+      };
+
+      window.filterLibrary = (query) => {
+        renderLibraryCourses('all', query);
+      };
+
+      // =======================================================================
+      // VIEW RENDERING: COURSE VIEW (SPOTIFY ALBUM STYLE)
+      // =======================================================================
+      window.openCourse = (courseId) => {
+        const course = state.courses[courseId];
+        if (!course) return;
+
+        state.selectedCourseId = courseId;
+        state.activeCourse = course;
+
+        // Build flat lessons list for prev/next traversal
+        state.flatLessonsList = [];
+        (course.modules || []).forEach(mod => {
+          (mod.lessons || []).forEach(lesson => {
+            state.flatLessonsList.push({
+              ...lesson,
+              moduleId: mod.id,
+              moduleTitle: mod.title,
+              courseId: course.id,
+              courseTitle: course.title,
+              courseCover: course.coverImageUrl
+            });
+          });
+        });
+
+        // Update Hero Details
+        const heroCover = document.getElementById('course-hero-cover');
+        const heroTitle = document.getElementById('course-hero-title');
+        const heroDesc = document.getElementById('course-hero-desc');
+        const heroBadge = document.getElementById('course-view-badge');
+        const heroKicker = document.getElementById('course-hero-kicker');
+        const heroMods = document.getElementById('course-hero-modules-count');
+        const heroLessons = document.getElementById('course-hero-lessons-count');
+
+        if (heroCover) heroCover.src = course.coverImageUrl || 'assets/images/cover-default-aef.jpg';
+        if (heroTitle) heroTitle.innerText = course.title;
+        if (heroDesc) heroDesc.innerText = course.description || 'Acesse o conteúdo completo desta playlist.';
+        if (heroBadge) heroBadge.innerText = course.badge || 'CURSO';
+        if (heroKicker) heroKicker.innerText = course.badge || 'TREINO OFICIAL';
+        if (heroMods) heroMods.innerText = `${(course.modules || []).length} módulos`;
+        if (heroLessons) heroLessons.innerText = `${state.flatLessonsList.length} aulas`;
+
+        // Render Modules & Lessons
+        renderCourseModules(course);
+
+        window.navigateTo('course');
+      };
+
+      function renderCourseModules(course) {
+        const container = document.getElementById('course-modules-container');
+        if (!container) return;
+
+        const modules = course.modules || [];
+        if (modules.length === 0) {
+          container.innerHTML = `
+            <div class="p-8 text-center text-slate-400 text-xs bg-white/5 rounded-2xl">
+              <p>Nenhuma aula disponível neste módulo ainda.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = modules.map((mod, modIdx) => {
+          const lessons = mod.lessons || [];
+
+          return `
+            <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
+              <!-- Module Header -->
+              <div class="p-3.5 sm:p-4 bg-white/[0.03] border-b border-white/5 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] font-mono text-amber-400 font-bold uppercase">MÓDULO ${mod.order || (modIdx + 1)}</span>
+                  <h3 class="font-bold text-sm text-white">${mod.title}</h3>
+                  ${mod.description ? `<p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${mod.description}</p>` : ''}
+                </div>
+                <span class="text-[10px] font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/5">
+                  ${lessons.length} aulas
+                </span>
+              </div>
+
+              <!-- Module Lessons List -->
+              <div class="divide-y divide-white/5">
+                ${lessons.map((lesson, lesIdx) => {
+                  const isCurrent = state.activeLesson && state.activeLesson.id === lesson.id;
+                  const isPlayingCurrent = isCurrent && state.isPlaying;
+                  const duration = lesson.duration || '03:00';
+                  const hasVideo = Boolean(lesson.videoUrl || (lesson.media && lesson.media.some(m => m.type && m.type.includes('video'))));
+                  const formatIcon = hasVideo ? 'video' : 'headphones';
+
+                  return `
+                    <div onclick="window.playLessonById('${course.id}', '${mod.id}', '${lesson.id}')" class="flex items-center justify-between p-3 sm:p-3.5 hover:bg-white/5 transition-colors cursor-pointer group ${isCurrent ? 'bg-amber-500/10' : ''}">
+                      <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <!-- Index or Playing Equalizer -->
+                        <div class="w-7 h-7 flex items-center justify-center shrink-0">
+                          ${isPlayingCurrent ? `
+                            <div class="flex items-end gap-0.5 h-4">
+                              <span class="w-1 bg-amber-400 rounded-full eq-bar-1"></span>
+                              <span class="w-1 bg-amber-400 rounded-full eq-bar-2"></span>
+                              <span class="w-1 bg-amber-400 rounded-full eq-bar-3"></span>
+                            </div>
+                          ` : `
+                            <span class="text-xs font-mono font-bold text-slate-400 group-hover:hidden">${lesIdx + 1}</span>
+                            <i data-lucide="play" class="w-4 h-4 text-amber-400 hidden group-hover:block fill-current"></i>
+                          `}
+                        </div>
+
+                        <!-- Lesson Title & Badges -->
+                        <div class="min-w-0 flex-1">
+                          <h4 class="text-xs sm:text-sm font-semibold text-white truncate ${isCurrent ? 'text-amber-400 font-bold' : 'group-hover:text-amber-300'}">
+                            ${lesson.title}
+                          </h4>
+                          <div class="flex items-center gap-2 text-[10px] font-mono text-slate-400 mt-0.5">
+                            <span class="flex items-center gap-1">
+                              <i data-lucide="${formatIcon}" class="w-3 h-3 text-slate-500"></i>
+                              ${hasVideo ? 'Vídeo' : 'Áudio'}
+                            </span>
+                            <span>•</span>
+                            <span>${duration}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Action Button -->
+                      <button class="p-2 rounded-full text-slate-400 group-hover:text-amber-400 transition">
+                        <i data-lucide="${isPlayingCurrent ? 'pause' : 'play'}" class="w-4 h-4 ${isPlayingCurrent ? 'fill-current text-amber-400' : ''}"></i>
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+      }
+
+      window.playCourseFromBeginning = () => {
+        if (state.flatLessonsList.length > 0) {
+          const first = state.flatLessonsList[0];
+          window.playLessonById(first.courseId, first.moduleId, first.id);
+        }
+      };
+
+      window.toggleShuffleCourse = () => {
+        if (state.flatLessonsList.length > 0) {
+          const randomIdx = Math.floor(Math.random() * state.flatLessonsList.length);
+          const randLesson = state.flatLessonsList[randomIdx];
+          window.playLessonById(randLesson.courseId, randLesson.moduleId, randLesson.id);
+          showToast('Modo Aleatório ativado!');
+        }
+      };
+
+      // =======================================================================
+      // VIEW SWITCHING (SPA NAVIGATION)
+      // =======================================================================
+      window.navigateTo = (viewName) => {
+        state.currentView = viewName;
+
+        const homeView = document.getElementById('view-home');
+        const libView = document.getElementById('view-library');
+        const courseView = document.getElementById('view-course');
+
+        if (homeView) homeView.classList.toggle('hidden', viewName !== 'home');
+        if (libView) libView.classList.toggle('hidden', viewName !== 'library');
+        if (courseView) courseView.classList.toggle('hidden', viewName !== 'course');
+
+        // Update Bottom Nav Bar
+        const btnHome = document.getElementById('nav-btn-home');
+        const btnLib = document.getElementById('nav-btn-library');
+
+        if (btnHome) {
+          btnHome.className = viewName === 'home' 
+            ? "flex flex-col items-center gap-1 text-amber-400 transition active:scale-95 group" 
+            : "flex flex-col items-center gap-1 text-slate-400 hover:text-white transition active:scale-95 group";
+        }
+        if (btnLib) {
+          btnLib.className = viewName === 'library' 
+            ? "flex flex-col items-center gap-1 text-amber-400 transition active:scale-95 group" 
+            : "flex flex-col items-center gap-1 text-slate-400 hover:text-white transition active:scale-95 group";
+        }
+
+        // Scroll back to top
+        const viewport = document.getElementById('views-viewport');
+        if (viewport) viewport.scrollTo({ top: 0, behavior: 'smooth' });
+
+        lucide.createIcons();
+      };
+
+      // =======================================================================
+      // AUDIO & VIDEO PLAYBACK ENGINE
+      // =======================================================================
+      window.playLessonById = async (courseId, moduleId, lessonId) => {
+        const course = state.courses[courseId];
+        if (!course) return;
+
+        // Check access
+        if (window.AEFAccessEngine && !window.AEFAccessEngine.hasAccess(state.user, course)) {
+          window.showPaywall(courseId);
+          return;
+        }
+
+        // Ensure flat list is loaded
+        if (state.selectedCourseId !== courseId || state.flatLessonsList.length === 0) {
+          state.flatLessonsList = [];
+          (course.modules || []).forEach(mod => {
+            (mod.lessons || []).forEach(lesson => {
+              state.flatLessonsList.push({
+                ...lesson,
+                moduleId: mod.id,
+                moduleTitle: mod.title,
+                courseId: course.id,
+                courseTitle: course.title,
+                courseCover: course.coverImageUrl
+              });
+            });
+          });
+        }
+
+        const idx = state.flatLessonsList.findIndex(l => l.id === lessonId);
+        if (idx === -1) return;
+
+        state.activeLessonIndex = idx;
+        const item = state.flatLessonsList[idx];
+
+        state.activeCourse = course;
+        state.activeModule = (course.modules || []).find(m => m.id === moduleId) || { id: moduleId, title: item.moduleTitle || 'Módulo' };
+        state.activeLesson = item;
+
+        // Setup Media Source: Video or Audio
+        const videoStage = document.getElementById('video-stage');
+        const audioStage = document.getElementById('audio-stage');
+
+        const hasVideo = Boolean(item.videoUrl);
+
+        if (hasVideo) {
+          state.mediaType = 'video';
+          state.audioElement.pause();
+          state.audioElement.removeAttribute('src');
+
+          state.videoElement.src = item.videoUrl;
+          state.videoElement.currentTime = 0;
+          state.videoElement.playbackRate = state.playbackRate;
+
+          videoStage?.classList.remove('hidden');
+          audioStage?.classList.add('hidden');
+        } else {
+          state.mediaType = 'audio';
+          state.videoElement.pause();
+          state.videoElement.removeAttribute('src');
+
+          const audioSrc = item.audioUrl || '';
+          state.audioElement.src = audioSrc;
+          state.audioElement.currentTime = 0;
+          state.audioElement.playbackRate = state.playbackRate;
+
+          audioStage?.classList.remove('hidden');
+          videoStage?.classList.add('hidden');
+        }
+
+        // Update Fullscreen & Mini Player UI
+        updateNowPlayingUI(item, course);
+        updateMiniPlayerUI(item, course);
+
+        // Render Pedagogical Tabs (Lyrics, Golden Tip, Notes)
+        renderPedagogicalContent(item);
+
+        // Open Fullscreen Now Playing Modal
+        window.expandNowPlaying();
+
+        // Start playback
+        await window.playMedia();
+
+        // Save activity in learning tracker
+        saveActivityToTracker(item, course);
+
+        // Re-render course modules if course view is open
+        if (state.currentView === 'course') {
+          renderCourseModules(course);
+        }
+      };
+
+      function updateNowPlayingUI(lesson, course) {
+        const cover = lesson.thumbnailUrl || lesson.artworkUrl || course.coverImageUrl || 'assets/images/cover-default-aef.jpg';
+        
+        document.getElementById('np-course-header-title').innerText = course.title;
+        document.getElementById('np-cover-img').src = cover;
+        document.getElementById('np-track-title').innerText = lesson.title;
+        document.getElementById('np-track-subhead').innerText = `${lesson.moduleTitle || 'Módulo'} • ${course.title}`;
+        document.getElementById('np-badge-text').innerText = lesson.activity || 'LISTEN & READ';
+      }
+
+      function updateMiniPlayerUI(lesson, course) {
+        const bar = document.getElementById('mini-player-bar');
+        if (!bar) return;
+
+        const cover = lesson.thumbnailUrl || lesson.artworkUrl || course.coverImageUrl || 'assets/images/cover-default-aef.jpg';
+        document.getElementById('mini-thumb-img').src = cover;
+        document.getElementById('mini-track-title').innerText = lesson.title;
+        document.getElementById('mini-track-sub').innerText = course.title;
+
+        bar.classList.remove('hidden');
+      }
+
+      function getActiveMediaElement() {
+        return state.mediaType === 'video' ? state.videoElement : state.audioElement;
+      }
+
+      window.playMedia = async () => {
+        const el = getActiveMediaElement();
+        if (!el || !el.src) return;
+
+        if (state.pendingPlayPromise !== null) {
+          try { await state.pendingPlayPromise; } catch (_e) {}
+          state.pendingPlayPromise = null;
+        }
+
+        el.playbackRate = state.playbackRate;
+        state.pendingPlayPromise = el.play();
+
+        state.pendingPlayPromise
+          .then(() => {
+            state.isPlaying = true;
+            state.pendingPlayPromise = null;
+            updatePlayButtonsUI(true);
+          })
+          .catch(err => {
+            if (err.name !== 'AbortError') console.warn('[AEF Player] Play error:', err);
+            state.isPlaying = false;
+            state.pendingPlayPromise = null;
+            updatePlayButtonsUI(false);
+          });
+      };
+
+      window.pauseMedia = () => {
+        const el = getActiveMediaElement();
+        if (el) {
+          el.pause();
+          state.isPlaying = false;
+          updatePlayButtonsUI(false);
+        }
+      };
+
+      window.togglePlayPause = () => {
+        if (state.isPlaying) {
+          window.pauseMedia();
+        } else {
+          window.playMedia();
+        }
+      };
+
+      function updatePlayButtonsUI(isPlaying) {
+        const npIcon = document.getElementById('np-icon-play');
+        const miniIcon = document.getElementById('mini-play-icon');
+        const pulse = document.getElementById('np-pulse-indicator');
+
+        const iconName = isPlaying ? 'pause' : 'play';
+
+        if (npIcon) npIcon.setAttribute('data-lucide', iconName);
+        if (miniIcon) miniIcon.setAttribute('data-lucide', iconName);
+
+        if (pulse) {
+          pulse.classList.toggle('hidden', !isPlaying);
+        }
+
+        lucide.createIcons();
+      }
+
+      window.seekOffset = (sec) => {
+        const el = getActiveMediaElement();
+        if (el) {
+          el.currentTime = Math.max(0, el.currentTime + sec);
+        }
+      };
+
+      window.handleSeek = (pct) => {
+        const el = getActiveMediaElement();
+        if (el && el.duration > 0) {
+          el.currentTime = (pct / 100) * el.duration;
+        }
+      };
+
+      window.cyclePlaybackRate = () => {
+        const currentIdx = SPEED_STEPS.indexOf(state.playbackRate);
+        const nextIdx = (currentIdx + 1) % SPEED_STEPS.length;
+        state.playbackRate = SPEED_STEPS[nextIdx];
+
+        if (state.audioElement) state.audioElement.playbackRate = state.playbackRate;
+        if (state.videoElement) state.videoElement.playbackRate = state.playbackRate;
+
+        const text = document.getElementById('text-speed');
+        if (text) text.innerText = `${state.playbackRate}x`;
+        showToast(`Velocidade: ${state.playbackRate}x`);
+      };
+
+      window.toggleContinuousPlay = () => {
+        state.isContinuousPlay = !state.isContinuousPlay;
+        const text = document.getElementById('text-continuous-play');
+        const btn = document.getElementById('btn-continuous-play');
+
+        if (state.isContinuousPlay) {
+          if (text) text.innerText = 'Contínuo: ON';
+          btn?.classList.add('text-amber-400');
+          btn?.classList.remove('text-slate-400');
+          showToast('Reprodução Contínua ON');
+        } else {
+          if (text) text.innerText = 'Contínuo: OFF';
+          btn?.classList.remove('text-amber-400');
+          btn?.classList.add('text-slate-400');
+          showToast('Reprodução Contínua OFF');
+        }
+      };
+
+      window.playNextLesson = () => {
+        if (state.flatLessonsList.length === 0) return;
+        if (state.activeLessonIndex < state.flatLessonsList.length - 1) {
+          const nextItem = state.flatLessonsList[state.activeLessonIndex + 1];
+          window.playLessonById(nextItem.courseId, nextItem.moduleId, nextItem.id);
+        } else {
+          showToast('Fim da playlist do curso!');
+        }
+      };
+
+      window.playPrevLesson = () => {
+        if (state.flatLessonsList.length === 0) return;
+        if (state.activeLessonIndex > 0) {
+          const prevItem = state.flatLessonsList[state.activeLessonIndex - 1];
+          window.playLessonById(prevItem.courseId, prevItem.moduleId, prevItem.id);
+        } else {
+          const el = getActiveMediaElement();
+          if (el) el.currentTime = 0;
+          showToast('Início do curso');
+        }
+      };
+
+      // =======================================================================
+      // AUDIO / VIDEO EVENT LISTENERS
+      // =======================================================================
+      function setupMediaEvents() {
+        ['timeupdate', 'play', 'pause', 'ended'].forEach(ev => {
+          state.audioElement.addEventListener(ev, handleMediaEvent);
+          state.videoElement.addEventListener(ev, handleMediaEvent);
+        });
+      }
+
+      function handleMediaEvent(e) {
+        const el = e.target;
+        // Ignore inactive media element
+        if (state.mediaType === 'video' && el === state.audioElement) return;
+        if (state.mediaType === 'audio' && el === state.videoElement) return;
+
+        if (e.type === 'play') {
+          state.isPlaying = true;
+          updatePlayButtonsUI(true);
+        } else if (e.type === 'pause') {
+          state.isPlaying = false;
+          updatePlayButtonsUI(false);
+        } else if (e.type === 'timeupdate') {
+          handleTimeUpdate(el);
+        } else if (e.type === 'ended') {
+          handleTrackEnded();
+        }
+      }
+
+      function handleTimeUpdate(el) {
+        const cur = el.currentTime || 0;
+        const dur = el.duration || 0;
+
+        const curEl = document.getElementById('time-current');
+        const totEl = document.getElementById('time-total');
+        const seekBar = document.getElementById('audio-seek-bar');
+        const miniProgress = document.getElementById('mini-player-progress-bar');
+
+        if (curEl) curEl.innerText = formatTime(cur);
+        if (totEl) totEl.innerText = formatTime(dur);
+
+        if (dur > 0) {
+          const pct = (cur / dur) * 100;
+          if (seekBar) {
+            seekBar.value = pct;
+            seekBar.style.background = `linear-gradient(to right, #F59E0B 0%, #F59E0B ${pct}%, rgba(255,255,255,0.15) ${pct}%, rgba(255,255,255,0.15) 100%)`;
+          }
+          if (miniProgress) {
+            miniProgress.style.width = `${pct}%`;
+          }
+        }
+
+        // Karaoke Lyrics Synchronization
+        const sentences = state.activeLesson?.sentences || [];
+        if (sentences.length > 0) {
+          let foundIdx = -1;
+          for (let i = 0; i < sentences.length; i++) {
+            const s = sentences[i];
+            if (s.start !== undefined && s.end !== undefined) {
+              const nextStart = (i + 1 < sentences.length && sentences[i+1].start !== undefined) ? sentences[i+1].start : (s.end + 0.8);
+              if (cur >= (s.start - 0.05) && cur < nextStart) {
+                foundIdx = i;
+                break;
+              }
+            }
+          }
+          if (foundIdx !== -1 && foundIdx !== state.currentSentenceIndex) {
+            state.currentSentenceIndex = foundIdx;
+            updateLyricsHighlight();
+          }
+        }
+
+        // Listening tracker continuous pulse
+        if (state.isPlaying && window.aefLearningTracker) {
+          const nowMs = Date.now();
+          if (!state._lastListeningTrackMs) state._lastListeningTrackMs = nowMs;
+          const delta = (nowMs - state._lastListeningTrackMs) / 1000;
+          if (delta >= 5) {
+            window.aefLearningTracker.recordListeningTime('player_user', Math.round(delta));
+            state._lastListeningTrackMs = nowMs;
+          }
+        }
+      }
+
+      function handleTrackEnded() {
+        state.isPlaying = false;
+        updatePlayButtonsUI(false);
+
+        if (state.activeLesson && window.aefLearningTracker) {
+          window.aefLearningTracker.markLessonCompleted?.(state.activeCourse?.id, state.activeLesson.id);
+        }
+
+        if (state.isContinuousPlay) {
+          window.playNextLesson();
+        }
+      }
+
+      function formatTime(sec) {
+        if (isNaN(sec) || sec < 0) return "00:00";
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+
+      // =======================================================================
+      // PEDAGOGICAL CONTENT (KARAOKE, GOLDEN TIP, STUDY NOTES)
+      // =======================================================================
+      function renderPedagogicalContent(lesson) {
+        // 1. Lyrics / Karaoke
+        const container = document.getElementById('lyrics-sentences-container');
+        const sentences = lesson.sentences || [];
+
+        if (container) {
+          if (sentences.length > 0) {
+            container.innerHTML = sentences.map((s, idx) => `
+              <div id="lyric-line-${idx}" onclick="window.seekToSentence(${idx})" class="lyrics-line transition-all duration-300 cursor-pointer p-3 rounded-2xl hover:bg-white/5 ${idx === state.currentSentenceIndex ? 'lyrics-active' : 'lyrics-inactive'}">
+                <p class="text-base sm:text-lg leading-relaxed">${s.text}</p>
+                ${state.showTranslation && s.spokenTranslation ? `
+                  <p class="text-xs sm:text-sm text-amber-200/90 font-medium mt-1 font-serif italic">${s.spokenTranslation}</p>
+                ` : ''}
+              </div>
+            `).join('');
+          } else {
+            container.innerHTML = `
+              <div class="text-center text-slate-400 text-xs py-8 space-y-1">
+                <p>Nenhuma transcrição sincronizada disponível.</p>
+                <p class="text-[11px] text-slate-500">Acesse a aba "Notas & PDF" para ver o roteiro de estudo.</p>
+              </div>
+            `;
+          }
+        }
+
+        // 2. Golden Tip
+        const tipEl = document.getElementById('golden-tip-text');
+        if (tipEl) {
+          tipEl.innerText = lesson.goldenTip || "Treine a repetição rítmica até as conexões fonéticas soarem com naturalidade e reflexo imediato.";
+        }
+
+        // 3. Notes & PDF
+        const pdfBox = document.getElementById('lesson-pdf-box');
+        const pdfLink = document.getElementById('lesson-pdf-link');
+        const processedHtmlBox = document.getElementById('lesson-processed-html');
+
+        if (lesson.pdfUrl && pdfBox && pdfLink) {
+          pdfBox.classList.remove('hidden');
+          pdfLink.href = lesson.pdfUrl;
+        } else if (pdfBox) {
+          pdfBox.classList.add('hidden');
+        }
+
+        if (processedHtmlBox) {
+          if (lesson.processedContentHtml) {
+            processedHtmlBox.innerHTML = lesson.processedContentHtml;
+          } else if (lesson.rawScript) {
+            processedHtmlBox.innerHTML = `<pre class="whitespace-pre-wrap font-sans text-xs text-slate-300">${lesson.rawScript}</pre>`;
+          } else {
+            processedHtmlBox.innerHTML = `<p class="text-slate-400 italic">Sem anotações complementares para esta aula.</p>`;
+          }
+        }
+      }
+
+      window.seekToSentence = (idx) => {
+        const sentences = state.activeLesson?.sentences || [];
+        const sentence = sentences[idx];
+        if (!sentence) return;
+
+        const el = getActiveMediaElement();
+        if (el && sentence.start !== undefined) {
+          el.currentTime = sentence.start;
+          if (!state.isPlaying) {
+            window.playMedia();
+          }
+          state.currentSentenceIndex = idx;
+          updateLyricsHighlight();
+        }
+      };
+
+      function updateLyricsHighlight() {
+        const sentences = state.activeLesson?.sentences || [];
+        sentences.forEach((_, idx) => {
+          const line = document.getElementById(`lyric-line-${idx}`);
+          if (!line) return;
+          if (idx === state.currentSentenceIndex) {
+            line.className = "lyrics-line transition-all duration-300 cursor-pointer p-3 rounded-2xl hover:bg-white/5 lyrics-active";
+          } else {
+            line.className = "lyrics-line transition-all duration-300 cursor-pointer p-3 rounded-2xl hover:bg-white/5 lyrics-inactive";
+          }
+        });
+        scrollActiveLyricIntoView();
+      }
+
+      function scrollActiveLyricIntoView() {
+        if (!state.isPedagogicalOpen || state.activeContentTab !== 'lyrics') return;
+        const activeLine = document.getElementById(`lyric-line-${state.currentSentenceIndex}`);
+        const container = document.getElementById('content-tab-lyrics');
+        if (activeLine && container) {
+          const offset = activeLine.offsetTop - container.offsetTop - (container.clientHeight / 2) + 50;
+          container.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+      }
+
+      window.toggleTranslation = () => {
+        state.showTranslation = !state.showTranslation;
+        const toggleState = document.getElementById('trans-toggle-state');
+        if (toggleState) toggleState.innerText = state.showTranslation ? 'ON' : 'OFF';
+        if (state.activeLesson) renderPedagogicalContent(state.activeLesson);
+        showToast(state.showTranslation ? 'Tradução falada ativada' : 'Tradução falada oculta');
+      };
+
+      window.togglePedagogicalContent = () => {
+        state.isPedagogicalOpen = !state.isPedagogicalOpen;
+        const sheet = document.getElementById('pedagogical-sheet');
+        const btnLabel = document.getElementById('btn-drawer-notes-label');
+
+        if (state.isPedagogicalOpen) {
+          sheet?.classList.remove('translate-y-full');
+          if (btnLabel) btnLabel.innerText = "Fechar";
+          scrollActiveLyricIntoView();
+        } else {
+          sheet?.classList.add('translate-y-full');
+          if (btnLabel) btnLabel.innerText = "Letra & Dicas";
+        }
+      };
+
+      window.switchContentTab = (tabName) => {
+        state.activeContentTab = tabName;
+
+        ['lyrics', 'goldentip', 'notes'].forEach(t => {
+          const btn = document.getElementById(`tab-btn-${t}`);
+          const section = document.getElementById(`content-tab-${t}`);
+
+          if (btn) {
+            btn.className = t === tabName 
+              ? "flex-1 py-1.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold transition text-center shadow-xs"
+              : "flex-1 py-1.5 rounded-xl bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition text-center";
+          }
+          if (section) {
+            section.classList.toggle('hidden', t !== tabName);
+          }
+        });
+
+        if (tabName === 'lyrics') {
+          scrollActiveLyricIntoView();
+        }
+      };
+
+      // =======================================================================
+      // FULLSCREEN / MINI PLAYER TOGGLING
+      // =======================================================================
+      window.expandNowPlaying = () => {
+        const modal = document.getElementById('now-playing-modal');
+        modal?.classList.remove('translate-y-full');
+      };
+
+      window.minimizeNowPlaying = () => {
+        const modal = document.getElementById('now-playing-modal');
+        modal?.classList.add('translate-y-full');
+
+        // Close pedagogical sheet if open
+        if (state.isPedagogicalOpen) {
+          window.togglePedagogicalContent();
+        }
+      };
+
+      window.closeMiniPlayer = () => {
+        window.pauseMedia();
+        document.getElementById('mini-player-bar')?.classList.add('hidden');
+      };
+
+      // =======================================================================
+      // LEARNING TRACKER INTEGRATION & RESUME WORKOUT
+      // =======================================================================
+      function saveActivityToTracker(lesson, course) {
+        if (!window.aefLearningTracker) return;
+
+        window.aefLearningTracker.saveLastActivity({
+          courseId: course.id,
+          courseTitle: course.title,
+          moduleId: lesson.moduleId,
+          moduleTitle: lesson.moduleTitle,
+          lessonId: lesson.id,
+          lessonTitle: lesson.title,
+          lessonDuration: lesson.duration || '03:00',
+          thumbnailUrl: lesson.thumbnailUrl || course.coverImageUrl || 'assets/images/cover-default-aef.jpg',
+          source: 'player'
+        });
+
+        loadResumeCard();
+      }
+
+      function loadResumeCard() {
+        if (!window.aefLearningTracker) return;
+
+        const last = window.aefLearningTracker.getGlobalLastActivity();
+        const card = document.getElementById('resume-workout-card');
+        if (!last || !card) return;
+
+        document.getElementById('resume-thumb-img').src = last.thumbnailUrl || 'assets/images/cover-default-aef.jpg';
+        document.getElementById('resume-course-title').innerText = last.courseTitle || 'AgoraEuFalo';
+        document.getElementById('resume-lesson-title').innerText = last.lessonTitle || 'Continuar Treino';
+        document.getElementById('resume-module-title').innerText = last.moduleTitle ? `${last.moduleTitle} • Toque para continuar` : 'Toque para continuar';
+
+        card.classList.remove('hidden');
+
+        document.getElementById('btn-resume-play').onclick = () => {
+          window.playLessonById(last.courseId, last.moduleId, last.lessonId);
+        };
+        card.onclick = () => {
+          window.playLessonById(last.courseId, last.moduleId, last.lessonId);
+        };
+      }
+
+      // =======================================================================
+      // DEEP-LINKING URL PARAMETERS
+      // =======================================================================
+      function handleUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const courseParam = params.get('curso') || params.get('course') || params.get('courseId');
+        const lessonParam = params.get('aula') || params.get('lesson') || params.get('lessonId');
+
+        if (courseParam && state.courses[courseParam]) {
+          window.openCourse(courseParam);
+          if (lessonParam && state.flatLessonsList.some(l => l.id === lessonParam)) {
+            const match = state.flatLessonsList.find(l => l.id === lessonParam);
+            if (match) {
+              window.playLessonById(courseParam, match.moduleId, match.id);
+            }
+          }
+        }
+      }
+
+      // =======================================================================
+      // PAYWALL / ACCESS MODAL
+      // =======================================================================
+      window.showPaywall = (courseId) => {
+        const course = state.courses[courseId];
+        const modal = document.getElementById('lock-modal');
+        if (!modal) return;
+
+        if (course) {
+          document.getElementById('lock-modal-title').innerText = course.title || 'Conteúdo Exclusivo';
+          document.getElementById('lock-modal-desc').innerText = `O curso "${course.title}" faz parte do ecossistema avançado do AgoraEuFalo English Club ou Mentoria VIP.`;
+        }
+
+        modal.classList.remove('hidden');
+        lucide.createIcons();
+      };
+
+      window.closeLockModal = () => {
+        document.getElementById('lock-modal')?.classList.add('hidden');
+      };
+
+      // Toast notification helper
+      function showToast(msg) {
+        const toast = document.getElementById('toast-container');
+        const text = document.getElementById('toast-message');
+        if (!toast || !text) return;
+
+        text.innerText = msg;
+        toast.classList.remove('-translate-y-10', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+
+        setTimeout(() => {
+          toast.classList.add('-translate-y-10', 'opacity-0');
+          toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 2200);
+      }
+
+      // Boot application when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+
+    })(window);
+  </script>
+
 </body>
 </html>
