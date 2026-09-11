@@ -156,6 +156,12 @@ O banco de dados Firestore é a **fonte única da verdade**, eliminando bifurca�
 ---
 
 ## 8. Diretrizes de Áudio (Gemini TTS & MP3 128kbps Puro)
+**ATENÇÃO ABSOLUTA - DEPRECIAÇÃO DE MODELOS (SET/2026):**
+Modelos da família `gemini-1.5` e `gemini-2.5` foram terminantemente descontinuados pela Google Cloud, causando erros de "Auth/404/400" se utilizados, especialmente com as novas Auth Keys (`AQ.`).
+* **Motor Exclusivo para TTS (Síntese de Voz):** `gemini-3.1-flash-tts-preview`. (Requer instrução direta no prompt: *"Read the following text aloud as audio speech. Generate only audio output. Do not generate any text response."*).
+* **Motor Exclusivo para Transcrição / Text-to-Text:** `gemini-3.7-flash` ou `gemini-3.5-transcribe`.
+* **Proibição:** É estritamente proibido criar novos scripts ou features de software utilizando a sintaxe legada `models/gemini-2.5-flash-preview-tts`.
+
 1. **Padrão Dual Speaker:** Diálogos e conversas reais usam **EXATAMENTE 2 VOZES** distintas (ex: `Rodrigo:Aoede` + `Liam:Puck` ou `Leo:Charon` + `Student:Puck`).
 2. **Padrão Single Speaker:** Monólogos, chunks e explicações usam **APENAS 1 VOZ**.
 3. **Codificação Obrigatória:** Todo áudio é exportado em **MP3 puro (LAME 128 kbps / 24kHz ou 44.1kHz)**. Proibido AAC sem tabela de frames para garantir o seek milissegundo a milissegundo.

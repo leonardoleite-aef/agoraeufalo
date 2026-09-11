@@ -79,6 +79,10 @@ Todas as aulas e treinos do ecossistema seguem a matriz pedagógica das 6 etapas
   4. **Inventário de Rotas:** Atualizar [`INTERFACES.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/INTERFACES.md) e [`src/worker.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/src/worker.js).
   5. **Deploy & Verificação em Produção:** Executar build, deploy Cloudflare e validar status HTTP 200 diretamente na URL de produção ao vivo.
 
+---
 
-
-
+## 8. Política de Modelos de Inteligência Artificial (Arquitetura Gemini)
+- **Migração Mandatória para Gemini 3.0+ (Setembro 2026):** Os modelos da geração `gemini-2.5` e `gemini-1.5` estão descontinuados. Solicitações de código ou de painéis de administração que invoquem `gemini-2.5-flash` ou `gemini-2.5-flash-preview-tts` falharão (retornando erros HTTP 400/404 que podem ser falsamente mascarados como Erros de Autenticação/CORS).
+- **Modelo Oficial de TTS:** Use rigorosamente `gemini-3.1-flash-tts-preview` para geração de áudio no painel TTS Studio.
+- **Modelo Oficial de Raciocínio, Transcrição e Dados:** Use rigorosamente `gemini-3.7-flash` para alinhamento de texto e transcrição (`aefAudioHub.transcribeAudioWithGemini`).
+- **Chaves de Autenticação (`AQ.`):** As novas Auth Keys não devem ser invalidadas prematuramente em validações de frontend. Falhas 400 em chamadas de TTS são frequentemente erros de `prompt` (tentativa de gerar texto em modelo de voz) e não de credenciais.
