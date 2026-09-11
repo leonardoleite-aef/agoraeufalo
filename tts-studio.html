@@ -2955,6 +2955,10 @@ Example output format:
       const targetLabel = `📁 ${courseTitle} ➔ ${moduleTitle}`;
       const assignedTo = ['courses_all']; // Fallback backwards compat
       const tier = 'tier2_courses'; // Fallback backwards compat
+      const isVideo = STATE.currentMeta?.mode === 'video' || (STATE.uploadedFile && STATE.uploadedFile.type && STATE.uploadedFile.type.includes('video')) || false;
+      const videoUrlInput = document.getElementById('publishVideoUrlInput')?.value.trim() || STATE.currentMeta?.videoUrl || "";
+      const durationSecVal = (window.masterAudio && window.masterAudio.duration) ? window.masterAudio.duration : 0;
+      const durationStr = window.formatTime ? window.formatTime(durationSecVal) : "00:00";
 
 
       if (!STATE.currentAudioBlob && !STATE.uploadedFile) {
