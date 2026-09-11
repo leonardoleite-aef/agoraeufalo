@@ -834,7 +834,7 @@
         state.courses = hierarchy || {};
 
         // Filter courses with AEFAccessEngine
-        const allList = Object.values(state.courses).filter(c => c && c.id);
+        const allList = Object.values(state.courses).filter(c => c && c.id && c.published !== false);
         
         state.accessibleCourses = allList.filter(c => {
           if (!window.AEFAccessEngine) return true;
