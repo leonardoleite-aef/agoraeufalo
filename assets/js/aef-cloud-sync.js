@@ -419,6 +419,29 @@
     /**
      * Tier 2: Publishes a course track to a student's course_tracks collection
      */
+    /**
+     * Publish a new lesson from TTS Studio directly into the Course Hierarchy
+     */
+    async publishLessonToCourse(courseId, moduleId, trackData) {
+      await this.init();
+      if (!courseId || !moduleId) throw new Error("Course ID and Module ID are required");
+      const lessonId = trackData.id || `les_${Date.now()}`;
+      const payload = {
+        ...trackData,
+        id: lessonId,
+        published: true,
+        updatedAt: new Date().toISOString()
+      };
+      if (this.db) {
+        await this.db
+          .collection("courses").doc(courseId)
+          .collection("modules").doc(moduleId)
+          .collection("lessons").doc(lessonId)
+          .set(payload, { merge: true });
+      }
+      return payload;
+    }
+
     async publishCourseTrack(userId, trackData) {
       if (!userId) throw new Error("ID do usuário obrigatório.");
       await this.init();

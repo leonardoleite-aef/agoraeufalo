@@ -733,42 +733,19 @@
       <!-- Scrollable Form Body -->
       <div class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
         
-        <!-- 3-Categoria Destination Selector -->
+        <!-- Course & Module Destination Selector -->
         <div class="space-y-2.5 p-3.5 rounded-xl bg-[#0B0F17] border border-amber-500/30">
           <label class="font-bold text-amber-400 block uppercase tracking-wider text-[11px] flex items-center justify-between">
-            <span>1. Destino do Treino por Categoria de Aluno</span>
-            <span class="text-[10px] text-slate-400 font-normal">Single Source of Truth</span>
+            <span>1. Destino da Lição (Curso ➔ Módulo)</span>
+            <span class="text-[10px] text-slate-400 font-normal">Firestore Database</span>
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <label class="flex items-center gap-2 p-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] cursor-pointer transition select-none">
-              <input type="radio" name="publishTier" value="tier1_suggestions" onchange="handleTierChange(this.value)" class="w-4 h-4 text-amber-500 focus:ring-0 bg-[#0B0F17] border-[#2D3D60] cursor-pointer">
-              <div>
-                <span class="block font-bold text-amber-300 text-xs">🌱 Categoria 1 (Aberto/Global)</span>
-                <span class="block text-[10px] text-slate-400">Público / Free / Todos</span>
-              </div>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-[#1F2B45] cursor-pointer transition select-none">
-              <input type="radio" name="publishTier" value="tier2_courses" onchange="handleTierChange(this.value)" class="w-4 h-4 text-amber-500 focus:ring-0 bg-[#0B0F17] border-[#2D3D60] cursor-pointer">
-              <div>
-                <span class="block font-bold text-sky-300 text-xs">🎓 Categoria 2 (Alunos de Curso)</span>
-                <span class="block text-[10px] text-slate-400">Aulas / Club / Pro</span>
-              </div>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-xl bg-[#161F33] hover:bg-[#1F2B45] border border-amber-500/40 cursor-pointer transition select-none">
-              <input type="radio" name="publishTier" value="tier3_vip" checked onchange="handleTierChange(this.value)" class="w-4 h-4 text-amber-500 focus:ring-0 bg-[#0B0F17] border-[#2D3D60] cursor-pointer">
-              <div>
-                <span class="block font-bold text-purple-300 text-xs">👑 Categoria 3 (Mentoria VIP)</span>
-                <span class="block text-[10px] text-slate-400">Mentoria 1 a 1</span>
-              </div>
-            </label>
-          </div>
-
-          <!-- Categoria 3 Specific: Mentees Checkboxes -->
-          <div id="publishStudentsContainer" class="space-y-1.5 pt-2 border-t border-[#1F2B45]">
-            <span class="text-[10px] font-bold text-slate-300 uppercase">Selecione o(s) Mentorado(s) VIP:</span>
-            <div id="publishStudentsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-              <!-- Injetado dinamicamente via JS -->
-            </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <select id="publishCourseSelect" onchange="window.updatePublishModules()" class="w-full bg-[#161F33] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2.5 text-slate-200 outline-none cursor-pointer">
+              <option value="">Carregando cursos...</option>
+            </select>
+            <select id="publishModuleSelect" class="w-full bg-[#161F33] border border-[#1F2B45] focus:border-amber-500 rounded-xl px-3 py-2.5 text-slate-200 outline-none cursor-pointer">
+              <option value="">Selecione o curso primeiro</option>
+            </select>
           </div>
         </div>
 
@@ -1332,6 +1309,30 @@
     // 3. INITIALIZATION
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
+      // Load courses for publish modal
+      if (window.aefCloudSync) {
+        window.aefCloudSync.getCoursesHierarchy().then(hierarchy => {
+          STATE.coursesHierarchy = hierarchy || {};
+          const cSelect = document.getElementById('publishCourseSelect');
+          if(cSelect) {
+            cSelect.innerHTML = '<option value="">Selecione o Curso</option>' + 
+              Object.values(hierarchy).filter(c => c.published !== false).map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+          }
+        });
+      }
+      window.updatePublishModules = function() {
+        const cId = document.getElementById('publishCourseSelect').value;
+        const mSelect = document.getElementById('publishModuleSelect');
+        if (!cId || !STATE.coursesHierarchy[cId]) {
+          mSelect.innerHTML = '<option value="">Selecione o curso primeiro</option>';
+          return;
+        }
+        const modules = STATE.coursesHierarchy[cId].modules || [];
+        mSelect.innerHTML = modules.length ? 
+          modules.map(m => `<option value="${m.id}">${m.title}</option>`).join('') : 
+          '<option value="">Nenhum módulo encontrado</option>';
+      };
+
       if (window.lucide) lucide.createIcons();
       sampleAudioElem = document.getElementById('voiceSampleAudioElement');
       
@@ -2943,33 +2944,20 @@ Example output format:
       const category = document.getElementById('publishCategorySelect')?.value || "Magic Story";
       const summary = document.getElementById('publishSummaryInput')?.value.trim() || "";
       const goldenTip = document.getElementById('publishGoldenTipInput')?.value.trim() || "Respire nas pausas e conecte os chunks.";
-      const tier = document.querySelector('input[name="publishTier"]:checked')?.value || 'tier3_vip';
-      const videoUrlInput = document.getElementById("publishVideoUrlInput")?.value.trim() || "";
-      const isVideo = Boolean(STATE.isVideo || (STATE.uploadedFile && STATE.uploadedFile.type.startsWith('video/')) || videoUrlInput);
-      const durationStr = formatTime((masterAudio && masterAudio.duration) ? masterAudio.duration : 30);
-
-      let assignedTo = ['public'];
-      let targetLabel = "🌱 Categoria 1: Sugestões do Leo (Público)";
-
-      if (tier === 'tier3_vip') {
-        const selectedCheckboxes = document.querySelectorAll('input[name="publishRecipient"]:checked');
-        assignedTo = Array.from(selectedCheckboxes).map(cb => cb.value);
-        if (assignedTo.length === 0) {
-          showToast("Selecione pelo menos um mentorado VIP para a Categoria 3.", "warning");
-          return;
-        }
-        const menteeNames = assignedTo.map(id => {
-          if (id === 'estevao') return 'Estêvão';
-          if (id === 'thomas') return 'Thomas';
-          if (id === 'andre') return 'André';
-          if (id === 'matheus') return 'Matheus';
-          return id;
-        });
-        targetLabel = `👑 Mentoria VIP (${menteeNames.join(', ')})`;
-      } else if (tier === 'tier2_courses') {
-        assignedTo = ['courses_all'];
-        targetLabel = "🎓 Categoria 2: Cursos (Área de Membros)";
+      const courseId = document.getElementById('publishCourseSelect')?.value;
+      const moduleId = document.getElementById('publishModuleSelect')?.value;
+      
+      if (!courseId || !moduleId) {
+        showToast("Selecione o Curso e o Módulo de destino.", "warning");
+        return;
       }
+      
+      const courseTitle = STATE.coursesHierarchy?.[courseId]?.title || courseId;
+      const moduleTitle = STATE.coursesHierarchy?.[courseId]?.modules?.find(m => m.id === moduleId)?.title || moduleId;
+      const targetLabel = `📁 ${courseTitle} ➔ ${moduleTitle}`;
+      const assignedTo = ['courses_all']; // Fallback backwards compat
+      const tier = 'tier2_courses'; // Fallback backwards compat
+
 
       if (!STATE.currentAudioBlob && !STATE.uploadedFile) {
         showToast("Nenhuma mídia em memória para publicar.", "error");
@@ -2981,6 +2969,8 @@ Example output format:
         category,
         summary,
         goldenTip,
+        courseId,
+        moduleId,
         tier,
         assignedTo,
         targetLabel,
@@ -3095,22 +3085,14 @@ Example output format:
             }
           }
 
-          if (data.tier === 'tier1_suggestions') {
-            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando em Sugestões do Leo...</span>`;
-            await window.aefCloudSync.publishSuggestionTrack(trackData);
-          } else if (data.tier === 'tier2_courses') {
-            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando em Meus Cursos...</span>`;
-            await window.aefCloudSync.publishCourseTrack('public_courses', trackData);
-          } else if (data.tier === 'tier3_vip') {
-            if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Publicando Nuvem VIP (${data.assignedTo.join(', ')})...</span>`;
-            await window.aefCloudSync.publishTrackToCloud(trackData, data.assignedTo);
-          }
+          if (publishBtn) publishBtn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div><span>Salvando na Hierarquia do Curso...</span>`;
+            await window.aefCloudSync.publishLessonToCourse(data.courseId, data.moduleId, trackData);
         }
 
         const confModal = document.getElementById('publishConfirmationModal');
         if (confModal) confModal.classList.remove('active');
 
-        const targetUrl = data.tier === 'tier3_vip' ? `treino/player.html?aluno=${data.assignedTo[0]}` : `treino/player.html?aluno=public`;
+        const targetUrl = `/player.html?curso=${data.courseId}&modulo=${data.moduleId}&aula=${trackId}`;
 
         showToast(`
           <div class="flex flex-col gap-1">
