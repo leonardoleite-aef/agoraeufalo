@@ -624,7 +624,7 @@
 
       const courseUrl = `curso.html?curso=${activeCourse.id}`;
       const classroomUrl = `sala-de-aula.html?curso=${activeCourse.id}`;
-      const playerUrl = `treino/player.html?curso=${activeCourse.id}`;
+      const playerUrl = `player.html?curso=${activeCourse.id}`;
 
       const topLink = document.getElementById("topBreadcrumbCourseLink");
       if (topLink) topLink.href = courseUrl;
@@ -1524,9 +1524,9 @@
       const studentId = activeCourse?.studentId || (courseId && courseId.startsWith("mentoria-") ? courseId.replace("mentoria-", "") : "");
 
       if (studentId) {
-        window.location.href = `treino/player.html?aluno=${studentId}&aula=${activeLesson.id}&activity=${activityTab}`;
+        window.location.href = `player.html?aluno=${studentId}&aula=${activeLesson.id}&activity=${activityTab}`;
       } else {
-        window.location.href = `treino/player.html?curso=${courseId}&modulo=${activeModule.id}&aula=${activeLesson.id}&activity=${activityTab}`;
+        window.location.href = `player.html?curso=${courseId}&modulo=${activeModule.id}&aula=${activeLesson.id}&activity=${activityTab}`;
       }
     }
 

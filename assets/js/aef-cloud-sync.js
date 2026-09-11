@@ -1104,7 +1104,10 @@
       let sdkSuccess = false;
       try {
         if (this.db) {
-          const coursesSnap = await this.db.collection("courses").get();
+          const coursesSnap = await Promise.race([
+      this.db.collection("courses").get(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on courses.get()")), 5000))
+    ]);
           if (!coursesSnap.empty) {
             const coursePromises = coursesSnap.docs.map(async (cDoc) => {
               const cid = cDoc.id;
