@@ -815,7 +815,7 @@
 
         // ✅ CORREÇÃO CRÍTICA: usa APENAS o header x-goog-api-key
         // NÃO colocar ?key= na URL junto com o header — causa "invalid authentication credentials"
-        const MODEL = "gemini-2.5-flash-preview-tts";
+        const MODEL = "gemini-3.7-flash-preview-tts";
         const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
         // Retry automático 1x em caso de erro 500 (recomendação oficial da doc TTS)
