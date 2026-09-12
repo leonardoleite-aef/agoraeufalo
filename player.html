@@ -774,7 +774,7 @@
         console.log("loadCoursesData calling"); await loadCoursesData(); console.log("loadCoursesData done");
 
         // Handle URL Deep-Linking (e.g. ?curso=dtc_curso ou ?aula=...)
-        handleUrlParams();
+        await handleUrlParams();
 
         // Render Resume Activity card if exists
         loadResumeCard();
@@ -821,13 +821,15 @@
         let hierarchy = {};
 
         try {
-          if (syncEngine && typeof syncEngine.getCoursesHierarchy === 'function') {
+          if (syncEngine && typeof syncEngine.getCoursesList === 'function') {
+            hierarchy = await syncEngine.getCoursesList(window.AEF_COURSES_REGISTRY || null);
+          } else if (syncEngine && typeof syncEngine.getCoursesHierarchy === 'function') {
             hierarchy = await syncEngine.getCoursesHierarchy(window.AEF_COURSES_REGISTRY || null);
           } else if (window.AEF_COURSES_REGISTRY) {
             hierarchy = JSON.parse(JSON.stringify(window.AEF_COURSES_REGISTRY));
           }
         } catch (err) {
-          console.warn('⚠️ [AEF Player] Falha no getCoursesHierarchy, usando registry base:', err);
+          console.warn('⚠️ [AEF Player] Falha no loadCoursesData, usando registry base:', err);
           hierarchy = window.AEF_COURSES_REGISTRY || {};
         }
 
@@ -1021,9 +1023,23 @@
       // =======================================================================
       // VIEW RENDERING: COURSE VIEW (SPOTIFY ALBUM STYLE)
       // =======================================================================
-      window.openCourse = (courseId) => {
-        const course = state.courses[courseId];
+      window.openCourse = async (courseId) => {
+        let course = state.courses[courseId];
         if (!course) return;
+
+        // Lazy Load: se o curso só tem a casca (metadata) vinda do getCoursesList, buscamos o conteúdo completo
+        if (!course.modules || course.modules.length === 0) {
+          const syncEngine = window.AEFCloudSync || window.aefCloudSync;
+          if (syncEngine && typeof syncEngine.getCourseHierarchy === 'function') {
+            document.getElementById('home-courses-count').innerText = "Carregando...";
+            const fullCourse = await syncEngine.getCourseHierarchy(courseId, window.AEF_COURSES_REGISTRY || {});
+            if (fullCourse) {
+               course = fullCourse;
+               state.courses[courseId] = fullCourse;
+            }
+            document.getElementById('home-courses-count').innerText = "";
+          }
+        }
 
         state.selectedCourseId = courseId;
         state.activeCourse = course;
@@ -1767,13 +1783,13 @@
       // =======================================================================
       // DEEP-LINKING URL PARAMETERS
       // =======================================================================
-      function handleUrlParams() {
+      async function handleUrlParams() {
         const params = new URLSearchParams(window.location.search);
         const courseParam = params.get('curso') || params.get('course') || params.get('courseId');
         const lessonParam = params.get('aula') || params.get('lesson') || params.get('lessonId');
 
         if (courseParam && state.courses[courseParam]) {
-          window.openCourse(courseParam);
+          await window.openCourse(courseParam);
           if (lessonParam && state.flatLessonsList.some(l => l.id === lessonParam)) {
             const match = state.flatLessonsList.find(l => l.id === lessonParam);
             if (match) {
