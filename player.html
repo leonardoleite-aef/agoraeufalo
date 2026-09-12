@@ -843,10 +843,20 @@
           return window.AEFAccessEngine.hasAccess(state.user, c);
         });
 
+        let isPremium = false;
+        if (window.AEFAccessEngine && state.user) {
+          const cats = window.AEFAccessEngine.resolveUserCategories(state.user);
+          isPremium = cats.includes('member_pago') || cats.includes('member_mentoria');
+        }
+
         state.otherCourses = allList.filter(c => {
           if (!window.AEFAccessEngine) return false;
           
-          // Ocultar cursos de mentoria privada da vitrine comercial de upsell
+          // Filosofia Calm EdTech: Se o aluno é premium (assinante/mentorado),
+          // o Player deve ser um santuário de treino livre de ads/upsells.
+          if (isPremium) return false;
+          
+          // Ocultar cursos de mentoria privada da vitrine comercial de upsell (mesmo para Free)
           if (c.id && c.id.startsWith("mentoria-")) return false;
           if (c.badge && c.badge.toUpperCase().includes("MENTORIA")) return false;
           
