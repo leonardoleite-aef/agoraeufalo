@@ -232,6 +232,7 @@ export default {
         '/index': '/',
         '/projeto-aef.html': '/projeto-aef',
         '/precos.html': '/precos',
+        '/cursos.html': '/cursos',
         '/ebook.html': '/ebook',
         '/guia-magic-stories.html': '/guia-magic-stories',
         '/contato.html': '/contato',
@@ -247,8 +248,8 @@ export default {
 
       const publicFileMap = {
         '/': '/index.html',
-        '/projeto-aef': '/projeto-aef.html',
-        '/precos': '/precos.html',
+        '/aefclub': '/aefclub.html',
+        '/cursos': '/cursos.html',
         '/ebook': '/ebook.html',
         '/guia-magic-stories': '/guia-magic-stories.html',
         '/contato': '/contato.html',

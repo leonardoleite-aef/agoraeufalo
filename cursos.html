@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ecossistema AgoraEuFalo | Catálogo de Cursos • Professor Leonardo Leite</title>
+  <meta name="title" content="Ecossistema AgoraEuFalo | Catálogo de Cursos • Professor Leonardo Leite">
+  <meta name="description" content="Conheça todos os treinamentos, mentorias e o AEF Club. Treine seu ouvido e fale inglês com naturalidade.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              deep: '#060D17',
+              petrol: '#0D2040',
+              slate: '#1E293B',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              'accent-light': '#FDF8F0',
+              muted: '#64748B',
+              subtle: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    .amber-ambient-glow {
+      background: radial-gradient(circle, rgba(217,119,6,0.18) 0%, rgba(217,119,6,0) 70%);
+    }
+    .modal-overlay {
+      background: rgba(6, 13, 23, 0.85);
+      backdrop-filter: blur(8px);
+    }
+  </style>
+  <script src="assets/js/aef-courses-registry.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- ========================================================================= -->
+  <!-- HEADER CINEMÁTICO -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-[#060D17]/95 backdrop-blur-md border-b border-white/10 transition-all text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3 shrink-0 group">
+        <img src="assets/images/logo-fundo-escuro.png" alt="Logo AgoraEuFalo" class="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"/>
+      </a>
+      <nav class="hidden lg:flex items-center gap-3 xl:gap-5 2xl:gap-6 text-xs xl:text-sm font-semibold text-slate-300">
+        <a href="index.html" class="hover:text-amber-400 transition-colors">Início</a>
+        <a href="cursos.html" class="text-amber-400 font-bold">Cursos</a>
+        <a href="aefclub.html#planos" class="hover:text-amber-400 transition-colors">Preços</a>
+        <a href="contato.html" class="hover:text-amber-400 transition-colors">Contato</a>
+      </nav>
+      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <a href="portal.html" class="hidden sm:inline-flex px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 border border-white/15 transition-all">
+          <span>Já sou Aluno</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    
+    <!-- ========================================================================= -->
+    <!-- 1. HERO SECTION: AEF CLUB (MEMBERSHIP) -->
+    <!-- ========================================================================= -->
+    <section class="relative bg-brand-deep text-white py-24 sm:py-32 overflow-hidden">
+      <div class="absolute inset-0 amber-ambient-glow opacity-60"></div>
+      
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+        <div class="lg:w-1/2 flex flex-col items-start text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider mb-6">
+            <i data-lucide="crown" class="w-4 h-4"></i>
+            O Destino Principal
+          </div>
+          
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            O Ecossistema Completo <br/>
+            <span class="text-amber-500 italic">AEF Club</span>
+          </h1>
+          
+          <p class="text-lg sm:text-xl text-slate-300 leading-relaxed mb-10 max-w-2xl font-light">
+            A melhor decisão que você pode tomar. Acesso total a todas as Magic Stories, biblioteca de pronúncia, simulador de diálogo e mentorias gravadas. O inglês vivo para quem quer resolver a fluência definitivamente.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row items-start gap-4 w-full sm:w-auto">
+            <a href="aefclub.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-lg shadow-lg shadow-amber-500/20 active:scale-95 transition-all text-center">
+              Aprenda sobre AEFclub
+            </a>
+            <div class="flex flex-col items-center w-full sm:w-auto">
+              <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" data-open-checkout="true" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-bold text-lg transition-all text-center">
+                Assinar Agora
+              </a>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2 w-full max-w-lg lg:max-w-none mx-auto">
+          <!-- Ilustração/Mockup do Club -->
+          <div class="aspect-[4/3] rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 shadow-2xl overflow-hidden relative flex items-center justify-center">
+            <img src="assets/images/capa-aef-club.jpg" alt="AEF Club Interface" class="absolute inset-0 w-full h-full object-cover opacity-60" onerror="this.style.display='none'">
+            <div class="z-10 text-center p-8">
+              <i data-lucide="gem" class="w-16 h-16 text-amber-500 mx-auto mb-4 opacity-80"></i>
+              <div class="text-2xl font-serif text-slate-300 italic">Experience the Living Language</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 2. GRADE: CURSOS AVULSOS / SOBREVIVÊNCIA -->
+    <!-- ========================================================================= -->
+    <section class="py-20 sm:py-28 bg-slate-50 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-4">Treinamentos Específicos</h2>
+          <p class="text-lg text-slate-600">Direto ao ponto. Resolva uma dor específica, prepare-se para uma viagem ou destrave uma habilidade essencial.</p>
+        </div>
+
+        <!-- Grade Injetada Dinamicamente -->
+        <div id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Card Skeleton / Loading -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col animate-pulse h-[400px]">
+            <div class="h-48 bg-slate-200"></div>
+            <div class="p-6 flex-grow flex flex-col gap-4">
+              <div class="h-6 bg-slate-200 rounded w-3/4"></div>
+              <div class="h-4 bg-slate-200 rounded w-full"></div>
+              <div class="h-4 bg-slate-200 rounded w-5/6"></div>
+              <div class="mt-auto h-10 bg-slate-200 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 3. MENTORIA VIP (HIGH-TICKET BASE) -->
+    <!-- ========================================================================= -->
+    <section class="py-24 bg-brand-navy text-white relative border-t border-slate-800">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <i data-lucide="compass" class="w-12 h-12 text-amber-500 mx-auto mb-6"></i>
+        <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-6">Mentoria Individual (VIP)</h2>
+        <p class="text-xl text-slate-300 font-light mb-10 max-w-2xl mx-auto">
+          Para profissionais, executivos ou alunos que buscam acompanhamento 1-a-1 direto com o Professor Leo. Uma jornada personalizada, sob medida para a sua rotina e necessidade urgente.
+        </p>
+        
+        <!-- Estado Dinâmico: Aberto vs Fechado. Simulado aqui para fins visuais. -->
+        <div class="inline-block p-[2px] rounded-xl bg-gradient-to-r from-amber-500 to-amber-700">
+          <a href="mentoria.html" class="block px-8 py-4 bg-brand-deep rounded-xl hover:bg-slate-900 transition-colors font-bold text-amber-400 text-lg">
+            Aplicar para a Próxima Turma ➔
+          </a>
+        </div>
+        <p class="mt-4 text-sm text-slate-500 uppercase tracking-widest font-semibold">Vagas Extremamente Limitadas</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. SALES MODAL (QUICK VIEW) PARA CURSOS AVULSOS -->
+  <!-- ========================================================================= -->
+  <div id="sales-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 modal-overlay" onclick="closeSalesModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="absolute inset-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 w-full sm:max-w-2xl h-full sm:h-auto max-h-[100vh] sm:max-h-[90vh] bg-white sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 scale-95 origin-center">
+      
+      <!-- Close Button -->
+      <button onclick="closeSalesModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur rounded-full flex items-center justify-center text-white transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Video Area -->
+      <div class="w-full aspect-video bg-slate-900 relative">
+        <iframe id="modal-video" class="w-full h-full" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </div>
+
+      <!-- Content Area -->
+      <div class="p-6 sm:p-8 overflow-y-auto flex-grow bg-slate-50">
+        <div id="modal-tags" class="flex gap-2 mb-3">
+          <!-- Tags injetadas -->
+        </div>
+        <h3 id="modal-title" class="text-2xl sm:text-3xl font-serif font-bold text-slate-900 mb-4">Nome do Curso</h3>
+        
+        <div class="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm">
+          <h4 class="font-bold text-slate-800 mb-3 text-sm uppercase tracking-wider">O que você vai dominar:</h4>
+          <ul id="modal-bullets" class="space-y-3">
+            <!-- Bullets injetados -->
+          </ul>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-auto">
+          <div class="text-center sm:text-left w-full sm:w-auto">
+            <p class="text-sm text-slate-500 font-semibold mb-1">Por apenas:</p>
+            <p id="modal-price" class="text-2xl font-black text-slate-900">R$ 97,00</p>
+          </div>
+          
+          <!-- CTA -->
+          <a id="modal-checkout-btn" href="#" target="_blank" data-open-checkout="true" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-lg shadow-lg shadow-amber-500/20 active:scale-95 transition-all text-center">
+            Assinar Agora
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- MODAL POPUP DE CHECKOUT INTERNO (HOTMART IN-PAGE POPUP)                  -->
+  <!-- ========================================================================= -->
+  <div 
+    id="checkout-modal" 
+    class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center px-3 sm:px-4 md:px-6 opacity-0 transition-opacity duration-300"
+    style="padding-top: max(3.5rem, env(safe-area-inset-top, 3rem)); padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1rem));"
+  >
+    <div class="relative w-full max-w-4xl h-[86vh] sm:h-[92vh] max-h-[850px] bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col">
+      
+      <!-- Header da Janela de Checkout -->
+      <div class="h-14 px-4 sm:px-5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <span class="font-extrabold text-sm sm:text-base text-white tracking-tight">
+            AgoraEuFalo<span class="text-brand-accent">.</span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] sm:text-xs font-bold border border-emerald-500/30">
+            <i data-lucide="shield-check" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+            <span>Ambiente Seguro (SSL)</span>
+          </span>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <a 
+            href="aefclub.html#planos" 
+            class="text-xs text-slate-400 hover:text-amber-300 hidden md:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-amber-400/50 transition-colors"
+          >
+            <span>Conheça os planos</span>
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+          </a>
+          <button 
+            type="button" 
+            id="close-checkout-modal"
+            class="w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-white flex items-center justify-center border border-slate-700 transition-all cursor-pointer"
+            aria-label="Fechar Checkout"
+          >
+            <i data-lucide="x" class="w-5 h-5 sm:w-4 sm:h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Container do Iframe do Checkout da Hotmart -->
+      <div class="relative w-full flex-grow bg-slate-50 overflow-hidden" id="checkout-iframe-container">
+        <!-- O iframe do checkout será injetado dinamicamente no clique -->
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    
+    // Load courses dynamically from the Registry (or Firestore in the future)
+    function loadDynamicCourses() {
+      if (!window.AEF_COURSES_REGISTRY) return [];
+      
+      const courses = [];
+      for (const [id, data] of Object.entries(window.AEF_COURSES_REGISTRY)) {
+        // Exclude mentorships (studentId) and unpublished courses
+        if (data.published === true && !data.studentId) {
+          
+          // Map to the format expected by the UI
+          courses.push({
+            id: data.id,
+            title: data.title,
+            headline: data.description || "Treinamento intensivo prático.",
+            tags: data.categories || ["Curso Completo"],
+            coverImageUrl: data.coverImageUrl || "assets/images/cover-default-aef.jpg",
+            hasActiveOffer: !!data.standaloneCheckoutHotmart,
+            salesModal: {
+              videoId: data.salesVideoId || "", // If empty, video will be hidden
+              bullets: [
+                "Aprenda com situações da vida real e contexto nativo.",
+                "Material de apoio interativo e PDF para download.",
+                "Acesso pelo computador, celular ou tablet."
+              ],
+              priceDisplay: "Ver Oferta",
+              checkoutUrl: data.standaloneCheckoutHotmart || "https://pay.hotmart.com/T107479074N?off=mgwnab3h"
+            },
+            waitlistFallbackMessage: "Inscrições encerradas no momento. Acompanhe as redes sociais para novas vagas."
+          });
+        }
+      }
+      return courses;
+    }
+
+    // Render Grid
+    function renderGrid() {
+      const grid = document.getElementById('courses-grid');
+      grid.innerHTML = ''; // Clear skeleton
+
+      window.CURRENT_COURSES = loadDynamicCourses();
+
+      window.CURRENT_COURSES.forEach(course => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full";
+        
+        let ctaHtml = '';
+        if (course.hasActiveOffer) {
+          ctaHtml = `<button onclick="openSalesModal('${course.id}')" class="mt-auto w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-colors">Saiba Mais</button>`;
+        } else {
+          ctaHtml = `<button onclick="alert('${course.waitlistFallbackMessage}')" class="mt-auto w-full py-3.5 bg-slate-200 text-slate-500 font-bold rounded-xl cursor-not-allowed">Inscrições Esgotadas</button>`;
+        }
+
+        const tagsHtml = course.tags.map(t => `<span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-[10px] font-black uppercase tracking-wider rounded-lg border border-amber-200/50">${t}</span>`).join('');
+
+        card.innerHTML = `
+          <div class="h-48 bg-slate-200 relative overflow-hidden group">
+            <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.style.display='none'; this.parentElement.classList.add('bg-slate-800')">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="p-6 flex-grow flex flex-col">
+            <div class="flex flex-wrap gap-1.5 mb-3">${tagsHtml}</div>
+            <h3 class="font-serif font-bold text-xl text-slate-900 mb-2">${course.title}</h3>
+            <p class="text-sm text-slate-600 mb-6 leading-relaxed">${course.headline}</p>
+            ${ctaHtml}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    
+    const modalEl = document.getElementById('sales-modal');
+    const modalContent = modalEl.querySelector('div:nth-child(2)'); // The inner container
+
+    
+    function openSalesModal(courseId) {
+      const course = window.CURRENT_COURSES.find(c => c.id === courseId);
+      if(!course || !course.salesModal) return;
+
+      // Populate data
+      document.getElementById('modal-title').textContent = course.title;
+      document.getElementById('modal-price').textContent = course.salesModal.priceDisplay;
+      
+      const checkoutBtn = document.getElementById('modal-checkout-btn');
+      if (checkoutBtn) checkoutBtn.href = course.salesModal.checkoutUrl;
+      
+      const tagsContainer = document.getElementById('modal-tags');
+      tagsContainer.innerHTML = course.tags.map(t => `<span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-[10px] font-black uppercase tracking-wider rounded-lg border border-amber-200/50">${t}</span>`).join('');
+
+      const bulletsContainer = document.getElementById('modal-bullets');
+      bulletsContainer.innerHTML = course.salesModal.bullets.map(b => `
+        <li class="flex items-start gap-2.5 text-slate-700 text-sm">
+          <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5"></i>
+          <span>${b}</span>
+        </li>
+      `).join('');
+
+      const videoFrame = document.getElementById('modal-video');
+      if (course.salesModal.videoId) {
+        videoFrame.src = `https://www.youtube.com/embed/${course.salesModal.videoId}?autoplay=1`;
+        videoFrame.parentElement.style.display = 'block';
+      } else {
+        videoFrame.src = '';
+        videoFrame.parentElement.style.display = 'none'; // hide video container if no video
+      }
+
+      lucide.createIcons();
+
+      // Show modal with animation
+      modalEl.classList.remove('hidden');
+      setTimeout(() => {
+        modalEl.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
+      }, 10);
+    }
+    
+    function closeSalesModal() {
+      modalEl.classList.add('opacity-0');
+      modalContent.classList.remove('scale-100');
+      modalContent.classList.add('scale-95');
+      
+      setTimeout(() => {
+        modalEl.classList.add('hidden');
+        document.getElementById('modal-video').src = ''; // Stop video playback
+      }, 300); // match transition duration
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      
+    // Checkout Modal Logic
+    const checkoutModal = document.getElementById('checkout-modal');
+    const closeCheckoutModalBtn = document.getElementById('close-checkout-modal');
+    const checkoutIframeContainer = document.getElementById('checkout-iframe-container');
+    const checkoutTriggers = document.querySelectorAll('[data-open-checkout="true"]');
+
+    function openCheckoutModal(checkoutUrl) {
+      if (!checkoutModal || !checkoutIframeContainer) return;
+      const url = checkoutUrl || 'https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=popup_site';
+      checkoutIframeContainer.innerHTML = `
+        <iframe 
+          class="w-full h-full border-0" 
+          src="${url}" 
+          title="Checkout Seguro Hotmart" 
+          allow="payment"
+        ></iframe>
+      `;
+      checkoutModal.classList.remove('hidden');
+      checkoutModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        checkoutModal.classList.remove('opacity-0');
+        checkoutModal.classList.add('opacity-100');
+      });
+    }
+
+    function closeCheckoutModal() {
+      if (!checkoutModal || !checkoutIframeContainer) return;
+      checkoutModal.classList.remove('opacity-100');
+      checkoutModal.classList.add('opacity-0');
+      setTimeout(() => {
+        checkoutModal.classList.remove('flex');
+        checkoutModal.classList.add('hidden');
+        checkoutIframeContainer.innerHTML = '';
+        document.body.style.overflow = '';
+      }, 250);
+    }
+
+    checkoutTriggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = trigger.getAttribute('href');
+        openCheckoutModal(href);
+      });
+    });
+
+    if (closeCheckoutModalBtn) {
+      closeCheckoutModalBtn.addEventListener('click', closeCheckoutModal);
+    }
+    if (checkoutModal) {
+      checkoutModal.addEventListener('click', (e) => {
+        if (e.target === checkoutModal) {
+          closeCheckoutModal();
+        }
+      });
+    }
+    
+      // Simulate network delay
+      setTimeout(renderGrid, 800);
+    });
+  </script>
+</body>
+</html>
