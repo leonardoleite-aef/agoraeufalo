@@ -873,7 +873,11 @@
 
     function resolveLessonMedia(found) {
       if (Array.isArray(found.media) && found.media.length > 0) {
-        return found.media.map(m => ({ ...m }));
+        // Protect against corrupted stringified objects "[object Object]"
+        const validMedia = found.media.filter(m => typeof m === 'object' && m !== null && !Array.isArray(m));
+        if (validMedia.length > 0) {
+          return validMedia.map(m => ({ ...m }));
+        }
       }
       const list = [];
       if (found.videoUrl && found.videoUrl.trim() !== '') {
@@ -1037,11 +1041,14 @@
 
     function resolveLessonDownloads(found) {
       if (Array.isArray(found.downloads) && found.downloads.length > 0) {
-        return found.downloads.map(d => ({
-          type: d.type || 'pdf',
-          url: (d.url || '').trim(),
-          title: d.title || (d.type === 'mp3' ? 'Áudio de Apoio' : d.type === 'zip' ? 'Pacote Completo (ZIP)' : 'Apostila (PDF)')
-        }));
+        const valid = found.downloads.filter(d => typeof d === 'object' && d !== null && !Array.isArray(d));
+        if (valid.length > 0) {
+          return valid.map(d => ({
+            type: d.type || 'pdf',
+            url: (d.url || '').trim(),
+            title: d.title || (d.type === 'mp3' ? 'Áudio de Apoio' : d.type === 'zip' ? 'Pacote Completo (ZIP)' : 'Apostila (PDF)')
+          }));
+        }
       }
 
       // Fallback: single pdfUrl from lesson, module, or course

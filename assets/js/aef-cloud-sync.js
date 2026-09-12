@@ -1112,7 +1112,7 @@
         if (v === undefined || typeof v === 'function' || k === 'modules' || k === 'lessons') continue;
         
         // Support string arrays (like categories, legacyGrants, tags, etc)
-        if (Array.isArray(v) && k !== 'sentences' && k !== 'chunks' && k !== 'exercises') {
+        if (Array.isArray(v) && k !== 'sentences' && k !== 'chunks' && k !== 'exercises' && k !== 'media' && k !== 'downloads') {
            fields[k] = {
              arrayValue: {
                values: v.map(str => ({ stringValue: String(str) }))
