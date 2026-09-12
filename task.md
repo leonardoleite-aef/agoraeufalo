@@ -1,0 +1,7 @@
+- [ ] Analyze `admin-ofertas.html` and `aef-offers-engine.js`
+- [ ] Refactor `admin-ofertas.html` to save to Firestore dynamically and remove hardcoded logic.
+- [ ] Determine how to handle multiple offers per product (rule: prioritize the most recently updated "active" offer).
+- [ ] Refactor `/cursos` to fetch courses AND offers from Firestore.
+- [ ] Implement UI splitting in `/cursos`: "AEF Club" vs "Cursos Avulsos".
+- [ ] Map "Comprar" vs "Esgotado" logic based on active offer status.
+- [ ] Populate Quick View Sales Modal with real Hotmart offer data.

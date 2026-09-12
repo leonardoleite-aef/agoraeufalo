@@ -13,7 +13,6 @@ const AEF_COURSES_DATA = {
     "categories": ["foundations"],
     "themeColor": "ruby",
     "coverImageUrl": "assets/images/cover-dates-and-times-square.jpg",
-    "standaloneCheckoutHotmart": "https://pay.hotmart.com/T107479074N?off=mgwnab3h",
     "description": "Aprenda tudo sobre datas, horas, uso de tempo e períodos em inglês. Um curso rápido que definitivamente vai te deixar pronto para escutar, entender e expresar tudo sobre datas, dias, horas, calendários e períodos de tempo em Inglês.",
     "published": true,
     "modules": [
