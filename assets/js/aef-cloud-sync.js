@@ -931,6 +931,17 @@
       const fields = {};
       for (const [k, v] of Object.entries(obj)) {
         if (v === undefined || typeof v === 'function' || k === 'modules' || k === 'lessons') continue;
+        
+        // Support string arrays (like categories, legacyGrants, tags, etc)
+        if (Array.isArray(v) && k !== 'sentences' && k !== 'chunks' && k !== 'exercises') {
+           fields[k] = {
+             arrayValue: {
+               values: v.map(str => ({ stringValue: String(str) }))
+             }
+           };
+           continue;
+        }
+
         if (k === 'sentences' && Array.isArray(v)) {
           fields[k] = {
             arrayValue: {
@@ -997,18 +1008,15 @@
       if (!courseData || !courseData.id) throw new Error("ID do curso obrigatório.");
       await this.init();
       const cid = courseData.id;
-      const payload = {
-        id: cid,
-        title: courseData.title || cid,
-        slug: courseData.slug || cid,
-        badge: courseData.badge || "CURSO LIBERADO",
-        tierRequired: courseData.tierRequired || "vip",
-        themeColor: courseData.themeColor || "amber",
-        coverImageUrl: courseData.coverImageUrl || "assets/images/cover-default-aef.jpg",
-        description: courseData.description || "",
-        published: courseData.published !== false,
-        updatedAt: new Date().toISOString()
-      };
+      const payload = { ...courseData };
+      payload.updatedAt = new Date().toISOString();
+      
+      // Limpeza de campos legados caso existam
+      if (payload.tierRequired !== undefined) {
+         // O SDK não precisa forçar "vip". Deixa como undef se não tiver.
+         if (!payload.tierRequired) delete payload.tierRequired;
+      }
+      
 
       let saved = false;
       if (this.db) {
