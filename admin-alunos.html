@@ -1641,9 +1641,10 @@
           updatedAt: new Date().toISOString()
         };
 
-        if (window.aefCloudSync) {
-          await window.aefCloudSync.init();
-          await window.aefCloudSync.saveStudentCloud(studentPayload);
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.updateUserTierAndRole(studentId, 'vip_mentorship', 'student', studentPayload.enrolledProducts, studentPayload);
+          await window.aefPortalAuth.saveMenteeDoc(studentId, studentPayload);
         }
 
         // 2. Criar Objeto do Curso VIP
