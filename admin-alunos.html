@@ -1050,6 +1050,7 @@
         const tracksCount = s.tracksCount || ((s.tier && s.tier.includes('vip')) || (s.categories && s.categories.includes('member_mentoria')) ? 1 : 0);
         const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(s.name || 'A').substring(0, 2).toUpperCase()}</div>`;
         const isVIP = (s.tier === 'vip_mentorship' || s.tier === 'vip') || (s.categories && s.categories.includes('member_mentoria'));
+        const hasVipSpace = s.enrolledProducts && s.enrolledProducts.includes('mentoria-' + s.id);
         const tracksLabel = tracksCount === 1 ? '1 faixa ativa' : `${tracksCount} faixas ativas`;
 
         return `
@@ -1078,8 +1079,8 @@
                 <button onclick="openDeleteStudentModal('${s.email}', '${(s.name || '').replace(/'/g, "\\'")}', '${s.id || ''}', '${s.tier || 'free'}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 border border-rose-200 transition cursor-pointer" title="Excluir Aluno Permanentemente">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
-                ${isVIP ? `
-                  <button onclick="openPrescribeModal('${s.id}', '${s.name}')" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Prescrever Áudio VIP">
+                ${isVIP ? (hasVipSpace ? `
+                  <button onclick="openPrescribeModal('${s.id}', '${(s.name || '').replace(/'/g, "\'")}')" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Prescrever Áudio VIP">
                     <i data-lucide="mic" class="w-3 h-3 text-amber-700"></i>
                     <span>Prescrever</span>
                   </button>
@@ -1093,7 +1094,12 @@
                   <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-50 hover:text-amber-900 text-white text-[11px] font-bold transition inline-flex items-center gap-1" title="Abrir Player no Celular">
                     <span>Player</span> <span>↗</span>
                   </a>
-                ` : ''}
+                ` : `
+                  <button onclick="openCreateVipSpaceModal('${s.id}', '${(s.name || '').replace(/'/g, "\'")}', '${s.email}')" class="px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Criar Curso e Sala do Mentorado no Banco de Dados">
+                    <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i>
+                    <span>Gerar Sala VIP</span>
+                  </button>
+                `) : ''}
               </div>
             </td>
           </tr>
