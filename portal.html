@@ -1390,18 +1390,44 @@
 
       const normalizedCurrentEmail = (currentEmail || '').trim().toLowerCase();
 
-      for (const [id, course] of Object.entries(courses)) {
-        try {
-          if (course.published === false) continue;
-
-          // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade
-          const isMentorshipCourse = course.tierRequired === 'vip' || id.startsWith('mentoria-');
-          const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
+      // Extrai, filtra e ordena a matriz de cursos para uma vitrine hierárquica e limpa
+      const visibleCourses = Object.entries(courses)
+        .map(([id, c]) => Object.assign({ id }, c))
+        .filter(c => {
+          if (c.published === false) return false;
+          // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade absoluta
+          const isMentorshipCourse = c.tierRequired === 'vip' || c.id.startsWith('mentoria-');
+          const courseOwnerEmail = (c.studentEmail || '').trim().toLowerCase();
           const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
+          if (isMentorshipCourse && !isAdmin && !isOwner) return false;
+          return true;
+        });
 
-          if (isMentorshipCourse && !isAdmin && !isOwner) {
-            continue;
-          }
+      // HIERARQUIA DE PRIORIDADE (Showcase / Vitrine)
+      // Define a ordem em que os cursos devem aparecer na tela para os alunos
+      const priorityList = [
+        'aef-experience',
+        'english-quickstart',
+        'dates-and-times',
+        'airport-and-flights',
+        'masterclass-phrasal-verbs',
+        'masterclass-pronunciation',
+        'first-steps',
+        'ms-legacy'
+      ];
+
+      visibleCourses.sort((a, b) => {
+        let idxA = priorityList.indexOf(a.id);
+        let idxB = priorityList.indexOf(b.id);
+        if (idxA === -1) idxA = 999;
+        if (idxB === -1) idxB = 999;
+        if (idxA !== idxB) return idxA - idxB;
+        return (a.title || '').localeCompare(b.title || '');
+      });
+
+      for (const course of visibleCourses) {
+        const id = course.id;
+        try {
 
           totalVisibleCatalog++;
 
