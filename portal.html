@@ -1433,6 +1433,8 @@
           const hasAccess = window.AEFAccessEngine 
             ? window.AEFAccessEngine.hasAccess(userObj, course)
             : (isAdmin || isOwner || enrolledProducts.includes(id) || course.tierRequired === 'free');
+            
+          const isMentorshipCourse = course.id.startsWith('mentoria-') || (course.badge && String(course.badge).toUpperCase().includes('MENTORIA'));
 
           const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
           const completedInThisCourse = courseProg.completedLessons || [];
