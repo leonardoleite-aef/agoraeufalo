@@ -358,19 +358,24 @@
         // Regra 2: Ignora mentorias VIP individuais (possui studentId ou começa com mentoria-)
         if (data.studentId || data.id.startsWith('mentoria-')) continue;
 
-        // Formata os dados básicos
-        const course = {
-          id: data.id,
-          title: data.title || "Curso AEF",
-          headline: data.description || "Treinamento intensivo prático.",
-          tags: data.categories || ["Curso Completo"],
-          coverImageUrl: data.coverImageUrl || "assets/images/cover-default-aef.jpg",
-          accessTier: data.accessTier || "all_access",
-          waitlistFallbackMessage: "Inscrições encerradas no momento. Acompanhe as redes sociais para novas vagas.",
-          hasActiveOffer: false,
-          isClubIncluded: false,
-          salesModal: null
-        };
+          // Fallback para cursos antigos que não tinham accessTier
+          let courseAccessTier = data.accessTier;
+          if (!courseAccessTier) {
+            courseAccessTier = (data.tierRequired === 'vip' || data.tierRequired === 'standalone') ? 'standalone' : 'all_access';
+          }
+
+          const course = {
+            id: data.id,
+            title: data.title || "Curso AEF",
+            headline: data.description || "Treinamento intensivo prático.",
+            tags: data.categories || ["Curso Completo"],
+            coverImageUrl: data.coverImageUrl || "assets/images/cover-default-aef.jpg",
+            accessTier: courseAccessTier,
+            waitlistFallbackMessage: "Inscrições encerradas no momento. Acompanhe as redes sociais para novas vagas.",
+            hasActiveOffer: false,
+            isClubIncluded: false,
+            salesModal: null
+          };
 
         // Categorização Visual: Club vs Avulso
         if (course.accessTier === 'all_access' || course.accessTier === 'free') {

@@ -115,6 +115,36 @@
   function resolveCourseCategories(course) {
     if (!course) return [];
 
+    const cats = [];
+    
+    // Support new accessTier from admin-cursos
+    if (course.accessTier === 'free') {
+      cats.push(PRODUCT_ACCESS_CATEGORIES.FREE, PRODUCT_ACCESS_CATEGORIES.PAGO);
+    } else if (course.accessTier === 'all_access') {
+      cats.push(PRODUCT_ACCESS_CATEGORIES.PAGO);
+    } else if (course.accessTier === 'standalone') {
+      // It's a standalone course. Access is granted individually via user.enrolledProducts,
+      // handled elsewhere. But we can push a special tag or just leave it empty.
+      // Wait, let's just leave it empty so only explicit enrollments grant access.
+    }
+
+    // Support legacyGrants array from admin-cursos
+    if (Array.isArray(course.legacyGrants)) {
+      course.legacyGrants.forEach(lg => cats.push(lg));
+    }
+
+    // Support older formats
+    if (Array.isArray(course.accessCategories)) {
+      course.accessCategories.forEach(c => cats.push(c));
+    } else if (course.tierRequired) {
+      const legacyCats = migrateTierRequiredToCategories(course.tierRequired);
+      legacyCats.forEach(c => cats.push(c));
+    }
+
+    return cats;
+  }\n\n  
+    if (!course) return [];
+
     // Formato novo
     if (Array.isArray(course.accessCategories) && course.accessCategories.length > 0) {
       return course.accessCategories;
@@ -167,9 +197,20 @@
     if (course.accessTier) {
       if (course.accessTier === 'free') return true;
       if (course.accessTier === 'all_access') {
-        return userCats.some(cat => [MEMBER_CATEGORIES.PAGO, MEMBER_CATEGORIES.MENTORIA, MEMBER_CATEGORIES.LEGADO_1, MEMBER_CATEGORIES.LEGADO_2].includes(cat));
+        let allowedCats = [MEMBER_CATEGORIES.PAGO, MEMBER_CATEGORIES.MENTORIA];
+        if (course.legacyGrants) {
+          allowedCats = allowedCats.concat(course.legacyGrants);
+        } else {
+          // Fallback para manter o acesso até o curso ser salvo novamente no painel
+          allowedCats.push(MEMBER_CATEGORIES.LEGADO_1, MEMBER_CATEGORIES.LEGADO_2);
+        }
+        return userCats.some(cat => allowedCats.includes(cat));
       }
       if (course.accessTier === 'standalone') {
+        // Se for standalone, checa se tem exceção de legado
+        if (Array.isArray(course.legacyGrants) && course.legacyGrants.length > 0) {
+           if (userCats.some(cat => course.legacyGrants.includes(cat))) return true;
+        }
         return false; // Apenas compras diretas dão acesso (já validado no passo 3)
       }
     }

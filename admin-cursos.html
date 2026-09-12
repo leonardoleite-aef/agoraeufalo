@@ -3485,6 +3485,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("courseModalPriceInput").value = "";
       document.getElementById("courseModalPriceContainer").classList.add("hidden");
       
+      document.querySelectorAll('.course-legacy-chk').forEach(chk => chk.checked = false);
       document.querySelectorAll('.course-cat-chk').forEach(chk => {
         chk.checked = (chk.value === 'foundations');
       });
@@ -3521,6 +3522,10 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       document.getElementById("courseModalPriceContainer").classList.toggle('hidden', accessTier !== 'standalone');
       
       let cats = course.categories || ['foundations'];
+      let legacyGrants = course.legacyGrants || [];
+      document.querySelectorAll('.course-legacy-chk').forEach(chk => {
+        chk.checked = legacyGrants.includes(chk.value);
+      });
       document.querySelectorAll('.course-cat-chk').forEach(chk => {
         chk.checked = cats.includes(chk.value);
       });
@@ -3588,6 +3593,8 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
 
       // Coleta categorias editoriais selecionadas nos checkboxes
       const selectedCats = [];
+      const selectedLegacy = [];
+      document.querySelectorAll('.course-legacy-chk:checked').forEach(c => selectedLegacy.push(c.value));
       document.querySelectorAll('.course-cat-chk:checked').forEach(chk => {
         selectedCats.push(chk.value);
       });
@@ -3602,6 +3609,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       courseObj.title = title;
       courseObj.slug = slug;
       courseObj.categories = selectedCats;
+      courseObj.legacyGrants = selectedLegacy;
       courseObj.accessTier = accessTier;
       if (priceInCents !== null) courseObj.priceInCents = priceInCents;
       else delete courseObj.priceInCents;
