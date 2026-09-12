@@ -728,26 +728,50 @@
 
     async deleteUserDoc(userId) {
       await this.ready();
-      if (!this.db) return false;
-      try {
-        await this.db.collection('users').doc(userId).delete();
-        return true;
-      } catch (e) {
-        console.warn('Error deleting user doc from Firestore:', e);
-        return false;
+      let success = false;
+      if (this.db) {
+        try {
+          await this.db.collection('users').doc(userId).delete();
+          success = true;
+        } catch (e) {
+          console.warn('SDK deleteUserDoc failed, trying REST:', e);
+        }
       }
+      
+      if (!success) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/users/${userId}`;
+          const res = await fetch(restUrl, { method: "DELETE" });
+          if (res.ok) success = true;
+        } catch(e) {
+          console.error("REST deleteUserDoc failed:", e);
+        }
+      }
+      return success;
     }
 
     async deleteMenteeDoc(menteeId) {
       await this.ready();
-      if (!this.db) return false;
-      try {
-        await this.db.collection('students').doc(menteeId).delete();
-        return true;
-      } catch (e) {
-        console.warn('Error deleting mentee doc from Firestore:', e);
-        return false;
+      let success = false;
+      if (this.db) {
+        try {
+          await this.db.collection('students').doc(menteeId).delete();
+          success = true;
+        } catch (e) {
+          console.warn('SDK deleteMenteeDoc failed, trying REST:', e);
+        }
       }
+      
+      if (!success) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/students/${menteeId}`;
+          const res = await fetch(restUrl, { method: "DELETE" });
+          if (res.ok) success = true;
+        } catch(e) {
+          console.error("REST deleteMenteeDoc failed:", e);
+        }
+      }
+      return success;
     }
   }
 
