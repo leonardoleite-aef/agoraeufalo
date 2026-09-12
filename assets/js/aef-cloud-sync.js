@@ -1065,14 +1065,54 @@
                               // (simplified mapping for REST fallback)
                               const restObj = {
                                 id: lid,
+                                type: lf.type?.stringValue || (lf.quizId?.stringValue ? 'quiz' : (baseObj.type || 'lesson')),
+                                quizId: lf.quizId?.stringValue !== undefined ? lf.quizId.stringValue : (baseObj.quizId || ''),
+                                quizDataJson: lf.quizDataJson?.stringValue || (baseObj.quizDataJson || ''),
                                 title: lf.title?.stringValue || baseObj.title || lid,
                                 order: parseInt(lf.order?.integerValue) || baseObj.order || (reconciledLessons.length + 1),
                                 videoUrl: lf.videoUrl?.stringValue !== undefined ? lf.videoUrl.stringValue : (baseObj.videoUrl || ""),
                                 audioUrl: lf.audioUrl?.stringValue !== undefined ? lf.audioUrl.stringValue : (baseObj.audioUrl || ""),
                                 pdfUrl: lf.pdfUrl?.stringValue !== undefined ? lf.pdfUrl.stringValue : (baseObj.pdfUrl || ""),
+                                goldenTip: lf.goldenTip?.stringValue !== undefined ? lf.goldenTip.stringValue : (baseObj.goldenTip || ""),
+                                artworkUrl: lf.artworkUrl?.stringValue !== undefined ? lf.artworkUrl.stringValue : (baseObj.artworkUrl || ""),
                                 thumbnailUrl: lf.thumbnailUrl?.stringValue !== undefined ? lf.thumbnailUrl.stringValue : (baseObj.thumbnailUrl || ""),
                                 published: lf.published?.booleanValue !== undefined ? lf.published.booleanValue : (baseObj.published !== false),
-                                duration: lf.duration?.stringValue !== undefined ? lf.duration.stringValue : (baseObj.duration || "05:00")
+                                hasTrainingTrack: lf.hasTrainingTrack?.booleanValue !== undefined ? lf.hasTrainingTrack.booleanValue : (baseObj.hasTrainingTrack !== false),
+                                trainingTrackId: lf.trainingTrackId?.stringValue !== undefined ? lf.trainingTrackId.stringValue : (baseObj.trainingTrackId || lid),
+                                rawScript: lf.rawScript?.stringValue !== undefined ? lf.rawScript.stringValue : (baseObj.rawScript || ""),
+                                processedContentHtml: lf.processedContentHtml?.stringValue !== undefined ? lf.processedContentHtml.stringValue : (baseObj.processedContentHtml || ""),
+                                duration: lf.duration?.stringValue !== undefined ? lf.duration.stringValue : (baseObj.duration || "05:00"),
+                                activity: lf.activity?.stringValue !== undefined ? lf.activity.stringValue : (baseObj.activity || ""),
+                                description: lf.description?.stringValue !== undefined ? lf.description.stringValue : (baseObj.description || ""),
+                                sentences: (lf.sentences?.arrayValue?.values || []).length > 0 ? (lf.sentences.arrayValue.values.map(sv => {
+                                  const sf = sv.mapValue?.fields || {};
+                                  return {
+                                    id: parseInt(sf.id?.integerValue || sf.id?.stringValue || "1"),
+                                    start: parseFloat(sf.start?.doubleValue || sf.start?.stringValue || "0"),
+                                    end: parseFloat(sf.end?.doubleValue || sf.end?.stringValue || "0"),
+                                    text: sf.text?.stringValue || "",
+                                    spokenTranslation: sf.spokenTranslation?.stringValue || sf.translation?.stringValue || "",
+                                    notes: sf.notes?.stringValue || ""
+                                  };
+                                })) : (baseObj.sentences || []),
+                                media: (lf.media?.arrayValue?.values || []).map(mv => {
+                                  const mf = mv.mapValue?.fields || {};
+                                  return {
+                                    type: mf.type?.stringValue || 'video_youtube',
+                                    url: mf.url?.stringValue || '',
+                                    title: mf.title?.stringValue || '',
+                                    durationStr: mf.durationStr?.stringValue || '',
+                                    thumbnailUrl: mf.thumbnailUrl?.stringValue || ''
+                                  };
+                                }),
+                                downloads: (lf.downloads?.arrayValue?.values || []).map(dv => {
+                                  const df = dv.mapValue?.fields || {};
+                                  return {
+                                    type: df.type?.stringValue || 'pdf',
+                                    url: df.url?.stringValue || '',
+                                    title: df.title?.stringValue || ''
+                                  };
+                                })
                               };
                               const mergedObj = Object.assign({}, baseObj, restObj);
                               reconciledLessons.push(mergedObj);
