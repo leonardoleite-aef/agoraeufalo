@@ -1357,6 +1357,78 @@
      * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
      * Merges Base Canonical Registry with Google Cloud Firestore Subcollections in parallel
      */
+    
+    /**
+     * Fetches only the list of courses without traversing modules and lessons.
+     * Ideal for populating dropdowns or lists very quickly.
+     */
+    async getCoursesList(baseRegistry = null) {
+      await this.init();
+      const courses = JSON.parse(JSON.stringify(baseRegistry || (window.AEF_COURSES_REGISTRY || {})));
+
+      let sdkSuccess = false;
+      try {
+        if (this.db) {
+          const coursesSnap = await Promise.race([
+            this.db.collection("courses").get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on courses.get()")), 5000))
+          ]);
+          if (!coursesSnap.empty) {
+            for (const cDoc of coursesSnap.docs) {
+              const cid = cDoc.id;
+              const cData = cDoc.data();
+              if (!courses[cid]) {
+                courses[cid] = { id: cid, title: cData.title || cid, modules: [] };
+              }
+              if (cData.title) courses[cid].title = cData.title;
+              if (cData.description !== undefined) courses[cid].description = cData.description;
+              if (cData.coverImageUrl) courses[cid].coverImageUrl = cData.coverImageUrl;
+              if (cData.tierRequired) courses[cid].tierRequired = cData.tierRequired;
+              if (cData.themeColor) courses[cid].themeColor = cData.themeColor;
+              if (cData.badge) courses[cid].badge = cData.badge;
+              if (cData.published !== undefined) courses[cid].published = cData.published;
+              if (cData.slug) courses[cid].slug = cData.slug;
+              if (cData.accessTier) courses[cid].accessTier = cData.accessTier;
+              courses[cid].modules = courses[cid].modules || [];
+            }
+            sdkSuccess = true;
+          }
+        }
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro no SDK Firestore (courses list), executando REST fallback:", err);
+      }
+
+      if (!sdkSuccess) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.documents) {
+              for (const doc of data.documents) {
+                const cid = doc.name.split('/').pop();
+                const f = doc.fields || {};
+                if (!courses[cid]) {
+                  courses[cid] = { id: cid, title: f.title?.stringValue || cid, modules: [] };
+                }
+                if (f.title?.stringValue) courses[cid].title = f.title.stringValue;
+                if (f.description?.stringValue !== undefined) courses[cid].description = f.description.stringValue;
+                if (f.coverImageUrl?.stringValue) courses[cid].coverImageUrl = f.coverImageUrl.stringValue;
+                if (f.themeColor?.stringValue) courses[cid].themeColor = f.themeColor.stringValue;
+                if (f.badge?.stringValue) courses[cid].badge = f.badge.stringValue;
+                if (f.published?.booleanValue !== undefined) courses[cid].published = f.published.booleanValue;
+                if (f.slug?.stringValue) courses[cid].slug = f.slug.stringValue;
+                if (f.accessTier?.stringValue) courses[cid].accessTier = f.accessTier.stringValue;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn("⚠️ [AEFCloudSync] Erro crítico no REST fallback (courses list):", err);
+        }
+      }
+
+      return courses;
+    }
+
     async getCoursesHierarchy(baseRegistry = null) {
       await this.init();
       const courses = JSON.parse(JSON.stringify(baseRegistry || (window.AEF_COURSES_REGISTRY || {})));

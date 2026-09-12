@@ -1641,7 +1641,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       try {
         if (window.aefCloudSync) {
           await window.aefCloudSync.init();
-          const remoteHierarchy = await window.aefCloudSync.getCoursesHierarchy(ALL_COURSES);
+          const remoteHierarchy = await window.aefCloudSync.getCoursesList(ALL_COURSES);
           if (remoteHierarchy && Object.keys(remoteHierarchy).length > 0) {
             ALL_COURSES = remoteHierarchy;
             const currentSaved = localStorage.getItem('aef_admin_active_course_id');
@@ -1652,6 +1652,13 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
               if (rKeys.length > 0) activeCourseId = rKeys[0];
             }
             renderCourseSwitcher();
+            
+            // Buscar hierarchy completa apenas para o curso ativo
+            if (window.aefCloudSync.getCourseHierarchy) {
+              const fullCourse = await window.aefCloudSync.getCourseHierarchy(activeCourseId, ALL_COURSES);
+              if (fullCourse) ALL_COURSES[activeCourseId] = fullCourse;
+            }
+
             renderHierarchyTree();
             updateArtworkControlsFromCourse();
 
@@ -1701,11 +1708,26 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       }).join("");
     }
 
-    function handleSelectCourse(cid) {
+    async function handleSelectCourse(cid) {
       activeCourseId = cid;
       localStorage.setItem('aef_admin_active_course_id', cid);
       activeModuleId = null;
       activeLessonId = null;
+
+      // Mostrar estado de carregamento rápido
+      document.getElementById("treeCourseTitle").innerText = "Carregando...";
+      const container = document.getElementById("hierarchyTreeContainer");
+      if (container) container.innerHTML = '<div class="text-xs text-slate-500 animate-pulse py-4">Sincronizando banco de dados...</div>';
+
+      try {
+        if (window.aefCloudSync && window.aefCloudSync.getCourseHierarchy) {
+           const fullCourse = await window.aefCloudSync.getCourseHierarchy(cid, ALL_COURSES);
+           if (fullCourse) ALL_COURSES[cid] = fullCourse;
+        }
+      } catch(e) {
+        console.warn("Erro ao carregar detalhes do curso:", e);
+      }
+
       renderHierarchyTree();
       updateArtworkControlsFromCourse();
       if (currentStation === "artwork") renderAllCourseCanvases();
