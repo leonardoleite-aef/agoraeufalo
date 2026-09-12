@@ -510,19 +510,8 @@
         }
       }
 
-      // 3. Inicializa bases e sync
+      // 3. Inicializa bases
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
-      if (window.aefCloudSync) {
-        try {
-          await window.aefCloudSync.init();
-          const liveCourses = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
-          if (liveCourses) {
-            baseCourses = { ...baseCourses, ...liveCourses };
-          }
-        } catch (err) {
-          console.warn("⚠️ Live Firestore Sync in Classroom:", err);
-        }
-      }
 
       // 4. Resolve o Course ID
       const urlParams = new URLSearchParams(window.location.search);
@@ -546,6 +535,32 @@
         const menteeSlug = urlParams.get("aluno");
         if (baseCourses[`mentoria-${menteeSlug}`]) {
           courseId = `mentoria-${menteeSlug}`;
+        }
+      }
+
+      if (courseId && window.aefCloudSync) {
+        try {
+          await window.aefCloudSync.init();
+          if (window.aefCloudSync.getCourseHierarchy) {
+            let liveCourse = await window.aefCloudSync.getCourseHierarchy(courseId, baseCourses);
+            // Fallback para mentoria puramente no Firestore
+            if ((!liveCourse || !liveCourse.title || liveCourse.title === courseId) && rawParam && !courseId.startsWith("mentoria-")) {
+               const mentoriaCourse = await window.aefCloudSync.getCourseHierarchy(`mentoria-${rawParam}`, baseCourses);
+               if (mentoriaCourse && mentoriaCourse.title && mentoriaCourse.title !== `mentoria-${rawParam}`) {
+                 liveCourse = mentoriaCourse;
+               }
+            }
+            if (liveCourse) {
+              baseCourses[courseId] = liveCourse;
+            }
+          } else {
+            const liveCourses = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
+            if (liveCourses) {
+              baseCourses = { ...baseCourses, ...liveCourses };
+            }
+          }
+        } catch (err) {
+          console.warn("⚠️ Live Firestore Sync in Classroom:", err);
         }
       }
 

@@ -923,6 +923,185 @@
     }
 
     /**
+     * Gets complete dynamic hierarchy for a single course (Avoids N+1 query of the entire DB)
+     */
+    async getCourseHierarchy(courseId, baseRegistry = null) {
+      await this.init();
+      const baseCourses = baseRegistry || (window.AEF_COURSES_REGISTRY || {});
+      const courseObj = JSON.parse(JSON.stringify(baseCourses[courseId] || { id: courseId, title: courseId, modules: [] }));
+
+      let sdkSuccess = false;
+      try {
+        if (this.db) {
+          const cDoc = await Promise.race([
+            this.db.collection("courses").doc(courseId).get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on course.get()")), 5000))
+          ]);
+          if (cDoc.exists) {
+            const cData = cDoc.data();
+            if (cData.title) courseObj.title = cData.title;
+            if (cData.description !== undefined) courseObj.description = cData.description;
+            if (cData.coverImageUrl) courseObj.coverImageUrl = cData.coverImageUrl;
+            if (cData.tierRequired) courseObj.tierRequired = cData.tierRequired;
+            if (cData.themeColor) courseObj.themeColor = cData.themeColor;
+            if (cData.badge) courseObj.badge = cData.badge;
+            if (cData.published !== undefined) courseObj.published = cData.published;
+            if (cData.slug) courseObj.slug = cData.slug;
+            courseObj.modules = courseObj.modules || [];
+
+            const modulesSnap = await this.db.collection("courses").doc(courseId).collection("modules").get();
+            if (!modulesSnap.empty) {
+              const modulePromises = modulesSnap.docs.map(async (mDoc) => {
+                const mid = mDoc.id;
+                const mData = mDoc.data();
+                let mObj = courseObj.modules.find(m => m.id === mid);
+                if (!mObj) {
+                  mObj = { id: mid, title: mData.title || mid, order: mData.order || (courseObj.modules.length + 1), lessons: [] };
+                  courseObj.modules.push(mObj);
+                }
+                if (mData.title) mObj.title = mData.title;
+                if (mData.order !== undefined) mObj.order = mData.order;
+                if (mData.description !== undefined) mObj.description = mData.description;
+                if (mData.published !== undefined) mObj.published = mData.published;
+                if (mData.badge) mObj.badge = mData.badge;
+                if (mData.stats) mObj.stats = mData.stats;
+                mObj.lessons = mObj.lessons || [];
+
+                try {
+                  const lessonsSnap = await this.db.collection("courses").doc(courseId).collection("modules").doc(mid).collection("lessons").get();
+                  if (!lessonsSnap.empty) {
+                    const existingMap = new Map();
+                    (mObj.lessons || []).forEach(l => {
+                      if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
+                    });
+
+                    const reconciledLessons = [];
+                    const seenIds = new Set();
+                    for (const lDoc of lessonsSnap.docs) {
+                      const lid = lDoc.id;
+                      if (seenIds.has(lid)) continue;
+                      seenIds.add(lid);
+                      const lData = lDoc.data();
+                      const baseObj = existingMap.get(lid) || {};
+                      const mergedObj = Object.assign({}, baseObj, lData, { id: lid });
+                      mergedObj.order = parseInt(mergedObj.order) || (reconciledLessons.length + 1);
+                      reconciledLessons.push(mergedObj);
+                    }
+                    reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                    mObj.lessons = reconciledLessons;
+                  }
+                } catch (le) {
+                  console.warn(`Firestore lessons subcollection fetch (${courseId}/${mid}):`, le);
+                }
+              });
+              await Promise.all(modulePromises);
+              courseObj.modules.sort((a, b) => (a.order || 0) - (b.order || 0));
+            }
+            sdkSuccess = true;
+          } else {
+             // Does not exist in firestore, fallback to base Registry content
+             sdkSuccess = true; // No error, just missing
+          }
+        }
+      } catch (err) {
+        console.warn("⚠️ [AEFCloudSync] Erro no SDK Firestore, executando REST fallback (single course):", err);
+      }
+
+      // 2. REST Fallback
+      if (!sdkSuccess) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.fields) {
+              const f = data.fields || {};
+              if (f.title?.stringValue) courseObj.title = f.title.stringValue;
+              if (f.description?.stringValue !== undefined) courseObj.description = f.description.stringValue;
+              if (f.coverImageUrl?.stringValue) courseObj.coverImageUrl = f.coverImageUrl.stringValue;
+              if (f.tierRequired?.stringValue) courseObj.tierRequired = f.tierRequired.stringValue;
+              if (f.themeColor?.stringValue) courseObj.themeColor = f.themeColor.stringValue;
+              if (f.badge?.stringValue) courseObj.badge = f.badge.stringValue;
+              if (f.published?.booleanValue !== undefined) courseObj.published = f.published.booleanValue;
+              if (f.slug?.stringValue) courseObj.slug = f.slug.stringValue;
+              courseObj.modules = courseObj.modules || [];
+
+              try {
+                const mRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules`);
+                if (mRes.ok) {
+                  const mData = await mRes.json();
+                  if (mData && mData.documents) {
+                    for (const mDoc of mData.documents) {
+                      const mid = mDoc.name.split("/").pop();
+                      const mf = mDoc.fields || {};
+                      let mObj = courseObj.modules.find(m => m.id === mid);
+                      if (!mObj) {
+                        mObj = { id: mid, title: mf.title?.stringValue || mid, order: parseInt(mf.order?.integerValue) || (courseObj.modules.length + 1), lessons: [] };
+                        courseObj.modules.push(mObj);
+                      }
+                      if (mf.title?.stringValue) mObj.title = mf.title.stringValue;
+                      if (mf.order?.integerValue !== undefined) mObj.order = parseInt(mf.order.integerValue);
+                      if (mf.description?.stringValue !== undefined) mObj.description = mf.description.stringValue;
+                      if (mf.published?.booleanValue !== undefined) mObj.published = mf.published.booleanValue;
+                      if (mf.badge?.stringValue) mObj.badge = mf.badge.stringValue;
+                      mObj.lessons = mObj.lessons || [];
+
+                      try {
+                        const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}/lessons`);
+                        if (lRes.ok) {
+                          const lData = await lRes.json();
+                          if (lData && lData.documents) {
+                            const existingMap = new Map();
+                            (mObj.lessons || []).forEach(l => {
+                              if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
+                            });
+                            const reconciledLessons = [];
+                            const seenIds = new Set();
+                            for (const lDoc of lData.documents) {
+                              const lid = lDoc.name.split("/").pop();
+                              if (seenIds.has(lid)) continue;
+                              seenIds.add(lid);
+                              const lf = lDoc.fields || {};
+                              const baseObj = existingMap.get(lid) || {};
+                              // (simplified mapping for REST fallback)
+                              const restObj = {
+                                id: lid,
+                                title: lf.title?.stringValue || baseObj.title || lid,
+                                order: parseInt(lf.order?.integerValue) || baseObj.order || (reconciledLessons.length + 1),
+                                videoUrl: lf.videoUrl?.stringValue !== undefined ? lf.videoUrl.stringValue : (baseObj.videoUrl || ""),
+                                audioUrl: lf.audioUrl?.stringValue !== undefined ? lf.audioUrl.stringValue : (baseObj.audioUrl || ""),
+                                pdfUrl: lf.pdfUrl?.stringValue !== undefined ? lf.pdfUrl.stringValue : (baseObj.pdfUrl || ""),
+                                thumbnailUrl: lf.thumbnailUrl?.stringValue !== undefined ? lf.thumbnailUrl.stringValue : (baseObj.thumbnailUrl || ""),
+                                published: lf.published?.booleanValue !== undefined ? lf.published.booleanValue : (baseObj.published !== false),
+                                duration: lf.duration?.stringValue !== undefined ? lf.duration.stringValue : (baseObj.duration || "05:00")
+                              };
+                              const mergedObj = Object.assign({}, baseObj, restObj);
+                              reconciledLessons.push(mergedObj);
+                            }
+                            reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
+                            mObj.lessons = reconciledLessons;
+                          }
+                        }
+                      } catch (le) {
+                        console.warn(`REST lessons error (${courseId}/${mid}):`, le);
+                      }
+                    }
+                    courseObj.modules.sort((a, b) => (a.order || 0) - (b.order || 0));
+                  }
+                }
+              } catch (me) {
+                console.warn(`REST modules error (${courseId}):`, me);
+              }
+            }
+          }
+        } catch (re) {
+          console.warn("REST single course hierarchy error:", re);
+        }
+      }
+
+      return courseObj;
+    }
+
+    /**
      * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
     /**
      * Helper to format JavaScript objects to Firestore REST format
