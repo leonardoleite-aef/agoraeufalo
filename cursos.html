@@ -378,7 +378,7 @@
           };
 
         // Categorização Visual: Club vs Avulso
-        if (course.accessTier === 'all_access' || course.accessTier === 'free') {
+        if (course.accessTier === 'all_access') {
           course.isClubIncluded = true;
           // Os cursos do clube usam o botão "Desbloquear com o Club" que direciona para o plano anual
           course.hasActiveOffer = true; 
@@ -484,7 +484,10 @@
 
     function renderCard(course) {
       let ctaHtml = '';
-      if (course.hasActiveOffer) {
+      
+      if (course.accessTier === 'free') {
+        ctaHtml = `<a href="portal.html" class="mt-auto w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-white font-black text-sm shadow-md active:scale-95 transition-all text-center flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i> Acessar Grátis</a>`;
+      } else if (course.hasActiveOffer) {
         const ctaText = course.salesModal?.customCtaText || "Saiba Mais";
         const ctaStyle = course.isClubIncluded 
           ? "bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold"
@@ -492,7 +495,7 @@
           
         if (course.isClubIncluded) {
             // Vai direto pra assinatura
-            ctaHtml = `<a href="aefclub.html#planos" class="mt-auto w-full py-3.5 ${ctaStyle} rounded-xl transition-colors text-center inline-block">${ctaText}</a>`;
+            ctaHtml = `<a href="aefclub.html#planos" class="mt-auto w-full py-3.5 ${ctaStyle} rounded-xl transition-colors text-center inline-block flex items-center justify-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-slate-900"></i> Desbloquear com o Club</a>`;
         } else {
             // Abre o modal de vendas do curso
             ctaHtml = `<button onclick="openSalesModal('${course.id}')" class="mt-auto w-full py-3.5 ${ctaStyle} rounded-xl transition-colors">${ctaText}</button>`;
@@ -506,8 +509,19 @@
       return `
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full">
           <div class="h-48 bg-slate-200 relative overflow-hidden group">
-            <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.style.display='none'; this.parentElement.classList.add('bg-slate-800')">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <!-- Capa do Curso -->
+            <div class="relative aspect-[16/9] w-full overflow-hidden">
+              <img src="${course.coverImageUrl}" alt="${course.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='assets/images/cover-default-aef.jpg'">
+              
+              <!-- Badges -->
+              ${course.accessTier === 'free' 
+                ? `<span class="absolute top-4 right-4 px-3 py-1 bg-emerald-500 text-white text-[10px] font-black tracking-wider uppercase rounded-full shadow-md">Grátis</span>` 
+                : (course.hasActiveOffer && !course.isClubIncluded
+                   ? `<span class="absolute top-4 right-4 px-3 py-1 bg-green-500 text-white text-[10px] font-black tracking-wider uppercase rounded-full shadow-md">Inscrições Abertas</span>`
+                   : '')}
+              
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60"></div>
+            </div>
           </div>
           <div class="p-6 flex-grow flex flex-col">
             <div class="flex flex-wrap gap-1.5 mb-3">${tagsHtml}</div>
