@@ -142,7 +142,9 @@
     }
 
     return cats;
-  }\n\n  
+  }
+
+  function resolveCourseCategories(course) {
     if (!course) return [];
 
     // Formato novo
