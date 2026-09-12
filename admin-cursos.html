@@ -2437,6 +2437,128 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       showToast("Nova aula criada! Você pode editar e salvar a qualquer momento.");
     }
 
+    
+    // ==========================================
+    // KARAOKE / SENTENCES LOGIC
+    // ==========================================
+    function parseSrtToSentences(srtContent) {
+      const blocks = srtContent.split(/\r?\n\r?\n/).filter(b => b.trim());
+      return blocks.map((block, idx) => {
+        const lines = block.split(/\r?\n/);
+        if (lines.length < 3) return null;
+        const timeMatch = lines[1].match(/(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/);
+        if (!timeMatch) return null;
+
+        const parseTime = (tc) => {
+          const [hms, ms] = tc.split(',');
+          const [h, m, s] = hms.split(':').map(Number);
+          return h * 3600 + m * 60 + s + Number(ms) / 1000;
+        };
+
+        const textLines = lines.slice(2).join(" ");
+        return {
+          id: String(idx + 1),
+          start: parseTime(timeMatch[1]),
+          end: parseTime(timeMatch[2]),
+          text: textLines,
+          spokenTranslation: "",
+          notes: ""
+        };
+      }).filter(Boolean);
+    }
+
+    async function handleSrtUploadForLesson(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const srtContent = e.target.result;
+        const sentences = parseSrtToSentences(srtContent);
+        
+        // Attach to the current active lesson object in memory
+        const course = ALL_COURSES[activeCourseId];
+        const moduleObj = course.modules.find(m => m.id === activeModuleId);
+        const lessonObj = moduleObj.lessons.find(l => l.id === activeLessonId);
+        
+        if (lessonObj) {
+          lessonObj.sentences = sentences;
+          updateSentencesCountBadge(sentences.length);
+          document.getElementById('karaokeSuccessState').classList.remove('hidden');
+          setTimeout(() => document.getElementById('karaokeSuccessState').classList.add('hidden'), 5000);
+          console.log("SRT Importado com sucesso! Frases:", sentences.length);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function handleAutoTranscribeLessonAudio() {
+      // Find current lesson audio url
+      const audioUrlInput = document.getElementById("lessonAudioUrlInput");
+      let audioUrl = audioUrlInput ? audioUrlInput.value : "";
+      
+      if (!audioUrl) {
+         // try fallback to mediaList
+         const course = ALL_COURSES[activeCourseId];
+         const mod = course.modules.find(m => m.id === activeModuleId);
+         const lesson = mod.lessons.find(l => l.id === activeLessonId);
+         if (lesson && lesson.media) {
+           const firstAudio = lesson.media.find(m => m.type === 'audio_mp3');
+           if (firstAudio) audioUrl = firstAudio.url;
+         }
+      }
+
+      if (!audioUrl) {
+        alert("Nenhum áudio salvo na aula. Faça o upload do áudio ou cole a URL primeiro.");
+        return;
+      }
+      
+      const apiKey = prompt("Para auto-transcrever, insira sua API Key do Gemini (gemini-3.7-flash):");
+      if (!apiKey) return;
+
+      document.getElementById('karaokeLoadingState').classList.remove('hidden');
+      document.getElementById('karaokeSuccessState').classList.add('hidden');
+
+      try {
+        const res = await fetch(audioUrl);
+        const audioBlob = await res.blob();
+        
+        if (!window.aefAudioHub) {
+          throw new Error("aefAudioHub não carregado.");
+        }
+        
+        const sentences = await window.aefAudioHub.transcribeAudioWithGemini(audioBlob, apiKey);
+        
+        const course = ALL_COURSES[activeCourseId];
+        const moduleObj = course.modules.find(m => m.id === activeModuleId);
+        const lessonObj = moduleObj.lessons.find(l => l.id === activeLessonId);
+        
+        if (lessonObj) {
+          lessonObj.sentences = sentences;
+          updateSentencesCountBadge(sentences.length);
+          document.getElementById('karaokeSuccessState').classList.remove('hidden');
+          setTimeout(() => document.getElementById('karaokeSuccessState').classList.add('hidden'), 5000);
+        }
+      } catch(err) {
+        console.error(err);
+        alert("Erro ao transcrever áudio: " + err.message);
+      } finally {
+        document.getElementById('karaokeLoadingState').classList.add('hidden');
+      }
+    }
+
+    function updateSentencesCountBadge(count) {
+      const badge = document.getElementById('sentencesCountBadge');
+      if (badge) {
+        badge.innerText = count + " frases";
+        if (count > 0) {
+          badge.classList.remove('bg-white/10', 'text-slate-400');
+          badge.classList.add('bg-indigo-500/20', 'text-indigo-400');
+        } else {
+          badge.classList.add('bg-white/10', 'text-slate-400');
+          badge.classList.remove('bg-indigo-500/20', 'text-indigo-400');
+        }
+      }
+    }
+
     async function handleSaveLesson(e) {
       if (e) e.preventDefault();
       const course = ALL_COURSES[activeCourseId];
