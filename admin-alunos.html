@@ -465,22 +465,7 @@
         <div class="space-y-2 pt-2 border-t border-slate-100">
           <label class="block text-[11px] font-bold text-slate-700">Compras Avulsas (Produtos Adquiridos)</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" id="edit-purchased-products">
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-purchased" value="ms-legacy" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">AgoraEuFalo English Club</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-purchased" value="dtc_curso" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">Dates & Times (DTC)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-purchased" value="english-quickstart" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">English QuickStart</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-purchased" value="frases-prontas" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-bold text-slate-800">Frases Prontas</span>
-            </label>
+            <!-- Populated dynamically -->
           </div>
         </div>
 
@@ -1164,7 +1149,9 @@
     function openAddStudentModal() { document.getElementById('add-student-modal').classList.remove('hidden'); }
     function closeAddStudentModal() { document.getElementById('add-student-modal').classList.add('hidden'); }
 
-    function openEditStudentModal(email) {
+    let ALL_AVAILABLE_COURSES_CACHE = null;
+
+    async function openEditStudentModal(email) {
       const student = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email.toLowerCase());
       if (!student) return;
       const AE = window.AEFAccessEngine;
@@ -1191,11 +1178,44 @@
       document.getElementById('edit-is-admin').checked = isAdminUser;
       document.getElementById('edit-student-role').value = student.role || (isAdminUser ? 'admin' : 'student');
 
-      // Purchased products
+      // Load dynamic courses if not loaded
+      if (!ALL_AVAILABLE_COURSES_CACHE) {
+         try {
+           const res = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100');
+           const data = await res.json();
+           ALL_AVAILABLE_COURSES_CACHE = (data.documents || []).map(doc => {
+             const f = doc.fields || {};
+             return {
+               id: doc.name.split('/').pop(),
+               title: f.title?.stringValue || 'Sem Título',
+               accessTier: f.accessTier?.stringValue || 'standalone'
+             };
+           }).filter(c => !c.id.startsWith('mentoria-'));
+         } catch (e) {
+           console.warn("Failed to fetch courses", e);
+           ALL_AVAILABLE_COURSES_CACHE = [];
+         }
+      }
+
+      // Render purchased products checkboxes dynamically
+      const container = document.getElementById('edit-purchased-products');
       const purchased = student.purchasedProducts || student.enrolledProducts || [];
-      document.querySelectorAll('#edit-purchased-products input[name="edit-purchased"]').forEach(chk => {
-        chk.checked = purchased.includes(chk.value);
-      });
+      
+      if (ALL_AVAILABLE_COURSES_CACHE.length > 0) {
+        container.innerHTML = ALL_AVAILABLE_COURSES_CACHE.map(course => {
+          const isChecked = purchased.includes(course.id) ? 'checked' : '';
+          // Decorate club vs standalone
+          const badge = course.accessTier === 'all_access' ? '<span class="ml-1 text-[9px] bg-blue-100 text-blue-700 px-1 rounded">Club</span>' : '<span class="ml-1 text-[9px] bg-amber-100 text-amber-700 px-1 rounded">Avulso</span>';
+          return `
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+              <input type="checkbox" name="edit-purchased" value="${course.id}" class="rounded text-amber-600 focus:ring-amber-500" ${isChecked}>
+              <span class="font-bold text-slate-800 text-[11px] leading-tight flex-1">${course.title} ${badge}</span>
+            </label>
+          `;
+        }).join('');
+      } else {
+         container.innerHTML = '<p class="text-xs text-slate-500 p-2">Nenhum curso carregado.</p>';
+      }
 
       document.getElementById('edit-student-modal').classList.remove('hidden');
     }
