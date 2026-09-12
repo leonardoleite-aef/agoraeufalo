@@ -421,13 +421,13 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      let rawParam = urlParams.get("id") || urlParams.get("curso") || urlParams.get("aluno") || "ms-legacy";
-      let courseId = rawParam;
+      let rawParam = urlParams.get("id") || urlParams.get("curso") || urlParams.get("aluno");
+      let courseId = rawParam || "ms-legacy";
 
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSES_REGISTRY);
 
       // Resolução inteligente: se passar ?aluno=andre ou ?curso=andre, resolve para mentoria-andre
-      if (!baseCourses[courseId] && baseCourses[`mentoria-${courseId}`]) {
+      if (courseId && !baseCourses[courseId] && baseCourses[`mentoria-${courseId}`]) {
         courseId = `mentoria-${courseId}`;
       } else if (urlParams.get("curso") === "mentoria" && urlParams.get("aluno")) {
         const menteeSlug = urlParams.get("aluno");
@@ -436,7 +436,16 @@
         }
       }
       
-      COURSE_DATA = baseCourses[courseId] || COURSES_REGISTRY[courseId] || baseCourses["ms-legacy"] || COURSES_REGISTRY["ms-legacy"];
+      if (baseCourses[courseId] || COURSES_REGISTRY[courseId]) {
+         COURSE_DATA = baseCourses[courseId] || COURSES_REGISTRY[courseId];
+      } else {
+         COURSE_DATA = { 
+            id: courseId, 
+            title: "Carregando curso...", 
+            description: "Sincronizando banco de dados. Por favor, aguarde...",
+            modules: [] 
+         };
+      }
 
       updateCourseUi();
 
@@ -478,12 +487,21 @@
       const visibleModules = (COURSE_DATA.modules || []).filter(m => isAdminView || m.published !== false);
 
       if (visibleModules.length === 0) {
-        container.innerHTML = `
-          <div class="text-center p-8 bg-white border border-[#EAE5DC] rounded-2xl text-slate-500 space-y-2 shadow-xs">
-            <p class="text-sm font-bold text-[#0A192F]">🟡 Conteúdo em Preparação</p>
-            <p class="text-xs text-slate-600">Este curso ainda não possui módulos públicos. Em breve novas aulas serão liberadas!</p>
-          </div>
-        `;
+        if (COURSE_DATA.title === "Carregando curso...") {
+          container.innerHTML = `
+            <div class="flex flex-col items-center gap-4 text-center p-12 bg-white border border-[#EAE5DC] rounded-2xl text-slate-500 shadow-xs">
+              <div class="w-8 h-8 border-4 border-[#C68A36] border-t-transparent rounded-full animate-spin"></div>
+              <p class="text-sm font-bold text-[#0A192F]">Sincronizando com a Nuvem...</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="text-center p-8 bg-white border border-[#EAE5DC] rounded-2xl text-slate-500 space-y-2 shadow-xs">
+              <p class="text-sm font-bold text-[#0A192F]">🟡 Conteúdo em Preparação</p>
+              <p class="text-xs text-slate-600">Este curso ainda não possui módulos públicos. Em breve novas aulas serão liberadas!</p>
+            </div>
+          `;
+        }
         return;
       }
 
