@@ -845,6 +845,11 @@
 
         state.otherCourses = allList.filter(c => {
           if (!window.AEFAccessEngine) return false;
+          
+          // Ocultar cursos de mentoria privada da vitrine comercial de upsell
+          if (c.id && c.id.startsWith("mentoria-")) return false;
+          if (c.badge && c.badge.toUpperCase().includes("MENTORIA")) return false;
+          
           return !window.AEFAccessEngine.hasAccess(state.user, c);
         });
 
