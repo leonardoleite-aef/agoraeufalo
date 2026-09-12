@@ -2051,7 +2051,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       if (!container) return;
       container.innerHTML = "";
 
-      let items = Array.isArray(mediaList) ? [...mediaList] : [];
+      let items = Array.isArray(mediaList) ? mediaList.filter(m => typeof m === 'object' && m !== null && !Array.isArray(m)) : [];
       if (items.length === 0 && fallbackVideoUrl) {
         const isMp4 = fallbackVideoUrl.includes(".mp4") || fallbackVideoUrl.includes("firebasestorage");
         items.push({
@@ -2198,7 +2198,7 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
       if (!container) return;
       container.innerHTML = "";
 
-      let items = Array.isArray(downloadList) ? [...downloadList] : [];
+      let items = Array.isArray(downloadList) ? downloadList.filter(d => typeof d === 'object' && d !== null && !Array.isArray(d)) : [];
       if (items.length === 0 && fallbackPdfUrl) {
         items.push({
           type: "pdf",
