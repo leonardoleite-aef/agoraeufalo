@@ -1396,7 +1396,7 @@
         .filter(c => {
           if (c.published === false) return false;
           // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade absoluta
-          const isMentorshipCourse = c.tierRequired === 'vip' || c.id.startsWith('mentoria-');
+          const isMentorshipCourse = c.id.startsWith('mentoria-') || (c.badge && String(c.badge).toUpperCase().includes('MENTORIA'));
           const courseOwnerEmail = (c.studentEmail || '').trim().toLowerCase();
           const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
           if (isMentorshipCourse && !isAdmin && !isOwner) return false;
@@ -1409,8 +1409,11 @@
         'aef-experience',
         'english-quickstart',
         'first-steps',
+        'fs-aef-ec',
         'dates-and-times',
+        'dtc_curso',
         'airport-and-flights',
+        'airport_flight_level_1',
         'masterclass-phrasal-verbs',
         'masterclass-pronunciation',
         'ms-legacy'
