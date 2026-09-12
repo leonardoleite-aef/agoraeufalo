@@ -60,7 +60,30 @@
       const clean = path ? (path.startsWith('/') ? path : `/${path}`) : '/';
       return this.isLocal() ? clean : `https://admin.agoraeufalo.com.br${clean}`;
     }
+
+    enforceSegregation() {
+      if (this.isLocal()) return;
+      
+      const adminPages = ['admin', 'admin-cursos', 'admin-usuarios', 'admin-vendas', 'admin-marketing', 'admin-quiz', 'admin-webhooks', 'admin-alunos', 'admin-pdf-factory', 'tts-studio', 'blog-panel', 'seo-manager'];
+      const appPages = ['portal', 'curso', 'sala-de-aula', 'player'];
+
+      const pageBase = this.page.split('.')[0] || '';
+      const isPublic = this.isPublicDomain();
+      const isAdmin = this.isAdminDomain();
+      const isApp = this.isAppDomain();
+      
+      if (adminPages.includes(pageBase)) {
+        if (!isAdmin) {
+          window.location.replace(this.getAdminUrl(this.pathname + this.search + this.hash));
+        }
+      } else if (appPages.includes(pageBase)) {
+        if (!isApp) {
+          window.location.replace(this.getAppUrl(this.pathname + this.search + this.hash));
+        }
+      }
+    }
   }
 
   window.AEFDomainRouter = new AEFDomainRouter();
+  window.AEFDomainRouter.enforceSegregation();
 })(window);
