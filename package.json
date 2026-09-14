@@ -5,8 +5,9 @@
   "description": "Site Oficial AgoraEuFalo - Prof. Leonardo Leite",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/build_dist.js",
-    "preview": "vite preview"
+    "build": "vite build && cd v2-pdf-factory && npm run build && cd .. && node scripts/build_dist.js",
+    "preview": "vite preview",
+    "postinstall": "cd v2-pdf-factory && npm install"
   },
   "devDependencies": {
     "puppeteer": "^25.10.0",

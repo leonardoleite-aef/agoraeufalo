@@ -106,6 +106,7 @@ export default {
         '/webhooks': '/admin-webhooks.html',
         '/marketing': '/admin-marketing.html',
         '/pdf-factory': '/admin-pdf-factory.html',
+        '/pdf-factory-v2': '/v2-factory/index.html',
         '/tts': '/tts-studio.html',
         '/blog': '/blog-panel.html',
         '/seo': '/seo-manager.html'
