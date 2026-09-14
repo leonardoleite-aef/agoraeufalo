@@ -80,6 +80,8 @@
             'admin-cursos': 'Course Factory',
             'admin-cursos.html': 'Course Factory',
             'pdf-factory': 'PDF Factory',
+            'pdf-factory-v2': 'PDF Factory V2',
+            'v2-factory': 'PDF Factory V2',
             'admin-pdf-factory': 'PDF Factory',
             'admin-pdf-factory.html': 'PDF Factory',
             'tts': 'TTS Voice Studio',
@@ -109,7 +111,7 @@
     }
 
     isDarkTheme() {
-      const darkPages = ['cursos', 'admin-cursos', 'vendas', 'admin-vendas', 'webhooks', 'admin-webhooks', 'marketing', 'admin-marketing', 'ofertas', 'admin-ofertas', 'tts', 'tts-studio', 'pdf-factory', 'admin-pdf-factory'];
+      const darkPages = ['cursos', 'admin-cursos', 'vendas', 'admin-vendas', 'webhooks', 'admin-webhooks', 'marketing', 'admin-marketing', 'ofertas', 'admin-ofertas', 'tts', 'tts-studio', 'pdf-factory', 'pdf-factory-v2', 'admin-pdf-factory'];
       return darkPages.some(p => this.currentPath.includes(p)) || document.body.classList.contains('bg-[#060D17]') || document.body.classList.contains('bg-[#0A192F]') || document.body.classList.contains('bg-[#0B0F17]') || document.body.classList.contains('bg-[#080D1A]');
     }
 
@@ -187,11 +189,11 @@
               <a href="/marketing" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('marketing')}">
                 <span>🎯</span> <span>Marketing</span>
               </a>
-              <a href="/cursos" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('cursos')}">
+              <a href="/admin-cursos" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('admin-cursos')}">
                 <span>🏭</span> <span>Course Factory</span>
               </a>
-              <a href="/pdf-factory" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('pdf-factory')}">
-                <span>📄</span> <span>PDF Factory</span>
+              <a href="/pdf-factory-v2" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('pdf-factory')}">
+                <span>📄</span> <span>PDF Factory V2</span>
               </a>
               <a href="/tts" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('tts')}">
                 <span>🎙️</span> <span>TTS Studio</span>
@@ -230,8 +232,8 @@
             <a href="/vendas" class="px-2.5 py-1 rounded-lg shrink-0 ${active('vendas')}">⚡ Vendas</a>
             <a href="/webhooks" class="px-2.5 py-1 rounded-lg shrink-0 ${active('webhooks')}">🔗 Webhooks</a>
             <a href="/marketing" class="px-2.5 py-1 rounded-lg shrink-0 ${active('marketing')}">🎯 Marketing</a>
-            <a href="/cursos" class="px-2.5 py-1 rounded-lg shrink-0 ${active('cursos')}">📦 Cursos</a>
-            <a href="/pdf-factory" class="px-2.5 py-1 rounded-lg shrink-0 ${active('pdf-factory')}">📄 PDF</a>
+            <a href="/admin-cursos" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos')}">📦 Cursos</a>
+            <a href="/pdf-factory-v2" class="px-2.5 py-1 rounded-lg shrink-0 ${active('pdf-factory')}">📄 PDF</a>
             <a href="/tts" class="px-2.5 py-1 rounded-lg shrink-0 ${active('tts')}">🎙️ TTS</a>
             <a href="/blog" class="px-2.5 py-1 rounded-lg shrink-0 ${active('blog')}">📝 Blog</a>
             <a href="/seo" class="px-2.5 py-1 rounded-lg shrink-0 ${active('seo')}">🔍 SEO</a>
