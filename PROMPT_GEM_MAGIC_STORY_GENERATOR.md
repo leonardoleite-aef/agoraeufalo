@@ -115,9 +115,19 @@ O JSON deve seguir **EXATAMENTE** este Schema estrutural:
           "answerVariations": ["He was sitting by himself."]
         },
         {
+          "negativeContext": "Grazi did not ignore him.",
+          "questionVariations": ["What did Grazi do?"],
+          "answerVariations": ["She looked over at him."]
+        },
+        {
           "negativeContext": "ATENÇÃO: ESCREVA APENAS A FRASE CRUA NA NEGATIVA AQUI. NUNCA ESCREVA 'Tell me...' OU 'Ask me...'. APENAS A FRASE PURA.",
-          "questionVariations": ["Pergunta final?"],
+          "questionVariations": ["Pergunta de checagem?"],
           "answerVariations": ["Resposta."]
+        },
+        {
+          "negativeContext": "CRIE UMA SENTENÇA NEGATIVA PARA CADA FRASE DA HISTÓRIA. CUBRA 100% DAS FRASES DA HISTÓRIA SEM PULAR NENHUMA. NUNCA PARE NA FRASE 3.",
+          "questionVariations": ["Pergunta da última frase?"],
+          "answerVariations": ["Resposta final."]
         }
       ]
     },
@@ -131,6 +141,12 @@ O JSON deve seguir **EXATAMENTE** este Schema estrutural:
         "COLOQUE 100% DAS FRASES DA HISTÓRIA AQUI. TODAS AS LINHAS DA HISTÓRIA DEVEM ESTAR AQUI."
       ],
       "goldenTip": "A dica transformadora do Leo."
+    },
+    {
+      "type": "QR_CODE",
+      "tag": "[QR_CODE]",
+      "url": "https://app.agoraeufalo.com/player?trackId=ID-DA-AULA",
+      "instruction": "Aponte a câmera do celular para abrir esta aula no Training Player"
     }
   ]
 }
@@ -139,8 +155,11 @@ O JSON deve seguir **EXATAMENTE** este Schema estrutural:
 ### 🔴 REGRA ABSOLUTA DE EXTENSÃO (O TESTE DO PENTE FINO)
 Ao gerar as atividades **LA, LRT, LASK e PRO**, você tem **PROIBIÇÃO ABSOLUTA** de resumir ou pular partes da história. 
 - Você deve cobrir **LITERALMENTE CADA FRASE EXISTENTE NA HISTÓRIA**. 
-- Se a história tem 15 frases, o `LA` deve ter perguntas suficientes para cobrir as 15 frases.
-- O `PRO` não é um resumo; é **100% das frases da história**, linha por linha.
+- Se a história tem 15 frases, o `LA` deve ter perguntas suficientes para dissecar as 15 frases.
+- O `LRT` deve replicar rigorosamente todas as perguntas do `LA`.
+- O `LASK` deve conter uma sentença negativa pura para **CADA UMA DAS FRASES** da história (se a história tem 15 frases, serão 15 sentenças negativas no `LASK`). Nunca use "Tell me...", apenas a frase negativa direta.
+- O `PRO` não é um resumo; é **100% das frases da história**, linha por linha com as marcações de linking.
+- O bloco `QR_CODE` deve ser gerado apontando para o `trackId` da aula.
 - Não tenha preguiça. Nunca limite a 3 ou 5 frases. Disseque a história inteira.
 
 ### 🔴 SAÍDA C: HTML PEDAGÓGICO (COURSE STUDIO)
