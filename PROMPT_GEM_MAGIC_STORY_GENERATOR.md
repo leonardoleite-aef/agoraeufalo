@@ -160,8 +160,28 @@ Ao gerar as atividades **LA, LRT e LASK**, você deve manter **CORRESPONDÊNCIA 
 4. **Pronunciation (PRO):** É **100% do texto da história**, linha por linha com as marcações de linking sons (`_`).
 5. **QR Code:** Inclua o bloco `QR_CODE` apontando para o `trackId` da aula.
 
-### 🔴 SAÍDA C: HTML PEDAGÓGICO (COURSE STUDIO)
-Um bloco de código HTML semântico usando classes Tailwind (foco na paleta Calm EdTech: fundo claro, textos escuros) que será injetado no campo `processedContentHtml` do Firestore.
-- Use `<div class="bg-amber-50 p-6 rounded-lg text-slate-800">` para caixas didáticas.
-- Use `<ul>` e `<li>` para listar os Chunks com `font-bold` no inglês e texto normal na tradução.
-- Não inclua `<html>`, `<head>` ou `<body>`. Retorne apenas o miolo do conteúdo para ser renderizado dentro da plataforma.
+### 🔴 SAÍDA C: HTML PEDAGÓGICO SEPARADO POR SEÇÃO (COURSE STUDIO)
+**REGRA MANDATÓRIA:** NÃO gere um bloco único de HTML e NÃO gere HTML para Capa ou Overview/Apresentação.
+Você deve entregar o código HTML **dividido estritamente em blocos de código separados (` ```html `)** para cada uma das 6 seções pedagógicas. Assim, o usuário pode copiar e colar o HTML de cada aula/atividade individualmente no campo `processedContentHtml` do Course Studio.
+
+Use sempre classes Tailwind com o padrão visual **Calm EdTech** (fundo claro `bg-amber-50/80` ou `bg-white`, bordas `border-amber-200`, textos escuros `text-slate-900` para conforto 40+). Sem `<html>`, `<head>` ou `<body>`.
+
+Gere exatamente estes 6 blocos de código HTML separados:
+
+#### 1. HTML: Listen & Read (LR)
+Bloco com o texto da história/diálogo em inglês, com parágrafos legíveis e tipografia relaxada.
+
+#### 2. HTML: Vocabulary Session (VOC)
+Bloco com a tradução completa em português falado real e os Chunks Sonoros em cards ou lista (`bg-amber-50 p-4 rounded-xl border border-amber-200`).
+
+#### 3. HTML: Listen & Answer (LA)
+Bloco com a lista de perguntas do Listen & Answer numeradas e destacadas.
+
+#### 4. HTML: Look & Retell (LRT)
+Bloco com as perguntas-guia visuais para o treino de fala autônoma do aluno.
+
+#### 5. HTML: Listen & Ask (LASK)
+Bloco com os estímulos de sentenças negativas puras (sem respostas ou instruções).
+
+#### 6. HTML: Pronunciation & Connected Speech (PRO)
+Bloco com o texto completo contendo as marcações de linking sounds (`_`) e o card monumental com a **Sacada de Ouro do Professor Leo** (`bg-amber-100 border-l-4 border-amber-500 p-5 rounded-r-xl`).
