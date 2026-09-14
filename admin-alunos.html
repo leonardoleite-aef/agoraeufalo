@@ -685,6 +685,7 @@
   <!-- ========================================================================= -->
   <script>
     let ALL_STUDENTS_LIST = [];
+    let ALL_COURSES_MAP = new Map();
     let CURRENT_FILTER = 'all';
     let COURSE_FILTER = 'all';
     let ORIGIN_FILTER = 'all';
@@ -694,6 +695,58 @@
     let PAGE_SIZE = 50;
     let FILTERED_COUNT = 0;
     let PENDING_DELETE_STUDENT = null;
+
+    function resolveVipCourse(student) {
+      if (!student) return null;
+      const email = (student.email || '').toLowerCase().trim();
+      const id = String(student.id || student.uid || '').trim();
+
+      // 1. Campo explícito já salvo no documento do aluno
+      if (student.vipCourseId && ALL_COURSES_MAP.has(student.vipCourseId)) {
+        return ALL_COURSES_MAP.get(student.vipCourseId);
+      }
+
+      // 2. Busca qualquer ID 'mentoria-*' nos produtos concedidos ou comprados
+      const allProds = [
+        ...(student.enrolledProducts || []),
+        ...(student.purchasedProducts || [])
+      ];
+      const mentoriaProd = allProds.find(p => typeof p === 'string' && p.startsWith('mentoria-'));
+      if (mentoriaProd) {
+        if (ALL_COURSES_MAP.has(mentoriaProd)) {
+          return ALL_COURSES_MAP.get(mentoriaProd);
+        }
+        return { id: mentoriaProd, title: `Mentoria VIP • ${student.name || id}` };
+      }
+
+      // 3. Procura no mapa de cursos por studentEmail ou studentId
+      for (const c of ALL_COURSES_MAP.values()) {
+        if (!c.id || !c.id.startsWith('mentoria-')) continue;
+        if (c.studentEmail && c.studentEmail.toLowerCase() === email) return c;
+        if (c.studentId && (c.studentId === id || c.studentId === student.uid)) return c;
+      }
+
+      // 4. Procura padrão direto mentoria-${id}
+      if (id && ALL_COURSES_MAP.has(`mentoria-${id}`)) {
+        return ALL_COURSES_MAP.get(`mentoria-${id}`);
+      }
+
+      // 5. Fallback canônico dos 4 mentorados VIP ativos
+      if (email === 'andrebarrote1992@gmail.com' || id === 'andre') {
+        return ALL_COURSES_MAP.get('mentoria-andre') || { id: 'mentoria-andre', title: 'Mentoria VIP • André Barrote', studentId: 'andre' };
+      }
+      if (email === 'estevaopin@gmail.com' || id === 'estevao' || id === 'estevaopin') {
+        return ALL_COURSES_MAP.get('mentoria-estevaopin') || { id: 'mentoria-estevaopin', title: 'Mentoria VIP • Estêvão Pinheiro', studentId: 'estevaopin' };
+      }
+      if (email === 'mateus.s.gomes.novo@gmail.com' || id === 'mateus.s.gomes.novo' || id === 'matheus') {
+        return ALL_COURSES_MAP.get('mentoria-mateus.s.gomes.novo') || { id: 'mentoria-mateus.s.gomes.novo', title: 'Mentoria VIP • Mateus Gomes', studentId: 'mateus.s.gomes.novo' };
+      }
+      if (email === 'thomasskt21@gmail.com' || id === 'thomasskt21' || id === 'thomas' || id === 'thomashenriquesilva') {
+        return ALL_COURSES_MAP.get('mentoria-thomasskt21') || { id: 'mentoria-thomasskt21', title: 'Mentoria VIP • Thomas Henrique Silva', studentId: 'thomasskt21' };
+      }
+
+      return null;
+    }
 
 
 
@@ -768,6 +821,31 @@
 
 
 
+      // 2. Carrega cursos do Firestore para identificação em tempo real de Salas VIP e matrículas
+      try {
+        const cRes = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100');
+        if (cRes.ok) {
+          const cData = await cRes.json();
+          ALL_COURSES_MAP.clear();
+          (cData.documents || []).forEach(doc => {
+            const id = doc.name.split('/').pop();
+            const f = doc.fields || {};
+            const cObj = {
+              id: id,
+              title: f.title?.stringValue || id,
+              studentId: f.studentId?.stringValue || null,
+              studentEmail: f.studentEmail?.stringValue || null,
+              accessTier: f.accessTier?.stringValue || 'standalone',
+              badge: f.badge?.stringValue || '',
+              slug: f.slug?.stringValue || id
+            };
+            ALL_COURSES_MAP.set(id, cObj);
+          });
+        }
+      } catch (err) {
+        console.warn("Could not load courses from Firestore:", err);
+      }
+
       // 3. Sincroniza com Firestore (Single Source of Truth)
       try {
         if (window.aefPortalAuth) await window.aefPortalAuth.ready();
@@ -777,13 +855,26 @@
         vipMentees.forEach(m => {
           const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase().trim();
           const existing = combined.get(email) || {};
+          const mergedProducts = Array.from(new Set([
+            ...(existing.enrolledProducts || []),
+            ...(m.enrolledProducts || []),
+            ...(m.purchasedProducts || [])
+          ]));
+          const mergedCats = Array.from(new Set([
+            ...(existing.categories || []),
+            ...(m.categories || []),
+            'member_mentoria'
+          ]));
+
           combined.set(email, {
             ...existing,
             ...m,
-            id: m.id,
+            id: m.id || existing.id,
             tier: 'vip_mentorship',
             name: m.name || existing.name || m.id,
             email: email,
+            categories: mergedCats,
+            enrolledProducts: mergedProducts,
             origem: 'firestore'
           });
         });
@@ -793,20 +884,58 @@
           const email = (u.email || '').toLowerCase().trim();
           if (!email) return;
           const existing = combined.get(email) || {};
+
+          // Safely merge enrolled products without wiping out VIP grants
+          const mergedProducts = Array.from(new Set([
+            ...(existing.enrolledProducts || []),
+            ...(u.enrolledProducts || []),
+            ...(u.purchasedProducts || [])
+          ]));
+
+          const mergedCats = Array.from(new Set([
+            ...(existing.categories || []),
+            ...(u.categories || [])
+          ]));
+
+          const isVip = (existing.tier && existing.tier.includes('vip')) || 
+                        (u.tier && u.tier.includes('vip')) || 
+                        mergedCats.includes('member_mentoria');
+          const resolvedTier = isVip ? 'vip_mentorship' : (u.tier || existing.tier || 'free');
+
           combined.set(email, {
             ...existing,
             ...u,
             id: existing.id || u.uid || email.split('@')[0],
-            name: u.name || existing.name || email.split('@')[0],
+            name: existing.name || u.name || email.split('@')[0],
             email: email,
-            tier: u.tier || existing.tier || 'free',
+            tier: resolvedTier,
             role: u.role || existing.role || 'student',
-            enrolledProducts: u.enrolledProducts || existing.enrolledProducts || [],
+            categories: mergedCats,
+            enrolledProducts: mergedProducts,
             origem: existing.origem || 'firestore'
           });
         });
       } catch (err) {
         console.warn("Could not load users from Firestore:", err);
+      }
+
+      // 4. Auto-associa Salas VIP encontradas aos alunos e garante dados coerentes
+      for (const s of combined.values()) {
+        const vipCourse = resolveVipCourse(s);
+        if (vipCourse) {
+          s.vipCourseId = vipCourse.id;
+          if (!s.enrolledProducts) s.enrolledProducts = [];
+          if (!s.enrolledProducts.includes(vipCourse.id)) {
+            s.enrolledProducts.unshift(vipCourse.id);
+          }
+          if (!s.tier || !s.tier.includes('vip')) {
+            s.tier = 'vip_mentorship';
+          }
+          if (!s.categories) s.categories = [];
+          if (!s.categories.includes('member_mentoria')) {
+            s.categories.push('member_mentoria');
+          }
+        }
       }
 
       ALL_STUDENTS_LIST = Array.from(combined.values());
@@ -1031,8 +1160,11 @@
 
             'mentoria-andre': 'VIP André',
             'mentoria-estevao': 'VIP Estêvão',
+            'mentoria-estevaopin': 'VIP Estêvão',
             'mentoria-thomas': 'VIP Thomas',
+            'mentoria-thomasskt21': 'VIP Thomas',
             'mentoria-matheus': 'VIP Matheus',
+            'mentoria-mateus.s.gomes.novo': 'VIP Mateus',
             'mentoria-graziela': 'VIP Grazi'
           };
           const label = names[p] || p.replace('mentoria-', 'VIP ').replace(/_/g, ' ');
@@ -1049,8 +1181,11 @@
 
         const tracksCount = s.tracksCount || ((s.tier && s.tier.includes('vip')) || (s.categories && s.categories.includes('member_mentoria')) ? 1 : 0);
         const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(s.name || 'A').substring(0, 2).toUpperCase()}</div>`;
-        const isVIP = (s.tier === 'vip_mentorship' || s.tier === 'vip') || (s.categories && s.categories.includes('member_mentoria'));
-        const hasVipSpace = s.enrolledProducts && s.enrolledProducts.includes('mentoria-' + s.id);
+        const vipCourse = resolveVipCourse(s);
+        const hasVipSpace = !!vipCourse;
+        const vipCourseId = vipCourse ? vipCourse.id : `mentoria-${s.id}`;
+        const menteeSlug = vipCourse?.studentId || s.menteeSlug || (vipCourse ? vipCourse.id.replace('mentoria-', '') : s.id);
+        const isVIP = (s.tier === 'vip_mentorship' || s.tier === 'vip') || (s.categories && s.categories.includes('member_mentoria')) || hasVipSpace;
         const tracksLabel = tracksCount === 1 ? '1 faixa ativa' : `${tracksCount} faixas ativas`;
 
         return `
@@ -1080,22 +1215,22 @@
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
                 ${isVIP ? (hasVipSpace ? `
-                  <button onclick="openPrescribeModal('${s.id}', '${(s.name || '').replace(/'/g, "\'")}')" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Prescrever Áudio VIP">
+                  <button onclick="openPrescribeModal('${menteeSlug}', '${(s.name || '').replace(/'/g, "\\'")}')" class="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Prescrever Áudio VIP">
                     <i data-lucide="mic" class="w-3 h-3 text-amber-700"></i>
                     <span>Prescrever</span>
                   </button>
-                  <a href="curso.html?curso=mentoria-${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500 hover:text-slate-950 text-amber-900 border border-amber-300 text-[11px] font-bold transition inline-flex items-center gap-1" title="Ver Vitrine do Curso do Mentorado">
-                    <i data-lucide="book-open" class="w-3 h-3"></i>
-                    <span>Sala VIP</span> <span>↗</span>
+                  <a href="curso.html?curso=${vipCourseId}" target="_blank" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500 hover:text-slate-950 text-amber-950 border border-amber-300 text-[11px] font-black transition inline-flex items-center gap-1.5 shadow-xs" title="Entrar na Sala do Mentorado (Vitrine & Aulas)">
+                    <i data-lucide="door-open" class="w-3.5 h-3.5 text-amber-700"></i>
+                    <span>Entrar na Sala</span> <span>↗</span>
                   </a>
-                  <a href="admin-cursos.html?curso=mentoria-${s.id}" target="_blank" class="p-1.5 rounded-lg bg-white/80 hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 transition" title="Editar Aulas & Módulos no Course Studio">
+                  <a href="admin-cursos.html?curso=${vipCourseId}" target="_blank" class="p-1.5 rounded-lg bg-white/80 hover:bg-slate-900 hover:text-white text-slate-700 border border-slate-200 transition" title="Editar Aulas & Módulos no Course Studio">
                     <i data-lucide="layers" class="w-3.5 h-3.5"></i>
                   </a>
-                  <a href="treino/player.html?aluno=${s.id}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-50 hover:text-amber-900 text-white text-[11px] font-bold transition inline-flex items-center gap-1" title="Abrir Player no Celular">
+                  <a href="player.html?aluno=${menteeSlug}" target="_blank" class="px-2 py-1 rounded-lg bg-slate-900 hover:bg-amber-50 hover:text-amber-900 text-white text-[11px] font-bold transition inline-flex items-center gap-1" title="Abrir Player no Celular">
                     <span>Player</span> <span>↗</span>
                   </a>
                 ` : `
-                  <button onclick="openCreateVipSpaceModal('${s.id}', '${(s.name || '').replace(/'/g, "\'")}', '${s.email}')" class="px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Criar Curso e Sala do Mentorado no Banco de Dados">
+                  <button onclick="openCreateVipSpaceModal('${s.id}', '${(s.name || '').replace(/'/g, "\\'")}', '${s.email}')" class="px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer" title="Criar Curso e Sala do Mentorado no Banco de Dados">
                     <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i>
                     <span>Gerar Sala VIP</span>
                   </button>
@@ -1430,12 +1565,21 @@
         : hasPago ? (billingPeriod === 'monthly' ? 'club_monthly' : billingPeriod === 'lifetime' ? 'lifetime' : 'club_annual')
         : 'free';
 
+      // Retém cursos VIP já matriculados para não perder a Sala VIP ao editar permissões gerais
+      const existingStudent = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email);
+      const existingVipCourses = (existingStudent?.enrolledProducts || []).filter(p => typeof p === 'string' && (p.startsWith('mentoria-') || p === 'mentoria_vip' || p === 'all_access_master'));
+      if (existingStudent?.vipCourseId && !existingVipCourses.includes(existingStudent.vipCourseId)) {
+        existingVipCourses.push(existingStudent.vipCourseId);
+      }
+      const finalEnrolledProducts = Array.from(new Set([...purchasedProducts, ...existingVipCourses]));
+
       const updateData = {
         categories,
-        purchasedProducts,
+        purchasedProducts: finalEnrolledProducts,
         tier: legacyTier,
         role: effectiveRole,
-        enrolledProducts: purchasedProducts, // backward compat
+        enrolledProducts: finalEnrolledProducts, // backward compat
+        vipCourseId: existingStudent?.vipCourseId || null,
         updatedAt: new Date().toISOString()
       };
 
@@ -1451,7 +1595,7 @@
       try {
         if (window.aefPortalAuth) {
           await window.aefPortalAuth.ready();
-          await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], legacyTier, effectiveRole, purchasedProducts, updateData);
+          await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], legacyTier, effectiveRole, finalEnrolledProducts, updateData);
           if (hasMentoria) {
             await window.aefPortalAuth.saveMenteeDoc(id || email.split('@')[0], { name, email, ...updateData });
           }
@@ -1719,12 +1863,18 @@
           await window.aefCloudSync.saveLesson(courseId, modulePayload.id, lessonPayload);
         }
 
-        // 5. Atualiza lista local
+        // 5. Atualiza lista local e cache de cursos
+        ALL_COURSES_MAP.set(courseId, coursePayload);
         const existIdx = ALL_STUDENTS_LIST.findIndex(s => s.id === studentId || s.email === email);
+        const updatedStudent = {
+          ...studentPayload,
+          vipCourseId: courseId,
+          enrolledProducts: Array.from(new Set([...(existIdx >= 0 ? (ALL_STUDENTS_LIST[existIdx].enrolledProducts || []) : []), ...studentPayload.enrolledProducts, courseId]))
+        };
         if (existIdx >= 0) {
-          ALL_STUDENTS_LIST[existIdx] = { ...ALL_STUDENTS_LIST[existIdx], ...studentPayload };
+          ALL_STUDENTS_LIST[existIdx] = { ...ALL_STUDENTS_LIST[existIdx], ...updatedStudent };
         } else {
-          ALL_STUDENTS_LIST.unshift(studentPayload);
+          ALL_STUDENTS_LIST.unshift(updatedStudent);
         }
 
         closeCreateVipSpaceModal();
