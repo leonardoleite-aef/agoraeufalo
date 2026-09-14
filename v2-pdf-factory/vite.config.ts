@@ -5,7 +5,7 @@ import path from 'path';
 // Configuração do Vite projetada para rodar em paralelo (Strangler Fig) com a raiz do site.
 export default defineConfig({
   plugins: [react()],
-  base: './', // Para caminhos relativos
+  base: '/v2-factory/', // Caminho absoluto para os assets estáticos no Cloudflare
   build: {
     outDir: '../dist/v2-factory', // Não sobrescreve a raiz inteira
     emptyOutDir: true,

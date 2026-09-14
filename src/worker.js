@@ -211,6 +211,7 @@ export default {
         '/admin-marketing': '/marketing',
         '/admin-marketing.html': '/marketing',
         '/pdf-factory': '/pdf-factory',
+        '/pdf-factory-v2': '/pdf-factory-v2',
         '/admin-pdf-factory': '/pdf-factory',
         '/admin-pdf-factory.html': '/pdf-factory',
         '/tts': '/tts',
