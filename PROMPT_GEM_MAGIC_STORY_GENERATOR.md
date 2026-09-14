@@ -125,9 +125,9 @@ O JSON deve seguir **EXATAMENTE** este Schema estrutural:
           "answerVariations": ["Resposta."]
         },
         {
-          "negativeContext": "CRIE UMA SENTENÇA NEGATIVA PARA CADA FRASE DA HISTÓRIA. CUBRA 100% DAS FRASES DA HISTÓRIA SEM PULAR NENHUMA. NUNCA PARE NA FRASE 3.",
-          "questionVariations": ["Pergunta da última frase?"],
-          "answerVariations": ["Resposta final."]
+          "negativeContext": "CRIE UMA SENTENÇA NEGATIVA PARA CADA PERGUNTA DO LISTEN & ANSWER (CORRESPONDÊNCIA 1 PARA 1). SE O LA TEM 12 PERGUNTAS, O LASK TEM EXATAMENTE AS MESMAS 12 SENTENÇAS NA NEGATIVA. NUNCA PARE NA 3.",
+          "questionVariations": ["Pergunta correspondente à do LA?"],
+          "answerVariations": ["Resposta."]
         }
       ]
     },
@@ -152,15 +152,13 @@ O JSON deve seguir **EXATAMENTE** este Schema estrutural:
 }
 ```
 
-### 🔴 REGRA ABSOLUTA DE EXTENSÃO (O TESTE DO PENTE FINO)
-Ao gerar as atividades **LA, LRT, LASK e PRO**, você tem **PROIBIÇÃO ABSOLUTA** de resumir ou pular partes da história. 
-- Você deve cobrir **LITERALMENTE CADA FRASE EXISTENTE NA HISTÓRIA**. 
-- Se a história tem 15 frases, o `LA` deve ter perguntas suficientes para dissecar as 15 frases.
-- O `LRT` deve replicar rigorosamente todas as perguntas do `LA`.
-- O `LASK` deve conter uma sentença negativa pura para **CADA UMA DAS FRASES** da história (se a história tem 15 frases, serão 15 sentenças negativas no `LASK`). Nunca use "Tell me...", apenas a frase negativa direta.
-- O `PRO` não é um resumo; é **100% das frases da história**, linha por linha com as marcações de linking.
-- O bloco `QR_CODE` deve ser gerado apontando para o `trackId` da aula.
-- Não tenha preguiça. Nunca limite a 3 ou 5 frases. Disseque a história inteira.
+### 🔴 REGRA ABSOLUTA DE EXTENSÃO & A TRÍADE SAGRADA (1:1:1)
+Ao gerar as atividades **LA, LRT e LASK**, você deve manter **CORRESPONDÊNCIA ESTRITA DE 1 PARA 1**:
+1. **Listen & Answer (LA) é a Matriz Primária:** Crie quantas perguntas forem necessárias para dissecar exaustivamente todos os fatos da história. Se foram geradas 12 perguntas no `LA`, este é o número exato do módulo.
+2. **Look & Retell (LRT) = As Mesmas Perguntas do LA:** O `LRT` replica rigorosamente **as mesmas 12 perguntas** do `LA` como perguntas-guia.
+3. **Listen & Ask (LASK) = As Mesmas Sentenças na Negativa:** O `LASK` contém **exatamente as mesmas 12 sentenças na negativa**, correspondendo ponto a ponto a cada pergunta do `LA` (1 para 1). Nunca use "Tell me...", apenas a frase negativa direta pura.
+4. **Pronunciation (PRO):** É **100% do texto da história**, linha por linha com as marcações de linking sons (`_`).
+5. **QR Code:** Inclua o bloco `QR_CODE` apontando para o `trackId` da aula.
 
 ### 🔴 SAÍDA C: HTML PEDAGÓGICO (COURSE STUDIO)
 Um bloco de código HTML semântico usando classes Tailwind (foco na paleta Calm EdTech: fundo claro, textos escuros) que será injetado no campo `processedContentHtml` do Firestore.
