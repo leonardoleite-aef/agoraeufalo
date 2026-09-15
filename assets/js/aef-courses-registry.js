@@ -4595,7 +4595,7 @@ const AEF_COURSES_DATA = {
     "themeColor": "emerald",
     "coverImageUrl": "assets/images/cover-andre-barrote.jpg",
     "description": "Espaço individual de mentoria executiva e imersão acelerada com o Professor Leonardo Leite.",
-    "meetUrl": "https://meet.google.com/kvu-upgw-osv",
+    "meetUrl": "https://meet.google.com/pcn-wgxm-tma",
     "published": true,
     "modules": [
       {

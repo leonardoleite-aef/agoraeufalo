@@ -523,6 +523,29 @@
 
       let courseId = rawParam;
 
+      // Mapeamento canônico e aliases para salas de Mentoria VIP individuais
+      const VIP_MENTORIA_SLUGS = {
+        'andre': 'mentoria-andre',
+        'mentoria-andre': 'mentoria-andre',
+        'estevao': 'mentoria-estevaopin',
+        'mentoria-estevao': 'mentoria-estevaopin',
+        'estevaopin': 'mentoria-estevaopin',
+        'mentoria-estevaopin': 'mentoria-estevaopin',
+        'thomas': 'mentoria-thomasskt21',
+        'mentoria-thomas': 'mentoria-thomasskt21',
+        'thomasskt21': 'mentoria-thomasskt21',
+        'mentoria-thomasskt21': 'mentoria-thomasskt21',
+        'mateus': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-mateus': 'mentoria-mateus.s.gomes.novo',
+        'matheus': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-matheus': 'mentoria-mateus.s.gomes.novo',
+        'mateus.s.gomes.novo': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-mateus.s.gomes.novo': 'mentoria-mateus.s.gomes.novo'
+      };
+      if (VIP_MENTORIA_SLUGS[courseId]) {
+        courseId = VIP_MENTORIA_SLUGS[courseId];
+      }
+
       if (!courseId && lastActivity && lastActivity.courseId) {
         courseId = lastActivity.courseId;
         if (!targetLessonId) targetLessonId = lastActivity.lessonId;

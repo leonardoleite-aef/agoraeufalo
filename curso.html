@@ -301,7 +301,7 @@
           <i data-lucide="smartphone" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Escutar no Celular</span>
         </a>
-        <a href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+        <a id="drawerMeetLink" href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="video" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Aulas ao Vivo (Meet)</span>
         </a>
@@ -379,6 +379,8 @@
       if (isVIP && meetCard) {
         meetCard.classList.remove("hidden");
         if (meetBtn && COURSE_DATA.meetUrl) meetBtn.href = COURSE_DATA.meetUrl;
+        const drawerMeet = document.getElementById("drawerMeetLink");
+        if (drawerMeet && COURSE_DATA.meetUrl) drawerMeet.href = COURSE_DATA.meetUrl;
         if (memberBadge) memberBadge.textContent = "MENTORIA VIP INDIVIDUAL";
         if (nextTitle) nextTitle.textContent = "Espaço Exclusivo com o Leo";
       } else if (memberBadge && user && AE) {
@@ -415,14 +417,38 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+      // Autenticação & Gatekeeper de Acesso
       if (window.aefPortalAuth) {
-        const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
+        const authed = await window.aefPortalAuth.requireAuth();
         if (!authed) return;
       }
 
       const urlParams = new URLSearchParams(window.location.search);
       let rawParam = urlParams.get("id") || urlParams.get("curso") || urlParams.get("aluno");
       let courseId = rawParam || "ms-legacy";
+
+      // Mapeamento canônico e aliases para salas de Mentoria VIP individuais
+      const VIP_MENTORIA_SLUGS = {
+        'andre': 'mentoria-andre',
+        'mentoria-andre': 'mentoria-andre',
+        'estevao': 'mentoria-estevaopin',
+        'mentoria-estevao': 'mentoria-estevaopin',
+        'estevaopin': 'mentoria-estevaopin',
+        'mentoria-estevaopin': 'mentoria-estevaopin',
+        'thomas': 'mentoria-thomasskt21',
+        'mentoria-thomas': 'mentoria-thomasskt21',
+        'thomasskt21': 'mentoria-thomasskt21',
+        'mentoria-thomasskt21': 'mentoria-thomasskt21',
+        'mateus': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-mateus': 'mentoria-mateus.s.gomes.novo',
+        'matheus': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-matheus': 'mentoria-mateus.s.gomes.novo',
+        'mateus.s.gomes.novo': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-mateus.s.gomes.novo': 'mentoria-mateus.s.gomes.novo'
+      };
+      if (VIP_MENTORIA_SLUGS[courseId]) {
+        courseId = VIP_MENTORIA_SLUGS[courseId];
+      }
 
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSES_REGISTRY);
 

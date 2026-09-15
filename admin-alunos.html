@@ -461,6 +461,21 @@
           </div>
         </div>
 
+        <!-- Sala Google Meet (Mentoria VIP) -->
+        <div class="space-y-1.5 pt-2 border-t border-slate-100" id="edit-student-meet-container">
+          <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Link da Sala Google Meet (Mentoria VIP 1-on-1)</span>
+          </label>
+          <div class="flex items-center gap-2">
+            <span class="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+              <i data-lucide="video" class="w-4 h-4"></i>
+            </span>
+            <input type="text" id="edit-student-meet-url" placeholder="https://meet.google.com/xyz-abcd-efg" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+          </div>
+          <p class="text-[10px] text-slate-500">Link exclusivo para os encontros ao vivo deste mentorado. Atualiza automaticamente a Sala de Aula do aluno.</p>
+        </div>
+
         <!-- Compras Avulsas (Purchased Products) -->
         <div class="space-y-2 pt-2 border-t border-slate-100">
           <label class="block text-[11px] font-bold text-slate-700">Compras Avulsas (Produtos Adquiridos)</label>
@@ -610,7 +625,7 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Sala Google Meet</label>
-            <input type="text" id="vip-space-meet-url" value="https://meet.google.com/kvu-upgw-osv" placeholder="https://meet.google.com/..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+            <input type="text" id="vip-space-meet-url" value="" placeholder="https://meet.google.com/xyz-abcd-efg" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
           </div>
         </div>
 
@@ -1310,6 +1325,12 @@
       document.getElementById('edit-is-admin').checked = isAdminUser;
       document.getElementById('edit-student-role').value = student.role || (isAdminUser ? 'admin' : 'student');
 
+      // Google Meet link for VIP mentee
+      const mentoriaCourse = resolveStudentMentoriaCourse(student);
+      const studentMeet = student.meetUrl || mentoriaCourse?.meetUrl || '';
+      const meetInput = document.getElementById('edit-student-meet-url');
+      if (meetInput) meetInput.value = studentMeet;
+
       // Load dynamic courses if not loaded
       if (!ALL_AVAILABLE_COURSES_CACHE) {
          try {
@@ -1583,6 +1604,11 @@
         updatedAt: new Date().toISOString()
       };
 
+      const meetUrl = document.getElementById('edit-student-meet-url')?.value.trim() || '';
+      if (meetUrl) {
+        updateData.meetUrl = meetUrl;
+      }
+
       if (hasPago) {
         updateData.subscription = {
           billingPeriod: billingPeriod,
@@ -1596,8 +1622,25 @@
         if (window.aefPortalAuth) {
           await window.aefPortalAuth.ready();
           await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], legacyTier, effectiveRole, finalEnrolledProducts, updateData);
-          if (hasMentoria) {
+          if (hasMentoria || meetUrl) {
             await window.aefPortalAuth.saveMenteeDoc(id || email.split('@')[0], { name, email, ...updateData });
+          }
+        }
+        // Sincroniza meetUrl diretamente no curso do mentorado no Firestore
+        if (meetUrl) {
+          const mentoriaCourse = resolveStudentMentoriaCourse({ id, email });
+          const targetCourseId = mentoriaCourse?.id || (id ? `mentoria-${id}` : null);
+          if (targetCourseId) {
+            try {
+              const patchUrl = 'https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses/' + targetCourseId + '?updateMask.fieldPaths=meetUrl';
+              await fetch(patchUrl, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields: { meetUrl: { stringValue: meetUrl } } })
+              });
+            } catch (pErr) {
+              console.warn("Could not patch course meetUrl via REST:", pErr);
+            }
           }
         }
       } catch (err) {
@@ -1761,7 +1804,7 @@
       const email = document.getElementById('vip-space-email').value.trim().toLowerCase();
       const cover = document.getElementById('vip-space-cover').value.trim() || 'assets/images/cover-default-aef.jpg';
       const modTitle = document.getElementById('vip-space-module-title').value.trim() || `Welcome ${name}!`;
-      const meetUrl = document.getElementById('vip-space-meet-url').value.trim() || 'https://meet.google.com/kvu-upgw-osv';
+      const meetUrl = document.getElementById('vip-space-meet-url').value.trim();
 
       const studentId = rawSlug || name.toLowerCase().replace(/[^a-z0-9]/g, '');
       const courseId = `mentoria-${studentId}`;
