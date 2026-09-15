@@ -1326,7 +1326,7 @@
       document.getElementById('edit-student-role').value = student.role || (isAdminUser ? 'admin' : 'student');
 
       // Google Meet link for VIP mentee
-      const mentoriaCourse = resolveStudentMentoriaCourse(student);
+      const mentoriaCourse = resolveVipCourse(student);
       const studentMeet = student.meetUrl || mentoriaCourse?.meetUrl || '';
       const meetInput = document.getElementById('edit-student-meet-url');
       if (meetInput) meetInput.value = studentMeet;
@@ -1628,7 +1628,7 @@
         }
         // Sincroniza meetUrl diretamente no curso do mentorado no Firestore
         if (meetUrl) {
-          const mentoriaCourse = resolveStudentMentoriaCourse({ id, email });
+          const mentoriaCourse = resolveVipCourse({ id, email });
           const targetCourseId = mentoriaCourse?.id || (id ? `mentoria-${id}` : null);
           if (targetCourseId) {
             try {

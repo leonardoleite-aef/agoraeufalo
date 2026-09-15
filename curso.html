@@ -225,7 +225,7 @@
                 <p class="text-[10px] text-slate-600">Google Meet 1 a 1</p>
               </div>
             </div>
-            <a id="btnJoinVipMeet" href="https://meet.google.com/kvu-upgw-osv" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+            <a id="btnJoinVipMeet" href="#" target="_blank" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition shadow-xs flex items-center justify-center gap-2 cursor-pointer">
               <i data-lucide="video" class="w-3.5 h-3.5"></i>
               <span>Entrar no Google Meet</span>
             </a>
@@ -377,10 +377,14 @@
       const nextTitle = document.getElementById("sidebarNextTitle");
 
       if (isVIP && meetCard) {
-        meetCard.classList.remove("hidden");
-        if (meetBtn && COURSE_DATA.meetUrl) meetBtn.href = COURSE_DATA.meetUrl;
-        const drawerMeet = document.getElementById("drawerMeetLink");
-        if (drawerMeet && COURSE_DATA.meetUrl) drawerMeet.href = COURSE_DATA.meetUrl;
+        if (COURSE_DATA.meetUrl) {
+          meetCard.classList.remove("hidden");
+          if (meetBtn) meetBtn.href = COURSE_DATA.meetUrl;
+          const drawerMeet = document.getElementById("drawerMeetLink");
+          if (drawerMeet) drawerMeet.href = COURSE_DATA.meetUrl;
+        } else {
+          meetCard.classList.add("hidden");
+        }
         if (memberBadge) memberBadge.textContent = "MENTORIA VIP INDIVIDUAL";
         if (nextTitle) nextTitle.textContent = "Espaço Exclusivo com o Leo";
       } else if (memberBadge && user && AE) {

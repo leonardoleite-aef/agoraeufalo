@@ -947,6 +947,7 @@
             if (cData.badge) courseObj.badge = cData.badge;
             if (cData.published !== undefined) courseObj.published = cData.published;
             if (cData.slug) courseObj.slug = cData.slug;
+            if (cData.meetUrl) courseObj.meetUrl = cData.meetUrl;
             courseObj.modules = courseObj.modules || [];
 
             const modulesSnap = await this.db.collection("courses").doc(courseId).collection("modules").get();
@@ -1023,6 +1024,7 @@
               if (f.badge?.stringValue) courseObj.badge = f.badge.stringValue;
               if (f.published?.booleanValue !== undefined) courseObj.published = f.published.booleanValue;
               if (f.slug?.stringValue) courseObj.slug = f.slug.stringValue;
+              if (f.meetUrl?.stringValue) courseObj.meetUrl = f.meetUrl.stringValue;
               courseObj.modules = courseObj.modules || [];
 
               try {
@@ -1496,6 +1498,7 @@
               if (cData.badge) courses[cid].badge = cData.badge;
               if (cData.published !== undefined) courses[cid].published = cData.published;
               if (cData.slug) courses[cid].slug = cData.slug;
+              if (cData.meetUrl) courses[cid].meetUrl = cData.meetUrl;
               courses[cid].modules = courses[cid].modules || [];
 
               // Fetch Modules Subcollection in parallel
@@ -1583,6 +1586,7 @@
                 if (f.badge?.stringValue) courses[cid].badge = f.badge.stringValue;
                 if (f.published?.booleanValue !== undefined) courses[cid].published = f.published.booleanValue;
                 if (f.slug?.stringValue) courses[cid].slug = f.slug.stringValue;
+                if (f.meetUrl?.stringValue) courses[cid].meetUrl = f.meetUrl.stringValue;
                 courses[cid].modules = courses[cid].modules || [];
 
                 // REST fetch modules

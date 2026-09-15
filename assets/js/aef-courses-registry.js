@@ -4633,6 +4633,369 @@ const AEF_COURSES_DATA = {
         ]
       }
     ]
+  },
+  "mentoria-thomasskt21": {
+    "id": "mentoria-thomasskt21",
+    "title": "Mentoria VIP • Thomas Henrique Silva",
+    "slug": "mentoria-thomasskt21",
+    "badge": "MENTORIA VIP",
+    "studentId": "thomasskt21",
+    "studentEmail": "thomasskt21@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Thomas Henrique Silva com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/uyj-dfzg-pmh",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-thomasskt21",
+        "courseId": "mentoria-thomasskt21",
+        "title": "Suas coisinhas aqui",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Thomas Henrique Silva.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "aula-1789404665483",
+            "moduleId": "mod-welcome-thomasskt21",
+            "courseId": "mentoria-thomasskt21",
+            "title": "2- Pink Floyd - Another Brick In The Wall",
+            "order": 2,
+            "duration": "05:36",
+            "description": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789405442600_Pink_floyd_the_wall_1__1_.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789405635716_the_wall_image_16_9.jpeg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789405645921_the_wall_img.jpeg?alt=media",
+            "pdfUrl": "",
+            "goldenTip": "",
+            "processedContentHtml": "",
+            "published": true
+          },
+          {
+            "id": "thomasskt21-l01-welcome",
+            "moduleId": "mod-welcome-thomasskt21",
+            "courseId": "mentoria-thomasskt21",
+            "title": "1- Welcome TJ!",
+            "order": 1,
+            "duration": "05:46",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789398990241_TJ_wlcome_message.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+            "pdfUrl": "",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Thomas Henrique Silva!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Thomas Henrique Silva</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
+  },
+  "mentoria-thomas": {
+    "id": "mentoria-thomasskt21",
+    "title": "Mentoria VIP • Thomas Henrique Silva",
+    "slug": "mentoria-thomasskt21",
+    "badge": "MENTORIA VIP",
+    "studentId": "thomasskt21",
+    "studentEmail": "thomasskt21@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Thomas Henrique Silva com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/uyj-dfzg-pmh",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-thomasskt21",
+        "courseId": "mentoria-thomasskt21",
+        "title": "Suas coisinhas aqui",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Thomas Henrique Silva.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "aula-1789404665483",
+            "moduleId": "mod-welcome-thomasskt21",
+            "courseId": "mentoria-thomasskt21",
+            "title": "2- Pink Floyd - Another Brick In The Wall",
+            "order": 2,
+            "duration": "05:36",
+            "description": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789405442600_Pink_floyd_the_wall_1__1_.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789405635716_the_wall_image_16_9.jpeg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789405645921_the_wall_img.jpeg?alt=media",
+            "pdfUrl": "",
+            "goldenTip": "",
+            "processedContentHtml": "",
+            "published": true
+          },
+          {
+            "id": "thomasskt21-l01-welcome",
+            "moduleId": "mod-welcome-thomasskt21",
+            "courseId": "mentoria-thomasskt21",
+            "title": "1- Welcome TJ!",
+            "order": 1,
+            "duration": "05:46",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fmentoria-thomasskt21%2Fmod-welcome-thomasskt21%2F1789398990241_TJ_wlcome_message.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+            "pdfUrl": "",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Thomas Henrique Silva!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Thomas Henrique Silva</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
+  },
+  "mentoria-mateus.s.gomes.novo": {
+    "id": "mentoria-mateus.s.gomes.novo",
+    "title": "Mentoria VIP • Mateus Gomes",
+    "slug": "mentoria-mateus.s.gomes.novo",
+    "badge": "CURSO LIBERADO",
+    "studentId": "mateus.s.gomes.novo",
+    "studentEmail": "mateus.s.gomes.novo@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789245580830_mateus.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Mateus Gomes com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/kmu-hwdu-xrm",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-mateus.s.gomes.novo",
+        "courseId": "mentoria-mateus.s.gomes.novo",
+        "title": "Welcome Mateus Gomes!",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Mateus Gomes.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "mateus.s.gomes.novo-l01-welcome",
+            "moduleId": "mod-welcome-mateus.s.gomes.novo",
+            "courseId": "mentoria-mateus.s.gomes.novo",
+            "title": "Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP, Mateus Gomes!",
+            "order": 1,
+            "duration": "05:00",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "assets/images/cover-default-aef.jpg",
+            "artworkUrl": "assets/images/cover-default-aef.jpg",
+            "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Mateus Gomes!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Mateus Gomes</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
+  },
+  "mentoria-mateus": {
+    "id": "mentoria-mateus.s.gomes.novo",
+    "title": "Mentoria VIP • Mateus Gomes",
+    "slug": "mentoria-mateus.s.gomes.novo",
+    "badge": "CURSO LIBERADO",
+    "studentId": "mateus.s.gomes.novo",
+    "studentEmail": "mateus.s.gomes.novo@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789245580830_mateus.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Mateus Gomes com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/kmu-hwdu-xrm",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-mateus.s.gomes.novo",
+        "courseId": "mentoria-mateus.s.gomes.novo",
+        "title": "Welcome Mateus Gomes!",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Mateus Gomes.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "mateus.s.gomes.novo-l01-welcome",
+            "moduleId": "mod-welcome-mateus.s.gomes.novo",
+            "courseId": "mentoria-mateus.s.gomes.novo",
+            "title": "Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP, Mateus Gomes!",
+            "order": 1,
+            "duration": "05:00",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "assets/images/cover-default-aef.jpg",
+            "artworkUrl": "assets/images/cover-default-aef.jpg",
+            "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Mateus Gomes!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Mateus Gomes</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
+  },
+  "mentoria-matheus": {
+    "id": "mentoria-mateus.s.gomes.novo",
+    "title": "Mentoria VIP • Mateus Gomes",
+    "slug": "mentoria-mateus.s.gomes.novo",
+    "badge": "CURSO LIBERADO",
+    "studentId": "mateus.s.gomes.novo",
+    "studentEmail": "mateus.s.gomes.novo@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789245580830_mateus.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Mateus Gomes com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/kmu-hwdu-xrm",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-mateus.s.gomes.novo",
+        "courseId": "mentoria-mateus.s.gomes.novo",
+        "title": "Welcome Mateus Gomes!",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Mateus Gomes.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "mateus.s.gomes.novo-l01-welcome",
+            "moduleId": "mod-welcome-mateus.s.gomes.novo",
+            "courseId": "mentoria-mateus.s.gomes.novo",
+            "title": "Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP, Mateus Gomes!",
+            "order": 1,
+            "duration": "05:00",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "assets/images/cover-default-aef.jpg",
+            "artworkUrl": "assets/images/cover-default-aef.jpg",
+            "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Mateus Gomes!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Mateus Gomes</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
+  },
+  "mentoria-estevaopin": {
+    "id": "mentoria-estevaopin",
+    "title": "Mentoria VIP • Estêvão Pinheiro",
+    "slug": "mentoria-estevaopin",
+    "badge": "MENTORIA VIP",
+    "studentId": "estevaopin",
+    "studentEmail": "estevaopin@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Estêvão Pinheiro com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/bbr-kzuy-edc",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-estevaopin",
+        "courseId": "mentoria-estevaopin",
+        "title": "Welcome Estêvão Pinheiro!",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Estêvão Pinheiro.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "estevaopin-l01-welcome",
+            "moduleId": "mod-welcome-estevaopin",
+            "courseId": "mentoria-estevaopin",
+            "title": "Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP, Estêvão Pinheiro!",
+            "order": 1,
+            "duration": "05:00",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+            "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Estêvão Pinheiro!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Estêvão Pinheiro</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
+  },
+  "mentoria-estevao": {
+    "id": "mentoria-estevaopin",
+    "title": "Mentoria VIP • Estêvão Pinheiro",
+    "slug": "mentoria-estevaopin",
+    "badge": "MENTORIA VIP",
+    "studentId": "estevaopin",
+    "studentEmail": "estevaopin@gmail.com",
+    "accessTier": "all_access",
+    "categories": [
+      "real_english"
+    ],
+    "themeColor": "emerald",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+    "description": "Espaço individual de mentoria executiva e imersão acelerada de Estêvão Pinheiro com o Professor Leonardo Leite.",
+    "meetUrl": "https://meet.google.com/bbr-kzuy-edc",
+    "published": true,
+    "modules": [
+      {
+        "id": "mod-welcome-estevaopin",
+        "courseId": "mentoria-estevaopin",
+        "title": "Welcome Estêvão Pinheiro!",
+        "order": 1,
+        "badge": "CICLO 01",
+        "description": "Ciclo inicial de boas-vindas, diagnóstico e primeiras histórias ativas de Estêvão Pinheiro.",
+        "published": true,
+        "lessons": [
+          {
+            "id": "estevaopin-l01-welcome",
+            "moduleId": "mod-welcome-estevaopin",
+            "courseId": "mentoria-estevaopin",
+            "title": "Aula 01 • Seja Muito Bem-Vindo à sua Mentoria VIP, Estêvão Pinheiro!",
+            "order": 1,
+            "duration": "05:00",
+            "description": "Alinhamento do plano de mentoria individual, método de ativação oral e rotina de treino diário.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fenglish-quickstart%2FEQS_0.mp4?alt=media",
+            "audioUrl": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+            "pdfUrl": "Material-PDF/MS001_Grazi_wants_to_change_Apostila_Oficial.pdf",
+            "goldenTip": "O inglês executivo e natural é construído no dia a dia. Repita os blocos sonoros no celular até virar reflexo!",
+            "processedContentHtml": "\n            <div class=\"space-y-4\">\n              <div class=\"p-5 sm:p-6 rounded-2xl bg-white border border-[#EAE5DC] shadow-xs space-y-3.5\">\n                <div class=\"flex items-center justify-between pb-3 border-b border-[#F0EBE1]\">\n                  <span class=\"font-black text-xs uppercase tracking-wider text-[#0A192F] flex items-center gap-2\">\n                    <i data-lucide=\"crown\" class=\"w-4 h-4 text-[#C68A36]\"></i>\n                    Seja Muito Bem-Vindo, Estêvão Pinheiro!\n                  </span>\n                  <span class=\"text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200\">Plano VIP Individual</span>\n                </div>\n                <div class=\"text-slate-800 text-xs sm:text-sm leading-relaxed space-y-3 font-medium\">\n                  <p>Fala, <b>Estêvão Pinheiro</b>! Seja muito bem-vindo ao seu espaço exclusivo de Mentoria VIP no AgoraEuFalo.</p>\n                  <p>Aqui nesta Sala de Aula Master você receberá seus módulos sob medida, diagnósticos 1 a 1, materiais de apoio e as prescrições gravadas para destravar sua fala e automatizar seu reflexo.</p>\n                </div>\n              </div>\n            </div>\n          ",
+            "published": true
+          }
+        ]
+      }
+    ]
   }
 };
 
