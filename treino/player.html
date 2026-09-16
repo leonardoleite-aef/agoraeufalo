@@ -854,7 +854,8 @@
       // Alunos free e club sem VIP não veem a opção de Mentoria
 
       optionsHtml += `<option value="public" class="bg-slate-900 text-slate-100">💡 Novidades Free</option>`;
-      optionsHtml += `<option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>`;
+      // 🚧 SPRINT DEDICADO: "Minhas Coisas" oculto temporariamente — código intacto, aguardando sprint de lançamento.
+      // optionsHtml += `<option value="custom" class="bg-slate-900 text-slate-100">🧪 Minhas Coisas</option>`;
 
       select.innerHTML = optionsHtml;
       select.value = state.courseId;
