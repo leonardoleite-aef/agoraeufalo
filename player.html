@@ -728,6 +728,26 @@
 
       const SPEED_STEPS = [1.0, 1.25, 1.5, 0.75];
 
+      // Mapeamento canônico para desduplicação e roteamento de Mentoria VIP
+      const VIP_CANONICAL_MAP = {
+        'andre': 'mentoria-andre',
+        'mentoria-andre': 'mentoria-andre',
+        'estevao': 'mentoria-estevaopin',
+        'mentoria-estevao': 'mentoria-estevaopin',
+        'estevaopin': 'mentoria-estevaopin',
+        'mentoria-estevaopin': 'mentoria-estevaopin',
+        'thomas': 'mentoria-thomasskt21',
+        'mentoria-thomas': 'mentoria-thomasskt21',
+        'thomasskt21': 'mentoria-thomasskt21',
+        'mentoria-thomasskt21': 'mentoria-thomasskt21',
+        'mateus': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-mateus': 'mentoria-mateus.s.gomes.novo',
+        'matheus': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-matheus': 'mentoria-mateus.s.gomes.novo',
+        'mateus.s.gomes.novo': 'mentoria-mateus.s.gomes.novo',
+        'mentoria-mateus.s.gomes.novo': 'mentoria-mateus.s.gomes.novo'
+      };
+
       // =======================================================================
       // INITIALIZATION
       // =======================================================================
@@ -835,11 +855,55 @@
 
         state.courses = hierarchy || {};
 
-        // Filter courses with AEFAccessEngine
-        const allList = Object.values(state.courses).filter(c => c && c.id && c.published !== false);
-        
-        state.accessibleCourses = allList.filter(c => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const alunoParam = (urlParams.get('aluno') || urlParams.get('student') || '').trim().toLowerCase();
+        const targetVipCourse = alunoParam ? (VIP_CANONICAL_MAP[alunoParam] || ('mentoria-' + alunoParam)) : null;
+
+        // 1. Desduplicação estrita de cursos por ID canônico
+        const seenCourseIds = new Set();
+        const allList = [];
+        for (const c of Object.values(state.courses)) {
+          if (!c || !c.id || c.published === false) continue;
+          const canonicalId = VIP_CANONICAL_MAP[c.id] || c.id;
+          if (seenCourseIds.has(canonicalId)) continue;
+          seenCourseIds.add(canonicalId);
+          allList.push(c);
+        }
+
+        // 2. Filtragem inteligente para o player do aluno (URL ?aluno=)
+        // Se a tela foi aberta para um aluno específico (ex: ?aluno=thomasskt21),
+        // só exibe o curso de mentoria DELE (ocultando mentorias privadas de outros alunos)
+        const filteredList = allList.filter(c => {
+          const isMentoria = (c.id && c.id.startsWith('mentoria-')) ||
+                             (c.badge && c.badge.toUpperCase().includes('MENTORIA')) ||
+                             c.accessTier === 'mentoria_vip' ||
+                             c.tierRequired === 'vip';
+
+          if (!isMentoria) return true; // Cursos comuns (Experience, QuickStart, DTC, Magic Stories) são preservados
+
+          if (alunoParam) {
+            const courseCanonical = VIP_CANONICAL_MAP[c.id] || c.id;
+            const matchesStudent = (c.studentId && c.studentId.toLowerCase() === alunoParam) ||
+                                   (courseCanonical === targetVipCourse);
+            return matchesStudent;
+          }
+
+          // Se não há ?aluno= na URL e é admin, exibe cada mentoria uma única vez
+          if (window.AEFAccessEngine && window.AEFAccessEngine.isAdmin(state.user)) {
+            return true;
+          }
+
+          // Para alunos normais logados, filtra pela regra estrita de AEFAccessEngine
+          return window.AEFAccessEngine ? window.AEFAccessEngine.hasAccess(state.user, c) : false;
+        });
+
+        state.accessibleCourses = filteredList.filter(c => {
           if (!window.AEFAccessEngine) return true;
+          // Se alunoParam foi fornecido e o curso é a mentoria correspondente, libera a visualização
+          if (alunoParam) {
+            const courseCanonical = VIP_CANONICAL_MAP[c.id] || c.id;
+            if (courseCanonical === targetVipCourse) return true;
+          }
           return window.AEFAccessEngine.hasAccess(state.user, c);
         });
 
@@ -849,7 +913,7 @@
           isPremium = cats.includes('member_pago') || cats.includes('member_mentoria');
         }
 
-        state.otherCourses = allList.filter(c => {
+        state.otherCourses = filteredList.filter(c => {
           if (!window.AEFAccessEngine) return false;
           
           // Filosofia Calm EdTech: Se o aluno é premium (assinante/mentorado),
@@ -1039,7 +1103,10 @@
       // VIEW RENDERING: COURSE VIEW (SPOTIFY ALBUM STYLE)
       // =======================================================================
       window.openCourse = async (courseId) => {
-        let course = state.courses[courseId];
+        if (VIP_CANONICAL_MAP && VIP_CANONICAL_MAP[courseId]) {
+          courseId = VIP_CANONICAL_MAP[courseId];
+        }
+        let course = state.courses[courseId] || (window.AEF_COURSES_REGISTRY && window.AEF_COURSES_REGISTRY[courseId]);
         if (!course) return;
 
         // Lazy Load: se o curso só tem a casca (metadata) vinda do getCoursesList, buscamos o conteúdo completo
@@ -1800,10 +1867,14 @@
       // =======================================================================
       async function handleUrlParams() {
         const params = new URLSearchParams(window.location.search);
-        const courseParam = params.get('curso') || params.get('course') || params.get('courseId');
+        let courseParam = params.get('curso') || params.get('course') || params.get('courseId');
         const lessonParam = params.get('aula') || params.get('lesson') || params.get('lessonId');
 
-        if (courseParam && state.courses[courseParam]) {
+        if (courseParam && VIP_CANONICAL_MAP && VIP_CANONICAL_MAP[courseParam]) {
+          courseParam = VIP_CANONICAL_MAP[courseParam];
+        }
+
+        if (courseParam && (state.courses[courseParam] || (window.AEF_COURSES_REGISTRY && window.AEF_COURSES_REGISTRY[courseParam]))) {
           await window.openCourse(courseParam);
           if (lessonParam && state.flatLessonsList.some(l => l.id === lessonParam)) {
             const match = state.flatLessonsList.find(l => l.id === lessonParam);

@@ -178,6 +178,27 @@
     // 2. Curso não publicado
     if (course.published === false) return false;
 
+    // Regra Estrita: Mentoria VIP é 100% individual e privada
+    const isMentoria = (course.id && course.id.startsWith('mentoria-')) ||
+                       course.accessTier === 'mentoria_vip' ||
+                       course.tierRequired === 'vip' ||
+                       (course.badge && course.badge.toUpperCase().includes('MENTORIA'));
+
+    if (isMentoria) {
+      if (isAdmin(user)) return true;
+      const cleanEmail = (user?.email || '').toLowerCase().trim();
+      const courseEmail = (course.studentEmail || '').toLowerCase().trim();
+      const studentId = (user?.studentId || user?.id || user?.uid || user?.menteeSlug || '').toLowerCase().trim();
+      const targetStudentId = (course.studentId || '').toLowerCase().trim();
+
+      const enrolled = user?.enrolledProducts || user?.purchasedProducts || [];
+      if (enrolled.includes(course.id)) return true;
+      if (targetStudentId && studentId && (studentId === targetStudentId || studentId.includes(targetStudentId) || targetStudentId.includes(studentId))) return true;
+      if (courseEmail && cleanEmail && cleanEmail === courseEmail) return true;
+
+      return false;
+    }
+
     // 3. Compra avulsa
     const purchased = user?.purchasedProducts || user?.enrolledProducts || [];
     if (purchased.includes(course.id) || purchased.includes("all_access_master")) {
@@ -596,4 +617,9 @@
 
   root.AEFAccessEngine = AEFAccessEngine;
 
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = AEFAccessEngine;
+  }
+
 })(typeof window !== "undefined" ? window : globalThis);
+
