@@ -142,9 +142,10 @@ function App() {
               const lessonId = lDoc.id;
               const lessonTitle = lDoc.data().title || lessonId;
               
+              const moduleTitle = mDoc.data().title || moduleId;
               options.push({
                 path: `courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`,
-                label: `${courseTitle} > ${lessonTitle}`
+                label: `${courseTitle} > ${moduleTitle} > ${lessonTitle}`
               });
             }
           }
