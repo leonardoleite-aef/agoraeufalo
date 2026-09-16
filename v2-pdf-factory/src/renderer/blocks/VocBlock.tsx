@@ -31,8 +31,8 @@ export function VocBlock({ block, themeId }: Props) {
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: 32,
-      padding: 24,
+      marginBottom: 0,
+      padding: 20,
       backgroundColor: palette.primaryLight,
       borderLeftWidth: 6,
       borderLeftColor: palette.primary,

@@ -15,7 +15,7 @@ export function IntroBlock({ block, themeId }: Props) {
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: 32,
+      marginBottom: 0,
       padding: 24,
       backgroundColor: '#F8FAFC', // Cinza muito sutil para diferenciar do miolo
       borderTopWidth: 4,

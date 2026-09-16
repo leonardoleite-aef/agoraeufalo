@@ -7,7 +7,7 @@ export const ProBlock = ({ block, themeId }: { block: any; themeId: string }) =>
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: 24,
+      marginBottom: 0,
     },
     badge: {
       fontFamily: 'Plus Jakarta Sans',

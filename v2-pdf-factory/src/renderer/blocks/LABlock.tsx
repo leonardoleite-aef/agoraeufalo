@@ -9,7 +9,7 @@ export const LABlock = ({ block, themeId }: { block: any; themeId: string }) => 
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: 24,
+      marginBottom: 0,
     },
     badge: {
       fontFamily: 'Plus Jakarta Sans',
@@ -26,7 +26,7 @@ export const LABlock = ({ block, themeId }: { block: any; themeId: string }) => 
       letterSpacing: 1,
     },
     drillRow: {
-      marginBottom: 16,
+      marginBottom: 12,
     },
     questionRow: {
       flexDirection: 'row',

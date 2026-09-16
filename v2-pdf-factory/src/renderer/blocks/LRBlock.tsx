@@ -17,7 +17,7 @@ export function LRBlock({ block, themeId }: Props) {
 
   const styles = StyleSheet.create({
     container: {
-      marginBottom: 32, // Margem generosa abaixo
+      marginBottom: 0,
       padding: 24,
       backgroundColor: palette.primaryLight,
       borderLeftWidth: 6,
