@@ -26,6 +26,21 @@
   <script src="treino/data/registry.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
   <script src="assets/js/aef-admin-nav.js"></script>
+  <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(203, 213, 225, 0.8);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(148, 163, 184, 1);
+    }
+  </style>
 </head>
 <body class="ambient-bg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
 
@@ -327,84 +342,95 @@
   <!-- ========================================================================= -->
   <!-- MODAL 1: ADD NEW STUDENT                                                  -->
   <!-- ========================================================================= -->
-  <div id="add-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold font-serif text-slate-900">Cadastrar Novo Aluno</h3>
-        <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-900 p-1 cursor-pointer">✕</button>
+  <div id="add-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-hidden">
+    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between pb-2.5 border-b border-slate-100 shrink-0">
+        <h3 class="text-base sm:text-lg font-bold font-serif text-slate-900">Cadastrar Novo Aluno</h3>
+        <button type="button" onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100 transition cursor-pointer">✕</button>
       </div>
 
-      <form id="form-add-student" onsubmit="handleSaveStudent(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo *</label>
-          <input type="text" id="new-student-name" required placeholder="ex: João Silva" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">E-mail do Aluno *</label>
-          <input type="email" id="new-student-email" required placeholder="ex: joao@gmail.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / Celular</label>
-          <div class="relative">
-            <input type="tel" id="new-student-whatsapp" placeholder="ex: (11) 99616-0910" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 pl-8 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-            <span class="absolute left-2.5 top-2.5 text-emerald-600">
-              <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-            </span>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-0.5">DDD + número (opcional, para contato e suporte direto)</p>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Categorias de Acesso *</label>
-          <div class="space-y-1.5" id="new-student-categories">
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="new-cat" value="member_free" checked class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">🌱 Member Free</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="new-cat" value="member_pago" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">💰 Member Pago</span>
-            </label>
-            <div id="new-billing-period-row" class="hidden pl-8 py-1">
-              <select id="new-billing-period" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-                <option value="annual">📅 Anual</option>
-                <option value="monthly">📅 Mensal</option>
-                <option value="lifetime">💎 Vitalício</option>
-              </select>
-            </div>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="new-cat" value="member_mentoria" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">👑 Mentorado VIP</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="new-cat" value="legado_1" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">📦 Legado 1 (MS-Legacy)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="new-cat" value="legado_2" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">📦 Legado 2 (AEF Primeiro)</span>
-            </label>
-          </div>
-          <div class="mt-2">
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 cursor-pointer">
-              <input type="checkbox" id="new-is-admin" class="rounded text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
-              <span class="font-bold text-purple-800 text-xs">🔐 Admin Mestre (role: admin)</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="pt-2 border-t border-slate-100">
-          <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-sky-50/80 hover:bg-sky-100/70 border border-sky-200 cursor-pointer transition">
-            <input type="checkbox" id="new-student-send-welcome" checked class="mt-0.5 rounded text-sky-600 focus:ring-sky-500 w-4 h-4">
+      <form id="form-add-student" onsubmit="handleSaveStudent(event)" class="flex flex-col flex-1 min-h-0 overflow-hidden pt-3">
+        <div class="overflow-y-auto pr-1.5 space-y-3 flex-1 custom-scrollbar">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
-              <span class="block font-bold text-sky-950 text-xs">✉️ Enviar E-mail de Boas-Vindas / Link de Acesso</span>
-              <span class="block text-[10px] text-sky-700 leading-tight mt-0.5">Dispara automaticamente o e-mail oficial do Firebase para o aluno entrar direto no portal com 1 clique (sem precisar criar conta).</span>
+              <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Nome Completo *</label>
+              <input type="text" id="new-student-name" required placeholder="ex: João Silva" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
             </div>
-          </label>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-0.5">E-mail do Aluno *</label>
+              <input type="email" id="new-student-email" required placeholder="ex: joao@gmail.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-0.5">WhatsApp / Celular</label>
+            <div class="relative">
+              <input type="tel" id="new-student-whatsapp" placeholder="ex: (11) 99616-0910" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 pl-8 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+              <span class="absolute left-2.5 top-2 text-emerald-600">
+                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-0.5">DDD + número (opcional, para contato e suporte direto)</p>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Categorias de Acesso *</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="new-student-categories">
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="new-cat" value="member_free" checked class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">🌱 Member Free</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="new-cat" value="member_pago" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">💰 Member Pago</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="new-cat" value="member_mentoria" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">👑 Mentorado VIP</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="new-cat" value="legado_1" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">📦 Legado 1 (MS)</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="new-cat" value="legado_2" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">📦 Legado 2 (AEF)</span>
+              </label>
+              <div id="new-billing-period-row" class="hidden col-span-2 sm:col-span-3 p-2 bg-amber-50/90 border border-amber-200 rounded-xl flex items-center justify-between gap-2">
+                <span class="text-[11px] font-bold text-amber-900 flex items-center gap-1.5">
+                  <span>📅</span> Periodicidade da Cobrança:
+                </span>
+                <select id="new-billing-period" class="bg-white border border-amber-300 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-900 focus:border-amber-500 focus:outline-none">
+                  <option value="annual">Anual (12x)</option>
+                  <option value="monthly">Mensal Recorrente</option>
+                  <option value="lifetime">Vitalício (Lifetime)</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-2">
+              <label class="flex items-center gap-2 p-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 cursor-pointer">
+                <input type="checkbox" id="new-is-admin" class="rounded text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
+                <span class="font-bold text-purple-800 text-xs">🔐 Admin Mestre (role: admin)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100">
+            <label class="flex items-start gap-2.5 p-2 rounded-xl bg-sky-50/80 hover:bg-sky-100/70 border border-sky-200 cursor-pointer transition">
+              <input type="checkbox" id="new-student-send-welcome" checked class="mt-0.5 rounded text-sky-600 focus:ring-sky-500 w-4 h-4">
+              <div>
+                <span class="block font-bold text-sky-950 text-xs">✉️ Enviar E-mail de Boas-Vindas / Link de Acesso</span>
+                <span class="block text-[10px] text-sky-700 leading-tight mt-0.5">Dispara automaticamente o e-mail oficial do Firebase para o aluno entrar direto no portal com 1 clique (sem precisar criar conta).</span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2 cursor-pointer">
-          Salvar Aluno no Firestore
-        </button>
+        <div class="pt-3 mt-1 border-t border-slate-100 shrink-0">
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer">
+            Salvar Aluno no Firestore
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -412,141 +438,148 @@
   <!-- ========================================================================= -->
   <!-- MODAL 2: EDIT STUDENT / TIERS / ENROLLED PRODUCTS                         -->
   <!-- ========================================================================= -->
-  <div id="edit-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+  <div id="edit-student-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-hidden">
+    <div class="glass-panel border-2 border-amber-400 rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between pb-2.5 border-b border-slate-100 shrink-0">
         <div>
-          <h3 class="text-lg font-bold font-serif text-slate-900" id="edit-student-title">Editar Aluno</h3>
-          <p class="text-xs text-slate-500" id="edit-student-subtitle">Alteração de planos e produtos liberados</p>
+          <h3 class="text-base sm:text-lg font-bold font-serif text-slate-900" id="edit-student-title">Editar Aluno</h3>
+          <p class="text-[11px] sm:text-xs text-slate-500" id="edit-student-subtitle">Alteração de planos e produtos liberados</p>
         </div>
-        <button onclick="closeEditStudentModal()" class="text-slate-400 hover:text-slate-900 p-1 cursor-pointer">✕</button>
+        <button type="button" onclick="closeEditStudentModal()" class="text-slate-400 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100 transition cursor-pointer">✕</button>
       </div>
 
-      <form id="form-edit-student" onsubmit="handleUpdateStudent(event)" class="space-y-4">
+      <form id="form-edit-student" onsubmit="handleUpdateStudent(event)" class="flex flex-col flex-1 min-h-0 overflow-hidden pt-3">
         <input type="hidden" id="edit-student-id">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Nome do Aluno</label>
-            <input type="text" id="edit-student-name" required class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">E-mail</label>
-            <input type="email" id="edit-student-email" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-500 cursor-not-allowed">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 mb-1">WhatsApp / Celular</label>
-          <div class="flex items-center gap-2">
-            <div class="relative flex-1">
-              <input type="tel" id="edit-student-whatsapp" placeholder="ex: (11) 99616-0910" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 pl-8 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-              <span class="absolute left-2.5 top-2.5 text-emerald-600">
-                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-              </span>
-            </div>
-            <a id="edit-student-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Abrir conversa no WhatsApp">
-              <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600"></i>
-              <span>Abrir WhatsApp ↗</span>
-            </a>
-          </div>
-          <p class="text-[10px] text-slate-400 mt-0.5">Número com DDD para contato direto e suporte.</p>
-        </div>
-
-        <div>
-          <label class="block text-[11px] font-bold text-slate-700 mb-1">Categorias de Acesso</label>
-          <div class="space-y-1.5" id="edit-student-categories">
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-cat" value="member_free" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">🌱 Member Free</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-cat" value="member_pago" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">💰 Member Pago</span>
-            </label>
-            <div id="edit-billing-period-row" class="hidden pl-8 py-1">
-              <select id="edit-billing-period" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-                <option value="annual">📅 Anual</option>
-                <option value="monthly">📅 Mensal</option>
-                <option value="lifetime">💎 Vitalício</option>
-              </select>
-            </div>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-cat" value="member_mentoria" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">👑 Mentorado VIP</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-cat" value="legado_1" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">📦 Legado 1 (MS-Legacy)</span>
-            </label>
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
-              <input type="checkbox" name="edit-cat" value="legado_2" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-              <span class="font-bold text-slate-800 text-xs">📦 Legado 2 (AEF Primeiro)</span>
-            </label>
-          </div>
-          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <label class="flex items-center gap-2 p-2 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 cursor-pointer">
-              <input type="checkbox" id="edit-is-admin" class="rounded text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
-              <span class="font-bold text-purple-800 text-xs">🔐 Admin Mestre</span>
-            </label>
+        <div class="overflow-y-auto pr-1.5 space-y-3 flex-1 custom-scrollbar">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
-              <select id="edit-student-role" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
-                <option value="student">Aluno / Usuário</option>
-                <option value="moderator">Moderador</option>
-                <option value="admin">Administrador Total</option>
-              </select>
+              <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Nome do Aluno</label>
+              <input type="text" id="edit-student-name" required class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-0.5">E-mail</label>
+              <input type="email" id="edit-student-email" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-500 cursor-not-allowed">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-0.5">WhatsApp / Celular</label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <input type="tel" id="edit-student-whatsapp" placeholder="ex: (11) 99616-0910" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 pl-8 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+                <span class="absolute left-2.5 top-2 text-emerald-600">
+                  <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                </span>
+              </div>
+              <a id="edit-student-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold text-[11px] transition flex items-center gap-1 cursor-pointer shrink-0" title="Abrir conversa no WhatsApp">
+                <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>Abrir WhatsApp ↗</span>
+              </a>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-0.5">Número com DDD para contato direto e suporte.</p>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Categorias de Acesso</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="edit-student-categories">
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="edit-cat" value="member_free" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">🌱 Member Free</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="edit-cat" value="member_pago" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">💰 Member Pago</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="edit-cat" value="member_mentoria" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">👑 Mentorado VIP</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="edit-cat" value="legado_1" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">📦 Legado 1 (MS)</span>
+              </label>
+              <label class="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 cursor-pointer">
+                <input type="checkbox" name="edit-cat" value="legado_2" class="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                <span class="font-bold text-slate-800 text-[11px]">📦 Legado 2 (AEF)</span>
+              </label>
+              <div id="edit-billing-period-row" class="hidden col-span-2 sm:col-span-3 p-2 bg-amber-50/90 border border-amber-200 rounded-xl flex items-center justify-between gap-2">
+                <span class="text-[11px] font-bold text-amber-900 flex items-center gap-1.5">
+                  <span>📅</span> Periodicidade da Cobrança:
+                </span>
+                <select id="edit-billing-period" class="bg-white border border-amber-300 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-900 focus:border-amber-500 focus:outline-none">
+                  <option value="annual">Anual (12x)</option>
+                  <option value="monthly">Mensal Recorrente</option>
+                  <option value="lifetime">Vitalício (Lifetime)</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 p-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 cursor-pointer">
+                <input type="checkbox" id="edit-is-admin" class="rounded text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
+                <span class="font-bold text-purple-800 text-xs">🔐 Admin Mestre</span>
+              </label>
+              <div>
+                <select id="edit-student-role" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+                  <option value="student">Aluno / Usuário</option>
+                  <option value="moderator">Moderador</option>
+                  <option value="admin">Administrador Total</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sala Google Meet (Mentoria VIP) -->
+          <div class="space-y-1 pt-2 border-t border-slate-100" id="edit-student-meet-container">
+            <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Link da Sala Google Meet (Mentoria VIP 1-on-1)</span>
+            </label>
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+                <i data-lucide="video" class="w-3.5 h-3.5"></i>
+              </span>
+              <input type="text" id="edit-student-meet-url" placeholder="https://meet.google.com/xyz-abcd-efg" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
+            </div>
+            <p class="text-[10px] text-slate-500">Link exclusivo para os encontros ao vivo deste mentorado. Atualiza a Sala de Aula do aluno.</p>
+          </div>
+
+          <!-- Compras Avulsas (Purchased Products) -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-100">
+            <div class="flex items-center justify-between">
+              <label class="block text-[11px] font-bold text-slate-700">Compras Avulsas (Produtos Adquiridos)</label>
+              <span class="text-[10px] text-slate-400">Acessos individuais</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs max-h-36 overflow-y-auto pr-1 custom-scrollbar" id="edit-purchased-products">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Painel de Comunicação Rápida & Boas-Vindas -->
+          <div class="p-2.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-amber-950 flex items-center gap-1.5">
+                <i data-lucide="send" class="w-3.5 h-3.5 text-amber-600"></i>
+                <span>Comunicação & Envio de Acesso</span>
+              </span>
+              <span class="text-[10px] text-amber-700 font-bold">1-Clique</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button type="button" onclick="sendWelcomeMagicLinkFromEditModal()" class="py-2 px-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                <span>Disparar Link por E-mail</span>
+              </button>
+              <button type="button" onclick="sendWhatsappInstructionsFromEditModal()" class="py-2 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                <span>Enviar Acesso no WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Sala Google Meet (Mentoria VIP) -->
-        <div class="space-y-1.5 pt-2 border-t border-slate-100" id="edit-student-meet-container">
-          <label class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Link da Sala Google Meet (Mentoria VIP 1-on-1)</span>
-          </label>
-          <div class="flex items-center gap-2">
-            <span class="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-              <i data-lucide="video" class="w-4 h-4"></i>
-            </span>
-            <input type="text" id="edit-student-meet-url" placeholder="https://meet.google.com/xyz-abcd-efg" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none font-mono">
-          </div>
-          <p class="text-[10px] text-slate-500">Link exclusivo para os encontros ao vivo deste mentorado. Atualiza automaticamente a Sala de Aula do aluno.</p>
-        </div>
-
-        <!-- Compras Avulsas (Purchased Products) -->
-        <div class="space-y-2 pt-2 border-t border-slate-100">
-          <label class="block text-[11px] font-bold text-slate-700">Compras Avulsas (Produtos Adquiridos)</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" id="edit-purchased-products">
-            <!-- Populated dynamically -->
-          </div>
-        </div>
-
-
-
-        <!-- Painel de Comunicação Rápida & Boas-Vindas -->
-        <div class="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/80 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
-              <i data-lucide="send" class="w-3.5 h-3.5 text-amber-600"></i>
-              <span>Comunicação & Envio de Acesso</span>
-            </span>
-            <span class="text-[10px] text-amber-700 font-medium">1-Clique</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button type="button" onclick="sendWelcomeMagicLinkFromEditModal()" class="py-2 px-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
-              <i data-lucide="mail" class="w-3.5 h-3.5"></i>
-              <span>Disparar Link por E-mail</span>
-            </button>
-            <button type="button" onclick="sendWhatsappInstructionsFromEditModal()" class="py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
-              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-              <span>Enviar Acesso no WhatsApp</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2.5 pt-2 border-t border-slate-100">
-          <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
+        <!-- Pinned Bottom Actions Footer -->
+        <div class="flex items-center gap-2.5 pt-3 mt-1 border-t border-slate-100 shrink-0">
+          <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
             <span>Excluir Aluno</span>
           </button>

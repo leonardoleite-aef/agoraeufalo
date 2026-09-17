@@ -47,6 +47,8 @@ async function runTest() {
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
   const page = await browser.newPage();
+  page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+  page.on('pageerror', err => console.log('PAGE ERROR:', err.message));
 
   // Set localStorage session
   await page.goto(`http://localhost:${PORT}/index.html`, { waitUntil: 'domcontentloaded' });
@@ -225,7 +227,41 @@ async function runTest() {
     throw new Error('Botões de comunicação não foram renderizados!');
   }
 
-  console.log('\n🎉 TODOS OS 10 TESTES DE INTEGRAÇÃO PASSARAM COM 100% DE SUCESSO! 🎉');
+  console.log('\n--- TEST 11: Altura do Modal e Visibilidade dos Botões no Viewport ---');
+  // Set a standard laptop viewport (e.g. 1280x768)
+  await page.setViewport({ width: 1280, height: 768 });
+  const viewportTest = await page.evaluate(async () => {
+    await openEditStudentModal('teste.whatsapp@agoraeufalo.com.br');
+    const modal = document.getElementById('edit-student-modal');
+    const card = modal.querySelector('.glass-panel');
+    const submitBtn = modal.querySelector('button[type="submit"]');
+    const scrollBody = modal.querySelector('.custom-scrollbar');
+
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = submitBtn.getBoundingClientRect();
+    const vh = window.innerHeight;
+
+    return {
+      cardTop: cardRect.top,
+      cardBottom: cardRect.bottom,
+      cardHeight: cardRect.height,
+      btnTop: btnRect.top,
+      btnBottom: btnRect.bottom,
+      viewportHeight: vh,
+      fitsInViewport: cardRect.top >= 0 && cardRect.bottom <= vh,
+      btnVisibleOnScreen: btnRect.top >= 0 && btnRect.bottom <= vh,
+      hasScrollBody: !!scrollBody
+    };
+  });
+  console.log('Modal Viewport Test (1280x768):', viewportTest);
+  if (!viewportTest.fitsInViewport) {
+    throw new Error(`Modal ultrapassa a altura da tela! Top: ${viewportTest.cardTop}, Bottom: ${viewportTest.cardBottom}, Viewport: ${viewportTest.viewportHeight}`);
+  }
+  if (!viewportTest.btnVisibleOnScreen) {
+    throw new Error(`Botão de salvar está fora da tela! Top: ${viewportTest.btnTop}, Bottom: ${viewportTest.btnBottom}`);
+  }
+
+  console.log('\n🎉 TODOS OS 11 TESTES DE INTEGRAÇÃO PASSARAM COM 100% DE SUCESSO! 🎉');
 
   await browser.close();
   server.close();

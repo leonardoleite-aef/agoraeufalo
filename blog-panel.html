@@ -204,6 +204,36 @@
           <!-- Video or Image -->
         </div>
 
+        <!-- Podcast Player (só exibe se houver áudio) -->
+        <div id="modal-preview-podcast-box" class="hidden p-4 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 shadow-md">
+          <div class="flex items-start gap-4">
+            <!-- Cover 1:1 -->
+            <img id="modal-preview-podcast-cover" src="" alt="Podcast cover" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover shrink-0 shadow-md">
+            <!-- Info -->
+            <div class="flex-1 min-w-0 space-y-1">
+              <span class="text-[10px] font-extrabold text-amber-500 uppercase tracking-wider">🎙️ Episódio do Podcast</span>
+              <p id="modal-preview-podcast-title" class="text-sm font-extrabold text-white leading-snug line-clamp-2"></p>
+              <p id="modal-preview-podcast-category" class="text-[10px] text-slate-400"></p>
+            </div>
+          </div>
+          <!-- Audio Player -->
+          <audio id="modal-preview-audio-player" controls controlsList="nodownload"
+            class="w-full rounded-xl accent-amber-500 [&::-webkit-media-controls-panel]:bg-slate-800 [&::-webkit-media-controls-current-time-display]:text-white [&::-webkit-media-controls-time-remaining-display]:text-slate-400">
+            Seu navegador não suporta o player de áudio.
+          </audio>
+          <!-- RSS & Download links -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <a id="modal-preview-podcast-download" href="#" target="_blank"
+              class="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-[10px] font-extrabold flex items-center gap-1 border border-amber-500/30 transition-colors">
+              <i data-lucide="download" class="w-3 h-3"></i> Baixar MP3
+            </a>
+            <a href="https://agoraeufalo.com.br/rss.xml" target="_blank"
+              class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold flex items-center gap-1 border border-slate-700 transition-colors">
+              <i data-lucide="rss" class="w-3 h-3 text-amber-500"></i> RSS Feed
+            </a>
+          </div>
+        </div>
+
         <!-- Takeaways Box -->
         <div id="modal-preview-takeaways" class="p-4 sm:p-5 rounded-2xl bg-amber-50/80 border border-amber-200/80 space-y-2">
           <h4 class="text-xs font-extrabold uppercase tracking-wide text-amber-900 flex items-center gap-1.5">
@@ -279,17 +309,112 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Link do Vídeo no YouTube (Opcional):</label>
-            <input type="url" id="import-youtube-url" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none focus:border-amber-500">
+        <!-- STATUS -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Status Inicial:</label>
+          <select id="import-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-bold focus:outline-none focus:border-amber-500">
+            <option value="draft">🟡 Rascunho</option>
+            <option value="published">🟢 Publicado</option>
+          </select>
+        </div>
+
+        <!-- SEÇÃO DE MÍDIA -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
+          <div class="px-3.5 py-2.5 bg-white border-b border-slate-200 flex items-center gap-2">
+            <i data-lucide="image-video" class="w-4 h-4 text-amber-600"></i>
+            <span class="text-xs font-extrabold text-slate-800">Mídia do Post</span>
           </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Status Inicial:</label>
-            <select id="import-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-bold focus:outline-none focus:border-amber-500">
-              <option value="draft">🟡 Rascunho</option>
-              <option value="published">🟢 Publicado</option>
-            </select>
+          <div class="p-3.5 space-y-3.5">
+
+            <!-- Vídeo: YouTube URL ou Upload -->
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wide flex items-center gap-1">
+                🎬 Vídeo
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <p class="text-[10px] text-slate-400 mb-1">YouTube URL</p>
+                  <input type="url" id="import-youtube-url" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-800 text-[11px] focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                  <p class="text-[10px] text-slate-400 mb-1">ou Upload de Arquivo de Vídeo</p>
+                  <label class="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+                    <i data-lucide="upload-cloud" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+                    <span id="video-upload-label" class="text-[11px] text-slate-400 truncate">Selecionar vídeo (.mp4)</span>
+                    <input type="file" accept="video/mp4,video/*" class="hidden" onchange="handleVideoUpload(this)">
+                  </label>
+                  <input type="hidden" id="import-video-url" value="">
+                </div>
+              </div>
+            </div>
+
+            <!-- Áudio: Upload Podcast MP3 -->
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wide flex items-center gap-1">
+                🎙️ Áudio Podcast
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <p class="text-[10px] text-slate-400 mb-1">Upload MP3 (RSS Feed)</p>
+                  <label class="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+                    <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+                    <span id="audio-upload-label" class="text-[11px] text-slate-400 truncate">Selecionar episódio (.mp3)</span>
+                    <input type="file" accept="audio/mpeg,audio/mp3,.mp3" class="hidden" onchange="handlePodcastAudioUpload(this)">
+                  </label>
+                  <input type="hidden" id="import-podcast-audio-url" value="">
+                </div>
+                <div>
+                  <p class="text-[10px] text-slate-400 mb-1">ou URL direta do MP3</p>
+                  <input type="url" id="import-podcast-audio-direct" placeholder="https://...episodio.mp3" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-800 text-[11px] focus:outline-none focus:border-amber-500">
+                </div>
+              </div>
+              <!-- Progress bar upload -->
+              <div id="podcast-upload-progress" class="hidden">
+                <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                  <span>Enviando para o Storage...</span>
+                  <span id="podcast-upload-pct">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                  <div id="podcast-upload-bar" class="bg-amber-500 h-1.5 rounded-full transition-all" style="width:0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Imagens -->
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wide flex items-center gap-1">
+                🖼️ Imagens
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <!-- 16:9 -->
+                <div class="space-y-1">
+                  <p class="text-[10px] text-slate-400">Capa do Post 16:9 <span class="text-slate-300">(auto do YouTube)</span></p>
+                  <label id="img16-upload-area" class="relative block rounded-xl overflow-hidden border-2 border-dashed border-slate-200 bg-white cursor-pointer hover:border-amber-400 transition-colors aspect-video">
+                    <img id="img16-preview" src="" alt="" class="w-full h-full object-cover hidden">
+                    <div id="img16-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-1 text-slate-400">
+                      <i data-lucide="image-plus" class="w-5 h-5"></i>
+                      <span class="text-[10px] font-bold">Upload 16:9</span>
+                    </div>
+                    <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this,'16x9')">
+                  </label>
+                  <input type="hidden" id="import-post-image-url" value="">
+                </div>
+                <!-- 1:1 -->
+                <div class="space-y-1">
+                  <p class="text-[10px] text-slate-400">Capa Podcast 1:1 <span class="text-slate-300">(artwork RSS)</span></p>
+                  <label id="img11-upload-area" class="relative block rounded-xl overflow-hidden border-2 border-dashed border-slate-200 bg-white cursor-pointer hover:border-amber-400 transition-colors aspect-square">
+                    <img id="img11-preview" src="" alt="" class="w-full h-full object-cover hidden">
+                    <div id="img11-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-1 text-slate-400">
+                      <i data-lucide="image-plus" class="w-5 h-5"></i>
+                      <span class="text-[10px] font-bold">Upload 1:1</span>
+                    </div>
+                    <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this,'1x1')">
+                  </label>
+                  <input type="hidden" id="import-podcast-cover-url" value="">
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -815,10 +940,33 @@
       const media = document.getElementById('modal-preview-media');
       if (post.youtubeId) {
         media.innerHTML = `<iframe src="https://www.youtube.com/embed/${post.youtubeId}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      } else if (post.videoUrl) {
+        media.innerHTML = `<video src="${post.videoUrl}" controls class="w-full h-full object-cover rounded-2xl" preload="metadata"></video>`;
       } else if (post.imageUrl) {
         media.innerHTML = `<img src="${post.imageUrl}" class="w-full h-full object-cover">`;
       } else {
         media.innerHTML = `<div class="w-full h-full flex items-center justify-center text-slate-500 text-xs">Sem mídia anexada</div>`;
+      }
+
+      // Podcast player
+      const podcastBox = document.getElementById('modal-preview-podcast-box');
+      const audioPlayer = document.getElementById('modal-preview-audio-player');
+      const podcastAudioUrl = post.podcastAudioUrl || post.podcastAudioDirect || '';
+      if (podcastBox && podcastAudioUrl) {
+        const cover = document.getElementById('modal-preview-podcast-cover');
+        const dlLink = document.getElementById('modal-preview-podcast-download');
+        const pTitle = document.getElementById('modal-preview-podcast-title');
+        const pCat = document.getElementById('modal-preview-podcast-category');
+        const coverSrc = post.podcastCoverUrl || post.imageUrl || 'assets/images/og-magic-stories.jpg';
+        if (cover) cover.src = coverSrc;
+        if (pTitle) pTitle.textContent = post.title;
+        if (pCat) pCat.textContent = post.category + ' • ' + (post.date || '');
+        if (audioPlayer) audioPlayer.src = podcastAudioUrl;
+        if (dlLink) dlLink.href = podcastAudioUrl;
+        podcastBox.classList.remove('hidden');
+      } else if (podcastBox) {
+        podcastBox.classList.add('hidden');
+        if (audioPlayer) { audioPlayer.src = ''; audioPlayer.pause?.(); }
       }
 
       const tkBox = document.getElementById('modal-preview-takeaways');
@@ -868,6 +1016,15 @@
       document.getElementById('import-status').value = 'published';
       document.getElementById('import-body-html').value = '';
       document.getElementById('import-golden-tip').value = '';
+      document.getElementById('import-video-url').value = '';
+      document.getElementById('import-podcast-audio-url').value = '';
+      document.getElementById('import-podcast-audio-direct').value = '';
+      document.getElementById('import-post-image-url').value = '';
+      document.getElementById('import-podcast-cover-url').value = '';
+      const lv = document.getElementById('video-upload-label'); if(lv) lv.textContent = 'Selecionar vídeo (.mp4)';
+      const la = document.getElementById('audio-upload-label'); if(la) la.textContent = 'Selecionar episódio (.mp3)';
+      ['img16-preview','img11-preview'].forEach(id => { const el = document.getElementById(id); if(el) { el.src=''; el.classList.add('hidden'); }});
+      ['img16-placeholder','img11-placeholder'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); });
       document.getElementById('import-modal').classList.remove('hidden');
       document.getElementById('import-modal').classList.add('flex');
       if (window.lucide) window.lucide.createIcons();
@@ -883,6 +1040,24 @@
       document.getElementById('import-slug').value = post.slug || '';
       document.getElementById('import-youtube-url').value = post.youtubeUrl || '';
       document.getElementById('import-status').value = post.status || 'published';
+      document.getElementById('import-video-url').value = post.videoUrl || '';
+      document.getElementById('import-podcast-audio-url').value = post.podcastAudioUrl || '';
+      document.getElementById('import-podcast-audio-direct').value = '';
+      document.getElementById('import-podcast-cover-url').value = post.podcastCoverUrl || '';
+      document.getElementById('import-post-image-url').value = post.imageUrl || '';
+      // Preenche previews de imagem
+      ['16x9','1x1'].forEach(type => {
+        const isSquare = type === '1x1';
+        const src = isSquare ? (post.podcastCoverUrl || '') : (post.imageUrl || '');
+        const previewEl = document.getElementById(isSquare ? 'img11-preview' : 'img16-preview');
+        const phEl = document.getElementById(isSquare ? 'img11-placeholder' : 'img16-placeholder');
+        if (previewEl && src) { previewEl.src = src; previewEl.classList.remove('hidden'); if(phEl) phEl.classList.add('hidden'); }
+        else { if(previewEl) { previewEl.src=''; previewEl.classList.add('hidden'); } if(phEl) phEl.classList.remove('hidden'); }
+      });
+      const lv = document.getElementById('video-upload-label');
+      if(lv) lv.textContent = post.videoUrl ? '✅ Vídeo vinculado' : 'Selecionar vídeo (.mp4)';
+      const la = document.getElementById('audio-upload-label');
+      if(la) la.textContent = post.podcastAudioUrl ? '✅ Áudio vinculado' : 'Selecionar episódio (.mp3)';
       document.getElementById('import-body-html').value = post.bodyHtml || '';
       document.getElementById('import-golden-tip').value = post.goldenTip || '';
       document.getElementById('import-modal').classList.remove('hidden');
@@ -915,7 +1090,10 @@
         slug: document.getElementById('import-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-'),
         youtubeUrl: ytUrl,
         youtubeId: ytId,
-        imageUrl: existingPost?.imageUrl && !ytId ? existingPost.imageUrl : img,
+        imageUrl: document.getElementById('import-post-image-url').value || (existingPost?.imageUrl && !ytId ? existingPost.imageUrl : img),
+        videoUrl: document.getElementById('import-video-url').value || existingPost?.videoUrl || '',
+        podcastAudioUrl: document.getElementById('import-podcast-audio-url').value || document.getElementById('import-podcast-audio-direct').value.trim() || existingPost?.podcastAudioUrl || '',
+        podcastCoverUrl: document.getElementById('import-podcast-cover-url').value || existingPost?.podcastCoverUrl || '',
         status: document.getElementById('import-status').value,
         readTime: existingPost?.readTime || '6 min de leitura',
         date: existingPost?.date || new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -978,6 +1156,111 @@
         try { await window.aefPortalAuth.ready(); } catch(e) {}
       }
       await loadLibrary();
+    }
+
+    // =========================================================================
+    // MÍDIA: UPLOAD DE VÍDEO, ÁUDIO, IMAGENS → FIREBASE STORAGE
+    // =========================================================================
+
+    async function _uploadToStorage(blob, fileName, mimeType, onProgress) {
+      const token = await _getAuthToken();
+      const headers = { 'Content-Type': mimeType };
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+
+      // Firebase Storage REST upload (multipart não disponível via REST simples → usa media upload)
+      const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o?uploadType=media&name=${encodeURIComponent(fileName)}`;
+
+      // Usa XHR para ter progresso
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', uploadUrl);
+        Object.entries(headers).forEach(([k, v]) => xhr.setRequestHeader(k, v));
+        if (onProgress) xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) onProgress(Math.round(e.loaded / e.total * 100));
+        });
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const data = JSON.parse(xhr.responseText);
+            const url = `https://firebasestorage.googleapis.com/v0/b/${data.bucket}/o/${encodeURIComponent(data.name)}?alt=media`;
+            resolve(url);
+          } else reject(new Error(`Storage ${xhr.status}: ${xhr.responseText}`));
+        };
+        xhr.onerror = () => reject(new Error('Erro de rede no upload'));
+        xhr.send(blob);
+      });
+    }
+
+    async function handleVideoUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const label = document.getElementById('video-upload-label');
+      if (label) label.textContent = 'Enviando...';
+      try {
+        const url = await _uploadToStorage(file, `blog-media/video-${Date.now()}-${file.name}`, file.type);
+        document.getElementById('import-video-url').value = url;
+        if (label) label.textContent = '✅ ' + file.name;
+        showToast('Vídeo enviado com sucesso! 🎬');
+      } catch(err) {
+        alert('Erro no upload do vídeo: ' + err.message);
+        if (label) label.textContent = 'Selecionar vídeo (.mp4)';
+      }
+      input.value = '';
+    }
+
+    async function handlePodcastAudioUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const label = document.getElementById('audio-upload-label');
+      const progressBox = document.getElementById('podcast-upload-progress');
+      const bar = document.getElementById('podcast-upload-bar');
+      const pct = document.getElementById('podcast-upload-pct');
+      if (progressBox) progressBox.classList.remove('hidden');
+      if (label) label.textContent = 'Enviando...';
+      try {
+        const url = await _uploadToStorage(
+          file,
+          `blog-media/podcast-${Date.now()}-${file.name}`,
+          'audio/mpeg',
+          (p) => { if (bar) bar.style.width = p + '%'; if (pct) pct.textContent = p + '%'; }
+        );
+        document.getElementById('import-podcast-audio-url').value = url;
+        if (label) label.textContent = '✅ ' + file.name;
+        if (progressBox) progressBox.classList.add('hidden');
+        showToast('Episódio enviado! 🎙️');
+      } catch(err) {
+        alert('Erro no upload do áudio: ' + err.message);
+        if (label) label.textContent = 'Selecionar episódio (.mp3)';
+        if (progressBox) progressBox.classList.add('hidden');
+      }
+      input.value = '';
+    }
+
+    async function handleImageUpload(input, type) {
+      const file = input.files[0];
+      if (!file) return;
+      const isSquare = type === '1x1';
+      const previewId = isSquare ? 'img11-preview' : 'img16-preview';
+      const placeholderId = isSquare ? 'img11-placeholder' : 'img16-placeholder';
+      const hiddenId = isSquare ? 'import-podcast-cover-url' : 'import-post-image-url';
+
+      // Preview local imediato
+      const reader = new FileReader();
+      reader.onload = e => {
+        const preview = document.getElementById(previewId);
+        const placeholder = document.getElementById(placeholderId);
+        if (preview) { preview.src = e.target.result; preview.classList.remove('hidden'); }
+        if (placeholder) placeholder.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+
+      try {
+        const url = await _uploadToStorage(file, `blog-media/${type}-${Date.now()}-${file.name}`, file.type);
+        document.getElementById(hiddenId).value = url;
+        showToast(`Imagem ${type} enviada! 🖼️`);
+      } catch(err) {
+        alert('Erro no upload da imagem: ' + err.message);
+      }
+      input.value = '';
     }
 
     // =========================================================================
