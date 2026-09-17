@@ -213,6 +213,36 @@ flowchart TD
     CheckFirebase -->|Não após timeout| RedirectLogin[🔒 Redireciona para /login]
 ```
 
+### 👤 Schema do Usuário & Aluno no CRM (`users/{uid}` & `students/{menteeId}`)
+O CRM de Alunos ([`admin-alunos.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/admin-alunos.html)) e a camada de autenticação ([`assets/js/aef-portal-auth.js`](file:///Users/macbookpro/Desktop/agoraeufalo_site/assets/js/aef-portal-auth.js)) compartilham o schema canônico de aluno:
+
+```javascript
+{
+  "id": "joaosilva",
+  "uid": "joaosilva",
+  "name": "João Silva",
+  "email": "joao@gmail.com",
+  "whatsapp": "(11) 99616-0910",
+  "phone": "(11) 99616-0910",
+  "categories": ["member_free", "member_pago"],
+  "role": "student",
+  "purchasedProducts": ["all_access_master"],
+  "enrolledProducts": ["all_access_master"],
+  "tier": "club_annual",
+  "subscription": {
+    "billingPeriod": "annual",
+    "status": "active",
+    "gateway": "manual",
+    "lastEvent": "ADMIN_UPDATED"
+  },
+  "meetUrl": "https://meet.google.com/xyz-abcd-efg", // Opcional (Mentoria VIP)
+  "createdAt": "2026-09-17T15:00:00.000Z",
+  "updatedAt": "2026-09-17T15:30:00.000Z"
+}
+```
+- **Persistência Multi-Campo:** O método `updateUserTierAndRole(userId, newTier, newRole, enrolledProducts, extraData)` realiza `merge: true` de todos os campos extras (incluindo `whatsapp`, `phone`, `categories`, `meetUrl`, `subscription`), assegurando sincronização íntegra no Firestore.
+- **Ação 1-Click WhatsApp:** A interface do CRM gera links automáticos formatados para a API do WhatsApp (`https://wa.me/55...`), facilitando o contato direto do Professor Leo tanto nos modais quanto na tabela de listagem.
+
 ---
 
 # 5. Motor de Áudio & Training Player

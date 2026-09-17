@@ -246,6 +246,13 @@ flowchart TD
     D & E & F --> G[Clique em 'Salvar Perfil']
 ```
 
+### 💡 Inclusão e Edição de Alunos & Contato Direto via WhatsApp:
+1. **Cadastrar Novo Aluno:** Clique no botão superior **`+ NOVO ALUNO`**. Preencha o Nome, E-mail e o **WhatsApp / Celular (com DDD)**. Selecione as categorias de acesso e salve.
+2. **Editar Dados e WhatsApp:** Na tabela de alunos, clique no ícone de lápis (`Editar Plano e Cursos`). No modal de edição, altere o campo **WhatsApp / Celular**.
+3. **Conversar com 1 Toque:** Ao preencher ou abrir um aluno com WhatsApp cadastrado, o botão verde **`Abrir WhatsApp ↗`** é exibido diretamente no modal e na coluna de contato da tabela para iniciar uma conversa imediata no WhatsApp com o aluno.
+4. **Busca Rápida por WhatsApp:** A barra de busca suporta pesquisa por dígitos do número (ex: `99616`), localizando o aluno instantaneamente.
+5. **Exportação CSV:** A lista exportada no botão **`Exportar CSV`** inclui a coluna dedicada **WhatsApp / Telefone**.
+
 ### 💡 Gerenciando um Aluno de Mentoria VIP Individual:
 1. Localize o aluno pelo campo de busca (ex: `André`).
 2. Mude o Tier para **`👑 Mentoria VIP Individual`**.
