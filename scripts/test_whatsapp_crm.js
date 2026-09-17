@@ -62,7 +62,11 @@ async function runTest() {
   await page.goto(`http://localhost:${PORT}/admin-alunos.html`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => typeof ALL_STUDENTS_LIST !== 'undefined' && ALL_STUDENTS_LIST.length > 0, { timeout: 15000 });
 
-  await page.evaluate(() => { window.alert = () => {}; });
+  await page.evaluate(() => {
+    window.alert = () => {};
+    window.confirm = () => true;
+    window.open = () => {};
+  });
 
   console.log('--- TEST 1: Modal Inclusão de Aluno ---');
   const addModalTest = await page.evaluate(() => {
@@ -175,7 +179,53 @@ async function runTest() {
     throw new Error('Busca por dígitos de WhatsApp falhou!');
   }
 
-  console.log('\n🎉 TODOS OS 7 TESTES DE INTEGRAÇÃO PASSARAM COM 100% DE SUCESSO! 🎉');
+  console.log('\n--- TEST 8: Checkbox de Boas-Vindas no Modal de Inclusão ---');
+  const chkTest = await page.evaluate(() => {
+    const chk = document.getElementById('new-student-send-welcome');
+    return {
+      exists: !!chk,
+      checked: chk ? chk.checked : false
+    };
+  });
+  console.log('Checkbox Boas-Vindas:', chkTest);
+  if (!chkTest.exists || !chkTest.checked) {
+    throw new Error('Checkbox de envio de boas-vindas não encontrado ou desmarcado!');
+  }
+
+  console.log('\n--- TEST 9: Formatação da Mensagem Canônica do Professor Leo ---');
+  const welcomeMsgTest = await page.evaluate(() => {
+    const dummy = { name: 'João Carlos Silva', email: 'joao@teste.com', whatsapp: '(11) 98888-7777' };
+    const msg = formatWelcomeMessage(dummy);
+    return {
+      includesGreeting: msg.includes('Hello, my dear friend João!'),
+      includesLoginLink: msg.includes('https://agoraeufalo.com.br/login'),
+      includesEmail: msg.includes('joao@teste.com'),
+      includesMagicLinkInstructions: msg.includes('Link Mágico')
+    };
+  });
+  console.log('Mensagem de Boas-Vindas:', welcomeMsgTest);
+  if (!welcomeMsgTest.includesGreeting || !welcomeMsgTest.includesLoginLink || !welcomeMsgTest.includesMagicLinkInstructions) {
+    throw new Error('Formatação da mensagem de boas-vindas está incorreta!');
+  }
+
+  console.log('\n--- TEST 10: Botões de Comunicação Rápida no Modal e na Tabela ---');
+  const buttonsTest = await page.evaluate(() => {
+    const editModal = document.getElementById('edit-student-modal');
+    const hasSendEmailBtn = !!editModal.querySelector('button[onclick*="sendWelcomeMagicLinkFromEditModal"]');
+    const hasSendWaBtn = !!editModal.querySelector('button[onclick*="sendWhatsappInstructionsFromEditModal"]');
+    const shareTableBtns = document.querySelectorAll('button[onclick*="shareStudentAccess"]');
+    return {
+      hasSendEmailBtn,
+      hasSendWaBtn,
+      shareTableButtonsCount: shareTableBtns.length
+    };
+  });
+  console.log('Botões de Comunicação:', buttonsTest);
+  if (!buttonsTest.hasSendEmailBtn || !buttonsTest.hasSendWaBtn || buttonsTest.shareTableButtonsCount === 0) {
+    throw new Error('Botões de comunicação não foram renderizados!');
+  }
+
+  console.log('\n🎉 TODOS OS 10 TESTES DE INTEGRAÇÃO PASSARAM COM 100% DE SUCESSO! 🎉');
 
   await browser.close();
   server.close();

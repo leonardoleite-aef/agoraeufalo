@@ -391,6 +391,17 @@
             </label>
           </div>
         </div>
+
+        <div class="pt-2 border-t border-slate-100">
+          <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-sky-50/80 hover:bg-sky-100/70 border border-sky-200 cursor-pointer transition">
+            <input type="checkbox" id="new-student-send-welcome" checked class="mt-0.5 rounded text-sky-600 focus:ring-sky-500 w-4 h-4">
+            <div>
+              <span class="block font-bold text-sky-950 text-xs">✉️ Enviar E-mail de Boas-Vindas / Link de Acesso</span>
+              <span class="block text-[10px] text-sky-700 leading-tight mt-0.5">Dispara automaticamente o e-mail oficial do Firebase para o aluno entrar direto no portal com 1 clique (sem precisar criar conta).</span>
+            </div>
+          </label>
+        </div>
+
         <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-2 cursor-pointer">
           Salvar Aluno no Firestore
         </button>
@@ -512,6 +523,27 @@
         </div>
 
 
+
+        <!-- Painel de Comunicação Rápida & Boas-Vindas -->
+        <div class="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/80 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+              <i data-lucide="send" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>Comunicação & Envio de Acesso</span>
+            </span>
+            <span class="text-[10px] text-amber-700 font-medium">1-Clique</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button type="button" onclick="sendWelcomeMagicLinkFromEditModal()" class="py-2 px-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+              <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+              <span>Disparar Link por E-mail</span>
+            </button>
+            <button type="button" onclick="sendWhatsappInstructionsFromEditModal()" class="py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+              <span>Enviar Acesso no WhatsApp</span>
+            </button>
+          </div>
+        </div>
 
         <div class="flex items-center gap-2.5 pt-2 border-t border-slate-100">
           <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
@@ -1282,6 +1314,9 @@
             </td>
             <td class="py-3 px-4 text-right">
               <div class="flex items-center justify-end gap-1.5">
+                <button onclick="shareStudentAccess('${s.email}')" class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition cursor-pointer" title="Enviar Instruções de Acesso via WhatsApp / Copiar Mensagem">
+                  <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                </button>
                 <button onclick="openEditStudentModal('${s.email}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                 </button>
@@ -1466,8 +1501,102 @@
     function closeEditStudentModal() { document.getElementById('edit-student-modal').classList.add('hidden'); }
 
     // =========================================================================
-    // DELETE STUDENT & 2FA SECURITY MODAL
+    // COMUNICAÇÃO, BOAS-VINDAS & ENVIO DE ACESSO (WHATSAPP & E-MAIL)
     // =========================================================================
+    function formatWelcomeMessage(student) {
+      const name = student?.name || 'Amigo';
+      const firstName = name.split(' ')[0];
+      const email = student?.email || '';
+
+      return `Hello, my dear friend ${firstName}! Aqui é o Professor Leonardo Leite.
+
+Seu acesso à plataforma AgoraEuFalo está 100% liberado! 🚀
+
+👉 Link de Entrada: https://agoraeufalo.com.br/login
+✉️ Seu E-mail cadastrado: ${email}
+
+Como fazer seu primeiro acesso:
+1. Acesse o link acima;
+2. Digite seu e-mail e clique em "Entrar com Link Mágico" (você entra na hora pelo e-mail, sem precisar de senha);
+3. Ou clique em "Esqueci minha senha" para criar sua senha pessoal caso prefira.
+
+Qualquer dúvida ou dificuldade, é só me chamar por aqui no WhatsApp.
+Bons treinos e nos vemos na Sala de Aula!`;
+    }
+
+    async function shareStudentAccess(email) {
+      const student = ALL_STUDENTS_LIST.find(s => (s.email || '').toLowerCase().trim() === email.toLowerCase().trim());
+      if (!student) return;
+
+      const msg = formatWelcomeMessage(student);
+      const studentPhone = student.whatsapp || student.phone || '';
+      const digits = studentPhone.replace(/\D/g, '');
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(msg);
+        }
+      } catch(e) {
+        console.warn("Clipboard copy failed:", e);
+      }
+
+      if (digits) {
+        const waNum = digits.startsWith('55') ? digits : (digits.length >= 10 && digits.length <= 11 ? '55' + digits : digits);
+        window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
+        alert(`✅ Mensagem de boas-vindas copiada e WhatsApp aberto para ${student.name}!`);
+      } else {
+        alert(`✅ Mensagem de boas-vindas copiada para a área de transferência!\n\n(Como o aluno não tem WhatsApp cadastrado, você pode colar no e-mail ou onde preferir).`);
+      }
+    }
+
+    async function sendWelcomeMagicLinkFromEditModal() {
+      const email = document.getElementById('edit-student-email')?.value.trim().toLowerCase();
+      const name = document.getElementById('edit-student-name')?.value.trim() || 'Aluno';
+      if (!email) {
+        alert("E-mail não encontrado.");
+        return;
+      }
+
+      if (!confirm(`Deseja disparar o E-mail com Link Mágico do Firebase para ${name} (${email})?`)) {
+        return;
+      }
+
+      try {
+        if (window.aefPortalAuth) {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.sendMagicLink(email, window.location.origin + '/portal.html?welcome=true');
+          alert(`✅ E-mail de boas-vindas com Link Mágico disparado com sucesso para ${email}!`);
+        } else {
+          alert("Módulo de autenticação não está pronto.");
+        }
+      } catch (err) {
+        alert(`❌ Erro ao disparar e-mail: ${err.message}`);
+      }
+    }
+
+    async function sendWhatsappInstructionsFromEditModal() {
+      const email = document.getElementById('edit-student-email')?.value.trim().toLowerCase();
+      const name = document.getElementById('edit-student-name')?.value.trim();
+      const phone = document.getElementById('edit-student-whatsapp')?.value.trim();
+
+      const student = { name, email, whatsapp: phone, phone };
+      const msg = formatWelcomeMessage(student);
+      const digits = (phone || '').replace(/\D/g, '');
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(msg);
+        }
+      } catch(e) {}
+
+      if (digits) {
+        const waNum = digits.startsWith('55') ? digits : (digits.length >= 10 && digits.length <= 11 ? '55' + digits : digits);
+        window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
+        alert(`✅ Mensagem de acesso copiada e WhatsApp aberto para ${name}!`);
+      } else {
+        alert(`✅ Mensagem copiada para a área de transferência!\n(Cadastre o WhatsApp no campo acima para abrir direto no WhatsApp).`);
+      }
+    }
     function openDeleteStudentModal(email, name, id, tier) {
       const student = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email.toLowerCase()) || { email, name, id, tier };
       PENDING_DELETE_STUDENT = student;
@@ -1653,6 +1782,20 @@
         console.warn("Could not save to Firestore:", err);
       }
 
+      // Disparo automático do Link Mágico do Firebase se solicitado
+      const sendWelcomeEmail = document.getElementById('new-student-send-welcome')?.checked ?? true;
+      let emailSent = false;
+      if (sendWelcomeEmail && window.aefPortalAuth) {
+        try {
+          await window.aefPortalAuth.ready();
+          await window.aefPortalAuth.sendMagicLink(cleanEmail, window.location.origin + '/portal.html?welcome=true');
+          emailSent = true;
+          console.log(`✉️ [CRM] Link de boas-vindas do Firebase disparado para ${cleanEmail}`);
+        } catch (mailErr) {
+          console.warn("Could not send magic link automatically:", mailErr);
+        }
+      }
+
       const existingIdx = ALL_STUDENTS_LIST.findIndex(s => (s.email || '').toLowerCase().trim() === cleanEmail);
       if (existingIdx >= 0) {
         ALL_STUDENTS_LIST[existingIdx] = { ...ALL_STUDENTS_LIST[existingIdx], ...newStudent };
@@ -1662,7 +1805,12 @@
       renderStudentsTable();
       updateMetrics();
       closeAddStudentModal();
-      alert(`✅ Aluno ${name} (${email}) cadastrado com sucesso!`);
+
+      let successMsg = `✅ Aluno ${name} (${cleanEmail}) cadastrado com sucesso!`;
+      if (emailSent) {
+        successMsg += `\n\n✉️ E-mail oficial do Firebase com Link de Acesso disparado para ${cleanEmail}.`;
+      }
+      alert(successMsg);
     }
 
     async function handleUpdateStudent(e) {

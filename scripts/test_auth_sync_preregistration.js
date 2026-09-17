@@ -34,7 +34,7 @@ function createStaticServer(port) {
   });
 
   return new Promise(resolve => {
-    server.listen(port, () => resolve(server));
+    server.listen(0, () => resolve(server));
   });
 }
 
@@ -49,8 +49,8 @@ function getFirestoreDoc(path) {
 }
 
 async function runTest() {
-  const PORT = 8098;
-  const server = await createStaticServer(PORT);
+  const server = await createStaticServer();
+  const PORT = server.address().port;
   console.log(`Server running on http://localhost:${PORT}`);
 
   const browser = await puppeteer.launch({
