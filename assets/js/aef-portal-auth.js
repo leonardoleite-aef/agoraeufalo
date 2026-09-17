@@ -88,6 +88,7 @@
         if (user) {
           this.currentProfile = await this.getProfile(user.uid);
           if (this.currentProfile) {
+            this.currentProfile = await this._mergePreRegistration(user, this.currentProfile);
             this._syncLocalStorage(this.currentProfile);
           }
           window.dispatchEvent(new CustomEvent('aef:auth-changed', { detail: { user, profile: this.currentProfile } }));
@@ -138,8 +139,120 @@
     }
 
     // =========================================================================
-    // AUTHENTICATION METHODS
+    // AUTHENTICATION METHODS & PRE-REGISTRATION MERGING
     // =========================================================================
+
+    async _mergePreRegistration(user, profile) {
+      if (!user || !user.email || !this.db) return profile;
+      const cleanEmail = user.email.toLowerCase().trim();
+      const legacyId = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
+
+      let preRegData = null;
+      let preRegDocRef = null;
+
+      // 1. Direct document lookup by sanitized email ID
+      if (legacyId !== user.uid) {
+        try {
+          const directDoc = await this.db.collection('users').doc(legacyId).get();
+          if (directDoc.exists) {
+            preRegData = directDoc.data();
+            preRegDocRef = directDoc.ref;
+          }
+        } catch (e) {
+          console.warn("Direct doc lookup failed:", e);
+        }
+      }
+
+      // 2. Query Firestore by email field (in case doc ID was name/slug based)
+      if (!preRegData) {
+        try {
+          const snap = await this.db.collection('users').where('email', '==', cleanEmail).get();
+          for (const doc of snap.docs) {
+            if (doc.id !== user.uid) {
+              preRegData = doc.data();
+              preRegDocRef = doc.ref;
+              break;
+            }
+          }
+        } catch (e) {
+          console.warn("Query users by email fallback failed:", e);
+        }
+      }
+
+      // 3. Merge if pre-registration was found
+      if (preRegData) {
+        if (preRegData.tier && preRegData.tier !== 'free') {
+          profile.tier = preRegData.tier;
+        }
+        if (preRegData.role && preRegData.role !== 'student') {
+          profile.role = preRegData.role;
+        }
+        if (preRegData.whatsapp || preRegData.phone) {
+          const wa = preRegData.whatsapp || preRegData.phone;
+          profile.whatsapp = wa;
+          profile.phone = wa;
+        }
+        if (preRegData.name && (!profile.name || profile.name === 'Aluno AgoraEuFalo')) {
+          profile.name = preRegData.name;
+        }
+        if (preRegData.categories && preRegData.categories.length) {
+          profile.categories = Array.from(new Set([...(profile.categories || []), ...preRegData.categories]));
+        }
+        if (preRegData.enrolledProducts && preRegData.enrolledProducts.length) {
+          profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), ...preRegData.enrolledProducts]));
+        }
+        if (preRegData.purchasedProducts && preRegData.purchasedProducts.length) {
+          profile.purchasedProducts = Array.from(new Set([...(profile.purchasedProducts || []), ...preRegData.purchasedProducts]));
+        }
+        if (preRegData.subscription) {
+          profile.subscription = preRegData.subscription;
+        }
+        if (preRegData.vipCourseId) {
+          profile.vipCourseId = preRegData.vipCourseId;
+        }
+        if (preRegData.mentorSlug) {
+          profile.mentorSlug = preRegData.mentorSlug;
+        }
+        if (preRegData.meetUrl) {
+          profile.meetUrl = preRegData.meetUrl;
+        }
+
+        try {
+          await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
+        } catch (setErr) {
+          console.warn("Could not merge profile into auth doc:", setErr);
+        }
+
+        // Safely delete the temporary pre-registration document
+        if (preRegDocRef && preRegDocRef.id !== user.uid) {
+          try {
+            await preRegDocRef.delete();
+          } catch (delErr) {
+            console.warn("Could not delete pre-registration doc:", delErr);
+          }
+        }
+      } else if (!profile.categories || !profile.categories.some(c => c.includes('pago') || c.includes('legado') || c.includes('mentoria'))) {
+        // Fallback JSON check for unmigrated legacy users
+        try {
+          const resp = await fetch('/data/alunos_master_todos_legados.json');
+          if (resp.ok) {
+            const masterData = await resp.json();
+            const legUser = (masterData.alunos || []).find(l => (l.email || '').toLowerCase().trim() === cleanEmail);
+            if (legUser) {
+              const isMS = legUser.categoria === 'magic_stories_legacy' || legUser.is_ms;
+              profile.tier = isMS ? 'ms_legacy' : 'primeiro_legado';
+              profile.categories = Array.from(new Set([...(profile.categories || []), isMS ? 'legado_1' : 'legado_2']));
+              profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), isMS ? 'ms-legacy' : 'english-quickstart']));
+              await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
+            }
+          }
+        } catch(e) {
+          console.warn("Legacy JSON merge failed:", e);
+        }
+      }
+
+      return profile;
+    }
 
     async signUpWithEmail(name, email, password) {
       await this.ready();
@@ -152,7 +265,7 @@
 
       await user.updateProfile({ displayName: finalName });
 
-      const newProfile = {
+      let newProfile = {
         uid: user.uid,
         name: finalName,
         email: email,
@@ -171,6 +284,7 @@
       };
 
       await this.db.collection('users').doc(user.uid).set(newProfile);
+      newProfile = await this._mergePreRegistration(user, newProfile);
       this.currentProfile = newProfile;
       this._syncLocalStorage(newProfile);
       return { user, profile: newProfile };
@@ -222,41 +336,7 @@
       }
 
       if (profile) {
-        const cleanEmail = email.toLowerCase().trim();
-        const legacyId = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
-        if (legacyId !== cred.user.uid) {
-          const legacyDoc = await this.db.collection('users').doc(legacyId).get();
-          if (legacyDoc.exists) {
-             const legacyData = legacyDoc.data();
-             profile.tier = legacyData.tier || profile.tier;
-             profile.categories = legacyData.categories || profile.categories || [];
-             profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), ...(legacyData.enrolledProducts || [])]));
-             profile.subscription = legacyData.subscription || profile.subscription;
-             profile.purchasedProducts = legacyData.purchasedProducts || profile.purchasedProducts;
-             profile.lastTransaction = legacyData.lastTransaction || profile.lastTransaction;
-
-             await this.db.collection('users').doc(cred.user.uid).set(profile, { merge: true });
-             await this.db.collection('users').doc(legacyId).delete();
-          } else if (!profile.categories || !profile.categories.some(c => c.includes('pago') || c.includes('legado') || c.includes('mentoria'))) {
-             // Fallback JSON check for unmigrated legacy users
-             try {
-               const resp = await fetch('/data/alunos_master_todos_legados.json');
-               if (resp.ok) {
-                 const masterData = await resp.json();
-                 const legUser = (masterData.alunos || []).find(l => (l.email || '').toLowerCase().trim() === cleanEmail);
-                 if (legUser) {
-                   const isMS = legUser.categoria === 'magic_stories_legacy' || legUser.is_ms;
-                   profile.tier = isMS ? 'ms_legacy' : 'primeiro_legado';
-                   profile.categories = Array.from(new Set([...(profile.categories || []), isMS ? 'legado_1' : 'legado_2']));
-                   profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), isMS ? 'ms-legacy' : 'english-quickstart']));
-                   await this.db.collection('users').doc(cred.user.uid).set(profile, { merge: true });
-                 }
-               }
-             } catch(e) {
-               console.warn("Legacy JSON merge failed:", e);
-             }
-          }
-        }
+        profile = await this._mergePreRegistration(cred.user, profile);
       }
 
       this.currentProfile = profile;
@@ -319,41 +399,7 @@
       }
 
       if (profile) {
-        const cleanEmail = user.email.toLowerCase().trim();
-        const legacyId = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
-        if (legacyId !== user.uid) {
-          const legacyDoc = await this.db.collection('users').doc(legacyId).get();
-          if (legacyDoc.exists) {
-             const legacyData = legacyDoc.data();
-             profile.tier = legacyData.tier || profile.tier;
-             profile.categories = legacyData.categories || profile.categories || [];
-             profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), ...(legacyData.enrolledProducts || [])]));
-             profile.subscription = legacyData.subscription || profile.subscription;
-             profile.purchasedProducts = legacyData.purchasedProducts || profile.purchasedProducts;
-             profile.lastTransaction = legacyData.lastTransaction || profile.lastTransaction;
-
-             await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
-             await this.db.collection('users').doc(legacyId).delete();
-          } else if (!profile.categories || !profile.categories.some(c => c.includes('pago') || c.includes('legado') || c.includes('mentoria'))) {
-             // Fallback JSON check for unmigrated legacy users
-             try {
-               const resp = await fetch('/data/alunos_master_todos_legados.json');
-               if (resp.ok) {
-                 const masterData = await resp.json();
-                 const legUser = (masterData.alunos || []).find(l => (l.email || '').toLowerCase().trim() === cleanEmail);
-                 if (legUser) {
-                   const isMS = legUser.categoria === 'magic_stories_legacy' || legUser.is_ms;
-                   profile.tier = isMS ? 'ms_legacy' : 'primeiro_legado';
-                   profile.categories = Array.from(new Set([...(profile.categories || []), isMS ? 'legado_1' : 'legado_2']));
-                   profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), isMS ? 'ms-legacy' : 'english-quickstart']));
-                   await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
-                 }
-               }
-             } catch(e) {
-               console.warn("Legacy JSON merge failed:", e);
-             }
-          }
-        }
+        profile = await this._mergePreRegistration(user, profile);
       }
 
       this.currentProfile = profile;
@@ -436,6 +482,7 @@
               lastLoginAt: new Date().toISOString()
             });
           }
+          profile = await this._mergePreRegistration(user, profile);
           this.currentProfile = profile;
           this._syncLocalStorage(profile);
           return { user, profile };

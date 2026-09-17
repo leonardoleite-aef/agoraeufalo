@@ -1580,7 +1580,10 @@
       const name = document.getElementById('new-student-name').value.trim();
       const email = document.getElementById('new-student-email').value.trim().toLowerCase();
       const whatsapp = (document.getElementById('new-student-whatsapp')?.value || '').trim();
-      const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') || email.split('@')[0];
+      
+      const cleanEmail = email.toLowerCase().trim();
+      // ID determinístico baseado no email sanitizado (garante compatibilidade 100% com o login Auth)
+      const id = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
 
       // Collect categories from checkboxes
       const categories = [];
@@ -1601,18 +1604,30 @@
         : hasPago ? (billingPeriod === 'monthly' ? 'club_monthly' : billingPeriod === 'lifetime' ? 'lifetime' : 'club_annual')
         : 'free';
 
+      // Pacote padrão de cursos por categoria
+      let initialCourses = [];
+      if (isAdmin) {
+        initialCourses = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+      } else if (hasMentoria) {
+        initialCourses = ['mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart'];
+      } else if (hasPago) {
+        initialCourses = ['magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+      }
+      if (categories.includes('legado_1') && !initialCourses.includes('ms-legacy')) initialCourses.push('ms-legacy');
+      if (categories.includes('legado_2') && !initialCourses.includes('english-quickstart')) initialCourses.push('english-quickstart');
+
       const newStudent = {
         id,
         uid: id,
         name,
-        email,
+        email: cleanEmail,
         whatsapp,
         phone: whatsapp,
         categories,
         role,
-        purchasedProducts: [],
+        purchasedProducts: initialCourses,
         tier: legacyTier, // backward compat
-        enrolledProducts: [], // backward compat
+        enrolledProducts: initialCourses, // backward compat
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1629,7 +1644,7 @@
       try {
         if (window.aefPortalAuth) {
           await window.aefPortalAuth.ready();
-          await window.aefPortalAuth.updateUserTierAndRole(id, legacyTier, role, [], newStudent);
+          await window.aefPortalAuth.updateUserTierAndRole(id, legacyTier, role, initialCourses, newStudent);
           if (hasMentoria) {
             await window.aefPortalAuth.saveMenteeDoc(id, newStudent);
           }
@@ -1638,7 +1653,12 @@
         console.warn("Could not save to Firestore:", err);
       }
 
-      ALL_STUDENTS_LIST.unshift(newStudent);
+      const existingIdx = ALL_STUDENTS_LIST.findIndex(s => (s.email || '').toLowerCase().trim() === cleanEmail);
+      if (existingIdx >= 0) {
+        ALL_STUDENTS_LIST[existingIdx] = { ...ALL_STUDENTS_LIST[existingIdx], ...newStudent };
+      } else {
+        ALL_STUDENTS_LIST.unshift(newStudent);
+      }
       renderStudentsTable();
       updateMetrics();
       closeAddStudentModal();
@@ -1688,8 +1708,12 @@
       }
       const finalEnrolledProducts = Array.from(new Set([...purchasedProducts, ...existingVipCourses]));
 
+      const cleanEmail = email.toLowerCase().trim();
+      const targetDocId = id || cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
+
       const updateData = {
         name,
+        email: cleanEmail,
         whatsapp,
         phone: whatsapp,
         categories,
@@ -1718,9 +1742,9 @@
       try {
         if (window.aefPortalAuth) {
           await window.aefPortalAuth.ready();
-          await window.aefPortalAuth.updateUserTierAndRole(id || email.split('@')[0], legacyTier, effectiveRole, finalEnrolledProducts, updateData);
+          await window.aefPortalAuth.updateUserTierAndRole(targetDocId, legacyTier, effectiveRole, finalEnrolledProducts, updateData);
           if (hasMentoria || meetUrl) {
-            await window.aefPortalAuth.saveMenteeDoc(id || email.split('@')[0], { name, email, ...updateData });
+            await window.aefPortalAuth.saveMenteeDoc(targetDocId, { name, email: cleanEmail, ...updateData });
           }
         }
         // Sincroniza meetUrl diretamente no curso do mentorado no Firestore
