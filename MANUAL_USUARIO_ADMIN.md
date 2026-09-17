@@ -246,19 +246,31 @@ flowchart TD
     D & E & F --> G[Clique em 'Salvar Perfil']
 ```
 
-### 💡 Inclusão e Edição de Alunos & Contato Direto via WhatsApp:
-1. **Cadastrar Novo Aluno:** Clique no botão superior **`+ NOVO ALUNO`**. Preencha o Nome, E-mail e o **WhatsApp / Celular (com DDD)**. Selecione as categorias de acesso e salve.
-2. **Editar Dados e WhatsApp:** Na tabela de alunos, clique no ícone de lápis (`Editar Plano e Cursos`). No modal de edição, altere o campo **WhatsApp / Celular**.
-3. **Conversar com 1 Toque:** Ao preencher ou abrir um aluno com WhatsApp cadastrado, o botão verde **`Abrir WhatsApp ↗`** é exibido diretamente no modal e na coluna de contato da tabela para iniciar uma conversa imediata no WhatsApp com o aluno.
-4. **Busca Rápida por WhatsApp:** A barra de busca suporta pesquisa por dígitos do número (ex: `99616`), localizando o aluno instantaneamente.
-5. **Exportação CSV:** A lista exportada no botão **`Exportar CSV`** inclui a coluna dedicada **WhatsApp / Telefone**.
+### 💡 Inclusão de Alunos, Vendas Manuais ("Por Fora") & Envio Automático de Acesso:
+1. **Cadastrar Novo Aluno:** Clique no botão superior **`+ NOVO ALUNO`**.
+2. **Preencher os Dados:** Informe o Nome Completo, E-mail do aluno e o **WhatsApp / Celular (com DDD)**.
+3. **Definir o Plano e Acessos:**
+   - **Club (Mensal, Anual, Vitalício):** Marque **`Member Pago`** e escolha a periodicidade. O sistema já pré-carrega todos os cursos oficiais do Club (`magic_stories_club`, `ms-legacy`, `english-quickstart`, `frases-prontas`).
+   - **Mentoria VIP:** Marque **`Mentorado VIP`**.
+   - **Cursos Avulsos:** Marque a categoria base e, no modal de edição, selecione os cursos específicos adquiridos.
+4. **Disparo Automático de Boas-Vindas (Firebase Auth):**
+   - O checkbox **`✉️ Enviar E-mail de Boas-Vindas / Link de Acesso`** vem marcado por padrão.
+   - Ao clicar em **`Salvar Aluno no Firestore`**, o sistema grava os acessos e dispara automaticamente o **Link Mágico Oficial do Firebase** para a caixa de entrada do aluno.
+   - O aluno recebe o e-mail, clica no botão e **entra direto na Sala de Aula logado com todos os cursos liberados**, sem precisar criar conta do zero!
+5. **Envio Rápido via WhatsApp (1-Clique):**
+   - Na linha de qualquer aluno na tabela, clique no ícone de compartilhamento verde (**`↗`**).
+   - O sistema copia a mensagem canônica de boas-vindas do Professor Leo para a área de transferência e abre o WhatsApp Web direto na conversa com o aluno.
+   - No modal de edição (`Editar Aluno`), o painel **Comunicação & Envio de Acesso** possui botões dedicados: **`Disparar Link por E-mail`** e **`Enviar Acesso no WhatsApp`**.
 
-### 💡 Gerenciando um Aluno de Mentoria VIP Individual:
-1. Localize o aluno pelo campo de busca (ex: `André`).
-2. Mude o Tier para **`👑 Mentoria VIP Individual`**.
-3. No campo **Link do Google Meet**, cole o link da sala fixa de vocês (ex: `https://meet.google.com/kvu-upgw-osv`).
-4. Clique em **`Salvar`**.
-5. *Resultado:* Quando o André entrar no portal dele, ele verá o card dourado de Mentoria VIP com botão de entrada direta no Google Meet e seu curso personalizado!
+---
+
+### 🛒 Como a Plataforma Gerencia o Aluno Free que Compra no Checkout (Hotmart):
+1. **O Aluno já possui conta Free:** O aluno criou seu cadastro gratuito e está navegando na plataforma.
+2. **Compra no Checkout da Hotmart:** Ele clica em "Garantir Vaga" e paga via PIX ou Cartão usando o mesmo e-mail.
+3. **Webhook em Menos de 2 Segundos:** A Hotmart aprova a compra e dispara o evento `PURCHASE_APPROVED` para o Cloudflare Worker do AgoraEuFalo.
+4. **Promoção e Desbloqueio Instantâneo:** O Cloudflare Worker atualiza a conta do aluno no Firestore com `tier: 'club_annual'`, status `active` e libera a grade de cursos completa.
+5. **Experiência na Tela:** Na próxima navegação ou clique do aluno no portal, o sistema reconhece a assinatura paga em tempo real e remove todos os cadeados das aulas automaticamente.
+6. **E-mails Recebidos:** O aluno recebe a confirmação oficial de compra da Hotmart e, ao acessar o portal, visualiza o modal comemorativo de boas-vindas do Professor Leo.
 
 ---
 
