@@ -91,17 +91,20 @@
   function resolveUserCategories(user) {
     if (!user) return [MEMBER_CATEGORIES.FREE];
 
-    // Formato novo: categories[] já existe
-    if (Array.isArray(user.categories) && user.categories.length > 0) {
-      const cats = [...user.categories];
+    // Merge categories[] + legacyEntitlements[] — always use the full set
+    const baseCats = Array.isArray(user.categories) ? user.categories : [];
+    const legacyEnt = Array.isArray(user.legacyEntitlements) ? user.legacyEntitlements : [];
+    const merged = Array.from(new Set([...baseCats, ...legacyEnt]));
+
+    if (merged.length > 0) {
       // Garante member_free como base universal
-      if (!cats.includes(MEMBER_CATEGORIES.FREE)) {
-        cats.push(MEMBER_CATEGORIES.FREE);
+      if (!merged.includes(MEMBER_CATEGORIES.FREE)) {
+        merged.push(MEMBER_CATEGORIES.FREE);
       }
-      return cats;
+      return merged;
     }
 
-    // Formato legado: mapear tier string → categories[]
+    // Formato legado puro: mapear tier string → categories[]
     return migrateTierToCategories(user.tier, user.role, user.category);
   }
 
@@ -290,11 +293,20 @@
    * Verifica se o usuário é admin
    */
   function isAdmin(user) {
-    // 1. Verificação direta pelo Portal Auth (Master Source of Truth)
+    // When checking a specific user object, evaluate only that user's own data
+    if (user) {
+      const userEmail = (user.email || '').toLowerCase().trim();
+      return user.role === ROLES.ADMIN ||
+             user.role === 'admin' ||
+             user.tier === 'admin_master' ||
+             (Array.isArray(user.categories) && user.categories.includes('admin')) ||
+             userEmail === 'selexenglish@gmail.com';
+    }
+
+    // No user passed = check if current session user is admin
     if (typeof window !== 'undefined' && window.aefPortalAuth && typeof window.aefPortalAuth.isAdmin === 'function') {
       if (window.aefPortalAuth.isAdmin()) return true;
     }
-    // 2. Verificação direta no cache de sessão
     if (typeof localStorage !== 'undefined') {
       const cachedRole = localStorage.getItem('aef_user_role');
       const cachedTier = localStorage.getItem('aef_user_tier');
@@ -303,14 +315,7 @@
         return true;
       }
     }
-    // 3. Verificação no objeto de usuário passado
-    if (!user) return false;
-    const userEmail = (user.email || '').toLowerCase().trim();
-    return user.role === ROLES.ADMIN ||
-           user.role === 'admin' ||
-           user.tier === 'admin_master' ||
-           (Array.isArray(user.categories) && user.categories.includes('admin')) ||
-           userEmail === 'selexenglish@gmail.com';
+    return false;
   }
 
   /**
@@ -766,9 +771,21 @@
         }
       });
     }
-    if (raw.tier === "ms_legacy" || raw.category === "magic_stories_legacy") {
+    if (
+      raw.tier === "ms_legacy" ||
+      raw.category === "magic_stories_legacy" ||
+      raw.legacyCategoria === "magic_stories_legacy" ||
+      (Array.isArray(raw.enrolledProducts) && raw.enrolledProducts.includes("ms-legacy") &&
+        !raw.enrolledProducts.some(p => ["mentoria-andre", "mentoria-estevaopin", "mentoria_vip"].includes(p)))
+    ) {
       legacyEntitlementsSet.add("legado_1");
-    } else if (raw.tier === "primeiro_legado" || raw.category === "primeiro_legado_agoraeufalo") {
+    } else if (
+      raw.tier === "primeiro_legado" ||
+      raw.category === "primeiro_legado_agoraeufalo" ||
+      raw.legacyCategoria === "agoraeufalo_primeiro_legado" ||
+      (Array.isArray(raw.enrolledProducts) && raw.enrolledProducts.includes("first-steps") &&
+        !raw.enrolledProducts.some(p => ["mentoria-andre", "mentoria-estevaopin", "mentoria_vip"].includes(p)))
+    ) {
       legacyEntitlementsSet.add("legado_2");
     }
 
@@ -871,7 +888,10 @@
       name,
       role,
       tier: raw.tier || "free",
-      categories: Array.isArray(raw.categories) && raw.categories.length > 0 ? raw.categories : Array.from(legacyEntitlementsSet),
+      categories: Array.from(new Set([
+        ...(Array.isArray(raw.categories) ? raw.categories : []),
+        ...legacyEntitlementsSet
+      ])),
       subscriptions,
       purchasedProducts,
       legacyEntitlements: Array.from(legacyEntitlementsSet),
