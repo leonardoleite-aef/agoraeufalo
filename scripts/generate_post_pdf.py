@@ -1,5 +1,10 @@
 """
-AgoraEuFalo Editorial PDF Generator for Blog Posts & Magic Stories
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador Python ReportLab foi descontinuado e substituído pela ferramenta oficial
+v2-pdf-factory (baseada em React-PDF, Zod e schemas canônicos).
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo Editorial PDF Generator for Blog Posts & Magic Stories (LEGACY)
 Complies with AgoraEuFalo Design Rules (A4, 15mm margins, clear contrast boxes, page X of Y footer)
 """
 

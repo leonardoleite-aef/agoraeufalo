@@ -144,18 +144,6 @@
     return cats;
   }
 
-  function resolveCourseCategories(course) {
-    if (!course) return [];
-
-    // Formato novo
-    if (Array.isArray(course.accessCategories) && course.accessCategories.length > 0) {
-      return course.accessCategories;
-    }
-
-    // Formato legado: mapear tierRequired → accessCategories[]
-    return migrateTierRequiredToCategories(course.tierRequired);
-  }
-
   /**
    * Verifica se um aluno tem acesso a um produto/curso.
    *
@@ -263,10 +251,28 @@
    * Verifica se o usuário é admin
    */
   function isAdmin(user) {
+    // 1. Verificação direta pelo Portal Auth (Master Source of Truth)
+    if (typeof window !== 'undefined' && window.aefPortalAuth && typeof window.aefPortalAuth.isAdmin === 'function') {
+      if (window.aefPortalAuth.isAdmin()) return true;
+    }
+    // 2. Verificação direta no cache de sessão
+    if (typeof localStorage !== 'undefined') {
+      const cachedRole = localStorage.getItem('aef_user_role');
+      const cachedTier = localStorage.getItem('aef_user_tier');
+      const cachedEmail = (localStorage.getItem('aef_user_email') || '').toLowerCase().trim();
+      if (cachedRole === 'admin' || cachedTier === 'admin_master' || cachedEmail === 'selexenglish@gmail.com' || cachedEmail === 'leonardo@agoraeufalo.com.br') {
+        return true;
+      }
+    }
+    // 3. Verificação no objeto de usuário passado
     if (!user) return false;
+    const userEmail = (user.email || '').toLowerCase().trim();
     return user.role === ROLES.ADMIN ||
-           user.tier === "admin_master" ||
-           (Array.isArray(user.categories) && user.categories.includes("admin"));
+           user.role === 'admin' ||
+           user.tier === 'admin_master' ||
+           (Array.isArray(user.categories) && user.categories.includes('admin')) ||
+           userEmail === 'selexenglish@gmail.com' ||
+           userEmail === 'leonardo@agoraeufalo.com.br';
   }
 
   /**
@@ -582,6 +588,254 @@
   }
 
   // =========================================================================
+  // 4.1. ADAPTADORES DE DADOS V2 (FASE 2)
+  // =========================================================================
+
+  function normalizeCourse(raw) {
+    if (!raw) {
+      return {
+        schemaVersion: 2,
+        id: "unknown",
+        title: "Sem Título",
+        categories: ["foundations"],
+        accessTier: "free",
+        access: { entitlements: ["member_free"] },
+        isPublished: false
+      };
+    }
+
+    const id = String(raw.id || raw.slug || "course_" + Date.now());
+    const title = String(raw.title || id);
+    const slug = raw.slug ? String(raw.slug) : id;
+    const isPublished = raw.published !== false && raw.isPublished !== false;
+
+    let accessTier = "all_access";
+    if (raw.accessTier === "free" || raw.tierRequired === "free" || (raw.badge && raw.badge.toUpperCase().includes("GRÁTIS"))) {
+      accessTier = "free";
+    } else if (raw.accessTier === "standalone" || raw.accessTier === "venda_avulsa") {
+      accessTier = "standalone";
+    } else if (raw.accessTier === "all_access" || raw.accessTier === "club") {
+      accessTier = "all_access";
+    } else if (raw.accessTier === "mentoria_vip" || id.startsWith("mentoria-")) {
+      accessTier = "standalone";
+    }
+
+    let access = {
+      entitlements: [],
+      requiresProductId: [],
+      legacyGrantIds: []
+    };
+
+    if (raw.access && typeof raw.access === "object") {
+      access = {
+        entitlements: Array.isArray(raw.access.entitlements) ? [...raw.access.entitlements] : [],
+        requiresProductId: Array.isArray(raw.access.requiresProductId) ? [...raw.access.requiresProductId] : [],
+        legacyGrantIds: Array.isArray(raw.access.legacyGrantIds) ? [...raw.access.legacyGrantIds] : []
+      };
+    } else {
+      if (accessTier === "free") {
+        access.entitlements = ["member_free", "member_pago"];
+      } else if (accessTier === "all_access") {
+        access.entitlements = ["member_pago"];
+        if (Array.isArray(raw.legacyGrants)) {
+          raw.legacyGrants.forEach(lg => {
+            if (!access.entitlements.includes(lg)) access.entitlements.push(lg);
+            access.legacyGrantIds.push(lg);
+          });
+        }
+      } else if (accessTier === "standalone") {
+        const prodId = raw.productId || raw.requiresProductId || id;
+        access.requiresProductId = Array.isArray(prodId) ? prodId : [String(prodId)];
+        if (id.startsWith("mentoria-") || raw.accessTier === "mentoria_vip") {
+          access.entitlements = ["member_mentoria"];
+        }
+      }
+
+      if (Array.isArray(raw.accessCategories)) {
+        raw.accessCategories.forEach(cat => {
+          if (!access.entitlements.includes(cat)) access.entitlements.push(cat);
+        });
+      }
+    }
+
+    access.entitlements = Array.from(new Set(access.entitlements));
+    access.requiresProductId = Array.from(new Set(access.requiresProductId));
+    access.legacyGrantIds = Array.from(new Set(access.legacyGrantIds));
+
+    return {
+      ...raw,
+      schemaVersion: 2,
+      id,
+      title,
+      slug,
+      accessTier,
+      access,
+      isPublished
+    };
+  }
+
+  function normalizeUser(raw) {
+    if (!raw) {
+      return {
+        schemaVersion: 2,
+        id: "anonymous",
+        uid: "anonymous",
+        email: "",
+        name: "Aluno AgoraEuFalo",
+        role: "student",
+        tier: "free",
+        categories: ["member_free"],
+        subscriptions: [],
+        purchasedProducts: [],
+        legacyEntitlements: ["member_free"],
+        enrolledProducts: []
+      };
+    }
+
+    const email = (raw.email || "").toLowerCase().trim();
+    const uid = String(raw.uid || raw.id || (email ? email.replace(/[^a-zA-Z0-9]/g, "_") : "user"));
+    const id = String(raw.id || uid);
+    const name = String(raw.name || raw.displayName || (email ? email.split("@")[0] : "Aluno AgoraEuFalo"));
+
+    let role = "student";
+    if (raw.role === "admin" || raw.tier === "admin_master" || (Array.isArray(raw.categories) && raw.categories.includes("admin")) || email === "selexenglish@gmail.com" || email === "leonardo@agoraeufalo.com.br") {
+      role = "admin";
+    } else if (raw.role === "moderator") {
+      role = "moderator";
+    }
+
+    const legacyEntitlementsSet = new Set(["member_free"]);
+    if (Array.isArray(raw.legacyEntitlements)) {
+      raw.legacyEntitlements.forEach(e => legacyEntitlementsSet.add(e));
+    }
+    if (Array.isArray(raw.categories)) {
+      raw.categories.forEach(cat => {
+        if (cat === "legado_1" || cat === "legado_2" || cat === "member_free") {
+          legacyEntitlementsSet.add(cat);
+        }
+      });
+    }
+    if (raw.tier === "ms_legacy" || raw.category === "magic_stories_legacy") {
+      legacyEntitlementsSet.add("legado_1");
+    } else if (raw.tier === "primeiro_legado" || raw.category === "primeiro_legado_agoraeufalo") {
+      legacyEntitlementsSet.add("legado_2");
+    }
+
+    const subscriptions = [];
+    if (Array.isArray(raw.subscriptions) && raw.subscriptions.length > 0) {
+      raw.subscriptions.forEach((s, idx) => {
+        if (s && typeof s === "object") {
+          subscriptions.push({
+            id: String(s.id || `sub_${uid}_${idx}`),
+            entitlement: s.entitlement || (s.productId === "PROJETO_AEF_2026" || s.productId === "MENTORIA_VIP" ? "member_mentoria" : "member_pago"),
+            productId: String(s.productId || "8460579"),
+            billingPeriod: s.billingPeriod || "annual",
+            status: s.status || "active",
+            expiresAt: s.expiresAt || null,
+            graceUntil: s.graceUntil || null,
+            gateway: s.gateway || "hotmart",
+            lastEventId: String(s.lastEventId || s.lastEvent || "init"),
+            updatedAt: String(s.updatedAt || new Date().toISOString())
+          });
+        }
+      });
+    } else if (raw.subscription && typeof raw.subscription === "object") {
+      const s = raw.subscription;
+      const isMentoria = raw.categories?.includes("member_mentoria") || raw.tier === "vip_mentorship" || s.productId === "PROJETO_AEF_2026";
+      subscriptions.push({
+        id: String(s.id || `sub_${uid}_hotmart`),
+        entitlement: s.entitlement || (isMentoria ? "member_mentoria" : "member_pago"),
+        productId: String(s.productId || (isMentoria ? "PROJETO_AEF_2026" : "8460579")),
+        billingPeriod: s.billingPeriod || "annual",
+        status: s.status || "active",
+        expiresAt: s.expiresAt || null,
+        graceUntil: s.graceUntil || null,
+        gateway: s.gateway || "hotmart",
+        lastEventId: String(s.lastEventId || s.lastEvent || "webhook_sync"),
+        updatedAt: String(s.updatedAt || new Date().toISOString())
+      });
+    } else {
+      const isMentoria = raw.categories?.includes("member_mentoria") || raw.tier === "vip_mentorship";
+      const isPago = raw.categories?.includes("member_pago") || raw.tier === "club_annual" || raw.tier === "club_monthly";
+      if (isMentoria || isPago) {
+        subscriptions.push({
+          id: `sub_${uid}_inferred`,
+          entitlement: isMentoria ? "member_mentoria" : "member_pago",
+          productId: isMentoria ? "PROJETO_AEF_2026" : "8460579",
+          billingPeriod: raw.tier === "club_monthly" ? "monthly" : "annual",
+          status: "active",
+          expiresAt: null,
+          graceUntil: null,
+          gateway: "hotmart",
+          lastEventId: "inferred_legacy",
+          updatedAt: new Date().toISOString()
+        });
+      }
+    }
+
+    const purchasedProducts = [];
+    if (Array.isArray(raw.purchasedProducts)) {
+      raw.purchasedProducts.forEach((p, idx) => {
+        if (typeof p === "string") {
+          purchasedProducts.push({
+            productId: p,
+            courseId: p,
+            purchasedAt: String(raw.createdAt || new Date().toISOString()),
+            gateway: "hotmart",
+            transactionId: `tx_legacy_${p}_${idx}`
+          });
+        } else if (p && typeof p === "object") {
+          purchasedProducts.push({
+            productId: String(p.productId || p.courseId || `prod_${idx}`),
+            courseId: String(p.courseId || p.productId || `course_${idx}`),
+            purchasedAt: String(p.purchasedAt || new Date().toISOString()),
+            gateway: p.gateway || "hotmart",
+            transactionId: String(p.transactionId || `tx_${idx}`)
+          });
+        }
+      });
+    }
+
+    if (Array.isArray(raw.enrolledProducts)) {
+      raw.enrolledProducts.forEach((ep, idx) => {
+        const alreadyPurchased = purchasedProducts.some(p => p.courseId === ep || p.productId === ep);
+        if (!alreadyPurchased && ep !== "ms-legacy" && ep !== "english-quickstart" && ep !== "frases-prontas") {
+          purchasedProducts.push({
+            productId: ep,
+            courseId: ep,
+            purchasedAt: String(raw.createdAt || new Date().toISOString()),
+            gateway: "manual",
+            transactionId: `tx_enrolled_${ep}_${idx}`
+          });
+        }
+      });
+    }
+
+    return {
+      ...raw,
+      schemaVersion: 2,
+      id,
+      uid,
+      email,
+      name,
+      role,
+      tier: raw.tier || "free",
+      categories: Array.isArray(raw.categories) && raw.categories.length > 0 ? raw.categories : Array.from(legacyEntitlementsSet),
+      subscriptions,
+      purchasedProducts,
+      legacyEntitlements: Array.from(legacyEntitlementsSet),
+      enrolledProducts: Array.isArray(raw.enrolledProducts) ? raw.enrolledProducts : [],
+      legacy: {
+        tier: raw.tier,
+        enrolledProducts: raw.enrolledProducts,
+        categories: raw.categories,
+        subscription: raw.subscription,
+        role: raw.role
+      }
+    };
+  }
+
+  // =========================================================================
   // 5. EXPORT GLOBAL
   // =========================================================================
 
@@ -601,6 +855,12 @@
     hasModuleAccess,
     isAdmin,
     isSubscriptionActive,
+
+    // Adaptadores V2 (Fase 2)
+    normalizeCourse,
+    normalizeUser,
+    normalizeCourseToV2: normalizeCourse,
+    normalizeUserToV2: normalizeUser,
 
     // Migração
     migrateTierToCategories,

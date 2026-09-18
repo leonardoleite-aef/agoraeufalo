@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-AgoraEuFalo PDF Factory - Comparison Generator for EQS 1.2
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador Python ReportLab foi descontinuado e substituído pela ferramenta oficial v2-pdf-factory.
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo PDF Factory - Comparison Generator for EQS 1.2 (LEGACY)
 Compiles two separate layout options:
 - Option A: One-Pager (Theory + Practice combined on exactly 1 A4 page)
 - Option B: Two-Pager Expanded (Theory + Practice separated, with expanded text, larger fonts, and notebook grids)

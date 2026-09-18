@@ -1,5 +1,10 @@
 """
-AgoraEuFalo Editorial Prestige Engine - Livro Oficial de Treino MS002 (Tom)
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador Python ReportLab foi descontinuado e substituído pela ferramenta oficial
+v2-pdf-factory (baseada em React-PDF, Zod e schemas canônicos).
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo Editorial Prestige Engine - Livro Oficial de Treino MS002 (Tom - LEGACY)
 100% Padrão Institucional AgoraEuFalo (Sistema Canônico dos 3 Arquétipos)
 Calibrado na faixa de 15 a 17pt para legibilidade e conforto 40+!
 """

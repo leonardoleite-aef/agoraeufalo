@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-AgoraEuFalo PDF Generator - Complete Module 1 Set (Lessons 1.1 to 1.4)
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador foi descontinuado e substituído pela ferramenta oficial v2-pdf-factory.
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo PDF Generator - Complete Module 1 Set (Lessons 1.1 to 1.4 - LEGACY)
 Generates A4 luxury light-themed PDFs using Google Chrome Headless.
 Renders pages to PNG inside the artifacts directory for validation.
 """

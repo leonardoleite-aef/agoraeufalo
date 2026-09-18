@@ -42,8 +42,15 @@ assets/videos
 assets/videos/
 assets/audio/alunos/
 assets/audio/public/*.mp3
-# Virtual Environment & Staging
+# Virtual Environment, Staging & Deprecated Isolation
 .venv/
 storage_staging/
 tmp/
+*.deprecated
+*.deprecated.*
+
+# LGPD & Data Protection: Sensitive student data and CSVs
+data/
+data/**
+*.csv
 

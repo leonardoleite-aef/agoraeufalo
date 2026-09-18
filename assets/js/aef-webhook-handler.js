@@ -40,13 +40,13 @@
     'PROJETO_AEF_2026': {
       tier: 'vip_mentorship',
       role: 'student',
-      enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas', 'all_access_master', 'mentoria_vip'],
+      enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas', 'mentoria_vip'],
       productName: 'Projeto AgoraEuFalo 2026 (Mentoria VIP + Formação Completa)'
     },
     'MENTORIA_VIP': {
       tier: 'vip_mentorship',
       role: 'student',
-      enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas', 'all_access_master', 'mentoria_vip'],
+      enrolledProducts: ['ms-legacy', 'english-quickstart', 'frases-prontas', 'mentoria_vip'],
       productName: 'Mentoria VIP Individual AgoraEuFalo'
     },
     'MS_LEGACY': {
@@ -338,6 +338,7 @@
           if (nextCharge) {
             const expDate = new Date(typeof nextCharge === 'number' ? nextCharge : nextCharge);
             expiresAt = expDate.toISOString();
+            graceUntil = expDate.toISOString();
             accessStatus = 'canceled_grace';
             resultSummary = `🛑 Assinatura Cancelada pelo Aluno. Acesso mantido até o fim do ciclo pago (${expDate.toLocaleDateString('pt-BR')}).`;
           } else {
@@ -388,14 +389,70 @@
           break;
       }
 
-      // Monta o Registro do Usuário
+      // Monta o Registro do Usuário V2
+      const mappedCategories = targetTier === 'vip_mentorship' 
+        ? ['member_free', 'member_pago', 'member_mentoria']
+        : targetTier === 'club_annual' || targetTier === 'club_monthly'
+        ? ['member_free', 'member_pago']
+        : targetTier === 'course_member'
+        ? ['member_free', 'legado_master']
+        : ['member_free'];
+
+      const billingPeriod = targetTier === 'club_monthly' ? 'monthly' : 'annual';
+      const primaryEntitlement = mappedCategories.includes('member_mentoria')
+        ? 'member_mentoria'
+        : mappedCategories.includes('member_pago')
+        ? 'member_pago'
+        : 'member_free';
+
       const userRecord = {
+        schemaVersion: 2,
+        id: studentId,
         uid: studentId,
         email: email,
         name: name,
         phone: phone,
-        tier: targetTier,
         role: 'student',
+        categories: mappedCategories,
+        subscriptions: [
+          {
+            id: `sub_${studentId}_hotmart`,
+            entitlement: primaryEntitlement,
+            productId: String(prodId),
+            billingPeriod: billingPeriod,
+            status: accessStatus === 'canceled_immediate' ? 'canceled_immediate' 
+              : accessStatus === 'canceled_grace' ? 'canceled_grace'
+              : accessStatus === 'overdue_grace_period' ? 'overdue_grace_period'
+              : (accessStatus === 'refunded' || accessStatus === 'chargeback_blocked') ? 'revoked'
+              : 'active',
+            expiresAt: expiresAt,
+            graceUntil: graceUntil,
+            gateway: 'hotmart',
+            lastEventId: eventId,
+            updatedAt: nowIso
+          }
+        ],
+        purchasedProducts: [],
+        legacyEntitlements: Array.from(new Set(['member_free', ...mappedCategories.filter(c => typeof c === 'string' && c.startsWith('legado_'))])),
+        createdAt: nowIso,
+        updatedAt: nowIso,
+        legacy: {
+          tier: targetTier,
+          enrolledProducts: targetCourses,
+          categories: mappedCategories,
+          subscription: {
+            billingPeriod: billingPeriod,
+            status: accessStatus,
+            expiresAt: expiresAt,
+            graceUntil: graceUntil,
+            gateway: 'hotmart',
+            lastEvent: event,
+            lastEventId: eventId,
+            updatedAt: nowIso
+          },
+          role: 'student'
+        },
+        tier: targetTier,
         enrolledProducts: targetCourses,
         subscriptionState: {
           status: accessStatus,
@@ -417,8 +474,7 @@
           formattedPrice: formattedPrice,
           transactionId: transactionId,
           processedAt: nowIso
-        },
-        updatedAt: nowIso
+        }
       };
 
       // 1. Sincroniza usuário no Firestore ('users/{studentId}')
@@ -466,21 +522,28 @@
         } catch (e) {}
       }
 
-      // 3. Monta e Salva o Log de Auditoria
+      // 3. Monta e Salva o Log de Auditoria (Conforme WebhookEvent V2)
       const logEntry = {
         id: eventId,
-        event: event,
         provider: 'hotmart',
+        type: event,
+        productId: String(prodId),
         buyerEmail: email,
+        occurredAt: nowIso,
+        receivedAt: nowIso,
+        raw: payload,
+        processedAt: nowIso,
+        processingError: null,
+
+        // Campos auxiliares para auditoria e dashboard admin
+        event: event,
         buyerName: name,
         productName: prodName,
-        productId: prodId,
         transactionId: transactionId,
         amountFormatted: formattedPrice,
         status: logStatus,
         resultSummary: resultSummary,
-        rawPayload: payload,
-        processedAt: nowIso
+        rawPayload: payload
       };
 
       await this.saveWebhookLog(logEntry);

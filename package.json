@@ -7,10 +7,13 @@
     "dev": "vite",
     "build": "vite build && cd v2-pdf-factory && npm run build && cd .. && node scripts/build_dist.js",
     "preview": "vite preview",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/core/**/*.test.ts",
+    "type-check": "tsc --noEmit --strict",
     "postinstall": "cd v2-pdf-factory && npm install"
   },
   "devDependencies": {
     "puppeteer": "^25.10.0",
+    "typescript": "^7.0.2",
     "vite": "^5.4.2"
   }
 }

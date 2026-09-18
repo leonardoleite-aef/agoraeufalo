@@ -31,14 +31,14 @@ const PRODUCT_CATEGORY_MAPPING = {
     categories: ["member_free", "member_pago", "member_mentoria"],
     subscription: { billingPeriod: "annual" },
     role: "student",
-    enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas", "all_access_master", "mentoria_vip"],
+    enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas", "mentoria_vip"],
     productName: "Projeto AgoraEuFalo 2026 (Mentoria VIP)"
   },
   "MENTORIA_VIP": {
     categories: ["member_free", "member_pago", "member_mentoria"],
     subscription: { billingPeriod: "annual" },
     role: "student",
-    enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas", "all_access_master", "mentoria_vip"],
+    enrolledProducts: ["ms-legacy", "english-quickstart", "frases-prontas", "mentoria_vip"],
     productName: "Mentoria VIP Individual AgoraEuFalo"
   }
 };
@@ -82,6 +82,14 @@ export default {
       });
     }
 
+    let eventId = null;
+    let event = "PURCHASE_APPROVED";
+    let prodId = "8460579";
+    let email = "";
+    let occurredAt = new Date().toISOString();
+    let receivedAt = new Date().toISOString();
+    let payload = {};
+
     try {
       // 3. Leitura ultra-segura do corpo (evita erro 500 se o corpo for vazio no teste da Cloudflare)
       const rawText = await request.text();
@@ -97,7 +105,6 @@ export default {
       }
 
       // 4. Parse tolerante a JSON e Form URL-encoded
-      let payload = {};
       try {
         payload = JSON.parse(rawText);
       } catch (parseErr) {
@@ -109,31 +116,46 @@ export default {
         }
       }
 
-      // 5. Validação opcional de segurança com Hottok
+      // 5. Validação de segurança com Hottok
       const incomingHottok = request.headers.get("X-HOTMART-HOTTOK") || request.headers.get("x-hotmart-hottok");
-      if (env && env.HOTMART_HOTTOK && incomingHottok) {
-        if (env.HOTMART_HOTTOK !== incomingHottok) {
-          console.warn("⚠️ Hottok inválido recebido:", incomingHottok);
+      if (env && env.HOTMART_HOTTOK) {
+        if (!incomingHottok || env.HOTMART_HOTTOK !== incomingHottok) {
+          console.warn("[AEF Webhook] [AEF Auth] Token Hottok ausente ou inválido recebido.");
         }
       }
 
-      // 6. Extração dos campos Hotmart 2.0.0
-      const event = (payload.event || payload.hottok_event || "PURCHASE_APPROVED").trim();
-      const eventId = payload.id || `wh_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      // 6. Extração dos campos Hotmart 2.0.0 e Idempotência Estrita
       const data = payload.data || payload;
-
+      const purchase = data.purchase || payload.purchase || {};
       const buyer = data.buyer || payload.buyer || {};
       const product = data.product || payload.product || {};
-      const purchase = data.purchase || payload.purchase || {};
       const subscription = data.subscription || payload.subscription || {};
 
-      const email = (buyer.email || payload.email || "").trim().toLowerCase();
+      event = (payload.event || payload.hottok_event || "PURCHASE_APPROVED").trim();
+      const txId = (purchase.transaction || data.transaction || payload.transaction || "").trim();
+      const rawEventId = (payload.id || data.id || "").trim();
+
+      // Identificador único e determinístico do evento (Idempotência)
+      // Se a Hotmart reenviar o mesmo webhook por retry, o eventId gerado é exatamente o mesmo
+      eventId = rawEventId || (txId ? `wh_${txId}_${event.toLowerCase()}` : `wh_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`);
+
+      receivedAt = new Date().toISOString();
+      const rawOccurred = purchase.order_date || purchase.date || data.purchase_date || payload.creation_date || null;
+      occurredAt = receivedAt;
+      if (rawOccurred) {
+        try {
+          occurredAt = typeof rawOccurred === 'number' ? new Date(rawOccurred).toISOString() : new Date(rawOccurred).toISOString();
+        } catch (e) {
+          occurredAt = receivedAt;
+        }
+      }
+
+      email = (buyer.email || payload.email || "").trim().toLowerCase();
       const name = (buyer.name || payload.name || (email ? email.split("@")[0] : "Aluno AgoraEuFalo")).trim();
       const phone = buyer.checkout_phone || buyer.phone || "";
-      const prodId = String(product.id || payload.product_id || "8460579");
+      prodId = String(product.id || payload.product_id || "8460579");
       const prodName = product.name || payload.product_name || "AgoraEuFalo English Club";
       const offerCode = (purchase.offer?.code || payload.offer_code || "").toUpperCase();
-      const txId = purchase.transaction || data.transaction || `tx_${Date.now()}`;
       const priceVal = purchase.price?.value || payload.price || 0;
       const formattedPrice = `R$ ${Number(priceVal).toFixed(2).replace(".", ",")}`;
       const isRecurrent = Boolean(purchase.recurrent || (purchase.recurrence_number && purchase.recurrence_number > 1));
@@ -144,6 +166,7 @@ export default {
         return new Response(JSON.stringify({
           received: true,
           status: "test_acknowledged",
+          eventId: eventId,
           message: "Notificação de teste recebida com sucesso pela Cloudflare."
         }), {
           status: 200,
@@ -152,7 +175,7 @@ export default {
       }
 
       const studentId = email.replace(/[^a-zA-Z0-9]/g, "_");
-      const nowIso = new Date().toISOString();
+      const nowIso = receivedAt;
 
       // 7. Mapeamento de Categorias e Regras de Negócio
       let mapping = PRODUCT_CATEGORY_MAPPING[prodId] || PRODUCT_CATEGORY_MAPPING["8460579"];
@@ -197,6 +220,7 @@ export default {
           if (nextCharge) {
             const expDate = new Date(nextCharge);
             expiresAt = expDate.toISOString();
+            graceUntil = expDate.toISOString();
             accessStatus = "canceled_grace";
             summary = `🛑 Assinatura Cancelada. Acesso mantido até ${expDate.toLocaleDateString("pt-BR")}.`;
           } else {
@@ -230,26 +254,82 @@ export default {
         : targetCategories.includes('member_pago') ? (mapping.subscription?.billingPeriod === 'monthly' ? 'club_monthly' : 'club_annual')
         : 'free';
 
+      const primaryEntitlement = targetCategories.includes('member_mentoria')
+        ? 'member_mentoria'
+        : targetCategories.includes('member_pago')
+        ? 'member_pago'
+        : 'member_free';
+
+      const billingPeriod = mapping.subscription?.billingPeriod || "annual";
+
+      // V2 Subscriptions Array (em conformidade com Subscription em src/types/core.ts)
+      const subscriptions = [
+        {
+          id: `sub_${studentId}_hotmart`,
+          entitlement: primaryEntitlement,
+          productId: prodId,
+          billingPeriod: billingPeriod,
+          status: accessStatus,
+          expiresAt: expiresAt,
+          graceUntil: graceUntil,
+          gateway: "hotmart",
+          lastEventId: eventId,
+          updatedAt: nowIso
+        }
+      ];
+
+      const legacyEntitlements = Array.from(new Set([
+        "member_free",
+        ...targetCategories.filter(c => typeof c === "string" && c.startsWith("legado_"))
+      ]));
+
+      // Modelo AEFUser V2 com retrocompatibilidade
       const userPayload = {
+        // V2 Canonical Schema
+        schemaVersion: 2,
+        id: studentId,
         uid: studentId,
         email: email,
         name: name,
         phone: phone,
-        // NEW: Multi-category system
+        role: "student",
+        subscriptions: subscriptions,
+        purchasedProducts: [],
+        legacyEntitlements: legacyEntitlements,
+        createdAt: nowIso,
+        updatedAt: nowIso,
+
+        // Bloco legacy estruturado
+        legacy: {
+          tier: legacyTier,
+          enrolledProducts: targetCourses,
+          categories: targetCategories,
+          subscription: {
+            billingPeriod: billingPeriod,
+            status: accessStatus,
+            expiresAt: expiresAt,
+            graceUntil: graceUntil,
+            gateway: "hotmart",
+            lastEvent: event,
+            lastEventId: eventId,
+            updatedAt: nowIso
+          },
+          role: "student"
+        },
+
+        // BACKWARD COMPAT (campos raiz para consumidores legados)
         categories: targetCategories,
         subscription: {
-          billingPeriod: mapping.subscription?.billingPeriod || "annual",
+          billingPeriod: billingPeriod,
           status: accessStatus,
           expiresAt: expiresAt,
           graceUntil: graceUntil,
           gateway: "hotmart",
           lastEvent: event,
+          lastEventId: eventId,
           updatedAt: nowIso
         },
-        purchasedProducts: [],
-        // BACKWARD COMPAT (keep for transition)
         tier: legacyTier,
-        role: "student",
         enrolledProducts: targetCourses,
         subscriptionState: {
           status: accessStatus,
@@ -269,8 +349,7 @@ export default {
           amountFormatted: formattedPrice,
           transactionId: txId,
           processedAt: nowIso
-        },
-        updatedAt: nowIso
+        }
       };
 
       await writeFirestore("users", studentId, userPayload);
@@ -289,21 +368,28 @@ export default {
         });
       }
 
-      // 10. Gravação de Log de Auditoria em webhook_logs/{eventId}
+      // 10. Gravação de Log de Auditoria em webhook_logs/{eventId} (Conforme interface WebhookEvent V2)
       const logPayload = {
         id: eventId,
-        event: event,
         provider: "hotmart",
+        type: event,
+        productId: prodId,
         buyerEmail: email,
+        occurredAt: occurredAt,
+        receivedAt: receivedAt,
+        raw: payload,
+        processedAt: nowIso,
+        processingError: null,
+
+        // Campos auxiliares para auditoria e dashboard admin
+        event: event,
         buyerName: name,
         productName: prodName,
-        productId: prodId,
         transactionId: txId,
         amountFormatted: formattedPrice,
         status: (accessStatus === "revoked" || event === "PURCHASE_DELAYED") ? "warning" : "processed",
         resultSummary: summary,
-        rawPayload: payload,
-        processedAt: nowIso
+        rawPayload: payload
       };
 
       await writeFirestore("webhook_logs", eventId, logPayload);
@@ -322,10 +408,33 @@ export default {
       });
 
     } catch (err) {
-      // Mesmo em erro inesperado, loga e responde com detalhes claros sem derrubar
-      console.error("❌ Erro no processamento do webhook:", err);
+      // Mesmo em erro inesperado, loga estruturado sem derrubar
+      console.error("[AEF Webhook] [AEF Error] Erro no processamento do webhook:", err.message || err);
+
+      try {
+        if (eventId) {
+          await writeFirestore("webhook_logs", eventId, {
+            id: eventId,
+            provider: "hotmart",
+            type: event || "UNKNOWN_ERROR",
+            productId: prodId || "",
+            buyerEmail: email || "unknown",
+            occurredAt: occurredAt || new Date().toISOString(),
+            receivedAt: receivedAt || new Date().toISOString(),
+            raw: payload || {},
+            processedAt: new Date().toISOString(),
+            processingError: err.message || "Erro desconhecido",
+            status: "error",
+            resultSummary: `❌ Falha: ${err.message || "Erro desconhecido"}`
+          });
+        }
+      } catch (logErr) {
+        console.warn("[AEF Webhook] [AEF Error] Falha ao registrar log de erro no Firestore:", logErr.message || logErr);
+      }
+
       return new Response(JSON.stringify({
         received: false,
+        eventId: eventId,
         error: err.message || "Erro desconhecido"
       }), {
         status: 400,
@@ -372,6 +481,6 @@ async function writeFirestore(collection, docId, data) {
       body: JSON.stringify({ fields })
     });
   } catch (e) {
-    console.warn("⚠️ Aviso na persistência do Firestore:", e);
+    console.warn("[AEF Webhook] [AEF Error] Aviso na persistência do Firestore:", e.message || e);
   }
 }

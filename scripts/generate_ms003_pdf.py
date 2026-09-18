@@ -1,5 +1,10 @@
 """
-AgoraEuFalo Editorial Prestige Engine - Livro Oficial de Treino MS003 (Saturday Morning)
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador Python ReportLab foi descontinuado e substituído pela ferramenta oficial
+v2-pdf-factory (baseada em React-PDF, Zod e schemas canônicos).
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo Editorial Prestige Engine - Livro Oficial de Treino MS003 (Saturday Morning - LEGACY)
 100% Padrão Institucional AgoraEuFalo (Sistema Canônico dos 3 Arquétipos)
 Tabela Canônica de Fontes Travadas (13.5 a 17pt) com Seção de Estações do Ano e Adjetivos de Clima/Temperatura na P4!
 """

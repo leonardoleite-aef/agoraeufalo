@@ -89,6 +89,7 @@
           this.currentProfile = await this.getProfile(user.uid);
           if (this.currentProfile) {
             this.currentProfile = await this._mergePreRegistration(user, this.currentProfile);
+            this.currentProfile = this.normalizeUserProfile(this.currentProfile);
             this._syncLocalStorage(this.currentProfile);
           }
           window.dispatchEvent(new CustomEvent('aef:auth-changed', { detail: { user, profile: this.currentProfile } }));
@@ -230,24 +231,6 @@
           } catch (delErr) {
             console.warn("Could not delete pre-registration doc:", delErr);
           }
-        }
-      } else if (!profile.categories || !profile.categories.some(c => c.includes('pago') || c.includes('legado') || c.includes('mentoria'))) {
-        // Fallback JSON check for unmigrated legacy users
-        try {
-          const resp = await fetch('/data/alunos_master_todos_legados.json');
-          if (resp.ok) {
-            const masterData = await resp.json();
-            const legUser = (masterData.alunos || []).find(l => (l.email || '').toLowerCase().trim() === cleanEmail);
-            if (legUser) {
-              const isMS = legUser.categoria === 'magic_stories_legacy' || legUser.is_ms;
-              profile.tier = isMS ? 'ms_legacy' : 'primeiro_legado';
-              profile.categories = Array.from(new Set([...(profile.categories || []), isMS ? 'legado_1' : 'legado_2']));
-              profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), isMS ? 'ms-legacy' : 'english-quickstart']));
-              await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
-            }
-          }
-        } catch(e) {
-          console.warn("Legacy JSON merge failed:", e);
         }
       }
 
@@ -519,12 +502,78 @@
     // USER PROFILE & PRODUCT ACCESS (TIERS)
     // =========================================================================
 
+    normalizeUserProfile(raw) {
+      if (!raw) return null;
+      if (typeof window !== 'undefined' && window.AEFAccessEngine && typeof window.AEFAccessEngine.normalizeUser === 'function') {
+        return window.AEFAccessEngine.normalizeUser(raw);
+      }
+      const email = (raw.email || '').toLowerCase().trim();
+      const uid = String(raw.uid || raw.id || '');
+      const legacyEntitlements = Array.from(new Set(['member_free', ...(raw.categories || [])]));
+      return {
+        ...raw,
+        schemaVersion: 2,
+        uid: uid,
+        email: email,
+        subscriptions: raw.subscriptions || [],
+        purchasedProducts: raw.purchasedProducts || [],
+        legacyEntitlements: raw.legacyEntitlements || legacyEntitlements,
+        legacy: {
+          tier: raw.tier,
+          enrolledProducts: raw.enrolledProducts,
+          categories: raw.categories,
+          subscription: raw.subscription,
+          role: raw.role
+        }
+      };
+    }
+
+    getCurrentProfile() {
+      const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
+      const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
+      const cachedTier = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_tier') : null;
+      const cachedName = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_name') : null;
+      const cachedUid = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_uid') : null;
+      let enrolled = [];
+      try {
+        enrolled = JSON.parse(localStorage.getItem('aef_enrolled_products') || '[]');
+      } catch (e) {}
+
+      const base = this.currentProfile || {};
+      const isAdmin = this.isAdmin();
+      const raw = {
+        ...base,
+        uid: base.uid || this.currentUser?.uid || cachedUid || '',
+        name: base.name || this.currentUser?.displayName || cachedName || 'Aluno AgoraEuFalo',
+        email: base.email || this.currentUser?.email || cachedEmail || '',
+        tier: this.getActiveTier(),
+        role: isAdmin ? 'admin' : (base.role || cachedRole || 'student'),
+        categories: base.categories || (isAdmin ? ['admin'] : []),
+        enrolledProducts: this.getEnrolledProducts() || enrolled,
+        purchasedProducts: this.getEnrolledProducts() || enrolled
+      };
+      return this.normalizeUserProfile(raw);
+    }
+
     async getProfile(uid) {
+      if (!uid) {
+        return this.getCurrentProfile();
+      }
+      if (window.aefUserRepository || window.aefCloudSync?.userRepository) {
+        try {
+          const repo = window.aefUserRepository || window.aefCloudSync.userRepository;
+          const u = await repo.getUser(uid);
+          if (u) return this.normalizeUserProfile(u);
+        } catch (e) {
+          console.warn("[AEFPortalAuth] UserRepository.getUser error, tentando direto:", e);
+        }
+      }
       await this.ready();
       try {
         const doc = await this.db.collection('users').doc(uid).get();
         if (doc.exists) {
-          return doc.data();
+          const raw = doc.data();
+          return this.normalizeUserProfile(raw);
         }
       } catch (err) {
         console.warn("Could not fetch user profile:", err);
@@ -700,6 +749,14 @@
     // =========================================================================
 
     async getAllUsers() {
+      if (window.aefUserRepository || window.aefCloudSync?.userRepository) {
+        try {
+          const repo = window.aefUserRepository || window.aefCloudSync.userRepository;
+          return await repo.getAllUsers();
+        } catch (e) {
+          console.warn("[AEFPortalAuth] UserRepository.getAllUsers error, tentando direto:", e);
+        }
+      }
       await this.ready();
       try {
         const snapshot = await this.db.collection('users').get();
@@ -715,6 +772,14 @@
     }
 
     async getAllStudentsAndMentees() {
+      if (window.aefUserRepository || window.aefCloudSync?.userRepository) {
+        try {
+          const repo = window.aefUserRepository || window.aefCloudSync.userRepository;
+          return await repo.getAllStudentsAndMentees();
+        } catch (e) {
+          console.warn("[AEFPortalAuth] UserRepository.getAllStudentsAndMentees error, tentando direto:", e);
+        }
+      }
       await this.ready();
       const results = {
         users: [],

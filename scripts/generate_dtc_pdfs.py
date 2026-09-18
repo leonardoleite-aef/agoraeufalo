@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-AgoraEuFalo PDF Generator - Dates & Times Complete Module Set
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador foi descontinuado e substituído pela ferramenta oficial v2-pdf-factory.
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo PDF Generator - Dates & Times Complete Module Set (LEGACY)
 Generates luxury A4 light-themed PDFs using Google Chrome Headless.
 Renders high quality pedagogical workbooks with zero obvious translations.
 """

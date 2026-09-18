@@ -17,4 +17,7 @@ wrangler.json
 wrangler.toml
 .chrome-profile
 **/.chrome-profile/**
+data
+data/**
+*.csv
 

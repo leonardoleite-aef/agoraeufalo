@@ -4811,9 +4811,109 @@ for (const [alias, target] of Object.entries(MENTORIA_CANONICAL_ALIASES)) {
   }
 }
 
+// ============================================================================
+// Adaptador V2 & Extração de Metadados Leves (AEF_COURSES_METADATA)
+// ============================================================================
+const AEF_COURSES_METADATA = {};
+
+for (const [cid, course] of Object.entries(AEF_COURSES_DATA)) {
+  if (course && typeof course === 'object') {
+    course.schemaVersion = 2;
+    if (!course.access) {
+      const isFree = course.accessTier === 'free' || (course.badge && course.badge.toUpperCase().includes('GRÁTIS'));
+      const isStandalone = course.accessTier === 'standalone';
+      const isMentoria = course.accessTier === 'mentoria_vip' || cid.startsWith('mentoria-');
+      
+      const entitlements = [];
+      if (isFree) {
+        entitlements.push('member_free', 'member_pago');
+      } else if (isMentoria) {
+        entitlements.push('member_mentoria');
+      } else {
+        entitlements.push('member_pago');
+      }
+
+      if (Array.isArray(course.legacyGrants)) {
+        course.legacyGrants.forEach(lg => {
+          if (!entitlements.includes(lg)) entitlements.push(lg);
+        });
+      }
+
+      if (Array.isArray(course.accessCategories)) {
+        course.accessCategories.forEach(ac => {
+          if (!entitlements.includes(ac)) entitlements.push(ac);
+        });
+      }
+
+      const requiresProductId = [];
+      if (isStandalone || isMentoria) {
+        requiresProductId.push(cid);
+        if (isMentoria) {
+          requiresProductId.push('PROJETO_AEF_2026', 'MENTORIA_VIP');
+        }
+      }
+
+      course.access = {
+        entitlements: entitlements,
+        requiresProductId: requiresProductId,
+        legacyGrantIds: Array.isArray(course.legacyGrants) ? [...course.legacyGrants] : []
+      };
+    }
+
+    // Extrai metadados leves (sem carregar o payload pesado de módulos e lições)
+    const { modules, ...meta } = course;
+    AEF_COURSES_METADATA[cid] = {
+      ...meta,
+      schemaVersion: 2,
+      modulesCount: Array.isArray(modules) ? modules.length : 0,
+      lessonsCount: Array.isArray(modules)
+        ? modules.reduce((acc, m) => acc + (Array.isArray(m.lessons) ? m.lessons.length : 0), 0)
+        : 0
+    };
+  }
+}
+
+// Aliases não-enumeráveis para compatibilidade de rotas também em AEF_COURSES_METADATA
+for (const [alias, target] of Object.entries(MENTORIA_CANONICAL_ALIASES)) {
+  if (AEF_COURSES_METADATA[target]) {
+    Object.defineProperty(AEF_COURSES_METADATA, alias, {
+      get() { return AEF_COURSES_METADATA[target]; },
+      enumerable: false,
+      configurable: true
+    });
+  }
+}
+
+// Helpers de catálogo leve e hidratação sob demanda
+function getCourseMetadata(courseId) {
+  const target = MENTORIA_CANONICAL_ALIASES[courseId] || courseId;
+  return AEF_COURSES_METADATA[target] || null;
+}
+
+function getAllCoursesMetadata() {
+  return AEF_COURSES_METADATA;
+}
+
+function hydrateCourseModules(courseId) {
+  const target = MENTORIA_CANONICAL_ALIASES[courseId] || courseId;
+  return (AEF_COURSES_DATA[target] && AEF_COURSES_DATA[target].modules) || [];
+}
+
 if (typeof window !== "undefined") {
   window.AEF_COURSES_REGISTRY = AEF_COURSES_DATA;
+  window.AEF_COURSES_DATA = AEF_COURSES_DATA;
+  window.AEF_COURSES_METADATA = AEF_COURSES_METADATA;
+  window.getCourseMetadata = getCourseMetadata;
+  window.getAllCoursesMetadata = getAllCoursesMetadata;
+  window.hydrateCourseModules = hydrateCourseModules;
 }
 if (typeof module !== "undefined" && module.exports) {
   module.exports = AEF_COURSES_DATA;
+  module.exports.metadata = AEF_COURSES_METADATA;
+  module.exports.AEF_COURSES_DATA = AEF_COURSES_DATA;
+  module.exports.AEF_COURSES_METADATA = AEF_COURSES_METADATA;
+  module.exports.getCourseMetadata = getCourseMetadata;
+  module.exports.getAllCoursesMetadata = getAllCoursesMetadata;
+  module.exports.hydrateCourseModules = hydrateCourseModules;
 }
+

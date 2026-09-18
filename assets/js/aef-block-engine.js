@@ -7,8 +7,10 @@
  * aplicando segmentação rigorosa por Tiers de usuário (Free, Club, VIP, Unauthenticated).
  */
 
-(function (window) {
+(function (root) {
   'use strict';
+
+  const window = root || (typeof globalThis !== 'undefined' ? globalThis : {});
 
   const STORAGE_KEY = 'aef_marketing_blocks_cache_v4';
 
@@ -257,16 +259,18 @@
 
       // 2. Lê do localStorage e mescla (preserva edições locais sem apagar sementes)
       try {
-        const cached = localStorage.getItem(STORAGE_KEY);
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            parsed.forEach(item => {
-              if (item && item.id) {
-                const existing = blockMap.get(item.id) || {};
-                blockMap.set(item.id, { ...existing, ...item });
-              }
-            });
+        if (typeof localStorage !== 'undefined') {
+          const cached = localStorage.getItem(STORAGE_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              parsed.forEach(item => {
+                if (item && item.id) {
+                  const existing = blockMap.get(item.id) || {};
+                  blockMap.set(item.id, { ...existing, ...item });
+                }
+              });
+            }
           }
         }
       } catch (e) {
@@ -298,7 +302,9 @@
 
     saveToLocalCache() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.blocks));
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(this.blocks));
+        }
       } catch (e) {}
     }
 
@@ -784,19 +790,636 @@
       }
       return fields;
     }
-  }
 
-  // Exportação Global
-  window.AEFBlockEngine = AEFBlockEngine;
-  window.aefBlockEngine = new AEFBlockEngine();
+    // =========================================================================
+    // MOTOR PEDAGÓGICO CANÔNICO & ADAPTADOR DE FORMATOS
+    // =========================================================================
 
-  // Auto-renderiza quando a página carregar
-  if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => window.aefBlockEngine.renderAllSlots());
-    } else {
-      window.aefBlockEngine.renderAllSlots();
+    /**
+     * Analisa o conteúdo pedagógico recebido (seja JSON canônico estruturado ou string legada)
+     * e retorna um array normalizado de blocos didáticos canônicos.
+     * Emite aviso explícito caso o fallback de regex/tags seja acionado.
+     */
+    parsePedagogicalContent(content, options = {}) {
+      if (!content) return [];
+
+      // 1. Caso já seja um array de blocos estruturados
+      if (Array.isArray(content)) {
+        return content;
+      }
+
+      // 2. Se for um objeto com campo 'blocks'
+      if (typeof content === 'object' && Array.isArray(content.blocks)) {
+        return content.blocks;
+      }
+
+      // 3. Se for string, verifica se é JSON serializado
+      if (typeof content === 'string') {
+        const trimmed = content.trim();
+        if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+          try {
+            const parsed = JSON.parse(trimmed);
+            if (Array.isArray(parsed)) {
+              // Verifica se os itens possuem o campo 'type' de blocos canônicos
+              const isCanonical = parsed.some(b => b && typeof b.type === 'string');
+              if (isCanonical) {
+                return parsed;
+              }
+            }
+            if (parsed && Array.isArray(parsed.blocks)) {
+              return parsed.blocks;
+            }
+          } catch (e) {
+            // Não é JSON válido, prossegue para o parser de fallback
+          }
+        }
+
+        // 4. Fallback: Parsing de tags de texto legado ([LR], [VOC], [LA], [Q], etc.)
+        const contextName = options.context || options.lessonTitle || options.id || 'conteúdo didático';
+        console.warn('[AEF Pedagogical Engine] Usando parser legado de tags para: ' + contextName);
+        return this.parseLegacyTags(trimmed);
+      }
+
+      return [];
+    }
+
+    /**
+     * Parser de fallback para converter textos legados com marcadores em blocos estruturados
+     */
+    parseLegacyTags(rawText) {
+      if (!rawText) return [];
+      const text = rawText.trim();
+      if (!text) return [];
+
+      const tagRegex = /\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)\]/gi;
+      const matches = [];
+      let m;
+
+      while ((m = tagRegex.exec(text)) !== null) {
+        let normalizedType = m[1].toUpperCase();
+        if (normalizedType === 'Q') normalizedType = 'LA';
+        matches.push({
+          tag: `[${m[1].toUpperCase()}]`,
+          type: normalizedType,
+          index: m.index
+        });
+      }
+
+      if (matches.length === 0) {
+        const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+        return [{
+          type: 'LR',
+          tag: '[LR]',
+          paragraphs: paragraphs.length > 0 ? paragraphs : [text]
+        }];
+      }
+
+      const blocks = [];
+
+      for (let i = 0; i < matches.length; i++) {
+        const current = matches[i];
+        const startIndex = current.index + current.tag.length;
+        const endIndex = i + 1 < matches.length ? matches[i + 1].index : text.length;
+        const content = text.slice(startIndex, endIndex).trim();
+
+        switch (current.type) {
+          case 'INTRO': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            let focus = '';
+            const keyChunks = [];
+            const grammarPoints = [];
+            const recommendations = [];
+            const roadblocks = [];
+            let currentSection = 'focus';
+
+            for (const line of lines) {
+              const lower = line.toLowerCase();
+              if (lower.startsWith('chunks:') || lower.startsWith('key chunks:')) {
+                currentSection = 'chunks';
+                continue;
+              }
+              if (lower.startsWith('grammar:') || lower.startsWith('pontos gramaticais:')) {
+                currentSection = 'grammar';
+                continue;
+              }
+              if (lower.startsWith('recommendations:') || lower.startsWith('recomendações:')) {
+                currentSection = 'recommendations';
+                continue;
+              }
+              if (lower.startsWith('roadblocks:') || lower.startsWith('dificuldades:')) {
+                currentSection = 'roadblocks';
+                continue;
+              }
+
+              const clean = line.replace(/^[\*\•\-\d+\.]\s*/, '').trim();
+              if (!clean) continue;
+
+              if (currentSection === 'focus') focus = focus ? `${focus} ${clean}` : clean;
+              else if (currentSection === 'chunks') keyChunks.push(clean);
+              else if (currentSection === 'grammar') grammarPoints.push(clean);
+              else if (currentSection === 'recommendations') recommendations.push(clean);
+              else if (currentSection === 'roadblocks') roadblocks.push(clean);
+            }
+
+            blocks.push({
+              type: 'INTRO',
+              tag: '[INTRO]',
+              focus: focus || 'Visão geral da lição.',
+              keyChunks,
+              grammarPoints,
+              recommendations,
+              roadblocks
+            });
+            break;
+          }
+
+          case 'LR': {
+            const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+            blocks.push({
+              type: 'LR',
+              tag: '[LR]',
+              paragraphs: paragraphs.length > 0 ? paragraphs : [content]
+            });
+            break;
+          }
+
+          case 'VOC': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            const items = [];
+            const storyTranslation = [];
+
+            for (const line of lines) {
+              if (line.startsWith('TRADUÇÃO:') || line.startsWith('STORY:')) {
+                storyTranslation.push(line.replace(/^(TRADUÇÃO|STORY):\s*/i, '').trim());
+                continue;
+              }
+              const clean = line.replace(/^[\*\•\-\d+\.]\s*/, '').trim();
+              const sepMatch = clean.match(/^(.*?)\s*[-–—:]\s*(.*)$/);
+              if (sepMatch) {
+                let target = sepMatch[1].trim();
+                let remainder = sepMatch[2].trim();
+                let grammarNote;
+                const noteMatch = remainder.match(/\((.*?)\)$/);
+                if (noteMatch) {
+                  grammarNote = noteMatch[1].trim();
+                  remainder = remainder.replace(/\((.*?)\)$/, '').trim();
+                }
+                items.push({
+                  type: 'chunk',
+                  target,
+                  spokenTranslation: remainder || undefined,
+                  grammarNote
+                });
+              } else if (clean) {
+                items.push({ type: 'general', target: clean });
+              }
+            }
+
+            blocks.push({
+              type: 'VOC',
+              tag: '[VOC]',
+              items: items.length > 0 ? items : [{ type: 'general', target: content }],
+              storyTranslation: storyTranslation.length > 0 ? storyTranslation : undefined
+            });
+            break;
+          }
+
+          case 'LA': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            const drills = [];
+            let currentQuestion = '';
+            let currentAnswers = [];
+            let currentContext = '';
+
+            for (const line of lines) {
+              const qMatch = line.match(/^(?:Q|Pergunta|\d+[\.\)])\s*[:\-]?\s*(.*)$/i);
+              const aMatch = line.match(/^(?:A|Resposta)\s*[:\-]?\s*(.*)$/i);
+              const cMatch = line.match(/^(?:Context|Cenário|Stimulus)\s*[:\-]?\s*(.*)$/i);
+
+              if (cMatch) {
+                currentContext = cMatch[1].trim();
+              } else if (qMatch) {
+                if (currentQuestion) {
+                  drills.push({
+                    negativeContext: currentContext || currentQuestion,
+                    questionVariations: [currentQuestion],
+                    answerVariations: currentAnswers.length > 0 ? currentAnswers : ['Yes/No']
+                  });
+                  currentAnswers = [];
+                  currentContext = '';
+                }
+                currentQuestion = qMatch[1].trim();
+              } else if (aMatch) {
+                currentAnswers.push(aMatch[1].trim());
+              } else if (line.endsWith('?')) {
+                if (currentQuestion) {
+                  drills.push({
+                    negativeContext: currentContext || currentQuestion,
+                    questionVariations: [currentQuestion],
+                    answerVariations: currentAnswers.length > 0 ? currentAnswers : ['Yes/No']
+                  });
+                  currentAnswers = [];
+                  currentContext = '';
+                }
+                currentQuestion = line;
+              } else if (currentQuestion) {
+                currentAnswers.push(line);
+              }
+            }
+
+            if (currentQuestion) {
+              drills.push({
+                negativeContext: currentContext || currentQuestion,
+                questionVariations: [currentQuestion],
+                answerVariations: currentAnswers.length > 0 ? currentAnswers : ['Yes/No']
+              });
+            }
+
+            if (drills.length === 0 && content) {
+              drills.push({
+                negativeContext: content,
+                questionVariations: [content],
+                answerVariations: ['Practice response']
+              });
+            }
+
+            blocks.push({
+              type: 'LA',
+              tag: '[LA]',
+              drills: drills.length > 0 ? drills : [{
+                negativeContext: 'Default drill',
+                questionVariations: ['Listen & Answer drill'],
+                answerVariations: ['Response']
+              }]
+            });
+            break;
+          }
+
+          case 'LRT': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            const guideQuestions = lines.map(l => l.replace(/^[\*\•\-\d+\.]\s*/, '').trim()).filter(Boolean);
+            blocks.push({
+              type: 'LRT',
+              tag: '[LRT]',
+              guideQuestions: guideQuestions.length > 0 ? guideQuestions : [content]
+            });
+            break;
+          }
+
+          case 'LASK': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            const drills = [];
+            for (const line of lines) {
+              const clean = line.replace(/^[\*\•\-\d+\.]\s*/, '').trim();
+              const arrowMatch = clean.match(/^(.*?)\s*(?:->|➔|=>|:\s*pergunta:)\s*(.*)$/i);
+              if (arrowMatch) {
+                drills.push({
+                  negativeContext: arrowMatch[1].trim(),
+                  questionVariations: [arrowMatch[2].trim()],
+                  answerVariations: []
+                });
+              } else if (clean) {
+                drills.push({
+                  negativeContext: clean,
+                  questionVariations: ['Ask question'],
+                  answerVariations: []
+                });
+              }
+            }
+            blocks.push({
+              type: 'LASK',
+              tag: '[LASK]',
+              drills: drills.length > 0 ? drills : [{
+                negativeContext: content,
+                questionVariations: ['Formulate question'],
+                answerVariations: []
+              }]
+            });
+            break;
+          }
+
+          case 'PRO': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            const fullTextWithLinking = [];
+            let goldenTip = '';
+            for (const line of lines) {
+              const tipMatch = line.match(/^(?:Sacada de Ouro|Golden Tip|Dica de Ouro)\s*[:\-]?\s*(.*)$/i);
+              if (tipMatch) goldenTip = tipMatch[1].trim();
+              else if (goldenTip) goldenTip += ` ${line}`;
+              else fullTextWithLinking.push(line);
+            }
+            blocks.push({
+              type: 'PRO',
+              tag: '[PRO]',
+              fullTextWithLinking: fullTextWithLinking.length > 0 ? fullTextWithLinking : [content],
+              goldenTip: goldenTip || 'Conecte os sons consonantais na vogal seguinte para fluência contínua.'
+            });
+            break;
+          }
+
+          case 'QR_CODE': {
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            let url = 'https://agoraeufalo.com.br';
+            let instruction = 'Escaneie para acessar o Training Player';
+            for (const line of lines) {
+              if (/^https?:\/\//i.test(line)) url = line.trim();
+              else instruction = line.replace(/^[\*\•\-]\s*/, '').trim();
+            }
+            blocks.push({
+              type: 'QR_CODE',
+              tag: '[QR_CODE]',
+              url,
+              instruction
+            });
+            break;
+          }
+        }
+      }
+
+      return blocks;
+    }
+
+    /**
+     * Renderiza o fluxo completo de blocos didáticos em HTML no padrão Calm EdTech
+     */
+    renderPedagogicalBlocks(content, options = {}) {
+      const blocks = this.parsePedagogicalContent(content, options);
+      if (!blocks || blocks.length === 0) return '';
+
+      const theme = options.themeId || 'amber';
+      const rendered = blocks.map((b, idx) => this.renderPedagogicalBlock(b, theme, { ...options, index: idx })).join('\n');
+      return `<div class="pedagogical-content-stream space-y-6 max-w-4xl mx-auto">${rendered}</div>`;
+    }
+
+    /**
+     * Renderiza um bloco didático individual em HTML de alto contraste
+     */
+    renderPedagogicalBlock(block, theme = 'amber', options = {}) {
+      if (!block || !block.type) return '';
+
+      switch (block.type) {
+        case 'INTRO':
+          return this.renderIntroBlock(block, theme);
+        case 'LR':
+          return this.renderLRBlock(block, theme);
+        case 'VOC':
+          return this.renderVocBlock(block, theme);
+        case 'LA':
+          return this.renderLABlock(block, theme);
+        case 'LRT':
+          return this.renderLRTBlock(block, theme);
+        case 'LASK':
+          return this.renderLASKBlock(block, theme);
+        case 'PRO':
+          return this.renderProBlock(block, theme);
+        case 'QR_CODE':
+          return this.renderQRCodeBlock(block, theme);
+        default:
+          return '';
+      }
+    }
+
+    renderIntroBlock(block, theme) {
+      const chunksHtml = (block.keyChunks || []).map(c => `<li class="flex items-start gap-2"><span class="text-amber-600 font-bold">•</span><span>${c}</span></li>`).join('');
+      const grammarHtml = (block.grammarPoints || []).map(g => `<li class="flex items-start gap-2"><span class="text-amber-600 font-bold">•</span><span>${g}</span></li>`).join('');
+      const recsHtml = (block.recommendations || []).map(r => `<li class="flex items-start gap-2"><span class="text-emerald-600 font-bold">✓</span><span>${r}</span></li>`).join('');
+      const roadblocksHtml = (block.roadblocks || []).map(rb => `<li class="flex items-start gap-2"><span class="text-amber-700 font-bold">!</span><span>${rb}</span></li>`).join('');
+
+      return `
+        <div class="pedagogical-block intro-block bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-bold text-xs uppercase tracking-wider">
+              ✦ Visão Geral & Foco da Lição
+            </span>
+          </div>
+          ${block.focus ? `
+            <div class="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 mb-6">
+              <p class="text-sm font-semibold text-amber-950 leading-relaxed">${block.focus}</p>
+            </div>
+          ` : ''}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+            ${chunksHtml ? `<div class="p-4 rounded-xl bg-slate-50 border border-slate-200"><h4 class="font-bold text-slate-800 uppercase tracking-wide text-xs mb-2">Key Chunks</h4><ul class="space-y-1.5">${chunksHtml}</ul></div>` : ''}
+            ${grammarHtml ? `<div class="p-4 rounded-xl bg-slate-50 border border-slate-200"><h4 class="font-bold text-slate-800 uppercase tracking-wide text-xs mb-2">Sentimento da Estrutura</h4><ul class="space-y-1.5">${grammarHtml}</ul></div>` : ''}
+            ${recsHtml ? `<div class="p-4 rounded-xl bg-slate-50 border border-slate-200"><h4 class="font-bold text-slate-800 uppercase tracking-wide text-xs mb-2">Recomendações</h4><ul class="space-y-1.5">${recsHtml}</ul></div>` : ''}
+            ${roadblocksHtml ? `<div class="p-4 rounded-xl bg-slate-50 border border-slate-200"><h4 class="font-bold text-slate-800 uppercase tracking-wide text-xs mb-2">Atenção ao Ponto Crítico</h4><ul class="space-y-1.5">${roadblocksHtml}</ul></div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    renderLRBlock(block, theme) {
+      const paragraphsHtml = (block.paragraphs || []).map(p => `
+        <p class="text-base sm:text-[17px] text-slate-900 leading-relaxed font-medium mb-3">${p}</p>
+      `).join('');
+
+      return `
+        <div class="pedagogical-block lr-block bg-amber-50/70 border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center justify-between gap-3 mb-5 border-b border-amber-200/60 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider">
+              1. Listen & Read (LR)
+            </span>
+            <span class="text-xs text-amber-900 font-semibold italic">Foco 100% auditivo • Sem tradução na tela</span>
+          </div>
+          <div class="lr-content space-y-3">
+            ${paragraphsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    renderVocBlock(block, theme) {
+      const itemsHtml = (block.items || []).map(item => `
+        <div class="p-3.5 rounded-2xl bg-white border border-amber-200/80 shadow-xs flex flex-col justify-between">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="font-bold text-slate-900 text-sm sm:text-base">${item.target}</span>
+            <button class="w-6 h-6 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-800 flex items-center justify-center text-xs transition" title="Ouvir chunk">▶</button>
+          </div>
+          ${item.spokenTranslation ? `<div class="text-xs text-amber-950 font-medium">${item.spokenTranslation}</div>` : ''}
+          ${item.grammarNote ? `<div class="text-[11px] text-slate-500 italic mt-1">${item.grammarNote}</div>` : ''}
+        </div>
+      `).join('');
+
+      return `
+        <div class="pedagogical-block voc-block bg-amber-50/50 border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center justify-between gap-3 mb-5 border-b border-amber-200/60 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider">
+              2. Vocabulary Session (VOC)
+            </span>
+            <span class="text-xs text-amber-900 font-semibold italic">Matriz de Chunks & Português Falado Real</span>
+          </div>
+          ${block.storyTranslation && block.storyTranslation.length > 0 ? `
+            <div class="mb-5 p-4 rounded-2xl bg-white/90 border border-amber-200 text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <strong class="text-amber-950 block mb-1">Contexto Geral da História:</strong>
+              ${block.storyTranslation.join('<br>')}
+            </div>
+          ` : ''}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            ${itemsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    renderLABlock(block, theme) {
+      // Regra Estrita Canônica: Zero respostas reveladas na tela do aluno!
+      const drillsHtml = (block.drills || []).map((d, idx) => {
+        const question = d.questionVariations?.[0] || d.negativeContext || 'Question';
+        return `
+          <div class="py-3 border-b border-amber-200/50 last:border-0">
+            <div class="flex items-start gap-2.5">
+              <span class="font-bold text-amber-800 text-sm w-6 shrink-0">${idx + 1}.</span>
+              <div class="flex-1">
+                <p class="text-sm sm:text-base font-semibold text-slate-900 leading-snug">${question}</p>
+                <div class="h-6 border-b border-dashed border-slate-300 mt-2"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="pedagogical-block la-block bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center justify-between gap-3 mb-5 border-b border-amber-200/60 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider">
+              3. Listen & Answer (LA)
+            </span>
+            <span class="text-xs text-amber-900 font-semibold italic">Reflexo imediato • Zero respostas reveladas</span>
+          </div>
+          <div class="space-y-1">
+            ${drillsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    renderLRTBlock(block, theme) {
+      const questionsHtml = (block.guideQuestions || []).map((q, idx) => `
+        <li class="flex items-start gap-2 py-1.5 text-sm sm:text-base text-slate-900 font-medium">
+          <span class="text-amber-800 font-bold">${idx + 1}.</span>
+          <span>${q}</span>
+        </li>
+      `).join('');
+
+      return `
+        <div class="pedagogical-block lrt-block bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center justify-between gap-3 mb-5 border-b border-amber-200/60 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider">
+              4. Look & Retell (LRT)
+            </span>
+            <span class="text-xs text-amber-900 font-semibold italic">Speaking ativo guiado pelas perguntas de LA</span>
+          </div>
+          <p class="text-xs text-slate-600 mb-3 italic">Reconte a história com suas próprias palavras utilizando as perguntas como roteiro mental:</p>
+          <ul class="space-y-1">
+            ${questionsHtml}
+          </ul>
+        </div>
+      `;
+    }
+
+    renderLASKBlock(block, theme) {
+      // Regra Estrita Canônica: Zero perguntas reveladas na tela do aluno!
+      const drillsHtml = (block.drills || []).map((d, idx) => {
+        const stimulus = d.negativeContext || 'Stimulus';
+        return `
+          <div class="py-3 border-b border-amber-200/50 last:border-0">
+            <div class="flex items-start gap-2.5">
+              <span class="font-bold text-amber-800 text-sm w-6 shrink-0">${idx + 1}.</span>
+              <div class="flex-1">
+                <p class="text-sm sm:text-base font-semibold text-slate-900 leading-snug">${stimulus}</p>
+                <div class="h-6 border-b border-dashed border-slate-300 mt-2"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="pedagogical-block lask-block bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center justify-between gap-3 mb-5 border-b border-amber-200/60 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider">
+              5. Listen & Ask (LASK)
+            </span>
+            <span class="text-xs text-amber-900 font-semibold italic">Formulação no reflexo • Zero perguntas reveladas</span>
+          </div>
+          <p class="text-xs text-slate-600 mb-3 italic">Leia a afirmação/negação e formule a pergunta correspondente no reflexo:</p>
+          <div class="space-y-1">
+            ${drillsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    renderProBlock(block, theme) {
+      const sentencesHtml = (block.fullTextWithLinking || []).map(s => `
+        <p class="text-base sm:text-[17px] text-slate-900 leading-relaxed font-medium mb-3">${s}</p>
+      `).join('');
+
+      return `
+        <div class="pedagogical-block pro-block bg-white border-2 border-amber-200 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6">
+          <div class="flex items-center justify-between gap-3 mb-5 border-b border-amber-200/60 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider">
+              6. Pronunciation & Connected Speech (PRO)
+            </span>
+            <span class="text-xs text-amber-900 font-semibold italic">Texto completo com marcações sonoras e linking</span>
+          </div>
+          <div class="pro-content space-y-3 mb-6">
+            ${sentencesHtml}
+          </div>
+          ${block.goldenTip ? `
+            <div class="golden-tip-box bg-amber-100/90 border-2 border-amber-400 rounded-2xl p-5 shadow-xs">
+              <div class="font-serif font-black text-amber-900 text-xs sm:text-sm uppercase tracking-wider mb-1.5 flex items-center gap-2">
+                <span>💡</span> SACADA DE OURO DO PROFESSOR LEO
+              </div>
+              <p class="text-xs sm:text-sm text-amber-950 leading-relaxed font-medium">
+                ${block.goldenTip}
+              </p>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    renderQRCodeBlock(block, theme) {
+      return `
+        <div class="pedagogical-block qr-block bg-white border-2 border-amber-200 rounded-2xl p-6 text-center shadow-xs my-6">
+          <p class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">${block.instruction || 'Escaneie para acessar o conteúdo'}</p>
+          <a href="${block.url}" target="_blank" class="inline-block text-xs text-amber-700 underline font-mono break-all">${block.url}</a>
+        </div>
+      `;
     }
   }
 
-})(window);
+  // Exportação Global
+  const aefBlockEngineInstance = new AEFBlockEngine();
+  const aefPedagogicalEngineInstance = {
+    parse: (content, opt) => aefBlockEngineInstance.parsePedagogicalContent(content, opt),
+    render: (content, opt) => aefBlockEngineInstance.renderPedagogicalBlocks(content, opt),
+    renderBlock: (block, theme, opt) => aefBlockEngineInstance.renderPedagogicalBlock(block, theme, opt)
+  };
+
+  if (typeof root !== 'undefined') {
+    root.AEFBlockEngine = AEFBlockEngine;
+    root.aefBlockEngine = aefBlockEngineInstance;
+    root.AEFPedagogicalEngine = AEFBlockEngine;
+    root.aefPedagogicalEngine = aefPedagogicalEngineInstance;
+  }
+
+  // Auto-renderiza slots de marketing quando a página carregar no navegador
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => aefBlockEngineInstance.renderAllSlots());
+    } else {
+      aefBlockEngineInstance.renderAllSlots();
+    }
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      AEFBlockEngine,
+      aefBlockEngine: aefBlockEngineInstance,
+      AEFPedagogicalEngine: AEFBlockEngine,
+      aefPedagogicalEngine: aefPedagogicalEngineInstance
+    };
+  }
+
+})(typeof window !== 'undefined' ? window : globalThis);

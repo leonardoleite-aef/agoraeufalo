@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-AgoraEuFalo Editorial Prestige Engine - Digital Flow Layout (EQS 1.2)
+[DEPRECATED / OBSOLETO] - Fase 5: Unificação do Pipeline Pedagógico
+Este gerador Python ReportLab foi descontinuado e substituído pela ferramenta oficial v2-pdf-factory.
+Consulte v2-pdf-factory/ e src/types/lesson-schema.ts para a produção oficial.
+
+AgoraEuFalo Editorial Prestige Engine - Digital Flow Layout (EQS 1.2 - LEGACY)
 Generates a dense, highly professional 2-page digital PDF for validation.
 - No waste of paper or screen space.
 - Page 1: Digital Header Banner + Explanations + Bicolour Table + Golden Tip.

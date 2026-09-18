@@ -4,7 +4,7 @@
  * Real-time Firebase Firestore & Google Cloud Storage Integration
  */
 
-(function () {
+(function (root) {
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk",
     authDomain: "agoraeufalo-3463a.firebaseapp.com",
@@ -14,6 +14,999 @@
     appId: "1:973862553705:web:959ea81c80c28cc1dc7af8"
   };
 
+  // =========================================================================
+  // HELPER DE CONVERSÃO REST FIRESTORE & FORMATADORES
+  // =========================================================================
+  function parseRestField(field) {
+    if (!field) return null;
+    if (field.stringValue !== undefined) return field.stringValue;
+    if (field.integerValue !== undefined) return parseInt(field.integerValue, 10);
+    if (field.doubleValue !== undefined) return parseFloat(field.doubleValue);
+    if (field.booleanValue !== undefined) return field.booleanValue;
+    if (field.nullValue !== undefined) return null;
+    if (field.arrayValue) {
+      return (field.arrayValue.values || []).map(parseRestField);
+    }
+    if (field.mapValue) {
+      const res = {};
+      for (const [k, v] of Object.entries(field.mapValue.fields || {})) {
+        res[k] = parseRestField(v);
+      }
+      return res;
+    }
+    return null;
+  }
+
+  function parseRestDoc(doc, fallbackId = "") {
+    if (!doc) return null;
+    const id = doc.name ? doc.name.split("/").pop() : fallbackId;
+    const obj = { id };
+    const fields = doc.fields || {};
+    for (const [k, v] of Object.entries(fields)) {
+      obj[k] = parseRestField(v);
+    }
+    return obj;
+  }
+
+  function toFirestoreRestFields(obj) {
+    const fields = {};
+    for (const [k, v] of Object.entries(obj)) {
+      if (v === undefined || typeof v === "function" || k === "modules" || k === "lessons") continue;
+
+      if (Array.isArray(v) && k !== "sentences" && k !== "chunks" && k !== "exercises" && k !== "media" && k !== "downloads") {
+        fields[k] = {
+          arrayValue: {
+            values: v.map(str => ({ stringValue: String(str) }))
+          }
+        };
+        continue;
+      }
+
+      if (k === "sentences" && Array.isArray(v)) {
+        fields[k] = {
+          arrayValue: {
+            values: v.map(s => ({
+              mapValue: {
+                fields: {
+                  id: { integerValue: String(s.id || 1) },
+                  start: { doubleValue: parseFloat(s.start) || 0.0 },
+                  end: { doubleValue: parseFloat(s.end) || 0.0 },
+                  text: { stringValue: s.text || "" },
+                  spokenTranslation: { stringValue: s.spokenTranslation || s.translation || "" },
+                  notes: { stringValue: s.notes || "" }
+                }
+              }
+            }))
+          }
+        };
+      } else if (k === "media" && Array.isArray(v)) {
+        fields[k] = {
+          arrayValue: {
+            values: v.map(m => {
+              const mf = {
+                type: { stringValue: m.type || "video_youtube" },
+                url: { stringValue: m.url || "" },
+                title: { stringValue: m.title || "" }
+              };
+              if (m.durationStr) mf.durationStr = { stringValue: m.durationStr };
+              if (m.thumbnailUrl) mf.thumbnailUrl = { stringValue: m.thumbnailUrl };
+              return { mapValue: { fields: mf } };
+            })
+          }
+        };
+      } else if (k === "downloads" && Array.isArray(v)) {
+        fields[k] = {
+          arrayValue: {
+            values: v.map(d => ({
+              mapValue: {
+                fields: {
+                  type: { stringValue: d.type || "pdf" },
+                  url: { stringValue: d.url || "" },
+                  title: { stringValue: d.title || "" }
+                }
+              }
+            }))
+          }
+        };
+      } else if (typeof v === "string") {
+        fields[k] = { stringValue: v };
+      } else if (typeof v === "number") {
+        fields[k] = Number.isInteger(v) ? { integerValue: v.toString() } : { doubleValue: v };
+      } else if (typeof v === "boolean") {
+        fields[k] = { booleanValue: v };
+      } else if (Array.isArray(v)) {
+        fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
+      } else if (typeof v === "object" && v !== null) {
+        fields[k] = { mapValue: { fields: toFirestoreRestFields(v) } };
+      }
+    }
+    return fields;
+  }
+
+  // =========================================================================
+  // NORMALIZADORES V2 COM FALLBACK SEGURO
+  // =========================================================================
+  function normalizeCourseSafe(course) {
+    if (!course) return course;
+    if (typeof root !== "undefined" && root.AEFAccessEngine && typeof root.AEFAccessEngine.normalizeCourse === "function") {
+      return root.AEFAccessEngine.normalizeCourse(course);
+    }
+    if (typeof window !== "undefined" && window.AEFAccessEngine && typeof window.AEFAccessEngine.normalizeCourse === "function") {
+      return window.AEFAccessEngine.normalizeCourse(course);
+    }
+    try {
+      if (typeof require === "function") {
+        const engine = require("./aef-access-engine.js");
+        if (engine && typeof engine.normalizeCourse === "function") return engine.normalizeCourse(course);
+      }
+    } catch (e) {}
+    const id = String(course.id || "");
+    const title = course.title || id;
+    const accessTier = course.accessTier || (id.startsWith("ms-") ? "all_access" : (course.tierRequired === "vip" ? "standalone" : "all_access"));
+    const access = course.access && typeof course.access === "object" ? {
+      entitlements: Array.isArray(course.access.entitlements) ? [...course.access.entitlements] : [],
+      requiresProductId: Array.isArray(course.access.requiresProductId) ? [...course.access.requiresProductId] : [],
+      legacyGrantIds: Array.isArray(course.access.legacyGrantIds) ? [...course.access.legacyGrantIds] : []
+    } : {
+      entitlements: accessTier === "free" ? ["member_free", "member_pago"] : ["member_pago"],
+      requiresProductId: accessTier === "standalone" ? [id] : [],
+      legacyGrantIds: []
+    };
+    return {
+      ...course,
+      schemaVersion: 2,
+      id,
+      title,
+      accessTier,
+      access,
+      isPublished: course.isPublished !== undefined ? Boolean(course.isPublished) : (course.published !== false),
+      categories: Array.isArray(course.categories) ? course.categories : ["magic_stories"]
+    };
+  }
+
+  function normalizeUserSafe(user) {
+    if (!user) return user;
+    if (typeof root !== "undefined" && root.AEFAccessEngine && typeof root.AEFAccessEngine.normalizeUser === "function") {
+      return root.AEFAccessEngine.normalizeUser(user);
+    }
+    if (typeof window !== "undefined" && window.AEFAccessEngine && typeof window.AEFAccessEngine.normalizeUser === "function") {
+      return window.AEFAccessEngine.normalizeUser(user);
+    }
+    try {
+      if (typeof require === "function") {
+        const engine = require("./aef-access-engine.js");
+        if (engine && typeof engine.normalizeUser === "function") return engine.normalizeUser(user);
+      }
+    } catch (e) {}
+    const email = (user.email || "").toLowerCase().trim();
+    const uid = String(user.uid || user.id || (email ? email.replace(/[^a-zA-Z0-9]/g, "_") : "user"));
+    const id = String(user.id || uid);
+    const name = String(user.name || user.displayName || (email ? email.split("@")[0] : "Aluno AgoraEuFalo"));
+    let role = user.role || "student";
+    if (user.tier === "admin_master" || (Array.isArray(user.categories) && user.categories.includes("admin")) || email === "selexenglish@gmail.com" || email === "leonardo@agoraeufalo.com.br") {
+      role = "admin";
+    }
+    const categories = Array.isArray(user.categories) && user.categories.length > 0
+      ? Array.from(new Set(["member_free", ...user.categories]))
+      : (user.tier === "vip_mentorship" ? ["member_free", "member_pago", "member_mentoria"] : ["member_free", "member_pago"]);
+    const subscriptions = Array.isArray(user.subscriptions) ? user.subscriptions : [];
+    const legacyEntitlements = Array.isArray(user.legacyEntitlements) && user.legacyEntitlements.length > 0
+      ? user.legacyEntitlements
+      : Array.from(new Set(["member_free", ...categories.filter(c => typeof c === "string" && c.startsWith("legado_"))]));
+
+    return {
+      ...user,
+      schemaVersion: 2,
+      id,
+      uid,
+      email,
+      name,
+      role,
+      categories,
+      subscriptions,
+      purchasedProducts: Array.isArray(user.purchasedProducts) ? user.purchasedProducts : [],
+      legacyEntitlements,
+      createdAt: user.createdAt || new Date().toISOString(),
+      updatedAt: user.updatedAt || new Date().toISOString()
+    };
+  }
+
+  // =========================================================================
+  // COURSE REPOSITORY (Padrão de Repositório Explícito & Fim do Merge Silencioso)
+  // =========================================================================
+  class CourseRepository {
+    constructor(cloudSync) {
+      this.sync = cloudSync;
+    }
+
+    /**
+     * Obtém a hierarquia completa de um curso específico (Curso > Módulos > Lições).
+     * Hierarquia Determinística:
+     * - Prioridade 1: Firestore Remoto (SDK com REST fallback).
+     * - Fallback 2: Cache local / Registro estático com log explícito.
+     * Saída: Sempre normalizada pelo Contrato V2 (normalizeCourseToV2).
+     */
+    async getCourseHierarchy(courseId, baseRegistry = null) {
+      if (!courseId) throw new Error("courseId é obrigatório para getCourseHierarchy");
+      await this.sync.init();
+
+      const baseCourses = baseRegistry || (typeof window !== "undefined" ? window.AEF_COURSES_REGISTRY || {} : {});
+      let remoteCourse = null;
+      let remoteFound = false;
+
+      // 1. PRIORIDADE 1: Busca Remota no Firestore (SDK)
+      if (this.sync.db) {
+        try {
+          const cDoc = await Promise.race([
+            this.sync.db.collection("courses").doc(courseId).get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on course.get()")), 5000))
+          ]);
+
+          if (cDoc.exists) {
+            remoteCourse = { id: cDoc.id, ...cDoc.data(), modules: [] };
+            remoteFound = true;
+
+            const modulesSnap = await this.sync.db.collection("courses").doc(courseId).collection("modules").get();
+            if (!modulesSnap.empty) {
+              const modulePromises = modulesSnap.docs.map(async (mDoc) => {
+                const mid = mDoc.id;
+                const mObj = { id: mid, ...mDoc.data(), lessons: [] };
+                try {
+                  const lessonsSnap = await this.sync.db
+                    .collection("courses").doc(courseId)
+                    .collection("modules").doc(mid)
+                    .collection("lessons").get();
+                  if (!lessonsSnap.empty) {
+                    mObj.lessons = lessonsSnap.docs.map(lDoc => ({ id: lDoc.id, ...lDoc.data() }));
+                    mObj.lessons.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                  }
+                } catch (le) {
+                  console.warn(`[AEF Repository] Aviso ao buscar lições de ${courseId}/${mid}:`, le);
+                }
+                return mObj;
+              });
+              remoteCourse.modules = await Promise.all(modulePromises);
+              remoteCourse.modules.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+            }
+          }
+        } catch (err) {
+          console.warn(`[AEF Repository] SDK Firestore falhou para curso "${courseId}", tentando REST:`, err);
+        }
+      }
+
+      // 2. PRIORIDADE 1 (continuação): REST Fallback se SDK não obteve sucesso
+      if (!remoteFound) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}`;
+          const res = await fetch(restUrl);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.fields) {
+              remoteCourse = parseRestDoc(data, courseId);
+              remoteCourse.modules = [];
+              remoteFound = true;
+
+              const mRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules`);
+              if (mRes.ok) {
+                const mData = await mRes.json();
+                if (mData && Array.isArray(mData.documents)) {
+                  for (const mDoc of mData.documents) {
+                    const mid = mDoc.name.split("/").pop();
+                    const mObj = parseRestDoc(mDoc, mid);
+                    mObj.lessons = [];
+
+                    const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}/lessons`);
+                    if (lRes.ok) {
+                      const lData = await lRes.json();
+                      if (lData && Array.isArray(lData.documents)) {
+                        mObj.lessons = lData.documents.map(lDoc => parseRestDoc(lDoc, lDoc.name.split("/").pop()));
+                        mObj.lessons.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                      }
+                    }
+                    remoteCourse.modules.push(mObj);
+                  }
+                  remoteCourse.modules.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                }
+              }
+            }
+          }
+        } catch (restErr) {
+          // Erro de rede / offline
+        }
+      }
+
+      // 3. SELEÇÃO DETERMINÍSTICA (Fim do Merge Cego)
+      let finalCourse = null;
+      if (remoteFound && remoteCourse) {
+        finalCourse = remoteCourse;
+        try {
+          if (typeof localStorage !== "undefined") {
+            localStorage.setItem(`aef_course_cache_${courseId}`, JSON.stringify(remoteCourse));
+          }
+        } catch (e) {}
+      } else {
+        // FALLBACK 2: Dados locais / estáticos
+        console.warn(`[AEF Repository] Usando dados locais de fallback para: curso "${courseId}"`);
+        let cached = null;
+        try {
+          if (typeof localStorage !== "undefined") {
+            const raw = localStorage.getItem(`aef_course_cache_${courseId}`);
+            if (raw) cached = JSON.parse(raw);
+          }
+        } catch (e) {}
+
+        const localBase = cached || baseCourses[courseId] || { id: courseId, title: courseId, modules: [] };
+        finalCourse = JSON.parse(JSON.stringify(localBase));
+      }
+
+      // 4. NORMALIZAÇÃO AUTOMÁTICA NA SAÍDA (V2)
+      return normalizeCourseSafe(finalCourse);
+    }
+
+    /**
+     * Obtém apenas a lista leve de metadados dos cursos (sem carregar módulos e lições).
+     * Ideal para renderizar cards, vitrines, menus e dropdowns instantaneamente.
+     */
+    async getCoursesMetadata(baseRegistry = null) {
+      await this.sync.init();
+      const metaSource = (typeof window !== "undefined" && window.AEF_COURSES_METADATA)
+        ? window.AEF_COURSES_METADATA
+        : (baseRegistry || (typeof window !== "undefined" ? window.AEF_COURSES_REGISTRY || {} : {}));
+
+      const result = {};
+      let remoteList = [];
+      let remoteSuccess = false;
+
+      // 1. Consulta remota leve no Firestore (apenas coleção "courses", sem subcoleções)
+      if (this.sync.db) {
+        try {
+          const snap = await Promise.race([
+            this.sync.db.collection("courses").get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
+          ]);
+          if (!snap.empty) {
+            snap.forEach(doc => {
+              const d = doc.data();
+              const { modules, ...meta } = d;
+              remoteList.push({ id: doc.id, ...meta, modules: [] });
+            });
+            remoteSuccess = true;
+          }
+        } catch (err) {
+          console.warn("[AEF Repository] SDK falhou ao listar metadados de cursos, tentando REST:", err);
+        }
+      }
+
+      if (!remoteSuccess) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.documents)) {
+              remoteList = data.documents.map(doc => {
+                const parsed = parseRestDoc(doc, doc.name.split("/").pop());
+                const { modules, ...meta } = parsed;
+                return { ...meta, modules: [] };
+              });
+              remoteSuccess = true;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (remoteSuccess && remoteList.length > 0) {
+        remoteList.forEach(c => {
+          result[c.id] = normalizeCourseSafe({ ...c, modules: [] });
+        });
+
+        for (const [cid, baseC] of Object.entries(metaSource)) {
+          if (!result[cid]) {
+            console.warn(`[AEF Repository] Usando dados locais de fallback para: curso "${cid}"`);
+            const { modules, ...meta } = baseC || {};
+            result[cid] = normalizeCourseSafe({ ...meta, modules: [] });
+          }
+        }
+      } else {
+        console.warn("[AEF Repository] Usando dados locais de fallback para: catálogo de cursos");
+        for (const [cid, baseC] of Object.entries(metaSource)) {
+          const { modules, ...meta } = baseC || {};
+          result[cid] = normalizeCourseSafe({ ...meta, modules: [] });
+        }
+      }
+
+      return result;
+    }
+
+    /**
+     * Lista de cursos (sem traversal de módulos/lições).
+     * Delega para getCoursesMetadata para garantir carregamento leve de alta performance.
+     */
+    async getCoursesList(baseRegistry = null) {
+      return this.getCoursesMetadata(baseRegistry);
+    }
+
+    /**
+     * Hidrata a árvore completa de módulos e lições sob demanda para um curso específico.
+     * Atua como alias semântico explícito de getCourseHierarchy.
+     */
+    async hydrateCourse(courseId, baseRegistry = null) {
+      return this.getCourseHierarchy(courseId, baseRegistry);
+    }
+
+    /**
+     * Hidrata uma lição específica sob demanda (vídeo, áudio, roteiro, etc.).
+     */
+    async hydrateLesson(courseId, moduleId, lessonId) {
+      if (!courseId || !moduleId || !lessonId) throw new Error("courseId, moduleId e lessonId são obrigatórios");
+      const course = await this.getCourseHierarchy(courseId);
+      const mod = (course.modules || []).find(m => m.id === moduleId);
+      const lesson = mod ? (mod.lessons || []).find(l => l.id === lessonId) : null;
+      return lesson || null;
+    }
+
+
+    /**
+     * Hierarquia dinâmica completa de todos os cursos.
+     */
+    async getCoursesHierarchy(baseRegistry = null) {
+      await this.sync.init();
+      const baseCourses = baseRegistry || (typeof window !== "undefined" ? window.AEF_COURSES_REGISTRY || {} : {});
+      const result = {};
+      let remoteCourses = [];
+      let remoteSuccess = false;
+
+      if (this.sync.db) {
+        try {
+          const snap = await Promise.race([
+            this.sync.db.collection("courses").get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 6000))
+          ]);
+          if (!snap.empty) {
+            const coursePromises = snap.docs.map(async (cDoc) => {
+              const cid = cDoc.id;
+              const cObj = { id: cid, ...cDoc.data(), modules: [] };
+              try {
+                const mSnap = await this.sync.db.collection("courses").doc(cid).collection("modules").get();
+                if (!mSnap.empty) {
+                  const mPromises = mSnap.docs.map(async (mDoc) => {
+                    const mid = mDoc.id;
+                    const mObj = { id: mid, ...mDoc.data(), lessons: [] };
+                    try {
+                      const lSnap = await this.sync.db.collection("courses").doc(cid).collection("modules").doc(mid).collection("lessons").get();
+                      if (!lSnap.empty) {
+                        mObj.lessons = lSnap.docs.map(lDoc => ({ id: lDoc.id, ...lDoc.data() }));
+                        mObj.lessons.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                      }
+                    } catch (le) {}
+                    return mObj;
+                  });
+                  cObj.modules = await Promise.all(mPromises);
+                  cObj.modules.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                }
+              } catch (me) {}
+              return cObj;
+            });
+            remoteCourses = await Promise.all(coursePromises);
+            remoteSuccess = true;
+          }
+        } catch (err) {
+          console.warn("[AEF Repository] SDK falhou na hierarquia geral de cursos, tentando REST:", err);
+        }
+      }
+
+      if (!remoteSuccess) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.documents)) {
+              for (const doc of data.documents) {
+                const cid = doc.name.split("/").pop();
+                const cObj = parseRestDoc(doc, cid);
+                cObj.modules = [];
+
+                try {
+                  const mRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules`);
+                  if (mRes.ok) {
+                    const mData = await mRes.json();
+                    if (mData && Array.isArray(mData.documents)) {
+                      for (const mDoc of mData.documents) {
+                        const mid = mDoc.name.split("/").pop();
+                        const mObj = parseRestDoc(mDoc, mid);
+                        mObj.lessons = [];
+
+                        try {
+                          const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules/${mid}/lessons`);
+                          if (lRes.ok) {
+                            const lData = await lRes.json();
+                            if (lData && Array.isArray(lData.documents)) {
+                              mObj.lessons = lData.documents.map(lDoc => parseRestDoc(lDoc, lDoc.name.split("/").pop()));
+                              mObj.lessons.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                            }
+                          }
+                        } catch (le) {}
+
+                        cObj.modules.push(mObj);
+                      }
+                      cObj.modules.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                    }
+                  }
+                } catch (me) {}
+
+                remoteCourses.push(cObj);
+              }
+              remoteSuccess = true;
+            }
+          }
+        } catch (restErr) {}
+      }
+
+      if (remoteSuccess && remoteCourses.length > 0) {
+        remoteCourses.forEach(c => {
+          result[c.id] = normalizeCourseSafe(c);
+        });
+
+        for (const [cid, baseC] of Object.entries(baseCourses)) {
+          if (!result[cid]) {
+            console.warn(`[AEF Repository] Usando dados locais de fallback para: curso "${cid}"`);
+            result[cid] = normalizeCourseSafe(JSON.parse(JSON.stringify(baseC)));
+          }
+        }
+      } else {
+        console.warn("[AEF Repository] Usando dados locais de fallback para: lista completa de cursos");
+        for (const [cid, baseC] of Object.entries(baseCourses)) {
+          result[cid] = normalizeCourseSafe(JSON.parse(JSON.stringify(baseC)));
+        }
+      }
+
+      return result;
+    }
+
+    async saveCourse(courseData) {
+      if (!courseData || !courseData.id) throw new Error("ID do curso obrigatório.");
+      await this.sync.init();
+      const cid = courseData.id;
+      const payload = normalizeCourseSafe({ ...courseData });
+      payload.updatedAt = new Date().toISOString();
+
+      let saved = false;
+      if (this.sync.db) {
+        try {
+          await this.sync.db.collection("courses").doc(cid).set(payload, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("[AEF Repository] SDK saveCourse error, tentando REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}`;
+        const res = await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: toFirestoreRestFields(payload) })
+        });
+        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+      }
+
+      try {
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem(`aef_course_cache_${cid}`, JSON.stringify(payload));
+        }
+      } catch (e) {}
+
+      console.log(`☁️ [AEF Repository] Curso "${payload.title}" salvo com sucesso no Firestore!`);
+      return payload;
+    }
+
+    async saveModule(courseId, moduleData) {
+      if (!courseId || !moduleData || !moduleData.id) throw new Error("CourseId e ModuleId obrigatórios.");
+      await this.sync.init();
+      const mid = moduleData.id;
+      const payload = {
+        id: mid,
+        courseId: courseId,
+        title: moduleData.title || mid,
+        order: parseInt(moduleData.order) || 1,
+        description: moduleData.description || "",
+        published: moduleData.published !== false,
+        badge: moduleData.badge || "",
+        stats: moduleData.stats || "",
+        updatedAt: new Date().toISOString()
+      };
+
+      let saved = false;
+      if (this.sync.db) {
+        try {
+          await this.sync.db.collection("courses").doc(courseId).collection("modules").doc(mid).set(payload, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("[AEF Repository] SDK saveModule error, tentando REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}`;
+        const res = await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: toFirestoreRestFields(payload) })
+        });
+        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+      }
+
+      console.log(`☁️ [AEF Repository] Módulo "${payload.title}" salvo com sucesso em courses/${courseId}/modules/${mid}`);
+      return payload;
+    }
+
+    async saveLesson(courseId, moduleId, lessonData) {
+      if (!courseId || !moduleId || !lessonData || !lessonData.id) throw new Error("CourseId, ModuleId e LessonId obrigatórios.");
+      await this.sync.init();
+      const lid = lessonData.id;
+      const payload = {
+        id: lid,
+        courseId: courseId,
+        moduleId: moduleId,
+        type: lessonData.type || (lessonData.quizId ? "quiz" : "lesson"),
+        quizId: lessonData.quizId || "",
+        title: lessonData.title || "Aula sem título",
+        order: parseInt(lessonData.order) || 1,
+        videoUrl: lessonData.videoUrl || "",
+        audioUrl: lessonData.audioUrl || "",
+        pdfUrl: lessonData.pdfUrl || "",
+        artworkUrl: lessonData.artworkUrl || "",
+        thumbnailUrl: lessonData.thumbnailUrl || "",
+        goldenTip: lessonData.goldenTip || "",
+        hasTrainingTrack: lessonData.hasTrainingTrack !== false,
+        published: lessonData.published !== false,
+        rawScript: lessonData.rawScript || "",
+        processedContentHtml: lessonData.processedContentHtml || "",
+        aiStatus: lessonData.aiStatus || "draft_pending",
+        updatedAt: new Date().toISOString()
+      };
+      if (lessonData.quizData) {
+        payload.quizData = typeof lessonData.quizData === "object" ? lessonData.quizData : JSON.parse(lessonData.quizData);
+        payload.quizDataJson = JSON.stringify(payload.quizData);
+      } else if (lessonData.quizDataJson) {
+        payload.quizDataJson = lessonData.quizDataJson;
+      }
+      if (lessonData.duration) payload.duration = lessonData.duration;
+      if (lessonData.activity) payload.activity = lessonData.activity;
+      if (lessonData.trainingTrackId) payload.trainingTrackId = lessonData.trainingTrackId;
+      if (lessonData.description) payload.description = lessonData.description;
+      if (lessonData.sentences && Array.isArray(lessonData.sentences)) {
+        payload.sentences = lessonData.sentences.map((s, idx) => ({
+          id: s.id || (idx + 1),
+          start: parseFloat(s.start) || 0.0,
+          end: parseFloat(s.end) || 0.0,
+          text: s.text || "",
+          spokenTranslation: s.spokenTranslation || s.translation || "",
+          notes: s.notes || ""
+        }));
+      }
+      if (lessonData.media && Array.isArray(lessonData.media)) {
+        payload.media = lessonData.media;
+      }
+      if (lessonData.downloads && Array.isArray(lessonData.downloads)) {
+        payload.downloads = lessonData.downloads;
+      }
+
+      let saved = false;
+      if (this.sync.db) {
+        try {
+          await this.sync.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lid).set(payload, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("[AEF Repository] SDK saveLesson error, tentando REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lid}`;
+        const res = await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: toFirestoreRestFields(payload) })
+        });
+        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+      }
+
+      console.log(`☁️ [AEF Repository] Lição "${payload.title}" salva com sucesso em courses/${courseId}/modules/${moduleId}/lessons/${lid}`);
+      return payload;
+    }
+
+    async deleteModule(courseId, moduleId) {
+      if (!courseId || !moduleId) return false;
+      await this.sync.init();
+      let deleted = false;
+      if (this.sync.db) {
+        try {
+          const lessonsSnap = await this.sync.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").get();
+          const batch = this.sync.db.batch();
+          lessonsSnap.forEach(doc => batch.delete(doc.ref));
+          batch.delete(this.sync.db.collection("courses").doc(courseId).collection("modules").doc(moduleId));
+          await batch.commit();
+          deleted = true;
+        } catch (e) {
+          console.warn("[AEF Repository] Erro ao deletar módulo via SDK, tentando REST:", e);
+        }
+      }
+      if (!deleted) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}`;
+          const res = await fetch(restUrl, { method: "DELETE" });
+          deleted = res.ok;
+        } catch (re) {
+          console.warn("[AEF Repository] Erro ao deletar módulo via REST:", re);
+        }
+      }
+      return deleted;
+    }
+
+    async deleteLesson(courseId, moduleId, lessonId) {
+      if (!courseId || !moduleId || !lessonId) return false;
+      await this.sync.init();
+      let deleted = false;
+      if (this.sync.db) {
+        try {
+          await this.sync.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lessonId).delete();
+          deleted = true;
+        } catch (e) {
+          console.warn("[AEF Repository] Erro ao deletar lição via SDK, tentando REST:", e);
+        }
+      }
+      if (!deleted) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`;
+          const res = await fetch(restUrl, { method: "DELETE" });
+          deleted = res.ok;
+        } catch (re) {
+          console.warn("[AEF Repository] Erro ao deletar lição via REST:", re);
+        }
+      }
+      return deleted;
+    }
+  }
+
+  // =========================================================================
+  // USER REPOSITORY (Padrão de Repositório Explícito & Fim do Merge Silencioso)
+  // =========================================================================
+  class UserRepository {
+    constructor(cloudSync) {
+      this.sync = cloudSync;
+    }
+
+    /**
+     * Obtém o perfil completo de um usuário.
+     * Hierarquia Determinística:
+     * - Prioridade 1: Documento remoto no Firestore (SDK + REST).
+     * - Fallback 2: Cache local (localStorage) com log explícito.
+     * Saída normalizada para AEFUser V2 (normalizeUserToV2).
+     */
+    async getUser(userId) {
+      if (!userId) return null;
+      await this.sync.init();
+
+      let remoteUser = null;
+      let remoteSuccess = false;
+
+      // 1. PRIORIDADE 1: Firestore Remoto (SDK)
+      if (this.sync.db) {
+        try {
+          const doc = await Promise.race([
+            this.sync.db.collection("users").doc(userId).get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on user.get()")), 5000))
+          ]);
+          if (doc.exists) {
+            remoteUser = { id: doc.id, uid: doc.id, ...doc.data() };
+            remoteSuccess = true;
+          }
+        } catch (err) {
+          console.warn(`[AEF Repository] SDK falhou para usuário "${userId}", tentando REST:`, err);
+        }
+      }
+
+      // 2. PRIORIDADE 1 (continuação): REST Fallback
+      if (!remoteSuccess) {
+        try {
+          const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users/${userId}`;
+          const res = await fetch(restUrl);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.fields) {
+              remoteUser = parseRestDoc(data, userId);
+              remoteSuccess = true;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 3. SELEÇÃO DETERMINÍSTICA
+      if (remoteSuccess && remoteUser) {
+        try {
+          if (typeof localStorage !== "undefined") {
+            localStorage.setItem(`aef_user_cache_${userId}`, JSON.stringify(remoteUser));
+          }
+        } catch (e) {}
+        return normalizeUserSafe(remoteUser);
+      }
+
+      // 4. FALLBACK 2: Cache Local com advertência explícita
+      console.warn(`[AEF Repository] Usando dados locais de fallback para: perfil do usuário "${userId}"`);
+      let cached = null;
+      try {
+        if (typeof localStorage !== "undefined") {
+          const raw = localStorage.getItem(`aef_user_cache_${userId}`) || localStorage.getItem("aef_user_profile");
+          if (raw) cached = JSON.parse(raw);
+        }
+      } catch (e) {}
+
+      if (cached) {
+        return normalizeUserSafe(cached);
+      }
+
+      return null;
+    }
+
+    /**
+     * Obtém todos os usuários para administração e CRM.
+     */
+    async getAllUsers() {
+      await this.sync.init();
+      let users = [];
+      let remoteSuccess = false;
+
+      if (this.sync.db) {
+        try {
+          const snap = await Promise.race([
+            this.sync.db.collection("users").get(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 6000))
+          ]);
+          if (!snap.empty) {
+            snap.forEach(doc => {
+              users.push({ id: doc.id, uid: doc.id, ...doc.data() });
+            });
+            remoteSuccess = true;
+          }
+        } catch (e) {
+          console.warn("[AEF Repository] SDK falhou em getAllUsers, tentando REST:", e);
+        }
+      }
+
+      if (!remoteSuccess) {
+        try {
+          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users?pageSize=300`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.documents)) {
+              users = data.documents.map(d => parseRestDoc(d, d.name.split("/").pop()));
+              remoteSuccess = true;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (remoteSuccess && users.length > 0) {
+        try {
+          if (typeof localStorage !== "undefined") {
+            localStorage.setItem("aef_all_users_cache", JSON.stringify(users));
+          }
+        } catch (e) {}
+        return users.map(normalizeUserSafe);
+      }
+
+      console.warn("[AEF Repository] Usando dados locais de fallback para: lista de usuários");
+      try {
+        if (typeof localStorage !== "undefined") {
+          const raw = localStorage.getItem("aef_all_users_cache");
+          if (raw) {
+            const cached = JSON.parse(raw);
+            if (Array.isArray(cached)) return cached.map(normalizeUserSafe);
+          }
+        }
+      } catch (e) {}
+
+      return [];
+    }
+
+    /**
+     * Obtém tanto usuários gerais quanto mentorados VIP (students collection).
+     */
+    async getAllStudentsAndMentees() {
+      await this.sync.init();
+      const results = { users: [], vipMentees: [] };
+      let remoteSuccess = false;
+
+      if (this.sync.db) {
+        try {
+          const [usersSnap, menteesSnap] = await Promise.all([
+            this.sync.db.collection("users").get(),
+            this.sync.db.collection("students").get()
+          ]);
+          if (!usersSnap.empty || !menteesSnap.empty) {
+            usersSnap.forEach(doc => {
+              results.users.push(normalizeUserSafe({ id: doc.id, uid: doc.id, ...doc.data() }));
+            });
+            menteesSnap.forEach(doc => {
+              results.vipMentees.push(normalizeUserSafe({ id: doc.id, uid: doc.id, ...doc.data() }));
+            });
+            remoteSuccess = true;
+          }
+        } catch (e) {
+          console.warn("[AEF Repository] SDK falhou em getAllStudentsAndMentees, tentando REST:", e);
+        }
+      }
+
+      if (!remoteSuccess) {
+        try {
+          const [uRes, mRes] = await Promise.all([
+            fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users?pageSize=300`),
+            fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/students?pageSize=300`)
+          ]);
+          if (uRes.ok) {
+            const uData = await uRes.json();
+            if (uData && Array.isArray(uData.documents)) {
+              results.users = uData.documents.map(d => normalizeUserSafe(parseRestDoc(d, d.name.split("/").pop())));
+              remoteSuccess = true;
+            }
+          }
+          if (mRes.ok) {
+            const mData = await mRes.json();
+            if (mData && Array.isArray(mData.documents)) {
+              results.vipMentees = mData.documents.map(d => normalizeUserSafe(parseRestDoc(d, d.name.split("/").pop())));
+              remoteSuccess = true;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (remoteSuccess) {
+        return results;
+      }
+
+      console.warn("[AEF Repository] Usando dados locais de fallback para: lista de alunos e mentorados VIP");
+      return results;
+    }
+
+    /**
+     * Salva ou atualiza um usuário no Firestore e sincroniza cache local.
+     */
+    async saveUser(userData) {
+      if (!userData || (!userData.uid && !userData.id)) throw new Error("ID do usuário obrigatório.");
+      await this.sync.init();
+      const uid = userData.uid || userData.id;
+      const normalized = normalizeUserSafe({ ...userData, uid, id: uid });
+      normalized.updatedAt = new Date().toISOString();
+
+      let saved = false;
+      if (this.sync.db) {
+        try {
+          await this.sync.db.collection("users").doc(uid).set(normalized, { merge: true });
+          saved = true;
+        } catch (e) {
+          console.warn("[AEF Repository] SDK saveUser erro, tentando REST:", e);
+        }
+      }
+
+      if (!saved) {
+        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users/${uid}`;
+        await fetch(restUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: toFirestoreRestFields(normalized) })
+        });
+      }
+
+      try {
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem(`aef_user_cache_${uid}`, JSON.stringify(normalized));
+        }
+      } catch (e) {}
+
+      return normalized;
+    }
+  }
+
   class AEFCloudSync {
     constructor() {
       this.isInitialized = false;
@@ -21,6 +1014,10 @@
       this.db = null;
       this.storage = null;
       this.initPromise = null;
+
+      // Camada de Repositórios Explícitos (Fase 4.1)
+      this.courseRepository = new CourseRepository(this);
+      this.userRepository = new UserRepository(this);
     }
 
     async init() {
@@ -924,850 +1921,138 @@
 
     /**
      * Gets complete dynamic hierarchy for a single course (Avoids N+1 query of the entire DB)
+     * Delega para o CourseRepository com prioridade remota determinística e saída normalizada V2.
      */
     async getCourseHierarchy(courseId, baseRegistry = null) {
-      await this.init();
-      const baseCourses = baseRegistry || (window.AEF_COURSES_REGISTRY || {});
-      const courseObj = JSON.parse(JSON.stringify(baseCourses[courseId] || { id: courseId, title: courseId, modules: [] }));
-
-      let sdkSuccess = false;
-      try {
-        if (this.db) {
-          const cDoc = await Promise.race([
-            this.db.collection("courses").doc(courseId).get(),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on course.get()")), 5000))
-          ]);
-          if (cDoc.exists) {
-            const cData = cDoc.data();
-            if (cData.title) courseObj.title = cData.title;
-            if (cData.description !== undefined) courseObj.description = cData.description;
-            if (cData.coverImageUrl) courseObj.coverImageUrl = cData.coverImageUrl;
-            if (cData.tierRequired) courseObj.tierRequired = cData.tierRequired;
-            if (cData.themeColor) courseObj.themeColor = cData.themeColor;
-            if (cData.badge) courseObj.badge = cData.badge;
-            if (cData.published !== undefined) courseObj.published = cData.published;
-            if (cData.slug) courseObj.slug = cData.slug;
-            if (cData.meetUrl) courseObj.meetUrl = cData.meetUrl;
-            courseObj.modules = courseObj.modules || [];
-
-            const modulesSnap = await this.db.collection("courses").doc(courseId).collection("modules").get();
-            if (!modulesSnap.empty) {
-              const modulePromises = modulesSnap.docs.map(async (mDoc) => {
-                const mid = mDoc.id;
-                const mData = mDoc.data();
-                let mObj = courseObj.modules.find(m => m.id === mid);
-                if (!mObj) {
-                  mObj = { id: mid, title: mData.title || mid, order: mData.order || (courseObj.modules.length + 1), lessons: [] };
-                  courseObj.modules.push(mObj);
-                }
-                if (mData.title) mObj.title = mData.title;
-                if (mData.order !== undefined) mObj.order = mData.order;
-                if (mData.description !== undefined) mObj.description = mData.description;
-                if (mData.published !== undefined) mObj.published = mData.published;
-                if (mData.badge) mObj.badge = mData.badge;
-                if (mData.stats) mObj.stats = mData.stats;
-                mObj.lessons = mObj.lessons || [];
-
-                try {
-                  const lessonsSnap = await this.db.collection("courses").doc(courseId).collection("modules").doc(mid).collection("lessons").get();
-                  if (!lessonsSnap.empty) {
-                    const existingMap = new Map();
-                    (mObj.lessons || []).forEach(l => {
-                      if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
-                    });
-
-                    const reconciledLessons = [];
-                    const seenIds = new Set();
-                    for (const lDoc of lessonsSnap.docs) {
-                      const lid = lDoc.id;
-                      if (seenIds.has(lid)) continue;
-                      seenIds.add(lid);
-                      const lData = lDoc.data();
-                      const baseObj = existingMap.get(lid) || {};
-                      const mergedObj = Object.assign({}, baseObj, lData, { id: lid });
-                      mergedObj.order = parseInt(mergedObj.order) || (reconciledLessons.length + 1);
-                      reconciledLessons.push(mergedObj);
-                    }
-                    reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
-                    mObj.lessons = reconciledLessons;
-                  }
-                } catch (le) {
-                  console.warn(`Firestore lessons subcollection fetch (${courseId}/${mid}):`, le);
-                }
-              });
-              await Promise.all(modulePromises);
-              courseObj.modules.sort((a, b) => (a.order || 0) - (b.order || 0));
-            }
-            sdkSuccess = true;
-          } else {
-             // Does not exist in firestore, fallback to base Registry content
-             sdkSuccess = true; // No error, just missing
-          }
-        }
-      } catch (err) {
-        console.warn("⚠️ [AEFCloudSync] Erro no SDK Firestore, executando REST fallback (single course):", err);
-      }
-
-      // 2. REST Fallback
-      if (!sdkSuccess) {
-        try {
-          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.fields) {
-              const f = data.fields || {};
-              if (f.title?.stringValue) courseObj.title = f.title.stringValue;
-              if (f.description?.stringValue !== undefined) courseObj.description = f.description.stringValue;
-              if (f.coverImageUrl?.stringValue) courseObj.coverImageUrl = f.coverImageUrl.stringValue;
-              if (f.tierRequired?.stringValue) courseObj.tierRequired = f.tierRequired.stringValue;
-              if (f.themeColor?.stringValue) courseObj.themeColor = f.themeColor.stringValue;
-              if (f.badge?.stringValue) courseObj.badge = f.badge.stringValue;
-              if (f.published?.booleanValue !== undefined) courseObj.published = f.published.booleanValue;
-              if (f.slug?.stringValue) courseObj.slug = f.slug.stringValue;
-              if (f.meetUrl?.stringValue) courseObj.meetUrl = f.meetUrl.stringValue;
-              courseObj.modules = courseObj.modules || [];
-
-              try {
-                const mRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules`);
-                if (mRes.ok) {
-                  const mData = await mRes.json();
-                  if (mData && mData.documents) {
-                    for (const mDoc of mData.documents) {
-                      const mid = mDoc.name.split("/").pop();
-                      const mf = mDoc.fields || {};
-                      let mObj = courseObj.modules.find(m => m.id === mid);
-                      if (!mObj) {
-                        mObj = { id: mid, title: mf.title?.stringValue || mid, order: parseInt(mf.order?.integerValue) || (courseObj.modules.length + 1), lessons: [] };
-                        courseObj.modules.push(mObj);
-                      }
-                      if (mf.title?.stringValue) mObj.title = mf.title.stringValue;
-                      if (mf.order?.integerValue !== undefined) mObj.order = parseInt(mf.order.integerValue);
-                      if (mf.description?.stringValue !== undefined) mObj.description = mf.description.stringValue;
-                      if (mf.published?.booleanValue !== undefined) mObj.published = mf.published.booleanValue;
-                      if (mf.badge?.stringValue) mObj.badge = mf.badge.stringValue;
-                      mObj.lessons = mObj.lessons || [];
-
-                      try {
-                        const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}/lessons`);
-                        if (lRes.ok) {
-                          const lData = await lRes.json();
-                          if (lData && lData.documents) {
-                            const existingMap = new Map();
-                            (mObj.lessons || []).forEach(l => {
-                              if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
-                            });
-                            const reconciledLessons = [];
-                            const seenIds = new Set();
-                            for (const lDoc of lData.documents) {
-                              const lid = lDoc.name.split("/").pop();
-                              if (seenIds.has(lid)) continue;
-                              seenIds.add(lid);
-                              const lf = lDoc.fields || {};
-                              const baseObj = existingMap.get(lid) || {};
-                              // (simplified mapping for REST fallback)
-                              const restObj = {
-                                id: lid,
-                                type: lf.type?.stringValue || (lf.quizId?.stringValue ? 'quiz' : (baseObj.type || 'lesson')),
-                                quizId: lf.quizId?.stringValue !== undefined ? lf.quizId.stringValue : (baseObj.quizId || ''),
-                                quizDataJson: lf.quizDataJson?.stringValue || (baseObj.quizDataJson || ''),
-                                title: lf.title?.stringValue || baseObj.title || lid,
-                                order: parseInt(lf.order?.integerValue) || baseObj.order || (reconciledLessons.length + 1),
-                                videoUrl: lf.videoUrl?.stringValue !== undefined ? lf.videoUrl.stringValue : (baseObj.videoUrl || ""),
-                                audioUrl: lf.audioUrl?.stringValue !== undefined ? lf.audioUrl.stringValue : (baseObj.audioUrl || ""),
-                                pdfUrl: lf.pdfUrl?.stringValue !== undefined ? lf.pdfUrl.stringValue : (baseObj.pdfUrl || ""),
-                                goldenTip: lf.goldenTip?.stringValue !== undefined ? lf.goldenTip.stringValue : (baseObj.goldenTip || ""),
-                                artworkUrl: lf.artworkUrl?.stringValue !== undefined ? lf.artworkUrl.stringValue : (baseObj.artworkUrl || ""),
-                                thumbnailUrl: lf.thumbnailUrl?.stringValue !== undefined ? lf.thumbnailUrl.stringValue : (baseObj.thumbnailUrl || ""),
-                                published: lf.published?.booleanValue !== undefined ? lf.published.booleanValue : (baseObj.published !== false),
-                                hasTrainingTrack: lf.hasTrainingTrack?.booleanValue !== undefined ? lf.hasTrainingTrack.booleanValue : (baseObj.hasTrainingTrack !== false),
-                                trainingTrackId: lf.trainingTrackId?.stringValue !== undefined ? lf.trainingTrackId.stringValue : (baseObj.trainingTrackId || lid),
-                                rawScript: lf.rawScript?.stringValue !== undefined ? lf.rawScript.stringValue : (baseObj.rawScript || ""),
-                                processedContentHtml: lf.processedContentHtml?.stringValue !== undefined ? lf.processedContentHtml.stringValue : (baseObj.processedContentHtml || ""),
-                                duration: lf.duration?.stringValue !== undefined ? lf.duration.stringValue : (baseObj.duration || "05:00"),
-                                activity: lf.activity?.stringValue !== undefined ? lf.activity.stringValue : (baseObj.activity || ""),
-                                description: lf.description?.stringValue !== undefined ? lf.description.stringValue : (baseObj.description || ""),
-                                sentences: (lf.sentences?.arrayValue?.values || []).length > 0 ? (lf.sentences.arrayValue.values.map(sv => {
-                                  const sf = sv.mapValue?.fields || {};
-                                  return {
-                                    id: parseInt(sf.id?.integerValue || sf.id?.stringValue || "1"),
-                                    start: parseFloat(sf.start?.doubleValue || sf.start?.stringValue || "0"),
-                                    end: parseFloat(sf.end?.doubleValue || sf.end?.stringValue || "0"),
-                                    text: sf.text?.stringValue || "",
-                                    spokenTranslation: sf.spokenTranslation?.stringValue || sf.translation?.stringValue || "",
-                                    notes: sf.notes?.stringValue || ""
-                                  };
-                                })) : (baseObj.sentences || []),
-                                media: (lf.media?.arrayValue?.values || []).map(mv => {
-                                  const mf = mv.mapValue?.fields || {};
-                                  return {
-                                    type: mf.type?.stringValue || 'video_youtube',
-                                    url: mf.url?.stringValue || '',
-                                    title: mf.title?.stringValue || '',
-                                    durationStr: mf.durationStr?.stringValue || '',
-                                    thumbnailUrl: mf.thumbnailUrl?.stringValue || ''
-                                  };
-                                }),
-                                downloads: (lf.downloads?.arrayValue?.values || []).map(dv => {
-                                  const df = dv.mapValue?.fields || {};
-                                  return {
-                                    type: df.type?.stringValue || 'pdf',
-                                    url: df.url?.stringValue || '',
-                                    title: df.title?.stringValue || ''
-                                  };
-                                })
-                              };
-                              const mergedObj = Object.assign({}, baseObj, restObj);
-                              reconciledLessons.push(mergedObj);
-                            }
-                            reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
-                            mObj.lessons = reconciledLessons;
-                          }
-                        }
-                      } catch (le) {
-                        console.warn(`REST lessons error (${courseId}/${mid}):`, le);
-                      }
-                    }
-                    courseObj.modules.sort((a, b) => (a.order || 0) - (b.order || 0));
-                  }
-                }
-              } catch (me) {
-                console.warn(`REST modules error (${courseId}):`, me);
-              }
-            }
-          }
-        } catch (re) {
-          console.warn("REST single course hierarchy error:", re);
-        }
-      }
-
-      return courseObj;
+      return this.courseRepository.getCourseHierarchy(courseId, baseRegistry);
     }
 
-    /**
-     * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
     /**
      * Helper to format JavaScript objects to Firestore REST format
      */
     _toFirestoreRestFields(obj) {
-      const fields = {};
-      for (const [k, v] of Object.entries(obj)) {
-        if (v === undefined || typeof v === 'function' || k === 'modules' || k === 'lessons') continue;
-        
-        // Support string arrays (like categories, legacyGrants, tags, etc)
-        if (Array.isArray(v) && k !== 'sentences' && k !== 'chunks' && k !== 'exercises' && k !== 'media' && k !== 'downloads') {
-           fields[k] = {
-             arrayValue: {
-               values: v.map(str => ({ stringValue: String(str) }))
-             }
-           };
-           continue;
-        }
-
-        if (k === 'sentences' && Array.isArray(v)) {
-          fields[k] = {
-            arrayValue: {
-              values: v.map(s => ({
-                mapValue: {
-                  fields: {
-                    id: { integerValue: String(s.id || 1) },
-                    start: { doubleValue: parseFloat(s.start) || 0.0 },
-                    end: { doubleValue: parseFloat(s.end) || 0.0 },
-                    text: { stringValue: s.text || "" },
-                    spokenTranslation: { stringValue: s.spokenTranslation || s.translation || "" },
-                    notes: { stringValue: s.notes || "" }
-                  }
-                }
-              }))
-            }
-          };
-        } else if (k === 'media' && Array.isArray(v)) {
-          fields[k] = {
-            arrayValue: {
-              values: v.map(m => {
-                const mf = {
-                  type: { stringValue: m.type || 'video_youtube' },
-                  url: { stringValue: m.url || '' },
-                  title: { stringValue: m.title || '' }
-                };
-                if (m.durationStr) mf.durationStr = { stringValue: m.durationStr };
-                if (m.thumbnailUrl) mf.thumbnailUrl = { stringValue: m.thumbnailUrl };
-                return { mapValue: { fields: mf } };
-              })
-            }
-          };
-        } else if (k === 'downloads' && Array.isArray(v)) {
-          fields[k] = {
-            arrayValue: {
-              values: v.map(d => ({
-                mapValue: {
-                  fields: {
-                    type: { stringValue: d.type || 'pdf' },
-                    url: { stringValue: d.url || '' },
-                    title: { stringValue: d.title || '' }
-                  }
-                }
-              }))
-            }
-          };
-        } else if (typeof v === 'string') {
-          fields[k] = { stringValue: v };
-        } else if (typeof v === 'number') {
-          fields[k] = Number.isInteger(v) ? { integerValue: v.toString() } : { doubleValue: v };
-        } else if (typeof v === 'boolean') {
-          fields[k] = { booleanValue: v };
-        } else if (Array.isArray(v)) {
-          fields[k] = { arrayValue: { values: v.map(item => ({ stringValue: String(item) })) } };
-        }
-      }
-      return fields;
+      return toFirestoreRestFields(obj);
     }
 
     /**
-     * Saves a Course document to Firestore (SDK + REST Fallback)
+     * Saves a Course document to Firestore (Delega para CourseRepository)
      */
     async saveCourse(courseData) {
-      if (!courseData || !courseData.id) throw new Error("ID do curso obrigatório.");
-      await this.init();
-      const cid = courseData.id;
-      const payload = { ...courseData };
-      payload.updatedAt = new Date().toISOString();
-      
-      // Limpeza de campos legados caso existam
-      if (payload.tierRequired !== undefined) {
-         // O SDK não precisa forçar "vip". Deixa como undef se não tiver.
-         if (!payload.tierRequired) delete payload.tierRequired;
-      }
-      
-
-      let saved = false;
-      if (this.db) {
-        try {
-          await this.db.collection("courses").doc(cid).set(payload, { merge: true });
-          saved = true;
-        } catch (e) {
-          console.warn("Firestore SDK saveCourse error, trying REST:", e);
-        }
-      }
-
-      if (!saved) {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}`;
-        const res = await fetch(restUrl, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields: this._toFirestoreRestFields(payload) })
-        });
-        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
-      }
-
-      console.log(`☁️ [AEFCloudSync] Curso "${payload.title}" salvo com sucesso no Firestore!`);
-      return payload;
+      return this.courseRepository.saveCourse(courseData);
     }
 
     /**
-     * Saves a Module document to Firestore (SDK + REST Fallback)
+     * Saves a Module document to Firestore (Delega para CourseRepository)
      */
     async saveModule(courseId, moduleData) {
-      if (!courseId || !moduleData || !moduleData.id) throw new Error("CourseId e ModuleId obrigatórios.");
-      await this.init();
-      const mid = moduleData.id;
-      const payload = {
-        id: mid,
-        courseId: courseId,
-        title: moduleData.title || mid,
-        order: parseInt(moduleData.order) || 1,
-        description: moduleData.description || "",
-        published: moduleData.published !== false,
-        badge: moduleData.badge || "",
-        stats: moduleData.stats || "",
-        updatedAt: new Date().toISOString()
-      };
-
-      let saved = false;
-      if (this.db) {
-        try {
-          await this.db.collection("courses").doc(courseId).collection("modules").doc(mid).set(payload, { merge: true });
-          saved = true;
-        } catch (e) {
-          console.warn("Firestore SDK saveModule error, trying REST:", e);
-        }
-      }
-
-      if (!saved) {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}`;
-        const res = await fetch(restUrl, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields: this._toFirestoreRestFields(payload) })
-        });
-        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
-      }
-
-      console.log(`☁️ [AEFCloudSync] Módulo "${payload.title}" salvo com sucesso em courses/${courseId}/modules/${mid}`);
-      return payload;
+      return this.courseRepository.saveModule(courseId, moduleData);
     }
 
     /**
-     * Saves a Lesson document to Firestore (SDK + REST Fallback)
+     * Saves a Lesson document to Firestore (Delega para CourseRepository)
      */
     async saveLesson(courseId, moduleId, lessonData) {
-      if (!courseId || !moduleId || !lessonData || !lessonData.id) throw new Error("CourseId, ModuleId e LessonId obrigatórios.");
-      await this.init();
-      const lid = lessonData.id;
-      const payload = {
-        id: lid,
-        courseId: courseId,
-        moduleId: moduleId,
-        type: lessonData.type || (lessonData.quizId ? 'quiz' : 'lesson'),
-        quizId: lessonData.quizId || "",
-        title: lessonData.title || "Aula sem título",
-        order: parseInt(lessonData.order) || 1,
-        videoUrl: lessonData.videoUrl || "",
-        audioUrl: lessonData.audioUrl || "",
-        pdfUrl: lessonData.pdfUrl || "",
-        artworkUrl: lessonData.artworkUrl || "",
-        thumbnailUrl: lessonData.thumbnailUrl || "",
-        goldenTip: lessonData.goldenTip || "",
-        hasTrainingTrack: lessonData.hasTrainingTrack !== false,
-        published: lessonData.published !== false,
-        rawScript: lessonData.rawScript || "",
-        processedContentHtml: lessonData.processedContentHtml || "",
-        aiStatus: lessonData.aiStatus || "draft_pending",
-        updatedAt: new Date().toISOString()
-      };
-      if (lessonData.quizData) {
-        payload.quizData = typeof lessonData.quizData === 'object' ? lessonData.quizData : JSON.parse(lessonData.quizData);
-        payload.quizDataJson = JSON.stringify(payload.quizData);
-      } else if (lessonData.quizDataJson) {
-        payload.quizDataJson = lessonData.quizDataJson;
-      }
-      if (lessonData.duration) payload.duration = lessonData.duration;
-      if (lessonData.activity) payload.activity = lessonData.activity;
-      if (lessonData.trainingTrackId) payload.trainingTrackId = lessonData.trainingTrackId;
-      if (lessonData.description) payload.description = lessonData.description;
-      if (lessonData.sentences && Array.isArray(lessonData.sentences)) {
-        payload.sentences = lessonData.sentences.map((s, idx) => ({
-          id: s.id || (idx + 1),
-          start: parseFloat(s.start) || 0.0,
-          end: parseFloat(s.end) || 0.0,
-          text: s.text || "",
-          spokenTranslation: s.spokenTranslation || s.translation || "",
-          notes: s.notes || ""
-        }));
-      }
-      if (lessonData.media && Array.isArray(lessonData.media)) {
-        payload.media = lessonData.media.map(m => ({
-          type: m.type || 'video_youtube',
-          url: m.url || '',
-          title: m.title || '',
-          durationStr: m.durationStr || '',
-          thumbnailUrl: m.thumbnailUrl || ''
-        }));
-      }
-      if (lessonData.downloads && Array.isArray(lessonData.downloads)) {
-        payload.downloads = lessonData.downloads.map(d => ({
-          type: d.type || 'pdf',
-          url: d.url || '',
-          title: d.title || ''
-        }));
-      }
-
-      let saved = false;
-      if (this.db) {
-        try {
-          await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lid).set(payload, { merge: true });
-          saved = true;
-        } catch (e) {
-          console.warn("Firestore SDK saveLesson error, trying REST:", e);
-        }
-      }
-
-      if (!saved) {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lid}`;
-        const res = await fetch(restUrl, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields: this._toFirestoreRestFields(payload) })
-        });
-        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
-      }
-
-      console.log(`☁️ [AEFCloudSync] Aula "${payload.title}" salva com sucesso em courses/${courseId}/modules/${moduleId}/lessons/${lid}`);
-      return payload;
+      return this.courseRepository.saveLesson(courseId, moduleId, lessonData);
     }
 
-    /**
-     * Courses & Modules Studio: Gets complete dynamic hierarchy (Courses > Modules > Lessons)
-     * Merges Base Canonical Registry with Google Cloud Firestore Subcollections in parallel
-     */
-    
     /**
      * Fetches only the list of courses without traversing modules and lessons.
-     * Ideal for populating dropdowns or lists very quickly.
+     * Delega para CourseRepository com prioridade remota determinística e saída normalizada V2.
      */
     async getCoursesList(baseRegistry = null) {
-      await this.init();
-      const courses = JSON.parse(JSON.stringify(baseRegistry || (window.AEF_COURSES_REGISTRY || {})));
-
-      let sdkSuccess = false;
-      try {
-        if (this.db) {
-          const coursesSnap = await Promise.race([
-            this.db.collection("courses").get(),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on courses.get()")), 5000))
-          ]);
-          if (!coursesSnap.empty) {
-            for (const cDoc of coursesSnap.docs) {
-              const cid = cDoc.id;
-              const cData = cDoc.data();
-              if (!courses[cid]) {
-                courses[cid] = { id: cid, title: cData.title || cid, modules: [] };
-              }
-              if (cData.title) courses[cid].title = cData.title;
-              if (cData.description !== undefined) courses[cid].description = cData.description;
-              if (cData.coverImageUrl) courses[cid].coverImageUrl = cData.coverImageUrl;
-              if (cData.tierRequired) courses[cid].tierRequired = cData.tierRequired;
-              if (cData.themeColor) courses[cid].themeColor = cData.themeColor;
-              if (cData.badge) courses[cid].badge = cData.badge;
-              if (cData.published !== undefined) courses[cid].published = cData.published;
-              if (cData.slug) courses[cid].slug = cData.slug;
-              if (cData.accessTier) courses[cid].accessTier = cData.accessTier;
-              courses[cid].modules = courses[cid].modules || [];
-            }
-            sdkSuccess = true;
-          }
-        }
-      } catch (err) {
-        console.warn("⚠️ [AEFCloudSync] Erro no SDK Firestore (courses list), executando REST fallback:", err);
-      }
-
-      if (!sdkSuccess) {
-        try {
-          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.documents) {
-              for (const doc of data.documents) {
-                const cid = doc.name.split('/').pop();
-                const f = doc.fields || {};
-                if (!courses[cid]) {
-                  courses[cid] = { id: cid, title: f.title?.stringValue || cid, modules: [] };
-                }
-                if (f.title?.stringValue) courses[cid].title = f.title.stringValue;
-                if (f.description?.stringValue !== undefined) courses[cid].description = f.description.stringValue;
-                if (f.coverImageUrl?.stringValue) courses[cid].coverImageUrl = f.coverImageUrl.stringValue;
-                if (f.themeColor?.stringValue) courses[cid].themeColor = f.themeColor.stringValue;
-                if (f.badge?.stringValue) courses[cid].badge = f.badge.stringValue;
-                if (f.published?.booleanValue !== undefined) courses[cid].published = f.published.booleanValue;
-                if (f.slug?.stringValue) courses[cid].slug = f.slug.stringValue;
-                if (f.accessTier?.stringValue) courses[cid].accessTier = f.accessTier.stringValue;
-              }
-            }
-          }
-        } catch (err) {
-          console.warn("⚠️ [AEFCloudSync] Erro crítico no REST fallback (courses list):", err);
-        }
-      }
-
-      return courses;
-    }
-
-    async getCoursesHierarchy(baseRegistry = null) {
-      await this.init();
-      const courses = JSON.parse(JSON.stringify(baseRegistry || (window.AEF_COURSES_REGISTRY || {})));
-
-      // 1. Try SDK Fetch
-      let sdkSuccess = false;
-      try {
-        if (this.db) {
-          const coursesSnap = await Promise.race([
-      this.db.collection("courses").get(),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout on courses.get()")), 5000))
-    ]);
-          if (!coursesSnap.empty) {
-            const coursePromises = coursesSnap.docs.map(async (cDoc) => {
-              const cid = cDoc.id;
-              const cData = cDoc.data();
-              if (!courses[cid]) {
-                courses[cid] = { id: cid, title: cData.title || cid, modules: [] };
-              }
-              if (cData.title) courses[cid].title = cData.title;
-              if (cData.description !== undefined) courses[cid].description = cData.description;
-              if (cData.coverImageUrl) courses[cid].coverImageUrl = cData.coverImageUrl;
-              if (cData.tierRequired) courses[cid].tierRequired = cData.tierRequired;
-              if (cData.themeColor) courses[cid].themeColor = cData.themeColor;
-              if (cData.badge) courses[cid].badge = cData.badge;
-              if (cData.published !== undefined) courses[cid].published = cData.published;
-              if (cData.slug) courses[cid].slug = cData.slug;
-              if (cData.meetUrl) courses[cid].meetUrl = cData.meetUrl;
-              courses[cid].modules = courses[cid].modules || [];
-
-              // Fetch Modules Subcollection in parallel
-              try {
-                const modulesSnap = await this.db.collection("courses").doc(cid).collection("modules").get();
-                if (!modulesSnap.empty) {
-                  const modulePromises = modulesSnap.docs.map(async (mDoc) => {
-                    const mid = mDoc.id;
-                    const mData = mDoc.data();
-                    let mObj = courses[cid].modules.find(m => m.id === mid);
-                    if (!mObj) {
-                      mObj = { id: mid, title: mData.title || mid, order: mData.order || (courses[cid].modules.length + 1), lessons: [] };
-                      courses[cid].modules.push(mObj);
-                    }
-                    if (mData.title) mObj.title = mData.title;
-                    if (mData.order !== undefined) mObj.order = mData.order;
-                    if (mData.description !== undefined) mObj.description = mData.description;
-                    if (mData.published !== undefined) mObj.published = mData.published;
-                    if (mData.badge) mObj.badge = mData.badge;
-                    if (mData.stats) mObj.stats = mData.stats;
-                    mObj.lessons = mObj.lessons || [];
-
-                    // Fetch Lessons Subcollection in parallel (Firestore is Single Source of Truth)
-                    try {
-                      const lessonsSnap = await this.db.collection("courses").doc(cid).collection("modules").doc(mid).collection("lessons").get();
-                      if (!lessonsSnap.empty) {
-                        const existingMap = new Map();
-                        (mObj.lessons || []).forEach(l => {
-                          if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
-                        });
-
-                        const reconciledLessons = [];
-                        const seenIds = new Set();
-
-                        for (const lDoc of lessonsSnap.docs) {
-                          const lid = lDoc.id;
-                          if (seenIds.has(lid)) continue;
-                          seenIds.add(lid);
-                          const lData = lDoc.data();
-                          const baseObj = existingMap.get(lid) || {};
-                          const mergedObj = Object.assign({}, baseObj, lData, { id: lid });
-                          mergedObj.order = parseInt(mergedObj.order) || (reconciledLessons.length + 1);
-                          reconciledLessons.push(mergedObj);
-                        }
-                        reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
-                        mObj.lessons = reconciledLessons;
-                      }
-                    } catch (le) {
-                      console.warn(`Firestore lessons subcollection fetch (${cid}/${mid}):`, le);
-                    }
-                  });
-                  await Promise.all(modulePromises);
-                  courses[cid].modules.sort((a, b) => (a.order || 0) - (b.order || 0));
-                }
-              } catch (me) {
-                console.warn(`Firestore modules subcollection fetch (${cid}):`, me);
-              }
-            });
-            await Promise.all(coursePromises);
-            sdkSuccess = true;
-          }
-        }
-      } catch (err) {
-        console.warn("⚠️ [AEFCloudSync] Erro no SDK Firestore, executando REST fallback:", err);
-      }
-
-      // 2. REST Fallback (executes if SDK fetch didn't run or returned nothing)
-      if (!sdkSuccess) {
-        try {
-          const res = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.documents) {
-              for (const doc of data.documents) {
-                const cid = doc.name.split("/").pop();
-                const f = doc.fields || {};
-                if (!courses[cid]) {
-                  courses[cid] = { id: cid, title: f.title?.stringValue || cid, modules: [] };
-                }
-                if (f.title?.stringValue) courses[cid].title = f.title.stringValue;
-                if (f.description?.stringValue !== undefined) courses[cid].description = f.description.stringValue;
-                if (f.coverImageUrl?.stringValue) courses[cid].coverImageUrl = f.coverImageUrl.stringValue;
-                if (f.tierRequired?.stringValue) courses[cid].tierRequired = f.tierRequired.stringValue;
-                if (f.themeColor?.stringValue) courses[cid].themeColor = f.themeColor.stringValue;
-                if (f.badge?.stringValue) courses[cid].badge = f.badge.stringValue;
-                if (f.published?.booleanValue !== undefined) courses[cid].published = f.published.booleanValue;
-                if (f.slug?.stringValue) courses[cid].slug = f.slug.stringValue;
-                if (f.meetUrl?.stringValue) courses[cid].meetUrl = f.meetUrl.stringValue;
-                courses[cid].modules = courses[cid].modules || [];
-
-                // REST fetch modules
-                try {
-                  const mRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules`);
-                  if (mRes.ok) {
-                    const mData = await mRes.json();
-                    if (mData && mData.documents) {
-                      for (const mDoc of mData.documents) {
-                        const mid = mDoc.name.split("/").pop();
-                        const mf = mDoc.fields || {};
-                        let mObj = courses[cid].modules.find(m => m.id === mid);
-                        if (!mObj) {
-                          mObj = { id: mid, title: mf.title?.stringValue || mid, order: parseInt(mf.order?.integerValue) || (courses[cid].modules.length + 1), lessons: [] };
-                          courses[cid].modules.push(mObj);
-                        }
-                        if (mf.title?.stringValue) mObj.title = mf.title.stringValue;
-                        if (mf.description?.stringValue) mObj.description = mf.description.stringValue;
-                        if (mf.published?.booleanValue !== undefined) mObj.published = mf.published.booleanValue;
-                        mObj.lessons = mObj.lessons || [];
-
-                        // REST fetch lessons (Firestore is Single Source of Truth)
-                        try {
-                          const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}/modules/${mid}/lessons`);
-                          if (lRes.ok) {
-                            const lData = await lRes.json();
-                            if (lData && Array.isArray(lData.documents) && lData.documents.length > 0) {
-                              const existingMap = new Map();
-                              (mObj.lessons || []).forEach(l => {
-                                if (l && l.id && !existingMap.has(l.id)) existingMap.set(l.id, l);
-                              });
-
-                              const reconciledLessons = [];
-                              const seenIds = new Set();
-
-                              for (const lDoc of lData.documents) {
-                                const lid = lDoc.name.split("/").pop();
-                                if (seenIds.has(lid)) continue;
-                                seenIds.add(lid);
-                                const lf = lDoc.fields || {};
-                                const baseObj = existingMap.get(lid) || {};
-                                const restObj = {
-                                  id: lid,
-                                  type: lf.type?.stringValue || (lf.quizId?.stringValue ? 'quiz' : (baseObj.type || 'lesson')),
-                                  quizId: lf.quizId?.stringValue !== undefined ? lf.quizId.stringValue : (baseObj.quizId || ''),
-                                  quizDataJson: lf.quizDataJson?.stringValue || (baseObj.quizDataJson || ''),
-                                  title: lf.title?.stringValue || baseObj.title || lid,
-                                  order: parseInt(lf.order?.integerValue) || baseObj.order || (reconciledLessons.length + 1),
-                                  videoUrl: lf.videoUrl?.stringValue !== undefined ? lf.videoUrl.stringValue : (baseObj.videoUrl || ""),
-                                  audioUrl: lf.audioUrl?.stringValue !== undefined ? lf.audioUrl.stringValue : (baseObj.audioUrl || ""),
-                                  pdfUrl: lf.pdfUrl?.stringValue !== undefined ? lf.pdfUrl.stringValue : (baseObj.pdfUrl || ""),
-                                  goldenTip: lf.goldenTip?.stringValue !== undefined ? lf.goldenTip.stringValue : (baseObj.goldenTip || ""),
-                                  artworkUrl: lf.artworkUrl?.stringValue !== undefined ? lf.artworkUrl.stringValue : (baseObj.artworkUrl || ""),
-                                  thumbnailUrl: lf.thumbnailUrl?.stringValue !== undefined ? lf.thumbnailUrl.stringValue : (baseObj.thumbnailUrl || ""),
-                                  published: lf.published?.booleanValue !== undefined ? lf.published.booleanValue : (baseObj.published !== false),
-                                  hasTrainingTrack: lf.hasTrainingTrack?.booleanValue !== undefined ? lf.hasTrainingTrack.booleanValue : (baseObj.hasTrainingTrack !== false),
-                                  trainingTrackId: lf.trainingTrackId?.stringValue !== undefined ? lf.trainingTrackId.stringValue : (baseObj.trainingTrackId || lid),
-                                  rawScript: lf.rawScript?.stringValue !== undefined ? lf.rawScript.stringValue : (baseObj.rawScript || ""),
-                                  processedContentHtml: lf.processedContentHtml?.stringValue !== undefined ? lf.processedContentHtml.stringValue : (baseObj.processedContentHtml || ""),
-                                  duration: lf.duration?.stringValue !== undefined ? lf.duration.stringValue : (baseObj.duration || "05:00"),
-                                  activity: lf.activity?.stringValue !== undefined ? lf.activity.stringValue : (baseObj.activity || ""),
-                                  description: lf.description?.stringValue !== undefined ? lf.description.stringValue : (baseObj.description || ""),
-                                  sentences: (lf.sentences?.arrayValue?.values || []).length > 0 ? (lf.sentences.arrayValue.values.map(sv => {
-                                    const sf = sv.mapValue?.fields || {};
-                                    return {
-                                      id: parseInt(sf.id?.integerValue || sf.id?.stringValue || "1"),
-                                      start: parseFloat(sf.start?.doubleValue || sf.start?.stringValue || "0"),
-                                      end: parseFloat(sf.end?.doubleValue || sf.end?.stringValue || "0"),
-                                      text: sf.text?.stringValue || "",
-                                      spokenTranslation: sf.spokenTranslation?.stringValue || sf.translation?.stringValue || "",
-                                      notes: sf.notes?.stringValue || ""
-                                    };
-                                  })) : (baseObj.sentences || []),
-                                  media: (lf.media?.arrayValue?.values || []).map(mv => {
-                                    const mf = mv.mapValue?.fields || {};
-                                    return {
-                                      type: mf.type?.stringValue || 'video_youtube',
-                                      url: mf.url?.stringValue || '',
-                                      title: mf.title?.stringValue || '',
-                                      durationStr: mf.durationStr?.stringValue || '',
-                                      thumbnailUrl: mf.thumbnailUrl?.stringValue || ''
-                                    };
-                                  }),
-                                  downloads: (lf.downloads?.arrayValue?.values || []).map(dv => {
-                                    const df = dv.mapValue?.fields || {};
-                                    return {
-                                      type: df.type?.stringValue || 'pdf',
-                                      url: df.url?.stringValue || '',
-                                      title: df.title?.stringValue || ''
-                                    };
-                                  })
-                                };
-                                const mergedObj = Object.assign({}, baseObj, restObj);
-                                reconciledLessons.push(mergedObj);
-                              }
-                              reconciledLessons.sort((a, b) => (a.order || 0) - (b.order || 0));
-                              mObj.lessons = reconciledLessons;
-                            }
-                          }
-                        } catch (le) {
-                          console.warn(`REST lessons error (${cid}/${mid}):`, le);
-                        }
-                      }
-                      courses[cid].modules.sort((a, b) => (a.order || 0) - (b.order || 0));
-                    }
-                  }
-                } catch (me) {
-                  console.warn(`REST modules error (${cid}):`, me);
-                }
-              }
-            }
-          }
-        } catch (re) {
-          console.warn("REST hierarchy error:", re);
-        }
-      }
-
-      return courses;
+      return this.courseRepository.getCoursesList(baseRegistry);
     }
 
     /**
-     * Deletes a module and its nested lessons from Firestore
+     * Obtém apenas a lista leve de metadados dos cursos (sem carregar módulos e lições).
+     */
+    async getCoursesMetadata(baseRegistry = null) {
+      return this.courseRepository.getCoursesMetadata(baseRegistry);
+    }
+
+    /**
+     * Hidrata a árvore completa de módulos e lições sob demanda para um curso específico.
+     */
+    async hydrateCourse(courseId, baseRegistry = null) {
+      return this.courseRepository.hydrateCourse(courseId, baseRegistry);
+    }
+
+    /**
+     * Hidrata uma lição específica sob demanda.
+     */
+    async hydrateLesson(courseId, moduleId, lessonId) {
+      return this.courseRepository.hydrateLesson(courseId, moduleId, lessonId);
+    }
+
+    /**
+     * Gets complete dynamic hierarchy (Courses > Modules > Lessons)
+     * Delega para CourseRepository com prioridade remota determinística e saída normalizada V2.
+     */
+    async getCoursesHierarchy(baseRegistry = null) {
+      return this.courseRepository.getCoursesHierarchy(baseRegistry);
+    }
+
+    /**
+     * Deletes a module and its nested lessons from Firestore (Delega para CourseRepository)
      */
     async deleteModuleFromCloud(courseId, moduleId) {
-      if (!courseId || !moduleId) return false;
-      await this.init();
-      if (!this.db) return false;
-      try {
-        const lessonsSnap = await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").get();
-        const batch = this.db.batch();
-        lessonsSnap.forEach(doc => batch.delete(doc.ref));
-        batch.delete(this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId));
-        await batch.commit();
-        return true;
-      } catch (e) {
-        console.warn("Error deleting module from cloud via SDK, trying REST fallback:", e);
-      }
-
-      // REST Fallback for module delete
-      try {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}`;
-        const res = await fetch(restUrl, { method: "DELETE" });
-        return res.ok;
-      } catch (re) {
-        console.warn("Error deleting module from cloud via REST:", re);
-        return false;
-      }
+      return this.courseRepository.deleteModule(courseId, moduleId);
     }
 
     /**
-     * Deletes a single lesson from Firestore (SDK + REST fallback)
+     * Deletes a single lesson from Firestore (Delega para CourseRepository)
      */
     async deleteLessonFromCloud(courseId, moduleId, lessonId) {
-      if (!courseId || !moduleId || !lessonId) return false;
-      await this.init();
-      
-      let deleted = false;
-      if (this.db) {
-        try {
-          await this.db.collection("courses").doc(courseId).collection("modules").doc(moduleId).collection("lessons").doc(lessonId).delete();
-          deleted = true;
-        } catch (e) {
-          console.warn("Error deleting lesson from cloud via SDK, trying REST fallback:", e);
-        }
-      }
+      return this.courseRepository.deleteLesson(courseId, moduleId, lessonId);
+    }
 
-      // REST Fallback for lesson delete
-      if (!deleted) {
-        try {
-          const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`;
-          const res = await fetch(restUrl, { method: "DELETE" });
-          deleted = res.ok;
-        } catch (re) {
-          console.warn("Error deleting lesson from cloud via REST:", re);
-        }
-      }
+    // =========================================================================
+    // USER REPOSITORY DELEGATIONS (UserRepository)
+    // =========================================================================
+    async getUser(userId) {
+      return this.userRepository.getUser(userId);
+    }
 
-      return deleted;
+    async getUserProfile(userId) {
+      return this.userRepository.getUser(userId);
+    }
+
+    async getAllUsers() {
+      return this.userRepository.getAllUsers();
+    }
+
+    async getAllStudentsAndMentees() {
+      return this.userRepository.getAllStudentsAndMentees();
+    }
+
+    async saveUser(userData) {
+      return this.userRepository.saveUser(userData);
     }
   }
 
-  // Global Singleton
-  window.aefCloudSync = new AEFCloudSync();
-})();
+  // Global Singletons
+  const aefCloudSync = new AEFCloudSync();
+  const aefCourseRepository = aefCloudSync.courseRepository;
+  const aefUserRepository = aefCloudSync.userRepository;
+
+  if (typeof root !== "undefined") {
+    root.aefCloudSync = aefCloudSync;
+    root.aefCourseRepository = aefCourseRepository;
+    root.aefUserRepository = aefUserRepository;
+    root.CourseRepository = CourseRepository;
+    root.UserRepository = UserRepository;
+  }
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+      AEFCloudSync,
+      CourseRepository,
+      UserRepository,
+      aefCloudSync,
+      aefCourseRepository,
+      aefUserRepository
+    };
+  }
+})(typeof window !== "undefined" ? window : globalThis);
+
+
