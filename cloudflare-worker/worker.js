@@ -86,7 +86,11 @@ export async function getDynamicVipOverrides(forceRefresh = false) {
     console.warn("[AEF Config] Falha ao carregar config/vipOverrides do Firestore:", err.message || err);
   }
   return {
-    adminEmails: ["selexenglish@gmail.com"],
+    adminEmails: [
+      "selexenglish@gmail.com",
+      "leonardo@agoraeufalo.com.br",
+      "leo@agoraeufalo.com.br"
+    ],
     vipEmails: [
       "andrebarrote1992@gmail.com",
       "estevaopin@gmail.com",
@@ -421,6 +425,23 @@ export async function readFirestoreDoc(collection, docId) {
     return null;
   }
 }
+
+// Listagem direta na API REST do Firestore (com paginação)
+export async function listFirestoreDocs(collection, pageSize = 300, pageToken = null) {
+  try {
+    let url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/${collection}?pageSize=${pageSize}&key=${FIRESTORE_API_KEY}`;
+    if (pageToken) url += `&pageToken=${encodeURIComponent(pageToken)}`;
+    const res = await fetch(url);
+    if (!res.ok) return { documents: [], nextPageToken: null };
+    const data = await res.json();
+    const docs = (data.documents || []).map(doc => parseRestDoc(doc, doc.name.split("/").pop()));
+    return { documents: docs, nextPageToken: data.nextPageToken || null };
+  } catch (err) {
+    console.warn(`[AEF Worker] [AEF Error] Falha ao listar ${collection}:`, err.message || err);
+    return { documents: [], nextPageToken: null };
+  }
+}
+
 
 // Consulta estruturada por email na coleção users
 export async function queryFirestoreUserByEmail(cleanEmail) {
@@ -846,19 +867,41 @@ export async function handleClaimPreregistration(request, env) {
 // ENDPOINT: /api/admin/users (Roteamento Server-Side de Ações do Admin)
 // ============================================================================
 export async function handleAdminUsers(request, env) {
-  if (request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method Not Allowed. Use POST." }), {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-ADMIN-SECRET",
+        "Access-Control-Max-Age": "86400"
+      }
+    });
+  }
+
+  if (request.method !== "POST" && request.method !== "GET") {
+    return new Response(JSON.stringify({ error: "Method Not Allowed. Use GET or POST." }), {
       status: 405,
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
     });
   }
 
   let body = {};
-  try {
-    const text = await request.text();
-    body = text ? JSON.parse(text) : {};
-  } catch (e) {
-    body = {};
+  if (request.method === "POST") {
+    try {
+      const text = await request.text();
+      body = text ? JSON.parse(text) : {};
+    } catch (e) {
+      body = {};
+    }
+  } else {
+    // GET request: extrai parâmetros da URL
+    const u = new URL(request.url);
+    body = {
+      action: "list_users",
+      pageSize: u.searchParams.get("pageSize") || "300",
+      pageToken: u.searchParams.get("pageToken") || null
+    };
   }
 
   // Validação estrita de autorização admin baseada em config/vipOverrides e Origem (§3.1 e §3.2)
@@ -962,6 +1005,26 @@ export async function handleAdminUsers(request, env) {
   }
 
   const action = body.action || "update_user";
+
+  // Listagem administrativa de usuários e alunos VIP
+  if (action === "list_users") {
+    const pageSize = body.pageSize ? parseInt(body.pageSize, 10) : 300;
+    const pageToken = body.pageToken || null;
+    const [usersResult, menteesResult] = await Promise.all([
+      listFirestoreDocs("users", pageSize, pageToken),
+      listFirestoreDocs("students", 100)
+    ]);
+    return new Response(JSON.stringify({
+      success: true,
+      users: usersResult.documents,
+      nextPageToken: usersResult.nextPageToken,
+      vipMentees: menteesResult.documents
+    }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
   const targetUserId = body.userId || body.uid;
   const userData = body.userData || {};
 

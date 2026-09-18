@@ -781,11 +781,14 @@
         }
       });
     }
+    const isPaidMember = raw.tier === "club_annual" || raw.tier === "club_anual" || raw.tier === "club_monthly" ||
+      raw.tier === "vip_mentorship" || (Array.isArray(raw.categories) && (raw.categories.includes("member_pago") || raw.categories.includes("member_mentoria")));
+
     if (
       raw.tier === "ms_legacy" ||
       raw.category === "magic_stories_legacy" ||
       raw.legacyCategoria === "magic_stories_legacy" ||
-      (Array.isArray(raw.enrolledProducts) && raw.enrolledProducts.includes("ms-legacy") &&
+      (!isPaidMember && Array.isArray(raw.enrolledProducts) && raw.enrolledProducts.includes("ms-legacy") &&
         !raw.enrolledProducts.some(p => ["mentoria-andre", "mentoria-estevaopin", "mentoria_vip"].includes(p)))
     ) {
       legacyEntitlementsSet.add("legado_1");
@@ -793,7 +796,7 @@
       raw.tier === "primeiro_legado" ||
       raw.category === "primeiro_legado_agoraeufalo" ||
       raw.legacyCategoria === "agoraeufalo_primeiro_legado" ||
-      (Array.isArray(raw.enrolledProducts) && raw.enrolledProducts.includes("first-steps") &&
+      (!isPaidMember && Array.isArray(raw.enrolledProducts) && raw.enrolledProducts.includes("first-steps") &&
         !raw.enrolledProducts.some(p => ["mentoria-andre", "mentoria-estevaopin", "mentoria_vip"].includes(p)))
     ) {
       legacyEntitlementsSet.add("legado_2");

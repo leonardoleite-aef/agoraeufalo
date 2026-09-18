@@ -57,7 +57,7 @@ service cloud.firestore {
     // Escrita: Exclusiva do Administrador Mestre (Course Studio / painel de cursos).
     // ========================================================================
     match /courses/{courseId} {
-      allow read: if resource.data.isPublished == true || isAdmin();
+      allow read: if true;
       allow write: if isAdmin();
 
       match /modules/{moduleId} {

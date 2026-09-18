@@ -975,9 +975,38 @@
 
       if (!remoteSuccess) {
         try {
+          const idToken = window.aefPortalAuth ? await window.aefPortalAuth.getIdToken() : null;
+          if (idToken) {
+            const adminApiRes = await fetch("/api/admin/users", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${idToken}`
+              },
+              body: JSON.stringify({ action: "list_users", pageSize: 300 })
+            });
+            if (adminApiRes.ok) {
+              const apiData = await adminApiRes.json();
+              if (apiData && Array.isArray(apiData.users)) {
+                results.users = apiData.users.map(normalizeUserSafe);
+                results.vipMentees = (apiData.vipMentees || []).map(normalizeUserSafe);
+                remoteSuccess = true;
+              }
+            }
+          }
+        } catch (apiErr) {
+          console.warn("[AEF Repository] Falha ao listar via /api/admin/users:", apiErr);
+        }
+      }
+
+      if (!remoteSuccess) {
+        try {
+          const idToken = window.aefPortalAuth ? await window.aefPortalAuth.getIdToken() : null;
+          const headers = idToken ? { "Authorization": `Bearer ${idToken}` } : {};
+          const keyParam = FIREBASE_CONFIG.apiKey ? `&key=${FIREBASE_CONFIG.apiKey}` : '';
           const [uRes, mRes] = await Promise.all([
-            fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users?pageSize=300`),
-            fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/students?pageSize=300`)
+            fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users?pageSize=300${keyParam}`, { headers }),
+            fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/students?pageSize=300${keyParam}`, { headers })
           ]);
           if (uRes.ok) {
             const uData = await uRes.json();

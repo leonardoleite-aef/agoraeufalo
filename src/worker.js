@@ -65,6 +65,13 @@ export default {
       return new Response('Not Found', { status: 404 });
     }
 
+    // Normalização defensiva para assets estáticos aninhados em subrotas (ex: /alunos/assets/* -> /assets/*)
+    if (path.includes('/assets/')) {
+      const cleanAssetPath = path.substring(path.indexOf('/assets/'));
+      url.pathname = cleanAssetPath;
+      return env.ASSETS.fetch(new Request(url.toString(), request));
+    }
+
     // Se for arquivo estático com extensão (.css, .js, .png, .jpg, .svg, .ico, .mp3, .pdf, .json, etc)
     if (path.includes('.') && !path.endsWith('.html')) {
       return env.ASSETS.fetch(request);

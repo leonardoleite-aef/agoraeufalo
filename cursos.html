@@ -316,7 +316,7 @@
       
       try {
         // Fetch Courses
-        const coursesRes = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses");
+        const coursesRes = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100&key=AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk");
         if (coursesRes.ok) {
           const data = await coursesRes.json();
           if (data && data.documents) {
@@ -336,7 +336,7 @@
 
       try {
         // Fetch Offers
-        const offersRes = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/offers");
+        const offersRes = await fetch("https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/offers?pageSize=100&key=AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk");
         if (offersRes.ok) {
           const data = await offersRes.json();
           if (data && data.documents) {

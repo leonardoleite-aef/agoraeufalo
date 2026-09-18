@@ -4791,6 +4791,3858 @@ const AEF_COURSES_DATA = {
         ]
       }
     ]
+  },
+  "fs-aef-ec": {
+    "description": "Aqui você vai aprender todos os pontos fundamentais de como a lingua inglesa funciona para o aluno iniciante. Se você não é iniciante, aproveite para revisar o que já esqueceu.",
+    "schemaVersion": 2,
+    "isPublished": true,
+    "badge": "CURSO LIBERADO",
+    "id": "fs-aef-ec",
+    "published": true,
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1788906319813_course_cover_1788906319784.jpg?alt=media",
+    "slug": "fs-aef-ec",
+    "title": "First Steps - Os Primeiros Passos Para Aprender Inglês",
+    "access": {
+      "requiresProductId": [],
+      "entitlements": [
+        "member_pago"
+      ],
+      "legacyGrantIds": []
+    },
+    "accessTier": "all_access",
+    "themeColor": "indigo",
+    "tierRequired": "vip",
+    "updatedAt": "2026-09-18T11:27:50.555Z",
+    "modules": [
+      {
+        "updatedAt": "2026-09-10T03:13:07.373Z",
+        "id": "ciclo-01",
+        "courseId": "fs-aef-ec",
+        "title": "Módulo 1 - A base",
+        "order": 1,
+        "description": "",
+        "badge": "",
+        "published": true,
+        "stats": "",
+        "lessons": [
+          {
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788929384288_Apostila_fs-aef-ec_personal_pronouns.pdf?alt=media",
+            "processedContentHtml": "<div class=\"space-y-8 text-slate-800 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200/80 rounded-2xl p-6 shadow-sm\"><div class=\"flex items-center gap-3 mb-3\"><span class=\"bg-amber-500 text-white font-bold text-xs uppercase px-3 py-1 rounded-full shadow-sm\">Sacada do Prof. Leo</span><h2 class=\"text-xl font-bold text-amber-950 m-0\">Do Papel para o Reflexo de Fala</h2></div><p class=\"text-slate-700 leading-relaxed m-0\">Entender a teoria leva cinco minutos. O desafio real da vida real é a <strong>automação no calor da conversa</strong>. Quando você está conversando em inglês, não dá tempo de consultar uma tabela mental. O seu cérebro precisa disparar o substituto correto no exato milissegundo em que você pensa na pessoa ou no objeto.</p></div><div class=\"space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-200 pb-2\">O Gatilho Mental do Substituição Automática</h3><p class=\"text-slate-600 text-sm\">Treine o seu cérebro para reagir instantaneamente a cada situação:</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3\"><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between\"><span class=\"text-slate-700 font-medium\">Falando de uma mulher (ex: Jéssica)</span><span class=\"bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-lg text-sm border border-amber-200\">Dispara: SHE</span></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between\"><span class=\"text-slate-700 font-medium\">Falando de um homem (ex: Paulo)</span><span class=\"bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-lg text-sm border border-amber-200\">Dispara: HE</span></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between\"><span class=\"text-slate-700 font-medium\">Duas ou mais pessoas (ex: John & Mark)</span><span class=\"bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-lg text-sm border border-amber-200\">Dispara: THEY</span></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between\"><span class=\"text-slate-700 font-medium\">Você + outra pessoa (ex: Anna e eu)</span><span class=\"bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-lg text-sm border border-amber-200\">Dispara: WE</span></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center justify-between\"><span class=\"text-slate-700 font-medium\">Um objeto ou lugar (ex: a casa, a mesa)</span><span class=\"bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-lg text-sm border border-amber-200\">Dispara: IT</span></div><div class=\"bg-amber-100/60 border border-amber-300 rounded-xl p-4 shadow-sm flex items-center justify-between\"><div class=\"pr-2\"><span class=\"text-amber-950 font-bold block text-sm\">Atenção para o Plural de Coisas!</span><span class=\"text-slate-600 text-xs\">Objetos/lugares no plural (os livros)</span></div><span class=\"bg-amber-600 text-white font-bold px-3 py-1 rounded-lg text-sm shadow-sm\">Dispara: THEY</span></div></div></div><div class=\"space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-200 pb-2\">Treino de Automação de Fala (Frases Práticas)</h3><p class=\"text-slate-600 text-sm\">Leia a frase original e sinta a substituição acontecendo naturalmente na sua boca:</p><div class=\"space-y-3\"><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">Jessica is my friend</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">She is my friend.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: A Jéssica é minha amiga → Ela é minha amiga.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">Paulo works for Apple</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">He works for Apple.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: O Paulo trabalha na Apple → Ele trabalha na Apple.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">John and Mark live in New York</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">They live in New York.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: O John e o Mark moram em Nova York → Eles moram em Nova York.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">The house is a new house</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">It is a new house.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: Falando de uma coisa só → Aponta direto com It.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">Anna and I work together</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">We work together.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: Incluiu você no grupo → Vira We na hora.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">The books are cheap</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">They are cheap.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: Falou de mais de um objeto → O cérebro dispara They sem hesitar.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">The boy likes video games</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">He likes video games.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: O menino gosta de videogame → Ele gosta de videogame.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">Carmem and Mary are sisters</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">They are sisters.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: A Carmem e a Mary são irmãs → Elas são irmãs.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">You and Josh can come with us</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">You can come with us.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: Falando diretamente com a pessoa + outra → Vocês podem vir com a gente.</p></div><div class=\"bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2\"><div class=\"flex flex-wrap items-center gap-2 text-sm\"><span class=\"text-slate-400 font-medium\">De:</span><span class=\"text-slate-600 line-through\">The table is very long</span><span class=\"text-amber-600 font-bold\">→</span><span class=\"text-slate-900 font-bold text-base\">It is very long.</span></div><p class=\"text-slate-500 text-xs italic m-0\">Entendimento natural: A mesa é muito comprida → Ela é muito comprida.</p></div></div></div></div>",
+            "title": "01 - Personal Pronouns",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923632364_art_1788923630450.jpg?alt=media",
+            "order": 1,
+            "id": "aula-1788904998576",
+            "hasTrainingTrack": true,
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788905020199_FS-EC_mod_1_aula_1_per_pronouns.mp4?alt=media",
+            "rawScript": "Personal Pronouns na Vida Real: Por que Entender é Fácil, mas Automatizar é o Desafio\n\nAprender os pronomes em inglês teoricamente todo mundo consegue em cinco minutos. Traduzir \"he\" como ele, \"she\" como ela, \"we\" como nós ou \"they\" como eles/elas é a parte mais óbvia do estudo. No papel, parece moleza.\n\nO verdadeiro problema nunca foi a teoria: o desafio real é a automação na hora de falar.\n\nNa dinâmica de uma conversa ao vivo, você não tem tempo de parar para pensar em tabela gramatical. No calor do diálogo, quando você está falando com alguém sobre uma terceira pessoa (ou sobre um grupo de pessoas, ou sobre um objeto), o cérebro do brasileiro costuma travar se o uso do pronome não estiver automático na ponta da língua.\n\nSubstituir nomes reais por pronomes de forma instantânea é o que faz você soar natural e manter o fluxo da conversa:\n- Está falando da Jéssica? Na sequência já tem que virar \"she\" sem hesitar.\n- Está falando do Paulo? Já vira \"he\".\n- Está falando de duas ou mais pessoas (John e Mark)? Imediatamente vira \"they\".\n- Está falando de você com outra pessoa (Anna e eu)? Vira \"we\" na hora.\n- Está falando de um objeto ou lugar (a casa, a mesa)? Entra o \"it\" sem drama.\n- E se forem objetos no plural (os livros)? O cérebro precisa disparar o \"they\" naturalmente.\n\nO objetivo deste treino não é decodificar conceitos gramaticais, mas sim treinar o seu reflexo de substituição até que falar sobre qualquer pessoa ou coisa se torne algo completamente automático.\n\n\nExercício de Substituição de Pronomes\n\nOriginal Phrase: Jessica is my friend\nPronoun Phrase: [ ___ ] is my friend\n\nOriginal Phrase: Paulo works for Apple\nPronoun Phrase: [ ___ ] works for Apple\n\nOriginal Phrase: John and Mark live in New York\nPronoun Phrase: [ ___ ] live in new york\n\nOriginal Phrase: The house is a new house\nPronoun Phrase: [ ___ ] is a new house\n\nOriginal Phrase: Anna and I work together\nPronoun Phrase: [ ___ ] work together\n\nOriginal Phrase: The books are cheap\nPronoun Phrase: [ ___ ] are cheap\n\nOriginal Phrase: The boy likes video games\nPronoun Phrase: [ ___ ] likes video games\n\nOriginal Phrase: Carmem and Mary are sisters\nPronoun Phrase: [ ___ ] are sisters\n\nOriginal Phrase: You and Josh can come with us\nPronoun Phrase: [ ___ ] can come with us\n\nOriginal Phrase: The table is very long\nPronoun Phrase: [ ___ ] is very long\n\n\nFrases Resolvidas para Prática de Fala e Automação\n\nJessica is my friend -> She is my friend.\n(A Jéssica é minha amiga -> Ela é minha amiga.)\n\nPaulo works for Apple -> He works for Apple.\n(O Paulo trabalha para a Apple -> Ele trabalha para a Apple.)\n\nJohn and Mark live in New York -> They live in new york.\n(O John e o Mark moram em Nova York -> Eles moram em Nova York.)\n\nThe house is a new house -> It is a new house.\n(A casa é uma casa nova -> Ela é uma casa nova.)\n\nAnna and I work together -> We work together.\n(A Anna e eu trabalhamos juntos -> Nós trabalhamos juntos.)\n\nThe books are cheap -> They are cheap.\n(Os livros são baratos -> Eles são baratos.)\n\nThe boy likes video games -> He likes video games.\n(O menino gosta de videogame -> Ele gosta de videogame.)\n\nCarmem and Mary are sisters -> They are sisters.\n(A Carmem e a Mary são irmãs -> Elas são irmãs.)\n\nYou and Josh can come with us -> You can come with us.\n(Você e o Josh podem vir conosco -> Vocês podem vir conosco.)\n\nThe table is very long -> It is very long.\n(A mesa é muito comprida -> Ela é muito comprida.)",
+            "duration": "15:20",
+            "sentences": [],
+            "moduleId": "ciclo-01",
+            "updatedAt": "2026-09-10T03:13:07.374Z",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923966362_FS-EC_mod_1_aula_1_per_pronouns.mp4?alt=media",
+            "courseId": "fs-aef-ec",
+            "goldenTip": "Saber a tabela de cabeça não faz ninguém falar: o segredo é treinar o reflexo de substituição instantânea. Quando você para de traduzir e deixa o cérebro disparar o som certo sem pensar, a fala destrava de verdade!",
+            "aiStatus": "draft_pending",
+            "published": true,
+            "quizId": "",
+            "type": "lesson",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923630460_thumb_1788923630440.jpg?alt=media",
+            "trainingTrackId": "aula-1788904998576"
+          },
+          {
+            "courseId": "fs-aef-ec",
+            "published": true,
+            "aiStatus": "draft_pending",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788929777891_Apostila_fs-aef-ec_present_simple.pdf?alt=media",
+            "trainingTrackId": "aula-1788905850710",
+            "hasTrainingTrack": true,
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788907881049_FS-EC_mod_1_aula_2_pres_simple.mp4?alt=media",
+            "type": "lesson",
+            "updatedAt": "2026-09-10T03:13:07.374Z",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-800 font-sans\">\n  <div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm space-y-3\">\n    <div class=\"flex items-center gap-3\">\n      <span class=\"text-2xl\">💡</span>\n      <h2 class=\"text-xl font-bold text-amber-950\">O Sentimento da Estrutura</h2>\n    </div>\n    <p class=\"text-amber-900 leading-relaxed text-base\">\n      Quando você quer conversar em inglês, não pense em tempos verbais ou nomenclatura acadêmica. O segredo para falar de rotina é a <strong>fórmula do desejo direto</strong>: você só precisa comunicar <em>quem faz</em> e <em>a ação</em>. É o atalho mais rápido para expressar o que você quer, precisa ou faz todos os dias.\n    </p>\n  </div>\n\n  <div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\">\n    <h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-100 pb-2\">1. A Lógica Direta: Quem + Ação</h3>\n    <p class=\"text-slate-600 text-sm\">\n      Para falar sobre você, coloque <code class=\"bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-mono font-semibold\">I</code> seguido da ação. Para falar com a pessoa à sua frente, use <code class=\"bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-mono font-semibold\">You</code>.\n    </p>\n    \n    <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 pt-2\">\n      <div class=\"bg-slate-50 border border-slate-200/80 rounded-xl p-4 space-y-2\">\n        <span class=\"text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100/80 px-2.5 py-1 rounded-full\">Falando de Você (I)</span>\n        <ul class=\"space-y-1.5 text-sm text-slate-700 pt-1\">\n          <li><strong class=\"text-slate-900\">I eat.</strong> <span class=\"text-slate-500 text-xs\">(Eu como)</span></li>\n          <li><strong class=\"text-slate-900\">I work.</strong> <span class=\"text-slate-500 text-xs\">(Eu trabalho)</span></li>\n          <li><strong class=\"text-slate-900\">I need.</strong> <span class=\"text-slate-500 text-xs\">(Eu preciso)</span></li>\n        </ul>\n      </div>\n\n      <div class=\"bg-slate-50 border border-slate-200/80 rounded-xl p-4 space-y-2\">\n        <span class=\"text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100/80 px-2.5 py-1 rounded-full\">Falando com o Outro (You)</span>\n        <ul class=\"space-y-1.5 text-sm text-slate-700 pt-1\">\n          <li><strong class=\"text-slate-900\">You speak.</strong> <span class=\"text-slate-500 text-xs\">(Você fala)</span></li>\n          <li><strong class=\"text-slate-900\">You understand.</strong> <span class=\"text-slate-500 text-xs\">(Você entende)</span></li>\n          <li><strong class=\"text-slate-900\">You know.</strong> <span class=\"text-slate-500 text-xs\">(Você sabe/conhece)</span></li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\">\n    <h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-100 pb-2\">2. Verbos Essenciais Organizados por Intenção</h3>\n    \n    <div class=\"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2 text-sm\">\n      <div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\">\n        <p class=\"font-bold text-amber-900 text-xs uppercase mb-2\">Necessidade & Vontade</p>\n        <p><strong>need</strong> – precisar</p>\n        <p><strong>want</strong> – querer</p>\n        <p><strong>have</strong> – ter</p>\n        <p><strong>like</strong> – gostar</p>\n        <p><strong>love</strong> – amar</p>\n      </div>\n\n      <div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\">\n        <p class=\"font-bold text-amber-900 text-xs uppercase mb-2\">Movimento & Rotina</p>\n        <p><strong>go</strong> – ir</p>\n        <p><strong>come</strong> – vir</p>\n        <p><strong>arrive</strong> – chegar</p>\n        <p><strong>get up</strong> – levantar</p>\n        <p><strong>travel</strong> – viajar</p>\n      </div>\n\n      <div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\">\n        <p class=\"font-bold text-amber-900 text-xs uppercase mb-2\">Comunicação & Percepção</p>\n        <p><strong>speak / talk</strong> – falar / conversar</p>\n        <p><strong>understand</strong> – entender</p>\n        <p><strong>know</strong> – saber / conhecer</p>\n        <p><strong>think</strong> – pensar / achar</p>\n        <p><strong>listen to</strong> – escutar</p>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"bg-amber-50/50 border border-amber-200/60 rounded-2xl p-6 space-y-4\">\n    <h3 class=\"text-lg font-bold text-amber-950 flex items-center gap-2\">\n      <span>🚀</span> Frases de Aplicação Imediata no Mundo Real\n    </h3>\n    \n    <div class=\"grid grid-cols-1 md:grid-cols-2 gap-3 text-sm\">\n      <div class=\"bg-white p-3.5 rounded-xl border border-amber-200/40 shadow-sm\">\n        <p class=\"font-semibold text-slate-900\">I need water.</p>\n        <p class=\"text-slate-500 text-xs mt-0.5\">Preciso de água.</p>\n      </div>\n      <div class=\"bg-white p-3.5 rounded-xl border border-amber-200/40 shadow-sm\">\n        <p class=\"font-semibold text-slate-900\">I want coffee.</p>\n        <p class=\"text-slate-500 text-xs mt-0.5\">Quero café.</p>\n      </div>\n      <div class=\"bg-white p-3.5 rounded-xl border border-amber-200/40 shadow-sm\">\n        <p class=\"font-semibold text-slate-900\">I need to go.</p>\n        <p class=\"text-slate-500 text-xs mt-0.5\">Preciso ir.</p>\n      </div>\n      <div class=\"bg-white p-3.5 rounded-xl border border-amber-200/40 shadow-sm\">\n        <p class=\"font-semibold text-slate-900\">I understand you.</p>\n        <p class=\"text-slate-500 text-xs mt-0.5\">Eu entendo você.</p>\n      </div>\n    </div>\n  </div>\n</div>",
+            "goldenTip": "Esqueça conjugações e tabelas decoradas: para falar de você ou da outra pessoa no dia a dia, a lógica é puramente 'Quem + Ação'. Diga o que precisa ou quer no momento sem travar tentando lembrar de regras gramaticais.",
+            "sentences": [],
+            "order": 2,
+            "rawScript": "Como falar sobre a sua rotina sem complicação\n\nQuando você começa a falar inglês, esqueça regras gramaticais e decorebas complexas. Pense no Simple Present como a sua ferramenta prática para dizer o que você faz, o que você quer e o que você precisa no dia a dia.\n\nA lógica para falar é direta:\n\n1. Eu + Ação:\nPara falar sobre você, basta juntar \"I\" com o verbo:\nI eat. (Eu como.)\nI work. (Eu trabalho.)\nI need. (Eu preciso.)\n\n2. Juntando com uma necessidade real:\nI drink water. (Eu bebo água.)\nI need help. (Eu preciso de ajuda.)\nI want coffee. (Eu quero café.)\n\n3. Falando com a outra pessoa (You):\nYou speak English. (Você fala inglês.)\nYou understand. (Você entende.)\n\nSem regras complicadas: apenas quem faz e a ação direta.\n\n\nLista de Verbos Úteis\n\nto eat - comer\nto drink - beber\nto work - trabalhar\nto go - ir\nto talk - conversar\nto speak - falar\nto have - ter\nto sleep - dormir\nto need - precisar\nto want - querer\nto believe - acreditar\nto stay - ficar\nto do - fazer\nto read - ler\nto come - vir\nto close - fechar\nto open - abrir\nto sell - vender\nto wear - vestir\nto walk - caminhar\nto run - correr\nto watch - assistir\nto listen to - escutar\nto like - gostar\nto love - amar\nto hate - odiar\nto send - enviar\nto see - ver\nto hear - ouvir\nto call - chamar / ligar / telefonar\nto know - saber / conhecer\nto ask - perguntar\nto answer - responder\nto find - encontrar\nto forget - esquecer\nto remember - lembrar\nto cook - cozinhar\nto sing - cantar\nto buy - comprar\nto arrive - chegar\nto think - pensar\nto wait - esperar\nto meet - conhecer / encontrar\nto get up - levantar\nto understand - entender\nto travel - viajar\nto give - dar\nto receive - receber\n\n\nPrimeiras Frases para Conversação\n\nNecessidades e Desejos:\nI need water. (Eu preciso de água.)\nI want coffee. (Eu quero café.)\nI need to go. (Eu preciso ir.)\nI want to sleep. (Eu quero dormir.)\n\nAções Diárias:\nI speak English. (Eu falo inglês.)\nI understand you. (Eu entendo você.)\nI work here. (Eu trabalho aqui.)\nI have a car. (Eu tenho um carro.)\n\nFalando com a outra pessoa:\nYou speak Portuguese. (Você fala português.)\nYou know my friend. (Você conhece meu amigo.)\nYou understand English. (Você entende inglês.)",
+            "title": "02 - Present Simple",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923568102_thumb_1788923568081.jpg?alt=media",
+            "duration": "23:30",
+            "quizId": "",
+            "id": "aula-1788905850710",
+            "moduleId": "ciclo-01",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923569902_art_1788923568091.jpg?alt=media",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788907941360_FS-EC_mod_1_aula_2_pres_simple.mp4?alt=media"
+          },
+          {
+            "courseId": "fs-aef-ec",
+            "published": true,
+            "aiStatus": "draft_pending",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788929801930_Apostila_fs-aef-ec_adverbs_of_place_lugares.pdf?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788909314287_FS-EC_mod_1_aula_3_adv_place.mp4?alt=media",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923477046_thumb_1788923476998.jpg?alt=media",
+            "hasTrainingTrack": true,
+            "updatedAt": "2026-09-10T03:13:07.773Z",
+            "type": "lesson",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923478870_art_1788923477020.jpg?alt=media",
+            "trainingTrackId": "aula-1788909250195",
+            "goldenTip": "Essas palavras te ajudam a  formar suas primeiras frases. Quando você vai trabalhar? Quando você  vai a academia? Com que frequencia você ou outra pessoa estuda ingles? Que dia? Treine! treine muito!",
+            "processedContentHtml": "<div class=\"space-y-8 text-slate-800 font-sans\">\n  <!-- BLOCO 1: O RITMO DO SEU DIA -->\n  <div class=\"bg-amber-50/90 border-2 border-amber-200/80 rounded-2xl p-6 shadow-sm space-y-4\">\n    <div class=\"flex items-center gap-3 border-b border-amber-200/60 pb-3\">\n      <span class=\"flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white font-bold text-sm\">1</span>\n      <h3 class=\"text-xl font-bold text-amber-950 m-0\">Marcadores do Seu Dia a Dia (Situando no Tempo)</h3>\n    </div>\n    <p class=\"text-base leading-relaxed text-slate-700 m-0\">\n      Em vez de decorar nomes técnicos, observe como nós dividimos o dia na prática. Repare no sentimento da estrutura: usamos <span class=\"font-semibold text-amber-900\">\"in the\"</span> para os períodos mais longos do dia e o preciso <span class=\"font-semibold text-amber-900\">\"at\"</span> para a noite.\n    </p>\n    \n    <div class=\"grid grid-cols-1 md:grid-cols-2 gap-3 pt-2\">\n      <div class=\"bg-white rounded-xl p-4 border border-amber-200/50 flex flex-col justify-between shadow-xs\">\n        <span class=\"font-bold text-amber-900 text-lg\">in the morning</span>\n        <span class=\"text-sm text-slate-600 italic\">pela manhã / de manhã</span>\n      </div>\n      <div class=\"bg-white rounded-xl p-4 border border-amber-200/50 flex flex-col justify-between shadow-xs\">\n        <span class=\"font-bold text-amber-900 text-lg\">in the afternoon</span>\n        <span class=\"text-sm text-slate-600 italic\">pela tarde / à tarde</span>\n      </div>\n      <div class=\"bg-white rounded-xl p-4 border border-amber-200/50 flex flex-col justify-between shadow-xs\">\n        <span class=\"font-bold text-amber-900 text-lg\">in the evening</span>\n        <span class=\"text-sm text-slate-600 italic\">ao anoitecer / início da noite</span>\n      </div>\n      <div class=\"bg-white rounded-xl p-4 border border-amber-200/50 flex flex-col justify-between shadow-xs\">\n        <span class=\"font-bold text-amber-900 text-lg\">at night</span>\n        <span class=\"text-sm text-slate-600 italic\">à noite (noite adentro)</span>\n      </div>\n    </div>\n  </div>\n\n  <!-- BLOCO 2: FREQUÊNCIA E PACING -->\n  <div class=\"bg-amber-50/90 border-2 border-amber-200/80 rounded-2xl p-6 shadow-sm space-y-4\">\n    <div class=\"flex items-center gap-3 border-b border-amber-200/60 pb-3\">\n      <span class=\"flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white font-bold text-sm\">2</span>\n      <h3 class=\"text-xl font-bold text-amber-950 m-0\">Construindo o Hábito da Rotina</h3>\n    </div>\n    <p class=\"text-base leading-relaxed text-slate-700 m-0\">\n      Para dar ritmo às suas frases, usamos combinadores simples baseados na palavra <span class=\"font-semibold text-amber-900\">every</span> (cada/todo) e marcadores práticos de tempo:\n    </p>\n\n    <div class=\"grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2\">\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 text-center\">\n        <p class=\"font-bold text-slate-900 m-0\">every day</p>\n        <p class=\"text-xs text-slate-500 m-0 mt-1\">todos os dias</p>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 text-center\">\n        <p class=\"font-bold text-slate-900 m-0\">every week</p>\n        <p class=\"text-xs text-slate-500 m-0 mt-1\">toda semana</p>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 text-center\">\n        <p class=\"font-bold text-slate-900 m-0\">every month</p>\n        <p class=\"text-xs text-slate-500 m-0 mt-1\">todo mês</p>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 text-center\">\n        <p class=\"font-bold text-slate-900 m-0\">every year</p>\n        <p class=\"text-xs text-slate-500 m-0 mt-1\">todo ano</p>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 text-center\">\n        <p class=\"font-bold text-slate-900 m-0\">every other day</p>\n        <p class=\"text-xs text-slate-500 m-0 mt-1\">dia sim, dia não</p>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 text-center\">\n        <p class=\"font-bold text-slate-900 m-0\">now / later</p>\n        <p class=\"text-xs text-slate-500 m-0 mt-1\">agora / mais tarde</p>\n      </div>\n    </div>\n\n    <div class=\"bg-white p-4 rounded-xl border border-amber-200/80 flex flex-col sm:flex-row justify-around gap-4 text-center mt-4\">\n      <div>\n        <span class=\"block font-bold text-amber-900\">on weekdays</span>\n        <span class=\"text-xs text-slate-600\">nos dias de semana (segunda a sexta)</span>\n      </div>\n      <div class=\"border-t sm:border-t-0 sm:border-l border-amber-100 pt-2 sm:pt-0 sm:pl-4\">\n        <span class=\"block font-bold text-amber-900\">on weekends</span>\n        <span class=\"text-xs text-slate-600\">nos fins de semana</span>\n      </div>\n    </div>\n  </div>\n\n  <!-- BLOCO 3: DIAS DA SEMANA -->\n  <div class=\"bg-amber-50/90 border-2 border-amber-200/80 rounded-2xl p-6 shadow-sm space-y-4\">\n    <div class=\"flex items-center gap-3 border-b border-amber-200/60 pb-3\">\n      <span class=\"flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white font-bold text-sm\">3</span>\n      <h3 class=\"text-xl font-bold text-amber-950 m-0\">Dias da Semana (Days of the Week)</h3>\n    </div>\n    <p class=\"text-base leading-relaxed text-slate-700 m-0\">\n      Lembre-se da sacada do Leo: para marcar compromissos no calendário em inglês, usamos sempre a preposição <span class=\"font-semibold text-amber-900\">\"on\"</span> antes do dia (ex: <i>on Monday</i>).\n    </p>\n\n    <div class=\"grid grid-cols-2 sm:grid-cols-4 gap-3 text-center pt-2\">\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50\">\n        <span class=\"block font-bold text-slate-900\">Sunday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Sun.</span>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50\">\n        <span class=\"block font-bold text-slate-900\">Monday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Mon.</span>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50\">\n        <span class=\"block font-bold text-slate-900\">Tuesday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Tues.</span>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50\">\n        <span class=\"block font-bold text-slate-900\">Wednesday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Wed.</span>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50\">\n        <span class=\"block font-bold text-slate-900\">Thursday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Thurs.</span>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50\">\n        <span class=\"block font-bold text-slate-900\">Friday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Fri.</span>\n      </div>\n      <div class=\"bg-white p-3 rounded-xl border border-amber-200/50 col-span-2 sm:col-span-2\">\n        <span class=\"block font-bold text-slate-900\">Saturday</span>\n        <span class=\"text-xs text-amber-800 font-semibold\">Sat.</span>\n      </div>\n    </div>\n  </div>\n\n  <!-- BLOCO 4: PRÁTICA E FIXAÇÃO GUIADA -->\n  <div class=\"bg-amber-50/90 border-2 border-amber-200/80 rounded-2xl p-6 shadow-sm space-y-4\">\n    <div class=\"flex items-center gap-3 border-b border-amber-200/60 pb-3\">\n      <span class=\"flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white font-bold text-sm\">4</span>\n      <h3 class=\"text-xl font-bold text-amber-950 m-0\">Praticar e Fixar</h3>\n    </div>\n    \n    <div class=\"space-y-3\">\n      <div class=\"bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-xs\">\n        <p class=\"font-bold text-lg text-slate-900 m-0\">I work every day.</p>\n        <p class=\"text-sm text-slate-600 m-0 mt-1\">Eu trabalho todos os dias.</p>\n      </div>\n      <div class=\"bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-xs\">\n        <p class=\"font-bold text-lg text-slate-900 m-0\">He opens the store on weekends.</p>\n        <p class=\"text-sm text-slate-600 m-0 mt-1\">Ele abre a loja nos fins de semana.</p>\n      </div>\n      <div class=\"bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-xs\">\n        <p class=\"font-bold text-lg text-slate-900 m-0\">They eat in the kitchen at night.</p>\n        <p class=\"text-sm text-slate-600 m-0 mt-1\">Eles comem na cozinha à noite.</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- BLOCO 5: AGORA É A SUA VEZ -->\n  <div class=\"bg-amber-100/60 border-2 border-amber-300 rounded-2xl p-6 shadow-sm space-y-4\">\n    <h3 class=\"text-xl font-bold text-amber-950 m-0 flex items-center gap-2\">\n      🚀 Now It's Your Turn! (Desafio de Fala)\n    </h3>\n    <p class=\"text-sm text-slate-700 m-0\">\n      Tente falar em voz alta estas frases completas conectando o verbo ao momento certo do dia:\n    </p>\n    \n    <ul class=\"space-y-2 list-none p-0 m-0 font-medium text-slate-800\">\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Eu como vegetais todos os dias. <span class=\"block text-xs font-normal text-amber-800 mt-1\">(Dica: I eat vegetables...)</span></li>\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Você fala inglês bem.</li>\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Ele vende carros.</li>\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Ela trabalha de manhã.</li>\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Nós dormimos cedo nos dias de semana.</li>\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Vocês estudam inglês à noite.</li>\n      <li class=\"bg-white/80 p-3 rounded-lg border border-amber-200/60\">• Eles precisam de dinheiro.</li>\n    </ul>\n  </div>\n</div>",
+            "order": 3,
+            "sentences": [],
+            "title": "03 - Adverbs of Place - Lugares",
+            "rawScript": "agora\neu falo\nAdvérbios de Tempo, Dias da Semana e Prática\nADVERBS OF TIME\n• in the morning\n• in the afternoon\n• in the evening\n• at night\nADVERBS OF TIME\n• every day\n• every week\n• every month\n• every year\n• tomorrow\n• yesterday\n• every other day\nnow\nlater\non weekdays\n• on weekends\nagora\neu falo\nMaterial Exclusivo do Agora EuFalo - Treinamento Definitivo de Inglês\n©2020 AgoraEuFalo - Todos os direitos reservados\nagora\neu falo\nDays of the Week\nDays of the Week\n\nSunday | Sun.\nMonday | Mon.\nTuesday | Tues.\nWednesday | Wed.\nThursday | Thurs.\nFriday | Fri.\nSaturday | Sat.\n\n• Sunday\n• Monday\n• Tuesday\n• Wednesday\n• Thursday\n• Friday\n• Saturday\nPRATICAR E FIXAR\n• I work every day\n• He opens the store on weekends\n• They eat in the kitchen at night\nagora\neu falo\nMaterial Exclusivo do Agora EuFalo - Treinamento Definitivo de Inglês\n©2020 AgoraEuFalo - Todos os direitos reservados\nagora\neu falo\nNOW IT'S YOUR TURN!\n• Eu como vegetais todos os dias.\n• Você fala inglês bem.\n• Ele vende carros.\n• Ela trabalha de manhã.\n• Nós dormimos cedo nos dias de semana.\n• Vocês estudam inglês à noite.\n• Eles precisam de dinheiro.\nTOMORROW:\n• Simple Present with more verbs on the sentence\n• Greetings (saudações)\nagora\neu falo\nMaterial Exclusivo do Agora EuFalo - Treinamento Definitivo de Inglês\n©2020 AgoraEuFalo - Todos os direitos reservados",
+            "duration": "38:37",
+            "quizId": "",
+            "id": "aula-1788909250195",
+            "moduleId": "ciclo-01",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788909282720_FS-EC_mod_1_aula_3_adv_place.mp4?alt=media"
+          },
+          {
+            "id": "aula-1788922925682",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788929826518_Apostila_fs-aef-ec_frases_com_mais_de_um_verbo.pdf?alt=media",
+            "title": "04 - Frases com mais de um verbo",
+            "goldenTip": "Não pense na palavra 'to' como uma regra de gramática, mas sim como uma pontezinha de transição entre o seu desejo interno e a ação que você vai realizar. O primeiro verbo mostra a sua intenção, e a ponte te leva até o seu destino!",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923019597_FS-EC_mod_1_aula_4_frases_present.mp4?alt=media",
+            "order": 4,
+            "duration": "15:23",
+            "type": "lesson",
+            "updatedAt": "2026-09-10T03:13:07.774Z",
+            "moduleId": "ciclo-01",
+            "hasTrainingTrack": true,
+            "trainingTrackId": "aula-1788922925682",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2\">A Ponte da Intenção: Conectando Ações</h3><p class=\"text-slate-800 leading-relaxed\">Para deixar sua fala mais rica e natural, basta unir a sua intenção (o que você quer, precisa ou gosta) com a ação principal. Em inglês, a palavra <span class=\"font-bold text-amber-800 underline decoration-amber-400\">\"to\"</span> funciona exatamente como essa ponte de ligação entre as duas ideias.</p></div><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-white border-2 border-slate-200 rounded-xl p-5 shadow-sm\"><div class=\"text-xs font-bold uppercase tracking-wider text-amber-600 mb-1\">Estrutura Prática</div><div class=\"text-lg font-bold text-slate-800 mb-3\">Intenção + Ponte + Ação</div><div class=\"space-y-3 font-mono text-sm\"><div class=\"bg-amber-50/60 p-3 rounded-lg border border-amber-200/80\"><span class=\"text-slate-700\">I want</span> <span class=\"font-bold text-amber-700\">+ to +</span> <span class=\"text-slate-700\">go</span><div class=\"text-xs font-sans text-slate-600 mt-1 font-medium\">I want to go.</div></div><div class=\"bg-amber-50/60 p-3 rounded-lg border border-amber-200/80\"><span class=\"text-slate-700\">I need</span> <span class=\"font-bold text-amber-700\">+ to +</span> <span class=\"text-slate-700\">sleep</span><div class=\"text-xs font-sans text-slate-600 mt-1 font-medium\">I need to sleep.</div></div></div></div><div class=\"bg-white border-2 border-slate-200 rounded-xl p-5 shadow-sm\"><div class=\"text-xs font-bold uppercase tracking-wider text-amber-600 mb-1\">Toque de Pronúncia</div><div class=\"text-lg font-bold text-slate-800 mb-3\">Falando de Ele ou Ela</div><p class=\"text-sm text-slate-700 leading-relaxed mb-3\">Quando o foco da frase for <span class=\"font-bold text-slate-900\">He</span> (Ele) ou <span class=\"font-bold text-slate-900\">She</span> (Ela), coloque apenas um leve som de <span class=\"font-bold text-amber-700\">\"s\"</span> no verbo da intenção:</p><div class=\"space-y-2 font-mono text-sm\"><div class=\"p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-slate-800\">He want<span class=\"font-bold text-amber-600\">s</span> to go.</div><div class=\"p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-slate-800\">She like<span class=\"font-bold text-amber-600\">s</span> to sleep.</div></div></div></div><div class=\"bg-white border-2 border-amber-200/80 rounded-2xl p-6 shadow-sm\"><h4 class=\"text-lg font-bold text-slate-900 mb-4\">Blocos Prontos para Treino de Fala</h4><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans\"><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">I want to stay.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">You need to go.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">She likes to sleep.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">He wants to go.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">We want to stay.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">You need to sleep.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">I like to stay.</div><div class=\"p-3 bg-amber-50/40 rounded-xl border border-amber-200/60 font-semibold text-slate-800\">We need to go.</div></div></div></div>",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923255335_art_1788923252966.jpg?alt=media",
+            "published": true,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923252977_thumb_1788923252950.jpg?alt=media",
+            "rawScript": "Juntando Dois Verbos: Como Dar o Próximo Passo na Conversação\n\nParabéns! Agora você já sabe dizer o que faz, mas a conversa real fica muito mais rica quando você junta duas ações em uma mesma ideia. \n\nEm português você diz: \"Eu quero ir\" ou \"Eu preciso dormir\". Repare que temos dois verbos juntos. Em inglês a lógica é exatamente a mesma, só precisamos colocar a pontezinha \"to\" entre eles para conectar as duas ações:\n\nI want + to go = I want to go. (Eu quero ir.)\nI need + to sleep = I need to sleep. (Eu preciso dormir.)\n\nDica prática de fala:\nPense sempre no primeiro verbo como a sua intenção (querer, precisar, gostar) e no segundo como o que você realmente vai fazer (ir, ficar, dormir). \n\nQuando falamos de uma terceira pessoa (He ou She), lembre-se apenas de dar aquele leve som de \"s\" no primeiro verbo da conversa:\nHe wants to go. (Ele quer ir.)\nShe likes to sleep. (Ela gosta de dormir.)\n\nSimples assim: sem complicação teórica, apenas juntando os blocos para expressar exatamente o que você quer e precisa.\n\n\nVerbos Base do Treino\n\nto want - querer\nto need - precisar\nto like - gostar de\nto go - ir\nto sleep - dormir\nto stay - ficar\n\n\nExercício de Fixação\n\nEu quero ficar:\nVocê precisa ir:\nEla gosta de dormir:\nEle quer ir:\nNós queremos ficar:\nVocês precisam dormir:\nEu gosto de ficar:\nNós precisamos ir:\n\n\nFrases Prontas para Prática e Fala\n\nI want to stay. (Eu quero ficar.)\nYou need to go. (Você precisa ir.)\nShe likes to sleep. (Ela gosta de dormir.)\nHe wants to go. (Ele quer ir.)\nWe want to stay. (Nós queremos ficar.)\nYou need to sleep. (Vocês precisam dormir.)\nI like to stay. (Eu gosto de ficar.)\nWe need to go. (Nós precisamos ir.)",
+            "quizId": "",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788923040997_FS-EC_mod_1_aula_4_frases_present.mp4?alt=media",
+            "sentences": [],
+            "courseId": "fs-aef-ec",
+            "aiStatus": "draft_pending"
+          },
+          {
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 p-6 rounded-2xl shadow-sm space-y-3\"><h3 class=\"text-xl font-bold text-amber-900 flex items-center gap-2\"><span>💬</span> A Vida Real vs. O Robô do Livro</h3><p class=\"text-slate-800 leading-relaxed\">Esqueça a resposta decorada de livro antigo. Na vida real, a saudação em inglês serve como um gatilho de conexão rápida e leve. Ninguém fica preso a fórmulas rígidas.</p><div class=\"bg-white p-4 rounded-xl border border-amber-200 mt-2 space-y-2\"><p class=\"font-semibold text-slate-900\">🌙 O Sentimento da Noite (Sem Confusão):</p><ul class=\"list-disc list-inside space-y-1 text-slate-700\"><li><b>Good evening:</b> É a sua chegada. A intenção é dizer 'Olá, cheguei!' durante a noite.</li><li><b>Good night:</b> É a sua saída. O sentimento é de 'Tchau, estou indo descansar!'.</li></ul></div></div><div class=\"bg-white border-2 border-slate-200 p-6 rounded-2xl shadow-sm space-y-4\"><h3 class=\"text-xl font-bold text-slate-900\">🚀 Abrindo a Conversa com Ritmo</h3><p class=\"text-slate-700\">Perguntas de saudação funcionam como apertos de mão falados. O segredo é manter o bate-e-volta dinâmico:</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3\"><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><span class=\"font-bold text-slate-900\">How are you doing?</span><p class=\"text-sm text-slate-600 mt-1\">Perfeita para o dia a dia. Responda simples: <i>'Good, and you?'</i> ou <i>'I'm all right.'</i></p></div><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><span class=\"font-bold text-slate-900\">How have you been?</span><p class=\"text-sm text-slate-600 mt-1\">Use quando não vê a pessoa há algum tempo. Resposta natural: <i>'I've been all right.'</i></p></div></div><div class=\"p-4 bg-amber-100/60 border border-amber-300 rounded-xl text-slate-800 text-sm\">💡 <b>Empatia Imediata:</b> Se a pessoa responder que não está bem (<i>'I'm not feeling well'</i>), acolha com <b>'Sorry to hear that!'</b> (Sinto muito em saber disso!).</div></div><div class=\"bg-white border-2 border-slate-200 p-6 rounded-2xl shadow-sm space-y-4\"><h3 class=\"text-xl font-bold text-slate-900\">🔥 O Ritmo Descontraído do Dia a Dia</h3><div class=\"space-y-3\"><div class=\"p-4 bg-slate-50 rounded-xl border border-slate-200\"><p class=\"font-bold text-slate-900\">How's it going? / How ya doin'?</p><p class=\"text-slate-700 text-sm mt-1\">Formas fluídas e faladas na rua. Respostas rápidas: <i>'Going well!'</i>, <i>'Pretty good!'</i> ou <i>'Doin' great!'</i>.</p></div><div class=\"p-4 bg-slate-50 rounded-xl border border-slate-200\"><p class=\"font-bold text-slate-900\">What's up?</p><p class=\"text-slate-700 text-sm mt-1\">A intenção é 'O que está rolando?'. Respostas clássicas: <i>'Not much'</i> (Nada de mais) ou <i>'Just relaxing'</i>.</p></div><div class=\"p-4 bg-slate-50 rounded-xl border border-slate-200\"><p class=\"font-bold text-slate-900\">How are things?</p><p class=\"text-slate-700 text-sm mt-1\">Uma resposta excelente e muito comum: <b>'Can't complain!'</b> (Não posso reclamar!).</p></div></div></div></div>",
+            "sentences": [],
+            "id": "aula-1788924241350",
+            "rawScript": "Saudações na Vida Real: Como Quebrar o Gelo com Naturalidade\n\nSaudação em inglês não é apenas cumprimentar por educação; é o gatilho para conectar com a outra pessoa e iniciar qualquer conversa.\n\nO erro mais comum é achar que todo mundo fala \"Hello, how are you? I'm fine, thank you, and you?\" como se fosse um robô de livro antigo. Na vida real, a conversa é fluida, dinâmica e varia de acordo com o ritmo do dia e a intimidade.\n\nLembre-se da regra de ouro da noite:\n- \"Good evening\" é para quando você chega a um lugar ou encontra alguém à noite (saudação).\n- \"Good night\" é apenas para despedida ou na hora de ir dormir.\n\nAlém disso, perguntas como \"How are you doing?\" ou \"How's it going?\" servem para abrir a conversa. Respostas curtas, positivas e um bate-e-volta rápido (\"Good, and you?\") mantêm o diálogo vivo sem complicação.\n\n\nSaudações Básicas\n\nHello! (Olá!)\nHi! (Oi!)\nGood morning! (Bom dia!)\nGood afternoon! (Boa tarde!)\nGood evening! (Boa noite! - na chegada)\nGood night! (Boa noite! - na despedida)\n\n\nPerguntas e Respostas Comuns do Dia a Dia\n\nHow are you? (Como vai você?)\n- I'm fine! How are you? (Estou bem! Como vai você?)\n- Fine. Thanks. What about you? (Bem. Obrigado. E quanto a você?)\n- Great! Thanks! And you? (Ótimo! Obrigado! E você?)\n- I am ok. (Estou bem / normal.)\n- I'm all right. (Estou tudo bem.)\n- I'm not feeling well. (Não estou me sentindo bem.) -> Resposta de empatia: \"Sorry to hear that!\" (Sinto muito em saber disso!)\n\nHow are you doing? (Como você está? / Como vão as coisas?)\n- I'm fine! How are you?\n- Fine. Thanks. What about you?\n- Great! Thanks! And you?\n- I am ok.\n- I'm all right.\n- I'm not feeling well. -> \"Sorry to hear that!\"\n\nHow have you been? (Como você tem passado? / Como tem estado ultimamente?)\n- Fine! How are you?\n- Fine. Thanks. What about you?\n- Great! Thanks! And you?\n- Ok. Thanks!\n- I've been all right. (Tenho estado bem.)\n\n\nSaudações Casuais e Modernas (Mais Usadas no Dia a Dia)\n\nNo cotidiano, especialmente entre amigos e colegas, você vai ouvir expressões mais conectadas e informais:\n\nHow's it going? (Como vão as coisas? / Como está indo?)\n- Respostas comuns: \"Going well!\", \"Good, you?\", \"Pretty good!\"\n\nHow ya doin'? (E aí, como vai? - forma contraída e rápida de How are you doing?)\n- Respostas comuns: \"Good!\", \"Not bad!\", \"Doin' great!\"\n\nWhat's up? (E aí? / Qual é a boa? / O que está rolando?)\n- Respostas comuns: \"Not much.\" (Nada de mais), \"Nothing much.\" (Tranquilo / nada de novo), \"Just relaxing.\" (Só relaxando).\n\nHow are things? (Como estão as coisas?)\n- Respostas comuns: \"Everything is good!\", \"Can't complain!\" (Não posso reclamar!).",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788925510991_thumb_1788925510965.jpg?alt=media",
+            "aiStatus": "draft_pending",
+            "courseId": "fs-aef-ec",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788929851148_Apostila_fs-aef-ec_sauda_es.pdf?alt=media",
+            "trainingTrackId": "aula-1788924241350",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788924283493_FS-EC_mod_1_aula_5_greetings.mp4?alt=media",
+            "moduleId": "ciclo-01",
+            "hasTrainingTrack": true,
+            "quizId": "",
+            "duration": "14:59",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788925513058_art_1788925510980.jpg?alt=media",
+            "published": true,
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788924257632_FS-EC_mod_1_aula_5_greetings.mp4?alt=media",
+            "order": 5,
+            "title": "05- Saudações",
+            "type": "lesson",
+            "updatedAt": "2026-09-10T03:13:07.775Z",
+            "goldenTip": "Esqueça o robô dos livros antigos: saudar em inglês é criar uma conexão rápida e acolhedora. Lembre-se apenas que 'Good evening' é o seu 'olá' da noite e 'Good night' é o seu 'tchau' de despedida."
+          },
+          {
+            "hasTrainingTrack": true,
+            "goldenTip": "Negação em inglês é treino de reflexo muscular: não tente traduzir o 'não' palavra por palavra, automatize o som do 'don't' e 'doesn't' repetindo em voz alta até que o ritmo saia sem esforço mental.",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788930019994_Apostila_fs-aef-ec_present_negative.pdf?alt=media",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788930053114_thumb_1788930053093.jpg?alt=media",
+            "order": 6,
+            "id": "aula-1788929858028",
+            "trainingTrackId": "aula-1788929858028",
+            "title": "06 - Present - Negative",
+            "updatedAt": "2026-09-10T03:13:07.775Z",
+            "duration": "13:52",
+            "moduleId": "ciclo-01",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788929871596_FS-EC_mod_1_aula_6_pres_negative.mp4?alt=media",
+            "published": true,
+            "courseId": "fs-aef-ec",
+            "aiStatus": "draft_pending",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-xl font-bold text-amber-900 mb-3 flex items-center gap-2\"><span>⚠️</span> A Armadilha do \"No\" na Conversação</h2><p class=\"text-slate-700 leading-relaxed mb-4\">O erro mais comum ao tentar negar em inglês é traduzir o \"não\" direto do português, resultando em frases como <span class=\"bg-red-100 text-red-700 font-mono px-2 py-0.5 rounded\">I no speak</span> ou <span class=\"bg-red-100 text-red-700 font-mono px-2 py-0.5 rounded\">He no work</span>. Apesar de ser compreensível, soa truncado e artificial na fala real.</p><p class=\"text-slate-700 leading-relaxed\">Para a conversa fluir com ritmo natural, o inglês usa duas ferramentas automáticas de negação: o <strong class=\"text-amber-900\">don't</strong> e o <strong class=\"text-amber-900\">doesn't</strong>.</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-lg font-bold text-slate-800 mb-4\">Sinta o Ritmo da Negação</h3><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"bg-slate-50 border border-slate-200 rounded-xl p-4\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-800 font-semibold text-xs rounded-full mb-2\">Para I, You, We, They</span><p class=\"text-2xl font-bold text-slate-900 mb-2\">don't</p><ul class=\"space-y-2 text-sm text-slate-700\"><li>• I <strong>don't</strong> speak.</li><li>• We <strong>don't</strong> work.</li></ul></div><div class=\"bg-slate-50 border border-slate-200 rounded-xl p-4\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-800 font-semibold text-xs rounded-full mb-2\">Para He, She, It</span><p class=\"text-2xl font-bold text-slate-900 mb-2\">doesn't</p><p class=\"text-xs text-amber-800 bg-amber-50 p-2 rounded mb-2 font-medium\">Sacada de Ouro: Como o som de \"s\" já está no doesn't, o verbo seguinte volta à sua forma limpa!</p><ul class=\"space-y-2 text-sm text-slate-700\"><li>• He <strong>doesn't</strong> speak.</li><li>• She <strong>doesn't</strong> work.</li><li>• It <strong>doesn't</strong> work.</li></ul></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-lg font-bold text-slate-800 mb-4\">Prática Guiada de Reflexo</h3><div class=\"space-y-2\"><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100\"><span class=\"text-slate-600\">Eu não falo português.</span><span class=\"font-semibold text-slate-900\">I don't speak Portuguese.</span></div><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100\"><span class=\"text-slate-600\">Você não fala português.</span><span class=\"font-semibold text-slate-900\">You don't speak Portuguese.</span></div><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100\"><span class=\"text-slate-600\">Ele não fala português.</span><span class=\"font-semibold text-slate-900\">He doesn't speak Portuguese.</span></div><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100\"><span class=\"text-slate-600\">Ela não fala português.</span><span class=\"font-semibold text-slate-900\">She doesn't speak Portuguese.</span></div><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100\"><span class=\"text-slate-600\">Nós não falamos português.</span><span class=\"font-semibold text-slate-900\">We don't speak Portuguese.</span></div><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100\"><span class=\"text-slate-600\">Eles não falam português.</span><span class=\"font-semibold text-slate-900\">They don't speak Portuguese.</span></div><div class=\"flex flex-col sm:flex-row sm:items-center justify-between bg-amber-50/60 p-3 rounded-lg border border-amber-200\"><span class=\"text-slate-700 font-medium\">Não funciona.</span><span class=\"font-bold text-amber-900\">It doesn't work.</span></div></div></div><div class=\"bg-amber-50/50 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-lg font-bold text-amber-900 mb-2\">Exercício de Automação Mental</h3><p class=\"text-sm text-slate-600 mb-4\">Leia a afirmação e transforme imediatamente em uma negação antes de verificar a resposta:</p><div class=\"space-y-3\"><div class=\"bg-white p-4 rounded-xl border border-amber-100\"><p class=\"text-xs text-amber-700 font-bold uppercase tracking-wider mb-1\">Afirmativa</p><p class=\"font-medium text-slate-800 mb-2\">We work on weekends.</p><p class=\"text-xs text-slate-500 font-bold uppercase tracking-wider mb-1\">Negativa</p><p class=\"font-bold text-amber-950\">We don't work on weekends.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100\"><p class=\"text-xs text-amber-700 font-bold uppercase tracking-wider mb-1\">Afirmativa</p><p class=\"font-medium text-slate-800 mb-2\">He sleeps early.</p><p class=\"text-xs text-slate-500 font-bold uppercase tracking-wider mb-1\">Negativa</p><p class=\"font-bold text-amber-950\">He doesn't sleep early.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100\"><p class=\"text-xs text-amber-700 font-bold uppercase tracking-wider mb-1\">Afirmativa</p><p class=\"font-medium text-slate-800 mb-2\">Paul speaks four languages.</p><p class=\"text-xs text-slate-500 font-bold uppercase tracking-wider mb-1\">Negativa</p><p class=\"font-bold text-amber-950\">Paul doesn't speak four languages.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100\"><p class=\"text-xs text-amber-700 font-bold uppercase tracking-wider mb-1\">Afirmativa</p><p class=\"font-medium text-slate-800 mb-2\">I see my mother everyday.</p><p class=\"text-xs text-slate-500 font-bold uppercase tracking-wider mb-1\">Negativa</p><p class=\"font-bold text-amber-950\">I don't see my mother everyday.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100\"><p class=\"text-xs text-amber-700 font-bold uppercase tracking-wider mb-1\">Afirmativa</p><p class=\"font-medium text-slate-800 mb-2\">My sister speaks English well.</p><p class=\"text-xs text-slate-500 font-bold uppercase tracking-wider mb-1\">Negativa</p><p class=\"font-bold text-amber-950\">My sister doesn't speak English well.</p></div></div></div></div>",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788930054973_art_1788930053106.jpg?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788929905709_FS-EC_mod_1_aula_6_pres_negative.mp4?alt=media",
+            "type": "lesson",
+            "sentences": [],
+            "quizId": "",
+            "rawScript": "A Armadilha do \"No\": Por Que Treinar Frases Negativas Muda Seu Jogo na Conversação\n\nO erro clássico do brasileiro que está aprendendo inglês é achar que negar uma frase é igualzinho no português: basta colocar a palavra \"não\" na frente de tudo.\n\nAí a pessoa solta: \"I no speak English\", \"He no work here\" ou \"I no want\". Não dá, né! Na hora até entendem, mas soa truncado e artificial.\n\nEm inglês, a conversa precisa de ritmo, e a negação precisa da ferramenta certa para soar natural:\n- Para I, You, We e They, o seu \"não\" automático do dia a dia é \"don't\":\n  I don't speak. (Eu não falo.)\n  We don't work. (Nós não trabalhamos.)\n\n- Para He, She e It, entra o som do \"doesn't\" (e repare que o verbo seguinte fica limpo, sem \"s\"):\n  He doesn't speak. (Ele não fala.)\n  She doesn't work. (Ela não trabalha.)\n  It doesn't work. (Não funciona.)\n\nA grande sacada aqui é treino de reflexo. Brasileiro não costuma praticar frases negativas em voz alta; treina apenas afirmando. Por isso, quando precisa negar no meio de uma conversa real com um nativo, o cérebro recorre ao improviso e joga o \"no\". Automatizar o \"don't\" e o \"doesn't\" até sair sem esforço mental é o que vai destravar a sua fluência de verdade.\n\n\nPrática Guiada: Simple Present Negative\n\nEu não falo portugu��s. -> I don't speak Portuguese.\nVocê não fala português. -> You don't speak Portuguese.\nEle não fala português. -> He doesn't speak Portuguese.\nEla não fala português. -> She doesn't speak Portuguese.\nNós não falamos português. -> We don't speak Portuguese.\nEles não falam português. -> They don't speak Portuguese.\nNão funciona. -> It doesn't work.\n\n\nExercícios de Tradução e Automação\n\nEu não como vegetais todos os dias.\n(I don't eat vegetables every day.)\n\nVocê não fala inglês bem.\n(You don't speak English well.)\n\nEle não vende carros.\n(He doesn't sell cars.)\n\nEla não trabalha de manhã.\n(She doesn't work in the morning.)\n\nNós não dormimos cedo nos dias de semana.\n(We don't sleep early on weekdays.)\n\nVocês não estudam inglês à noite.\n(You don't study English at night.)\n\n\nExercícios de Transformação para a Negativa\n\nFrase afirmativa: We work on weekends.\nForma negativa: We don't work on weekends.\n\nFrase afirmativa: He sleeps early.\nForma negativa: He doesn't sleep early.\n\nFrase afirmativa: Paul speaks four languages.\nForma negativa: Paul doesn't speak four languages.\n\nFrase afirmativa: I see my mother everyday.\nForma negativa: I don't see my mother everyday.\n\nFrase afirmativa: My sister speaks english well.\nForma negativa: My sister doesn't speak English well."
+          },
+          {
+            "processedContentHtml": "<div class=\"space-y-6 font-sans text-slate-800\"><div class=\"p-6 rounded-2xl bg-amber-50/90 border-2 border-amber-200 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2 flex items-center gap-2\"><span class=\"text-2xl\">🎧</span> A Sacada do Professor Leo: Treine o Ouvido Primeiro</h3><p class=\"text-slate-700 leading-relaxed\">Em vez de ficar calculando regras gramaticais na cabeça enquanto tenta falar, entenda que a fluidez dos artigos é uma questão de <strong>ritmo e sonoridade</strong>. O seu cérebro só automatiza a fala quando acostuma a ouvir. Quando o som encaixa, a frase flui naturalmente sem você precisar pensar.</p></div><div class=\"bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 flex items-center gap-2\"><span class=\"w-3 h-3 rounded-full bg-amber-500 inline-block\"></span>1. O Vício do Português que Você Vai Deixar para Trás</h3><p class=\"text-slate-600 leading-relaxed\">No Brasil, temos o hábito de colocar artigo antes de nomes próprios e possessivos (<em>\"O Carlos\"</em>, <em>\"A minha namorada\"</em>). Em inglês, a estrutura pede que você vá direto ao ponto, sem usar o conector \"the\":</p><div class=\"grid md:grid-cols-2 gap-4 pt-2\"><div class=\"p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900\"><p class=\"text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1\">Natural no Inglês</p><p class=\"text-base font-semibold\">Carlos doesn't work here.</p><p class=\"text-base font-semibold mt-2\">My girlfriend likes to read.</p></div><div class=\"p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 opacity-80\"><p class=\"text-xs font-bold uppercase tracking-wider text-rose-700 mb-1\">Evite (Vício do Português)</p><p class=\"text-sm line-through\">The Carlos doesn't work here.</p><p class=\"text-sm line-through mt-2\">The my girlfriend likes to read.</p></div></div></div><div class=\"bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 flex items-center gap-2\"><span class=\"w-3 h-3 rounded-full bg-amber-500 inline-block\"></span>2. A Ponte Sonora: Como Funciona o \"A\" e o \"AN\"</h3><p class=\"text-slate-600 leading-relaxed\">A escolha não depende da letra escrita, mas do <strong>som de abertura</strong> da palavra seguinte. O som \"AN\" existe para criar uma ponte e não deixar a sua voz gaguejar entre duas vogais.</p><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2\"><div class=\"flex items-center gap-2 text-amber-800 font-bold\"><span class=\"bg-amber-200 text-amber-900 text-xs px-2 py-0.5 rounded\">Ponte AN</span> Som Aberto / Vogal</div><ul class=\"space-y-1 text-sm text-slate-700\"><li><strong>an island</strong> (o som se conecta suavemente)</li><li><strong>an hour</strong> (o H é silencioso, o som começa na vogal)</li><li><strong>an umbrella</strong></li><li><strong>an apple</strong></li></ul></div><div class=\"p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-2\"><div class=\"flex items-center gap-2 text-slate-800 font-bold\"><span class=\"bg-slate-200 text-slate-800 text-xs px-2 py-0.5 rounded\">Ponte A</span> Som Fechado / Consoante</div><ul class=\"space-y-1 text-sm text-slate-700\"><li><strong>a car</strong></li><li><strong>a house</strong> (o H tem som soprado)</li><li><strong>a university</strong> (o som inicial é /juː/, como consoante)</li><li><strong>a year</strong></li></ul></div></div></div><div class=\"bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 flex items-center gap-2\"><span class=\"w-3 h-3 rounded-full bg-amber-500 inline-block\"></span>3. Prática Falada e Conexão Real</h3><div class=\"space-y-2 text-sm text-slate-700\"><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-100 flex justify-between items-center\"><span>I need <strong>an answer</strong> now.</span><span class=\"text-xs text-amber-800 bg-amber-100 px-2 py-1 rounded font-medium\">Som aberto na sequência</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex justify-between items-center\"><span>He studies in <strong>a good</strong> school.</span><span class=\"text-xs text-slate-600 bg-slate-200 px-2 py-1 rounded font-medium\">Som fechado de consoante</span></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-100 flex justify-between items-center\"><span>They live in <strong>an old</strong> house.</span><span class=\"text-xs text-amber-800 bg-amber-100 px-2 py-1 rounded font-medium\">Conexão contínua</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex justify-between items-center\"><span>You have <strong>a son</strong>!</span><span class=\"text-xs text-slate-600 bg-slate-200 px-2 py-1 rounded font-medium\">Ritmo direto</span></div></div></div><div class=\"p-5 rounded-xl bg-slate-100 border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4\"><div class=\"space-y-1\"><p class=\"text-xs uppercase font-bold text-slate-500 tracking-wider\">Acolhimento Conversacional</p><p class=\"text-slate-800 font-medium\">Quando alguém diz: <em>\"I'm not feeling well\"</em></p></div><div class=\"bg-white px-4 py-2 rounded-lg border border-slate-300 font-semibold text-slate-900 shadow-sm\">\"Sorry to hear that!\"</div></div></div>",
+            "duration": "30:18",
+            "updatedAt": "2026-09-10T03:13:07.775Z",
+            "moduleId": "ciclo-01",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788930527651_art_1788930525854.jpg?alt=media",
+            "goldenTip": "Não trave a sua fala tentando calcular regras de artigos antes de abrir a boca. O 'a' ou 'an' certo nasce no seu ouvido: se a frase travar no som, a própria música do inglês te pede a ponte sonora natural.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788930334072_FS-EC_mod_1_aula_7_articles.mp4?alt=media",
+            "published": true,
+            "title": "07 - Artigos",
+            "order": 7,
+            "quizId": "",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788930525866_thumb_1788930525840.jpg?alt=media",
+            "trainingTrackId": "aula-1788930320837",
+            "id": "aula-1788930320837",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788930497158_Apostila_fs-aef-ec_artigos.pdf?alt=media",
+            "type": "lesson",
+            "hasTrainingTrack": true,
+            "courseId": "fs-aef-ec",
+            "aiStatus": "draft_pending",
+            "rawScript": "Artigos em Inglês: Treine o Seu Ouvido Primeiro\n\nQuando o assunto é artigo (\"the\", \"a\", \"an\"), muita gente trava tentando calcular regras antes de abrir a boca. Aqui está o segredo: esse é um detalhe muito mais importante na escuta e no entendimento do que na preocupação neurótica de acertar ou errar na hora de falar.\n\nNinguém vai deixar de entender você se você esquecer um \"the\" ou trocar \"a\" por \"an\" numa conversa rápida. O pulo do gato é que a automação desse tipo de detalhe na sua fala só nasce depois de você acostumar muito o seu ouvido a notar quando escuta. É ouvindo nativos e prestando atenção nas frases reais que, de repente, a sua ficha cai. Quando você menos esperar, a frase certa simplesmente \"soa melhor\" para o seu cérebro.\n\nNo português, temos o vício de colocar artigo antes de nomes e possessivos (\"O Carlos\", \"A minha namorada\"). Em inglês, isso não existe: dizemos direto \"Carlos\" e \"My girlfriend\", sem colocar \"the\".\n\nJá com \"a\" e \"an\", a regra prática de escuta é o som:\n- Som de vogal puxa \"an\" para a fala não travar: an apple, an hour, an umbrella.\n- Som de consoante puxa \"a\": a car, a house, a university (som de \"iu\").\n\nNão tente decorar tudo de véspera. Apenas escute bastante, repare nos padrões e deixe o seu ouvido calibrar o seu reflexo de fala.\n\n\nArtigos Definidos (The)\n\nO barco -> The boat\nA casa -> The house\nOs carros -> The cars\nAs meninas -> The girls\n\nAtenção ao Uso Real do \"The\":\nO Carlos não trabalha aqui. -> Carlos doesn't work here.\n(Incorreto: The Carlos doesn't work here.)\n\nA minha namorada gosta de ler. -> My girlfriend likes to read.\n(Incorreto: The my girlfriend likes to read.)\n\n\nRevisão Conversacional: Saudações Comuns e Respostas\n\nHow are you?\n- I'm fine! How are you?\n- Fine. Thanks. What about you?\n- Great! Thanks! And you?\n- I am ok.\n- I'm all right.\n- I'm not feeling well. -> \"Sorry to hear that!\"\n\n\nArtigos Indefinidos: \"A\" e \"AN\"\n\nExemplos com som de vogal (uso de AN):\nan island (uma ilha)\nan egg (um ovo)\nan oven (um forno)\nan apple (uma maçã)\nan ugly car (um carro feio)\nan umbrella (um guarda-chuva)\nan hour (uma hora - som mudo do H)\nan honor (uma honra - som mudo do H)\n\nExemplos com som de consoante (uso de A):\na car (um carro)\na house (uma casa)\na door (uma porta)\na poor man (um homem pobre)\na week (uma semana)\na number (um número)\na university (uma universidade - som de /juː/)\na year (um ano - som de semivogal)\na uniform (um uniforme - som de /juː/)\na restaurant (um restaurante)\n\n\nPrática de Fixação\n\nI need [ an ] answer now.\n(Eu preciso de uma resposta agora.)\n\nHe studies in [ a ] good school.\n(Ele estuda em uma boa escola.)\n\nThey live in [ an ] old house.\n(Eles moram em uma casa antiga.)\n\nWe send [ an ] e-mail every day.\n(Nós enviamos um e-mail todos os dias.)\n\nYou have [ a ] son!\n(Você tem um filho!)",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788930367146_FS-EC_mod_1_aula_7_articles.mp4?alt=media",
+            "sentences": []
+          },
+          {
+            "type": "lesson",
+            "aiStatus": "draft_pending",
+            "updatedAt": "2026-09-10T03:13:07.776Z",
+            "courseId": "fs-aef-ec",
+            "id": "aula-1788931013518",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931081352_FS-EC_mod_1_aula_8_pres_questions.mp4?alt=media",
+            "trainingTrackId": "aula-1788931013518",
+            "goldenTip": "Fazer pergunta em inglês não é conta de matemática para você calcular a regra na hora de falar, é puro reflexo de gatilho! Treine a entonação até que o acionador 'Do' ou 'Does' saia da sua boca antes mesmo do seu cérebro começar a traduzir.",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931227144_art_1788931225073.jpg?alt=media",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931225096_thumb_1788931225051.jpg?alt=media",
+            "published": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788931200229_Apostila_fs-aef-ec_fazer_perguntas_em_ingl_s.pdf?alt=media",
+            "processedContentHtml": "<div class=\"space-y-8 font-sans text-slate-900\"><section class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-2xl font-bold text-amber-950 mb-3 flex items-center gap-2\"><span>💡</span> A Armadilha da Regra: Por Que Saber Gramática Não Faz Você Falar</h2><p class=\"text-base text-slate-800 leading-relaxed mb-4\">No português, para transformar uma afirmação em pergunta, você só muda a entonação da voz. Você diz <em>'Ela trabalha'</em> e depois <em>'Ela trabalha?'</em>. No inglês, a língua exige um <strong>sinalizador prévio</strong> — um aviso que dispara na frente da frase para avisar o ouvinte: <em>'Vem uma pergunta por aí!'</em>.</p><p class=\"text-base text-slate-800 leading-relaxed\">Se você parar na hora da conversa para pensar: <em>'espera aí, quem é o sujeito? Vou usar o auxiliar x...'</em>, a conversa trava no silêncio constrangedor. O segredo é transformar esse sinalizador em um <strong>reflexo automático de fala</strong>.</p></section><section class=\"bg-white border-2 border-slate-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4 flex items-center gap-2\"><span>🎯</span> O Sentimento da Estrutura: Os Dois Sinalizadores</h3><p class=\"text-sm text-slate-600 mb-6\">Pense nestes acionadores como buzinas de atenção que preparam o ouvido do seu interlocutor:</p><div class=\"grid md:grid-cols-2 gap-4 mb-6\"><div class=\"bg-slate-50 border border-slate-200 p-5 rounded-xl\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-lg text-sm mb-2\">Gatilho Direto</span><h4 class=\"text-2xl font-extrabold text-slate-900 mb-1\">DO</h4><p class=\"text-sm text-slate-600 mb-3\">Use quando você fala com a pessoa, de você mesmo, de nós ou deles.</p><div class=\"bg-white p-3 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800\">You need help. ➔ <span class=\"text-amber-700\">Do</span> you need help?</div></div><div class=\"bg-slate-50 border border-slate-200 p-5 rounded-xl\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-lg text-sm mb-2\">Gatilho Focado</span><h4 class=\"text-2xl font-extrabold text-slate-900 mb-1\">DOES</h4><p class=\"text-sm text-slate-600 mb-3\">Use quando o foco da pergunta é uma terceira pessoa (ele, ela, uma empresa, um objeto).</p><div class=\"bg-white p-3 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800\">He lives downtown. ➔ <span class=\"text-amber-700\">Does</span> he live downtown?</div></div></div></section><section class=\"bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4\">🚀 Treino de Disparo Rápido (Prática Oral)</h3><p class=\"text-sm text-slate-600 mb-6\">Não leia apenas com os olhos. Fale em voz alta acionando o gatilho sem hesitar:</p><div class=\"space-y-3\"><div class=\"bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Você come vegetais todos os dias?</span><span class=\"font-bold text-amber-900 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200\">Do you eat vegetables every day?</span></div><div class=\"bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Ele tem um carro?</span><span class=\"font-bold text-amber-900 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200\">Does he have a car?</span></div><div class=\"bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Ela trabalha de manhã?</span><span class=\"font-bold text-amber-900 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200\">Does she work in the morning?</span></div><div class=\"bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Nós temos leite?</span><span class=\"font-bold text-amber-900 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200\">Do we have milk?</span></div><div class=\"bg-white p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Eles precisam de dinheiro?</span><span class=\"font-bold text-amber-900 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200\">Do they need money?</span></div></div></section><section class=\"bg-amber-50/50 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-950 mb-2\">🎧 Magic Story: Listen & Ask</h3><p class=\"text-sm text-slate-700 mb-6\">Ouça a declaração e dispare a pergunta imediatamente antes de conferir a resposta. Este é o exercício supremo de escuta ativa.</p><div class=\"space-y-4\"><div class=\"bg-white p-5 rounded-xl border border-amber-200 shadow-sm\"><p class=\"text-xs font-bold text-slate-400 uppercase tracking-wider mb-1\">Afirmação Base</p><p class=\"text-base font-semibold text-slate-900 mb-3\">Mark does NOT live downtown. He lives in a small house near the beach.</p><div class=\"bg-amber-50 p-3 rounded-lg mb-2 text-sm text-amber-900 font-medium\"><strong>Sua Pergunta:</strong> Does Mark live downtown? / Where does he live?</div><div class=\"text-sm text-slate-600 pl-3 border-l-2 border-amber-400\"><strong>Resposta Esperada:</strong> No, he doesn't live downtown. He lives near the beach.</div></div><div class=\"bg-white p-5 rounded-xl border border-amber-200 shadow-sm\"><p class=\"text-xs font-bold text-slate-400 uppercase tracking-wider mb-1\">Afirmação Base</p><p class=\"text-base font-semibold text-slate-900 mb-3\">Mark does NOT work in an office. He works at a restaurant.</p><div class=\"bg-amber-50 p-3 rounded-lg mb-2 text-sm text-amber-900 font-medium\"><strong>Sua Pergunta:</strong> Does he work in an office? / Where does he work?</div><div class=\"text-sm text-slate-600 pl-3 border-l-2 border-amber-400\"><strong>Resposta Esperada:</strong> No, he doesn't. He works at a restaurant.</div></div><div class=\"bg-white p-5 rounded-xl border border-amber-200 shadow-sm\"><p class=\"text-xs font-bold text-slate-400 uppercase tracking-wider mb-1\">Afirmação Base</p><p class=\"text-base font-semibold text-slate-900 mb-3\">He does NOT have a car. He walks to work every day.</p><div class=\"bg-amber-50 p-3 rounded-lg mb-2 text-sm text-amber-900 font-medium\"><strong>Sua Pergunta:</strong> Does he have a car? / Does he drive to work?</div><div class=\"text-sm text-slate-600 pl-3 border-l-2 border-amber-400\"><strong>Resposta Esperada:</strong> No, he doesn't have a car. He walks to work every day.</div></div></div></section></div>",
+            "quizId": "",
+            "hasTrainingTrack": true,
+            "moduleId": "ciclo-01",
+            "order": 8,
+            "duration": "13:23",
+            "title": "08 - Fazer Perguntas em Inglês",
+            "sentences": [],
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931044219_FS-EC_mod_1_aula_8_pres_questions.mp4?alt=media",
+            "rawScript": "A Grande Ilusão de Fazer Perguntas: Por Que a Teoria Não Salva Você na Conversa\n\nPraticamente todo estudante de inglês comete o mesmo erro fatal: estuda meses a fio e simplesmente esquece de treinar fazer perguntas. \n\nNa teoria, parece moleza. Todo mundo escuta a regra clássica: \"Ah, no presente é só colocar o 'Do' ou o 'Does' na frente da frase! Fácil demais!\". \n\nNão, não é fácil! Saber a regra de cabeça não coloca a pergunta na ponta da língua. \n\nEm uma conversa ao vivo, quando você precisa conduzir o diálogo ou pedir uma informação, o seu cérebro não tem dois segundos para calcular: \"espera aí, o sujeito é 'he', então vou puxar o 'does', tirar o 's' do verbo...\". Se você tentar pensar nisso, a conversa morre e vem o silêncio constrangedor. No português, você só muda a entonação da voz; no inglês, você precisa disparar a estrutura invertida de forma automática.\n\nE é exatamente para resolver esse abismo que existem as Magic Stories com a atividade de Listen and Ask. Ninguém aprende a perguntar preenchendo lacuna de gramática. É preciso muito treino de escuta ativa, muito estímulo e muita repetição em contexto real para que o \"Do you...?\" ou o \"Does he...?\" saia sem esforço mental, como um puro reflexo de fala.\n\n\nTexto Cru da Lição\n\nInterrogative Affirmative\n\n1. Portuguese\nAfirmativa: \"Ela tem filhos.\"\nInterrogativa: \"Ela tem filhos?\"\n\n2. English\nDo - Does\nDo - I, you, we, they\nDoes - he, she, it\n\nYou need help. (você precisa de ajuda.) -> Do you need help?\nHe lives downtown. (ele mora no centro) -> Does he live downtown?\n\nInterrogative:\nDo I need...?\nDo you need...?\nDoes he need...?\nDoes she need...?\nDoes it need...?\nDo we need...?\nDo you need...?\nDo they need...?\n\nHow do you say that in english?\nVocê come vegetais todos os dias?\nVocê fala inglês?\nEle tem um carro?\nEla trabalha de manhã?\nNós temos leite?\nVocês estudam no sábado?\nEles precisam de dinheiro?\n\n\nGabarito dos Exercícios para Prática Oral\n\nVocê come vegetais todos os dias?\n-> Do you eat vegetables every day?\n\nVocê fala inglês?\n-> Do you speak English?\n\nEle tem um carro?\n-> Does he have a car?\n\nEla trabalha de manhã?\n-> Does she work in the morning?\n\nNós temos leite?\n-> Do we have milk?\n\nVocês estudam no sábado?\n-> Do you study on Saturday?\n\nEles precisam de dinheiro?\n-> Do they need money?\n\n\nMagic Story: Listen & Ask (Foco em Gatilhos Negativos e Perguntas Automáticas)\n\nHistória Base:\nMark does NOT live downtown. He lives in a small house near the beach.\nMark does NOT work in an office. He works at a restaurant.\nHe does NOT work at night. He works in the morning.\nHe does NOT have a car. He walks to work every day.\nMark does NOT drink soda. He drinks water and coffee.\nHe does NOT want a new job. He likes his job.\n\nPrática de Perguntas e Respostas:\n\nDeclaração: Mark does NOT live downtown.\nPergunta do Aluno: Does Mark live downtown? / Where does he live?\nResposta: No, he doesn't live downtown. He lives near the beach.\n\nDeclaração: He does NOT work in an office.\nPergunta do Aluno: Does he work in an office? / Where does he work?\nResposta: No, he doesn't. He works at a restaurant.\n\nDeclaração: He does NOT work at night.\nPergunta do Aluno: Does he work at night? / When does he work?\nResposta: No, he doesn't work at night. He works in the morning.\n\nDeclaração: He does NOT have a car.\nPergunta do Aluno: Does he have a car? / Does he drive to work?\nResposta: No, he doesn't have a car. He walks to work every day.\n\nDeclaração: Mark does NOT drink soda.\nPergunta do Aluno: Does Mark drink soda? / What does he drink?\nResposta: No, he doesn't drink soda. He drinks water and coffee.\n\nDeclaração: He does NOT want a new job.\nPergunta do Aluno: Does he want a new job? / Does he like his job?\nResposta: No, he doesn't want a new job. He likes his job."
+          },
+          {
+            "goldenTip": "Esqueça as tabelas gramaticais: a pergunta certa só sai de forma natural quando você treina seu cérebro para reagir com curiosidade imediata ao que ouve na história!",
+            "type": "lesson",
+            "updatedAt": "2026-09-10T03:13:07.776Z",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931651089_FS-EC_mod_1_aula_9_question_words.mp4?alt=media",
+            "trainingTrackId": "aula-1788931631723",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788931731147_Apostila_fs-aef-ec_question_words.pdf?alt=media",
+            "moduleId": "ciclo-01",
+            "duration": "27:06",
+            "published": true,
+            "hasTrainingTrack": true,
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931659906_FS-EC_mod_1_aula_9_question_words.mp4?alt=media",
+            "aiStatus": "draft_pending",
+            "quizId": "",
+            "courseId": "fs-aef-ec",
+            "id": "aula-1788931631723",
+            "sentences": [],
+            "title": "09 - Question Words",
+            "order": 9,
+            "rawScript": "Indo Além do \"Sim\" ou \"Não\": Como Extrair a Informação Que Você Realmente Precisa\n\nAté a última aula, você só conseguia fazer perguntas cuja resposta terminava em um simples \"sim\" ou \"não\": \"Você mora aqui?\", \"Ele trabalha hoje?\". Isso quebra um galho, mas limita demais a conversa.\n\nAgora o jogo virou: você vai aprender a extrair a informação exata que você precisa no dia a dia. Como? Onde? Quem? O que? Qual? Quando?\n\nE aqui vai uma verdade direta: o único jeito de treinar isso para valer na ponta da língua é através da atividade de LISTEN AND ASK dentro de uma Magic Story.\n\nNão adianta ficar decorando tabela gramatical de question words. O seu cérebro precisa de gatilhos reais e curiosidade imediata. Quando você escuta na história:\n\"Grazi doesn't live in São Paulo.\"\nA sua curiosidade conversacional desperta na hora: \"Hum... então onde ela mora?\".\nVocê escuta a negativa em inglês e dispara imediatamente a pergunta em inglês:\n\"Where does she live?\"\n\nÉ essa dinâmica de escutar em inglês, reagir à informação e perguntar em inglês que destrói a tradução mental e faz o fluxo da conversa acontecer de forma natural e espontânea.\n\n\nQuestion Words\n\n1. What? (O que? / Qual?)\n- I don't want to eat chocolate.\nWHAT DO YOU WANT TO EAT?\n- I want to eat ice cream.\n\n2. Where? (Onde?)\n- She doesn't live in Brazil.\nWHERE DOES SHE LIVE?\n- She lives in USA.\n\n3. When? (Quando?)\n- We don't work in the afternoon.\nWHEN DO WE WORK?\n- We work in the morning.\n\n4. Why? (Por que?)\n- I want to make money.\nWHY DO YOU WANT TO MAKE MONEY?\n- Because I need to buy a house.\n\n5. Which? (Qual? - escolha entre opções)\n- I don't want the blue car.\nWHICH CAR DO YOU WANT?\n- I want the black car.\n\n6. Who? (Quem?)\n- Kate doesn't go to school with Jason.\nWHO DOES KATE GO TO SCHOOL WITH?\n- Kate goes to school with Mary.\n\n7. Who? (Exceção - quando \"quem\" é o próprio sujeito da ação)\n- John doesn't live in Brazil.\nWHO LIVES IN BRAZIL?\nWHO WANTS CHOCOLATE?\nWHO REMEMBERS THE NAME OF THE MOVIE?\n\n8. Whose? (De quem?)\n- That car is not mine. (Aquele carro não é meu.)\nWHOSE CAR IS THAT?\n\n9. What Time? (A que horas?)\n- I don't wake up at 7.\nWHAT TIME DO YOU WAKE UP?\n\n10. How? (Como?)\n- I don't go to school by car.\nHOW DO YOU GO TO SCHOOL?\n- I go to school by bus.\n\n11. How Many? (Quantos? / Quantas? - contáveis)\n- I don't have 3 cars.\nHOW MANY CARS DO YOU HAVE?\n- I have one car.\n- They don't have 2 sisters.\nHOW MANY SISTERS DO THEY HAVE?\n- They have 5 sisters.\n\n12. How Much? (Quanto? / Quanta? - incontáveis / preço)\n\"Coffee please!\"\n\"HOW MUCH sugar do you want?\"\n\"Just a spoon!\"\n(- Café por favor! - Quanto de açúcar você quer? - Só uma colher.)\n\n13. How Old? (Qual idade?)\nHow old is Jessica?\n- She is 5.\nHow old are you?\n- I'm 23.\n\n14. How Often? (Com que frequência?)\nHow often do you listen to English lessons?\n- Every day.\nHow often do you work out? (faz exercício físico)\n- 3 times a week. (3 vezes por semana)\n\n15. How Far? (Qual distância?)\nHow far do you run every day?\n- I run 10km every day.\n\n\nExercícios de Prática e Automação\n\nO que você quer?\n-> What do you want?\n\nOnde ele estuda?\n-> Where does he study?\n\nQuando eles ligam?\n-> When do they call?\n\nQuem mora aqui?\n-> Who lives here?\n\nPor que você estuda à noite?\n-> Why do you study at night?\n\nQual livro você precisa?\n-> Which book do you need?\n\nComo ela vai para o trabalho?\n-> How does she go to work?\n\nQuantos livros você lê?\n-> How many books do you read?\n\nQuanto açúcar você quer?\n-> How much sugar do you want?\n\nCom que frequência ela liga?\n-> How often does she call?\n\nA que horas você vai para a escola?\n-> What time do you go to school?",
+            "processedContentHtml": "<div class=\"space-y-8 text-slate-900 font-sans\"><header class=\"bg-amber-50/90 border-2 border-amber-200 rounded-3xl p-6 md:p-8 shadow-sm\"><h1 class=\"text-2xl md:text-3xl font-bold text-amber-950 mb-3\">Indo Além do \"Sim\" ou \"Não\": Buscando a Informação Real</h1><p class=\"text-base md:text-lg text-slate-800 leading-relaxed\">Ficar preso a perguntas que só dão respostas curtas limita sua conversa. O segredo para destravar o fluxo é aprender a reagir com curiosidade ao que a outra pessoa fala, disparando a pergunta certa no exato momento da reação.</p></header><section class=\"space-y-6\"><h2 class=\"text-xl md:text-2xl font-bold text-slate-900 border-b-2 border-amber-200 pb-2\">As Ferramentas de Curiosidade no Dia a Dia</h2><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">O quê? / Qual?</span><h3 class=\"text-lg font-bold text-slate-900\">What?</h3><p class=\"text-sm text-slate-700\">I don't want to eat chocolate.</p><p class=\"text-base font-semibold text-amber-900\">WHAT DO YOU WANT TO EAT?</p><p class=\"text-sm text-slate-600\">I want to eat ice cream.</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Onde?</span><h3 class=\"text-lg font-bold text-slate-900\">Where?</h3><p class=\"text-sm text-slate-700\">She doesn't live in Brazil.</p><p class=\"text-base font-semibold text-amber-900\">WHERE DOES SHE LIVE?</p><p class=\"text-sm text-slate-600\">She lives in USA.</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Quando?</span><h3 class=\"text-lg font-bold text-slate-900\">When?</h3><p class=\"text-sm text-slate-700\">We don't work in the afternoon.</p><p class=\"text-base font-semibold text-amber-900\">WHEN DO WE WORK?</p><p class=\"text-sm text-slate-600\">We work in the morning.</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Por que?</span><h3 class=\"text-lg font-bold text-slate-900\">Why?</h3><p class=\"text-sm text-slate-700\">I want to make money.</p><p class=\"text-base font-semibold text-amber-900\">WHY DO YOU WANT TO MAKE MONEY?</p><p class=\"text-sm text-slate-600\">Because I need to buy a house.</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Escolha entre opções</span><h3 class=\"text-lg font-bold text-slate-900\">Which?</h3><p class=\"text-sm text-slate-700\">I don't want the blue car.</p><p class=\"text-base font-semibold text-amber-900\">WHICH CAR DO YOU WANT?</p><p class=\"text-sm text-slate-600\">I want the black car.</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Quem?</span><h3 class=\"text-lg font-bold text-slate-900\">Who?</h3><p class=\"text-sm text-slate-700\">Kate doesn't go to school with Jason.</p><p class=\"text-base font-semibold text-amber-900\">WHO DOES KATE GO TO SCHOOL WITH?</p><p class=\"text-sm text-slate-600\">Kate goes to school with Mary.</p></div></div></section><section class=\"bg-amber-50/90 border-2 border-amber-200 rounded-3xl p-6 shadow-sm space-y-4\"><h2 class=\"text-lg font-bold text-amber-950\">Sacada de Estrutura: Quando o \"Quem\" Executa a Ação Direta</h2><p class=\"text-sm md:text-base text-slate-800 leading-relaxed\">Quando a sua pergunta busca saber diretamente quem faz algo (sem precisar preparar a estrutura com auxiliares), a pergunta vai direto ao ponto:</p><div class=\"bg-white p-4 rounded-xl border border-amber-200 space-y-2 text-sm md:text-base font-semibold text-slate-900\"><p>• WHO LIVES IN BRAZIL?</p><p>• WHO WANTS CHOCOLATE?</p><p>• WHO REMEMBERS THE NAME OF THE MOVIE?</p></div></section><section class=\"space-y-4\"><h2 class=\"text-xl font-bold text-slate-900 border-b-2 border-amber-200 pb-2\">Especificando Quantidades, Tempos e Detalhes</h2><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">De quem?</span><h3 class=\"text-lg font-bold text-slate-900\">Whose?</h3><p class=\"text-base font-semibold text-amber-900\">WHOSE CAR IS THAT?</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">A que horas?</span><h3 class=\"text-lg font-bold text-slate-900\">What Time?</h3><p class=\"text-base font-semibold text-amber-900\">WHAT TIME DO YOU WAKE UP?</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Como? / De que jeito?</span><h3 class=\"text-lg font-bold text-slate-900\">How?</h3><p class=\"text-base font-semibold text-amber-900\">HOW DO YOU GO TO SCHOOL?</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Para coisas separadas e somáveis</span><h3 class=\"text-lg font-bold text-slate-900\">How Many?</h3><p class=\"text-base font-semibold text-amber-900\">HOW MANY CARS DO YOU HAVE?</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Para volumes, massas ou valor</span><h3 class=\"text-lg font-bold text-slate-900\">How Much?</h3><p class=\"text-base font-semibold text-amber-900\">HOW MUCH SUGAR DO YOU WANT?</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm space-y-2\"><span class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-bold rounded-full text-xs\">Frequência com que faz algo</span><h3 class=\"text-lg font-bold text-slate-900\">How Often?</h3><p class=\"text-base font-semibold text-amber-900\">HOW OFTEN DO YOU WORK OUT?</p></div></div></section><section class=\"bg-amber-50/90 border-2 border-amber-200 rounded-3xl p-6 shadow-sm space-y-4\"><h2 class=\"text-xl font-bold text-amber-950\">Treino de Automação Rápida</h2><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm md:text-base\"><div class=\"bg-white p-3 rounded-xl border border-amber-200\"><p class=\"text-slate-600\">O que você quer?</p><p class=\"font-bold text-slate-900\">What do you want?</p></div><div class=\"bg-white p-3 rounded-xl border border-amber-200\"><p class=\"text-slate-600\">Onde ele estuda?</p><p class=\"font-bold text-slate-900\">Where does he study?</p></div><div class=\"bg-white p-3 rounded-xl border border-amber-200\"><p class=\"text-slate-600\">Quem mora aqui?</p><p class=\"font-bold text-slate-900\">Who lives here?</p></div><div class=\"bg-white p-3 rounded-xl border border-amber-200\"><p class=\"text-slate-600\">Como ela vai para o trabalho?</p><p class=\"font-bold text-slate-900\">How does she go to work?</p></div></div></section></div>",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931728504_thumb_1788931728487.jpg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788931731197_art_1788931728496.jpg?alt=media"
+          },
+          {
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788932154116_FS-EC_mod_1_aula_10_ms_cristine.mp4?alt=media",
+            "published": true,
+            "courseId": "fs-aef-ec",
+            "aiStatus": "draft_pending",
+            "quizId": "",
+            "goldenTip": "Para falar da rotina de alguém sem travar, pare de fazer conta matemática na cabeça! Sinta o som de tração do piloto automático ('gets up', 'has breakfast') e deixe sua boca assumir o volante através do ritmo dos chunks.",
+            "updatedAt": "2026-09-10T03:13:07.777Z",
+            "trainingTrackId": "aula-1788932065650",
+            "processedContentHtml": "<div class=\"space-y-8 font-sans text-slate-900\"><header class=\"p-6 bg-amber-50/90 border-2 border-amber-200 rounded-2xl shadow-sm\"><span class=\"text-xs font-bold tracking-widest text-amber-800 uppercase bg-amber-200/60 px-3 py-1 rounded-full\">First Steps • Magic Story MS010</span><h1 class=\"text-2xl font-extrabold text-slate-900 mt-3\">A Day in the Life of Cristine</h1><p class=\"text-sm text-slate-600 mt-1\">Desenvolvendo o reflexo de contar a rotina de alguém no piloto automático.</p></header><section class=\"bg-white p-6 rounded-2xl border border-slate-200 shadow-sm\"><h2 class=\"text-lg font-bold text-slate-900 mb-4 flex items-center gap-2\"><span class=\"w-3 h-3 bg-amber-500 rounded-full\"></span>1. A História (The Story)</h2><div class=\"space-y-2 text-slate-800 leading-relaxed font-medium bg-slate-50 p-4 rounded-xl border border-slate-100\"><p>Cristine lives in Santa Monica California.</p><p>She is 24 years old and lives in an apartment.</p><p>She lives with her boyfriend Thomas.</p><p>Every day, she gets up at 7 and takes a shower.</p><p>At 7:30 Cristine has breakfast with Thomas.</p><p>At 8 she goes to work.</p><p>Cristine goes to work by car.</p><p>Cristine works in a Film Studio in Hollywood.</p><p>She works there until 5.</p><p>At 6 she goes to the gym.</p><p>She stays at the gym for 2 hours.</p><p>At 8 o'clock Cristine and Thomas go to the bar for some drinks.</p><p>They see some friends.</p><p>They talk and they have fun!</p><p>On fridays they stay out until 3 in the morning!</p><p>They go to bed late and sleep until noon the next day.</p></div></section><section class=\"bg-white p-6 rounded-2xl border border-slate-200 shadow-sm\"><h2 class=\"text-lg font-bold text-slate-900 mb-4 flex items-center gap-2\"><span class=\"w-3 h-3 bg-amber-500 rounded-full\"></span>2. Vocabulário Prático (Expressões Chave)</h2><div class=\"grid md:grid-cols-2 gap-3 text-sm\"><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">lives in an apartment</strong><span class=\"text-slate-600\">mora num apartamento / apê</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">gets up</strong><span class=\"text-slate-600\">levanta da cama / acorda e levanta</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">takes a shower</strong><span class=\"text-slate-600\">toma banho / toma uma ducha</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">has breakfast</strong><span class=\"text-slate-600\">toma café da manhã (usando o verbo coringa \"have\")</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">goes to work / by car</strong><span class=\"text-slate-600\">vai pro trabalho / de carro</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">goes to the gym / stays</strong><span class=\"text-slate-600\">vai pra academia / fica lá</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">go for some drinks</strong><span class=\"text-slate-600\">vão pro bar tomar umas / tomar uns drinks</span></div><div class=\"p-3 bg-amber-50/50 rounded-xl border border-amber-100\"><strong class=\"text-amber-900 block\">stay out / go to bed late</strong><span class=\"text-slate-600\">varam a noite / vão dormir tarde</span></div></div></section><section class=\"bg-amber-50/90 border-2 border-amber-200 p-6 rounded-2xl shadow-sm\"><h2 class=\"text-lg font-bold text-amber-950 mb-2\">3. O Sentimento da Estrutura</h2><p class=\"text-sm text-amber-900 mb-4 font-medium\">A Ponte Mental: Descrevendo a Rotina no Piloto Automático</p><div class=\"space-y-4 text-sm text-slate-800\"><div class=\"bg-white p-4 rounded-xl border border-amber-200/60\"><h3 class=\"font-bold text-amber-900\">O Som de Tração do Piloto Automático</h3><p class=\"mt-1 text-slate-700\">Quando você conta o dia a dia de outra pessoa em inglês, os verbos ganham uma pequena tração sonora no final (som de /s/ ou /z/). Não é regra de livro: é um marcador automático do ritmo falado indicando que você está narrando o hábito de alguém. Exemplo: <em>gets up, takes, works, goes</em>.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200/60\"><h3 class=\"font-bold text-amber-900\">Gatilhos Rápidos de Pergunta e Negação</h3><p class=\"mt-1 text-slate-700\">Para perguntar rápido, acione a chave <strong>\"Does she...?\"</strong> (<em>Does she work?</em>). Para negar, o <strong>\"doesn't\"</strong> assume o peso da frase e deixa a ação leve e solta na sua forma base (<em>She doesn't get up early</em>).</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200/60\"><h3 class=\"font-bold text-amber-900\">Sacada Cultural: O Verbo Coringa \"Have\"</h3><p class=\"mt-1 text-slate-700\">No inglês do dia a dia, para refeições e drinks, o verbo padrão é sempre o lazy verb <strong>have</strong> (have breakfast, have lunch, have dinner, have a drink). Internalize o bloco direto, sem traduzir como 'tomar' ou 'comer'.</p></div></div></section><section class=\"bg-white p-6 rounded-2xl border border-slate-200 shadow-sm\"><h2 class=\"text-lg font-bold text-slate-900 mb-4 flex items-center gap-2\"><span class=\"w-3 h-3 bg-amber-500 rounded-full\"></span>4. Treino Fonético & Conexões Sonoras</h2><div class=\"space-y-3 text-sm\"><div class=\"p-3 bg-slate-50 rounded-xl border border-slate-100\"><p class=\"font-mono text-slate-900 font-bold\">lives in an apartment ➔ /lɪv-zɪ-nən-ə-pɑːrt-mənt/</p><p class=\"text-slate-600 text-xs mt-1\">O 'lives' emenda no 'in' e no 'an', criando uma única esteira de som sem pausas.</p></div><div class=\"p-3 bg-slate-50 rounded-xl border border-slate-100\"><p class=\"font-mono text-slate-900 font-bold\">gets up at 7 ➔ /ɡɛt-sʌ-pət ˈsɛvən/</p><p class=\"text-slate-600 text-xs mt-1\">O som final de 'gets' conecta com 'up' e o 'p' encosta suavemente no 'at'.</p></div><div class=\"p-3 bg-slate-50 rounded-xl border border-slate-100\"><p class=\"font-mono text-slate-900 font-bold\">takes a shower ➔ /teɪk-sə ˈʃaʊ-ər/</p><p class=\"text-slate-600 text-xs mt-1\">O som de /s/ no final do verbo gruda direto no artigo 'a'.</p></div></div></section></div>",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788933300163_art_1788933298226.jpg?alt=media",
+            "rawScript": "TITULO: MS010 - A Day in the Life of Cristine\nSUBTITULO: Magic Stories Legacy • Acervo Clássico\n\nHISTÓRIA:\nCristine lives in Santa Monica California.\nShe is 24 years old and lives in an apartment.\nShe lives with her boyfriend Thomas.\nEvery day, she gets up at 7 and takes a shower.\nAt 7:30 Cristine has breakfast with Thomas.\nAt 8 she goes to work.\nCristine goes to work by car.\nCristine works in a Film Studio in Hollywood.\nShe works there until 5.\nAt 6 she goes to the gym.\nShe stays at the gym for 2 hours.\nAt 8 o'clock Cristine and Thomas go to the bar for some drinks.\nThey see some friends.\nThey talk and they have fun!\nOn fridays they stay out until 3 in the morning!\nThey go to bed late and sleep until noon the next day.\n\nVOCABULÁRIO:\nlives in an apartment - mora num apartamento / apê\nboyfriend - namorado\ngets up - levanta da cama / acorda e levanta\ntakes a shower - toma banho / toma uma ducha\nhas breakfast - toma café da manhã\ngoes to work - vai pro trabalho / vai trampar\nby car - de carro\nworks there until - trabalha lá até\ngoes to the gym - vai pra academia / vai malhar\nstays at the gym - fica na academia\ngo to the bar for some drinks - vão pro bar tomar umas / tomar uns drinks\nhave fun - se divertem / curtem\nstay out - ficam na rua / varam a noite\ngo to bed late - vão dormir tarde / deitam tarde\nsleep until noon - dormem até o meio-dia\n\nGRAMMAR & CULTURAL INSIGHTS:\nSELO: SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS\nTÍTULO: O Sentimento da Estrutura (Grammar & Cultural Aspects Explained)\nSUBTÍTULO: A Ponte Mental: A Rotina no Piloto Automático e o \"S\" de Terceira Pessoa\nCLIQUE MENTAL: Quando falamos da vida e da rotina de outra pessoa em inglês, o motor do verbo ganha uma tração sonora no final (o som de 's' ou 'z'). Não pense em regra gramatical: sinta isso como um marcador automático de que você está contando a rotina de alguém.\nCARTÕES:\n\n1. FORMA AFIRMATIVA | Ela acorda às 7 e toma banho | Every day, she gets up at 7 and takes a shower. | She works in an office downtown. | Repare no som de /s/ grudando na ação: ela faz isso todo santo dia no piloto automático.\n2. PERGUNTA DE BATE-PRONTO | Que horas ela acorda? | What time does she get up? | What time does she start work? | A chave mágica do reflexo é o \"Does she...\": ele faz a pergunta disparar sem você ter que pensar na regra.\n3. FORMA NEGATIVA | Ela não acorda meio-dia | She doesn't get up at 12. | She doesn't drink coffee at night. | Na negação falada, o \"doesn't\" assume toda a carga negativa e o verbo volta leve e solto pro modo base.\nSACADA CULTURAL: Em inglês americano real, as pessoas raramente dizem \"I make my breakfast\" ou \"I drink breakfast\". O verbo universal para refeições é o Lazy Verb \"have\" (have breakfast, have lunch, have dinner, have some drinks). Internalize isso em bloco (chunk)!\nDICA DE TREINO: Não tente conjugar verbos na cabeça. No Listen & Read e no Listen & Answer, treine sua boca para grudar o som do \"does she\" nas perguntas e \"she gets up / she works\" nas afirmações até virar reflexo muscular.\n\nLISTEN & ANSWER (PERGUNTAS):\nWhere does Cristine live?\nHow old is she and where does she live?\nWho does she live with?\nWhat time does she get up and what does she do every day?\nWhat time does Cristine have breakfast with Thomas?\nWhat time does she go to work?\nHow does Cristine go to work?\nWhere does Cristine work?\nUntil what time does she work there?\nWhat time does she go to the gym?\nHow long does she stay at the gym?\nWhat time do Cristine and Thomas go to the bar and why?\nWho do they see?\nWhat do they do?\nHow late do they stay out on fridays?\nWhen do they go to bed and how long do they sleep the next day?\n\nLOOK & RETELL:\nWhere does Cristine live?\nHow old is she and where does she live?\nWho does she live with?\nWhat time does she get up and what does she do every day?\nWhat time does Cristine have breakfast with Thomas?\nWhat time does she go to work?\nHow does Cristine go to work?\nWhere does Cristine work?\nUntil what time does she work there?\nWhat time does she go to the gym?\nHow long does she stay at the gym?\nWhat time do Cristine and Thomas go to the bar and why?\nWho do they see?\nWhat do they do?\nHow late do they stay out on fridays?\nWhen do they go to bed and how long do they sleep the next day?\n\nLISTEN & ASK (GATILHOS NEGATIVOS):\nCristine does not live in San Diego -> me pergunte onde a Cristine mora\nCristine is not 30 years old and she does not live in a house -> me pergunte a idade dela e onde ela mora\nCristine does not live alone -> me pergunte com quem ela mora\nShe does not get up at 9 and she does not take a bath -> me pergunte que horas ela levanta e o que ela faz todo dia\nCristine does not have breakfast at 8 with Thomas -> me pergunte a que horas a Cristine toma café com o Thomas\nShe does not go to work at 9 -> me pergunte que horas ela vai pro trabalho\nCristine does not go to work by bus -> me pergunte como a Cristine vai pro trabalho\nCristine does not work at a bank -> me pergunte onde a Cristine trabalha\nShe does not work there until 8 -> me pergunte até que horas ela trabalha lá\nShe does not go to the gym at 7 -> me pergunte que horas ela vai pra academia\nShe does not stay at the gym for 30 minutes -> me pergunte quanto tempo ela fica na academia\nCristine and Thomas do not go to the restaurant at 8 for dinner -> me pergunte que horas a Cristine e o Thomas vão pro bar e pra quê\nThey do not see their parents -> me pergunte quem eles veem\nThey do not argue and they are not bored -> me pergunte o que eles fazem\nThey do not stay out until midnight on fridays -> me pergunte até que horas eles ficam na rua nas sextas\nThey do not go to bed early and they do not wake up at 7 the next day -> me pergunte quando eles vão dormir e até que horas dormem no dia seguinte\n\nPRONÚNCIA:\nCristine lives in Santa Monica California.\nShe is 24 years old and lives in an apartment.\nShe lives with her boyfriend Thomas.\nEvery day, she gets up at 7 and takes a shower.\nAt 7:30 Cristine has breakfast with Thomas.\nAt 8 she goes to work.\nCristine goes to work by car.\nCristine works in a Film Studio in Hollywood.\nShe works there until 5.\nAt 6 she goes to the gym.\nShe stays at the gym for 2 hours.\nAt 8 o'clock Cristine and Thomas go to the bar for some drinks.\nThey see some friends.\nThey talk and they have fun!\nOn fridays they stay out until 3 in the morning!\nThey go to bed late and sleep until noon the next day.\n\nDICAS FONÉTICAS:\nlives in an apartment ➔ O \"lives\" conecta com \"in\" e \"an\" formando uma corrente sonora única: /lɪv-zɪ-nən-ə-pɑːrt-mənt/. Não pause entre as palavras!\ngets up at 7 ➔ O 't' de \"gets\" bate no 'u' de \"up\" e o 'p' conecta com 'at': /ɡɛt-sʌ-pət ˈsɛvən/.\ntakes a shower ➔ O 's' final do verbo emenda direto no artigo indefinido: /teɪk-sə ˈʃaʊ-ər/.\nfor some drinks ➔ O 'for' perde força e vira som de schwa bem reduzido: /fər sʌm drɪŋks/.\n\nSACADA DE OURO:\nSabe qual é o maior segredo pra falar da rotina com naturalidade sem travar conjugando verbo? É você parar de olhar pro inglês como uma equação matemática cheia de regrinhas de terceira pessoa e começar a ouvir o ritmo da fala. Cristine mora, levanta, toma café, vai pro trabalho e malha — tudo isso tem um compasso contínuo. Quando você para de traduzir 'acorda', 'toma café' e passa a disparar 'gets up', 'has breakfast', a sua boca assume o volante antes mesmo do seu cérebro tentar traduzir. Solta a voz, repita no ritmo e deixe os chunks trabalharem por você!",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788933268306_Aula_10_-_Cristine-magic-story.pdf?alt=media",
+            "order": 10,
+            "type": "lesson",
+            "title": "010 - Magic Story - Cristine",
+            "hasTrainingTrack": true,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788933298236_thumb_1788933298213.jpg?alt=media",
+            "sentences": [],
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-01%2F1788932128974_FS-EC_mod_1_aula_10_ms_cristine.mp4?alt=media",
+            "duration": "32:55",
+            "id": "aula-1788932065650",
+            "moduleId": "ciclo-01"
+          }
+        ]
+      },
+      {
+        "stats": "",
+        "description": "",
+        "badge": "",
+        "published": true,
+        "order": 2,
+        "courseId": "fs-aef-ec",
+        "title": "Módulo 2 - Ganhando Autonomia",
+        "updatedAt": "2026-09-10T03:13:07.777Z",
+        "id": "ciclo-02",
+        "lessons": [
+          {
+            "moduleId": "ciclo-02",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788983531059_thumb_1788983531035.jpg?alt=media",
+            "processedContentHtml": "<div class=\"space-y-8 text-slate-800 font-sans max-w-4xl mx-auto\"><section class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2\"><span class=\"text-amber-600\">✨</span> O Sentimento do Passado na Vida Real</h2><p class=\"text-lg text-slate-700 leading-relaxed\">Falar no passado em inglês é exatamente como contar uma história rápida para um amigo no Brasil: é direto, objetivo e sem rodeios. Quando você quer contar o que fez ontem, hoje de manhã ou no fim de semana, a intenção é simplesmente relatar o fato concluído.</p></section><section class=\"space-y-4\"><h3 class=\"text-xl font-bold text-slate-900 border-b-2 border-amber-200 pb-2\">Como a Língua se Comporta: As Duas Famílias de Ação</h3><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"bg-white border-2 border-slate-200 rounded-xl p-5 shadow-sm space-y-2\"><div class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-semibold rounded-full text-sm\">Ações Previsíveis</div><h4 class=\"text-lg font-bold text-slate-900\">Os Verbos com Padrão (-ED)</h4><p class=\"text-slate-600 text-sm leading-relaxed\">São aqueles que só ganham uma terminação fixa ao final da palavra. Você mantém a base e acrescenta a marca do passado para sinalizar que a ação já aconteceu.</p><div class=\"bg-slate-50 p-3 rounded-lg text-sm space-y-1 font-mono text-slate-800\"><div>work → <strong>worked</strong></div><div>need → <strong>needed</strong></div><div>call → <strong>called</strong></div></div></div><div class=\"bg-white border-2 border-slate-200 rounded-xl p-5 shadow-sm space-y-2\"><div class=\"inline-block px-3 py-1 bg-amber-100 text-amber-900 font-semibold rounded-full text-sm\">Ações Marcantes</div><h4 class=\"text-lg font-bold text-slate-900\">Os Verbos Mutantes</h4><p class=\"text-slate-600 text-sm leading-relaxed\">São palavras que mudam de forma no passado. Em vez de decorar listas, a melhor estratégia é absorver cada uma naturalmente conforme você escuta e conta suas histórias.</p><div class=\"bg-slate-50 p-3 rounded-lg text-sm space-y-1 font-mono text-slate-800\"><div>go → <strong>went</strong></div><div>eat → <strong>ate</strong></div><div>see → <strong>saw</strong></div></div></div></div></section><section class=\"bg-white border-2 border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-xl font-bold text-slate-900 flex items-center gap-2\"><span class=\"text-amber-600\">🗣️</span> Soltando a Voz: O Passado na Prática Diária</h3><p class=\"text-slate-600\">Veja como a estrutura é idêntica não importa quem realiza a ação. A palavra de ação não muda para pessoas diferentes:</p><div class=\"grid sm:grid-cols-2 gap-3 text-sm\"><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Ação realizada por mim</p><p class=\"font-medium text-slate-900\">I worked yesterday.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Ação realizada por nós</p><p class=\"font-medium text-slate-900\">We worked yesterday.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Ele respondeu</p><p class=\"font-medium text-slate-900\">He answered.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Eles responderam</p><p class=\"font-medium text-slate-900\">They answered.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Eu fui</p><p class=\"font-medium text-slate-900\">I went.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Eles foram</p><p class=\"font-medium text-slate-900\">They went.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Uma pessoa dormiu</p><p class=\"font-medium text-slate-900\">Julia slept.</p></div><div class=\"p-3 bg-amber-50/50 rounded-lg border border-amber-200/60\"><p class=\"text-slate-500 text-xs mb-1\">Mais de uma pessoa dormiram</p><p class=\"font-medium text-slate-900\">Robert and Anna slept.</p></div></div></section></div>",
+            "courseId": "fs-aef-ec",
+            "type": "lesson",
+            "id": "aula-1788982998194",
+            "updatedAt": "2026-09-10T03:13:07.777Z",
+            "published": true,
+            "quizId": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788983020336_FS-EC_mod_2_aula_11_past_simple.mp4?alt=media",
+            "aiStatus": "published",
+            "duration": "27:14",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788983533141_art_1788983531050.jpg?alt=media",
+            "title": "011 - Past Simple",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788983042171_FS-EC_mod_2_aula_11_past_simple.mp4?alt=media",
+            "order": 1,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788983497244_Apostila_fs-aef-ec_past_simple.pdf?alt=media",
+            "rawScript": "Past Simple sem Medo: O Passado na Vida Real\n\nO Past Simple é o passado, my friends! kkk \n\nSuper parecido com o que a gente já está acostumado a fazer no português: você quer contar o que fez ontem, semana passada ou hoje de manhã. Portanto, não é tão difícil ativar na nossa fala, porque a ideia é direta e sem rodeios.\n\nPara colocar a conversa para rodar, você só precisa ficar ligado em duas coisas práticas:\n\n1. Os dois tipos de verbos:\n- Verbos Regulares: são os mais previsíveis. No passado, eles ganham aquele finalzinho com \"-ed\" (work -> worked, need -> needed).\n- Verbos Irregulares: são aqueles que viram praticamente outra palavra (go -> went, eat -> ate). Não sofra tentando decorar uma lista inteira de véspera: esses a gente vai fixando naturalmente conforme for escutando, usando e aplicando nas histórias.\n\n2. A pronúncia do \"-ed\":\nEssa é a segunda coisa que pega muita gente. Mas relaxa: você não precisa se desesperar com isso agora, porque vamos ter uma aula inteira dedicada exclusivamente a destravar essa pronúncia na próxima aula!\n\nPor enquanto, o foco é simples: bater o olho no verbo, entender o que aconteceu e soltar a voz para praticar.\n\n\nLista de Verbos Regulares (Forma Simples -> Passado)\n\n(trabalhar) work -> worked[cite: 10]\n(morar) live -> lived[cite: 10]\n(estudar) study -> studied[cite: 10]\n(jogar, brincar) play -> played[cite: 10]\n(precisar) need -> needed[cite: 10]\n(querer) want -> wanted[cite: 10]\n(ligar, chamar) call -> called[cite: 10]\n(gostar) like -> liked[cite: 10]\n(amar) love -> loved[cite: 10]\n(odiar) hate -> hated[cite: 10]\n(assistir) watch -> watched[cite: 10]\n(perguntar, pedir) ask -> asked[cite: 10]\n(responder, atender tel) answer -> answered[cite: 10]\n(conversar) talk -> talked[cite: 10]\n(abrir) open -> opened[cite: 10]\n(fechar) close -> closed[cite: 10]\n(lembrar) remember -> remembered[cite: 10]\n(tentar) try -> tried[cite: 10]\n(ficar) stay -> stayed[cite: 10]\n(cozinhar) cook -> cooked[cite: 10]\n(começar) start -> started[cite: 10]\n(terminar) finish -> finished[cite: 10]\n(usar) use -> used[cite: 10]\n(chorar) cry -> cried[cite: 10]\n(chegar) arrive -> arrived[cite: 10]\n(esperar) wait -> waited[cite: 10]\n(viajar) travel -> traveled[cite: 10]\n(receber) receive -> received[cite: 10]\n(ouvir) listen -> listened[cite: 10]\n(ajudar) help -> helped[cite: 10]\n\n\nLista de Verbos Irregulares (Forma Simples -> Passado)\n\n(comer) eat -> ate[cite: 10]\n(beber) drink -> drank[cite: 10]\n(ir) go -> went[cite: 10]\n(falar) speak -> spoke[cite: 10]\n(dormir) sleep -> slept[cite: 10]\n(fazer) do -> did[cite: 10]\n(ler) read -> read (pronúncia difere)[cite: 10]\n(escrever) write -> wrote[cite: 10]\n(vestir) wear -> wore[cite: 10]\n(ver) see -> saw[cite: 10]\n(saber, conhecer) know -> knew[cite: 10]\n(encontrar, conhecer) meet -> met[cite: 10]\n(esquecer) forget -> forgot[cite: 10]\n(comprar) buy -> bought[cite: 10]\n(vender) sell -> sold[cite: 10]\n(obter) get -> got[cite: 10]\n(levar) take -> took[cite: 10]\n(dirigir) drive -> drove[cite: 10]\n(encontrar) find -> found[cite: 10]\n(vir) come -> came[cite: 10]\n(sentir) feel -> felt[cite: 10]\n(fazer) make -> made[cite: 10]\n(nadar) swim -> swam[cite: 10]\n(vencer) win -> won[cite: 10]\n(pensar) think -> thought[cite: 10]\n(levantar) get up -> got up[cite: 10]\n(entender) understand -> understood[cite: 10]\n(dar) give -> gave[cite: 10]\n(colocar) put -> put[cite: 10]\n\n\nEscutar e Praticar (Uso Diário no Passado)\n\nEu trabalhei ontem.[cite: 10]\n-> I worked yesterday.\n\nNós trabalhamos ontem.[cite: 10]\n-> We worked yesterday.\n\nEle respondeu.[cite: 10]\n-> He answered.\n\nEles responderam.[cite: 10]\n-> They answered.\n\nEu fui.[cite: 10]\n-> I went.\n\nEles foram.[cite: 10]\n-> They went.\n\nJulia dormiu.[cite: 10]\n-> Julia slept.\n\nRobert e Anna dormiram.[cite: 10]\n-> Robert and Anna slept.\n\nEu venci.[cite: 10]\n-> I won.",
+            "goldenTip": "Não perca tempo tentando decorar listas infinitas de verbos de véspera! O segredo é usar os verbos mais comuns nas suas histórias diárias até que o passado saia de forma natural e sem esforço.",
+            "hasTrainingTrack": true
+          },
+          {
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2\"><span>🗣️</span> O Mito do \"ED\" e o Segredo da Pronúncia Natural</h2><p class=\"text-slate-700 leading-relaxed text-lg\">O maior erro de quem fala português é ver <strong>-ed</strong> no final da palavra e querer pronunciar \"édi\" para absolutamente tudo: <em>\"uórquedi\"</em>, <em>\"lávidi\"</em>, <em>\"láiquedi\"</em>. Na vida real, a sua boca só precisa de <strong>três reflexos práticos</strong> para soar natural sem travar.</p></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-xl font-bold text-slate-900 flex items-center gap-2\"><span>✋</span> O Truque Prático da Garganta</h3><p class=\"text-slate-700\">Coloque a mão na garganta nas cordas vocais e fale a palavra no presente:</p><div class=\"grid md:grid-cols-3 gap-4 text-sm\"><div class=\"bg-amber-50/60 border border-amber-200 rounded-xl p-4\"><h4 class=\"font-bold text-amber-900 mb-2 text-base\">1. Garganta Vibrou?</h4><p class=\"text-slate-700 mb-2\">O som é sonoro. Emende apenas um som rápido de <strong>\"d\" seco</strong>, sem criar sílaba nova.</p><p class=\"font-semibold text-slate-900\">live ➔ lived<br>play ➔ played<br>love ➔ loved</p></div><div class=\"bg-amber-50/60 border border-amber-200 rounded-xl p-4\"><h4 class=\"font-bold text-amber-900 mb-2 text-base\">2. Garganta Não Vibrou?</h4><p class=\"text-slate-700 mb-2\">É apenas ar saindo. Solte um som de <strong>\"t\" seco</strong> no final.</p><p class=\"font-semibold text-slate-900\">work ➔ worked (\"uórkt\")<br>like ➔ liked (\"láikt\")<br>watch ➔ watched</p></div><div class=\"bg-amber-50/60 border border-amber-200 rounded-xl p-4\"><h4 class=\"font-bold text-amber-900 mb-2 text-base\">3. Já termina em T ou D?</h4><p class=\"text-slate-700 mb-2\">Aí sim você cria uma sílaba nova com som de <strong>\"ed\" / \"id\"</strong> para não travar a língua.</p><p class=\"font-semibold text-slate-900\">need ➔ needed<br>want ➔ wanted<br>start ➔ started</p></div></div></div><div class=\"bg-white border-2 border-amber-100 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4 flex items-center gap-2\"><span>⏳</span> Marcadores de Tempo no Passado</h3><div class=\"grid sm:grid-cols-2 md:grid-cols-3 gap-3 text-slate-800 font-medium\"><div class=\"p-3 bg-amber-50/40 rounded-lg border border-amber-200/60\">Yesterday <span class=\"text-xs text-slate-500 font-normal block\">ontem</span></div><div class=\"p-3 bg-amber-50/40 rounded-lg border border-amber-200/60\">Last week <span class=\"text-xs text-slate-500 font-normal block\">semana passada</span></div><div class=\"p-3 bg-amber-50/40 rounded-lg border border-amber-200/60\">Last month <span class=\"text-xs text-slate-500 font-normal block\">mês passado</span></div><div class=\"p-3 bg-amber-50/40 rounded-lg border border-amber-200/60\">Two hours ago <span class=\"text-xs text-slate-500 font-normal block\">2 horas atrás</span></div><div class=\"p-3 bg-amber-50/40 rounded-lg border border-amber-200/60\">Five days ago <span class=\"text-xs text-slate-500 font-normal block\">5 dias atrás</span></div><div class=\"p-3 bg-amber-50/40 rounded-lg border border-amber-200/60\">In 1995 / In 2009</div></div></div><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4 flex items-center gap-2\"><span>🎯</span> Say That in English! (Prática de Fixação)</h3><div class=\"space-y-3\"><div class=\"bg-white p-4 rounded-xl border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Eu comecei ontem.</span><span class=\"text-amber-900 font-bold font-mono\">➔ I started yesterday.</span></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Você falou bem ontem.</span><span class=\"text-amber-900 font-bold font-mono\">➔ You spoke well yesterday.</span></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Ele ligou na terça passada.</span><span class=\"text-amber-900 font-bold font-mono\">➔ He called last Tuesday.</span></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">A Micheli comprou o livro ano passado.</span><span class=\"text-amber-900 font-bold font-mono\">➔ Micheli bought the book last year.</span></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Nós viajamos para a Itália três anos atrás.</span><span class=\"text-amber-900 font-bold font-mono\">➔ We traveled to Italy three years ago.</span></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><span class=\"text-slate-700 font-medium\">Eles conversaram semana passada.</span><span class=\"text-amber-900 font-bold font-mono\">➔ They talked last week.</span></div></div></div></div>",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788984884887_FS-EC_mod_2_aula_12_past_pronunciation.mp4?alt=media",
+            "moduleId": "ciclo-02",
+            "type": "lesson",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1789017532248_thumb_1789017532224.jpg?alt=media",
+            "quizId": "",
+            "rawScript": "O Segredo do \"ED\": O Que Quase Nenhum Brasileiro Sabe na Pronúncia\n\nEssa aula é muito legal! Falantes de português não fazem ideia de como isso funciona na vida real.\n\nO erro número um do estudante brasileiro é ver \"-ed\" escrito no final do verbo e querer pronunciar \"édi\" para absolutamente tudo: fala \"uórquedi\", \"lávidi\", \"láiquedi\". Não dá, né! \n\nPara falar com naturalidade, você precisa ficar atento a apenas três sons possíveis no final dos verbos regulares:\n1. Som de \"d\"\n2. Som de \"t\"\n3. E finalmente o som que todo brasileiro quer usar sempre: som de \"ed\" (ou \"id\")\n\nO truque prático da garganta:\nColoque a mão na garganta (nas cordas vocais) e fale o final do verbo na forma normal:\n- Vibrou a garganta? O som final é sonoro. Na hora de colocar no passado, você apenas emenda um som rápido de \"d\" seco, sem criar sílaba nova: live -> lived, play -> played, love -> loved.\n- Não vibrou? O som é surdo, apenas ar saindo (como k, p, ch, sh, s). No passado, o seu reflexo é soltar um som de \"t\" seco: work -> worked (\"uórkt\"), like -> liked (\"láikt\"), watch -> watched.\n- O verbo já terminou com som de \"d\" ou com som de \"t\"? Aí sim! Como a nossa boca não consegue falar dois \"t\" ou dois \"d\" colados, você fala tudo, criando uma nova sílaba com som de \"ed\" / \"id\": need -> needed, want -> wanted, start -> started, wait -> waited.\n\nPegou esse reflexo de ouvido, acabou o sofrimento com os verbos no passado!\n\n\nVerbos no Simple Past: Regulares vs Irregulares\n\nRegular Verbs:\nQualquer verbo cujo passado é formado acrescentando-se \"d\" ou \"ed\" ao final[cite: 11].\nExemplos:\nwork -> worked[cite: 11]\ndance -> danced[cite: 11]\n\nIrregular Verbs:\nO passado geralmente tem a ortografia diferente do infinitivo[cite: 11].\nExemplos:\nsee -> saw[cite: 11]\ngo -> went[cite: 11]\ndrink -> drank[cite: 11]\n\n\nGuia Prático de Pronúncia do \"-ed\"\n\n1. Som de \"d\" (cordas vocais vibram):\nlive -> lived[cite: 11]\nstudy -> studied[cite: 11]\nplay -> played[cite: 11]\nlove -> loved[cite: 11]\nanswer -> answered[cite: 11]\nopen -> opened[cite: 11]\nclose -> closed[cite: 11]\nremember -> remembered[cite: 11]\ntry -> tried[cite: 11]\nstay -> stayed[cite: 11]\nuse -> used[cite: 11]\ncry -> cried[cite: 11]\ntravel -> traveled[cite: 11]\nreceive -> received[cite: 11]\nlisten -> listened[cite: 11]\ncall -> called[cite: 11]\n\n2. Som de \"t\" (cordas vocais não vibram, apenas sopro de ar):\nwork -> worked[cite: 11]\nlike -> liked[cite: 11]\nwatch -> watched[cite: 11]\nask -> asked[cite: 11]\ntalk -> talked[cite: 11]\ncook -> cooked[cite: 11]\nfinish -> finished[cite: 11]\nhelp -> helped[cite: 11]\n\n3. Som de \"ed\" / \"id\" (terminações originais em som de T ou D):\nneed -> needed[cite: 11]\nwant -> wanted[cite: 11]\nstart -> started[cite: 11]\nwait -> waited[cite: 11]\ncelebrate -> celebrated[cite: 11]\n\n\nLista Completa de Verbos Regulares (Forma Simples -> Passado)\n\n(trabalhar) work -> worked[cite: 11]\n(morar) live -> lived[cite: 11]\n(estudar) study -> studied[cite: 11]\n(jogar, brincar) play -> played[cite: 11]\n(precisar) need -> needed[cite: 11]\n(querer) want -> wanted[cite: 11]\n(ligar, chamar) call -> called[cite: 11]\n(gostar) like -> liked[cite: 11]\n(amar) love -> loved[cite: 11]\n(odiar) hate -> hated[cite: 11]\n(assistir) watch -> watched[cite: 11]\n(perguntar, pedir) ask -> asked[cite: 11]\n(responder, atender tel) answer -> answered[cite: 11]\n(conversar) talk -> talked[cite: 11]\n(abrir) open -> opened[cite: 11]\n(fechar) close -> closed[cite: 11]\n(lembrar) remember -> remembered[cite: 11]\n(tentar) try -> tried[cite: 11]\n(ficar) stay -> stayed[cite: 11]\n(cozinhar) cook -> cooked[cite: 11]\n(começar) start -> started[cite: 11]\n(terminar) finish -> finished[cite: 11]\n(usar) use -> used[cite: 11]\n(chorar) cry -> cried[cite: 11]\n(chegar) arrive -> arrived[cite: 11]\n(esperar) wait -> waited[cite: 11]\n(viajar) travel -> traveled[cite: 11]\n(receber) receive -> received[cite: 11]\n(ouvir) listen -> listened[cite: 11]\n(ajudar) help -> helped[cite: 11]\n\n\nAdvérbios Comuns de Uso no Passado\n\nYesterday: ontem[cite: 11]\nLast week: semana passada[cite: 11]\nLast month: mês passado[cite: 11]\nLast Saturday: sábado passado[cite: 11]\nTwo hours ago: 2 horas atrás[cite: 11]\nFive days ago: 5 dias atrás[cite: 11]\nTen years ago: dez anos atrás[cite: 11]\nIn 1995: em 1995[cite: 11]\nIn 2009: em 2009[cite: 11]\nLast night: ontem à noite[cite: 11]\n\n\nSay That in English! (Prática de Fixação)\n\nEu comecei ontem.[cite: 11]\n-> I started yesterday.\n\nVocê falou bem ontem.[cite: 11]\n-> You spoke well yesterday.\n\nEle ligou na terça passada.[cite: 11]\n-> He called last Tuesday.\n\nA Micheli comprou o livro ano passado.[cite: 11]\n-> Micheli bought the book last year.\n\nNós viajamos para a Itália três anos atrás.[cite: 11]\n-> We traveled to Italy three years ago.\n\nEles conversaram semana passada.[cite: 11]\n-> They talked last week.O Segredo do \"ED\": O Que Quase Nenhum Brasileiro Sabe na Pronúncia\n\nEssa aula é muito legal! Falantes de português não fazem ideia de como isso funciona na vida real.\n\nO erro número um do estudante brasileiro é ver \"-ed\" escrito no final do verbo e querer pronunciar \"édi\" para absolutamente tudo: fala \"uórquedi\", \"lávidi\", \"láiquedi\". Não dá, né! \n\nPara falar com naturalidade, você precisa ficar atento a apenas três sons possíveis no final dos verbos regulares:\n1. Som de \"d\"\n2. Som de \"t\"\n3. E finalmente o som que todo brasileiro quer usar sempre: som de \"ed\" (ou \"id\")\n\nO truque prático da garganta:\nColoque a mão na garganta (nas cordas vocais) e fale o final do verbo na forma normal:\n- Vibrou a garganta? O som final é sonoro. Na hora de colocar no passado, você apenas emenda um som rápido de \"d\" seco, sem criar sílaba nova: live -> lived, play -> played, love -> loved.\n- Não vibrou? O som é surdo, apenas ar saindo (como k, p, ch, sh, s). No passado, o seu reflexo é soltar um som de \"t\" seco: work -> worked (\"uórkt\"), like -> liked (\"láikt\"), watch -> watched.\n- O verbo já terminou com som de \"d\" ou com som de \"t\"? Aí sim! Como a nossa boca não consegue falar dois \"t\" ou dois \"d\" colados, você fala tudo, criando uma nova sílaba com som de \"ed\" / \"id\": need -> needed, want -> wanted, start -> started, wait -> waited.\n\nPegou esse reflexo de ouvido, acabou o sofrimento com os verbos no passado!\n\n\nVerbos no Simple Past: Regulares vs Irregulares\n\nRegular Verbs:\nQualquer verbo cujo passado é formado acrescentando-se \"d\" ou \"ed\" ao final[cite: 11].\nExemplos:\nwork -> worked[cite: 11]\ndance -> danced[cite: 11]\n\nIrregular Verbs:\nO passado geralmente tem a ortografia diferente do infinitivo[cite: 11].\nExemplos:\nsee -> saw[cite: 11]\ngo -> went[cite: 11]\ndrink -> drank[cite: 11]\n\n\nGuia Prático de Pronúncia do \"-ed\"\n\n1. Som de \"d\" (cordas vocais vibram):\nlive -> lived[cite: 11]\nstudy -> studied[cite: 11]\nplay -> played[cite: 11]\nlove -> loved[cite: 11]\nanswer -> answered[cite: 11]\nopen -> opened[cite: 11]\nclose -> closed[cite: 11]\nremember -> remembered[cite: 11]\ntry -> tried[cite: 11]\nstay -> stayed[cite: 11]\nuse -> used[cite: 11]\ncry -> cried[cite: 11]\ntravel -> traveled[cite: 11]\nreceive -> received[cite: 11]\nlisten -> listened[cite: 11]\ncall -> called[cite: 11]\n\n2. Som de \"t\" (cordas vocais não vibram, apenas sopro de ar):\nwork -> worked[cite: 11]\nlike -> liked[cite: 11]\nwatch -> watched[cite: 11]\nask -> asked[cite: 11]\ntalk -> talked[cite: 11]\ncook -> cooked[cite: 11]\nfinish -> finished[cite: 11]\nhelp -> helped[cite: 11]\n\n3. Som de \"ed\" / \"id\" (terminações originais em som de T ou D):\nneed -> needed[cite: 11]\nwant -> wanted[cite: 11]\nstart -> started[cite: 11]\nwait -> waited[cite: 11]\ncelebrate -> celebrated[cite: 11]\n\n\nLista Completa de Verbos Regulares (Forma Simples -> Passado)\n\n(trabalhar) work -> worked[cite: 11]\n(morar) live -> lived[cite: 11]\n(estudar) study -> studied[cite: 11]\n(jogar, brincar) play -> played[cite: 11]\n(precisar) need -> needed[cite: 11]\n(querer) want -> wanted[cite: 11]\n(ligar, chamar) call -> called[cite: 11]\n(gostar) like -> liked[cite: 11]\n(amar) love -> loved[cite: 11]\n(odiar) hate -> hated[cite: 11]\n(assistir) watch -> watched[cite: 11]\n(perguntar, pedir) ask -> asked[cite: 11]\n(responder, atender tel) answer -> answered[cite: 11]\n(conversar) talk -> talked[cite: 11]\n(abrir) open -> opened[cite: 11]\n(fechar) close -> closed[cite: 11]\n(lembrar) remember -> remembered[cite: 11]\n(tentar) try -> tried[cite: 11]\n(ficar) stay -> stayed[cite: 11]\n(cozinhar) cook -> cooked[cite: 11]\n(começar) start -> started[cite: 11]\n(terminar) finish -> finished[cite: 11]\n(usar) use -> used[cite: 11]\n(chorar) cry -> cried[cite: 11]\n(chegar) arrive -> arrived[cite: 11]\n(esperar) wait -> waited[cite: 11]\n(viajar) travel -> traveled[cite: 11]\n(receber) receive -> received[cite: 11]\n(ouvir) listen -> listened[cite: 11]\n(ajudar) help -> helped[cite: 11]\n\n\nAdvérbios Comuns de Uso no Passado\n\nYesterday: ontem[cite: 11]\nLast week: semana passada[cite: 11]\nLast month: mês passado[cite: 11]\nLast Saturday: sábado passado[cite: 11]\nTwo hours ago: 2 horas atrás[cite: 11]\nFive days ago: 5 dias atrás[cite: 11]\nTen years ago: dez anos atrás[cite: 11]\nIn 1995: em 1995[cite: 11]\nIn 2009: em 2009[cite: 11]\nLast night: ontem à noite[cite: 11]\n\n\nSay That in English! (Prática de Fixação)\n\nEu comecei ontem.[cite: 11]\n-> I started yesterday.\n\nVocê falou bem ontem.[cite: 11]\n-> You spoke well yesterday.\n\nEle ligou na terça passada.[cite: 11]\n-> He called last Tuesday.\n\nA Micheli comprou o livro ano passado.[cite: 11]\n-> Micheli bought the book last year.\n\nNós viajamos para a Itália três anos atrás.[cite: 11]\n-> We traveled to Italy three years ago.\n\nEles conversaram semana passada.[cite: 11]\n-> They talked last week.",
+            "goldenTip": "O segredo para destravar a pronúncia do passado em inglês é prestar atenção na sua garganta: se ela vibrou no final do verbo, você só emenda um 'd' seco; se não vibrou, solta um 't'; e você só diz 'id' se a palavra já terminar em som de T ou D!",
+            "courseId": "fs-aef-ec",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788984945188_FS-EC_mod_2_aula_12_past_pronunciation.mp4?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1789017534252_art_1789017532236.jpg?alt=media",
+            "id": "aula-1788984837122",
+            "title": "012 - Uma aula de pronúncia importante - PAST",
+            "hasTrainingTrack": true,
+            "order": 2,
+            "updatedAt": "2026-09-10T05:19:30.052Z",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788985351909_Apostila_fs-aef-ec_uma_aula_de_pron_ncia_importante_past.pdf?alt=media",
+            "aiStatus": "ai_reviewed",
+            "duration": "24:11",
+            "published": true
+          },
+          {
+            "moduleId": "ciclo-02",
+            "courseId": "fs-aef-ec",
+            "updatedAt": "2026-09-10T03:13:07.778Z",
+            "title": "013 - Family, Relatives and Others",
+            "published": true,
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788986814830_art_1788986813267.jpg?alt=media",
+            "order": 3,
+            "type": "lesson",
+            "quizId": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788986738219_FS-EC_mod_2_aula_13_family_relatives.mp4?alt=media",
+            "hasTrainingTrack": true,
+            "processedContentHtml": "<div class=\"space-y-8 text-slate-800 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><div class=\"flex items-center gap-3 mb-4\"><span class=\"bg-amber-500 text-white font-bold px-3 py-1 rounded-lg text-sm uppercase tracking-wide\">Sacada Inicial</span><h3 class=\"text-xl font-bold text-slate-900\">As 3 Pegadinhas do Português na Hora de Falar da Família</h3></div><p class=\"text-slate-700 leading-relaxed mb-4\">Quando tentamos traduzir palavra por palavra do português, a nossa mente dá um n��. O inglês é infinitamente mais prático e direto se você entender a intenção da estrutura:</p><div class=\"grid md:grid-cols-3 gap-4\"><div class=\"bg-white p-4 rounded-xl border border-amber-200 shadow-sm\"><h4 class=\"font-bold text-amber-900 mb-2\">1. Falsos Amigos</h4><p class=\"text-sm text-slate-600\"><strong class=\"text-slate-900\">Parents</strong> = Apenas seu pai e sua mãe.<br><strong class=\"text-slate-900\">Relatives</strong> = Toda a sua parentada (tios, primos, avós).</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 shadow-sm\"><h4 class=\"font-bold text-amber-900 mb-2\">2. Economia de Palavras</h4><p class=\"text-sm text-slate-600\">Você não precisa mudar para meu, minha, meus ou minhas. Use apenas <strong class=\"text-slate-900\">MY</strong> para tudo!</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 shadow-sm\"><h4 class=\"font-bold text-amber-900 mb-2\">3. Sem Confusão de \"Seu/Sua\"</h4><p class=\"text-sm text-slate-600\">Vá direto ao dono:<br><strong class=\"text-slate-900\">His</strong> = Dele<br><strong class=\"text-slate-900\">Her</strong> = Dela<br><strong class=\"text-slate-900\">Their</strong> = Deles/Delas</p></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6\"><h3 class=\"text-xl font-bold text-slate-900 border-b pb-3 border-slate-100\">Vocabulário Prático: Pessoas e Conexões Reais</h3><div class=\"grid md:grid-cols-2 gap-6\"><div class=\"space-y-3\"><h4 class=\"font-semibold text-amber-800 text-sm uppercase tracking-wider\">Núcleo Familiar e Gerações</h4><ul class=\"space-y-2 text-sm\"><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Grandparents / Grandfather / Grandmother</span><span class=\"text-slate-500\">Avós / Avô / Avó</span></li><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Parents / Father / Mother</span><span class=\"text-slate-500\">Pais / Pai / Mãe</span></li><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Son / Daughter / Children</span><span class=\"text-slate-500\">Filho / Filha / Filhos (crianças)</span></li><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Brother / Sister</span><span class=\"text-slate-500\">Irmão / Irmã</span></li></ul></div><div class=\"space-y-3\"><h4 class=\"font-semibold text-amber-800 text-sm uppercase tracking-wider\">Parentes e Outras Relações</h4><ul class=\"space-y-2 text-sm\"><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Uncle / Aunt / Cousin</span><span class=\"text-slate-500\">Tio / Tia / Primo(a)</span></li><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Husband / Wife</span><span class=\"text-slate-500\">Marido / Esposa</span></li><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Boyfriend / Girlfriend / Fiancé(e)</span><span class=\"text-slate-500\">Namorado(a) / Noivo(a)</span></li><li class=\"flex justify-between p-2 rounded bg-slate-50\"><span class=\"font-medium text-slate-900\">Neighbor / Friend / Person / People</span><span class=\"text-slate-500\">Vizinho(a) / Amigo(a) / Pessoa / Pessoas</span></li></ul></div></div></div><div class=\"bg-amber-50/50 border border-amber-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-xl font-bold text-slate-900\">Indique Posse sem Dar Nó na Cabeça</h3><p class=\"text-slate-700 text-sm leading-relaxed\">Observe como no português precisamos mudar a palavra 4 vezes, enquanto o inglês usa a mesma palavra antes do objeto ou pessoa:</p><div class=\"bg-white rounded-xl p-4 border border-amber-200 grid md:grid-cols-2 gap-4 text-sm\"><div class=\"space-y-1\"><p class=\"text-slate-500 font-medium\">Em Português (4 variações):</p><p class=\"text-slate-800\">meu pai, minha mãe, meus primos, minhas tias</p></div><div class=\"space-y-1\"><p class=\"text-amber-800 font-bold\">Em Inglês (1 palavra única):</p><p class=\"text-slate-900 font-semibold\">my father, my mother, my cousins, my aunts</p></div></div><div class=\"pt-2\"><h4 class=\"font-bold text-slate-900 mb-3 text-sm\">Guia Rápido de Posição (Sempre antes do nome):</h4><div class=\"grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-medium\"><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">My</span> Meu / Minha</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">Your</span> Seu / Sua</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">His</span> Dele</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">Her</span> Dela</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">Its</span> Dele/Dela (coisas/animais)</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">Our</span> Nosso / Nossa</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">Your</span> De vocês</div><div class=\"bg-white p-2 rounded border border-slate-200 text-center\"><span class=\"block text-amber-800 font-bold\">Their</span> Deles / Delas</div></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-xl font-bold text-slate-900\">Treino Dinâmico em Voz Alta</h3><p class=\"text-slate-600 text-sm\">Junte a palavra <strong class=\"text-slate-900\">food</strong> (comida) ou <strong class=\"text-slate-900\">house</strong> (casa) com quem é o dono e fale em voz alta:</p><div class=\"grid sm:grid-cols-2 md:grid-cols-3 gap-3 text-sm\"><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\"><span class=\"text-slate-500 block text-xs\">Minha comida / Minha casa</span><strong class=\"text-slate-900\">My food / My house</strong></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\"><span class=\"text-slate-500 block text-xs\">Sua comida / Sua casa</span><strong class=\"text-slate-900\">Your food / Your house</strong></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\"><span class=\"text-slate-500 block text-xs\">Comida dele / Casa dele</span><strong class=\"text-slate-900\">His food / His house</strong></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\"><span class=\"text-slate-500 block text-xs\">Comida dela / Casa dela</span><strong class=\"text-slate-900\">Her food / Her house</strong></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\"><span class=\"text-slate-500 block text-xs\">Nossa comida / Nossa casa</span><strong class=\"text-slate-900\">Our food / Our house</strong></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100\"><span class=\"text-slate-500 block text-xs\">Comida deles / Casa deles</span><strong class=\"text-slate-900\">Their food / Their house</strong></div></div></div></div>",
+            "id": "aula-1788986691881",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788986813280_thumb_1788986813250.jpg?alt=media",
+            "aiStatus": "ai_reviewed",
+            "duration": "17:30",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788986759999_FS-EC_mod_2_aula_13_family_relatives.mp4?alt=media",
+            "rawScript": "Família e Pessoas Próximas: Atenção às Pegadinhas Clássicas do Português\n\nFalar sobre família e pessoas ao nosso redor é a base de qualquer bate-papo real. No entanto, o estudante brasileiro cai em três armadilhas clássicas se tentar traduzir tudo ao pé da letra:\n\n1. A pegadinha dos falsos amigos:\n- \"Relatives\" NÃO significa parentescos no sentido de pais; \"relatives\" são seus parentes em geral (tios, primos, etc.)[cite: 12].\n- \"Parents\" NÃO são seus parentes; \"parents\" são exclusivamente seus pais (pai e mãe)[cite: 12].\n\n2. A economia do inglês para posse:\nNo português, a gente muda a palavra para concordar com o gênero e o número: \"meu pai\", \"minha mãe\", \"meus primos\", \"minhas tias\". Em inglês é muito mais simples e direto: usamos apenas \"my\" para todos eles (my father, my mother, my cousins, my aunts)[cite: 12].\n\n3. His vs. Her (Sem confundir de quem é a coisa):\nQuando queremos falar \"o carro dele\" ou \"a casa dela\", não use o português \"seu/sua\" que gera confusão. Vá direto ao ponto de quem é o dono:\n- Dele? É \"his\" (his house, his food)[cite: 12].\n- Dela? É \"her\" (her house, her food)[cite: 12].\n- Deles ou delas? É \"their\" (their house, their food)[cite: 12].\n\nPegue o vocabulário em blocos naturais, conecte com as pessoas reais da sua vida e pratique em voz alta!\n\n\nVocabulário: Family, Relatives and Others\n\nFamília Direta e Gerações:\nGrandparents - avós[cite: 12]\nGrandfather - avô[cite: 12]\nGrandmother - avó[cite: 12]\nGrandson - neto[cite: 12]\nGranddaughter - neta[cite: 12]\nParents - pais (pai e mãe)[cite: 12]\nFather - pai[cite: 12]\nMother - mãe[cite: 12]\nSon - filho[cite: 12]\nDaughter - filha[cite: 12]\nChildren - filhos (ambos os sexos) / crianças[cite: 12]\nBrother - irmão[cite: 12]\nSister - irmã[cite: 12]\n\nParentes e Outras Pessoas (More People):\nRelatives - parentes[cite: 12]\nuncle - tio[cite: 12]\naunt - tia[cite: 12]\ncousin - primo / prima[cite: 12]\nhusband - marido[cite: 12]\nwife - esposa[cite: 12]\nboyfriend - namorado[cite: 12]\ngirlfriend - namorada[cite: 12]\nfiancé - noivo[cite: 12]\nfiancée - noiva[cite: 12]\nman - homem[cite: 12]\nwoman - mulher[cite: 12]\nboy - menino[cite: 12]\ngirl - menina[cite: 12]\nkid - criança[cite: 12]\nperson - pessoa[cite: 12]\npeople - pessoas[cite: 12]\nhuman being - ser humano[cite: 12]\nneighbor - vizinho / vizinha[cite: 12]\nfriend - amigo / amiga[cite: 12]\n\n\nPossessive Adjectives (Adjetivos Possessivos)\n\nEm português:\n- meu pai (singular masculino)[cite: 12]\n- meus primos (plural masculino)[cite: 12]\n- minha mãe (singular feminino)[cite: 12]\n- minhas tias (plural feminino)[cite: 12]\n\nEm inglês (não muda por gênero nem por plural):\n- my father[cite: 12]\n- my cousins[cite: 12]\n- my mother[cite: 12]\n- my aunts[cite: 12]\n\nLista dos Possessivos:\nMy - meu, minha, meus, minhas[cite: 12]\nYour - seu, sua, seus, suas (de você)[cite: 12]\nHis - dele[cite: 12]\nHer - dela[cite: 12]\nIts - dele, dela (para coisas ou animais)[cite: 12]\nOur - nosso, nossa, nossos, nossas[cite: 12]\nYour - de vocês[cite: 12]\nTheir - deles, delas[cite: 12]\n\nImportante: sempre posicionados antes dos substantivos[cite: 12].\nMy house - minha casa[cite: 12]\nYour house - sua casa[cite: 12]\nHis house - casa dele[cite: 12]\nHer house - casa dela[cite: 12]\nOur house - nossa casa[cite: 12]\nYour house - casa de vocês[cite: 12]\nTheir house - casa deles[cite: 12]\n\n\nPrática de Fixação: Treino com a Palavra \"Food\"[cite: 12]\n\nMinha comida -> My food\nSua comida -> Your food\nComida dele -> His food\nComida dela -> Her food\nNossa comida -> Our food\nComida de vocês -> Your food\nComida deles / delas -> Their food",
+            "goldenTip": "Esqueça a complicação do português de mudar palavras para concordar com masculino, feminino ou plural: no inglês, o 'my' resolve tudo sozinho! E guarde essa sacada: 'parents' são exclusivamente seus pais, enquanto 'relatives' é a sua parentada toda.",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788986784232_13_-_LESSON13__1_.pdf?alt=media"
+          },
+          {
+            "id": "aula-1788987374251",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788987506235_art_1788987504029.jpg?alt=media",
+            "rawScript": "Posse com ('s): A Estrutura Que Ninguém Lembra de Falar (Mas Precisa Entender)\n\nNem sei por que esse assunto está aqui neste curso. Ninguém lembra disso! haha! E você também não vai lembrar nesse estágio que você está.\n\nHowever, porém, contudo, você vai precisar disso o tempo todo na leitura e na escuta de nativos falando.\n\nNo português, a gente sempre diz \"a coisa DE alguém\": o carro do João, a casa da Maria. No inglês, eles invertem a ordem: colocam primeiro o dono com um apóstrofo e \"s\" ('s), e depois a coisa que ele tem:\n- \"The hair of the girl\" até existe, mas não é nada comum na fala real! O nativo sempre vai mandar: \"The girl's hair\".\n- A casa de Luciana? Vira \"Luciana's house\".\n- A prima do John? Vira \"John's cousin\".\n\nA regra de bolso para você não quebrar a cabeça:\n1. Pessoas ou animais: use ('s) invertendo a ordem (dono primeiro, posse depois).\n2. Plural que já termina em \"s\": só coloca o apóstrofo no final, sem outro s (The tourists' bus).\n3. Coisas e objetos: aí sim você usa o tradicional \"of the\" (The door of the car).\n\nSe treinar, você vai ativar rapidamente na fala. Mas... eu duvido que você vai! kkkk Por enquanto, foque em entender de primeira quando escutar ou ler!\n\n\nGenitive Case: Outra Maneira de Expressar Posse\n\nO cabelo da menina é longo[cite: 13]\n- Incomum na fala real: The hair of the girl is long (Not common! / Não é comum!)[cite: 13]\n- Forma natural com ('s): The girl's hair is long[cite: 13]\n\nExemplos de Posse com ('s):\n- A casa de Luciana é bonita -> Luciana's house is pretty[cite: 13]\n- O livro do aluno -> The student's book[cite: 13]\n- A prima do John -> John's cousin[cite: 13]\n\nPlural Terminado em S:\n- O ônibus dos turistas -> The tourists' bus[cite: 13]\n\nRegra de Uso:\n- Use ('s) preferencialmente com pessoas ou animais[cite: 13].\n- Com objetos inanimados, use a estrutura normal com \"of the\"[cite: 13]:\n  A porta do carro -> The door of the car[cite: 13]\n\n\nVocabulário de Apoio\n\nWallet - carteira[cite: 13]\nfood - comida[cite: 13]\nteacher - professor / professora[cite: 13]\nmoney - dinheiro[cite: 13]\ndog - cachorro[cite: 13]\nhouse - casa[cite: 13]\nman - homem[cite: 13]\npen - caneta[cite: 13]\nbaby - bebê[cite: 13]\ncolor - cor[cite: 13]\n\n\nAgora Diga em Inglês! (Prática de Fixação)\n\nO dinheiro do homem[cite: 13]\n-> The man's money\n\nA carteira da Jessica[cite: 13]\n-> Jessica's wallet\n\nA caneta do professor[cite: 13]\n-> The teacher's pen\n\nA casa do gato[cite: 13]\n-> The cat's house\n\nA comida do cachorro[cite: 13]\n-> The dog's food\n\nA comida do bebê[cite: 13]\n-> The baby's food\n\nA casa da Grace[cite: 13]\n-> Grace's house\n\nA cor da carteira[cite: 13] (objeto com objeto)\n-> The color of the wallet\n\nA janela da casa[cite: 13] (objeto com objeto)\n-> The window of the house\n\nA filha de Jack[cite: 13] (pessoa com pessoa)\n-> Jack's daughter",
+            "goldenTip": "Não esquente a cabeça se você esquecer de inverter na hora de falar agora. O verdadeiro pulo do gato é bater o olho ou ouvir o dono vindo antes com 's e entender tudo na hora, sem travar!",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788987444927_FS-EC_mod_2_aula_14_genitive.mp4?alt=media",
+            "type": "lesson",
+            "aiStatus": "ai_reviewed",
+            "duration": "40:18",
+            "hasTrainingTrack": true,
+            "order": 4,
+            "quizId": "",
+            "title": "014 - Expressão de Posse com ['s]  Genitive - o que é de quem",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788987504048_thumb_1788987504003.jpg?alt=media",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788987439216_FS-EC_mod_2_aula_14_genitive.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:07.779Z",
+            "published": true,
+            "courseId": "fs-aef-ec",
+            "moduleId": "ciclo-02",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-800\"><div class=\"bg-amber-50/90 border-2 border-amber-200 p-6 rounded-2xl shadow-sm\"><h3 class=\"text-xl font-bold text-amber-950 mb-2 flex items-center gap-2\"><span>💡</span> Como Funciona a Mente de quem Fala Inglês</h3><p class=\"text-slate-700 leading-relaxed\">No português, a gente sempre pensa na coisa primeiro e depois diz de quem é (<span class=\"italic font-medium\">a casa da Luciana</span>). No inglês, quando falamos de gente ou animais, a lógica ganha velocidade colocando o <span class=\"font-semibold text-amber-900\">dono na frente</span> com um gancho (<strong class=\"text-amber-900\">'s</strong>): <span class=\"font-bold text-slate-900\">Luciana's house</span>. Se for um objeto inanimado, a ordem fica exatamente igual à nossa!</p></div><div class=\"bg-white border border-slate-200 p-6 rounded-2xl space-y-4 shadow-sm\"><h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-100 pb-2\">A Regra Prática do Ouvido Atento</h3><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"p-4 rounded-xl bg-slate-50 border border-slate-200/60\"><h4 class=\"font-semibold text-amber-900 mb-1\">1. Pessoas e Animais (Dono Primeiro)</h4><p class=\"text-sm text-slate-600 mb-3\">Inverte a ordem para dar fluidez imediata.</p><ul class=\"space-y-2 text-sm\"><li class=\"flex justify-between border-b border-slate-200/40 pb-1\"><span class=\"text-slate-500\">O cabelo da menina</span> <span class=\"font-bold text-slate-900\">The girl's hair</span></li><li class=\"flex justify-between border-b border-slate-200/40 pb-1\"><span class=\"text-slate-500\">A casa da Luciana</span> <span class=\"font-bold text-slate-900\">Luciana's house</span></li><li class=\"flex justify-between border-b border-slate-200/40 pb-1\"><span class=\"text-slate-500\">A prima do John</span> <span class=\"font-bold text-slate-900\">John's cousin</span></li><li class=\"flex justify-between\"><span class=\"text-slate-500\">A comida do cachorro</span> <span class=\"font-bold text-slate-900\">The dog's food</span></li></ul></div><div class=\"p-4 rounded-xl bg-slate-50 border border-slate-200/60\"><h4 class=\"font-semibold text-slate-900 mb-1\">2. Coisas e Objetos (Ordem Normal)</h4><p class=\"text-sm text-slate-600 mb-3\">Sem inversão! Usa-se a ponte idêntica ao português.</p><ul class=\"space-y-2 text-sm\"><li class=\"flex justify-between border-b border-slate-200/40 pb-1\"><span class=\"text-slate-500\">A porta do carro</span> <span class=\"font-bold text-slate-900\">The door of the car</span></li><li class=\"flex justify-between border-b border-slate-200/40 pb-1\"><span class=\"text-slate-500\">A cor da carteira</span> <span class=\"font-bold text-slate-900\">The color of the wallet</span></li><li class=\"flex justify-between\"><span class=\"text-slate-500\">A janela da casa</span> <span class=\"font-bold text-slate-900\">The window of the house</span></li></ul></div></div><div class=\"mt-4 p-4 rounded-xl bg-amber-100/50 border border-amber-200 text-sm text-amber-950\"><strong class=\"font-bold\">E se já estiver no plural terminado em S?</strong> Apenas adicione o apóstrofo no final, sem repetir o som de S. Exemplo: <span class=\"font-semibold\">The tourists' bus</span> (O ônibus dos turistas).</div></div><div class=\"bg-white border border-slate-200 p-6 rounded-2xl shadow-sm\"><h3 class=\"text-lg font-bold text-slate-900 mb-4\">Prática de Absorção Rápida</h3><div class=\"grid sm:grid-cols-2 gap-3 text-sm\"><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center\"><span class=\"text-slate-600\">O dinheiro do homem</span><span class=\"font-bold text-amber-950 bg-amber-100/60 px-2 py-1 rounded\">The man's money</span></div><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center\"><span class=\"text-slate-600\">A carteira da Jessica</span><span class=\"font-bold text-amber-950 bg-amber-100/60 px-2 py-1 rounded\">Jessica's wallet</span></div><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center\"><span class=\"text-slate-600\">A caneta do professor</span><span class=\"font-bold text-amber-950 bg-amber-100/60 px-2 py-1 rounded\">The teacher's pen</span></div><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center\"><span class=\"text-slate-600\">A filha de Jack</span><span class=\"font-bold text-amber-950 bg-amber-100/60 px-2 py-1 rounded\">Jack's daughter</span></div></div></div></div>",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788987603607_Apostila_fs-aef-ec_express_o_de_posse_com_s_genitive_o_que_de_quem.pdf?alt=media"
+          },
+          {
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788988166879_Apostila_fs-aef-ec_n_meros_datas_e_esta_es.pdf?alt=media",
+            "goldenTip": "Para não travar na hora de pagar a conta ou dizer sua idade, foque no ritmo do som: os 'adolescentes' (-teen) têm o final puxado e nasal, enquanto as dezenas (-ty) são secas e firmes no começo. Sinta o ritmo antes de tentar traduzir!",
+            "id": "aula-1788988043164",
+            "rawScript": "Números em Inglês: A Ferramenta Mais Subestimada da Conversação\n\nAprender números em outro idioma é sempre um detalhe subestimado quando a gente está estudando. Todo mundo acha que sabe porque aprendeu a contar \"one, two, three\" lá no comecinho e pronto. \n\nO grande problema é que quase ninguém passa um tempinho treinando o ouvido para escutar pessoas falando números rápidos na vida real, ou tentando montar frases do cotidiano usando números, especialmente em datas, horários e anos. \n\nResultado? Na hora de passar o número de telefone, entender o preço de algo na viagem, dizer o ano em que nasceu ou marcar uma data, o cérebro trava feio e entra em curto-circuito.\n\nFique atento a duas regrinhas conversacionais que mudam tudo:\n1. Dezenas vs. Adolescentes (\"-teen\" vs. \"-ty\"):\nO som de 13 a 19 puxa o final longo no nariz: thirteen, fourteen, fifteen.\nJá as dezenas cheias (30, 40, 50) são secas e fortes no começo: thirty, forty, fifty. Se não treinar o ouvido, você confunde 15 com 50 na hora de pagar a conta!\n\n2. Datas não usam números comuns:\nNo Brasil, você fala \"dois de dezembro\" ou \"sete de março\". No inglês falado, além de inverter a ordem (mês primeiro, dia depois), eles usam números ordinais: \"December second\" e \"March seventh\".\n\nTreinar números em frases reais em voz alta é o único jeito de fazer o seu reflexo de fala responder na hora!\n\n\nNumbers 0 to 99\n\n0 - Zero[cite: 14]\n1 - One[cite: 14]\n2 - Two[cite: 14]\n3 - Three[cite: 14]\n4 - Four[cite: 14]\n5 - Five[cite: 14]\n6 - Six[cite: 14]\n7 - Seven[cite: 14]\n8 - Eight[cite: 14]\n9 - Nine[cite: 14]\n10 - Ten[cite: 14]\n11 - Eleven[cite: 14]\n12 - Twelve[cite: 14]\n13 - Thirteen[cite: 14]\n14 - Fourteen[cite: 14]\n15 - Fifteen[cite: 14]\n16 - Sixteen[cite: 14]\n17 - Seventeen[cite: 14]\n18 - Eighteen[cite: 14]\n19 - Nineteen[cite: 14]\n20 - Twenty[cite: 14]\n30 - Thirty[cite: 14]\n40 - Forty[cite: 14]\n50 - Fifty[cite: 14]\n60 - Sixty[cite: 14]\n70 - Seventy[cite: 14]\n80 - Eighty[cite: 14]\n90 - Ninety[cite: 14]\n\nExemplos de Combinação:\n21 = Twenty-one[cite: 14]\n35 = Thirty-five[cite: 14]\n86 = Eighty-six[cite: 14]\n\nNow... it's your turn. PRACTICE![cite: 14]\n74 -> Seventy-four\n63 -> Sixty-three\n40 -> Forty\n28 -> Twenty-eight\n95 -> Ninety-five\n37 -> Thirty-seven\n52 -> Fifty-two\n81 -> Eighty-one\n39 -> Thirty-nine\n20 -> Twenty\n\n\nOrdinal Numbers (Números Ordinais)\n\n1st - First (primeiro)[cite: 14]\n2nd - Second (segundo)[cite: 14]\n3rd - Third (terceiro)[cite: 14]\n4th - Fourth (quarto)[cite: 14]\n5th - Fifth (quinto)[cite: 14]\n6th - Sixth (sexto)[cite: 14]\n7th - Seventh (sétimo)[cite: 14]\n8th - Eighth (oitavo)[cite: 14]\n9th - Ninth (nono)[cite: 14]\n10th - Tenth (décimo)[cite: 14]\n\nOutros Exemplos:[cite: 14]\n15th - fifteenth[cite: 14]\n21st - twenty-first[cite: 14]\n32nd - thirty-second[cite: 14]\n64th - sixty-fourth[cite: 14]\n73rd - seventy-third[cite: 14]\n\n\nMonths (Meses) & Unidades de Tempo\n\nJanuary (Janeiro)[cite: 14]\nFebruary (Fevereiro - abreviação: Feb)[cite: 14]\nMarch (Março)[cite: 14]\nApril (Abril)[cite: 14]\nMay (Maio)[cite: 14]\nJune (Junho)[cite: 14]\nJuly (Julho)[cite: 14]\nAugust (Agosto)[cite: 14]\nSeptember (Setembro)[cite: 14]\nOctober (Outubro)[cite: 14]\nNovember (Novembro)[cite: 14]\nDecember (Dezembro)[cite: 14]\n\nMonth - Mês[cite: 14]\nYear - Ano[cite: 14]\n\n\nDates (Datas na Conversação)\n\nEstamos acostumados a dizer o dia e depois o mês quando falamos em datas no português[cite: 14].\nEm inglês, o mais comum no dia a dia é dizer primeiro o mês, e depois o dia[cite: 14].\nO dia vem sempre representado em números ordinais na pronúncia[cite: 14].\n\nExemplos:[cite: 14]\nDecember 10th (December tenth)[cite: 14]\nMay 6th (May sixth)[cite: 14]\nNovember 1st (November first)[cite: 14]\nJuly 23rd (July twenty-third)[cite: 14]\n\nExercício de Fixação de Datas:\n7 de março -> March 7th (March seventh)\n14 de outubro -> October 14th (October fourteenth)\n25 de janeiro -> January 25th (January twenty-fifth)\n19 de abril -> April 19th (April nineteenth)\n3 de junho -> June 3rd (June third)\n2 de dezembro -> December 2nd (December second)\n31 de maio -> May 31st (May thirty-first)\n28 de fevereiro -> February 28th (February twenty-eighth)\n1º de agosto -> August 1st (August first)\n16 de setembro -> September 16th (September sixteenth)\n\n\nSeasons (Estações do Ano)\n\nSummer - Verão[cite: 14]\nFall or Autumn - Outono[cite: 14]\nWinter - Inverno[cite: 14]\nSpring - Primavera[cite: 14]",
+            "duration": "27:19",
+            "aiStatus": "ai_reviewed",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988098676_FS-EC_mod_2_aula_15_numb_date_season.mp4?alt=media",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988129825_thumb_1788988129804.jpg?alt=media",
+            "moduleId": "ciclo-02",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988131603_art_1788988129814.jpg?alt=media",
+            "published": true,
+            "hasTrainingTrack": true,
+            "quizId": "",
+            "updatedAt": "2026-09-10T03:13:07.779Z",
+            "courseId": "fs-aef-ec",
+            "order": 5,
+            "title": "015 - Números, Datas e Estações",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><section class=\"p-6 bg-amber-50/90 border-2 border-amber-200 rounded-2xl shadow-sm\"><h2 class=\"text-xl font-bold text-amber-950 mb-3 flex items-center gap-2\"><span>🎯</span> O Sentimento da Estrutura: Ritmo e Frequência</h2><p class=\"text-base text-slate-800 leading-relaxed mb-4\">Quando falamos números em inglês, o segredo não é memorizar uma lista, mas entender o <strong>ritmo emocional da fala</strong>. Na vida real, a diferença entre pagar $15 ou $50 está na intenção da pronúncia.</p><div class=\"grid md:grid-cols-2 gap-4 mt-4\"><div class=\"p-4 bg-white border border-amber-200 rounded-xl\"><h3 class=\"font-bold text-amber-900 text-lg mb-1\">A Família dos \"Teen\" (13 a 19)</h3><p class=\"text-sm text-slate-700 mb-2\">O som é puxado no final, nasal e sustentado, como quem segura a nota musical.</p><ul class=\"space-y-1 font-mono text-sm text-slate-800\"><li>thirteen | fourteen | fifteen</li><li>sixteen | seventeen | eighteen | nineteen</li></ul></div><div class=\"p-4 bg-white border border-amber-200 rounded-xl\"><h3 class=\"font-bold text-amber-900 text-lg mb-1\">As Dezenas Decididas (-ty)</h3><p class=\"text-sm text-slate-700 mb-2\">O som é seco, forte no início e rápido no final. É uma batida firme.</p><ul class=\"space-y-1 font-mono text-sm text-slate-800\"><li>thirty | forty | fifty</li><li>sixty | seventy | eighty | ninety</li></ul></div></div></section><section class=\"p-6 bg-white border-2 border-slate-200 rounded-2xl shadow-sm space-y-4\"><h2 class=\"text-xl font-bold text-slate-900 flex items-center gap-2\"><span>📅</span> Datas: A Lógica da Sequência Harmônica</h2><p class=\"text-slate-700 leading-relaxed\">Para marcar um compromisso ou celebrar um aniversário, a mente em inglês organiza o tempo partindo do <strong>mês (o contexto maior)</strong> para o <strong>dia ordinal (a posição específica)</strong>.</p><div class=\"p-4 bg-amber-50/60 border border-amber-200 rounded-xl space-y-2\"><p class=\"font-semibold text-amber-950\">Como o cérebro nativo conecta uma data:</p><div class=\"grid sm:grid-cols-2 gap-3 text-sm\"><div class=\"p-3 bg-white rounded-lg border border-amber-100\"><span class=\"block font-bold text-slate-900\">December 10th</span><span class=\"text-slate-600 font-mono\">December tenth</span></div><div class=\"p-3 bg-white rounded-lg border border-amber-100\"><span class=\"block font-bold text-slate-900\">May 6th</span><span class=\"text-slate-600 font-mono\">May sixth</span></div><div class=\"p-3 bg-white rounded-lg border border-amber-100\"><span class=\"block font-bold text-slate-900\">November 1st</span><span class=\"text-slate-600 font-mono\">November first</span></div><div class=\"p-3 bg-white rounded-lg border border-amber-100\"><span class=\"block font-bold text-slate-900\">July 23rd</span><span class=\"text-slate-600 font-mono\">July twenty-third</span></div></div></div></section><section class=\"p-6 bg-amber-50/90 border-2 border-amber-200 rounded-2xl shadow-sm\"><h2 class=\"text-xl font-bold text-amber-950 mb-4 flex items-center gap-2\"><span>🗣️</span> Treino de Reflexo de Fala: Treine em Voz Alta</h2><div class=\"grid md:grid-cols-2 gap-4 text-sm\"><div class=\"bg-white p-4 rounded-xl border border-amber-200\"><h3 class=\"font-bold text-amber-900 mb-2 border-b pb-1 border-amber-100\">Combinações do Cotidiano</h3><ul class=\"space-y-1 font-mono text-slate-800\"><li>74 &rarr; Seventy-four</li><li>63 &rarr; Sixty-three</li><li>28 &rarr; Twenty-eight</li><li>95 &rarr; Ninety-five</li><li>37 &rarr; Thirty-seven</li></ul></div><div class=\"bg-white p-4 rounded-xl border border-amber-200\"><h3 class=\"font-bold text-amber-900 mb-2 border-b pb-1 border-amber-100\">Datas Marcantes</h3><ul class=\"space-y-1 font-mono text-slate-800\"><li>March 7th</li><li>October 14th</li><li>January 25th</li><li>June 3rd</li><li>August 1st</li></ul></div></div></section><section class=\"p-6 bg-white border-2 border-slate-200 rounded-2xl shadow-sm\"><h2 class=\"text-xl font-bold text-slate-900 mb-3 flex items-center gap-2\"><span>🍂</span> Estações do Ano (Seasons)</h2><div class=\"grid grid-cols-2 sm:grid-cols-4 gap-3 text-center\"><div class=\"p-3 bg-amber-50/50 border border-amber-200 rounded-xl\"><span class=\"block font-bold text-amber-950\">Summer</span></div><div class=\"p-3 bg-amber-50/50 border border-amber-200 rounded-xl\"><span class=\"block font-bold text-amber-950\">Fall / Autumn</span></div><div class=\"p-3 bg-amber-50/50 border border-amber-200 rounded-xl\"><span class=\"block font-bold text-amber-950\">Winter</span></div><div class=\"p-3 bg-amber-50/50 border border-amber-200 rounded-xl\"><span class=\"block font-bold text-amber-950\">Spring</span></div></div></section></div>",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988093143_FS-EC_mod_2_aula_15_numb_date_season.mp4?alt=media",
+            "type": "lesson"
+          },
+          {
+            "quizId": "",
+            "hasTrainingTrack": true,
+            "order": 6,
+            "title": "016 - Negativas no Passado",
+            "aiStatus": "ai_reviewed",
+            "duration": "17:24",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988604914_thumb_1788988604893.jpg?alt=media",
+            "processedContentHtml": "<div class=\"space-y-6\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 text-slate-900 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2\">A Metade Esquecida da Conversa Real</h3><p class=\"text-slate-700 leading-relaxed\">Na vida real, metade do que você conta é sobre o que deu errado ou o que não aconteceu. O aluno costuma passar horas treinando afirmativas, mas congela na hora de dizer que não foi ou não viu. A notícia libertadora do passado em inglês é que negar aqui é incrivelmente mais simples: não existe divisão de ferramentas. Para todo mundo (eu, você, ele, ela, nós, eles), a chave universal é apenas uma: <strong class=\"text-amber-900 font-bold\">didn't</strong>.</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 text-slate-900 shadow-sm space-y-4\"><h4 class=\"text-lg font-bold text-slate-800\">Como Funciona o Alívio da Estrutura</h4><p class=\"text-slate-700 leading-relaxed\">Como o <span class=\"px-2.5 py-1 bg-amber-100 text-amber-900 font-bold rounded-lg border border-amber-300/60\">didn't</span> já carrega todo o peso do passado nas costas, o verbo que vem depois não precisa mudar nada. Ele volta à forma original, levinha e natural.</p><div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2\"><div class=\"p-4 bg-amber-50/60 rounded-xl border border-amber-200/80\"><span class=\"text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1\">Afirmativa (Verbo Carregado)</span><p class=\"text-base font-bold text-slate-800\">I saw <span class=\"text-slate-400 font-normal\">(Eu vi)</span></p><p class=\"text-base font-bold text-slate-800\">She went <span class=\"text-slate-400 font-normal\">(Ela foi)</span></p></div><div class=\"p-4 bg-amber-100/70 rounded-xl border border-amber-300\"><span class=\"text-xs font-semibold text-amber-900 uppercase tracking-wider block mb-1\">Negativa (didn't + Verbo Leve)</span><p class=\"text-base font-bold text-amber-950\">I didn't see</p><p class=\"text-base font-bold text-amber-950\">She didn't go</p></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 text-slate-900 shadow-sm\"><h4 class=\"text-lg font-bold text-slate-800 mb-4\">Treino de Transformação: Virando a Chave</h4><div class=\"space-y-3\"><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">I watched the news.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">I didn't watch the news.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">Carlos lived in England.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">Carlos didn't live in England.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">They bought a new car.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">They didn't buy a new car.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">We ate pizza last night.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">We didn't eat pizza last night.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">My sister finished her homework.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">My sister didn't finish her homework.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">I called Jason on Monday.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">I didn't call Jason on Monday.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">You won.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">You didn't win.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">Her boyfriend had money.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">Her boyfriend didn't have money.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">They closed the store.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">They didn't close the store.</span></div><div class=\"p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-500 line-through\">I forgot.</span><span class=\"font-bold text-slate-900 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200\">I didn't forget.</span></div></div></div><div class=\"bg-amber-50/50 border border-amber-200 rounded-2xl p-6 text-slate-900 shadow-sm\"><h4 class=\"text-lg font-bold text-amber-900 mb-4\">Pares de Prática Rápida (Construindo o Reflexo)</h4><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3\"><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">I liked it &rarr; <strong class=\"text-amber-900\">I didn't like it</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">He asked &rarr; <strong class=\"text-amber-900\">He didn't ask</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">They lived there &rarr; <strong class=\"text-amber-900\">They didn't live there</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">She wrote that &rarr; <strong class=\"text-amber-900\">She didn't write that</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">You thought &rarr; <strong class=\"text-amber-900\">You didn't think</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">We had it &rarr; <strong class=\"text-amber-900\">We didn't have it</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">He saw it &rarr; <strong class=\"text-amber-900\">He didn't see it</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">We did it &rarr; <strong class=\"text-amber-900\">We didn't do it</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">I went &rarr; <strong class=\"text-amber-900\">I didn't go</strong></span></div><div class=\"p-3 bg-white rounded-xl border border-amber-200/80 shadow-sm\"><span class=\"text-slate-700 block text-sm\">She called me &rarr; <strong class=\"text-amber-900\">She didn't call me</strong></span></div></div></div></div>",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988607031_art_1788988604904.jpg?alt=media",
+            "id": "aula-1788988545455",
+            "goldenTip": "No passado, o 'didn't' já faz todo o trabalho pesado de avisar que a história ficou para trás. Assim que ele entra em cena, o seu verbo descansa e volta ao estado mais simples e leve possível!",
+            "rawScript": "Negativas no Passado: A Chave Esquecida da Fluência Real\n\nVocê se surpreenderia com a quantidade de pessoas que, quando resolvem aprender inglês, simplesmente esquecem de treinar negativas.\n\nNa vida real, metade das suas conversas é contando o que deu errado ou o que não aconteceu:\n\"Nós não vimos o John na festa. O que aconteceu?\"\n\"Eu não treinei meu inglês ontem. Preciso treinar hoje.\"\n\nBelieve me: brasileiros não lembram de treinar frases na negativa! O aluno costuma passar horas decorando afirmativas (\"eu fui\", \"eu comprei\", \"eu vi\"), mas na hora de soltar um \"eu não fui\" no meio da conversa, ele congela ou tenta mandar um \"I no went\". Não dá, né!\n\nA melhor notícia do mundo sobre o passado em inglês é esta: negar no passado é incrivelmente mais fácil do que no presente.\n- Esqueça a divisão de \"don't\" e \"doesn't\".\n- No passado, existe apenas uma ferramenta universal para todo mundo (I, you, he, she, it, we, they): o \"didn't\".\n\nE tem um detalhe maravilhoso: como o \"didn't\" já carrega todo o passado nas costas, o verbo principal volta a ficar normal, limpo, na forma original:\nI saw -> I didn't see.\nShe went -> She didn't go.\n\nAutomatizar o reflexo do \"didn't + verbo limpo\" em voz alta é o que vai destravar a sua segurança para contar qualquer história do seu dia a dia.\n\n\nSimple Past - Negative Form (Passado Simples na Forma Negativa)\n\nLembra do Present Simple?\n- Para fazer a negativa você precisa do: \"don't\" e \"doesn't\" - NO PRESENTE!!\n- Ex: \"I don't like bananas\"; \"He doesn't work in the morning.\"\n- \"don't\" e \"doesn't\" são auxiliares do presente.\n\nSimple Past - Negative:\n\"didn't\" é o auxiliar do passado para todos os pronomes.\n\nAffirmative / Negative:\nI worked yesterday -> I didn't work yesterday\nShe went home in the morning -> She didn't go home in the morning\n\n\nA Estrutura: didn't + verbo no infinitivo sem \"to\"\n\nAfirmando / Negando:\nI played -> I didn't play\nYou drank -> You didn't drink\nHe studied -> He didn't study\nWe saw -> We didn't see\n\nPra entender melhor e não esquecer:\n- \"didn't\" é exclusivo do simple past\n- Ele sozinho já é suficiente para indicar que a ação \"não aconteceu\" no passado\n\n\nExercício de Transformação: Affirmative -> Negative\n\nI watched the news yesterday.\n-> I didn't watch the news yesterday.\n\nCarlos lived in England last year.\n-> Carlos didn't live in England last year.\n\nThey bought a new car.\n-> They didn't buy a new car.\n\nWe ate pizza last night.\n-> We didn't eat pizza last night.\n\nMy sister finished her homework.\n-> My sister didn't finish her homework.\n\nI called Jason on Monday.\n-> I didn't call Jason on Monday.\n\nYou won.\n-> You didn't win.\n\nHer boyfriend had money.\n-> Her boyfriend didn't have money.\n\nThey closed the store.\n-> They didn't close the store.\n\nI forgot.\n-> I didn't forget.\n\n\nPra Entender Melhor e Não Esquecer (Pares de Prática Rápida)\n\n(eu gostei) I liked it\n(eu não gostei) I didn't like it\n\n(ele perguntou) He asked\n(ele não perguntou) He didn't ask\n\n(eles moraram lá) They lived there\n(eles não moraram lá) They didn't live there\n\n(ela escreveu aquilo) She wrote that\n(ela não escreveu aquilo) She didn't write that\n\n(você pensou) You thought\n(você não pensou) You didn't think\n\n(nós tínhamos) We had it\n(nós não tínhamos) We didn't have it (ou: I didn't have it)\n\n(ele viu) He saw it\n(ele não viu) He didn't see it\n\n(nós fizemos) We did it\n(nós não fizemos) We didn't do it\n\n(eu fui) I went\n(eu não fui) I didn't go\n\n(ela me ligou) She called me\n(ela não me ligou) She didn't call me",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988575510_FS-EC_mod_2_aula_16_past_negative.mp4?alt=media",
+            "courseId": "fs-aef-ec",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988786563_16_-_Lesson__2_.pdf?alt=media",
+            "moduleId": "ciclo-02",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788988564411_FS-EC_mod_2_aula_16_past_negative.mp4?alt=media",
+            "published": true,
+            "updatedAt": "2026-09-10T03:13:07.780Z",
+            "type": "lesson"
+          },
+          {
+            "published": true,
+            "courseId": "fs-aef-ec",
+            "updatedAt": "2026-09-10T03:13:08.230Z",
+            "id": "aula-1788989220787",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788989292539_thumb_1788989292515.jpg?alt=media",
+            "processedContentHtml": "<div class=\"space-y-6\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-xl p-6 shadow-sm text-slate-900\"><h2 class=\"text-xl font-bold text-amber-900 mb-2\">O Segredo do Reflexo para Perguntar no Passado</h2><p class=\"text-slate-700 leading-relaxed\">Tentar conjugar verbos de cabeça na hora de falar só faz travar. Na vida real, o segredo é treinar o impulso imediato: ao ouvir um fato do passado, acione o gatilho <strong>Did</strong> no começo da frase. O <strong>Did</strong> avisa imediatamente que a conversa é no passado, liberando a ação principal para ficar no seu estado original e relaxado.</p></div><div class=\"bg-white border-2 border-slate-200 rounded-xl p-6 shadow-sm\"><h3 class=\"text-lg font-bold text-slate-900 mb-4\">O Sentimento da Estrutura na Prática</h3><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"bg-slate-50 p-4 rounded-lg border border-slate-200\"><span class=\"text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1\">Rotina / Presente</span><p class=\"font-medium text-slate-800\">Do you work every day?</p><p class=\"font-medium text-slate-800\">Does she work every day?</p></div><div class=\"bg-amber-50/60 p-4 rounded-lg border border-amber-200\"><span class=\"text-xs font-semibold text-amber-800 uppercase tracking-wider block mb-1\">Passado (O Did assume o comando)</span><p class=\"font-medium text-slate-900\">He lived in Europe &rarr; <span class=\"font-bold text-amber-900\">Did he live in Europe?</span></p><p class=\"font-medium text-slate-900\">They went by car &rarr; <span class=\"font-bold text-amber-900\">Did they go by car?</span></p></div></div></div><div class=\"bg-white border-2 border-slate-200 rounded-xl p-6 shadow-sm\"><h3 class=\"text-lg font-bold text-slate-900 mb-4\">Treino de Reflexo: Virada Afirmativa em Pergunta</h3><div class=\"space-y-3\"><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-600\">You worked last Saturday.</span><span class=\"font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded\">&rarr; Did you work last Saturday?</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-600\">Julie remembered the story.</span><span class=\"font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded\">&rarr; Did Julie remember the story?</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-600\">Your sister sold the car.</span><span class=\"font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded\">&rarr; Did your sister sell the car?</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-600\">They got married.</span><span class=\"font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded\">&rarr; Did they get married?</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-600\">She needed help.</span><span class=\"font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded\">&rarr; Did she need help?</span></div><div class=\"p-3 bg-slate-50 rounded-lg border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2\"><span class=\"text-slate-600\">They saw you there yesterday.</span><span class=\"font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded\">&rarr; Did they see you there yesterday?</span></div></div></div><div class=\"bg-amber-50/50 border-2 border-amber-200 rounded-xl p-6 shadow-sm\"><h3 class=\"text-lg font-bold text-amber-900 mb-4\">Prática Imediata: Afirmação x Pergunta</h3><div class=\"grid md:grid-cols-2 gap-3\"><div class=\"p-3 bg-white rounded-lg border border-amber-200\"><p class=\"text-xs text-slate-500 mb-1\">Você respondeu / Você respondeu?</p><p class=\"font-bold text-slate-800\">You answered. <span class=\"text-amber-800\">&rarr; Did you answer?</span></p></div><div class=\"p-3 bg-white rounded-lg border border-amber-200\"><p class=\"text-xs text-slate-500 mb-1\">Eles choraram / Eles choraram?</p><p class=\"font-bold text-slate-800\">They cried. <span class=\"text-amber-800\">&rarr; Did they cry?</span></p></div><div class=\"p-3 bg-white rounded-lg border border-amber-200\"><p class=\"text-xs text-slate-500 mb-1\">Jonathan dormiu / Jonathan dormiu?</p><p class=\"font-bold text-slate-800\">Jonathan slept. <span class=\"text-amber-800\">&rarr; Did Jonathan sleep?</span></p></div><div class=\"p-3 bg-white rounded-lg border border-amber-200\"><p class=\"text-xs text-slate-500 mb-1\">Nós vencemos / Nós vencemos?</p><p class=\"font-bold text-slate-800\">We won. <span class=\"text-amber-800\">&rarr; Did we win?</span></p></div><div class=\"p-3 bg-white rounded-lg border border-amber-200\"><p class=\"text-xs text-slate-500 mb-1\">Ela falou / Ela falou?</p><p class=\"font-bold text-slate-800\">She spoke. <span class=\"text-amber-800\">&rarr; Did she speak?</span></p></div></div></div></div>",
+            "type": "lesson",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788989505791_Apostila_fs-aef-ec_perguntas_no_passado_interrogative.pdf?alt=media",
+            "moduleId": "ciclo-02",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788989256659_FS-EC_mod_2_aula_17_past_questions.mp4?alt=media",
+            "goldenTip": "A única forma eficaz de praticar e assimilar o uso de frases na interrogativa - perguntas é usando as Magic Stories com a atividade Listen and Ask. Vá para as Magic Stories agora.",
+            "duration": "23:34",
+            "aiStatus": "ai_reviewed",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788989294249_art_1788989292527.jpg?alt=media",
+            "rawScript": "Perguntas no Passado: Só Existe um Caminho para Destravar\n\nFazer perguntas no passado parece simples no papel: você aprende que basta colocar o \"Did\" no começo e voltar o verbo para a forma normal. \n\nSó que na vida real, saber essa regra de cabeça não faz a pergunta sair naturalmente da sua boca. Quando você está diante de uma pessoa e precisa perguntar o que ela fez ontem, o seu cérebro trava tentando conjugar o verbo mentalmente.\n\nAqui é treinar com as Magic Stories no modo Listen and Ask. Não tem outro jeito!\n\nÉ escutando o gatilho da história e sendo forçado a perguntar imediatamente que o seu reflexo é ativado. Quando você ouve: \"Mark didn't go to the party\", o seu impulso imediato precisa ser perguntar: \"Did he go to work then? Where did he go?\".\n\nNão perca tempo tentando memorizar listas ou teorias. Entre nas Magic Stories e comece agora a disparar suas perguntas em voz alta!\n\n\nSimple Past - Interrogative Form (Passado Simples na Forma Interrogativa)\n\nFazer Perguntas...\nLembra do simple present?\nDo you work every day?\nDoes she work every day?\n\nNo simple past...\nHe lived in Europe. (ele morou na Europa)\nDid he live in Europe?\nThey went by car. (eles foram de carro)\nDid they go by car?\nMichael stayed home. (Michael ficou em casa)\nDid Michael stay home?\n\n\nPractice! (Transforme para Perguntas no Passado)\n\nYou worked last Saturday.\n-> Did you work last Saturday?\n\nJulie remembered the story.\n-> Did Julie remember the story?\n\nYour sister sold the car.\n-> Did your sister sell the car?\n\nThey got married.\n-> Did they get married?\n\nI opened the wrong door.\n-> Did I open the wrong door?\n\nShe needed help.\n-> Did she need help?\n\nDonna had a blue car.\n-> Did Donna have a blue car?\n\nWe studied until five.\n-> Did we study until five?\n\nThey saw you there yesterday.\n-> Did they see you there yesterday?\n\nYou used my computer.\n-> Did you use my computer?\n\nLembre-se:\nPara dizer \"ele trabalhou\", frase afirmativa, usa-se o verbo no passado:\nHe worked.\nJá na interrogativa...\n\"Did he work?\"\nO verbo volta para o infinitivo sem o \"to\".\n\n\nTraduza para o Inglês: Prática de Reflexo Afirmativa vs. Interrogativa\n\nVocê respondeu:\nYou answered.\n\nVocê respondeu?\nDid you answer?\n\nEles choraram:\nThey cried.\n\nEles choraram?\nDid they cry?\n\nJonathan dormiu:\nJonathan slept.\n\nJonathan dormiu?\nDid Jonathan sleep?\n\nNós vencemos:\nWe won.\n\nNós vencemos?\nDid we win?\n\nEla falou:\nShe spoke.\n\nEla falou?\nDid she speak?",
+            "quizId": "",
+            "hasTrainingTrack": true,
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788989263487_FS-EC_mod_2_aula_17_past_questions.mp4?alt=media",
+            "title": "017 - Perguntas no Passado - Interrogative",
+            "order": 7
+          },
+          {
+            "courseId": "fs-aef-ec",
+            "id": "aula-1788990130267",
+            "quizId": "",
+            "moduleId": "ciclo-02",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788990235370_thumb_1788990235342.jpg?alt=media",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788990168662_FS-EC_mod_2_aula_18_practice_questions.mp4?alt=media",
+            "goldenTip": "Entre nas Magic Stories e treine a atividade de Listen and Ask da história que você está treinando.",
+            "rawScript": "O Treino Invertido: Como Destravar Perguntas no Passado\n\nFazer perguntas em inglês não é nem um pouco intuitivo para falantes de português.\n\nNa nossa língua materna, quando queremos perguntar algo, a estrutura da frase não muda em nada: a gente só levanta o tom de voz no final (\"Você foi ontem\" vira \"Você foi ontem?\"). No inglês não existe essa facilidade. Você precisa reprogramar o cérebro para colocar o auxiliar na frente, ajustar a estrutura e manter o verbo principal na forma base.\n\nÉ por isso que a maioria das pessoas trava na hora de puxar assunto: elas só aprenderam a responder, nunca a perguntar.\n\nO melhor exercício do mundo para quebrar esse bloqueio é o caminho inverso: olhar para uma resposta pronta e forçar o seu cérebro a formular a pergunta exata que gerou aquela resposta. \n\nQuando você vê alguém dizendo \"Yes, I went to the party yesterday\", o seu reflexo imediato tem que ser pensar: \"O que eu perguntaria para ouvir isso?\". A resposta tem que vir na lata: \"Did you go to the party yesterday?\".\n\nEsse treino de engenharia reversa cria os caminhos neurais que faltavam para você conduzir conversas de verdade com nativos sem hesitar.\n\n\nSimple Past - Interrogative Form (Passado Simples na Forma Interrogativa)\n\nFaça perguntas para as respostas:\n\nPergunta: Did you go to the party yesterday?\nResposta: Yes. I went to the party yesterday.\n\nPergunta: Did you drink a lot?\nResposta: No. I didn't drink a lot.\n\nPergunta: Did you dance with your friends?\nResposta: Yes! I danced with my friends.\n\nPergunta: Did you live in the USA?\nResposta: Yes. I lived in the USA.\n\nPergunta: Did you go to school?\nResposta: Yes. I went to school.\n\nPergunta: Did you study Japanese?\nResposta: No. I didn't study japanese.\n\n\nFaça perguntas para as respostas (Atenção ao tempo verbal: Presente vs. Passado):\n\nPergunta: Do you work at home?\nResposta: Yes. I work at home.\n\nPergunta: Do you get up at 6 every day?\nResposta: No. I don't get up at 6 every day.\n\nPergunta: Did you get up at 6 this morning?\nResposta: Yes. I got up at 6 this morning.\n\nPergunta: Do you study English every day?\nResposta: Yes. I study english every day.\n\nPergunta: Did you see my email yesterday?\nResposta: Yes. I saw your email yesterday.\n\nPergunta: Did you see the film?\nResposta: No. I didn't see the film.\n\nPergunta: Did you go by car?\nResposta: Yes. I went by car.\n\nPergunta: Did you see your friends?\nResposta: No. I didn't see my friends.\n\nPergunta: Do you see your friends on weekends?\nResposta: Yes! I see my friends on weekends.\n\nPergunta: Where did you go yesterday? / Did you go to the cinema yesterday?\nResposta: I went to the cinema yesterday.\n\nPergunta: What movie did you see? / What did you see?\nResposta: I saw \"Titanic 3D\".\n\nPergunta: Did you go with your girlfriend?\nResposta: Yes! I went with my girlfriend.\n\n\nFaça perguntas para as respostas (Use WH words):\n\nPergunta: Where did she go?\nResposta: She went to the mall.\n\nPergunta: What did she buy?\nResposta: She bought a pair of jeans.\n\nPergunta: How did she go to the mall?\nResposta: She went to the mall by car.",
+            "processedContentHtml": "<div class=\"space-y-8 font-sans text-slate-900\"><header class=\"p-6 rounded-2xl bg-amber-50/90 border-2 border-amber-200 shadow-sm\"><h1 class=\"text-2xl font-bold text-amber-950 mb-3\">O Treino Invertido: Como Destravar Perguntas no Passado</h1><p class=\"text-slate-700 leading-relaxed\">No português, quando queremos perguntar algo, nós só mudamos a entonação no final da frase. Em inglês, o cérebro do ouvinte precisa de um <strong>aviso antecipado</strong> logo no começo para entender a intenção de quem fala. Quando o assunto é o passado, esse aviso é a palavra-chave <span class=\"px-2 py-0.5 rounded bg-amber-200 font-semibold text-amber-900\">Did</span>.</p></header><section class=\"space-y-4\"><div class=\"border-l-4 border-amber-500 pl-4 py-1\"><h2 class=\"text-xl font-bold text-slate-900\">Bloco 1: Ativando o Gatilho do Passado (Did)</h2><p class=\"text-sm text-slate-600\">Veja a resposta e perceba como a pergunta nasce colocando o aviso no início e mantendo a ação na sua forma natural.</p></div><div class=\"grid gap-4 md:grid-cols-2\"><div class=\"p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2\"><p class=\"text-xs font-semibold uppercase tracking-wider text-amber-700\">Situação: Ir à festa</p><p class=\"text-slate-800\"><strong>Pergunta:</strong> Did you go to the party yesterday?</p><p class=\"text-slate-600 text-sm border-t border-slate-100 pt-2\"><strong>Resposta:</strong> Yes, I went to the party yesterday.</p></div><div class=\"p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2\"><p class=\"text-xs font-semibold uppercase tracking-wider text-amber-700\">Situação: Beber bastante</p><p class=\"text-slate-800\"><strong>Pergunta:</strong> Did you drink a lot?</p><p class=\"text-slate-600 text-sm border-t border-slate-100 pt-2\"><strong>Resposta:</strong> No, I didn't drink a lot.</p></div><div class=\"p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2\"><p class=\"text-xs font-semibold uppercase tracking-wider text-amber-700\">Situação: Dançar com amigos</p><p class=\"text-slate-800\"><strong>Pergunta:</strong> Did you dance with your friends?</p><p class=\"text-slate-600 text-sm border-t border-slate-100 pt-2\"><strong>Resposta:</strong> Yes! I danced with my friends.</p></div><div class=\"p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2\"><p class=\"text-xs font-semibold uppercase tracking-wider text-amber-700\">Situação: Morar fora</p><p class=\"text-slate-800\"><strong>Pergunta:</strong> Did you live in the USA?</p><p class=\"text-slate-600 text-sm border-t border-slate-100 pt-2\"><strong>Resposta:</strong> Yes, I lived in the USA.</p></div></div></section><section class=\"space-y-4\"><div class=\"border-l-4 border-amber-500 pl-4 py-1\"><h2 class=\"text-xl font-bold text-slate-900\">Bloco 2: Sentindo a Diferença — Rotina (Do) x Passado (Did)</h2><p class=\"text-sm text-slate-600\">Note o sentimento: para hábitos do dia a dia, iniciamos com <span class=\"font-semibold text-amber-800\">Do</span>. Para coisas que já aconteceram e fecharam no tempo, usamos <span class=\"font-semibold text-amber-800\">Did</span>.</p></div><div class=\"space-y-3\"><div class=\"p-4 rounded-xl bg-amber-50/50 border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><div class=\"space-y-1\"><span class=\"text-xs font-bold text-amber-800 uppercase\">Sentimento de Rotina</span><p class=\"text-slate-900 font-medium\">Do you work at home?</p><p class=\"text-xs text-slate-500\">Pergunta se a pessoa costuma trabalhar de casa.</p></div><div class=\"text-sm text-slate-700 bg-white p-2.5 rounded-lg border border-amber-100\">Resposta: Yes, I work at home.</div></div><div class=\"p-4 rounded-xl bg-amber-50/50 border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><div class=\"space-y-1\"><span class=\"text-xs font-bold text-amber-800 uppercase\">Sentimento de Momento Específico (Hoje Cedo)</span><p class=\"text-slate-900 font-medium\">Did you get up at 6 this morning?</p><p class=\"text-xs text-slate-500\">Pergunta sobre o fato que aconteceu hoje de manhã.</p></div><div class=\"text-sm text-slate-700 bg-white p-2.5 rounded-lg border border-amber-100\">Resposta: Yes, I got up at 6 this morning.</div></div><div class=\"p-4 rounded-xl bg-amber-50/50 border border-amber-200 flex flex-col md:flex-row md:items-center justify-between gap-2\"><div class=\"space-y-1\"><span class=\"text-xs font-bold text-amber-800 uppercase\">Sentimento de Checagem Específica</span><p class=\"text-slate-900 font-medium\">Did you see my email yesterday?</p><p class=\"text-xs text-slate-500\">Foco na ação de ver o e-mail no dia de ontem.</p></div><div class=\"text-sm text-slate-700 bg-white p-2.5 rounded-lg border border-amber-100\">Resposta: Yes, I saw your email yesterday.</div></div></div></section><section class=\"space-y-4\"><div class=\"border-l-4 border-amber-500 pl-4 py-1\"><h2 class=\"text-xl font-bold text-slate-900\">Bloco 3: Buscando Detalhes Específicos</h2><p class=\"text-sm text-slate-600\">Quando você precisa saber onde, o quê ou como, coloque a palavra de busca no início, seguida imediatamente do sinalizador de passado.</p></div><div class=\"p-5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-4\"><div class=\"grid gap-3 md:grid-cols-3\"><div class=\"p-3 rounded-lg bg-slate-50 border border-slate-100\"><p class=\"text-xs font-bold text-amber-800 uppercase mb-1\">Lugar (Where)</p><p class=\"text-sm font-semibold text-slate-900\">Where did she go?</p><p class=\"text-xs text-slate-600 mt-1\">Resposta: She went to the mall.</p></div><div class=\"p-3 rounded-lg bg-slate-50 border border-slate-100\"><p class=\"text-xs font-bold text-amber-800 uppercase mb-1\">Objeto/Ação (What)</p><p class=\"text-sm font-semibold text-slate-900\">What did she buy?</p><p class=\"text-xs text-slate-600 mt-1\">Resposta: She bought a pair of jeans.</p></div><div class=\"p-3 rounded-lg bg-slate-50 border border-slate-100\"><p class=\"text-xs font-bold text-amber-800 uppercase mb-1\">Meio/Modo (How)</p><p class=\"text-sm font-semibold text-slate-900\">How did she go to the mall?</p><p class=\"text-xs text-slate-600 mt-1\">Resposta: She went to the mall by car.</p></div></div></div></section></div>",
+            "aiStatus": "ai_reviewed",
+            "duration": "20:57",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788990401788_18_-_Lesson.pdf?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788990237227_art_1788990235358.jpg?alt=media",
+            "order": 8,
+            "title": "018 - Fazer Perguntas - Prática",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788990177983_FS-EC_mod_2_aula_18_practice_questions.mp4?alt=media",
+            "hasTrainingTrack": true,
+            "published": true,
+            "type": "lesson",
+            "updatedAt": "2026-09-10T03:13:08.230Z"
+          },
+          {
+            "quizId": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788991633135_FS-EC_mod_2_aula_19_ms_trip_to_chile.mp4?alt=media",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2\">A Magia da Narrativa Flutuante</h3><p class=\"text-slate-700 leading-relaxed\">Nesta aula, acompanhamos a viagem do José. Em vez de analisar regras gramaticais, perceba como as ações se encadeiam em sequência lógica no dia a dia. É a história ganhando ritmo de forma natural.</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h4 class=\"text-lg font-bold text-slate-900 border-b pb-2 border-slate-100\">A Trip to Chile (A História)</h4><div class=\"prose prose-slate max-w-none text-slate-800 leading-relaxed space-y-3\"><p><strong>José got up at 3:30am</strong>, took a shower, got dressed, had a cup of coffee and went to the airport.</p><p>He went to the airport by taxi. He <strong>got to the airport</strong> at 4:30 in the morning.</p><p>When José got to the airport he went to the check-in counter. He gave his passport to the check-in agent and said:</p><blockquote class=\"border-l-4 border-amber-400 pl-4 py-2 italic bg-amber-50/50 rounded-r-lg text-slate-700\">\"Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile\"</blockquote><p>The check-in agent said: <em>\"Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate 1.\"</em> José said: <em>\"Thank you.\"</em></p><p>He <strong>left Belo for Sao Paulo</strong> at 6am. Jose arrived in Sao Paulo at 7:15am. He <strong>got off the airplane</strong> and went to the departure lounge to wait for the next flight.</p><p>José waited until 8 o'clock. Then he <strong>got on the plane</strong> to Santiago. He flew for about 4 hours. José arrived in Santiago at lunch time.</p><p>He went to the baggage claim area to pick up his luggage. After that he was ready to go to the hotel. When he got out of the airport, a strange man approached him and said: <em>\"Hola Señor! ¿Cómo estás?\"</em></p></div></div><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm space-y-4\"><h4 class=\"text-lg font-bold text-amber-900\">Sentindo as Estruturas na Prática</h4><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 text-sm\"><div class=\"bg-white p-4 rounded-xl border border-amber-100 space-y-1\"><p class=\"font-bold text-amber-900\">O Coringa 'GET'</p><p class=\"text-slate-700\">Note a sensação de movimento e mudança de estado: <em>got up</em> (sair da cama), <em>got dressed</em> (mudar de roupa), <em>got to</em> (chegar ao destino).</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100 space-y-1\"><p class=\"font-bold text-amber-900\">Embarque e Desembarque</p><p class=\"text-slate-700\">Para aviões e ônibus, a mente em inglês pensa em subir e descer da plataforma: <em>got on</em> (embarcou) e <em>got off</em> (desembarcou).</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100 space-y-1\"><p class=\"font-bold text-amber-900\">Refeições e Bebidas</p><p class=\"text-slate-700\">Em vez de focar no verbo beber, a expressão natural é <em>had a cup of coffee</em> para indicar o ato de tomar/consumir o café.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-100 space-y-1\"><p class=\"font-bold text-amber-900\">De Um Ponto a Outro</p><p class=\"text-slate-700\">Para dizer que saiu de uma cidade em direção a outra, a estrutura fluida é <em>left Belo for Sao Paulo</em> (deixou BH com destino a SP).</p></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h4 class=\"text-lg font-bold text-slate-900\">Guia Prático de Ações</h4><div class=\"overflow-x-auto\"><table class=\"w-full text-left text-sm border-collapse\"><thead class=\"bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-b border-slate-200\"><tr><th class=\"p-3\">Ação Habitual</th><th class=\"p-3\">Ação Ocorrida (História)</th><th class=\"p-3\">A Intenção da Expressão</th></tr></thead><tbody class=\"divide-y divide-slate-100 text-slate-800\"><tr><td class=\"p-3 font-mono text-xs\">get up</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">got up</td><td class=\"p-3\">Levantar-se da cama</td></tr><tr><td class=\"p-3 font-mono text-xs\">take a shower</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">took a shower</td><td class=\"p-3\">Tomar banho</td></tr><tr><td class=\"p-3 font-mono text-xs\">get dressed</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">got dressed</td><td class=\"p-3\">Trocar de roupa / Vestir-se</td></tr><tr><td class=\"p-3 font-mono text-xs\">have a cup of coffee</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">had a cup of coffee</td><td class=\"p-3\">Tomar uma xícara de café</td></tr><tr><td class=\"p-3 font-mono text-xs\">get to the airport</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">got to the airport</td><td class=\"p-3\">Chegar ao aeroporto</td></tr><tr><td class=\"p-3 font-mono text-xs\">go to the counter</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">went to the counter</td><td class=\"p-3\">Ir até o balcão</td></tr><tr><td class=\"p-3 font-mono text-xs\">give the passport</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">gave the passport</td><td class=\"p-3\">Entregar o passaporte</td></tr><tr><td class=\"p-3 font-mono text-xs\">leave Belo for SP</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">left Belo for SP</td><td class=\"p-3\">Sair de BH com destino a SP</td></tr><tr><td class=\"p-3 font-mono text-xs\">get off the plane</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">got off the plane</td><td class=\"p-3\">Desembarcar do avião</td></tr><tr><td class=\"p-3 font-mono text-xs\">get on the plane</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">got on the plane</td><td class=\"p-3\">Embarcar no avião</td></tr><tr><td class=\"p-3 font-mono text-xs\">fly to Santiago</td><td class=\"p-3 font-mono text-xs font-bold text-amber-800\">flew to Santiago</td><td class=\"p-3\">Voar para Santiago</td></tr></tbody></table></div></div></div>",
+            "type": "lesson",
+            "moduleId": "ciclo-02",
+            "goldenTip": "Não se preocupe em memorizar se um verbo muda de forma ou não no passado. Sinta a história como uma sequência natural de ações: você acorda, se arruma, entra no transporte e chega ao destino!",
+            "courseId": "fs-aef-ec",
+            "rawScript": "A trip to Chile[cite: 18]\n\nJosé got up at 3:30am. took a shower, got dressed, had a cup of coffee and went to the airport.[cite: 18]\nHe went to the airport by taxi. He got to the airport at 4:30 in the morning.[cite: 18]\nWhen José got to the airport he went to the check in counter. He gave his passport to the check in agent and said:[cite: 18]\n\"Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile\"[cite: 18]\nThe check in agent said:[cite: 18]\n- \"Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate1\"[cite: 18]\nJosé said: \"thank you\".[cite: 18]\nHe left Belo for Sao Paulo at 6am. Jose arrived in Sao Paulo at 7:15am. He got off the airplane and went to the departure lounge to wait for the next flight.[cite: 18]\n\nJosé waited until 8 o'clock. Then he got on the plane to Santiago.[cite: 18]\nHe flew for about 4 hours. José arrived in Santiago at lunch time.[cite: 18]\nHe went to the baggage claim area to pick up his luggage. After that he was ready to go to the hotel.[cite: 18]\nWhen got out of the airport, a strange man approached him and said:[cite: 18]\n\"Hola Señor! ¿Como estás?\"[cite: 18]\n\n\nTabela de Verbos e Expressões (Infinitivo -> Passado -> Tradução)\n\nget up | got up | levantar (da cama)[cite: 18]\ntake a shower | took a shower | tomar banho[cite: 18]\nget dressed | got dressed | vestir-se[cite: 18]\nhave a cup of coffee | had a cup of coffee | tomar uma xícara de café[cite: 18]\nget to the airport | got to the airport | chegar ao aeroporto[cite: 18]\ngo to the check in counter | went to the check in counter | ir ao balcão de check in[cite: 18]\ngive the passport | gave the passport | entregar o passaporte[cite: 18]\nget on the plane | got on the plane | embarcar no avião[cite: 18]\nfly to Santiago | flew to Santiago | voar para Santiago[cite: 18]\nget off the plane | got off the plane | desembarcar do avião[cite: 18]\nleave Belo for SP | left Belo for São Paulo | sair de BH para SP[cite: 18]",
+            "hasTrainingTrack": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1788991593554_Apostila_fs-aef-ec_019_magic_story_a_trip_to_chile.pdf?alt=media",
+            "title": "019 - Magic Story - A trip to Chile",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788991655465_FS-EC_mod_2_aula_19_ms_trip_to_chile.mp4?alt=media",
+            "order": 9,
+            "id": "aula-1788991296731",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788991536400_thumb_1788991536382.jpg?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788991538460_art_1788991536392.jpg?alt=media",
+            "aiStatus": "ai_reviewed",
+            "duration": "08:54",
+            "published": true,
+            "updatedAt": "2026-09-10T03:13:08.231Z"
+          },
+          {
+            "processedContentHtml": "<div class=\"space-y-8 font-sans text-slate-900\"><header class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><div class=\"flex items-center gap-3 mb-2\"><span class=\"bg-amber-400 text-slate-950 font-bold text-xs uppercase px-3 py-1 rounded-full shadow-sm\">First Steps • Aula 020</span><span class=\"text-xs font-semibold text-amber-800 uppercase tracking-wider\">AgoraEuFalo</span></div><h1 class=\"text-3xl font-extrabold text-slate-900 mb-2\">A Trip to Chile</h1><p class=\"text-slate-700 font-medium text-lg\">Dominando a movimentação de viagem no piloto automático com os Lazy Verbs no passado.</p></header><section class=\"bg-white border-2 border-slate-100 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-xl font-bold text-slate-900 mb-4 flex items-center gap-2\"><span class=\"w-3 h-3 bg-amber-500 rounded-full inline-block\"></span> História Principal</h2><div class=\"prose prose-slate max-w-none text-slate-800 leading-relaxed space-y-3 font-normal text-base\"><p>José got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport.</p><p>He went to the airport by taxi.</p><p>He got to the airport at 4:30 in the morning.</p><p>When José got to the airport he went to the check in counter.</p><p>He gave his passport to the check in agent and said:</p><blockquote class=\"bg-slate-50 border-l-4 border-amber-400 p-4 my-2 text-slate-800 font-medium italic\">José: Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile.</blockquote><p>The check in agent said:</p><blockquote class=\"bg-slate-50 border-l-4 border-amber-400 p-4 my-2 text-slate-800 font-medium italic\">Check in agent: Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate 1.</blockquote><p>José: Thank you.</p><p>He left Belo for Sao Paulo at 6am.</p><p>Jose arrived in Sao Paulo at 7:15am.</p><p>He got off the airplane and went to the departure lounge to wait for the next flight.</p><p>José waited until 8 o&#39;clock.</p><p>Then he got on the plane to Santiago.</p><p>He flew for about 4 hours.</p><p>José arrived in Santiago at lunch time.</p><p>He went to the baggage claim area to pick up his luggage.</p><p>After that he was ready to go to the hotel.</p><p>When he got out of the airport, a strange man approached him and said:</p><p class=\"text-amber-900 font-semibold italic\">Strange man: ¡Hola Señor! ¿Cómo estás?</p></div></section><section class=\"bg-amber-50/50 border-2 border-amber-200/60 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-xl font-bold text-slate-900 mb-4 flex items-center gap-2\"><span class=\"w-3 h-3 bg-amber-500 rounded-full inline-block\"></span> Vocabulário da Vida Real</h2><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3 text-sm\"><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">got up</span><span class=\"text-slate-600 font-medium\">levantou da cama / pulou da cama</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">got dressed</span><span class=\"text-slate-600 font-medium\">se vestiu / trocou de roupa</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">had a cup of coffee</span><span class=\"text-slate-600 font-medium\">tomou uma xícara de café</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">by taxi</span><span class=\"text-slate-600 font-medium\">de táxi</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">got to the airport</span><span class=\"text-slate-600 font-medium\">chegou no aeroporto</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">check in counter</span><span class=\"text-slate-600 font-medium\">balcão de check-in</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">on time</span><span class=\"text-slate-600 font-medium\">no horário / pontual</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">boarding pass</span><span class=\"text-slate-600 font-medium\">cartão de embarque</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">proceed to gate 1</span><span class=\"text-slate-600 font-medium\">siga para o portão 1</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">got off the airplane</span><span class=\"text-slate-600 font-medium\">desceu do avião / desembarcou</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">departure lounge</span><span class=\"text-slate-600 font-medium\">sala de embarque</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">got on the plane</span><span class=\"text-slate-600 font-medium\">entrou no avião / embarcou</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">baggage claim area</span><span class=\"text-slate-600 font-medium\">área de restituição de bagagem</span></div><div class=\"p-3 bg-white border border-amber-200 rounded-xl flex justify-between items-center shadow-sm\"><span class=\"font-bold text-slate-900\">pick up his luggage</span><span class=\"text-slate-600 font-medium\">pegar/retirar a mala dele</span></div></div></section><section class=\"bg-white border-2 border-slate-100 rounded-2xl p-6 shadow-sm space-y-4\"><div class=\"flex items-center gap-2 mb-2\"><span class=\"bg-amber-100 text-amber-900 font-bold text-xs uppercase px-2.5 py-1 rounded-md\">O Sentimento da Estrutura</span><h2 class=\"text-xl font-bold text-slate-900\">A Agilidade dos &quot;Lazy Verbs&quot; no Passado</h2></div><p class=\"text-slate-700 leading-relaxed font-normal\">No português falado, costumamos usar um verbo formal diferente para cada pequena mudança física da rotina: levantou, vestiu-se, chegou, desembarcou, embarcou, tomou café. No inglês falado do dia a dia, o nativo economiza energia e ganha agilidade usando o verbo coringa <strong class=\"text-amber-800\">get</strong> no passado (<strong class=\"text-amber-800\">got</strong>) para transições de estado, e o <strong class=\"text-amber-800\">had</strong> para consumo de bebidas ou refeições.</p><div class=\"grid grid-cols-1 md:grid-cols-3 gap-4 pt-2\"><div class=\"bg-amber-50/80 border border-amber-200 rounded-xl p-4 shadow-sm\"><span class=\"text-xs font-bold text-amber-800 uppercase tracking-wide block mb-1\">1. Afirmação Fluida</span><p class=\"font-semibold text-slate-900 mb-2\">José got up, got dressed, had a coffee and went to the airport.</p><p class=\"text-xs text-slate-600\">Sinta o &#39;got&#39; e o &#39;had&#39; assumindo a ação sem precisar gastar energia procurando verbos difíceis.</p></div><div class=\"bg-amber-50/80 border border-amber-200 rounded-xl p-4 shadow-sm\"><span class=\"text-xs font-bold text-amber-800 uppercase tracking-wide block mb-1\">2. Pergunta de Bate-Pronto</span><p class=\"font-semibold text-slate-900 mb-2\">Did Jose get on the plane to Santiago?</p><p class=\"text-xs text-slate-600\">O &#39;Did&#39; já avisa o passado na largada e deixa o &#39;get&#39; livre e leve no presente de bate-pronto.</p></div><div class=\"bg-amber-50/80 border border-amber-200 rounded-xl p-4 shadow-sm\"><span class=\"text-xs font-bold text-amber-800 uppercase tracking-wide block mb-1\">3. Negação Sem Travar</span><p class=\"font-semibold text-slate-900 mb-2\">He didn&#39;t go by bus, he went by taxi.</p><p class=\"text-xs text-slate-600\">O &#39;didn&#39;t&#39; carrega toda a intenção do passado e a sua frase flui no ritmo certo.</p></div></div><div class=\"bg-amber-100/60 border-l-4 border-amber-500 p-4 rounded-r-xl mt-4\"><h3 class=\"font-bold text-amber-950 text-sm mb-1\">Sacada Cultural &amp; Treino Prático</h3><p class=\"text-slate-800 text-sm leading-relaxed\">Em aeroportos internacionais, a comunicação é composta por frases curtas e diretas. Reconhecer blocos como <em>&quot;proceed to gate...&quot;</em> ou <em>&quot;your flight is on time&quot;</em> de ouvido garante tranquilidade absoluta. Não analise regra por regra: treine os blocos <em>got up</em>, <em>got dressed</em>, <em>got on</em>, <em>got off</em> repetidamente até disparar o som sem pensar!</p></div></section><section class=\"bg-amber-50/40 border-2 border-amber-200/50 rounded-2xl p-6 shadow-sm space-y-4\"><h2 class=\"text-xl font-bold text-slate-900 mb-2 flex items-center gap-2\"><span class=\"w-3 h-3 bg-amber-500 rounded-full inline-block\"></span> Dicas Fonéticas &amp; Conexões de Som</h2><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 text-sm\"><div class=\"bg-white p-4 border border-amber-200 rounded-xl shadow-sm\"><p class=\"font-bold text-slate-900 mb-1\">got up at ➔ /ɡɑ-tʌ-pət/</p><p class=\"text-slate-600 text-xs\">O &#39;t&#39; de &#39;got&#39; suavemente vira um flap &#39;t&#39; ligando com &#39;up&#39;, e o &#39;p&#39; conecta direto em &#39;at&#39;.</p></div><div class=\"bg-white p-4 border border-amber-200 rounded-xl shadow-sm\"><p class=\"font-bold text-slate-900 mb-1\">had a cup of coffee ➔ /hæ-də kʌ-pəv ˈkɔː-fi/</p><p class=\"text-slate-600 text-xs\">Uma única sequência melódica sem interrupções secas entre as palavras.</p></div><div class=\"bg-white p-4 border border-amber-200 rounded-xl shadow-sm\"><p class=\"font-bold text-slate-900 mb-1\">got off the airplane ➔ /ɡɑ-tɔːf ði ˈɛr-pleɪn/</p><p class=\"text-slate-600 text-xs\">O som final de &#39;got&#39; liga de primeira com o &#39;off&#39; num único disparo de ar.</p></div><div class=\"bg-white p-4 border border-amber-200 rounded-xl shadow-sm\"><p class=\"font-bold text-slate-900 mb-1\">proceed to gate 1 ➔ /prə-ˈsiːd-tə ɡeɪt wʌn/</p><p class=\"text-slate-600 text-xs\">O som do &#39;to&#39; reduz suavemente para um schwa átono bem rápido.</p></div></div></section></div>",
+            "courseId": "fs-aef-ec",
+            "moduleId": "ciclo-02",
+            "quizId": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788993285334_FS-EC_mod_2_aula_20_ms_trip_to_chile_p2.mp4?alt=media",
+            "rawScript": "TITULO: AULA 20 - A Trip to Chile\nSUBTITULO: FIRST STEPS AGORAEUFALO\n\nHISTÓRIA:\nJosé got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport.\nHe went to the airport by taxi.\nHe got to the airport at 4:30 in the morning.\nWhen José got to the airport he went to the check in counter.\nHe gave his passport to the check in agent and said:\nJosé: Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile.\nThe check in agent said:\nCheck in agent: Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate 1.\nJosé: Thank you.\nHe left Belo for Sao Paulo at 6am.\nJose arrived in Sao Paulo at 7:15am.\nHe got off the airplane and went to the departure lounge to wait for the next flight.\nJosé waited until 8 o'clock.\nThen he got on the plane to Santiago.\nHe flew for about 4 hours.\nJosé arrived in Santiago at lunch time.\nHe went to the baggage claim area to pick up his luggage.\nAfter that he was ready to go to the hotel.\nWhen he got out of the airport, a strange man approached him and said:\nStrange man: ¡Hola Señor! ¿Cómo estás?\n\nVOCABULÁRIO:\ngot up - levantou da cama / pulou da cama\ngot dressed - se vestiu / trocou de roupa\nhad a cup of coffee - tomou uma xícara de café / tomou um cafezinho\nby taxi - de táxi\ngot to the airport - chegou no aeroporto\ncheck in counter - balcão de check-in\non time - no horário / pontual\nboarding pass - cartão de embarque\nproceed to gate 1 - dirija-se ao portão 1 / siga pro portão 1\ngot off the airplane - desceu do avião / desembarcou\ndeparture lounge - sala de embarque\ngot on the plane - entrou no avião / embarcou\nflew for about - voou por cerca de / viajou de avião por quase\nbaggage claim area - área de restituição de bagagem / esteira de malas\npick up his luggage - pegar a mala dele / retirar a bagagem\ngot out of the airport - saiu do aeroporto / foi pro lado de fora\n\nGRAMMAR & CULTURAL INSIGHTS:\nSELO: SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS\nTÍTULO: O Sentimento da Estrutura (Grammar & Cultural Aspects Explained)\nSUBTÍTULO: A Ponte Mental: A Agilidade dos \"Lazy Verbs\" no Passado (\"Got\" e \"Had\")\nCLIQUE MENTAL: No português, a gente usa um verbo formal diferente para cada pequeno movimento da rotina: \"levantou\", \"vestiu-se\", \"chegou\", \"desembarcou\", \"embarcou\", \"tomou café\". No inglês falado real, o nativo economiza energia e ganha velocidade usando o verbo coringa \"get\" no passado (\"got\") para todas as transições, e o \"had\" para qualquer refeição ou bebida.\nCARTÕES:\n\n1. FORMA AFIRMATIVA | Ele se vestiu e tomou café | José got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport | I got ready and had lunch | Sinta o \"got\" e o \"had\" assumindo a cena no piloto automático, sem procurar verbos difíceis.\n2. PERGUNTA DE BATE-PRONTO | Ele embarcou no avião? | Did Jose get on the plane to Santiago? | Did you get to the station on time? | O \"Did\" assume todo o passado na largada e deixa o verbo \"get\" leve e solto no presente de bate-pronto.\n3. FORMA NEGATIVA | Ele não foi de ônibus | He didn't go by bus, he went by taxi | We didn't get off at the wrong stop | O \"didn't\" carrega o peso da negação no passado e a fala flui sem travar a língua.\nSACADA CULTURAL: Em aeroportos pelo mundo afora, ninguém fica inventando frases longas. Os comandos são blocos curtos e universais como \"proceed to gate...\", \"your flight is on time\" ou \"baggage claim\". Reconhecer esses chunks de ouvido poupa o desespero na hora de fazer uma conexão apertada.\nDICA DE TREINO: Não tente traduzir palavra por palavra nem fique pensando se o verbo é regular ou irregular. Treine a sequência da viagem do José sentindo o ritmo dos blocos \"got up\", \"got dressed\", \"got on\", \"got off\" até a sua boca disparar o som sem esforço mental.\n\nLISTEN & ANSWER (PERGUNTAS):\nDid Jose get up at 3:30?\nDid Jose get up in the morning?\nDid he get up in the morning or in the afternoon?\nDid jose take a shower?\nDid Jose take a shower in the morning?\nDid he get dressed?\nDid he get dressed in the afternoon?\nWhen did he get dressed?\nDid he have a cup of coffee?\nDid he have a glass of water?\nWhat did he have?\nDid he go to the airport?\nDid he go to a hospital?\nWhere did he go?\nHow did he go to the airport?\nWhat time did he get to airport?\nDid he get to the airport at night?\nWhen did he get to the airport?\nDid he go to the check-in counter?\nDid he go to the restrooms?\nWhere did he go?\nDid he give his passport to the agent?\nDid he give his bag to the agent?\nWhat did he give to the agent?\nWhat did he say to check-in agent?\nWhat did the agent say to Jose?\nDid the agent give the boarding pass to Jose?\nDid the agent give money to Jose?\nWhat did the agent give to Jose?\nWhat did the agent say?\nDid Jose leave BH for SP?\nDid he leave curitiba for sp?\nDid he wait in SP until 8?\nDid Jose get on the plane to Santiago?\nDid he get on the plane to Santiago or NY?\nDid Jose fly for about 4 hours?\nDid he fly for 1 hour?\nHow long did he fly to Santiago?\nDid he fly for 4 hours or 2 hours?\nDid he arrive in Santiago at lunch time?\nDid he arrive in Miami at lunch time?\nWhere did he arrive at lunch time?\nDid he arrive in Santiago at dinner time?\nWhat time did he arrive in Santiago?\nDid jose go to the baggage claim area to pick up his luggage?\nDid he go to the baggage claim area to get on the plane?\nWhy did he go the baggage claim area?\nWhat did the man say to Jose?\n\nLOOK & RETELL:\nDid Jose get up at 3:30?\nDid Jose get up in the morning?\nDid he get up in the morning or in the afternoon?\nDid jose take a shower?\nDid Jose take a shower in the morning?\nDid he get dressed?\nDid he get dressed in the afternoon?\nWhen did he get dressed?\nDid he have a cup of coffee?\nDid he have a glass of water?\nWhat did he have?\nDid he go to the airport?\nDid he go to a hospital?\nWhere did he go?\nHow did he go to the airport?\nWhat time did he get to airport?\nDid he get to the airport at night?\nWhen did he get to the airport?\nDid he go to the check-in counter?\nDid he go to the restrooms?\nWhere did he go?\nDid he give his passport to the agent?\nDid he give his bag to the agent?\nWhat did he give to the agent?\nWhat did he say to check-in agent?\nWhat did the agent say to Jose?\nDid the agent give the boarding pass to Jose?\nDid the agent give money to Jose?\nWhat did the agent give to Jose?\nWhat did the agent say?\nDid Jose leave BH for SP?\nDid he leave curitiba for sp?\nDid he wait in SP until 8?\nDid Jose get on the plane to Santiago?\nDid he get on the plane to Santiago or NY?\nDid Jose fly for about 4 hours?\nDid he fly for 1 hour?\nHow long did he fly to Santiago?\nDid he fly for 4 hours or 2 hours?\nDid he arrive in Santiago at lunch time?\nDid he arrive in Miami at lunch time?\nWhere did he arrive at lunch time?\nDid he arrive in Santiago at dinner time?\nWhat time did he arrive in Santiago?\nDid jose go to the baggage claim area to pick up his luggage?\nDid he go to the baggage claim area to get on the plane?\nWhy did he go the baggage claim area?\nWhat did the man say to Jose?\n\nLISTEN & ASK (GATILHOS NEGATIVOS):\nJose did not get up at 7:00 -> me pergunte se o José levantou às 3:30\nJose did not get up at night -> me pergunte se o José levantou de manhã\nJose did not get up at night -> me pergunte se ele levantou de manhã ou de tarde\nJose did not skip his shower -> me pergunte se o José tomou banho\nJose did not take a shower at night -> me pergunte se o José tomou banho de manhã\nJose did not stay in his pajamas -> me pergunte se ele se vestiu\nJose did not get dressed in the evening -> me pergunte se ele se vestiu de tarde\nJose did not get dressed at night -> me pergunte quando ele se vestiu\nJose did not have a cup of tea -> me pergunte se ele tomou uma xícara de café\nJose did not have a glass of juice -> me pergunte se ele tomou um copo de água\nJose did not have breakfast at a restaurant -> me pergunte o que ele tomou\nJose did not go to the office -> me pergunte se ele foi para o aeroporto\nJose did not go to a hotel -> me pergunte se ele foi para um hospital\nJose did not stay home -> me pergunte para onde ele foi\nJose did not go to the airport by bus -> me pergunte como ele foi para o aeroporto\nJose did not get to the airport at noon -> me pergunte a que horas ele chegou ao aeroporto\nJose did not get to the airport in the evening -> me pergunte se ele chegou ao aeroporto à noite\nJose did not get to the airport at 10pm -> me pergunte quando ele chegou ao aeroporto\nJose did not go to the cafeteria -> me pergunte se ele foi para o balcão de check-in\nJose did not go to the shops -> me pergunte se ele foi para os banheiros\nJose did not head to the gates yet -> me pergunte para onde ele foi\nJose did not give his ID card to the agent -> me pergunte se ele deu o passaporte dele para o agente\nJose did not give his suitcase to the agent -> me pergunte se ele deu a mala dele para o agente\nJose did not give a ticket to the agent -> me pergunte o que ele deu para o agente\nJose did not stay silent at the counter -> me pergunte o que ele disse para o agente de check-in\nThe agent did not stay quiet -> me pergunte o que o agente disse para o José\nThe agent did not give a receipt to Jose -> me pergunte se o agente deu o cartão de embarque para o José\nThe agent did not give a voucher to Jose -> me pergunte se o agente deu dinheiro para o José\nThe agent did not hand over a magazine to Jose -> me pergunte o que o agente deu para o José\nThe agent did not remain silent -> me pergunte o que o agente disse\nJose did not leave Salvador for SP -> me pergunte se o José saiu de BH para SP\nJose did not leave Porto Alegre for SP -> me pergunte se ele saiu de Curitiba para SP\nJose did not leave SP at 7:30 -> me pergunte se ele esperou em SP até as 8\nJose did not get on the plane to Buenos Aires -> me pergunte se o José entrou no avião para Santiago\nJose did not get on the plane to London -> me pergunte se ele entrou no avião para Santiago ou Nova York\nJose did not fly for 8 hours -> me pergunte se o José voou por cerca de 4 horas\nJose did not fly for 30 minutes -> me pergunte se ele voou por 1 hora\nJose did not take a quick flight -> me pergunte quanto tempo ele voou para Santiago\nJose did not fly for 6 hours -> me pergunte se ele voou por 4 horas ou 2 horas\nJose did not arrive in Santiago at midnight -> me pergunte se ele chegou em Santiago na hora do almoço\nJose did not arrive in Orlando at lunch time -> me pergunte se ele chegou em Miami na hora do almoço\nJose did not arrive in Bogota at lunch time -> me pergunte onde ele chegou na hora do almoço\nJose did not arrive in Santiago in the morning -> me pergunte se ele chegou em Santiago na hora do jantar\nJose did not arrive in Santiago at 8pm -> me pergunte que horas ele chegou em Santiago\nJose did not go to the baggage claim area to drink coffee -> me pergunte se o José foi para a área de restituição de bagagem para pegar a mala dele\nJose did not go to the baggage claim area to check in -> me pergunte se ele foi para a área de restituição de bagagem para entrar no avião\nJose did not go to the baggage claim area to look for a taxi -> me pergunte por que ele foi para a área de restituição de bagagem\nThe man did not greet Jose in English -> me pergunte o que o homem disse para o José\n\nPRONÚNCIA:\nJosé got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport.\nHe went to the airport by taxi.\nHe got to the airport at 4:30 in the morning.\nWhen José got to the airport he went to the check in counter.\nHe gave his passport to the check in agent and said:\nJosé: Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile.\nThe check in agent said:\nCheck in agent: Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate 1.\nJosé: Thank you.\nHe left Belo for Sao Paulo at 6am.\nJose arrived in Sao Paulo at 7:15am.\nHe got off the airplane and went to the departure lounge to wait for the next flight.\nJosé waited until 8 o'clock.\nThen he got on the plane to Santiago.\nHe flew for about 4 hours.\nJosé arrived in Santiago at lunch time.\nHe went to the baggage claim area to pick up his luggage.\nAfter that he was ready to go to the hotel.\nWhen he got out of the airport, a strange man approached him and said:\nStrange man: ¡Hola Señor! ¿Cómo estás?\n\nDICAS FONÉTICAS:\ngot up at ➔ O 't' de \"got\" vira flap t conectando com \"up\", e o 'p' emenda suavemente no \"at\": /ɡɑ-tʌ-pət/.\nhad a cup of coffee ➔ O som conecta numa cadência melódica contínua sem pausas secas: /hæ-də kʌ-pəv ˈkɔː-fi/.\ngot off the airplane ➔ O 't' do \"got\" cola diretamente no \"off\": /ɡɑ-tɔːf ði ˈɛr-pleɪn/.\nproceed to gate 1 ➔ O som do \"to\" reduz para som de schwa bem sutil: /prə-ˈsiːd-tə ɡeɪt wʌn/.\n\nSACADA DE OURO:\nViajar de avião é o teste definitivo para a sua fala no piloto automático. No saguão do aeroporto não dá tempo de você abrir um dicionário mental para conjugar pretérito perfeito ou escolher entre preposições rebuscadas. Repare como o José se desloca com agilidade usando Lazy Verbs: ele 'got up', 'got dressed', 'got to the airport', 'got off' e 'got on'. A linguagem da vida real é feita de blocos sonoros dinâmicos que se encaixam como engrenagens. Treine essas repetições até que a sua boca responda antes da dúvida surgir. Aja com convicção, solte o ar e deixe os chunks guiarem a sua viagem!TITULO: MS020 - A Trip to Chile\nSUBTITULO: Magic Stories Legacy • Acervo Clássico\n\nHISTÓRIA:\nJosé got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport.\nHe went to the airport by taxi.\nHe got to the airport at 4:30 in the morning.\nWhen José got to the airport he went to the check in counter.\nHe gave his passport to the check in agent and said:\nJosé: Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile.\nThe check in agent said:\nCheck in agent: Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate 1.\nJosé: Thank you.\nHe left Belo for Sao Paulo at 6am.\nJose arrived in Sao Paulo at 7:15am.\nHe got off the airplane and went to the departure lounge to wait for the next flight.\nJosé waited until 8 o'clock.\nThen he got on the plane to Santiago.\nHe flew for about 4 hours.\nJosé arrived in Santiago at lunch time.\nHe went to the baggage claim area to pick up his luggage.\nAfter that he was ready to go to the hotel.\nWhen he got out of the airport, a strange man approached him and said:\nStrange man: ¡Hola Señor! ¿Cómo estás?\n\nVOCABULÁRIO:\ngot up - levantou da cama / pulou da cama\ngot dressed - se vestiu / trocou de roupa\nhad a cup of coffee - tomou uma xícara de café / tomou um cafezinho\nby taxi - de táxi\ngot to the airport - chegou no aeroporto\ncheck in counter - balcão de check-in\non time - no horário / pontual\nboarding pass - cartão de embarque\nproceed to gate 1 - dirija-se ao portão 1 / siga pro portão 1\ngot off the airplane - desceu do avião / desembarcou\ndeparture lounge - sala de embarque\ngot on the plane - entrou no avião / embarcou\nflew for about - voou por cerca de / viajou de avião por quase\nbaggage claim area - área de restituição de bagagem / esteira de malas\npick up his luggage - pegar a mala dele / retirar a bagagem\ngot out of the airport - saiu do aeroporto / foi pro lado de fora\n\nGRAMMAR & CULTURAL INSIGHTS:\nSELO: SECTION 2.1 • CULTURAL & STRUCTURAL INSIGHTS\nTÍTULO: O Sentimento da Estrutura (Grammar & Cultural Aspects Explained)\nSUBTÍTULO: A Ponte Mental: A Agilidade dos \"Lazy Verbs\" no Passado (\"Got\" e \"Had\")\nCLIQUE MENTAL: No português, a gente usa um verbo formal diferente para cada pequeno movimento da rotina: \"levantou\", \"vestiu-se\", \"chegou\", \"desembarcou\", \"embarcou\", \"tomou café\". No inglês falado real, o nativo economiza energia e ganha velocidade usando o verbo coringa \"get\" no passado (\"got\") para todas as transições, e o \"had\" para qualquer refeição ou bebida.\nCARTÕES:\n\n1. FORMA AFIRMATIVA | Ele se vestiu e tomou café | José got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport | I got ready and had lunch | Sinta o \"got\" e o \"had\" assumindo a cena no piloto automático, sem procurar verbos difíceis.\n2. PERGUNTA DE BATE-PRONTO | Ele embarcou no avião? | Did Jose get on the plane to Santiago? | Did you get to the station on time? | O \"Did\" assume todo o passado na largada e deixa o verbo \"get\" leve e solto no presente de bate-pronto.\n3. FORMA NEGATIVA | Ele não foi de ônibus | He didn't go by bus, he went by taxi | We didn't get off at the wrong stop | O \"didn't\" carrega o peso da negação no passado e a fala flui sem travar a língua.\nSACADA CULTURAL: Em aeroportos pelo mundo afora, ninguém fica inventando frases longas. Os comandos são blocos curtos e universais como \"proceed to gate...\", \"your flight is on time\" ou \"baggage claim\". Reconhecer esses chunks de ouvido poupa o desespero na hora de fazer uma conexão apertada.\nDICA DE TREINO: Não tente traduzir palavra por palavra nem fique pensando se o verbo é regular ou irregular. Treine a sequência da viagem do José sentindo o ritmo dos blocos \"got up\", \"got dressed\", \"got on\", \"got off\" até a sua boca disparar o som sem esforço mental.\n\nLISTEN & ANSWER (PERGUNTAS):\nDid Jose get up at 3:30?\nDid Jose get up in the morning?\nDid he get up in the morning or in the afternoon?\nDid jose take a shower?\nDid Jose take a shower in the morning?\nDid he get dressed?\nDid he get dressed in the afternoon?\nWhen did he get dressed?\nDid he have a cup of coffee?\nDid he have a glass of water?\nWhat did he have?\nDid he go to the airport?\nDid he go to a hospital?\nWhere did he go?\nHow did he go to the airport?\nWhat time did he get to airport?\nDid he get to the airport at night?\nWhen did he get to the airport?\nDid he go to the check-in counter?\nDid he go to the restrooms?\nWhere did he go?\nDid he give his passport to the agent?\nDid he give his bag to the agent?\nWhat did he give to the agent?\nWhat did he say to check-in agent?\nWhat did the agent say to Jose?\nDid the agent give the boarding pass to Jose?\nDid the agent give money to Jose?\nWhat did the agent give to Jose?\nWhat did the agent say?\nDid Jose leave BH for SP?\nDid he leave curitiba for sp?\nDid he wait in SP until 8?\nDid Jose get on the plane to Santiago?\nDid he get on the plane to Santiago or NY?\nDid Jose fly for about 4 hours?\nDid he fly for 1 hour?\nHow long did he fly to Santiago?\nDid he fly for 4 hours or 2 hours?\nDid he arrive in Santiago at lunch time?\nDid he arrive in Miami at lunch time?\nWhere did he arrive at lunch time?\nDid he arrive in Santiago at dinner time?\nWhat time did he arrive in Santiago?\nDid jose go to the baggage claim area to pick up his luggage?\nDid he go to the baggage claim area to get on the plane?\nWhy did he go the baggage claim area?\nWhat did the man say to Jose?\n\nLOOK & RETELL:\nDid Jose get up at 3:30?\nDid Jose get up in the morning?\nDid he get up in the morning or in the afternoon?\nDid jose take a shower?\nDid Jose take a shower in the morning?\nDid he get dressed?\nDid he get dressed in the afternoon?\nWhen did he get dressed?\nDid he have a cup of coffee?\nDid he have a glass of water?\nWhat did he have?\nDid he go to the airport?\nDid he go to a hospital?\nWhere did he go?\nHow did he go to the airport?\nWhat time did he get to airport?\nDid he get to the airport at night?\nWhen did he get to the airport?\nDid he go to the check-in counter?\nDid he go to the restrooms?\nWhere did he go?\nDid he give his passport to the agent?\nDid he give his bag to the agent?\nWhat did he give to the agent?\nWhat did he say to check-in agent?\nWhat did the agent say to Jose?\nDid the agent give the boarding pass to Jose?\nDid the agent give money to Jose?\nWhat did the agent give to Jose?\nWhat did the agent say?\nDid Jose leave BH for SP?\nDid he leave curitiba for sp?\nDid he wait in SP until 8?\nDid Jose get on the plane to Santiago?\nDid he get on the plane to Santiago or NY?\nDid Jose fly for about 4 hours?\nDid he fly for 1 hour?\nHow long did he fly to Santiago?\nDid he fly for 4 hours or 2 hours?\nDid he arrive in Santiago at lunch time?\nDid he arrive in Miami at lunch time?\nWhere did he arrive at lunch time?\nDid he arrive in Santiago at dinner time?\nWhat time did he arrive in Santiago?\nDid jose go to the baggage claim area to pick up his luggage?\nDid he go to the baggage claim area to get on the plane?\nWhy did he go the baggage claim area?\nWhat did the man say to Jose?\n\nLISTEN & ASK (GATILHOS NEGATIVOS):\nJose did not get up at 7:00 -> me pergunte se o José levantou às 3:30\nJose did not get up at night -> me pergunte se o José levantou de manhã\nJose did not get up at night -> me pergunte se ele levantou de manhã ou de tarde\nJose did not skip his shower -> me pergunte se o José tomou banho\nJose did not take a shower at night -> me pergunte se o José tomou banho de manhã\nJose did not stay in his pajamas -> me pergunte se ele se vestiu\nJose did not get dressed in the evening -> me pergunte se ele se vestiu de tarde\nJose did not get dressed at night -> me pergunte quando ele se vestiu\nJose did not have a cup of tea -> me pergunte se ele tomou uma xícara de café\nJose did not have a glass of juice -> me pergunte se ele tomou um copo de água\nJose did not have breakfast at a restaurant -> me pergunte o que ele tomou\nJose did not go to the office -> me pergunte se ele foi para o aeroporto\nJose did not go to a hotel -> me pergunte se ele foi para um hospital\nJose did not stay home -> me pergunte para onde ele foi\nJose did not go to the airport by bus -> me pergunte como ele foi para o aeroporto\nJose did not get to the airport at noon -> me pergunte a que horas ele chegou ao aeroporto\nJose did not get to the airport in the evening -> me pergunte se ele chegou ao aeroporto à noite\nJose did not get to the airport at 10pm -> me pergunte quando ele chegou ao aeroporto\nJose did not go to the cafeteria -> me pergunte se ele foi para o balcão de check-in\nJose did not go to the shops -> me pergunte se ele foi para os banheiros\nJose did not head to the gates yet -> me pergunte para onde ele foi\nJose did not give his ID card to the agent -> me pergunte se ele deu o passaporte dele para o agente\nJose did not give his suitcase to the agent -> me pergunte se ele deu a mala dele para o agente\nJose did not give a ticket to the agent -> me pergunte o que ele deu para o agente\nJose did not stay silent at the counter -> me pergunte o que ele disse para o agente de check-in\nThe agent did not stay quiet -> me pergunte o que o agente disse para o José\nThe agent did not give a receipt to Jose -> me pergunte se o agente deu o cartão de embarque para o José\nThe agent did not give a voucher to Jose -> me pergunte se o agente deu dinheiro para o José\nThe agent did not hand over a magazine to Jose -> me pergunte o que o agente deu para o José\nThe agent did not remain silent -> me pergunte o que o agente disse\nJose did not leave Salvador for SP -> me pergunte se o José saiu de BH para SP\nJose did not leave Porto Alegre for SP -> me pergunte se ele saiu de Curitiba para SP\nJose did not leave SP at 7:30 -> me pergunte se ele esperou em SP até as 8\nJose did not get on the plane to Buenos Aires -> me pergunte se o José entrou no avião para Santiago\nJose did not get on the plane to London -> me pergunte se ele entrou no avião para Santiago ou Nova York\nJose did not fly for 8 hours -> me pergunte se o José voou por cerca de 4 horas\nJose did not fly for 30 minutes -> me pergunte se ele voou por 1 hora\nJose did not take a quick flight -> me pergunte quanto tempo ele voou para Santiago\nJose did not fly for 6 hours -> me pergunte se ele voou por 4 horas ou 2 horas\nJose did not arrive in Santiago at midnight -> me pergunte se ele chegou em Santiago na hora do almoço\nJose did not arrive in Orlando at lunch time -> me pergunte se ele chegou em Miami na hora do almoço\nJose did not arrive in Bogota at lunch time -> me pergunte onde ele chegou na hora do almoço\nJose did not arrive in Santiago in the morning -> me pergunte se ele chegou em Santiago na hora do jantar\nJose did not arrive in Santiago at 8pm -> me pergunte que horas ele chegou em Santiago\nJose did not go to the baggage claim area to drink coffee -> me pergunte se o José foi para a área de restituição de bagagem para pegar a mala dele\nJose did not go to the baggage claim area to check in -> me pergunte se ele foi para a área de restituição de bagagem para entrar no avião\nJose did not go to the baggage claim area to look for a taxi -> me pergunte por que ele foi para a área de restituição de bagagem\nThe man did not greet Jose in English -> me pergunte o que o homem disse para o José\n\nPRONÚNCIA:\nJosé got up at 3:30am, took a shower, got dressed, had a cup of coffee and went to the airport.\nHe went to the airport by taxi.\nHe got to the airport at 4:30 in the morning.\nWhen José got to the airport he went to the check in counter.\nHe gave his passport to the check in agent and said:\nJosé: Flight 8000 to Sao Paulo and flight 8080 to Santiago, Chile.\nThe check in agent said:\nCheck in agent: Certainly sir! Your flight is on time! Here is your boarding pass. Proceed to gate 1.\nJosé: Thank you.\nHe left Belo for Sao Paulo at 6am.\nJose arrived in Sao Paulo at 7:15am.\nHe got off the airplane and went to the departure lounge to wait for the next flight.\nJosé waited until 8 o'clock.\nThen he got on the plane to Santiago.\nHe flew for about 4 hours.\nJosé arrived in Santiago at lunch time.\nHe went to the baggage claim area to pick up his luggage.\nAfter that he was ready to go to the hotel.\nWhen he got out of the airport, a strange man approached him and said:\nStrange man: ¡Hola Señor! ¿Cómo estás?\n\nDICAS FONÉTICAS:\ngot up at ➔ O 't' de \"got\" vira flap t conectando com \"up\", e o 'p' emenda suavemente no \"at\": /ɡɑ-tʌ-pət/.\nhad a cup of coffee ➔ O som conecta numa cadência melódica contínua sem pausas secas: /hæ-də kʌ-pəv ˈkɔː-fi/.\ngot off the airplane ➔ O 't' do \"got\" cola diretamente no \"off\": /ɡɑ-tɔːf ði ˈɛr-pleɪn/.\nproceed to gate 1 ➔ O som do \"to\" reduz para som de schwa bem sutil: /prə-ˈsiːd-tə ɡeɪt wʌn/.\n\nSACADA DE OURO:\nViajar de avião é o teste definitivo para a sua fala no piloto automático. No saguão do aeroporto não dá tempo de você abrir um dicionário mental para conjugar pretérito perfeito ou escolher entre preposições rebuscadas. Repare como o José se desloca com agilidade usando Lazy Verbs: ele 'got up', 'got dressed', 'got to the airport', 'got off' e 'got on'. A linguagem da vida real é feita de blocos sonoros dinâmicos que se encaixam como engrenagens. Treine essas repetições até que a sua boca responda antes da dúvida surgir. Aja com convicção, solte o ar e deixe os chunks guiarem a sua viagem!",
+            "goldenTip": "No saguão do aeroporto não dá tempo de consultar regras gramaticais: use a força dos 'Lazy Verbs' como 'got' e 'had' para conduzir toda a sua rotina de viagem no piloto automático com total fluidez.",
+            "type": "lesson",
+            "id": "aula-1788991692053",
+            "duration": "30:20",
+            "aiStatus": "ai_reviewed",
+            "order": 10,
+            "title": "020 - MS - A trip to Chile",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788991771112_art_1788991769225.jpg?alt=media",
+            "updatedAt": "2026-09-10T05:24:53.175Z",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788991769275_thumb_1788991769204.jpg?alt=media",
+            "published": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788993248005_020_-_A_Trip_to_Chile___Apostila_Oficial___AgoraEuFalo.pdf?alt=media",
+            "hasTrainingTrack": true,
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-02%2F1788993328344_FS-EC_mod_2_aula_20_ms_trip_to_chile_p2.mp4?alt=media"
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "published": true,
+        "title": "Módulo 3 - Expansão",
+        "description": "",
+        "stats": "",
+        "courseId": "fs-aef-ec",
+        "badge": "",
+        "id": "ciclo-03",
+        "updatedAt": "2026-09-10T03:13:08.233Z",
+        "lessons": [
+          {
+            "aiStatus": "ai_reviewed",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2 flex items-center gap-2\"><span>💡</span> O Sentimento da Estrutura: Ser, Estar e Sentir-se</h3><p class=\"text-slate-800 leading-relaxed\">Esqueça decorebas gramaticais complexas. O verbo <strong>to be</strong> nada mais é do que a cola que conecta você a um estado ou característica (quem você é ou como você está agora). Ele assume apenas três formas no presente: <strong>am</strong>, <strong>is</strong> e <strong>are</strong>.</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h4 class=\"text-lg font-bold text-slate-900 border-b border-slate-100 pb-2\">As 3 Formas do Verbo 'To Be' na Prática</h4><div class=\"grid md:grid-cols-3 gap-4\"><div class=\"bg-slate-50 p-4 rounded-xl border border-slate-100\"><span class=\"inline-block px-2.5 py-1 bg-amber-100 text-amber-900 font-bold text-xs rounded-full mb-2\">I (EU)</span><p class=\"text-lg font-semibold text-slate-900\">am</p><p class=\"text-sm text-slate-600 mt-2\">I am hungry <span class=",
+            "type": "lesson",
+            "hasTrainingTrack": true,
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789001661861_art_1789001659701.jpg?alt=media",
+            "courseId": "fs-aef-ec",
+            "updatedAt": "2026-09-10T03:13:08.234Z",
+            "goldenTip": "Em inglês, as qualidades são extremamente simples: elas não mudam se a palavra é masculina, feminina, singular ou plural. Além disso, o verbo 'to be' serve apenas para conectar quem você é ou como se sente no momento!",
+            "title": "021 - O verbo 'to be' não é o que você pensa",
+            "quizId": "",
+            "order": 1,
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789001489953_FS-EC_mod_3_aula_21_tobe_adjectives.mp4?alt=media",
+            "published": true,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789001659748_thumb_1789001659646.jpg?alt=media",
+            "duration": "31:52",
+            "rawScript": "To be - Present (Verbo Ser/Estar no Presente)[cite: 19]\nAdjetivos[cite: 19]\n\nTo be - Ser/Estar[cite: 19]\nO verbo \"to be\" no presente tem apenas 3 conjugações: am, is, are[cite: 19]\n\nExamples:[cite: 19]\nI am | eu sou / eu estou[cite: 19]\nYou are | você é / você está[cite: 19]\nHe is | ele é / ele está[cite: 19]\nShe is | ela é / ela está[cite: 19]\nIt is | é / está[cite: 19]\nWe are | nós somos / nós estamos[cite: 19]\nYou are | vocês são / vocês estão[cite: 19]\nThey are | eles são / eles estão[cite: 19]\n\n• I am hungry (eu estou com fome)[cite: 19]\n• I am tall (eu sou alto)[cite: 19]\n• She is tired.[cite: 19]\n• She is short.[cite: 19]\n• They are at home.[cite: 19]\n• They are married.[cite: 19]\n\n\nLista de Adjetivos (Inglês | Português)[cite: 19]\n\ntired | cansado[cite: 19]\ntall | alto[cite: 19]\nshort | baixo / curto[cite: 19]\nbig | grande[cite: 19]\nsmall | pequeno[cite: 19]\nhot | quente[cite: 19]\ncold | frio / com frio[cite: 19]\nmarried | casado[cite: 19]\nsingle | solteiro[cite: 19]\neasy | fácil[cite: 19]\ndifficult | difícil[cite: 19]\nhappy | feliz[cite: 19]\nsad | triste[cite: 19]\ninteresting | interessante[cite: 19]\nboring | entediante / chato[cite: 19]\nnew | novo[cite: 19]\nold | velho[cite: 19]\nfar | longe[cite: 19]\nnear | perto[cite: 19]\nyoung | jovem[cite: 19]\ncheap | barato[cite: 19]\nexpensive | caro[cite: 19]\npoor | pobre[cite: 19]\nrich | rico[cite: 19]\nbeautiful | bonito[cite: 19]\nugly | feio[cite: 19]\ngood | bom[cite: 19]\nbad | ruim[cite: 19]\nfamous | famosos[cite: 19]\nsick | doente[cite: 19]\nthirsty | com sede[cite: 19]\nhungry | com fome[cite: 19]\nclean | limpo[cite: 19]\ndirty | sujo[cite: 19]\nstrong | forte[cite: 19]\nweak | fraco[cite: 19]\nheavy | pesado[cite: 19]\nlight (ligth) | leve[cite: 19]\nnoisy | barulhento[cite: 19]\nquiet | silencioso[cite: 19]\nintelligent | inteligente[cite: 19]\nsmart | inteligente / esperto[cite: 19]\nstupid | burro[cite: 19]\nright | certo[cite: 19]\nwrong | errado[cite: 19]\nfat | gordo[cite: 19]\nthin | magro[cite: 19]\nbusy | ocupado[cite: 19]\nnice | legal, simpático, bacana[cite: 19]\ngreat | ótimo[cite: 19]\n\n\nAtenção![cite: 19]\n• Em inglês os adjetivos não têm gênero.[cite: 19]\n• Quer dizer: \"new\" significa \"novo\" ou \"nova\"[cite: 19]\n• \"Beautiful\" é \"bonito\" ou \"bonita\"[cite: 19]\n\nE mais![cite: 19]\n• Os adjetivos não têm singular ou plural[cite: 19]\n• \"beautiful\" pode ser também \"bonitos\" ou \"bonitas\"[cite: 19]\n\nExemplos:[cite: 19]\n• The car is old. O carro é velho.[cite: 19]\n• The house is old. A casa é velha.[cite: 19]\n• The books are old. Os livros são velhos.[cite: 19]\n• My brother is tall. Meu irmão é alto.[cite: 19]\n• My sister is tall. Minha irmã é alta.[cite: 19]\n• My parents are tall. Meus pais são altos.[cite: 19]\n\nPosicionamento:[cite: 19]\n• He is a good man. Ele é um homem bom.[cite: 19]\n• It is a heavy bag. É uma bolsa pesada.[cite: 19]\n• They are rich people. Eles são pessoas ricas.[cite: 19]\n\n\nPractice![cite: 19]\n• Eu estou feliz hoje![cite: 19]\n• Ela é jovem.[cite: 19]\n• Nós estamos ocupados agora.[cite: 19]\n• Meu pai está em casa na sexta.[cite: 19]\n• O livro dele é muito caro.[cite: 19]\n• Nós estamos com fome.[cite: 19]\n• Ele é um homem forte.[cite: 19]\n• É um filme legal.[cite: 19]\n• Eu gosto de chá quente.[cite: 19]\n• Ele quer um sanduíche grande.[cite: 19]\n\n\nRespostas:[cite: 19]\n• Eu estou feliz hoje! -> I'M HAPPY TODAY![cite: 19]\n• Ela é jovem. -> SHE'S YOUNG[cite: 19]\n• Nós estamos ocupados agora. -> We are busy[cite: 19]\n• Meu pai está em casa na sexta. -> My father is home on friday[cite: 19]\n• O livro dele é muito caro. -> His book is very expensive[cite: 19]\n• Nós estamos com fome. -> We are hungry[cite: 19]\n• Ele é um homem forte. -> He's a strong man[cite: 19]\n• É um filme legal. -> It's a nice movie[cite: 19]\n• Eu gosto de chá quente. -> I like hot tea.[cite: 19]\n• Ele quer um sanduíche grande. -> He wants a big sandwich[cite: 19]To be - Present (Verbo Ser/Estar no Presente)[cite: 19]\nAdjetivos[cite: 19]\n\nTo be - Ser/Estar[cite: 19]\nO verbo \"to be\" no presente tem apenas 3 conjugações: am, is, are[cite: 19]\n\nExamples:[cite: 19]\nI am | eu sou / eu estou[cite: 19]\nYou are | você é / você está[cite: 19]\nHe is | ele é / ele está[cite: 19]\nShe is | ela é / ela está[cite: 19]\nIt is | é / está[cite: 19]\nWe are | nós somos / nós estamos[cite: 19]\nYou are | vocês são / vocês estão[cite: 19]\nThey are | eles são / eles estão[cite: 19]\n\n• I am hungry (eu estou com fome)[cite: 19]\n• I am tall (eu sou alto)[cite: 19]\n• She is tired.[cite: 19]\n• She is short.[cite: 19]\n• They are at home.[cite: 19]\n• They are married.[cite: 19]\n\n\nLista de Adjetivos (Inglês | Português)[cite: 19]\n\ntired | cansado[cite: 19]\ntall | alto[cite: 19]\nshort | baixo / curto[cite: 19]\nbig | grande[cite: 19]\nsmall | pequeno[cite: 19]\nhot | quente[cite: 19]\ncold | frio / com frio[cite: 19]\nmarried | casado[cite: 19]\nsingle | solteiro[cite: 19]\neasy | fácil[cite: 19]\ndifficult | difícil[cite: 19]\nhappy | feliz[cite: 19]\nsad | triste[cite: 19]\ninteresting | interessante[cite: 19]\nboring | entediante / chato[cite: 19]\nnew | novo[cite: 19]\nold | velho[cite: 19]\nfar | longe[cite: 19]\nnear | perto[cite: 19]\nyoung | jovem[cite: 19]\ncheap | barato[cite: 19]\nexpensive | caro[cite: 19]\npoor | pobre[cite: 19]\nrich | rico[cite: 19]\nbeautiful | bonito[cite: 19]\nugly | feio[cite: 19]\ngood | bom[cite: 19]\nbad | ruim[cite: 19]\nfamous | famosos[cite: 19]\nsick | doente[cite: 19]\nthirsty | com sede[cite: 19]\nhungry | com fome[cite: 19]\nclean | limpo[cite: 19]\ndirty | sujo[cite: 19]\nstrong | forte[cite: 19]\nweak | fraco[cite: 19]\nheavy | pesado[cite: 19]\nlight (ligth) | leve[cite: 19]\nnoisy | barulhento[cite: 19]\nquiet | silencioso[cite: 19]\nintelligent | inteligente[cite: 19]\nsmart | inteligente / esperto[cite: 19]\nstupid | burro[cite: 19]\nright | certo[cite: 19]\nwrong | errado[cite: 19]\nfat | gordo[cite: 19]\nthin | magro[cite: 19]\nbusy | ocupado[cite: 19]\nnice | legal, simpático, bacana[cite: 19]\ngreat | ótimo[cite: 19]\n\n\nAtenção![cite: 19]\n• Em inglês os adjetivos não têm gênero.[cite: 19]\n• Quer dizer: \"new\" significa \"novo\" ou \"nova\"[cite: 19]\n• \"Beautiful\" é \"bonito\" ou \"bonita\"[cite: 19]\n\nE mais![cite: 19]\n• Os adjetivos não têm singular ou plural[cite: 19]\n• \"beautiful\" pode ser também \"bonitos\" ou \"bonitas\"[cite: 19]\n\nExemplos:[cite: 19]\n• The car is old. O carro é velho.[cite: 19]\n• The house is old. A casa é velha.[cite: 19]\n• The books are old. Os livros são velhos.[cite: 19]\n• My brother is tall. Meu irmão é alto.[cite: 19]\n• My sister is tall. Minha irmã é alta.[cite: 19]\n• My parents are tall. Meus pais são altos.[cite: 19]\n\nPosicionamento:[cite: 19]\n• He is a good man. Ele é um homem bom.[cite: 19]\n• It is a heavy bag. É uma bolsa pesada.[cite: 19]\n• They are rich people. Eles são pessoas ricas.[cite: 19]\n\n\nPractice![cite: 19]\n• Eu estou feliz hoje![cite: 19]\n• Ela é jovem.[cite: 19]\n• Nós estamos ocupados agora.[cite: 19]\n• Meu pai está em casa na sexta.[cite: 19]\n• O livro dele é muito caro.[cite: 19]\n• Nós estamos com fome.[cite: 19]\n• Ele é um homem forte.[cite: 19]\n• É um filme legal.[cite: 19]\n• Eu gosto de chá quente.[cite: 19]\n• Ele quer um sanduíche grande.[cite: 19]\n\n\nRespostas:[cite: 19]\n• Eu estou feliz hoje! -> I'M HAPPY TODAY![cite: 19]\n• Ela é jovem. -> SHE'S YOUNG[cite: 19]\n• Nós estamos ocupados agora. -> We are busy[cite: 19]\n• Meu pai está em casa na sexta. -> My father is home on friday[cite: 19]\n• O livro dele é muito caro. -> His book is very expensive[cite: 19]\n• Nós estamos com fome. -> We are hungry[cite: 19]\n• Ele é um homem forte. -> He's a strong man[cite: 19]\n• É um filme legal. -> It's a nice movie[cite: 19]\n• Eu gosto de chá quente. -> I like hot tea.[cite: 19]\n• Ele quer um sanduíche grande. -> He wants a big sandwich[cite: 19]",
+            "id": "aula-1789001435522",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789001933909_21_-_Lesson.pdf?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789001497667_FS-EC_mod_3_aula_21_tobe_adjectives.mp4?alt=media",
+            "moduleId": "ciclo-03"
+          },
+          {
+            "quizId": "",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003098413_FS-EC_mod_3_aula_22_tobe_questions_negative.mp4?alt=media",
+            "order": 2,
+            "title": "022 - 'To Be\" - Perguntas e Negativas",
+            "moduleId": "ciclo-03",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003101674_art_1789003099574.jpg?alt=media",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003092878_FS-EC_mod_3_aula_22_tobe_questions_negative.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.234Z",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003099584_thumb_1789003099564.jpg?alt=media",
+            "goldenTip": "",
+            "type": "lesson",
+            "duration": "21:09",
+            "processedContentHtml": "",
+            "published": true,
+            "courseId": "fs-aef-ec",
+            "hasTrainingTrack": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003111960_22_-_Lesson.pdf?alt=media",
+            "id": "aula-1789002954405",
+            "aiStatus": "draft_pending",
+            "rawScript": ""
+          },
+          {
+            "courseId": "fs-aef-ec",
+            "hasTrainingTrack": true,
+            "published": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003571109_Apostila_Lesson_23_Completa.pdf?alt=media",
+            "aiStatus": "draft_pending",
+            "title": "023 -  House and Parts of a House",
+            "rawScript": "",
+            "order": 3,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003562937_thumb_1789003562913.jpg?alt=media",
+            "type": "lesson",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003565235_art_1789003562925.jpg?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003658540_FS-EC_mod_3_aula_23_demonst_house.mp4?alt=media",
+            "moduleId": "ciclo-03",
+            "processedContentHtml": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789003647150_FS-EC_mod_3_aula_23_demonst_house.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.234Z",
+            "duration": "18:39",
+            "id": "aula-1789003141910",
+            "goldenTip": "Aqui vamos aprender pronomes demonstrativos. Mas já te aviso: This, that, those, these você só vai conseguir ativar no automático treinando com magic stories. você vai aprender aqui, achar legal e vai esquecer. Não se contente em aprender passivamente.",
+            "quizId": ""
+          },
+          {
+            "type": "lesson",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789004214925_thumb_1789004214899.jpg?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789004136354_FS-EC_mod_3_aula_24_check_point.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.235Z",
+            "moduleId": "ciclo-03",
+            "goldenTip": "Entender a regra no papel não faz você falar inglês; o abismo sempre foi a automação na hora da conversa real.\nO brasileiro perde tempo decorando afirmativas e trava feio nas negativas por falta de reflexo com o didn't.\nPara de falar uórquedi: o final \"-ed\" só vira som inteiro se a palavra base já terminar em som de T ou D.\nA maioria só aprende a responder, mas quem não treina disparar perguntas com did nunca conduz um diálogo.\nO único jeito de destravar é com o Listen and Ask nas Magic Stories: muito ouvido ativo até a boca falar no automático.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789004117152_FS-EC_mod_3_aula_24_check_point.mp4?alt=media",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fpdfs%2F1789004746817_Apostila_fs-aef-ec_024_check_point_revis_o.pdf?alt=media",
+            "duration": "16:30",
+            "title": "024 - Check Point - Revisão",
+            "hasTrainingTrack": true,
+            "order": 4,
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789004216900_art_1789004214912.jpg?alt=media",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h2 class=\"text-xl font-bold text-amber-900 mb-2 flex items-center gap-2\"><span>🎯</span> Check Point: O Sentimento da Estrutura em Ação</h2><p class=\"text-slate-700 leading-relaxed\">Nesta aula de consolidação, não vamos 'analisar gramática'. Vamos sentir a intenção de cada estrutura que você já aprendeu a usar para conversar com naturalidade e confiança no seu dia a dia.</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b pb-2 border-slate-100 flex items-center gap-2\"><span class=\"text-amber-600\">1.</span> Como o Seu Cérebro Conta o Passado</h3><p class=\"text-slate-700 leading-relaxed\">Quando você quer contar algo que já aconteceu, o inglês divide as ações em dois comportamentos de fala:</p><ul class=\"list-disc pl-5 space-y-2 text-slate-700\"><li><strong class=\"text-slate-900\">Ações com a marca '-ed':</strong> A maioria ganha esse final no passado. O segredo não é soletrar, é sentir onde a sua voz vibra na garganta!</li><li><strong class=\"text-slate-900\">Ações que mudam de roupa:</strong> Um grupo especial muda de palavra para indicar o passado (ex: <span class=\"font-semibold text-amber-800\">went</span>, <span class=\"font-semibold text-amber-800\">bought</span>, <span class=\"font-semibold text-amber-800\">saw</span>).</li></ul><div class=\"bg-slate-50 border border-slate-200 rounded-xl p-4 mt-3 space-y-2\"><h4 class=\"font-semibold text-slate-800 text-sm uppercase tracking-wider\">A Música do '-ed' na Prática:</h4><div class=\"grid grid-cols-1 md:grid-cols-3 gap-3 text-sm\"><div class=\"bg-white p-3 rounded-lg border border-slate-200\"><p class=\"font-bold text-slate-900\">1. Som de D seco</p><p class=\"text-xs text-slate-500 mb-1\">Garganta vibrou na palavra base</p><p class=\"text-amber-700 font-medium\">lived, played, loved</p></div><div class=\"bg-white p-3 rounded-lg border border-slate-200\"><p class=\"font-bold text-slate-900\">2. Som de T seco</p><p class=\"text-xs text-slate-500 mb-1\">Apenas sopro de ar no final</p><p class=\"text-amber-700 font-medium\">worked, liked, watched</p></div><div class=\"bg-white p-3 rounded-lg border border-slate-200\"><p class=\"font-bold text-slate-900\">3. Som 'id' (Nova sílaba)</p><p class=\"text-xs text-slate-500 mb-1\">Já terminava em som de T ou D</p><p class=\"text-amber-700 font-medium\">needed, wanted, started</p></div></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b pb-2 border-slate-100 flex items-center gap-2\"><span class=\"text-amber-600\">2.</span> O Alívio de Negar e Perguntar no Passado</h3><p class=\"text-slate-700 leading-relaxed\">A beleza do passado em inglês é a economia de energia: você usa uma única ferramenta para todo mundo, e ela deixa o verbo principal completamente limpo e relaxado.</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-amber-50/50 border border-amber-200/60 rounded-xl p-4\"><h4 class=\"font-bold text-amber-900 mb-2\">Negativa Liberadora (didn't)</h4><p class=\"text-sm text-slate-700 mb-2\">Colocou o <span class=\"font-bold text-amber-800\">didn't</span>, o verbo volta à forma simples!</p><p class=\"text-sm font-medium text-slate-900\">I didn't work yesterday.</p><p class=\"text-sm font-medium text-slate-900\">She didn't go home.</p></div><div class=\"bg-amber-50/50 border border-amber-200/60 rounded-xl p-4\"><h4 class=\"font-bold text-amber-900 mb-2\">Pergunta Direta (did)</h4><p class=\"text-sm text-slate-700 mb-2\">O <span class=\"font-bold text-amber-800\">did</span> avisa logo no início que a história é no passado.</p><p class=\"text-sm font-medium text-slate-900\">Did you go to the party?</p><p class=\"text-sm font-medium text-slate-900\">What did she buy?</p></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b pb-2 border-slate-100 flex items-center gap-2\"><span class=\"text-amber-600\">3.</span> A Lógica do 'S e o Pessoas vs. Objetos</h3><p class=\"text-slate-700 leading-relaxed\">Para indicar de quem é algo, o inglês odeia dar voltas. Ele coloca quem manda na história (o dono) na frente e pendura o 's.</p><div class=\"space-y-2\"><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center text-sm\"><span class=\"font-medium text-slate-900\">Pessoas e Animais (Dono + 's + Objeto):</span><span class=\"text-amber-800 font-bold\">Luciana's house / John's cousin</span></div><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center text-sm\"><span class=\"font-medium text-slate-900\">Cuidado com os Falsos Amigos:</span><span class=\"text-amber-800 font-bold\">Parents = Pais (Pai e Mãe) | Relatives = Parentes</span></div><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center text-sm\"><span class=\"font-medium text-slate-900\">Coisas Inanimadas (Estrutura normal):</span><span class=\"text-amber-800 font-bold\">The door of the car / The window of the house</span></div></div></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b pb-2 border-slate-100 flex items-center gap-2\"><span class=\"text-amber-600\">4.</span> O Ritmo dos Números e a Leveza dos Adjetivos</h3><ul class=\"space-y-3 text-slate-700\"><li><strong class=\"text-slate-900\">A pegada da escuta nos números:</strong> Os adolescentes (<span class=\"text-amber-800 font-medium\">-teen</span>) têm som longo e anasalado no final. As dezenas (<span class=\"text-amber-800 font-medium\">-ty</span>) são secas e fortes no começo.</li><li><strong class=\"text-slate-900\">Adjetivos não se complicam:</strong> Em inglês, a qualidade da coisa não muda se for homem, mulher, um ou dez. É sempre a mesma palavra antes do objeto (<span class=\"text-amber-800 font-medium\">a good man</span> / <span class=\"text-amber-800 font-medium\">heavy bags</span>).</li></ul></div></div>",
+            "courseId": "fs-aef-ec",
+            "rawScript": "COMPILADO REVISIONAL \n\n1. PASSADO SIMPLES: REGULARES, IRREGULARES E PRONÚNCIA DO \"-ED\"\nDois grupos de verbos para contar o que já aconteceu:\n- Regulares: recebem \"-ed\" no final (worked, lived, studied, needed).\n- Irregulares: mudam de forma e viram outras palavras (went, ate, saw, bought, did, came).\n\nA pronúncia prática do \"-ed\" (guiada pelo som final da palavra base):\n- Vibrou a garganta? Som de \"d\" seco, sem criar nova sílaba (lived, played, loved).\n- Não vibrou (apenas sopro de ar)? Som de \"t\" seco (worked, liked, watched, talked).\n- Terminou em som original de \"t\" ou \"d\"? Som de \"ed/id\", criando nova sílaba (needed, wanted, started, waited).\n\n\n2. NEGATIVAS NO PASSADO (DIDN'T)\nUma única ferramenta universal para todas as pessoas (I, you, he, she, it, we, they), mantendo o verbo principal na forma limpa (sem \"ed\" e sem conjugação):\n- I didn't work yesterday.\n- She didn't go home in the morning.\n- We didn't see John at the party.\n- They didn't buy a new car.\n- Carlos didn't live in England.\n\n\n3. PERGUNTAS NO PASSADO (DID) E ENGENHARIA REVERSA\nO cérebro precisa treinar a formulação de perguntas a partir de respostas dadas para destravar a condução do diálogo:\n- Resposta: \"Yes, I went to the party yesterday.\" -> Pergunta: Did you go to the party yesterday?\n- Resposta: \"No, I didn't see the film.\" -> Pergunta: Did you see the film?\n- Resposta: \"She bought a pair of jeans.\" -> Pergunta: What did she buy?\n- Resposta: \"She went to the mall by car.\" -> Pergunta: How did she go to the mall?\n\n\n4. FAMÍLIA, PARENTES E POSSESSIVOS (MY, HIS, HER, THEIR)\nVocabulário essencial e falsos amigos:\n- Parents = pais (pai e mãe) | Relatives = parentes em geral.\n- Grandparents, Father, Mother, Son, Daughter, Brother, Sister.\n- Uncle, Aunt, Cousin, Husband, Wife, Boyfriend, Girlfriend.\n\nPossessivos invariáveis (não mudam de gênero nem plural):\n- My (meu, minha, meus, minhas)\n- His (dele) / Her (dela) / Their (deles, delas)\n- Our (nosso, nossa, nossos, nossas)\n\n\n5. EXPRESSÃO DE POSSE COM ('S) - CASO GENITIVO\nInversão natural para pessoas e animais (Dono + 's + Objeto/Pessoa possuída):\n- The girl's hair (e não a forma truncada \"the hair of the girl\").\n- Luciana's house.\n- John's cousin.\n- Plural terminado em \"s\": The tourists' bus (apenas o apóstrofo no final).\n- Objetos inanimados mantêm a estrutura normal com \"of the\": The door of the car / The window of the house.\n\n\n6. NÚMEROS, DATAS E ESTAÇÕES DO ANO\n- Cardinais (0 a 99): zero, one, ten, twenty, thirty-five, eighty-six.\n- Treino de escuta: final \"-teen\" (longo e anasalado: 13 a 19) vs. final \"-ty\" (curto, seco e inicial forte: 30, 40, 50).\n- Ordinais (ordem e datas): first (1st), second (2nd), third (3rd), fourth (4th), twenty-first (21st).\n- Formato de datas faladas no dia a dia (Mês + Dia ordinal): March 7th (March seventh), October 14th, December 2nd.\n- Estações: Summer, Fall/Autumn, Winter, Spring.\n\n\n7. VERBO TO BE E ADJETIVOS\nConjugação direta no presente:\n- I am | You are | He is | She is | It is | We are | They are.\n\nComportamento dos adjetivos em inglês:\n- Não variam em gênero (novo/nova = new).\n- Não têm forma plural (velho/velhos = old).\n- Posicionamento: sempre vêm antes do substantivo quando estão qualificando diretamente: \"He is a good man\", \"It is a heavy bag\".",
+            "id": "aula-1789004008883",
+            "aiStatus": "ai_reviewed",
+            "published": true,
+            "quizId": ""
+          },
+          {
+            "rawScript": "Módulo 2 - Step 3: \"To be\" no Passado (Was / Were) – Afirmativa, Negativa e Interrogativa\n\nDescrição Pedagógica:\nNesta aula, o aluno aprende a dominar o verbo \"to be\" no passado simples, cobrindo com segurança as três estruturas essenciais da comunicação: afirmação, negação e interrogação. O foco é automatizar a distinção entre \"was\" (para I, he, she, it) e \"were\" (para you, we, they), contextualizando o vocabulário de tempo, lugares e estados emocionais/físicos do cotidiano através de exercícios práticos de montagem de frases, transformação e tradução reversa.\n\nPegue o atalho dos Lazy Verbs e dos chunks: se você estiver falando de UMA pessoa só (I, he, she, it), use WAS. Falou de mais de uma ou de 'you' (você/vocês), use WERE.\n\nE para perguntar? Nada de inventar moda com 'did': o verbo 'to be' é autossuficiente e folgado, ele mesmo vai lá pra frente da frase ('Was he...?', 'Were you...?').\n\nNão tente traduzir palavra por palavra; treine o ouvido com os blocos prontos: 'I was tired', 'She was at work', 'Were you at home?'. Falou, colou!\"\n\n",
+            "courseId": "fs-aef-ec",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2 flex items-center gap-2\"><span>💡</span> A Regra Prática da Quantidade (Was vs. Were)</h3><p class=\"text-slate-800 text-base leading-relaxed mb-4\">Em vez de memorizar tabelas gramaticais, sinta a intenção da frase pela quantidade de pessoas ou coisas que você está descrevendo:</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-white border border-amber-200 rounded-lg p-4 shadow-sm\"><h4 class=\"font-bold text-amber-800 text-lg mb-1\">UMA só pessoa/coisa = WAS</h4><p class=\"text-sm text-slate-600 mb-3\">Usado para falar de você mesmo, de ele, dela ou de um objeto/situação singular.</p><ul class=\"space-y-2 text-sm font-medium\"><li class=\"flex justify-between border-b pb-1\"><span>I was tired.</span><span class=\"text-slate-500\">Eu estava cansado.</span></li><li class=\"flex justify-between border-b pb-1\"><span>She was at work.</span><span class=\"text-slate-500\">Ela estava no trabalho.</span></li><li class=\"flex justify-between\"><span>He was happy.</span><span class=\"text-slate-500\">Ele estava feliz.</span></li></ul></div><div class=\"bg-white border border-amber-200 rounded-lg p-4 shadow-sm\"><h4 class=\"font-bold text-amber-800 text-lg mb-1\">MAIS DE UMA (ou 'YOU') = WERE</h4><p class=\"text-sm text-slate-600 mb-3\">Usado para grupos, outras pessoas e sempre com você/vocês (you).</p><ul class=\"space-y-2 text-sm font-medium\"><li class=\"flex justify-between border-b pb-1\"><span>You were there.</span><span class=\"text-slate-500\">Você estava lá.</span></li><li class=\"flex justify-between border-b pb-1\"><span>We were late.</span><span class=\"text-slate-500\">Nós estávamos atrasados.</span></li><li class=\"flex justify-between\"><span>They were home.</span><span class=\"text-slate-500\">Eles estavam em casa.</span></li></ul></div></div></div><div class=\"bg-white border-2 border-slate-200 rounded-xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-3 flex items-center gap-2\"><span>🚫</span> Pergunta no Passado: Nada de inventar moda com 'DID'</h3><p class=\"text-slate-700 leading-relaxed mb-4\">Diferente de outros verbos no passado, o verbo <strong>to be</strong> não precisa de ajudante para fazer perguntas ou negar. Ele é autossuficiente!</p><div class=\"bg-amber-50/50 border border-amber-200 rounded-lg p-4 mb-4\"><p class=\"text-sm font-semibold text-amber-900 mb-2\">Para perguntar, inverta a ordem (jogue para frente):</p><div class=\"flex flex-col sm:flex-row gap-4 text-center font-bold text-slate-800\"><div class=\"flex-1 bg-white p-3 rounded border border-amber-200\"><span>Was he at work?</span></div><div class=\"flex-1 bg-white p-3 rounded border border-amber-200\"><span>Were you at home?</span></div></div></div></div><div class=\"bg-white border-2 border-slate-200 rounded-xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-3\">🚀 Blocos Prontos para Treinar o Ouvido (Chunks)</h3><p class=\"text-slate-700 mb-4\">Não tente traduzir palavra por palavra. Treine a pronúncia e o ritmo com estes blocos de comunicação real:</p><div class=\"space-y-3\"><div class=\"p-3 bg-amber-50/60 rounded-lg border border-amber-100 flex justify-between items-center\"><span class=\"font-semibold text-slate-800\">I was tired yesterday.</span><span class=\"text-sm text-slate-600\">Eu estava cansado ontem.</span></div><div class=\"p-3 bg-amber-50/60 rounded-lg border border-amber-100 flex justify-between items-center\"><span class=\"font-semibold text-slate-800\">She wasn't at home.</span><span class=\"text-sm text-slate-600\">Ela não estava em casa.</span></div><div class=\"p-3 bg-amber-50/60 rounded-lg border border-amber-100 flex justify-between items-center\"><span class=\"font-semibold text-slate-800\">Were you ready?</span><span class=\"text-sm text-slate-600\">Você estava pronto?</span></div></div></div></div>",
+            "id": "aula-1789005239570",
+            "published": true,
+            "aiStatus": "ai_reviewed",
+            "type": "lesson",
+            "hasTrainingTrack": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789005347670_Apostila_25_Lesson_Com_Answer_Sheet.pdf?alt=media",
+            "order": 5,
+            "updatedAt": "2026-09-10T03:13:08.235Z",
+            "title": "025 'To be'in the past",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789005333684_FS-EC_mod_3_aula_25_tobe_past.mp4?alt=media",
+            "goldenTip": "O verbo 'to be' no passado é autossuficiente e folgado: ele não aceita ajuda do 'did'! Para perguntar, ele mesmo dá um pulo para a frente da frase e resolve a conversa sozinho.",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789005303866_thumb_1789005303842.jpg?alt=media",
+            "moduleId": "ciclo-03",
+            "quizId": "",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789005328406_FS-EC_mod_3_aula_25_tobe_past.mp4?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789005305978_art_1789005303854.jpg?alt=media",
+            "duration": "25:59"
+          },
+          {
+            "aiStatus": "ai_reviewed",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789006617889_art_1789006615847.jpg?alt=media",
+            "quizId": "",
+            "rawScript": "TITULO: MS026 - California Daniel\nSUBTITULO: Magic Stories Legacy • Acervo Clássico\n\nHISTÓRIA:\nRight now Daniel is at work.\nHe works in a famous company called ComTech.\nIt is a software company.\nComTech is in California.\nDaniel lives in California, too.\nRight now he is in his office.\nHe is the manager of \"Research and Development\" department.\nComTech is a very special company.\nIt is the number one software developer for smartphones in the USA.\nDaniel is very happy with his job.\nHe is one of the first people to work in the company.\nHe is ready to become VP.\nHe is very excited!\n\nVOCABULÁRIO:\nat work - no trabalho / trampando\nfamous company - empresa famosa / firma de renome\nsoftware company - empresa de software / empresa de tecnologia\nlives in California, too - também mora na Califórnia\nin his office - no escritório dele / na sala dele\nResearch and Development - Pesquisa e Desenvolvimento / P&D\nnumber one software developer - a desenvolvedora de software número um / líder em desenvolvimento\nhappy with his job - feliz com o trabalho dele / amarradão no emprego\none of the first people - uma das primeiras pessoas\nready to become VP - pronto pra virar vice-presidente\nvery excited - animadaço / superempolgado\n\nLISTEN & ANSWER (PERGUNTAS):\nWhere is Daniel right now?\nWhere does he work?\nWhat kind of company is ComTech?\nWhere is it located?\nWhere does Daniel live?\nIs he at home now?\nWhere is he at now?\nWhat does he do at ComTech?\nIs he happy with his job?\nWhy is he so excited?\n\nLOOK & RETELL:\nWhere is Daniel right now?\nWhere does he work?\nWhat kind of company is ComTech?\nWhere is it located?\nWhere does Daniel live?\nIs he at home now?\nWhere is he at now?\nWhat does he do at ComTech?\nIs he happy with his job?\nWhy is he so excited?\n\nPRONÚNCIA:\nRight now Daniel is at work.\nHe works in a famous company called ComTech.\nIt is a software company.\nComTech is in California.\nDaniel lives in California, too.\nRight now he is in his office.\nHe is the manager of \"Research and Development\" department.\nComTech is a very special company.\nIt is the number one software developer for smartphones in the USA.\nDaniel is very happy with his job.\nHe is one of the first people to work in the company.\nHe is ready to become VP.\nHe is very excited!",
+            "hasTrainingTrack": true,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789006615857_thumb_1789006615836.jpg?alt=media",
+            "published": true,
+            "courseId": "fs-aef-ec",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><section class=\"bg-amber-50/90 border-2 border-amber-200 p-6 rounded-2xl shadow-sm\"><h2 class=\"text-2xl font-bold text-amber-900 mb-3\">📖 A História: California Daniel</h2><p class=\"text-lg leading-relaxed text-slate-800 italic\">\"Right now Daniel is at work. He works in a famous company called ComTech. It is a software company. ComTech is in California. Daniel lives in California, too. Right now he is in his office. He is the manager of 'Research and Development' department. ComTech is a very special company. It is the number one software developer for smartphones in the USA. Daniel is very happy with his job. He is one of the first people to work in the company. He is ready to become VP. He is very excited!\"</p></section><section class=\"bg-white border-2 border-slate-200 p-6 rounded-2xl shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4\">🎯 Sacadas de Vocabulário Real</h3><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><p class=\"font-bold text-amber-950\">at work</p><p class=\"text-slate-700\">no trabalho / trampando</p></div><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><p class=\"font-bold text-amber-950\">Research and Development</p><p class=\"text-slate-700\">Pesquisa e Desenvolvimento (P&D)</p></div><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><p class=\"font-bold text-amber-950\">happy with his job</p><p class=\"text-slate-700\">amarradão no emprego</p></div><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><p class=\"font-bold text-amber-950\">ready to become VP</p><p class=\"text-slate-700\">pronto pra virar vice-presidente</p></div><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200\"><p class=\"font-bold text-amber-950\">very excited</p><p class=\"text-slate-700\">animadaço / superempolgado</p></div></div></section><section class=\"bg-amber-50/90 border-2 border-amber-200 p-6 rounded-2xl shadow-sm\"><h3 class=\"text-xl font-bold text-amber-950 mb-3\">💡 O Sentimento da Estrutura</h3><p class=\"text-slate-800 leading-relaxed\">Sinta a transição entre o que está acontecendo exatamente agora (Right now he is...) e os fatos da vida do Daniel (He works..., Daniel lives...). A estrutura do inglês serve para construir o cenário na mente de quem ouve, sem necessidade de nomenclaturas gramaticais complicadas.</p></section><section class=\"bg-white border-2 border-slate-200 p-6 rounded-2xl shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4\">🗣️ Treino de Escuta e Resposta</h3><ul class=\"space-y-3 text-slate-800\"><li class=\"p-3 bg-slate-50 rounded-lg border border-slate-200\"><strong>Where is Daniel right now?</strong></li><li class=\"p-3 bg-slate-50 rounded-lg border border-slate-200\"><strong>Where does he work?</strong></li><li class=\"p-3 bg-slate-50 rounded-lg border border-slate-200\"><strong>What kind of company is ComTech?</strong></li><li class=\"p-3 bg-slate-50 rounded-lg border border-slate-200\"><strong>What does he do at ComTech?</strong></li><li class=\"p-3 bg-slate-50 rounded-lg border border-slate-200\"><strong>Why is he so excited?</strong></li></ul></section></div>",
+            "goldenTip": "Lembre-se de que 'excited' não significa 'excitado' no sentido sexual, mas sim superempolgado, pilhado de alegria! Sinta o ritmo natural do inglês sem tentar traduzir cada palavrinha ao pé da letra.",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789006655168_FS-EC_mod_3_aula_26_ms_california_daniel.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.235Z",
+            "type": "lesson",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789006801420_MS026_-_California_Daniel___Apostila_Oficial___AgoraEuFalo.pdf?alt=media",
+            "title": "026 California Daniel",
+            "order": 6,
+            "duration": "15:00",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789006661257_FS-EC_mod_3_aula_26_ms_california_daniel.mp4?alt=media",
+            "id": "aula-1789006535216",
+            "moduleId": "ciclo-03"
+          },
+          {
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789007565374_FS-EC_mod_3_aula_27_future.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.236Z",
+            "goldenTip": "Com o 'will be', a regra é a lei do menor esforço: a estrutura é idêntica para todas as pessoas da frase! Já no futuro planejado, enxergue o 'gonna be' como um bloco único e apenas encaixe quem está fazendo a ação.",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789007648852_Apostila_Lesson_27.pdf?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789007486902_art_1789007484384.jpg?alt=media",
+            "processedContentHtml": "<div class=\"space-y-6 font-sans text-slate-800\"><div class=\"bg-amber-50/90 border-2 border-amber-200 p-6 rounded-2xl shadow-sm\"><h3 class=\"text-xl font-bold text-amber-950 mb-2 flex items-center gap-2\"><span>O Futuro Sem Complicação: A Lei do Menor Esforço</span></h3><p class=\"text-base text-slate-700 leading-relaxed\">Sabe aquela história de ter que mudar a palavra dependendo de quem fala? No futuro com <strong class=\"text-amber-900\">WILL BE</strong>, você pode relaxar! É a lei do menor esforço: a mesma estrutura serve para mim, para você, para ela, para nós e para todo mundo.</p><div class=\"mt-4 grid grid-cols-1 md:grid-cols-2 gap-3\"><div class=\"bg-white p-4 rounded-xl border border-amber-200/60 shadow-sm\"><span class=\"text-xs font-semibold uppercase tracking-wider text-amber-700 block mb-1\">Ação Direta</span><p class=\"text-lg font-bold text-slate-900\">I will be there.</p><p class=\"text-sm text-slate-600\">Eu estarei lá.</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200/60 shadow-sm\"><span class=\"text-xs font-semibold uppercase tracking-wider text-amber-700 block mb-1\">Para Qualquer Pessoa</span><p class=\"text-lg font-bold text-slate-900\">They will be happy.</p><p class=\"text-sm text-slate-600\">Eles estarão felizes.</p></div></div></div><div class=\"bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-100 pb-2\">Negando no Futuro & O Atalho da Pronúncia</h3><p class=\"text-sm text-slate-700 leading-relaxed\">Para dizer que algo <strong class=\"text-slate-900\">não será</strong> ou <strong class=\"text-slate-900\">não estará</strong>, o jeito mais comum na fala do dia a dia é usar <strong class=\"text-amber-800\">WON'T BE</strong>.</p><div class=\"bg-amber-50/50 p-4 rounded-xl border border-amber-200/50 text-sm text-amber-900 flex items-start gap-3\"><span class=\"text-lg\">💡</span><div><strong>Dica do Leo de Pronúncia:</strong> Não fale \"want\" (que significa querer). A pronúncia certa do negativo é <em>\"uôunt\"</em>!</div></div><div class=\"space-y-2 pt-2\"><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center\"><span class=\"font-medium text-slate-900\">She won't be at home.</span><span class=\"text-sm text-slate-500\">Ela não estará em casa.</span></div><div class=\"p-3 bg-slate-50 rounded-lg flex justify-between items-center\"><span class=\"font-medium text-slate-900\">We won't be late.</span><span class=\"text-sm text-slate-500\">Nós não estaremos atrasados.</span></div></div></div><div class=\"bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-900 border-b border-slate-100 pb-2\">O Bloco Pronto: Planos e Certezas (Going to be)</h3><p class=\"text-sm text-slate-700 leading-relaxed\">Quando você já planejou algo ou tem certeza de que vai acontecer, use o bloco pronto <strong class=\"text-slate-900\">gonna be</strong> (ou <em>going to be</em>). Você só ajusta a pessoa no começo e solta o bloco!</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3\"><div class=\"p-4 bg-amber-50/40 rounded-xl border border-amber-100\"><p class=\"font-bold text-slate-900\">I'm gonna be ready.</p><p class=\"text-xs text-slate-600 mt-1\">Eu vou estar pronto/preparado.</p></div><div class=\"p-4 bg-amber-50/40 rounded-xl border border-amber-100\"><p class=\"font-bold text-slate-900\">It's gonna be awesome!</p><p class=\"text-xs text-slate-600 mt-1\">Vai ser incrível!</p></div></div></div><div class=\"bg-slate-50 border border-slate-200 p-6 rounded-2xl space-y-3\"><h3 class=\"text-md font-bold text-slate-900\">Como Perguntar Sem Engasgar</h3><p class=\"text-sm text-slate-600\">Lembra da mecânica natural de perguntas? É só colocar quem puxa a ação para o começo da frase:</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3 pt-1\"><div class=\"p-3 bg-white rounded-lg border border-slate-200\"><p class=\"font-semibold text-slate-900 text-sm\">Will you be there?</p><p class=\"text-xs text-slate-500\">Você estará lá?</p></div><div class=\"p-3 bg-white rounded-lg border border-slate-200\"><p class=\"font-semibold text-slate-900 text-sm\">Are they going to be here?</p><p class=\"text-xs text-slate-500\">Eles vão estar aqui?</p></div></div></div></div>",
+            "hasTrainingTrack": true,
+            "duration": "26:35",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789007582396_FS-EC_mod_3_aula_27_future.mp4?alt=media",
+            "order": 7,
+            "title": "027 'To be\" IN THE FUTURE",
+            "moduleId": "ciclo-03",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789007484392_thumb_1789007484373.jpg?alt=media",
+            "aiStatus": "ai_reviewed",
+            "rawScript": "Aula 027: \"To be\" in the Future – Will be & Going to be (Afirmativa, Negativa e Interrogativa)\n\nDescrição Pedagógica:\nNesta aula, o aluno aprende a projetar o verbo \"to be\" para o futuro de forma natural e sem bloqueios, dominando as duas formas mais comuns da língua inglesa: o futuro com \"will be\" e a estrutura planejada com \"going to be\". O treinamento abrange as estruturas afirmativas, negativas (\"won't be\" / \"not going to be\") e a inversão interrogativa (\"Will they be...?\" / \"Are they going to be...?\"), consolidando a formação através de exercícios de tradução reversa, transformação negativa e formulação de perguntas para respostas dadas.\n\nCom o WILL, a regra é preguiça pura: não muda pra ninguém! É 'will be' pra mim, pra você, pra ela, pra nós e pro cachorro. Quer negar? O 'will not' vira 'WON'T BE'. Só cuidado com a pronúncia: nada de falar 'want' (querer); é 'uôunt'!\n\nE o GOING TO? Pense nele como um bloco colado. Você só ajusta o bom e velho 'to be' no presente e emenda o resto como um chunk: 'I'm gonna be...', 'She's gonna be...'.\n\nPara perguntar, a mecânica que você já aprendeu não falha: é só jogar o auxiliar pra frente da pessoa ('Will you be...?', 'Is she going to be...?').\n\nNão tente adivinhar regra gramatical na hora de falar: treine o ouvido com blocos prontos e solte a língua!\"",
+            "type": "lesson",
+            "id": "aula-1789007414492",
+            "quizId": "",
+            "courseId": "fs-aef-ec",
+            "published": true
+          },
+          {
+            "courseId": "fs-aef-ec",
+            "id": "aula-1789008054499",
+            "type": "lesson",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789008127321_art_1789008125060.jpg?alt=media",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789008125069_thumb_1789008125049.jpg?alt=media",
+            "aiStatus": "ai_reviewed",
+            "updatedAt": "2026-09-10T03:13:08.236Z",
+            "quizId": "",
+            "goldenTip": "Não trave tentando adivinhar se deve usar uma estrutura ou outra para falar do futuro: na vida real, o que importa é a imagem mental do que você está projetando. Solte a voz e sinta a intenção da frase!",
+            "processedContentHtml": "<div class=\"space-y-6 font-sans text-slate-900\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><div class=\"flex items-center space-x-3 mb-3\"><span class=\"flex h-3 w-3 rounded-full bg-amber-500\"></span><h2 class=\"text-xl font-bold text-amber-900\">A Essência da Aula: Projetando o Futuro</h2></div><p class=\"text-slate-700 leading-relaxed\">Nesta prática do acervo clássico, viajamos 10 anos no tempo para ver a vida do Daniel. O objetivo aqui não é decorar regras gramaticais, mas sim treinar a sua mente para visualizar situações futuras e responder com agilidade de forma natural.</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-800 border-b pb-2 border-slate-100\">1. A História: California Daniel (Future)</h3><div class=\"space-y-2 text-slate-700 text-lg leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100\"><p>Imagine this story in the future:</p><p><strong>In 10 years Daniel will be at work.</strong></p><p>He will work in a famous company called ComTech.</p><p>ComTech will be a software company.</p><p>It will be in California.</p><p>In 10 years Daniel will be in his office.</p><p>He is going to be the manager of <em>\"Research and Development\"</em> department.</p><p>Comtech will be a very special company.</p><p>It will be the number one software developer for smartphones in the USA.</p><p>Daniel is going to be very happy with his job.</p><p>He is going to be one of the first people to work in the company.</p><p>He will be ready to become VP <span class=\"text-xs font-semibold uppercase bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full inline-block ml-1\">Vice-Presidente</span>.</p><p>He will be very excited!</p></div></div><div class=\"bg-amber-50/50 border border-amber-200 rounded-2xl p-6 space-y-4\"><h3 class=\"text-lg font-bold text-amber-900 border-b pb-2 border-amber-200/60\">2. O Sentimento da Estrutura</h3><p class=\"text-slate-700 leading-relaxed\">Perceba como alternamos o olhar para o futuro sem complicação. Quando você quer pintar um quadro de como as coisas serão lá na frente ou mostrar expectativa e preparo, o som das frases flui com total clareza. Concentre-se no ritmo e na imagem mental do Daniel na Califórnia!</p></div><div class=\"bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4\"><h3 class=\"text-lg font-bold text-slate-800 border-b pb-2 border-slate-100\">3. Listen & Answer (Treino de Escuta e Resposta Ativa)</h3><p class=\"text-sm text-slate-500 mb-4\">Ouça as perguntas e responda em voz alta o mais rápido que puder, sem traduzir mentalmente:</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-3\"><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">1. Where is Daniel going to be in ten years?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">2. Where is he going to work in ten years?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">3. What kind of company will ComTech be in ten years?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">4. Where will it be located in 10 years?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">5. Where will Daniel live in ten years?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">6. Will he be at home in ten years?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">7. Where is he going to be then?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">8. What is he going to do at ComTech?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">9. Will he be happy with his job?</div><div class=\"bg-slate-50 p-3 rounded-xl border border-slate-100 text-slate-800 text-sm font-medium\">10. Why is he going to be so excited?</div></div></div></div>",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789008190460_FS-EC_mod_3_aula_28_calif_daniel_future.mp4?alt=media",
+            "moduleId": "ciclo-03",
+            "published": true,
+            "hasTrainingTrack": true,
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789008575167_MS028_-_California_Daniel__Future____Apostila_Oficial___AgoraEuFalo.pdf?alt=media",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789008157809_FS-EC_mod_3_aula_28_calif_daniel_future.mp4?alt=media",
+            "duration": "14:18",
+            "rawScript": "TITULO: MS028 - California Daniel [Future]\nSUBTITULO: Magic Stories Legacy • Acervo Clássico\n\nHISTÓRIA:\nImagine this story in the future:\nIn 10 years Daniel will be at work.\nHe will work in a famous company called ComTech.\nComTech will be a software company.\nIt will be in California.\nIn 10 years Daniel will be in his office.\nHe is going to be the manager of \"Research and Development\" department.\nComtech will be a very special company.\nIt will be the number one software developer for smartphones in the USA.\nDaniel is going to be very happy with his job.\nHe is going to be one of the first people to work in the company.\nHe will be ready to become VP.\nHe will be very excited!\n\nLISTEN & ANSWER (PERGUNTAS):\nWhere is Daniel going to be in ten years?\nWhere is he going to work in ten years?\nWhat kind of company will ComTech be in ten years?\nWhere will it be located in 10 years?\nWhere will Daniel live in ten years?\nWill he be at home in ten years?\nWhere is he going to be then?\nWhat is he going to do at ComTech?\nWill he be happy with his job?\nWhy is he going to be so excited?",
+            "order": 8,
+            "title": "028 California Daniel  FUTURE"
+          },
+          {
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009187381_FS-EC_mod_3_aula_29_there_to_be.mp4?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.236Z",
+            "goldenTip": "Pare de usar o verbo 'have' para dizer que algo existe! Em inglês, 'have' é de posse; para dizer que 'tem' algo em algum lugar, acione direto o bloco pronto: 'There is' para singular e 'There are' para plural.",
+            "quizId": "",
+            "moduleId": "ciclo-03",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009182459_FS-EC_mod_3_aula_29_there_to_be.mp4?alt=media",
+            "order": 9,
+            "title": "029 - There to be - Por que você não consegue usar?",
+            "hasTrainingTrack": true,
+            "type": "lesson",
+            "duration": "27:36",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009298799_Apostila_Lesson_29_Completa.pdf?alt=media",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-3 flex items-center gap-2\"><span>💡</span> A Virada de Chave: Esqueça o 'Have' para Existência</h3><p class=\"text-slate-800 leading-relaxed mb-4\">No Brasil, costumamos dizer: <em>\"Tem um banheiro aqui?\"</em> ou <em>\"Tem muita gente na rua\"</em>. Porém, no inglês, o verbo <strong>have</strong> indica exclusivamente posse (quando alguém é dono de algo).</p><p class=\"text-slate-800 leading-relaxed\">Para expressar que algo <strong>existe</strong> ou <strong>está presente</strong>, seu cérebro precisa acionar blocos prontos em vez de traduzir palavra por palavra.</p></div><div class=\"bg-white border-2 border-slate-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-slate-900 mb-4\">O Sentimento da Estrutura: Bloco Pronto de Presença</h3><div class=\"grid md:grid-cols-2 gap-4\"><div class=\"bg-emerald-50 border border-emerald-200 rounded-xl p-4\"><span class=\"text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full\">Para 1 Coisa (Singular)</span><h4 class=\"text-2xl font-black text-emerald-950 mt-2 mb-1\">THERE IS...</h4><p class=\"text-slate-700 text-sm mb-3\">(Sinta o 'há', 'existe' ou 'tem 1 coisa')</p><div class=\"bg-white p-3 rounded-lg border border-emerald-100 space-y-1 text-sm\"><p><strong>There's a car outside.</strong> <span class=",
+            "id": "aula-1789009019997",
+            "rawScript": "Aula 029: There to be (There is & There are) – Afirmativa, Negativa, Interrogativa e Preposições de Lugar\n\nDescrição Pedagógica:\nNesta aula, o aluno aprende a usar a estrutura \"There to be\" para indicar existência (\"haver\" / \"existir\" / o nosso \"ter\" no sentido de existir), eliminando de vez o vício comum de usar o verbo \"have\" nessa função. O conteúdo aborda a distinção obrigatória entre singular (\"there is\") e plural (\"there are\"), expande a aplicação prática com preposições essenciais de lugar e posicionamento físico (in, on, under, behind, in front of, between, near, beside), e desenvolve a fluência nas formas negativa (\"there isn't\" / \"there aren't\") e interrogativa (\"Is there...?\" / \"Are there...?\"). O aprendizado é consolidado por meio de treino visual guiado, reescrita e tradução situacional do dia a dia.\n\nPara dizer que algo existe ou está em algum lugar, o atalho mental é automático:\n• Se for UM só: THERE IS ('There's a car...').\n• Se for MAIS DE UM: THERE ARE ('There are many people...').\n\nQuer negar? Moleza: 'There isn't' e 'There aren't'.\nQuer perguntar? É a mesma folga do verbo 'to be' que você já conhece: joga o 'is' ou 'are' pra frente do 'there' ('Is there a bathroom here?', 'Are there any questions?').\n\nInternalize o bloco pronto (chunk) e pare de traduzir 'tem'. Viu, pensou, falou: THERE IS ou THERE ARE!\"",
+            "courseId": "fs-aef-ec",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009122726_art_1789009120195.jpg?alt=media",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009120207_thumb_1789009120180.jpg?alt=media",
+            "aiStatus": "ai_reviewed",
+            "published": true
+          },
+          {
+            "type": "lesson",
+            "processedContentHtml": "<div class=\"space-y-6 text-slate-900 font-sans\"><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2\">Como Negar a Existência de Algo</h3><p class=\"text-slate-700 mb-4\">Quando você quer dizer que não tem algo em determinado lugar, a lógica é simples: você junta a palavra de negação ao bloco que já conhece, sem complicações.</p><div class=\"grid grid-cols-1 md:grid-cols-2 gap-4\"><div class=\"bg-white p-4 rounded-xl border border-amber-200 shadow-xs\"><span class=\"inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded mb-2\">Para um item</span><p class=\"text-lg font-bold text-slate-900\">There isn't...</p><p class=\"text-slate-600 text-sm mt-1\">\"There isn't a garage.\" (Não tem garagem no local.)</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200 shadow-xs\"><span class=\"inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded mb-2\">Para mais de um item</span><p class=\"text-lg font-bold text-slate-900\">There aren't...</p><p class=\"text-slate-600 text-sm mt-1\">\"There aren't many trees.\" (Não tem muitas árvores.)</p></div></div></div><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2\">Fazendo Perguntas: O Pulo do Bloco</h3><p class=\"text-slate-700 mb-4\">Para perguntar se algo existe, não invente palavras extras. O verbo simplesmente pula para a frente do bloco!</p><div class=\"space-y-3\"><div class=\"bg-white p-4 rounded-xl border border-amber-200\"><p class=\"text-base font-bold text-amber-950\">Is there a bathroom here?</p><p class=\"text-slate-600 text-sm\">Tem um banheiro aqui?</p></div><div class=\"bg-white p-4 rounded-xl border border-amber-200\"><p class=\"text-base font-bold text-amber-950\">Are there five bedrooms?</p><p class=\"text-slate-600 text-sm\">Tem cinco quartos?</p></div></div></div><div class=\"bg-amber-50/90 border-2 border-amber-200 rounded-2xl p-6 shadow-sm\"><h3 class=\"text-xl font-bold text-amber-900 mb-2\">O Par Perfeito: O uso do ANY</h3><p class=\"text-slate-700 mb-3\">Em frases negativas ou perguntas, quando nos referimos a quantidades gerais ou coisas que não contamos por unidade, usamos o <strong class=\"text-amber-900\">ANY</strong> para dar o sentido natural de \"nada de\" ou \"algum\".</p><ul class=\"space-y-2 text-slate-800\"><li class=\"bg-white p-3 rounded-lg border border-amber-200\"><strong>There isn't ANY water.</strong> — Não tem água nenhuma / Não tem nada de água.</li><li class=\"bg-white p-3 rounded-lg border border-amber-200\"><strong>Are there ANY cars?</strong> — Tem algum carro?</li></ul></div></div>",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009680045_thumb_1789009679973.jpg?alt=media",
+            "courseId": "fs-aef-ec",
+            "quizId": "",
+            "goldenTip": "Para negar ou perguntar a existência de algo, você não precisa inventar regras novas nem usar auxiliares: basta inverter a ordem ou grudar o NOT. Treine o som de 'Is there...?' e 'There isn't...' até virar um reflexo automático!",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009681749_art_1789009680011.jpg?alt=media",
+            "updatedAt": "2026-09-10T03:13:08.237Z",
+            "aiStatus": "ai_reviewed",
+            "published": true,
+            "moduleId": "ciclo-03",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009859311_Apostila_Lesson_30_Completa.pdf?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009807047_FS-EC_mod_3_aula_30_there_to_be_p2.mp4?alt=media",
+            "id": "aula-1789009583830",
+            "duration": "21:03",
+            "rawScript": "Aula 030: There is & There are – Negative and Interrogative\n\nDescrição Pedagógica:\nNesta aula, o aluno desenvolve agilidade comunicativa ao aplicar as formas negativa e interrogativa da estrutura \"There to be\", eliminando a hesitação na hora de perguntar ou negar a existência de algo. O treinamento foca na assimilação direta de \"there isn't\" e \"there aren't\" para expressar que algo não existe ou não está presente, e na inversão natural para criar perguntas imediatas (\"Is there...?\" / \"Are there...?\"). A fixação ocorre por meio de exercícios práticos de reescrita, tradução contextualizada de situações do cotidiano e formulação de perguntas para respostas dadas.\n\nA Sacada do Prof. Leo:\n\"Negar e perguntar com 'there is' e 'there are' é o tipo de estrutura que você não precisa quebrar a cabeça: a lógica é a mesma do verbo 'to be' que você já domina!\n\nPara negar, o atalho é simples:\n• No singular: THERE ISN'T ('There isn't any problem', 'There isn't a garage').\n• No plural: THERE AREN'T ('There aren't many trees', 'There aren't two cars').\n\nE para fazer uma pergunta? Nada de inventar auxiliares do nada: é só inverter a ordem dos blocos!\nO 'is' e o 'are' pulam para a frente do 'there':\n• 'Is there...?' ('Is there a bathroom here?', 'Is there food in the oven?')\n• 'Are there...?' ('Are there many books?', 'Are there five bedrooms?')\n\nPreste muita atenção ao 'any': em frases negativas e perguntas com substantivos incontáveis ou plurais, ele entra como o seu parceiro perfeito ('There isn't ANY water', 'Are there ANY cars?'). Treine as frases em voz alta até virar reflexo automático!\"\n\n---\n\nPrecisa de algum ajuste ou quer acrescentar mais algum ponto nesta descrição pedagógica antes de prosseguirmos?",
+            "title": "030  Mais sobre THERE TO BE",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Ffs-aef-ec%2Fciclo-03%2F1789009801053_FS-EC_mod_3_aula_30_there_to_be_p2.mp4?alt=media",
+            "order": 10,
+            "hasTrainingTrack": true
+          }
+        ]
+      }
+    ]
+  },
+  "airport_flight_level_1": {
+    "access": {
+      "legacyGrantIds": [],
+      "entitlements": [
+        "venda_avulsa"
+      ],
+      "requiresProductId": [
+        "airport_flight_level_1"
+      ]
+    },
+    "updatedAt": "2026-09-18T11:27:47.966Z",
+    "id": "airport_flight_level_1",
+    "schemaVersion": 2,
+    "title": "Aeroportos e Vôos - [Iniciante]",
+    "accessTier": "standalone",
+    "slug": "airport_flight_level_1",
+    "badge": "CURSO LIBERADO",
+    "isPublished": true,
+    "themeColor": "emerald",
+    "description": "O Crash Course: Airports & Flights (Nível 1 - Iniciante) foi desenhado para quem vai viajar e quer passar pelo check-in, raio-X, portão de embarque e atendimento de bordo com total segurança — sem travar e sem depender de tradutor no celular.",
+    "tierRequired": "vip",
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789064532612_course_cover_1789064532593.jpg?alt=media",
+    "published": true,
+    "modules": [
+      {
+        "badge": "",
+        "published": true,
+        "order": 1,
+        "updatedAt": "2026-09-12T03:16:15.313Z",
+        "stats": "",
+        "courseId": "airport_flight_level_1",
+        "id": "ciclo-01",
+        "description": "Aqui você não estuda inglês; você ativa a sua fala. Através de diálogos reais e práticos, você treina seu ouvido para a velocidade de nativos e pratica a sua voz para responder de forma automática.",
+        "title": "No Aeroporto e dentro do avião",
+        "lessons": [
+          {
+            "published": true,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789064801657_thumb_1789064801631.jpg?alt=media",
+            "moduleId": "ciclo-01",
+            "hasTrainingTrack": true,
+            "duration": "02:23",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789175771897_Airplane_flights_1.mp4?alt=media",
+            "quizId": "",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789181495247_Airport_and_Flights_apostila.pdf?alt=media",
+            "order": 1,
+            "id": "aula-1789064668266",
+            "downloads": [
+              "[object Object]"
+            ],
+            "courseId": "airport_flight_level_1",
+            "sentences": [
+              {
+                "id": 1,
+                "start": 1.653,
+                "end": 2.493,
+                "text": "Welcome to airport",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 2,
+                "start": 2.4939999999999998,
+                "end": 3.973,
+                "text": "and in-flight survival.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 3,
+                "start": 4.853,
+                "end": 6.573,
+                "text": "In this crash course, you",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 4,
+                "start": 6.574,
+                "end": 7.893,
+                "text": "are going to master the",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 5,
+                "start": 7.894,
+                "end": 9.413,
+                "text": "exact phrases you need",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 6,
+                "start": 9.414,
+                "end": 10.853,
+                "text": "the moment you step up to",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 7,
+                "start": 10.854,
+                "end": 12.493,
+                "text": "the airport check-in desk",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 8,
+                "start": 12.494,
+                "end": 13.773,
+                "text": "and when you board your",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 9,
+                "start": 13.774000000000001,
+                "end": 14.213,
+                "text": "plane.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 10,
+                "start": 15.573,
+                "end": 16.613,
+                "text": "Forget complicated",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 11,
+                "start": 16.614,
+                "end": 18.333,
+                "text": "grammar rules and dictionary",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 12,
+                "start": 18.334,
+                "end": 19.493,
+                "text": "translation.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 13,
+                "start": 19.494,
+                "end": 20.413,
+                "text": "We are focusing",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 14,
+                "start": 20.414,
+                "end": 22.413,
+                "text": "entirely on practical chunks",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 15,
+                "start": 22.414,
+                "end": 23.533,
+                "text": "and multi-use",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 16,
+                "start": 23.534,
+                "end": 26.013,
+                "text": "lazy verbs like get, take,",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 17,
+                "start": 26.014,
+                "end": 28.553,
+                "text": "have, and put.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 18,
+                "start": 28.554,
+                "end": 29.753,
+                "text": "These simple verbs do",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 19,
+                "start": 29.754,
+                "end": 30.873,
+                "text": "the heavy lifting in",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 20,
+                "start": 30.874,
+                "end": 32.313,
+                "text": "real-life English.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 21,
+                "start": 32.314,
+                "end": 33.433,
+                "text": "When you hear the questions",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 22,
+                "start": 33.434,
+                "end": 35.433,
+                "text": "in our interactive drills,",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 23,
+                "start": 35.434,
+                "end": 37.193,
+                "text": "speak out loud immediately.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 24,
+                "start": 37.913,
+                "end": 39.993,
+                "text": "Do not just think the answer.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 25,
+                "start": 39.994,
+                "end": 41.753,
+                "text": "Open your mouth and say it.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 26,
+                "start": 42.313,
+                "end": 43.393,
+                "text": "Let's dive straight",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 27,
+                "start": 43.394,
+                "end": 44.33,
+                "text": "into the action.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 28,
+                "start": 53.153,
+                "end": 53.713,
+                "text": "Good morning.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 29,
+                "start": 53.714,
+                "end": 54.953,
+                "text": "Can I have your passport",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 30,
+                "start": 54.954,
+                "end": 55.953,
+                "text": "and ticket, please?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 31,
+                "start": 57.953,
+                "end": 58.593,
+                "text": "Good morning.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 32,
+                "start": 58.594,
+                "end": 59.513,
+                "text": "Here you go.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 33,
+                "start": 59.514,
+                "end": 61.153,
+                "text": "Can I get a window seat?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 34,
+                "start": 62.833,
+                "end": 63.353,
+                "text": "Sure.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 35,
+                "start": 63.354,
+                "end": 64.113,
+                "text": "Let me check.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 36,
+                "start": 68.113,
+                "end": 68.633,
+                "text": "Yes.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 37,
+                "start": 68.634,
+                "end": 70.873,
+                "text": "Window seat 14A is open.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 38,
+                "start": 70.874,
+                "end": 71.913,
+                "text": "Do you have any bags",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 39,
+                "start": 71.914,
+                "end": 72.913,
+                "text": "to check in today?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 40,
+                "start": 77.153,
+                "end": 78.993,
+                "text": "Just this big suitcase.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 41,
+                "start": 78.994,
+                "end": 80.353,
+                "text": "Can I take this backpack",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 42,
+                "start": 80.354,
+                "end": 82.113,
+                "text": "with me on the plane?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 43,
+                "start": 83.233,
+                "end": 84.033,
+                "text": "Yes, you can take",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 44,
+                "start": 84.034,
+                "end": 84.633,
+                "text": "it with you.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 45,
+                "start": 84.634,
+                "end": 85.633,
+                "text": "Here is your boarding",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 46,
+                "start": 85.634,
+                "end": 87.273,
+                "text": "pass, gate 4B.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 47,
+                "start": 87.274,
+                "end": 88.913,
+                "text": "Boarding starts at 10:30.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 48,
+                "start": 90.993,
+                "end": 92.273,
+                "text": "Thank you very much.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 49,
+                "start": 92.274,
+                "end": 93.153,
+                "text": "Have a great day.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 50,
+                "start": 100.753,
+                "end": 101.953,
+                "text": "Excuse me, where",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 51,
+                "start": 101.954,
+                "end": 103.313,
+                "text": "can I put my backpack?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 52,
+                "start": 105.313,
+                "end": 106.553,
+                "text": "You can put it under the seat",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 53,
+                "start": 106.554,
+                "end": 107.913,
+                "text": "in front of you, or get some",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 54,
+                "start": 107.914,
+                "end": 109.393,
+                "text": "space in the overhead bin.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 55,
+                "start": 111.553,
+                "end": 112.873,
+                "text": "Perfect, thank you.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 56,
+                "start": 112.874,
+                "end": 114.113,
+                "text": "And can I have a glass",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 57,
+                "start": 114.114,
+                "end": 115.073,
+                "text": "of water, please?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 58,
+                "start": 117.073,
+                "end": 118.753,
+                "text": "Of course, here you go.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 59,
+                "start": 118.754,
+                "end": 119.633,
+                "text": "Enjoy your flight.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 60,
+                "start": 121.473,
+                "end": 122.113,
+                "text": "Thanks a lot. ",
+                "spokenTranslation": "",
+                "notes": ""
+              }
+            ],
+            "processedContentHtml": "",
+            "artworkUrl": "",
+            "type": "lesson",
+            "title": "1- Airport & Flights - Dialogue",
+            "aiStatus": "draft_pending",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789175826128_Airplane_flights_1.mp3?alt=media",
+            "goldenTip": "",
+            "media": [
+              "[object Object]"
+            ],
+            "rawScript": "",
+            "updatedAt": "2026-09-12T23:32:14.718Z"
+          },
+          {
+            "hasTrainingTrack": true,
+            "artworkUrl": "",
+            "published": true,
+            "order": 2,
+            "downloads": [
+              "[object Object]"
+            ],
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789229837747_Airplane_flights_2_voc.mp3?alt=media",
+            "aiStatus": "draft_pending",
+            "processedContentHtml": "",
+            "id": "aula-1789229704239",
+            "moduleId": "ciclo-01",
+            "media": [
+              "[object Object]"
+            ],
+            "sentences": [
+              {
+                "id": 1,
+                "start": 2.32,
+                "end": 3.36,
+                "text": "Welcome to your quick",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 2,
+                "start": 3.3609999999999998,
+                "end": 4.88,
+                "text": "vocabulary breakdown.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 3,
+                "start": 4.881,
+                "end": 6.64,
+                "text": "Let's look at seven essential",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 4,
+                "start": 6.641,
+                "end": 8.24,
+                "text": "chunks from this dialogue that",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 5,
+                "start": 8.241,
+                "end": 10.4,
+                "text": "will transform how you travel.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 6,
+                "start": 10.401,
+                "end": 12.4,
+                "text": "First up, can I have?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 7,
+                "start": 13.04,
+                "end": 15.16,
+                "text": "Notice we do not say give me.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 8,
+                "start": 15.161,
+                "end": 16.72,
+                "text": "We say, can I have your",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 9,
+                "start": 16.721,
+                "end": 17.8,
+                "text": "passport please?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 10,
+                "start": 17.801,
+                "end": 19.44,
+                "text": "It is polite, direct,",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 11,
+                "start": 19.441,
+                "end": 20.96,
+                "text": "and universally understood.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 12,
+                "start": 21.76,
+                "end": 23.44,
+                "text": "Next, can I get?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 13,
+                "start": 24,
+                "end": 25.44,
+                "text": "Can I get a window seat?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 14,
+                "start": 25.96,
+                "end": 27.76,
+                "text": "Get is our favorite lazy verb",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 15,
+                "start": 27.761,
+                "end": 29.72,
+                "text": "here, meaning obtain or receive.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 16,
+                "start": 30.44,
+                "end": 32.439,
+                "text": "Third chunk: Here you go.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 17,
+                "start": 33,
+                "end": 35,
+                "text": "Use this every single time you hand",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 18,
+                "start": 35.001,
+                "end": 36.8,
+                "text": "an object, document, or card",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 19,
+                "start": 36.801,
+                "end": 37.8,
+                "text": "to another person.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 20,
+                "start": 38.44,
+                "end": 40.6,
+                "text": "Fourth: Take with me.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 21,
+                "start": 40.601,
+                "end": 42.36,
+                "text": "Can I take this backpack with me?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 22,
+                "start": 42.92,
+                "end": 44.24,
+                "text": "Take means to carry or",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 23,
+                "start": 44.241,
+                "end": 45.24,
+                "text": "bring something along.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 24,
+                "start": 46.04,
+                "end": 48.2,
+                "text": "Fifth: Where can I put?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 25,
+                "start": 48.201,
+                "end": 49.92,
+                "text": "Another powerful lazy verb.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 26,
+                "start": 49.921,
+                "end": 51.88,
+                "text": "Where can I put my backpack?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 27,
+                "start": 51.881,
+                "end": 53.52,
+                "text": "Put solves almost every storage",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 28,
+                "start": 53.521,
+                "end": 54.84,
+                "text": "question on an airplane.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 29,
+                "start": 55.44,
+                "end": 56.92,
+                "text": "Sixth, under the seat",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 30,
+                "start": 56.921,
+                "end": 58.08,
+                "text": "in front of you.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 31,
+                "start": 58.081,
+                "end": 59.8,
+                "text": "This is the exact spatial chunk",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 32,
+                "start": 59.801,
+                "end": 60.92,
+                "text": "flight attendants use",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 33,
+                "start": 60.921,
+                "end": 62.8,
+                "text": "in every flight safety briefing.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 34,
+                "start": 62.801,
+                "end": 63.88,
+                "text": "And finally, number",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 35,
+                "start": 63.881,
+                "end": 66,
+                "text": "seven, overhead bin.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 36,
+                "start": 66.001,
+                "end": 67,
+                "text": "That is the compartment",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 37,
+                "start": 67.001,
+                "end": 68.6,
+                "text": "right above your head where larger",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 38,
+                "start": 68.601,
+                "end": 70.48,
+                "text": "carry-on luggage goes.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 39,
+                "start": 70.481,
+                "end": 71.88,
+                "text": "Anchor these chunks in full",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 40,
+                "start": 71.881,
+                "end": 73.16,
+                "text": "phrases, and you are ready",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 41,
+                "start": 73.161,
+                "end": 74.72,
+                "text": "for any airport in the world.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 42,
+                "start": 76.96,
+                "end": 77.76,
+                "text": "Great!",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 43,
+                "start": 77.761,
+                "end": 78.76,
+                "text": "Now that you know these",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 44,
+                "start": 78.761,
+                "end": 79.8,
+                "text": "important chunks,",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 45,
+                "start": 79.801,
+                "end": 82.32,
+                "text": "let's get to real practice.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 46,
+                "start": 83.02,
+                "end": 84.86,
+                "text": "Move on to the next activity. ",
+                "spokenTranslation": "",
+                "notes": ""
+              }
+            ],
+            "quizId": "",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789230130309_Apostila_airport_flight_level_1_2_vocabulary_breakdown_frases_usadas_em_aeroportos_e_viagens_de_aviao.pdf?alt=media",
+            "duration": "01:27",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789229820163_Airplane_flights_2_voc.mp4?alt=media",
+            "title": "2- Vocabulary Breakdown",
+            "type": "lesson",
+            "updatedAt": "2026-09-12T23:59:47.954Z",
+            "rawScript": "",
+            "courseId": "airport_flight_level_1",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789229945454_thumb_1789229945424.jpg?alt=media",
+            "goldenTip": ""
+          },
+          {
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789254002995_Apostila_airport_flight_level_1_3_airports_flights_listen_and_answer_activity.pdf?alt=media",
+            "quizId": "",
+            "sentences": [
+              {
+                "id": 1,
+                "start": 4.6,
+                "end": 6.32,
+                "text": "Time for speaking activation.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 2,
+                "start": 6.321,
+                "end": 8.039,
+                "text": "I am going to ask you eight",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 3,
+                "start": 8.04,
+                "end": 9.719,
+                "text": "direct questions about the story.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 4,
+                "start": 9.72,
+                "end": 11.12,
+                "text": "When you hear the question,",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 5,
+                "start": 11.121,
+                "end": 12.16,
+                "text": "answer out loud",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 6,
+                "start": 12.161,
+                "end": 13.879,
+                "text": "immediately during the pause.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 7,
+                "start": 13.88,
+                "end": 15.719,
+                "text": "Then listen to the model answer.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 8,
+                "start": 15.72,
+                "end": 16.52,
+                "text": "Let's begin.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 9,
+                "start": 19.24,
+                "end": 21.2,
+                "text": "Question one: What does the agent",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 10,
+                "start": 21.201,
+                "end": 22.36,
+                "text": "ask to see first?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 11,
+                "start": 30.433,
+                "end": 32.313,
+                "text": "The agent asks for the passenger's",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 12,
+                "start": 32.314,
+                "end": 33.553,
+                "text": "passport and ticket.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 13,
+                "start": 35.953,
+                "end": 37.053,
+                "text": "Question two.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 14,
+                "start": 37.054,
+                "end": 38.013,
+                "text": "What kind of seat does",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 15,
+                "start": 38.014,
+                "end": 38.973,
+                "text": "the passenger want?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 16,
+                "start": 41.373,
+                "end": 41.466,
+                "text": "The",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 17,
+                "start": 49.586,
+                "end": 51.586,
+                "text": "Question 3: What seat number does",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 18,
+                "start": 51.587,
+                "end": 53.346,
+                "text": "the agent assign to the passenger?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 19,
+                "start": 63.646,
+                "end": 65.326,
+                "text": "Question 4: How many bags",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 20,
+                "start": 65.327,
+                "end": 66.686,
+                "text": "does the passenger check in?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 21,
+                "start": 69.146,
+                "end": 69.2,
+                "text": "The",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 22,
+                "start": 72.426,
+                "end": 73.786,
+                "text": "just one big suitcase.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 23,
+                "start": 76.426,
+                "end": 78.186,
+                "text": "Question 5: What gate does",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 24,
+                "start": 78.187,
+                "end": 79.546,
+                "text": "the passenger need to go to?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 25,
+                "start": 84.679,
+                "end": 85.559,
+                "text": "The passenger needs",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 26,
+                "start": 85.56,
+                "end": 87.079,
+                "text": "to go to gate 4B.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 27,
+                "start": 89.559,
+                "end": 90.399,
+                "text": "Question 6:",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 28,
+                "start": 90.4,
+                "end": 91.959,
+                "text": "What time does boarding start?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 29,
+                "start": 98.453,
+                "end": 99.893,
+                "text": "Boarding starts at 10:30.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 30,
+                "start": 102.713,
+                "end": 103.673,
+                "text": "Question 7.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 31,
+                "start": 103.674,
+                "end": 104.793,
+                "text": "Where can the passenger put",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 32,
+                "start": 104.794,
+                "end": 106.313,
+                "text": "the backpack inside the cabin?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 33,
+                "start": 112.16,
+                "end": 113.52,
+                "text": "Under the seat in front of him",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 34,
+                "start": 113.521,
+                "end": 114.96,
+                "text": "or in the overhead bin?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 35,
+                "start": 117.44,
+                "end": 118.32,
+                "text": "Question 8.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 36,
+                "start": 118.321,
+                "end": 119.52,
+                "text": "What drink does the passenger",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 37,
+                "start": 119.521,
+                "end": 120.72,
+                "text": "ask for on the plane?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 38,
+                "start": 127.999,
+                "end": 128.919,
+                "text": "The passenger asks",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 39,
+                "start": 128.92,
+                "end": 130.195,
+                "text": "for a glass of water.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 40,
+                "start": 132.5,
+                "end": 133.66,
+                "text": "All right, great.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 41,
+                "start": 133.661,
+                "end": 136.739,
+                "text": "This activity is a reflex exercise.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 42,
+                "start": 136.74,
+                "end": 138.299,
+                "text": "It's not a comprehension",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 43,
+                "start": 138.3,
+                "end": 140.1,
+                "text": "check questionnaire.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 44,
+                "start": 140.101,
+                "end": 142.859,
+                "text": "Go back and repeat this exercise",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 45,
+                "start": 142.86,
+                "end": 144.579,
+                "text": "until you feel comfortable",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 46,
+                "start": 144.58,
+                "end": 145.859,
+                "text": "understanding the questions",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 47,
+                "start": 145.86,
+                "end": 147.78,
+                "text": "and speaking your own answers.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 48,
+                "start": 148.5,
+                "end": 149.54,
+                "text": "See you in look",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 49,
+                "start": 149.541,
+                "end": 151.299,
+                "text": "and retell activity.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": 50,
+                "start": 151.3,
+                "end": 151.979,
+                "text": "Cheers. ",
+                "spokenTranslation": "",
+                "notes": ""
+              }
+            ],
+            "type": "lesson",
+            "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; width: 100%; max-width: 700px; margin: 0 auto; padding: 15px; box-sizing: border-box; background-color: #FFFFFF;\">\n  <h2 style=\"color: #276749; text-align: center; border-bottom: 2px solid #38A169; padding-bottom: 5px; margin-top: 0; margin-bottom: 12px; font-size: 20px;\">Listen and Answer</h2>\n\n  <style>\n    .compact-bubble {\n      background-color: #F0FFF4;\n      border-left: 3px solid #38A169;\n      border-radius: 6px;\n      padding: 8px 12px;\n      margin-bottom: 8px;\n    }\n    .compact-question {\n      color: #2D3748;\n      font-weight: 500;\n      margin: 0 0 8px 0;\n      font-size: 13px;\n    }\n    .ruled-line {\n      border-bottom: 1px dashed #CBD5E0;\n      height: 10px;\n    }\n  </style>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What does the agent ask to see first?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What kind of seat does the passenger want?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What seat number does the agent assign to the passenger?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">How many bags does the passenger check in?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What gate does the passenger need to go to?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What time does boarding start?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">Where can the passenger put the backpack inside the cabin?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What drink does the passenger ask for on the plane?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n</div>",
+            "title": "3- Airports & flights Listen and answer activity",
+            "aiStatus": "ai_reviewed",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253121849_Airplane_flights_3_LA.mp3?alt=media",
+            "id": "aula-1789235201111",
+            "goldenTip": "Esta é a primeira atividade prática de escuta e fala. Escutar e responder. Você não precisa lembrar nem decorar a historia ou o diálogo. Responda por reflexo. Isto não é um exercício de compreensão. É um exercício de reflexo.",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253492210_art_1789253490580.jpg?alt=media",
+            "updatedAt": "2026-09-12T23:14:57.754Z",
+            "rawScript": "LISTEN AND ANSWER\n\n1. What does the agent ask to see first?\n2. What kind of seat does the passenger want?\n3. What seat number does the agent assign to the passenger?\n4. How many bags does the passenger check in?\n5. What gate does the passenger need to go to?\n6. What time does boarding start?\n7. Where can the passenger put the backpack inside the cabin?\n8. What drink does the passenger ask for on the plane?\n",
+            "media": [
+              "[object Object]"
+            ],
+            "courseId": "airport_flight_level_1",
+            "published": true,
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253490590_thumb_1789253490564.jpg?alt=media",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253104571_Airplane_flights_3_LA.mp4?alt=media",
+            "duration": "02:43",
+            "hasTrainingTrack": true,
+            "order": 3,
+            "downloads": [
+              "[object Object]"
+            ],
+            "moduleId": "ciclo-01"
+          },
+          {
+            "downloads": [
+              "[object Object]"
+            ],
+            "type": "lesson",
+            "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; border: 2px solid #4A90E2; border-radius: 8px; padding: 20px; background-color: #F4F8FB; margin: 20px 0;\">\n  <h2 style=\"color: #2C3E50; margin-top: 0; font-size: 22px;\">Look and Retell</h2>\n  <p style=\"color: #555555; font-size: 15px; font-style: italic; margin-bottom: 20px;\">\n    Olhe para as perguntas e comece a recontar a história que acabou de aprender com suas próprias palavras.\n  </p>\n  <ol style=\"color: #333333; line-height: 1.6; font-size: 15px; padding-left: 20px;\">\n    <li>What does the agent ask to see first?</li>\n    <li>What kind of seat does the passenger want?</li>\n    <li>What seat number does the agent assign to the passenger?</li>\n    <li>How many bags does the passenger check in?</li>\n    <li>What gate does the passenger need to go to?</li>\n    <li>What time does boarding start?</li>\n    <li>Where can the passenger put the backpack inside the cabin?</li>\n    <li>What drink does the passenger ask for on the plane?</li>\n  </ol>\n</div>\n",
+            "order": 4,
+            "hasTrainingTrack": true,
+            "courseId": "airport_flight_level_1",
+            "moduleId": "ciclo-01",
+            "published": true,
+            "duration": "05:00",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252394568_Airplane_flights_4_LRT.mp4?alt=media",
+            "id": "aula-1789252227676",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252407200_Airplane_flights_4_LRT.mp3?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252304359_art_1789252302000.jpg?alt=media",
+            "aiStatus": "ai_reviewed",
+            "rawScript": "LOOK AND RETELL\n1. What does the agent ask to see first?\n2. What kind of seat does the passenger want?\n3. What seat number does the agent assign to the passenger?\n4. How many bags does the passenger check in?\n5. What gate does the passenger need to go to?\n6. What time does boarding start?\n7. Where can the passenger put the backpack inside the cabin?\n8. What drink does the passenger ask for on the plane?",
+            "updatedAt": "2026-09-12T22:43:37.712Z",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252302026_thumb_1789252301973.jpg?alt=media",
+            "goldenTip": "Esta atividade é o momento que você só precisa falar. E não vai acontecer de primeira. Você precisa repetir muitas vezes. Como se fosse um treino físico. Não force. Não se estresse. Tenha paciência e aceite o desafio. 😉",
+            "media": [
+              "[object Object]"
+            ],
+            "quizId": "",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789253015545_Apostila_airport_flight_level_1_4_airport_flights_look_and_retell.pdf?alt=media",
+            "title": "4 - Airport & Flights - Look and Retell"
+          },
+          {
+            "courseId": "airport_flight_level_1",
+            "rawScript": "",
+            "updatedAt": "2026-09-13T04:28:35.800Z",
+            "id": "aula-1789272667348",
+            "quizId": "",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789273701816_Apostila_airport_flight_level_1_5_airport_flights_listen_and_ask.pdf?alt=media",
+            "order": 5,
+            "goldenTip": "Esta atividade é super importante para que você se dê a oportunidade de fazer perguntas. Se você  não usar essa atividade, jamais se dará a oportunidade de praticar perguntas. E quanto mais treinar, mais preparado ou preparada você estará quando precisar de verdade.",
+            "type": "lesson",
+            "duration": "06:55",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272862796_Airplane_flights_5_LASK.mp4?alt=media",
+            "sentences": [
+              {
+                "end": 6.853,
+                "notes": "",
+                "text": "Hello, my dear friend.",
+                "id": "1",
+                "start": 5.673,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 9.153,
+                "text": "Leonardo Leite here with the",
+                "start": 7.473,
+                "spokenTranslation": "",
+                "id": "2",
+                "notes": ""
+              },
+              {
+                "id": "3",
+                "end": 11.313,
+                "start": 9.154,
+                "text": "“Listen and Ask” activity.",
+                "notes": "",
+                "spokenTranslation": ""
+              },
+              {
+                "id": "4",
+                "end": 12.693,
+                "start": 11.314,
+                "text": "I don’t know if this is",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "text": "your first time doing these activities.",
+                "start": 12.693999999999999,
+                "spokenTranslation": "",
+                "id": "5",
+                "end": 14.943
+              },
+              {
+                "text": "This is a themed course featuring",
+                "spokenTranslation": "",
+                "start": 14.943999999999999,
+                "end": 17.783,
+                "id": "6",
+                "notes": ""
+              },
+              {
+                "text": "phrases, chunks, set phrases,",
+                "start": 18.313,
+                "spokenTranslation": "",
+                "end": 21.152,
+                "notes": "",
+                "id": "7"
+              },
+              {
+                "id": "8",
+                "start": 21.153,
+                "end": 24.673000000000002,
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "and vocabulary related to situations"
+              },
+              {
+                "spokenTranslation": "",
+                "start": 24.674,
+                "id": "9",
+                "text": "where you’ll need to understand",
+                "notes": "",
+                "end": 28.293
+              },
+              {
+                "notes": "",
+                "text": "what others are saying at",
+                "id": "10",
+                "start": 28.294,
+                "end": 29.753,
+                "spokenTranslation": ""
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "11",
+                "text": "an airport and on a flight—and",
+                "start": 29.754,
+                "end": 33.153
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "12",
+                "text": "where you’ll also need to",
+                "start": 34.393,
+                "end": 36.313
+              },
+              {
+                "spokenTranslation": "",
+                "end": 36.953,
+                "notes": "",
+                "text": "communicate.",
+                "id": "13",
+                "start": 36.314
+              },
+              {
+                "id": "14",
+                "spokenTranslation": "",
+                "notes": "",
+                "end": 38.653,
+                "text": "So, what are the",
+                "start": 36.954
+              },
+              {
+                "end": 39.953,
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "15",
+                "text": "most common words and phrases?",
+                "start": 38.654
+              },
+              {
+                "start": 39.954,
+                "text": "But these activities here—if you",
+                "notes": "",
+                "id": "16",
+                "end": 43.353,
+                "spokenTranslation": ""
+              },
+              {
+                "text": "haven’t noticed by now—are",
+                "start": 43.354,
+                "end": 44.813,
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "17"
+              },
+              {
+                "start": 44.814,
+                "text": "part of a “Magic Story.”",
+                "notes": "",
+                "end": 46.713,
+                "spokenTranslation": "",
+                "id": "18"
+              },
+              {
+                "end": 49.013,
+                "spokenTranslation": "",
+                "id": "19",
+                "notes": "",
+                "text": "And this activity is “Listen and Ask.”",
+                "start": 46.714
+              },
+              {
+                "spokenTranslation": "",
+                "id": "20",
+                "start": 49.014,
+                "end": 52.933,
+                "notes": "",
+                "text": "This activity is for you"
+              },
+              {
+                "spokenTranslation": "",
+                "end": 55.553,
+                "id": "21",
+                "start": 52.934,
+                "text": "to practice asking questions.",
+                "notes": ""
+              },
+              {
+                "id": "22",
+                "text": "Has it ever crossed your mind",
+                "notes": "",
+                "end": 57.033,
+                "start": 55.554,
+                "spokenTranslation": ""
+              },
+              {
+                "start": 57.913,
+                "spokenTranslation": "",
+                "text": "how important it is to know how to ask",
+                "notes": "",
+                "id": "23",
+                "end": 60.753
+              },
+              {
+                "text": "questions, especially at an",
+                "start": 60.754,
+                "end": 62.913,
+                "notes": "",
+                "id": "24",
+                "spokenTranslation": ""
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "25",
+                "text": "airport or on a plane?",
+                "end": 65.113,
+                "start": 62.914
+              },
+              {
+                "id": "26",
+                "spokenTranslation": "",
+                "end": 67.673,
+                "notes": "",
+                "text": "If I were to stop",
+                "start": 66.053
+              },
+              {
+                "text": "and think about it, I think the",
+                "start": 67.674,
+                "end": 69.623,
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "27"
+              },
+              {
+                "id": "28",
+                "notes": "",
+                "text": "phrases we use",
+                "end": 71.133,
+                "start": 69.624,
+                "spokenTranslation": ""
+              },
+              {
+                "id": "29",
+                "start": 71.134,
+                "spokenTranslation": "",
+                "end": 73.533,
+                "notes": "",
+                "text": "most often at an airport and on"
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "end": 75.513,
+                "start": 73.534,
+                "id": "30",
+                "text": "a plane are questions—"
+              },
+              {
+                "start": 75.514,
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "questions.",
+                "end": 77.173,
+                "id": "31"
+              },
+              {
+                "notes": "",
+                "id": "32",
+                "text": "And my friend, asking questions",
+                "start": 77.174,
+                "end": 79.213,
+                "spokenTranslation": ""
+              },
+              {
+                "text": "isn’t something that comes naturally.",
+                "notes": "",
+                "end": 82.133,
+                "start": 80.093,
+                "id": "33",
+                "spokenTranslation": ""
+              },
+              {
+                "id": "34",
+                "start": 82.753,
+                "end": 84.053,
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "So, at first, when we’re"
+              },
+              {
+                "notes": "",
+                "start": 84.054,
+                "end": 86.173,
+                "text": "learning, it isn’t easy.",
+                "id": "35",
+                "spokenTranslation": ""
+              },
+              {
+                "start": 86.773,
+                "id": "36",
+                "text": "That’s why you’ll",
+                "notes": "",
+                "end": 88.733,
+                "spokenTranslation": ""
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "37",
+                "text": "need to practice with this exercise.",
+                "start": 88.734,
+                "end": 90.833
+              },
+              {
+                "start": 91.793,
+                "spokenTranslation": "",
+                "id": "38",
+                "text": "Finish it, go back, and start over.",
+                "end": 95.013,
+                "notes": ""
+              },
+              {
+                "spokenTranslation": "",
+                "text": "And it’s very simple:",
+                "start": 95.014,
+                "end": 95.753,
+                "id": "39",
+                "notes": ""
+              },
+              {
+                "end": 101.513,
+                "id": "40",
+                "notes": "",
+                "text": "you’ll hear a negative statement",
+                "spokenTranslation": "",
+                "start": 95.754
+              },
+              {
+                "notes": "",
+                "id": "41",
+                "text": "—that is, something that",
+                "spokenTranslation": "",
+                "start": 101.514,
+                "end": 103.393
+              },
+              {
+                "id": "42",
+                "notes": "",
+                "spokenTranslation": "",
+                "end": 105.613,
+                "start": 103.394,
+                "text": "isn’t true."
+              },
+              {
+                "text": "And why do I choose",
+                "notes": "",
+                "spokenTranslation": "",
+                "end": 107.313,
+                "start": 106.163,
+                "id": "43"
+              },
+              {
+                "spokenTranslation": "",
+                "text": "this kind of exercise?",
+                "start": 108.313,
+                "end": 109.473,
+                "notes": "",
+                "id": "44"
+              },
+              {
+                "end": 110.793,
+                "spokenTranslation": "",
+                "id": "45",
+                "start": 109.474,
+                "text": "Because when you hear something",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "id": "46",
+                "spokenTranslation": "",
+                "end": 114.393,
+                "start": 110.794,
+                "text": "negative, it usually prompts you"
+              },
+              {
+                "start": 114.394,
+                "id": "47",
+                "text": "to ask a question about",
+                "end": 116.153,
+                "notes": "",
+                "spokenTranslation": ""
+              },
+              {
+                "notes": "",
+                "id": "48",
+                "spokenTranslation": "",
+                "text": "what’s actually true. So, if I",
+                "start": 116.154,
+                "end": 118.033
+              },
+              {
+                "text": "come up to you and say,",
+                "notes": "",
+                "spokenTranslation": "",
+                "end": 119.203,
+                "start": 118.034,
+                "id": "49"
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "50",
+                "text": "“Look, it’s not two o’clock",
+                "start": 119.204,
+                "end": 121.633
+              },
+              {
+                "text": "in the afternoon right now.”",
+                "start": 121.634,
+                "end": 122.453,
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "51"
+              },
+              {
+                "end": 123.453,
+                "start": 122.454,
+                "text": "Then you’ll ask, “Okay,",
+                "spokenTranslation": "",
+                "id": "52",
+                "notes": ""
+              },
+              {
+                "start": 123.454,
+                "id": "53",
+                "end": 125.713,
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "so what time is it?” See?"
+              },
+              {
+                "end": 130.033,
+                "notes": "",
+                "text": "Like, “Maria doesn’t live with João,",
+                "id": "54",
+                "start": 126.273,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 131.273,
+                "notes": "",
+                "text": "but she lives with someone—",
+                "id": "55",
+                "spokenTranslation": "",
+                "start": 130.034
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "56",
+                "start": 131.274,
+                "text": "she just doesn’t live with João.”",
+                "end": 132.713
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "57",
+                "start": 132.714,
+                "text": "And then you’ll ask,",
+                "end": 133.673
+              },
+              {
+                "id": "58",
+                "end": 135.183,
+                "start": 133.674,
+                "spokenTranslation": "",
+                "text": "“So who does Maria",
+                "notes": ""
+              },
+              {
+                "end": 136.113,
+                "notes": "",
+                "text": "live with?” And so on.",
+                "id": "59",
+                "start": 135.184,
+                "spokenTranslation": ""
+              },
+              {
+                "start": 136.114,
+                "id": "60",
+                "text": "That’s it—“listen and ask”—that’s what it is.",
+                "notes": "",
+                "end": 138.673,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 144.313,
+                "id": "61",
+                "notes": "",
+                "text": "It’s just about you asking questions in a natural way.",
+                "spokenTranslation": "",
+                "start": 138.674
+              },
+              {
+                "start": 144.314,
+                "text": "Because we memorize things—",
+                "spokenTranslation": "",
+                "notes": "",
+                "end": 146.253,
+                "id": "62"
+              },
+              {
+                "id": "63",
+                "end": 147.933,
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "we study from books that tell us we have",
+                "start": 146.254
+              },
+              {
+                "notes": "",
+                "text": "to put a verb somewhere",
+                "spokenTranslation": "",
+                "start": 147.934,
+                "end": 149.053,
+                "id": "64"
+              },
+              {
+                "end": 153.413,
+                "start": 149.054,
+                "text": "—but you need",
+                "spokenTranslation": "",
+                "id": "65",
+                "notes": ""
+              },
+              {
+                "start": 153.414,
+                "id": "66",
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "to practice; you need to be willing",
+                "end": 155.743
+              },
+              {
+                "id": "67",
+                "start": 155.744,
+                "text": "to ask a question.",
+                "end": 157.433,
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "spokenTranslation": "",
+                "start": 157.434,
+                "text": "And you have to do this many",
+                "end": 158.793,
+                "notes": "",
+                "id": "68"
+              },
+              {
+                "end": 160.533,
+                "start": 158.794,
+                "spokenTranslation": "",
+                "text": "times so that when the time comes—in",
+                "id": "69",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "id": "70",
+                "text": "real life, in real-world situations—it won’t",
+                "start": 160.534,
+                "end": 163.093,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 165.783,
+                "text": "be a big",
+                "notes": "",
+                "id": "71",
+                "spokenTranslation": "",
+                "start": 163.094
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "deal for you, because you’ll",
+                "id": "72",
+                "start": 165.784,
+                "end": 167.173
+              },
+              {
+                "text": "be used to",
+                "start": 167.174,
+                "end": 168.773,
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "73"
+              },
+              {
+                "id": "74",
+                "end": 169.733,
+                "spokenTranslation": "",
+                "text": "it.",
+                "notes": "",
+                "start": 168.774
+              },
+              {
+                "start": 169.734,
+                "spokenTranslation": "",
+                "id": "75",
+                "text": "Without further ado,",
+                "end": 170.713,
+                "notes": ""
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "start": 171.373,
+                "end": 172.873,
+                "text": "let’s get to the activity.",
+                "id": "76"
+              },
+              {
+                "spokenTranslation": "",
+                "end": 179.2,
+                "start": 177.92,
+                "text": "Now let's practice.",
+                "id": "77",
+                "notes": ""
+              },
+              {
+                "start": 179.201,
+                "id": "78",
+                "spokenTranslation": "",
+                "end": 180.64,
+                "notes": "",
+                "text": "Listen and ask."
+              },
+              {
+                "notes": "",
+                "text": "I will say a negative statement",
+                "start": 181.519,
+                "spokenTranslation": "",
+                "end": 183.239,
+                "id": "79"
+              },
+              {
+                "id": "80",
+                "end": 184.28,
+                "text": "that is factually",
+                "notes": "",
+                "spokenTranslation": "",
+                "start": 183.24
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "81",
+                "start": 184.281,
+                "text": "false based on our story.",
+                "end": 186
+              },
+              {
+                "spokenTranslation": "",
+                "end": 188.68,
+                "start": 186.64,
+                "text": "Your job is to uncover the truth",
+                "id": "82",
+                "notes": ""
+              },
+              {
+                "id": "83",
+                "end": 190.359,
+                "text": "by asking the corresponding",
+                "start": 188.681,
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "84",
+                "text": "question out loud.",
+                "end": 191.6,
+                "start": 190.36
+              },
+              {
+                "end": 194.4,
+                "start": 192.64,
+                "text": "Then I will give you the expected",
+                "spokenTranslation": "",
+                "id": "85",
+                "notes": ""
+              },
+              {
+                "end": 196.56,
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "question and the factual answer.",
+                "id": "86",
+                "start": 194.401
+              },
+              {
+                "end": 197.952,
+                "text": "Let's do it.",
+                "notes": "",
+                "id": "87",
+                "start": 197.12,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 202.326,
+                "start": 200.206,
+                "id": "88",
+                "spokenTranslation": "",
+                "text": "Number one, the agent didn't",
+                "notes": ""
+              },
+              {
+                "end": 203.726,
+                "text": "ask for a credit card.",
+                "start": 202.327,
+                "id": "89",
+                "notes": "",
+                "spokenTranslation": ""
+              },
+              {
+                "end": 211.726,
+                "id": "90",
+                "start": 209.806,
+                "text": "What did the agent ask for?",
+                "notes": "",
+                "spokenTranslation": ""
+              },
+              {
+                "start": 215.966,
+                "id": "91",
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "The agent asked for",
+                "end": 217.166
+              },
+              {
+                "id": "92",
+                "end": 218.926,
+                "text": "the passport and ticket.",
+                "start": 217.167,
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "start": 223.519,
+                "spokenTranslation": "",
+                "text": "Number 2.",
+                "notes": "",
+                "id": "93",
+                "end": 224.079
+              },
+              {
+                "notes": "",
+                "id": "94",
+                "spokenTranslation": "",
+                "text": "The passenger doesn't",
+                "start": 224.72,
+                "end": 226.04
+              },
+              {
+                "text": "want an aisle seat.",
+                "start": 226.041,
+                "end": 227.519,
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "95"
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "96",
+                "text": "What kind of seat",
+                "end": 231.72,
+                "start": 230.72
+              },
+              {
+                "spokenTranslation": "",
+                "end": 233.2,
+                "start": 231.721,
+                "text": "does the passenger want?",
+                "id": "97",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "id": "98",
+                "text": "The passenger wants a window seat.",
+                "spokenTranslation": "",
+                "start": 235.76,
+                "end": 237.88
+              },
+              {
+                "spokenTranslation": "",
+                "id": "99",
+                "start": 239.986,
+                "end": 240.626,
+                "notes": "",
+                "text": "Number 3."
+              },
+              {
+                "start": 241.826,
+                "text": "The seat number isn't 22B.",
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "100",
+                "end": 244.706
+              },
+              {
+                "spokenTranslation": "",
+                "start": 248.866,
+                "end": 250.466,
+                "id": "101",
+                "text": "What seat number is it?",
+                "notes": ""
+              },
+              {
+                "start": 253.666,
+                "text": "It is seat 14A.",
+                "notes": "",
+                "end": 255.862,
+                "id": "102",
+                "spokenTranslation": ""
+              },
+              {
+                "spokenTranslation": "",
+                "start": 257.32,
+                "notes": "",
+                "end": 257.88,
+                "text": "Number 4.",
+                "id": "103"
+              },
+              {
+                "id": "104",
+                "start": 259.16,
+                "end": 260.64,
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "The passenger didn't check"
+              },
+              {
+                "notes": "",
+                "id": "105",
+                "spokenTranslation": "",
+                "text": "in three heavy boxes.",
+                "start": 260.641,
+                "end": 262.92
+              },
+              {
+                "notes": "",
+                "text": "What did the passenger check in?",
+                "start": 267,
+                "end": 268.76,
+                "spokenTranslation": "",
+                "id": "106"
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "The passenger checked in",
+                "start": 272.12,
+                "end": 273.96,
+                "id": "107"
+              },
+              {
+                "notes": "",
+                "text": "just one big suitcase.",
+                "spokenTranslation": "",
+                "start": 273.961,
+                "id": "108",
+                "end": 276.226
+              },
+              {
+                "notes": "",
+                "id": "109",
+                "start": 278.219,
+                "text": "Number 5.",
+                "end": 278.859,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 281.34,
+                "id": "110",
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "The flight doesn't leave",
+                "start": 279.9
+              },
+              {
+                "notes": "",
+                "id": "111",
+                "end": 283.099,
+                "spokenTranslation": "",
+                "start": 281.341,
+                "text": "from gate 12A."
+              },
+              {
+                "end": 288.14,
+                "id": "112",
+                "start": 287.26,
+                "text": "What gate does",
+                "notes": "",
+                "spokenTranslation": ""
+              },
+              {
+                "id": "113",
+                "notes": "",
+                "end": 289.34,
+                "start": 288.141,
+                "spokenTranslation": "",
+                "text": "the flight leave from?"
+              },
+              {
+                "id": "114",
+                "end": 294.33,
+                "start": 291.979,
+                "text": "It leaves from gate 4B.",
+                "notes": "",
+                "spokenTranslation": ""
+              },
+              {
+                "start": 295.62,
+                "text": "Number six, boarding",
+                "notes": "",
+                "end": 297.58,
+                "id": "115",
+                "spokenTranslation": ""
+              },
+              {
+                "end": 299.3,
+                "spokenTranslation": "",
+                "id": "116",
+                "start": 297.581,
+                "text": "doesn't start at noon.",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "117",
+                "end": 305.38,
+                "start": 303.54,
+                "text": "What time does boarding start?"
+              },
+              {
+                "id": "118",
+                "start": 308.5,
+                "spokenTranslation": "",
+                "text": "Boarding starts at 10:30.",
+                "notes": "",
+                "end": 310.26
+              },
+              {
+                "spokenTranslation": "",
+                "end": 313.793,
+                "id": "119",
+                "notes": "",
+                "text": "Number seven, the backpack",
+                "start": 311.873
+              },
+              {
+                "text": "cannot be left",
+                "start": 313.794,
+                "spokenTranslation": "",
+                "end": 314.553,
+                "notes": "",
+                "id": "120"
+              },
+              {
+                "notes": "",
+                "text": "in the middle of the aisle.",
+                "spokenTranslation": "",
+                "start": 314.554,
+                "id": "121",
+                "end": 315.793
+              },
+              {
+                "text": "Where can the passenger",
+                "start": 322.193,
+                "spokenTranslation": "",
+                "end": 323.313,
+                "id": "122",
+                "notes": ""
+              },
+              {
+                "id": "123",
+                "start": 323.314,
+                "text": "put the backpack?",
+                "end": 324.433,
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "text": "Under the seat in front, or",
+                "start": 328.913,
+                "spokenTranslation": "",
+                "end": 330.553,
+                "id": "124",
+                "notes": ""
+              },
+              {
+                "text": "in the overhead bin.",
+                "notes": "",
+                "end": 331.747,
+                "spokenTranslation": "",
+                "start": 330.554,
+                "id": "125"
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "126",
+                "end": 334.546,
+                "start": 333.986,
+                "text": "Number 8."
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "127",
+                "start": 335.346,
+                "text": "The passenger didn't ask",
+                "end": 336.746
+              },
+              {
+                "id": "128",
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "for a cup of hot coffee.",
+                "start": 336.747,
+                "end": 338.466
+              },
+              {
+                "start": 343.506,
+                "text": "What drink did the passenger",
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "129",
+                "end": 345.146
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "end": 345.826,
+                "text": "ask for?",
+                "start": 345.147,
+                "id": "130"
+              },
+              {
+                "id": "131",
+                "start": 350.306,
+                "spokenTranslation": "",
+                "end": 351.386,
+                "notes": "",
+                "text": "The passenger asked"
+              },
+              {
+                "notes": "",
+                "id": "132",
+                "end": 352.823,
+                "spokenTranslation": "",
+                "start": 351.387,
+                "text": "for a glass of water."
+              },
+              {
+                "text": "Exactly.",
+                "start": 359.246,
+                "spokenTranslation": "",
+                "end": 359.886,
+                "notes": "",
+                "id": "133"
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "text": "The passenger didn't ask for a cup",
+                "id": "134",
+                "end": 361.886,
+                "start": 359.887
+              },
+              {
+                "notes": "",
+                "end": 364.606,
+                "spokenTranslation": "",
+                "text": "of coffee or a cup of hot coffee.",
+                "id": "135",
+                "start": 361.887
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "136",
+                "end": 367.966,
+                "start": 365.486,
+                "text": "She asked for a glass of water."
+              },
+              {
+                "start": 367.967,
+                "id": "137",
+                "text": "All right, my friend.",
+                "notes": "",
+                "end": 369.726,
+                "spokenTranslation": ""
+              },
+              {
+                "spokenTranslation": "",
+                "end": 372.126,
+                "notes": "",
+                "text": "That's great.",
+                "id": "138",
+                "start": 370.846
+              },
+              {
+                "start": 372.127,
+                "end": 374.086,
+                "id": "139",
+                "text": "Well, that's a very",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "end": 375.726,
+                "notes": "",
+                "text": "challenging activity.",
+                "id": "140",
+                "start": 374.087,
+                "spokenTranslation": ""
+              },
+              {
+                "spokenTranslation": "",
+                "start": 375.727,
+                "id": "141",
+                "notes": "",
+                "text": "You need to repeat this activity.",
+                "end": 378.366
+              },
+              {
+                "notes": "",
+                "spokenTranslation": "",
+                "id": "142",
+                "text": "Go back and do it again.",
+                "start": 379.166,
+                "end": 381.646
+              },
+              {
+                "start": 381.647,
+                "id": "143",
+                "text": "Igualzinho uma academia, my friend.",
+                "notes": "",
+                "end": 385.006,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 386.106,
+                "notes": "",
+                "spokenTranslation": "",
+                "text": "Isso aqui.",
+                "id": "144",
+                "start": 385.007
+              },
+              {
+                "id": "145",
+                "notes": "",
+                "end": 387.946,
+                "text": "É nada mais nada menos do que",
+                "spokenTranslation": "",
+                "start": 386.107
+              },
+              {
+                "notes": "",
+                "id": "146",
+                "text": "aparelho na sua lista",
+                "start": 388.506,
+                "end": 392.026,
+                "spokenTranslation": ""
+              },
+              {
+                "end": 394.666,
+                "text": "na sua ficha de academia.",
+                "notes": "",
+                "id": "147",
+                "spokenTranslation": "",
+                "start": 392.027
+              },
+              {
+                "spokenTranslation": "",
+                "notes": "",
+                "id": "148",
+                "start": 394.667,
+                "text": "So please go back, do it again,",
+                "end": 397.546
+              },
+              {
+                "id": "149",
+                "start": 398.186,
+                "end": 399.826,
+                "notes": "",
+                "text": "practice and let me",
+                "spokenTranslation": ""
+              },
+              {
+                "end": 401.066,
+                "text": "know how you're doing.",
+                "start": 399.827,
+                "id": "150",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "notes": "",
+                "id": "151",
+                "spokenTranslation": "",
+                "end": 405.226,
+                "start": 401.786,
+                "text": "Thank you and I'll see you soon. "
+              }
+            ],
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272752152_art_1789272749983.jpg?alt=media",
+            "hasTrainingTrack": true,
+            "moduleId": "ciclo-01",
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272749996_thumb_1789272749966.jpg?alt=media",
+            "downloads": [
+              {
+                "title": "Apostila Diagramada (5_airport_flights_listen_and_ask)",
+                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789273701816_Apostila_airport_flight_level_1_5_airport_flights_listen_and_ask.pdf?alt=media",
+                "type": "pdf"
+              }
+            ],
+            "media": [
+              {
+                "thumbnailUrl": "",
+                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272862796_Airplane_flights_5_LASK.mp4?alt=media",
+                "type": "video_mp4",
+                "title": "airport_flights_LASK_video",
+                "durationStr": ""
+              }
+            ],
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272875704_Airplane_flights_5_LASK.mp3?alt=media",
+            "aiStatus": "draft_pending",
+            "title": "5- Airport & Flights - Listen and Ask",
+            "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; box-sizing: border-box; background-color: #FFFFFF;\">\n  <!-- Main Title -->\n  <h1 style=\"color: #1B365D; text-align: center; margin: 0 0 10px 0; font-size: 26px; font-weight: bold;\">AgoraEuFalo - Survival English</h1>\n  \n  <!-- Subtitle Blue Bubble Box -->\n  <div style=\"background-color: #1E40AF; color: #FFFFFF; text-align: center; border-radius: 20px; padding: 6px 18px; margin: 0 auto 20px auto; width: fit-content; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;\">\n    Airport &amp; Flights\n  </div>\n\n  <!-- Main Cream Bubble Box -->\n  <div style=\"background-color: #FFFDF0; border: 1px solid #EAE2B7; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);\">\n    <h2 style=\"color: #2B2D42; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 20px; border-bottom: 2px solid #F4A261; padding-bottom: 8px;\">Listen and Ask Activity</h2>\n\n    <!-- Sentence 1 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">1. The agent didn't ask for a credit card.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 2 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">2. The passenger doesn't want an aisle seat.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 3 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">3. The seat number isn't 22B.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 4 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">4. The passenger didn't check in three heavy boxes.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 5 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">5. The flight doesn't leave from Gate 12A.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 6 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">6. Boarding doesn't start at noon.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 7 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">7. The backpack cannot be left in the middle of the aisle.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 8 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 0;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">8. The passenger didn't ask for a cup of hot coffee.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n  </div>\n</div>",
+            "published": true
+          },
+          {
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276003405_thumb_1789276003367.jpg?alt=media",
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276099578_6_Airplane_flights_pro.mp3?alt=media",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276005464_art_1789276003391.jpg?alt=media",
+            "aiStatus": "draft_pending",
+            "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; box-sizing: border-box; background-color: #FFFFFF;\">\n  <!-- Main Title -->\n  <h1 style=\"color: #1B365D; text-align: center; margin: 0 0 10px 0; font-size: 26px; font-weight: bold;\">AgoraEuFalo - Survival English</h1>\n  \n  <!-- Subtitle Blue Bubble Box -->\n  <div style=\"background-color: #1E40AF; color: #FFFFFF; text-align: center; border-radius: 20px; padding: 6px 18px; margin: 0 auto 20px auto; width: fit-content; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;\">\n    Airport &amp; Flights\n  </div>\n\n  <!-- Main Cream Bubble Box -->\n  <div style=\"background-color: #FFFDF0; border: 1px solid #EAE2B7; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);\">\n    <h2 style=\"color: #2B2D42; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 20px; border-bottom: 2px solid #F4A261; padding-bottom: 8px;\">Pronunciation Practice</h2>\n\n    <style>\n      .practice-box {\n        background-color: #FFFFFF;\n        border: 1px solid #E2E8F0;\n        border-left: 4px solid #2563EB;\n        border-radius: 8px;\n        padding: 10px 14px;\n        margin-bottom: 8px;\n        color: #1F2937;\n        font-size: 14px;\n        font-weight: 600;\n      }\n    </style>\n\n    <div class=\"practice-box\">1. Good morning! Can I have your passport and ticket, please?</div>\n    <div class=\"practice-box\">2. Good morning. Here you go.</div>\n    <div class=\"practice-box\">3. Can I get a window seat?</div>\n    <div class=\"practice-box\">4. Sure, let me check. Yes, window seat 14A is open.</div>\n    <div class=\"practice-box\">5. Do you have any bags to check in today?</div>\n    <div class=\"practice-box\">6. Just this big suitcase.</div>\n    <div class=\"practice-box\">7. Can I take this backpack with me on the plane?</div>\n    <div class=\"practice-box\">8. Yes, you can take it with you.</div>\n    <div class=\"practice-box\">9. Here is your boarding pass. Gate 4B.</div>\n    <div class=\"practice-box\">10. Boarding starts at 10:30.</div>\n    <div class=\"practice-box\">11. Thank you very much! Have a great day.</div>\n    <div class=\"practice-box\">12. Excuse me, where can I put my backpack?</div>\n    <div class=\"practice-box\">13. You can put it under the seat in front of you.</div>\n    <div class=\"practice-box\">14. Or get some space in the overhead bin.</div>\n    <div class=\"practice-box\">15. Perfect, thank you.</div>\n    <div class=\"practice-box\">16. And can I have a glass of water, please?</div>\n    <div class=\"practice-box\">17. Of course! Here you go. Enjoy your flight.</div>\n    <div class=\"practice-box\">18. Thanks a lot!</div>\n  </div>\n</div>",
+            "media": [
+              {
+                "type": "video_mp4",
+                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276072937_6_Airplane_flights_pro.mp4?alt=media",
+                "title": "6_airport_flights_pro_video",
+                "durationStr": "",
+                "thumbnailUrl": ""
+              }
+            ],
+            "hasTrainingTrack": true,
+            "sentences": [
+              {
+                "id": "1",
+                "start": 29.886,
+                "end": 30.446,
+                "text": "Good morning.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "2",
+                "start": 30.447,
+                "end": 31.686,
+                "text": "Can I have your passport",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "3",
+                "start": 31.687,
+                "end": 36.653,
+                "text": "and ticket, please?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "4",
+                "start": 36.654,
+                "end": 37.293,
+                "text": "Good morning.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "5",
+                "start": 37.294,
+                "end": 38.213,
+                "text": "Here you go.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "6",
+                "start": 38.214,
+                "end": 45.199,
+                "text": "Can I get a window seat?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "7",
+                "start": 45.2,
+                "end": 45.72,
+                "text": "Sure.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "8",
+                "start": 45.721,
+                "end": 50.48,
+                "text": "Let me check.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "9",
+                "start": 50.481,
+                "end": 51,
+                "text": "Yes.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "10",
+                "start": 51.001,
+                "end": 54.806,
+                "text": "Window seat 14A is open.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "11",
+                "start": 54.807,
+                "end": 55.846,
+                "text": "Do you have any bags",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "12",
+                "start": 55.847,
+                "end": 61.085,
+                "text": "to check in today?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "13",
+                "start": 61.086,
+                "end": 64.593,
+                "text": "Just this big suitcase.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "14",
+                "start": 64.594,
+                "end": 65.953,
+                "text": "Can I take this backpack",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "15",
+                "start": 65.954,
+                "end": 68.833,
+                "text": "with me on the plane?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "16",
+                "start": 68.834,
+                "end": 69.633,
+                "text": "Yes, you can take",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "17",
+                "start": 69.634,
+                "end": 70.233,
+                "text": "it with you.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "18",
+                "start": 72.4,
+                "end": 73.266,
+                "text": "Here iso your boarding",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "19",
+                "start": 73.267,
+                "end": 74.9,
+                "text": "pass, gate 4B.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "20",
+                "start": 76.206,
+                "end": 77.846,
+                "text": "Boarding starts at 10:30.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "21",
+                "start": 79.926,
+                "end": 81.206,
+                "text": "Thank you very much.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "22",
+                "start": 81.207,
+                "end": 82.086,
+                "text": "Have a great day.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "23",
+                "start": 87.619,
+                "end": 88.82,
+                "text": "Excuse me, where",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "24",
+                "start": 88.821,
+                "end": 90.179,
+                "text": "can I put my backpack?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "25",
+                "start": 93.913,
+                "end": 95.153,
+                "text": "You can put it under the seat",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "26",
+                "start": 95.154,
+                "end": 95.966,
+                "text": "in front of you, or",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "27",
+                "start": 100.246,
+                "end": 101.726,
+                "text": "space in the overhead bin.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "28",
+                "start": 105.053,
+                "end": 106.373,
+                "text": "Perfect, thank you.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "29",
+                "start": 106.374,
+                "end": 107.613,
+                "text": "And can I have a glass",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "30",
+                "start": 107.614,
+                "end": 108.573,
+                "text": "of water, please?",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "31",
+                "start": 112.54,
+                "end": 114.22,
+                "text": "Of course, here you go.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "32",
+                "start": 114.221,
+                "end": 115.1,
+                "text": "Enjoy your flight.",
+                "spokenTranslation": "",
+                "notes": ""
+              },
+              {
+                "id": "33",
+                "start": 120.006,
+                "end": 120.646,
+                "text": "Thanks a lot. ",
+                "spokenTranslation": "",
+                "notes": ""
+              }
+            ],
+            "updatedAt": "2026-09-13T05:18:43.484Z",
+            "rawScript": "",
+            "title": "6 - Pronunciation Practice",
+            "goldenTip": "Essa atividade é como se você estivesse curtindo uma música e aprendendo a cantá-la. Aqui o foco está em imitar todos os sons que escuta. Por isso, pause o áudio e repita igualzinho escuta. SIM! Este é o único momento que o exército é ser um papagaio. Capriche!",
+            "type": "lesson",
+            "id": "aula-1789275938297",
+            "order": 6,
+            "courseId": "airport_flight_level_1",
+            "published": true,
+            "moduleId": "ciclo-01",
+            "downloads": [
+              {
+                "type": "pdf",
+                "title": "Apostila Diagramada (6_pronunciation_practice)",
+                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789276673305_Apostila_airport_flight_level_1_6_pronunciation_practice.pdf?alt=media"
+              }
+            ],
+            "quizId": "",
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789276673305_Apostila_airport_flight_level_1_6_pronunciation_practice.pdf?alt=media",
+            "duration": "02:07",
+            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276072937_6_Airplane_flights_pro.mp4?alt=media"
+          }
+        ]
+      }
+    ]
+  },
+  "aef-experience": {
+    "title": "AgoraEuFalo Experience",
+    "slug": "aef-experience",
+    "themeColor": "amber",
+    "updatedAt": "2026-09-18T11:27:47.104Z",
+    "id": "aef-experience",
+    "tierRequired": "vip",
+    "schemaVersion": 2,
+    "badge": "CURSO GRATUITO",
+    "access": {
+      "legacyGrantIds": [],
+      "entitlements": [
+        "member_free",
+        "member_pago"
+      ],
+      "requiresProductId": []
+    },
+    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789104713231_course_cover_1789104713206.jpg?alt=media",
+    "isPublished": true,
+    "description": "A verdadeira expêriencia de aprender Inglês na nova era da tecnologia sem perder o calor humano de Leonardo Leite",
+    "published": true,
+    "accessTier": "free",
+    "modules": [
+      {
+        "badge": "",
+        "updatedAt": "2026-09-11T05:30:58.532Z",
+        "id": "ciclo-01",
+        "stats": "",
+        "description": "Tutorial sobre como usar o ecossistema AgoraEuFalo",
+        "order": 1,
+        "title": "Módulo Teste",
+        "published": true,
+        "courseId": "aef-experience",
+        "lessons": [
+          {
+            "summary": "Treino focado em conexões sonoras e reflexo rápido de fala coached por Prof. Leo Leite.",
+            "goldenTip": "Respire nas pausas e conecte os chunks.",
+            "durationSec": 40,
+            "published": true,
+            "hasTrainingTrack": true,
+            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1789136272660_1_airport_flight_intro_begginer.mp3?alt=media",
+            "media": [
+              {
+                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fstudents%2F1789136272660_1_airport_flight_intro_begginer.mp3?alt=media",
+                "title": "Áudio Principal",
+                "type": "audio_mp3",
+                "thumbnailUrl": "../assets/images/cover-matheus-session01.jpg",
+                "durationStr": "00:00"
+              }
+            ],
+            "speakers": "Gravação Real do Professor",
+            "coverImageUrl": "../assets/images/cover-matheus-session01.jpg",
+            "category": "Magic Story (Mini-Diálogo)",
+            "id": "1_airport_flight_intro_begginer",
+            "thumbnailUrl": "../assets/images/cover-matheus-session01.jpg",
+            "type": "lesson",
+            "sentences": [
+              {
+                "text": "Welcome to Airport and Inflight Survival.",
+                "notes": "",
+                "id": 1,
+                "end": 3.2,
+                "spokenTranslation": "Boas-vindas ao Airport and Inflight Survival!",
+                "start": 0
+              },
+              {
+                "id": 2,
+                "start": 3.9,
+                "end": 12,
+                "text": "In this crash course, you are going to master the exact phrases you need the moment you step up to the airport check-in desk and when you board your plane.",
+                "spokenTranslation": "Neste curso rápido, você vai dominar as frases exatas de que precisa desde o momento em que chega ao balcão de check-in do aeroporto até a hora de embarcar no avião.",
+                "notes": ""
+              },
+              {
+                "spokenTranslation": "Esqueça regras gramaticais complicadas e traduções de dicionário. Vamos focar totalmente em blocos práticos de linguagem e verbos curingas como get, take, have e put.",
+                "text": "Forget complicated grammar rules and dictionary translations. We are focusing entirely on practical chunks and multi-use lazy verbs like get, take, have, and put.",
+                "start": 12.7,
+                "id": 3,
+                "end": 23.7,
+                "notes": ""
+              },
+              {
+                "id": 4,
+                "end": 28,
+                "start": 24.4,
+                "text": "These simple verbs do the heavy lifting in real-life English.",
+                "spokenTranslation": "Esses verbos simples fazem todo o trabalho pesado no inglês da vida real.",
+                "notes": ""
+              },
+              {
+                "start": 28.3,
+                "end": 32.4,
+                "notes": "",
+                "spokenTranslation": "Quando você ouvir as perguntas nos nossos treinos interativos, fale em voz alta imediatamente.",
+                "text": "When you hear the questions in our interactive drills, speak out loud immediately.",
+                "id": 5
+              },
+              {
+                "text": "Do not just think the answer; open your mouth and say it.",
+                "notes": "",
+                "id": 6,
+                "spokenTranslation": "Não fique só pensando na resposta; abra a boca e fale!",
+                "end": 36.7,
+                "start": 32.6
+              },
+              {
+                "text": "Let's dive straight into the action.",
+                "spokenTranslation": "Bora direto para a prática!",
+                "notes": "",
+                "id": 7,
+                "end": 39.1,
+                "start": 36.8
+              }
+            ],
+            "hasBlob": true,
+            "duration": "00:00",
+            "updatedAt": "2026-09-11T14:17:55.193Z",
+            "title": "1_airport_flight_intro_begginer",
+            "scriptRaw": "",
+            "moduleId": "ciclo-01",
+            "courseId": "aef-experience"
+          },
+          {
+            "sentences": [],
+            "hasTrainingTrack": true,
+            "updatedAt": "2026-09-11T05:33:11.842Z",
+            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Faef-experience%2Fciclo-01%2F1789104598409_art_1789104596231.jpg?alt=media",
+            "videoUrl": "",
+            "pdfUrl": "",
+            "downloads": [],
+            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Faef-experience%2Fciclo-01%2F1789104596254_thumb_1789104596205.jpg?alt=media",
+            "aiStatus": "draft_pending",
+            "courseId": "aef-experience",
+            "goldenTip": "",
+            "title": "Teste 1 - aula vazia",
+            "type": "lesson",
+            "trainingTrackId": "aula-1788324079666",
+            "order": 1,
+            "published": true,
+            "audioUrl": "",
+            "processedContentHtml": "",
+            "moduleId": "ciclo-01",
+            "duration": "00:00",
+            "rawScript": "",
+            "media": [],
+            "quizId": "",
+            "id": "aula-1788324079666"
+          }
+        ]
+      }
+    ]
   }
 };
 
