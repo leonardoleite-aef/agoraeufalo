@@ -907,145 +907,145 @@
       const combined = new Map();
       STUDENTS_LOAD_ERROR = null;
 
-      // 1. Inicializa mapa de alunos consolidados (Firestore é a Single Source of Truth)
-
-
-
-      // 2. Carrega cursos do Firestore para identificação em tempo real de Salas VIP e matrículas
       try {
-        if (window.aefPortalAuth) await window.aefPortalAuth.ready();
-        const idToken = window.aefPortalAuth ? await window.aefPortalAuth.getIdToken() : null;
-        const cRes = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100', {
-          headers: idToken ? { "Authorization": `Bearer ${idToken}` } : {}
-        });
-        if (cRes.ok) {
-          const cData = await cRes.json();
-          ALL_COURSES_MAP.clear();
-          (cData.documents || []).forEach(doc => {
-            const id = doc.name.split('/').pop();
-            const f = doc.fields || {};
-            const cObj = {
-              id: id,
-              title: f.title?.stringValue || id,
-              studentId: f.studentId?.stringValue || null,
-              studentEmail: f.studentEmail?.stringValue || null,
-              accessTier: f.accessTier?.stringValue || 'standalone',
-              badge: f.badge?.stringValue || '',
-              slug: f.slug?.stringValue || id
-            };
-            ALL_COURSES_MAP.set(id, cObj);
+        // 2. Carrega cursos do Firestore para identificação em tempo real de Salas VIP e matrículas
+        try {
+          if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+          const idToken = window.aefPortalAuth ? await window.aefPortalAuth.getIdToken() : null;
+          const cRes = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100', {
+            headers: idToken ? { "Authorization": `Bearer ${idToken}` } : {}
           });
+          if (cRes.ok) {
+            const cData = await cRes.json();
+            ALL_COURSES_MAP.clear();
+            (cData.documents || []).forEach(doc => {
+              const id = doc.name.split('/').pop();
+              const f = doc.fields || {};
+              const cObj = {
+                id: id,
+                title: f.title?.stringValue || id,
+                studentId: f.studentId?.stringValue || null,
+                studentEmail: f.studentEmail?.stringValue || null,
+                accessTier: f.accessTier?.stringValue || 'standalone',
+                badge: f.badge?.stringValue || '',
+                slug: f.slug?.stringValue || id
+              };
+              ALL_COURSES_MAP.set(id, cObj);
+            });
+          }
+        } catch (err) {
+          console.warn("Could not load courses from Firestore:", err);
         }
-      } catch (err) {
-        console.warn("Could not load courses from Firestore:", err);
-      }
 
-      // 3. Sincroniza com Firestore (Single Source of Truth)
-      try {
-        if (window.aefPortalAuth) await window.aefPortalAuth.ready();
-        const { users, vipMentees } = await window.aefPortalAuth.getAllStudentsAndMentees();
+        // 3. Sincroniza com Firestore (Single Source of Truth)
+        try {
+          if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+          const { users, vipMentees } = await window.aefPortalAuth.getAllStudentsAndMentees();
 
-        // Add Firestore Mentees
-        vipMentees.forEach(m => {
-          const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase().trim();
-          const existing = combined.get(email) || {};
-          const mergedProducts = Array.from(new Set([
-            ...(existing.enrolledProducts || []),
-            ...(m.enrolledProducts || []),
-            ...(m.purchasedProducts || [])
-          ]));
-          const mergedCats = Array.from(new Set([
-            ...(existing.categories || []),
-            ...(m.categories || []),
-            'member_mentoria'
-          ]));
+          // Add Firestore Mentees
+          vipMentees.forEach(m => {
+            const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase().trim();
+            const existing = combined.get(email) || {};
+            const mergedProducts = Array.from(new Set([
+              ...(existing.enrolledProducts || []),
+              ...(m.enrolledProducts || []),
+              ...(m.purchasedProducts || [])
+            ]));
+            const mergedCats = Array.from(new Set([
+              ...(existing.categories || []),
+              ...(m.categories || []),
+              'member_mentoria'
+            ]));
 
-          const menteePhone = m.whatsapp || m.phone || existing.whatsapp || existing.phone || '';
-          combined.set(email, {
-            ...existing,
-            ...m,
-            id: m.id || existing.id,
-            tier: 'vip_mentorship',
-            name: m.name || existing.name || m.id,
-            email: email,
-            whatsapp: menteePhone,
-            phone: menteePhone,
-            categories: mergedCats,
-            enrolledProducts: mergedProducts,
-            origem: 'firestore'
+            const menteePhone = m.whatsapp || m.phone || existing.whatsapp || existing.phone || '';
+            combined.set(email, {
+              ...existing,
+              ...m,
+              id: m.id || existing.id,
+              tier: 'vip_mentorship',
+              name: m.name || existing.name || m.id,
+              email: email,
+              whatsapp: menteePhone,
+              phone: menteePhone,
+              categories: mergedCats,
+              enrolledProducts: mergedProducts,
+              origem: 'firestore'
+            });
           });
-        });
 
-        // Add Firestore Users
-        users.forEach(u => {
-          const email = (u.email || '').toLowerCase().trim();
-          if (!email) return;
-          const existing = combined.get(email) || {};
+          // Add Firestore Users
+          users.forEach(u => {
+            const email = (u.email || '').toLowerCase().trim();
+            if (!email) return;
+            const existing = combined.get(email) || {};
 
-          // Safely merge enrolled products without wiping out VIP grants
-          const mergedProducts = Array.from(new Set([
-            ...(existing.enrolledProducts || []),
-            ...(u.enrolledProducts || []),
-            ...(u.purchasedProducts || [])
-          ]));
+            // Safely merge enrolled products without wiping out VIP grants
+            const mergedProducts = Array.from(new Set([
+              ...(existing.enrolledProducts || []),
+              ...(u.enrolledProducts || []),
+              ...(u.purchasedProducts || [])
+            ]));
 
-          const mergedCats = Array.from(new Set([
-            ...(existing.categories || []),
-            ...(u.categories || [])
-          ]));
+            const mergedCats = Array.from(new Set([
+              ...(existing.categories || []),
+              ...(u.categories || [])
+            ]));
 
-          const isVip = (existing.tier && existing.tier.includes('vip')) || 
-                        (u.tier && u.tier.includes('vip')) || 
-                        mergedCats.includes('member_mentoria');
-          const resolvedTier = isVip ? 'vip_mentorship' : (u.tier || existing.tier || 'free');
+            const isVip = (existing.tier && existing.tier.includes('vip')) || 
+                          (u.tier && u.tier.includes('vip')) || 
+                          mergedCats.includes('member_mentoria');
+            const resolvedTier = isVip ? 'vip_mentorship' : (u.tier || existing.tier || 'free');
 
-          const userPhone = u.whatsapp || u.phone || existing.whatsapp || existing.phone || '';
-          combined.set(email, {
-            ...existing,
-            ...u,
-            id: existing.id || u.uid || email.split('@')[0],
-            name: existing.name || u.name || email.split('@')[0],
-            email: email,
-            whatsapp: userPhone,
-            phone: userPhone,
-            tier: resolvedTier,
-            role: u.role || existing.role || 'student',
-            categories: mergedCats,
-            enrolledProducts: mergedProducts,
-            origem: existing.origem || 'firestore'
+            const userPhone = u.whatsapp || u.phone || existing.whatsapp || existing.phone || '';
+            combined.set(email, {
+              ...existing,
+              ...u,
+              id: existing.id || u.uid || email.split('@')[0],
+              name: existing.name || u.name || email.split('@')[0],
+              email: email,
+              whatsapp: userPhone,
+              phone: userPhone,
+              tier: resolvedTier,
+              role: u.role || existing.role || 'student',
+              categories: mergedCats,
+              enrolledProducts: mergedProducts,
+              origem: existing.origem || 'firestore'
+            });
           });
-        });
-      } catch (err) {
-        console.warn("Could not load users from Firestore:", err);
-        STUDENTS_LOAD_ERROR = err;
-      }
+        } catch (err) {
+          console.warn("Could not load users from Firestore:", err);
+          STUDENTS_LOAD_ERROR = err;
+        }
 
-      // 4. Auto-associa Salas VIP encontradas aos alunos e garante dados coerentes
-      for (const s of combined.values()) {
-        const vipCourse = resolveVipCourse(s);
-        if (vipCourse) {
-          s.vipCourseId = vipCourse.id;
-          if (!s.enrolledProducts) s.enrolledProducts = [];
-          if (!s.enrolledProducts.includes(vipCourse.id)) {
-            s.enrolledProducts.unshift(vipCourse.id);
-          }
-          if (!s.tier || !s.tier.includes('vip')) {
-            s.tier = 'vip_mentorship';
-          }
-          if (!s.categories) s.categories = [];
-          if (!s.categories.includes('member_mentoria')) {
-            s.categories.push('member_mentoria');
+        // 4. Auto-associa Salas VIP encontradas aos alunos e garante dados coerentes
+        for (const s of combined.values()) {
+          const vipCourse = resolveVipCourse(s);
+          if (vipCourse) {
+            s.vipCourseId = vipCourse.id;
+            if (!s.enrolledProducts) s.enrolledProducts = [];
+            if (!s.enrolledProducts.includes(vipCourse.id)) {
+              s.enrolledProducts.unshift(vipCourse.id);
+            }
+            if (!s.tier || !s.tier.includes('vip')) {
+              s.tier = 'vip_mentorship';
+            }
+            if (!s.categories) s.categories = [];
+            if (!s.categories.includes('member_mentoria')) {
+              s.categories.push('member_mentoria');
+            }
           }
         }
+      } catch (globalErr) {
+        console.error("Critical error in loadAllStudentsData:", globalErr);
+        STUDENTS_LOAD_ERROR = globalErr;
+      } finally {
+        ALL_STUDENTS_LIST = Array.from(combined.values());
+        CURRENT_PAGE = 1;
+        updateMetrics();
+        renderStudentsTable();
+        renderAdminsTable();
+        updateIcons();
       }
-
-      ALL_STUDENTS_LIST = Array.from(combined.values());
-
-      CURRENT_PAGE = 1;
-      updateMetrics();
-      renderStudentsTable();
-      renderAdminsTable();
-      updateIcons();
     }
 
     function updateMetrics() {

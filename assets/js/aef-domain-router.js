@@ -26,6 +26,7 @@
         this.hostname === '127.0.0.1' ||
         this.hostname.startsWith('192.168.') ||
         this.hostname.startsWith('10.') ||
+        this.hostname.endsWith('workers.dev') ||
         window.location.protocol === 'file:'
       );
     }

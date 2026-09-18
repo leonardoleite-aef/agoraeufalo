@@ -853,7 +853,7 @@
         vipMentees: []
       };
 
-      if (!this.db) {
+      if (!this.db || !this.auth?.currentUser) {
         return results;
       }
 

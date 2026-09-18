@@ -65,6 +65,12 @@ export default {
       return new Response('Not Found', { status: 404 });
     }
 
+    // Normalização para favicon.ico (evita 404 em navegadores e ferramentas de auditoria)
+    if (path === '/favicon.ico') {
+      url.pathname = '/assets/images/favicon.png';
+      return env.ASSETS.fetch(new Request(url.toString(), request));
+    }
+
     // Normalização defensiva para assets estáticos aninhados em subrotas (ex: /alunos/assets/* -> /assets/*)
     if (path.includes('/assets/')) {
       const cleanAssetPath = path.substring(path.indexOf('/assets/'));
@@ -150,8 +156,7 @@ export default {
         '/curso.html': '/curso',
         '/treino/player.html': '/player',
         '/player.html': '/player',
-        '/treino/player': '/player',
-        '/player.html': '/player'
+        '/treino/player': '/player'
       };
 
       if (appLegacyRedirects[path]) {
@@ -178,6 +183,8 @@ export default {
     // 3. DOMÍNIO PÚBLICO (agoraeufalo.com.br / www)
     // ============================================================
     else {
+      const isWorkersDev = host.endsWith('.workers.dev');
+
       // Cross-domain Redirects de rotas de aluno acessadas no domínio público
       const appCrossDomainMap = {
         '/portal': '/',
@@ -191,7 +198,6 @@ export default {
         '/treino/player': '/player',
         '/player.html': '/player',
         '/treino/player.html': '/player',
-        '/player.html': '/player',
         '/login': '/login',
         '/login.html': '/login',
         '/cadastro': '/cadastro',
@@ -200,7 +206,7 @@ export default {
         '/migracao/index.html': '/migracao'
       };
 
-      if (appCrossDomainMap[path]) {
+      if (!isWorkersDev && appCrossDomainMap[path]) {
         const dest = `https://app.agoraeufalo.com.br${appCrossDomainMap[path]}${url.search}`;
         return Response.redirect(dest, 302);
       }
@@ -220,7 +226,6 @@ export default {
         '/quiz': '/quiz',
         '/admin-quiz': '/quiz',
         '/admin-quiz.html': '/quiz',
-        '/vendas': '/vendas',
         '/admin-vendas': '/vendas',
         '/admin-vendas.html': '/vendas',
         '/webhooks': '/webhooks',
@@ -243,7 +248,7 @@ export default {
         '/seo-manager.html': '/seo'
       };
 
-      if (adminCrossDomainMap[path]) {
+      if (!isWorkersDev && adminCrossDomainMap[path]) {
         const dest = `https://admin.agoraeufalo.com.br${adminCrossDomainMap[path]}${url.search}`;
         return Response.redirect(dest, 302);
       }
@@ -270,6 +275,8 @@ export default {
       const publicFileMap = {
         '/': '/index.html',
         '/aefclub': '/aefclub.html',
+        '/vendas': '/vendas.html',
+        '/vendas.html': '/vendas.html',
         '/cursos': '/cursos.html',
         '/ebook': '/ebook.html',
         '/guia-magic-stories': '/guia-magic-stories.html',
