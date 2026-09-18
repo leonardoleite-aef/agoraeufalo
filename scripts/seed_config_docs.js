@@ -214,9 +214,7 @@ const VIP_OVERRIDES_DATA = {
   description: "Lista canônica de e-mails VIP e superadministradores com overrides de acesso",
   updatedAt: new Date().toISOString(),
   adminEmails: [
-    "selexenglish@gmail.com",
-    "leonardo@agoraeufalo.com.br",
-    "leo@agoraeufalo.com.br"
+    "selexenglish@gmail.com"
   ],
   vipEmails: [
     "andrebarrote1992@gmail.com",

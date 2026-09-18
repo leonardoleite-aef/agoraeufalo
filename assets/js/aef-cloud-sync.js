@@ -183,7 +183,7 @@
     const id = String(user.id || uid);
     const name = String(user.name || user.displayName || (email ? email.split("@")[0] : "Aluno AgoraEuFalo"));
     let role = user.role || "student";
-    if (user.tier === "admin_master" || (Array.isArray(user.categories) && user.categories.includes("admin")) || email === "selexenglish@gmail.com" || email === "leonardo@agoraeufalo.com.br") {
+    if (user.tier === "admin_master" || (Array.isArray(user.categories) && user.categories.includes("admin")) || email === "selexenglish@gmail.com") {
       role = "admin";
     }
     const categories = Array.isArray(user.categories) && user.categories.length > 0

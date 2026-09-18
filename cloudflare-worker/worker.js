@@ -86,7 +86,7 @@ export async function getDynamicVipOverrides(forceRefresh = false) {
     console.warn("[AEF Config] Falha ao carregar config/vipOverrides do Firestore:", err.message || err);
   }
   return {
-    adminEmails: ["selexenglish@gmail.com", "leonardo@agoraeufalo.com.br", "leo@agoraeufalo.com.br"],
+    adminEmails: ["selexenglish@gmail.com"],
     vipEmails: [
       "andrebarrote1992@gmail.com",
       "estevaopin@gmail.com",
@@ -106,7 +106,7 @@ export function isEmailAdmin(email, vipConfig = null) {
   if (vipConfig && Array.isArray(vipConfig.adminEmails)) {
     return vipConfig.adminEmails.includes(clean);
   }
-  return clean === "selexenglish@gmail.com" || clean === "leonardo@agoraeufalo.com.br" || clean === "leo@agoraeufalo.com.br";
+  return clean === "selexenglish@gmail.com";
 }
 
 /**

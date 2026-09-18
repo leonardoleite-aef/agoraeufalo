@@ -27,9 +27,7 @@
   };
 
   const MASTER_ADMIN_EMAILS = [
-    'selexenglish@gmail.com',
-    'leonardo@agoraeufalo.com.br',
-    'leo@agoraeufalo.com.br'
+    'selexenglish@gmail.com'
   ];
 
   class AEFPortalAuth {

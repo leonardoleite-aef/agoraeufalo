@@ -299,7 +299,7 @@
       const cachedRole = localStorage.getItem('aef_user_role');
       const cachedTier = localStorage.getItem('aef_user_tier');
       const cachedEmail = (localStorage.getItem('aef_user_email') || '').toLowerCase().trim();
-      if (cachedRole === 'admin' || cachedTier === 'admin_master' || cachedEmail === 'selexenglish@gmail.com' || cachedEmail === 'leonardo@agoraeufalo.com.br') {
+      if (cachedRole === 'admin' || cachedTier === 'admin_master' || cachedEmail === 'selexenglish@gmail.com') {
         return true;
       }
     }
@@ -310,8 +310,7 @@
            user.role === 'admin' ||
            user.tier === 'admin_master' ||
            (Array.isArray(user.categories) && user.categories.includes('admin')) ||
-           userEmail === 'selexenglish@gmail.com' ||
-           userEmail === 'leonardo@agoraeufalo.com.br';
+           userEmail === 'selexenglish@gmail.com';
   }
 
   /**
@@ -750,7 +749,7 @@
     const name = String(raw.name || raw.displayName || (email ? email.split("@")[0] : "Aluno AgoraEuFalo"));
 
     let role = "student";
-    if (raw.role === "admin" || raw.tier === "admin_master" || (Array.isArray(raw.categories) && raw.categories.includes("admin")) || email === "selexenglish@gmail.com" || email === "leonardo@agoraeufalo.com.br") {
+    if (raw.role === "admin" || raw.tier === "admin_master" || (Array.isArray(raw.categories) && raw.categories.includes("admin")) || email === "selexenglish@gmail.com") {
       role = "admin";
     } else if (raw.role === "moderator") {
       role = "moderator";
