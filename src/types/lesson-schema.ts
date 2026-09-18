@@ -93,6 +93,8 @@ export const LABlockSchema = z.object({
   type: z.literal('LA'),
   tag: z.literal('[LA]').default('[LA]'),
   drills: z.array(NegativeTriggerGroupSchema).min(1),
+  failClosed: z.boolean().optional().describe('Flag indicando se o bloco foi isolado preventivamente por segurança'),
+  warningNotice: z.string().optional().describe('Mensagem didática explicativa em modo fail-closed'),
 });
 export type LABlock = z.infer<typeof LABlockSchema>;
 
@@ -117,6 +119,8 @@ export const LASKBlockSchema = z.object({
   type: z.literal('LASK'),
   tag: z.literal('[LASK]').default('[LASK]'),
   drills: z.array(NegativeTriggerGroupSchema).min(1),
+  failClosed: z.boolean().optional().describe('Flag indicando se o bloco foi isolado preventivamente por segurança'),
+  warningNotice: z.string().optional().describe('Mensagem didática explicativa em modo fail-closed'),
 });
 export type LASKBlock = z.infer<typeof LASKBlockSchema>;
 
@@ -179,6 +183,33 @@ export const PDFDocumentPayloadSchema = z.object({
 });
 export type PDFDocumentPayload = z.infer<typeof PDFDocumentPayloadSchema>;
 
+/**
+ * Contrato Canônico de Lição Estruturada (Zod / JSON Canônico)
+ * Trava Anti-Retrocesso (CI / Build Guard): Toda nova lição cadastrada na plataforma
+ * DEVE aderir a esta estrutura para garantir conformidade pedagógica e técnica.
+ */
+export const CanonicalLessonSchema = z.object({
+  id: z.string().min(1, 'ID da lição é obrigatório'),
+  slug: z.string().min(1, 'Slug da lição é obrigatório'),
+  courseId: z.string().optional(),
+  moduleId: z.string().optional(),
+  title: z.string().min(1, 'Título da lição é obrigatório'),
+  archetype: LessonArchetypeSchema.default('magic_story'),
+  blocks: z.array(PedagogicalBlockSchema).min(1, 'A lição deve conter no mínimo 1 bloco pedagógico estruturado'),
+  description: z.string().optional(),
+  thumbnailUrl: z.string().optional(),
+  artworkUrl: z.string().optional(),
+  videoUrl: z.string().optional(),
+  audioUrl: z.string().optional(),
+  pdfUrl: z.string().optional(),
+  goldenTip: z.string().optional(),
+  published: z.boolean().default(true),
+  hasTrainingTrack: z.boolean().optional(),
+  trainingTrackId: z.string().optional(),
+  processedContentHtml: z.string().optional(),
+});
+export type CanonicalLesson = z.infer<typeof CanonicalLessonSchema>;
+
 // ============================================================================
 // 4. FUNÇÕES PURAS DE VALIDAÇÃO E TYPE GUARDS
 // ============================================================================
@@ -205,7 +236,8 @@ export function validatePedagogicalBlock(block: unknown): PedagogicalBlock {
 export function safeValidatePedagogicalBlock(block: unknown): {
   success: boolean;
   data?: PedagogicalBlock;
-  error?: string;
+  error?: z.ZodError;
+  errorMessage?: string;
 } {
   const result = PedagogicalBlockSchema.safeParse(block);
   if (result.success) {
@@ -213,7 +245,8 @@ export function safeValidatePedagogicalBlock(block: unknown): {
   }
   return {
     success: false,
-    error: result.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+    error: result.error,
+    errorMessage: result.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
   };
 }
 
@@ -233,13 +266,101 @@ export function validatePedagogicalBlocks(blocks: unknown): PedagogicalBlock[] {
   });
 }
 
+/**
+ * Trava Anti-Retrocesso: Verifica se uma lição está no formato JSON canônico estruturado
+ */
+export function isCanonicalLesson(obj: unknown): obj is CanonicalLesson {
+  if (!obj || typeof obj !== 'object') return false;
+  return CanonicalLessonSchema.safeParse(obj).success;
+}
+
+/**
+ * Trava Anti-Retrocesso: Valida lição contra o schema canônico Zod, lançando erro se violar
+ */
+export function validateCanonicalLesson(lesson: unknown): CanonicalLesson {
+  return CanonicalLessonSchema.parse(lesson);
+}
+
+/**
+ * Trava Anti-Retrocesso: Validação segura de lição canônica sem lançar exceções
+ */
+export function safeValidateCanonicalLesson(lesson: unknown): {
+  success: boolean;
+  data?: CanonicalLesson;
+  error?: z.ZodError;
+  errorMessage?: string;
+} {
+  const result = CanonicalLessonSchema.safeParse(lesson);
+  if (result.success) {
+    return { success: true, data: result.data };
+  }
+  return {
+    success: false,
+    error: result.error,
+    errorMessage: result.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+  };
+}
+
+/**
+ * Trava Anti-Retrocesso: Asserção de tipo estrita para CI / Build Guard
+ */
+export function assertCanonicalLesson(lesson: unknown): asserts lesson is CanonicalLesson {
+  const result = CanonicalLessonSchema.safeParse(lesson);
+  if (!result.success) {
+    const errorDetails = result.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+    throw new Error(`Violação do Schema Canônico de Lições: ${errorDetails}`);
+  }
+}
+
 // ============================================================================
-// 5. PARSER DE FALLBACK PARA CONTEÚDO LEGADO BASEADO EM TAGS
+// 5. PARSER DE FALLBACK PARA CONTEÚDO LEGADO BASEADO EM TAGS (MODO FAIL-CLOSED)
 // ============================================================================
+
+export const ANSWER_LEAK_REGEX = /(?:^|\s)(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-])/i;
+export const QUESTION_LEAK_REGEX = /(?:^|\s)(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-])/i;
+
+/**
+ * Constrói um bloco seguro de LA em modo fail-closed
+ */
+export function createFailClosedLABlock(warningNotice?: string): LABlock {
+  return {
+    type: 'LA',
+    tag: '[LA]',
+    failClosed: true,
+    warningNotice: warningNotice || 'Conteúdo em revisão pedagógica. Para preservar o reflexo auditivo e evitar spoilers do gabarito, este bloco está temporariamente em modo de proteção segura.',
+    drills: [
+      {
+        negativeContext: 'Conteúdo em proteção pedagógica.',
+        questionVariations: ['[Modo Seguro Ativado • Zero Respostas Reveladas]'],
+        answerVariations: [],
+      },
+    ],
+  };
+}
+
+/**
+ * Constrói um bloco seguro de LASK em modo fail-closed
+ */
+export function createFailClosedLASKBlock(warningNotice?: string): LASKBlock {
+  return {
+    type: 'LASK',
+    tag: '[LASK]',
+    failClosed: true,
+    warningNotice: warningNotice || 'Conteúdo em revisão pedagógica. Para garantir a formulação autônoma no reflexo e evitar a revelação prévia de perguntas, este bloco está temporariamente em modo de proteção segura.',
+    drills: [
+      {
+        negativeContext: 'Conteúdo em proteção pedagógica.',
+        questionVariations: ['[Modo Seguro Ativado • Zero Perguntas Reveladas]'],
+        answerVariations: [],
+      },
+    ],
+  };
+}
 
 /**
  * Converte strings legadas com marcadores [INTRO], [LR], [VOC], [LA], [Q], [LRT], [LASK], [PRO]
  * no formato canônico estruturado de blocos PedagogicalBlock[].
+ * Aplica validação estrita das invariantes pedagógicas com isolamento fail-closed.
  */
 export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] {
   if (!rawText || typeof rawText !== 'string') return [];
@@ -262,23 +383,35 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
     }
   }
 
-  // Regex para segmentar por tags [INTRO], [LR], [VOC], [LA], [Q], [LRT], [LASK], [PRO], [QR_CODE]
-  const tagRegex = /\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)\]/gi;
-  const matches: { tag: string; type: string; index: number }[] = [];
+  // Tokenização estrita: captura tags completas [TAG] e tags malformadas sem fechamento [TAG
+  const tagRegex = /\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)(\]|(?=[\s\n\r\t:;.,]|$))/gi;
+  const matches: { tag: string; type: string; index: number; isMalformed: boolean; tagLength: number }[] = [];
   let m: RegExpExecArray | null;
 
   while ((m = tagRegex.exec(text)) !== null) {
     let normalizedType = m[1].toUpperCase();
     if (normalizedType === 'Q') normalizedType = 'LA';
+    const isClosed = m[2] === ']';
     matches.push({
-      tag: `[${m[1].toUpperCase()}]`,
+      tag: isClosed ? `[${m[1].toUpperCase()}]` : `[${m[1].toUpperCase()}`,
       type: normalizedType,
       index: m.index,
+      isMalformed: !isClosed,
+      tagLength: m[0].length,
     });
   }
 
-  // Se não encontrar nenhuma tag, trata todo o texto como Listen & Read (LR) padrão
+  // Se não encontrar nenhuma tag:
   if (matches.length === 0) {
+    // Se o texto contiver indícios de gabarito ou respostas soltas sem tags, isola em fail-closed
+    if (ANSWER_LEAK_REGEX.test(text) || QUESTION_LEAK_REGEX.test(text)) {
+      return [
+        createFailClosedLABlock(
+          'Texto com formato de perguntas/respostas sem delimitação canônica. Bloco isolado para proteção do gabarito.'
+        ),
+      ];
+    }
+
     const paragraphs = text
       .split(/\n\s*\n/)
       .map(p => p.trim())
@@ -296,9 +429,9 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
 
   for (let i = 0; i < matches.length; i++) {
     const current = matches[i];
-    const startIndex = current.index + current.tag.length;
+    const startIndex = current.index + current.tagLength;
     const endIndex = i + 1 < matches.length ? matches[i + 1].index : text.length;
-    const content = text.slice(startIndex, endIndex).trim();
+    let content = text.slice(startIndex, endIndex).trim();
 
     switch (current.type) {
       case 'INTRO': {
@@ -308,10 +441,14 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
         const grammarPoints: string[] = [];
         const recommendations: string[] = [];
         const roadblocks: string[] = [];
-
         let currentSection = 'focus';
 
         for (const line of lines) {
+          // Proteção contra vazamento de tags malformadas ou gabarito em INTRO
+          if (/^\[(LA|LASK|Q|VOC|PRO)/i.test(line) || ANSWER_LEAK_REGEX.test(line)) {
+            continue;
+          }
+
           const lower = line.toLowerCase();
           if (lower.startsWith('chunks:') || lower.startsWith('key chunks:')) {
             currentSection = 'chunks';
@@ -359,7 +496,10 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
       }
 
       case 'LR': {
-        const paragraphs = content
+        const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+        const cleanLines = lines.filter(l => !/^\[(LA|LASK|Q|VOC|PRO)/i.test(l) && !ANSWER_LEAK_REGEX.test(l));
+        const cleanContent = cleanLines.join('\n');
+        const paragraphs = cleanContent
           .split(/\n\s*\n/)
           .map(p => p.trim())
           .filter(Boolean);
@@ -367,7 +507,7 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
         blocks.push({
           type: 'LR',
           tag: '[LR]',
-          paragraphs: paragraphs.length > 0 ? paragraphs : [content],
+          paragraphs: paragraphs.length > 0 ? paragraphs : (cleanLines.length > 0 ? cleanLines : ['Narrativa didática.']),
         });
         break;
       }
@@ -378,12 +518,16 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
         const storyTranslation: string[] = [];
 
         for (const line of lines) {
+          // Proteção contra vazamento de tags corrompidas ou gabarito dentro de vocabulário
+          if (/^\[(LA|LASK|Q|LR|INTRO|PRO)/i.test(line) || ANSWER_LEAK_REGEX.test(line) || QUESTION_LEAK_REGEX.test(line)) {
+            continue;
+          }
+
           if (line.startsWith('TRADUÇÃO:') || line.startsWith('STORY:')) {
             storyTranslation.push(line.replace(/^(TRADUÇÃO|STORY):\s*/i, '').trim());
             continue;
           }
 
-          // Formato: - target: spokenTranslation (grammarNote) ou target - translation
           const clean = line.replace(/^[\*\•\-\d+\.]\s*/, '').trim();
           const separatorMatch = clean.match(/^(.*?)\s*[-–—:]\s*(.*)$/);
 
@@ -422,16 +566,55 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
       }
 
       case 'LA': {
-        // Suporta Q: Pergunta / A: Resposta ou linhas numeradas
+        // Regra LA Fail-Closed: se a tag estiver malformada (sem colchete de fechamento), isola preventivamente
+        if (current.isMalformed) {
+          blocks.push(
+            createFailClosedLABlock('Tag [LA malformada ou sem fechamento. Bloco isolado para proteção do gabarito.')
+          );
+          break;
+        }
+
         const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
         const drills: NegativeTriggerGroup[] = [];
         let currentQuestion = '';
         let currentAnswers: string[] = [];
         let currentContext = '';
+        let hasAmbiguityOrLeak = false;
+
+        // Se o conteúdo do bloco contiver tags aninhadas indevidamente
+        if (/\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)/i.test(content)) {
+          hasAmbiguityOrLeak = true;
+        }
 
         for (const line of lines) {
-          const qMatch = line.match(/^(?:Q|Pergunta|\d+[\.\)])\s*[:\-]?\s*(.*)$/i);
-          const aMatch = line.match(/^(?:A|Resposta)\s*[:\-]?\s*(.*)$/i);
+          // Verifica se há pergunta e resposta misturadas na mesma linha (ex: "Q: Onde foi? A: Em casa")
+          const inlineSplit = line.match(/^(.*?)\s+(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-])\s*(.*)$/i);
+          if (inlineSplit) {
+            if (currentQuestion) {
+              drills.push({
+                negativeContext: currentContext || currentQuestion,
+                questionVariations: [currentQuestion],
+                answerVariations: currentAnswers.length > 0 ? currentAnswers : ['Yes/No response'],
+              });
+              currentAnswers = [];
+              currentContext = '';
+            }
+            const cleanQ = inlineSplit[1].replace(/^(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-]?|\d+[\.\)])\s*/i, '').trim();
+            const cleanA = inlineSplit[2].trim();
+            if (ANSWER_LEAK_REGEX.test(cleanQ)) {
+              hasAmbiguityOrLeak = true;
+            }
+            drills.push({
+              negativeContext: cleanQ,
+              questionVariations: [cleanQ],
+              answerVariations: cleanA ? [cleanA] : ['Yes/No response'],
+            });
+            currentQuestion = '';
+            continue;
+          }
+
+          const qMatch = line.match(/^(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-]?|\d+[\.\)])\s*(.*)$/i);
+          const aMatch = line.match(/^(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-]?)\s*(.*)$/i);
           const cMatch = line.match(/^(?:Context|Cenário|Stimulus)\s*[:\-]?\s*(.*)$/i);
 
           if (cMatch) {
@@ -447,6 +630,9 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
               currentContext = '';
             }
             currentQuestion = qMatch[1].trim();
+            if (ANSWER_LEAK_REGEX.test(currentQuestion)) {
+              hasAmbiguityOrLeak = true;
+            }
           } else if (aMatch) {
             currentAnswers.push(aMatch[1].trim());
           } else if (line.endsWith('?')) {
@@ -462,6 +648,11 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
             currentQuestion = line;
           } else if (currentQuestion) {
             currentAnswers.push(line);
+          } else {
+            // Linha sem pergunta correspondente que contenha indicativo de resposta
+            if (ANSWER_LEAK_REGEX.test(line)) {
+              hasAmbiguityOrLeak = true;
+            }
           }
         }
 
@@ -473,24 +664,25 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
           });
         }
 
-        // Fallback se não separou em perguntas específicas
-        if (drills.length === 0 && content) {
-          drills.push({
-            negativeContext: content,
-            questionVariations: [content],
-            answerVariations: ['Practice response'],
+        // Validação estrita das invariantes de LA:
+        const anyQuestionHasLeak = drills.some(d =>
+          d.questionVariations.some(q => ANSWER_LEAK_REGEX.test(q)) ||
+          ANSWER_LEAK_REGEX.test(d.negativeContext)
+        );
+
+        if (hasAmbiguityOrLeak || anyQuestionHasLeak || drills.length === 0) {
+          blocks.push(
+            createFailClosedLABlock(
+              'Estrutura de perguntas e respostas ambígua. Bloco isolado para proteger o reflexo do aluno e evitar spoilers do gabarito.'
+            )
+          );
+        } else {
+          blocks.push({
+            type: 'LA',
+            tag: '[LA]',
+            drills,
           });
         }
-
-        blocks.push({
-          type: 'LA',
-          tag: '[LA]',
-          drills: drills.length > 0 ? drills : [{
-            negativeContext: 'Default drill',
-            questionVariations: ['Listen & Answer drill'],
-            answerVariations: ['Default answer'],
-          }],
-        });
         break;
       }
 
@@ -507,36 +699,70 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
       }
 
       case 'LASK': {
+        // Regra LASK Fail-Closed: se a tag estiver malformada, isola preventivamente
+        if (current.isMalformed) {
+          blocks.push(
+            createFailClosedLASKBlock(
+              'Tag [LASK malformada ou sem fechamento. Bloco isolado para evitar vazamento prévio de perguntas.'
+            )
+          );
+          break;
+        }
+
         const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
         const drills: NegativeTriggerGroup[] = [];
+        let hasAmbiguityOrLeak = false;
+
+        if (/\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)/i.test(content)) {
+          hasAmbiguityOrLeak = true;
+        }
 
         for (const line of lines) {
           const clean = line.replace(/^[\*\•\-\d+\.]\s*/, '').trim();
           const arrowMatch = clean.match(/^(.*?)\s*(?:->|➔|=>|:\s*pergunta:)\s*(.*)$/i);
           if (arrowMatch) {
+            const stimulus = arrowMatch[1].trim();
+            const question = arrowMatch[2].trim();
+            if (QUESTION_LEAK_REGEX.test(stimulus) || stimulus.endsWith('?')) {
+              hasAmbiguityOrLeak = true;
+            }
             drills.push({
-              negativeContext: arrowMatch[1].trim(),
-              questionVariations: [arrowMatch[2].trim()],
+              negativeContext: stimulus,
+              questionVariations: [question],
               answerVariations: [],
             });
           } else if (clean) {
-            drills.push({
-              negativeContext: clean,
-              questionVariations: ['Ask question about stimulus'],
-              answerVariations: [],
-            });
+            // Linha sem separador explícito de seta (->)
+            if (clean.includes('?') || QUESTION_LEAK_REGEX.test(clean)) {
+              hasAmbiguityOrLeak = true;
+            } else {
+              drills.push({
+                negativeContext: clean,
+                questionVariations: ['Ask question about stimulus'],
+                answerVariations: [],
+              });
+            }
           }
         }
 
-        blocks.push({
-          type: 'LASK',
-          tag: '[LASK]',
-          drills: drills.length > 0 ? drills : [{
-            negativeContext: content,
-            questionVariations: ['Formulate question'],
-            answerVariations: [],
-          }],
-        });
+        const anyStimulusHasLeak = drills.some(d =>
+          QUESTION_LEAK_REGEX.test(d.negativeContext) ||
+          d.negativeContext.includes('?')
+        );
+
+        if (hasAmbiguityOrLeak || anyStimulusHasLeak || drills.length === 0) {
+          blocks.push(
+            createFailClosedLASKBlock(
+              'Estrutura de formulação de perguntas ambígua. Bloco isolado para proteger a regra de zero perguntas reveladas.'
+            )
+          );
+        } else {
+          blocks.push({
+            type: 'LASK',
+            tag: '[LASK]',
+            drills,
+          });
+        }
         break;
       }
 
@@ -546,6 +772,10 @@ export function parseLegacyPedagogicalText(rawText: string): PedagogicalBlock[] 
         let goldenTip = '';
 
         for (const line of lines) {
+          if (/^\[(LA|LASK|Q|VOC)/i.test(line) || ANSWER_LEAK_REGEX.test(line)) {
+            continue;
+          }
+
           const tipMatch = line.match(/^(?:Sacada de Ouro|Golden Tip|Dica de Ouro)\s*[:\-]?\s*(.*)$/i);
           if (tipMatch) {
             goldenTip = tipMatch[1].trim();

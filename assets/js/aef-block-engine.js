@@ -844,28 +844,57 @@
     }
 
     /**
-     * Parser de fallback para converter textos legados com marcadores em blocos estruturados
+     * Converte texto com tags legadas em blocos pedagógicos estruturados (alias compatível com lesson-schema)
      */
-    parseLegacyTags(rawText) {
+    parseLegacyPedagogicalText(rawText, options = {}) {
+      return this.parsePedagogicalContent(rawText, options);
+    }
+
+    /**
+     * Parser de fallback para converter textos legados com marcadores em blocos estruturados (Modo Fail-Closed)
+     */
+    parseLegacyTags(rawText, options = {}) {
       if (!rawText) return [];
       const text = rawText.trim();
       if (!text) return [];
 
-      const tagRegex = /\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)\]/gi;
+      const ANSWER_LEAK_REGEX = /(?:^|\s)(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-])/i;
+      const QUESTION_LEAK_REGEX = /(?:^|\s)(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-])/i;
+
+      // Tokenização estrita: captura tags completas [TAG] e tags malformadas sem fechamento [TAG
+      const tagRegex = /\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)(\]|(?=[\s\n\r\t:;.,]|$))/gi;
       const matches = [];
       let m;
 
       while ((m = tagRegex.exec(text)) !== null) {
         let normalizedType = m[1].toUpperCase();
         if (normalizedType === 'Q') normalizedType = 'LA';
+        const isClosed = m[2] === ']';
         matches.push({
-          tag: `[${m[1].toUpperCase()}]`,
+          tag: isClosed ? `[${m[1].toUpperCase()}]` : `[${m[1].toUpperCase()}`,
           type: normalizedType,
-          index: m.index
+          index: m.index,
+          isMalformed: !isClosed,
+          tagLength: m[0].length
         });
       }
 
       if (matches.length === 0) {
+        if (ANSWER_LEAK_REGEX.test(text) || QUESTION_LEAK_REGEX.test(text)) {
+          console.warn('[AEF Pedagogical Engine] Texto sem tags contém formato de gabarito/resposta. Acionando proteção fail-closed.');
+          return [{
+            type: 'LA',
+            tag: '[LA]',
+            failClosed: true,
+            warningNotice: 'Texto com formato de perguntas/respostas sem delimitação canônica. Bloco isolado para proteção do gabarito.',
+            drills: [{
+              negativeContext: 'Conteúdo em proteção pedagógica.',
+              questionVariations: ['[Modo Seguro Ativado • Zero Respostas Reveladas]'],
+              answerVariations: []
+            }]
+          }];
+        }
+
         const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
         return [{
           type: 'LR',
@@ -878,9 +907,9 @@
 
       for (let i = 0; i < matches.length; i++) {
         const current = matches[i];
-        const startIndex = current.index + current.tag.length;
+        const startIndex = current.index + current.tagLength;
         const endIndex = i + 1 < matches.length ? matches[i + 1].index : text.length;
-        const content = text.slice(startIndex, endIndex).trim();
+        let content = text.slice(startIndex, endIndex).trim();
 
         switch (current.type) {
           case 'INTRO': {
@@ -893,6 +922,10 @@
             let currentSection = 'focus';
 
             for (const line of lines) {
+              if (/^\[(LA|LASK|Q|VOC|PRO)/i.test(line) || ANSWER_LEAK_REGEX.test(line)) {
+                continue;
+              }
+
               const lower = line.toLowerCase();
               if (lower.startsWith('chunks:') || lower.startsWith('key chunks:')) {
                 currentSection = 'chunks';
@@ -934,11 +967,14 @@
           }
 
           case 'LR': {
-            const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+            const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
+            const cleanLines = lines.filter(l => !/^\[(LA|LASK|Q|VOC|PRO)/i.test(l) && !ANSWER_LEAK_REGEX.test(l));
+            const cleanContent = cleanLines.join('\n');
+            const paragraphs = cleanContent.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
             blocks.push({
               type: 'LR',
               tag: '[LR]',
-              paragraphs: paragraphs.length > 0 ? paragraphs : [content]
+              paragraphs: paragraphs.length > 0 ? paragraphs : (cleanLines.length > 0 ? cleanLines : ['Narrativa didática.'])
             });
             break;
           }
@@ -949,6 +985,10 @@
             const storyTranslation = [];
 
             for (const line of lines) {
+              if (/^\[(LA|LASK|Q|LR|INTRO|PRO)/i.test(line) || ANSWER_LEAK_REGEX.test(line) || QUESTION_LEAK_REGEX.test(line)) {
+                continue;
+              }
+
               if (line.startsWith('TRADUÇÃO:') || line.startsWith('STORY:')) {
                 storyTranslation.push(line.replace(/^(TRADUÇÃO|STORY):\s*/i, '').trim());
                 continue;
@@ -985,15 +1025,61 @@
           }
 
           case 'LA': {
+            if (current.isMalformed) {
+              console.warn('[AEF Pedagogical Engine] Tag [LA malformada sem fechamento. Acionando proteção fail-closed.');
+              blocks.push({
+                type: 'LA',
+                tag: '[LA]',
+                failClosed: true,
+                warningNotice: 'Tag [LA malformada ou sem fechamento. Bloco isolado para proteção do gabarito.',
+                drills: [{
+                  negativeContext: 'Conteúdo em proteção pedagógica.',
+                  questionVariations: ['[Modo Seguro Ativado • Zero Respostas Reveladas]'],
+                  answerVariations: []
+                }]
+              });
+              break;
+            }
+
             const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
             const drills = [];
             let currentQuestion = '';
             let currentAnswers = [];
             let currentContext = '';
+            let hasAmbiguityOrLeak = false;
+
+            if (/\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)/i.test(content)) {
+              hasAmbiguityOrLeak = true;
+            }
 
             for (const line of lines) {
-              const qMatch = line.match(/^(?:Q|Pergunta|\d+[\.\)])\s*[:\-]?\s*(.*)$/i);
-              const aMatch = line.match(/^(?:A|Resposta)\s*[:\-]?\s*(.*)$/i);
+              const inlineSplit = line.match(/^(.*?)\s+(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-])\s*(.*)$/i);
+              if (inlineSplit) {
+                if (currentQuestion) {
+                  drills.push({
+                    negativeContext: currentContext || currentQuestion,
+                    questionVariations: [currentQuestion],
+                    answerVariations: currentAnswers.length > 0 ? currentAnswers : ['Yes/No response']
+                  });
+                  currentAnswers = [];
+                  currentContext = '';
+                }
+                const cleanQ = inlineSplit[1].replace(/^(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-]?|\d+[\.\)])\s*/i, '').trim();
+                const cleanA = inlineSplit[2].trim();
+                if (ANSWER_LEAK_REGEX.test(cleanQ)) {
+                  hasAmbiguityOrLeak = true;
+                }
+                drills.push({
+                  negativeContext: cleanQ,
+                  questionVariations: [cleanQ],
+                  answerVariations: cleanA ? [cleanA] : ['Yes/No response']
+                });
+                currentQuestion = '';
+                continue;
+              }
+
+              const qMatch = line.match(/^(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-]?|\d+[\.\)])\s*(.*)$/i);
+              const aMatch = line.match(/^(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-]?)\s*(.*)$/i);
               const cMatch = line.match(/^(?:Context|Cenário|Stimulus)\s*[:\-]?\s*(.*)$/i);
 
               if (cMatch) {
@@ -1009,6 +1095,9 @@
                   currentContext = '';
                 }
                 currentQuestion = qMatch[1].trim();
+                if (ANSWER_LEAK_REGEX.test(currentQuestion)) {
+                  hasAmbiguityOrLeak = true;
+                }
               } else if (aMatch) {
                 currentAnswers.push(aMatch[1].trim());
               } else if (line.endsWith('?')) {
@@ -1024,6 +1113,10 @@
                 currentQuestion = line;
               } else if (currentQuestion) {
                 currentAnswers.push(line);
+              } else {
+                if (ANSWER_LEAK_REGEX.test(line)) {
+                  hasAmbiguityOrLeak = true;
+                }
               }
             }
 
@@ -1035,23 +1128,31 @@
               });
             }
 
-            if (drills.length === 0 && content) {
-              drills.push({
-                negativeContext: content,
-                questionVariations: [content],
-                answerVariations: ['Practice response']
+            const anyQuestionHasLeak = drills.some(d =>
+              (d.questionVariations || []).some(q => ANSWER_LEAK_REGEX.test(q)) ||
+              ANSWER_LEAK_REGEX.test(d.negativeContext || '')
+            );
+
+            if (hasAmbiguityOrLeak || anyQuestionHasLeak || drills.length === 0) {
+              console.warn('[AEF Pedagogical Engine] Bloco LA com ambiguidade ou risco de vazamento de resposta. Acionando proteção fail-closed.');
+              blocks.push({
+                type: 'LA',
+                tag: '[LA]',
+                failClosed: true,
+                warningNotice: 'Estrutura de perguntas e respostas ambígua. Bloco isolado para proteger o reflexo do aluno e evitar spoilers do gabarito.',
+                drills: [{
+                  negativeContext: 'Conteúdo em proteção pedagógica.',
+                  questionVariations: ['[Modo Seguro Ativado • Zero Respostas Reveladas]'],
+                  answerVariations: []
+                }]
+              });
+            } else {
+              blocks.push({
+                type: 'LA',
+                tag: '[LA]',
+                drills
               });
             }
-
-            blocks.push({
-              type: 'LA',
-              tag: '[LA]',
-              drills: drills.length > 0 ? drills : [{
-                negativeContext: 'Default drill',
-                questionVariations: ['Listen & Answer drill'],
-                answerVariations: ['Response']
-              }]
-            });
             break;
           }
 
@@ -1067,34 +1168,82 @@
           }
 
           case 'LASK': {
+            if (current.isMalformed) {
+              console.warn('[AEF Pedagogical Engine] Tag [LASK malformada sem fechamento. Acionando proteção fail-closed.');
+              blocks.push({
+                type: 'LASK',
+                tag: '[LASK]',
+                failClosed: true,
+                warningNotice: 'Tag [LASK malformada ou sem fechamento. Bloco isolado para evitar vazamento prévio de perguntas.',
+                drills: [{
+                  negativeContext: 'Conteúdo em proteção pedagógica.',
+                  questionVariations: ['[Modo Seguro Ativado • Zero Perguntas Reveladas]'],
+                  answerVariations: []
+                }]
+              });
+              break;
+            }
+
             const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
             const drills = [];
+            let hasAmbiguityOrLeak = false;
+
+            if (/\[(INTRO|LR|VOC|LA|Q|LRT|LASK|PRO|QR_CODE)/i.test(content)) {
+              hasAmbiguityOrLeak = true;
+            }
+
             for (const line of lines) {
               const clean = line.replace(/^[\*\•\-\d+\.]\s*/, '').trim();
               const arrowMatch = clean.match(/^(.*?)\s*(?:->|➔|=>|:\s*pergunta:)\s*(.*)$/i);
               if (arrowMatch) {
+                const stimulus = arrowMatch[1].trim();
+                const question = arrowMatch[2].trim();
+                if (QUESTION_LEAK_REGEX.test(stimulus) || stimulus.endsWith('?')) {
+                  hasAmbiguityOrLeak = true;
+                }
                 drills.push({
-                  negativeContext: arrowMatch[1].trim(),
-                  questionVariations: [arrowMatch[2].trim()],
+                  negativeContext: stimulus,
+                  questionVariations: [question],
                   answerVariations: []
                 });
               } else if (clean) {
-                drills.push({
-                  negativeContext: clean,
-                  questionVariations: ['Ask question'],
-                  answerVariations: []
-                });
+                if (clean.includes('?') || QUESTION_LEAK_REGEX.test(clean)) {
+                  hasAmbiguityOrLeak = true;
+                } else {
+                  drills.push({
+                    negativeContext: clean,
+                    questionVariations: ['Ask question about stimulus'],
+                    answerVariations: []
+                  });
+                }
               }
             }
-            blocks.push({
-              type: 'LASK',
-              tag: '[LASK]',
-              drills: drills.length > 0 ? drills : [{
-                negativeContext: content,
-                questionVariations: ['Formulate question'],
-                answerVariations: []
-              }]
-            });
+
+            const anyStimulusHasLeak = drills.some(d =>
+              QUESTION_LEAK_REGEX.test(d.negativeContext || '') ||
+              (d.negativeContext || '').includes('?')
+            );
+
+            if (hasAmbiguityOrLeak || anyStimulusHasLeak || drills.length === 0) {
+              console.warn('[AEF Pedagogical Engine] Bloco LASK com ambiguidade ou pergunta vazada no estímulo. Acionando proteção fail-closed.');
+              blocks.push({
+                type: 'LASK',
+                tag: '[LASK]',
+                failClosed: true,
+                warningNotice: 'Estrutura de formulação de perguntas ambígua. Bloco isolado para proteger a regra de zero perguntas reveladas.',
+                drills: [{
+                  negativeContext: 'Conteúdo em proteção pedagógica.',
+                  questionVariations: ['[Modo Seguro Ativado • Zero Perguntas Reveladas]'],
+                  answerVariations: []
+                }]
+              });
+            } else {
+              blocks.push({
+                type: 'LASK',
+                tag: '[LASK]',
+                drills
+              });
+            }
             break;
           }
 
@@ -1103,6 +1252,9 @@
             const fullTextWithLinking = [];
             let goldenTip = '';
             for (const line of lines) {
+              if (/^\[(LA|LASK|Q|VOC)/i.test(line) || ANSWER_LEAK_REGEX.test(line)) {
+                continue;
+              }
               const tipMatch = line.match(/^(?:Sacada de Ouro|Golden Tip|Dica de Ouro)\s*[:\-]?\s*(.*)$/i);
               if (tipMatch) goldenTip = tipMatch[1].trim();
               else if (goldenTip) goldenTip += ` ${line}`;
@@ -1150,6 +1302,14 @@
       const rendered = blocks.map((b, idx) => this.renderPedagogicalBlock(b, theme, { ...options, index: idx })).join('\n');
       return `<div class="pedagogical-content-stream space-y-6 max-w-4xl mx-auto">${rendered}</div>`;
     }
+
+    /**
+     * Alias de compatibilidade para renderizar conteúdo pedagógico completo
+     */
+    renderPedagogicalContent(content, options = {}) {
+      return this.renderPedagogicalBlocks(content, options);
+    }
+
 
     /**
      * Renderiza um bloco didático individual em HTML de alto contraste
@@ -1261,8 +1421,25 @@
     }
 
     renderLABlock(block, theme) {
+      if (block && block.failClosed) {
+        return this.renderFailClosedBlock('LA', block.warningNotice);
+      }
+
+      const drills = (block && block.drills && block.drills.length > 0)
+        ? block.drills
+        : (Array.isArray(block?.questions) ? block.questions.map(q => ({ negativeContext: q, questionVariations: [q] })) : []);
+
+      const ANSWER_LEAK_REGEX = /(?:^|\s)(?:\[(?:A|Ans|Answer|Resposta|Resp|Gabarito)\]|\(?(?:A|Ans|Answer|Resposta|Resp|Gabarito)\)?\s*[:\-])/i;
+      const hasLeak = drills.some(d =>
+        (d.questionVariations || []).some(q => ANSWER_LEAK_REGEX.test(q)) ||
+        ANSWER_LEAK_REGEX.test(d.negativeContext || '')
+      );
+      if (hasLeak) {
+        return this.renderFailClosedBlock('LA', 'Proteção ativa: indicador de resposta detectado no enunciado.');
+      }
+
       // Regra Estrita Canônica: Zero respostas reveladas na tela do aluno!
-      const drillsHtml = (block.drills || []).map((d, idx) => {
+      const drillsHtml = drills.map((d, idx) => {
         const question = d.questionVariations?.[0] || d.negativeContext || 'Question';
         return `
           <div class="py-3 border-b border-amber-200/50 last:border-0">
@@ -1317,8 +1494,25 @@
     }
 
     renderLASKBlock(block, theme) {
+      if (block && block.failClosed) {
+        return this.renderFailClosedBlock('LASK', block.warningNotice);
+      }
+
+      const drills = (block && block.drills && block.drills.length > 0)
+        ? block.drills
+        : (Array.isArray(block?.prompts) ? block.prompts.map(p => ({ negativeContext: p })) : []);
+
+      const QUESTION_LEAK_REGEX = /(?:^|\s)(?:\[(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\]|\(?(?:Q|Quest|Question|Pergunta|Perg|P|Ask)\)?\s*[:\-])/i;
+      const hasLeak = drills.some(d =>
+        QUESTION_LEAK_REGEX.test(d.negativeContext || '') ||
+        (d.negativeContext || '').trim().endsWith('?')
+      );
+      if (hasLeak) {
+        return this.renderFailClosedBlock('LASK', 'Proteção ativa: pergunta detectada no estímulo.');
+      }
+
       // Regra Estrita Canônica: Zero perguntas reveladas na tela do aluno!
-      const drillsHtml = (block.drills || []).map((d, idx) => {
+      const drillsHtml = drills.map((d, idx) => {
         const stimulus = d.negativeContext || 'Stimulus';
         return `
           <div class="py-3 border-b border-amber-200/50 last:border-0">
@@ -1344,6 +1538,39 @@
           <p class="text-xs text-slate-600 mb-3 italic">Leia a afirmação/negação e formule a pergunta correspondente no reflexo:</p>
           <div class="space-y-1">
             ${drillsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Renderiza o card seguro de aviso didático em modo Fail-Closed (Calm EdTech)
+     */
+    renderFailClosedBlock(blockType, customNotice) {
+      const isLA = blockType === 'LA';
+      const badge = isLA ? '3. Listen & Answer (LA) • Proteção Ativa' : '5. Listen & Ask (LASK) • Proteção Ativa';
+      const invariantTitle = isLA ? 'Zero respostas reveladas na tela' : 'Zero perguntas reveladas previamente';
+      const defaultNotice = isLA
+        ? 'Para garantir o princípio inegociável de reflexo auditivo e evitar spoilers do gabarito (Zero respostas reveladas), a renderização automática deste exercício foi suspensa devido a inconsistências na formatação de origem. O áudio do exercício pode ser praticado diretamente no Training Player.'
+        : 'Para garantir que nenhuma pergunta seja revelada previamente (Zero perguntas reveladas) e manter o desafio de formulação rápida no reflexo, a renderização deste bloco foi isolada preventivamente. Pratique a escuta ativa no Training Player.';
+      const notice = customNotice || defaultNotice;
+
+      return `
+        <div class="pedagogical-block fail-closed-block bg-amber-50/80 border-2 border-amber-300 rounded-3xl p-6 sm:p-8 shadow-sm text-slate-900 mb-6" data-fail-closed="${blockType}">
+          <div class="flex items-center justify-between gap-3 mb-4 border-b border-amber-200/80 pb-3">
+            <span class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span>🔒</span> ${badge}
+            </span>
+            <span class="text-xs text-amber-900 font-bold italic">${invariantTitle}</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-white border border-amber-200 shadow-xs">
+            <div class="flex items-start gap-3">
+              <span class="text-xl shrink-0">🛡️</span>
+              <div>
+                <h4 class="font-bold text-amber-950 text-sm mb-1">Aviso Didático: Conteúdo em Proteção Pedagógica (Modo Fail-Closed Ativado)</h4>
+                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">${notice}</p>
+              </div>
+            </div>
           </div>
         </div>
       `;
@@ -1393,8 +1620,10 @@
   const aefBlockEngineInstance = new AEFBlockEngine();
   const aefPedagogicalEngineInstance = {
     parse: (content, opt) => aefBlockEngineInstance.parsePedagogicalContent(content, opt),
+    parseLegacyPedagogicalText: (content, opt) => aefBlockEngineInstance.parseLegacyPedagogicalText(content, opt),
     render: (content, opt) => aefBlockEngineInstance.renderPedagogicalBlocks(content, opt),
-    renderBlock: (block, theme, opt) => aefBlockEngineInstance.renderPedagogicalBlock(block, theme, opt)
+    renderBlock: (block, theme, opt) => aefBlockEngineInstance.renderPedagogicalBlock(block, theme, opt),
+    renderFailClosedBlock: (type, notice) => aefBlockEngineInstance.renderFailClosedBlock(type, notice)
   };
 
   if (typeof root !== 'undefined') {

@@ -81,6 +81,12 @@ export interface AEFUser {
   legacyEntitlements: EntitlementCategory[];
   createdAt: string;
   updatedAt: string;
+  studentId?: string;
+  menteeSlug?: string;
+  enrolledProducts?: string[];
+  tier?: string;
+  category?: string;
+  categories?: EntitlementCategory[] | string[];
   legacy?: {
     tier?: string;
     enrolledProducts?: string[];
@@ -95,7 +101,7 @@ export interface AEFUser {
 // ============================================================================
 
 export type CourseCategory = "magic_stories" | "foundations" | "survival" | "real_english";
-export type CourseAccessTier = "all_access" | "standalone" | "free";
+export type CourseAccessTier = "free" | "all_access" | "standalone";
 
 export interface AccessGrant {
   entitlements?: EntitlementCategory[];
@@ -125,6 +131,9 @@ export interface AEFLesson {
   description?: string;
   thumbnailUrl?: string;
   artworkUrl?: string;
+  tag?: string;
+  duration?: number;
+  isFree?: boolean;
   media?: AEFMedia[];
   downloads?: AEFDownload[];
   videoUrl?: string;
@@ -149,6 +158,13 @@ export interface AEFCourse {
   access: AccessGrant;
   priceInCents?: number;
   isPublished: boolean;
+  published?: boolean;
+  studentId?: string;
+  studentEmail?: string;
+  badge?: string;
+  tierRequired?: string;
+  legacyGrants?: string[];
+  productId?: string;
   sortOrder?: number;
   modules?: AEFModule[];
 }
@@ -186,21 +202,54 @@ export interface ProductEntitlementMapping {
  * status de publicação, modelo de acesso (free, all_access, standalone) e vigência.
  */
 export function hasAccess(user: AEFUser, course: AEFCourse, now: Date = new Date()): boolean {
-  if (user.role === "admin") return true;
-  if (!course.isPublished) return false;
+  if (user.role === "admin" || user.email === "selexenglish@gmail.com" || user.email === "leonardo@agoraeufalo.com.br") return true;
+  if (course.isPublished === false || course.published === false) return false;
+
+  // Regra Estrita: Mentoria VIP é 100% individual e privada
+  const isMentoria = course.id.startsWith("mentoria-") ||
+                     course.accessTier === ("mentoria_vip" as any) ||
+                     course.tierRequired === "vip" ||
+                     Boolean(course.badge && course.badge.toUpperCase().includes("MENTORIA"));
+
+  if (isMentoria) {
+    const cleanEmail = (user.email || "").toLowerCase().trim();
+    const courseEmail = (course.studentEmail || "").toLowerCase().trim();
+    const studentId = (user.studentId || user.id || user.uid || user.menteeSlug || "").toLowerCase().trim();
+    const targetStudentId = (course.studentId || "").toLowerCase().trim();
+
+    const enrolled = user.enrolledProducts || [];
+    const ownsCourse = enrolled.includes(course.id) || user.purchasedProducts.some(p => p.courseId === course.id || p.productId === course.id);
+    if (ownsCourse) return true;
+    if (targetStudentId && studentId && (studentId === targetStudentId || studentId.includes(targetStudentId) || targetStudentId.includes(studentId))) return true;
+    if (courseEmail && cleanEmail && cleanEmail === courseEmail) return true;
+
+    return false;
+  }
+
   if (course.accessTier === "free") return true;
+
+  // Compra direta / matrícula standalone
+  const enrolled = user.enrolledProducts || [];
+  const ownsProduct = enrolled.includes(course.id) || enrolled.includes("all_access_master") ||
+    user.purchasedProducts.some(
+      (p) => p.courseId === course.id || course.access.requiresProductId?.includes(p.productId) || (course.productId && p.productId === course.productId)
+    );
+  if (ownsProduct) return true;
 
   const active = getActiveEntitlements(user, now);
 
   if (course.accessTier === "all_access") {
-    return (course.access.entitlements ?? []).some((e) => active.includes(e));
+    let allowedCats: EntitlementCategory[] = course.access?.entitlements ?? ["member_pago"];
+    if (course.legacyGrants && course.legacyGrants.length > 0) {
+      allowedCats = [...allowedCats, ...(course.legacyGrants as EntitlementCategory[])];
+    }
+    return allowedCats.some((e) => active.includes(e));
   }
 
   if (course.accessTier === "standalone") {
-    const ownsProduct = user.purchasedProducts.some(
-      (p) => p.courseId === course.id || course.access.requiresProductId?.includes(p.productId)
-    );
-    if (ownsProduct) return true;
+    if (course.legacyGrants && course.legacyGrants.length > 0) {
+      if (course.legacyGrants.some((g) => active.includes(g as EntitlementCategory))) return true;
+    }
     return (course.access.entitlements ?? []).some((e) => active.includes(e));
   }
 

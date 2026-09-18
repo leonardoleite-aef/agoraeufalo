@@ -157,14 +157,14 @@
    * @param {Object} course - Documento do curso/produto
    * @returns {boolean}
    */
-  function hasAccess(user, course) {
+  function hasAccess(user, course, now = new Date()) {
     if (!course) return false;
 
     // 1. Admin tem tudo
     if (isAdmin(user)) return true;
 
     // 2. Curso não publicado
-    if (course.published === false) return false;
+    if (course.published === false || course.isPublished === false) return false;
 
     // Regra Estrita: Mentoria VIP é 100% individual e privada
     const isMentoria = (course.id && course.id.startsWith('mentoria-')) ||
@@ -179,28 +179,62 @@
       const studentId = (user?.studentId || user?.id || user?.uid || user?.menteeSlug || '').toLowerCase().trim();
       const targetStudentId = (course.studentId || '').toLowerCase().trim();
 
-      const enrolled = user?.enrolledProducts || user?.purchasedProducts || [];
-      if (enrolled.includes(course.id)) return true;
+      const enrolled = user?.enrolledProducts || [];
+      const purchased = user?.purchasedProducts || [];
+      const ownsMentoria = (Array.isArray(enrolled) && enrolled.includes(course.id)) ||
+        (Array.isArray(purchased) && purchased.some(p => (typeof p === 'string' ? p === course.id : (p.courseId === course.id || p.productId === course.id))));
+      if (ownsMentoria) return true;
       if (targetStudentId && studentId && (studentId === targetStudentId || studentId.includes(targetStudentId) || targetStudentId.includes(studentId))) return true;
       if (courseEmail && cleanEmail && cleanEmail === courseEmail) return true;
 
       return false;
     }
 
-    // 3. Compra avulsa
-    const purchased = user?.purchasedProducts || user?.enrolledProducts || [];
-    if (purchased.includes(course.id) || purchased.includes("all_access_master")) {
-      return true;
-    }
+    // 3. Compra avulsa ou matrícula direta (V1 string ou V2 PurchasedProduct object)
+    const purchased = user?.purchasedProducts || [];
+    const enrolled = user?.enrolledProducts || [];
+    const ownsProduct = (Array.isArray(enrolled) && (enrolled.includes(course.id) || enrolled.includes('all_access_master'))) ||
+      (Array.isArray(purchased) && purchased.some(p => {
+        if (typeof p === 'string') {
+          return p === course.id || p === 'all_access_master' || (course.access && Array.isArray(course.access.requiresProductId) && course.access.requiresProductId.includes(p));
+        }
+        if (p && typeof p === 'object') {
+          const cId = p.courseId || p.productId;
+          const pId = p.productId;
+          return cId === course.id ||
+                 (course.access && Array.isArray(course.access.requiresProductId) && course.access.requiresProductId.includes(pId)) ||
+                 (course.productId && (pId === course.productId || cId === course.productId));
+        }
+        return false;
+      }));
+    if (ownsProduct) return true;
 
     // 4. Resolve e filtra categorias ativas do aluno
     let userCats = resolveUserCategories(user);
-    
-    // Se não tiver assinatura ativa, remove 'member_pago' e 'member_mentoria'
-    // pois o acesso deve cair de volta para 'member_free'
+
+    // Suporte a subscriptions V2 e legacyEntitlements
+    if (Array.isArray(user?.subscriptions)) {
+      user.subscriptions.forEach(s => {
+        if (s && isSingleSubscriptionActive(s, now) && s.entitlement) {
+          if (!userCats.includes(s.entitlement)) userCats.push(s.entitlement);
+        }
+      });
+    }
+    if (Array.isArray(user?.legacyEntitlements)) {
+      user.legacyEntitlements.forEach(e => {
+        if (!userCats.includes(e)) userCats.push(e);
+      });
+    }
+
+    // Se não tiver assinatura ativa nem direito legado permanente, remove 'member_pago' e 'member_mentoria'
     if (userCats.includes(MEMBER_CATEGORIES.PAGO) || userCats.includes(MEMBER_CATEGORIES.MENTORIA)) {
-      if (!isSubscriptionActive(user)) {
-        userCats = userCats.filter(c => c !== MEMBER_CATEGORIES.PAGO && c !== MEMBER_CATEGORIES.MENTORIA);
+      const hasActiveSub = isSubscriptionActive(user, now);
+      const hasLegacyPago = Array.isArray(user?.legacyEntitlements) && user.legacyEntitlements.includes(MEMBER_CATEGORIES.PAGO);
+      const hasLegacyMentoria = Array.isArray(user?.legacyEntitlements) && user.legacyEntitlements.includes(MEMBER_CATEGORIES.MENTORIA);
+
+      if (!hasActiveSub) {
+        if (!hasLegacyPago) userCats = userCats.filter(c => c !== MEMBER_CATEGORIES.PAGO);
+        if (!hasLegacyMentoria) userCats = userCats.filter(c => c !== MEMBER_CATEGORIES.MENTORIA);
       }
     }
 
@@ -209,7 +243,9 @@
       if (course.accessTier === 'free') return true;
       if (course.accessTier === 'all_access') {
         let allowedCats = [MEMBER_CATEGORIES.PAGO, MEMBER_CATEGORIES.MENTORIA];
-        if (course.legacyGrants) {
+        if (course.access && Array.isArray(course.access.entitlements) && course.access.entitlements.length > 0) {
+          allowedCats = course.access.entitlements;
+        } else if (course.legacyGrants) {
           allowedCats = allowedCats.concat(course.legacyGrants);
         } else {
           // Fallback para manter o acesso até o curso ser salvo novamente no painel
@@ -218,7 +254,10 @@
         return userCats.some(cat => allowedCats.includes(cat));
       }
       if (course.accessTier === 'standalone') {
-        // Se for standalone, checa se tem exceção de legado
+        // Se for standalone, checa se tem exceção de legado ou access.entitlements
+        if (course.access && Array.isArray(course.access.entitlements) && course.access.entitlements.length > 0) {
+          if (userCats.some(cat => course.access.entitlements.includes(cat))) return true;
+        }
         if (Array.isArray(course.legacyGrants) && course.legacyGrants.length > 0) {
            if (userCats.some(cat => course.legacyGrants.includes(cat))) return true;
         }
@@ -276,36 +315,49 @@
   }
 
   /**
+   * Verifica se uma assinatura individual está ativa na data de referência
+   */
+  function isSingleSubscriptionActive(sub, now = new Date()) {
+    if (!sub || typeof sub !== 'object') return false;
+    if (sub.billingPeriod === BILLING_PERIODS.LIFETIME) return true;
+    switch (sub.status) {
+      case 'revoked':
+      case 'canceled_immediate':
+        return false;
+      case 'active':
+        return !sub.expiresAt || new Date(sub.expiresAt) > now;
+      case 'overdue_grace_period':
+      case 'canceled_grace':
+      case 'grace': {
+        const validUntil = sub.graceUntil || sub.expiresAt;
+        return !!validUntil && new Date(validUntil) > now;
+      }
+      default:
+        return false;
+    }
+  }
+
+  /**
    * Verifica se a assinatura do aluno está ativa
    */
-  function isSubscriptionActive(user) {
+  function isSubscriptionActive(user, now = new Date()) {
     if (!user) return false;
 
-    // Formato novo
+    // Formato V2 (subscriptions array)
+    if (Array.isArray(user.subscriptions)) {
+      if (user.subscriptions.length === 0) return false;
+      return user.subscriptions.some(s => isSingleSubscriptionActive(s, now));
+    }
+
+    // Formato V1 (subscription objeto único)
     if (user.subscription) {
-      const s = user.subscription;
-      if (s.billingPeriod === BILLING_PERIODS.LIFETIME) return true;
-      if (s.status === "active") return true;
-      if (s.status === "grace" || s.status === "canceled_grace") {
-        if (s.expiresAt) {
-          return new Date(s.expiresAt) > new Date();
-        }
-        return true;
-      }
-      return false;
+      return isSingleSubscriptionActive(user.subscription, now);
     }
 
     // Formato legado
     const sub = user.subscriptionState;
     if (!sub) return true; // sem info de assinatura = ativo por default
-    if (sub.status === "active") return true;
-    if (sub.status === "overdue_grace_period" || sub.status === "canceled_grace") {
-      if (sub.expiresAt || sub.graceUntil) {
-        return new Date(sub.expiresAt || sub.graceUntil) > new Date();
-      }
-      return true;
-    }
-    return sub.status !== "revoked" && sub.status !== "canceled_immediate";
+    return isSingleSubscriptionActive(sub, now);
   }
 
   // =========================================================================
@@ -876,6 +928,14 @@
   };
 
   root.AEFAccessEngine = AEFAccessEngine;
+
+  // Direct global bindings to ensure global availability without local shadowing
+  root.resolveCourseCategories = resolveCourseCategories;
+  root.resolveUserCategories = resolveUserCategories;
+  root.hasAccess = hasAccess;
+  root.hasModuleAccess = hasModuleAccess;
+  root.isAdmin = isAdmin;
+  root.isSubscriptionActive = isSubscriptionActive;
 
   if (typeof module !== "undefined" && module.exports) {
     module.exports = AEFAccessEngine;

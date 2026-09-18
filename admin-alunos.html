@@ -906,33 +906,7 @@
 
       const combined = new Map();
 
-      // 1. Carrega a base consolidada de 3.872 alunos legados
-      try {
-        const resp = await fetch('data/alunos_master_todos_legados.json');
-        if (resp.ok) {
-          const masterData = await resp.json();
-          (masterData.alunos || []).forEach(leg => {
-            const email = (leg.email || '').toLowerCase().trim();
-            if (!email) return;
-            const isMS = leg.categoria === 'magic_stories_legacy' || leg.is_ms;
-            const legPhone = leg.telefone || leg.whatsapp || leg.phone || '';
-            combined.set(email, {
-              id: email.split('@')[0],
-              name: leg.nome || email.split('@')[0],
-              email: email,
-              whatsapp: legPhone,
-              phone: legPhone,
-              tier: isMS ? 'ms_legacy' : 'primeiro_legado',
-              category: leg.categoria || (isMS ? 'magic_stories_legacy' : 'primeiro_legado_agoraeufalo'),
-              enrolledProducts: leg.curso_concedido ? [leg.curso_concedido] : (isMS ? ['ms-legacy'] : ['english-quickstart']),
-              role: 'student',
-              origem: leg.origem || (isMS ? 'magic_stories_legacy' : 'primeiro_legado_agoraeufalo')
-            });
-          });
-        }
-      } catch (e) {
-        console.warn("Could not load legacy students file, will rely on Firestore:", e);
-      }
+      // 1. Inicializa mapa de alunos consolidados (Firestore é a Single Source of Truth)
 
 
 
@@ -2133,7 +2107,7 @@ Bons treinos e nos vemos na Sala de Aula!`;
           phone: whatsapp,
           tier: 'vip_mentorship',
           role: 'student',
-          enrolledProducts: ['all_access_master', 'mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas', courseId],
+          enrolledProducts: ['mentoria_vip', 'ms-legacy', 'english-quickstart', 'frases-prontas', courseId],
           photoUrl: cover,
           meetUrl: meetUrl,
           active: true,

@@ -45,6 +45,8 @@ export const LABlockSchema = z.object({
   type: z.literal('LA'),
   tag: z.literal('[LA]'),
   drills: z.array(NegativeTriggerGroupSchema),
+  failClosed: z.boolean().optional(),
+  warningNotice: z.string().optional(),
 });
 
 export const LRTBlockSchema = z.object({
@@ -57,6 +59,8 @@ export const LASKBlockSchema = z.object({
   type: z.literal('LASK'),
   tag: z.literal('[LASK]'),
   drills: z.array(NegativeTriggerGroupSchema),
+  failClosed: z.boolean().optional(),
+  warningNotice: z.string().optional(),
 });
 
 export const ProBlockSchema = z.object({

@@ -979,22 +979,62 @@
       normalized.updatedAt = new Date().toISOString();
 
       let saved = false;
-      if (this.sync.db) {
+
+      // 1. Roteamento Server-Side via Cloudflare Worker (/api/admin/users) sob política Zero Trust
+      const workerBase = (typeof window !== "undefined" && window.AEF_WORKER_URL)
+        || "https://agoraeufalo-webhook-hotmart.selexenglish.workers.dev";
+
+      let idToken = null;
+      let requesterEmail = null;
+      try {
+        if (typeof window !== "undefined" && window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
+          const current = window.firebase.auth().currentUser;
+          requesterEmail = current.email;
+          if (typeof current.getIdToken === "function") {
+            idToken = await current.getIdToken();
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const res = await fetch(`${workerBase}/api/admin/users`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(idToken ? { "Authorization": `Bearer ${idToken}` } : {})
+          },
+          body: JSON.stringify({
+            userId: uid,
+            userData: normalized,
+            requesterEmail: requesterEmail
+          })
+        });
+
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.user) {
+            saved = true;
+          }
+        } else {
+          console.warn("[AEF Repository] [AEF Admin] Resposta não-ok do worker /api/admin/users:", res.status);
+        }
+      } catch (err) {
+        // Falha de rede ou ambiente sem worker
+        console.warn("[AEF Repository] [AEF Admin] Erro ao chamar worker /api/admin/users:", err.message || err);
+      }
+
+      // 2. Se falhar no worker e houver SDK disponível (ex: testes ou mock de ambiente)
+      if (!saved && this.sync.db) {
         try {
           await this.sync.db.collection("users").doc(uid).set(normalized, { merge: true });
           saved = true;
         } catch (e) {
-          console.warn("[AEF Repository] SDK saveUser erro, tentando REST:", e);
+          console.warn("[AEF Repository] SDK saveUser erro:", e.message || e);
         }
       }
 
       if (!saved) {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users/${uid}`;
-        await fetch(restUrl, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields: toFirestoreRestFields(normalized) })
-        });
+        console.warn("[AEF Repository] Usando fallback local para persistência de usuário:", uid);
       }
 
       try {

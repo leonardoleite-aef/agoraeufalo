@@ -16,13 +16,21 @@ import {
   QRCodeBlockSchema,
   PedagogicalBlockSchema,
   PDFDocumentPayloadSchema,
+  CanonicalLessonSchema,
   isCanonicalBlock,
+  isCanonicalLesson,
   safeValidatePedagogicalBlock,
+  safeValidateCanonicalLesson,
   validatePedagogicalBlock,
   validatePedagogicalBlocks,
+  validateCanonicalLesson,
+  assertCanonicalLesson,
   parseLegacyPedagogicalText,
+  createFailClosedLABlock,
+  createFailClosedLASKBlock,
   type PedagogicalBlock,
   type PDFDocumentPayload,
+  type CanonicalLesson,
 } from '../../src/types/lesson-schema.ts';
 
 import { createRequire } from 'node:module';
@@ -492,4 +500,351 @@ Sacada de Ouro: Ligue o som de d com a vogal seguinte.
       assert.ok(blocks.length > 0);
     });
   });
+
+  // ==========================================================================
+  // 5. BATERIA DE TESTES ADVERSARIAIS & MODO FAIL-CLOSED (LA / LASK MALFORMADOS)
+  // ==========================================================================
+  describe('Bateria de Testes Adversariais & Modo Fail-Closed (LA / LASK Malformados)', () => {
+
+    it('LA malformado com tag não fechada "[LA" não deve expor a resposta secreta no HTML', () => {
+      const adversarialText = `[LR]
+Rodrigo was standing in the hall.
+
+[LA
+Q: Did Rodrigo open the door?
+A: SECRET_ANSWER_HE_ABSOLUTELY_DID_NOT_OPEN_IT
+
+[PRO]
+Repeat after me.`;
+
+      // 1. Testa o parser legado de TypeScript
+      const parsedBlocks = parseLegacyPedagogicalText(adversarialText);
+      const laBlock = parsedBlocks.find(b => b.type === 'LA');
+      assert.ok(laBlock, 'Deveria identificar bloco LA mesmo com tag malformada');
+      assert.strictEqual(laBlock?.failClosed, true, 'LA malformado deve marcar failClosed = true');
+
+      // 2. Testa a renderização no motor unificado
+      const renderedHtml = aefBlockEngine.renderPedagogicalContent(adversarialText);
+
+      // Asserção inegociável de zero vazamento de resposta
+      assert.strictEqual(
+        renderedHtml.includes('SECRET_ANSWER_HE_ABSOLUTELY_DID_NOT_OPEN_IT'),
+        false,
+        'O HTML final JAMAIS deve expor o gabarito/resposta em caso de tag malformada'
+      );
+
+      // Deve renderizar aviso pedagógico seguro de alto contraste
+      assert.ok(renderedHtml.includes('Aviso Didático'));
+      assert.ok(renderedHtml.includes('Modo Fail-Closed Ativado'));
+      assert.ok(renderedHtml.includes('Zero respostas reveladas'));
+    });
+
+    it('LA com pergunta e resposta sem quebra ou delimitador claro deve acionar Fail-Closed e omitir resposta', () => {
+      const adversarialText = `[LA]
+Did Rodrigo open the door? YES_HE_DID_SECRET_ANSWER_WITHOUT_DELIMITER
+[PRO]
+Keep talking.`;
+
+      const parsedBlocks = parseLegacyPedagogicalText(adversarialText);
+      const laBlock = parsedBlocks.find(b => b.type === 'LA');
+      assert.ok(laBlock);
+      assert.strictEqual(laBlock?.failClosed, true);
+
+      const renderedHtml = aefBlockEngine.renderPedagogicalContent(adversarialText);
+      assert.strictEqual(
+        renderedHtml.includes('YES_HE_DID_SECRET_ANSWER_WITHOUT_DELIMITER'),
+        false,
+        'A resposta embutida sem delimitador seguro não pode ser exibida'
+      );
+      assert.ok(renderedHtml.includes('Modo Fail-Closed Ativado'));
+    });
+
+    it('LA com tag aninhada incorretamente dentro de VOC não deve vazar resposta', () => {
+      const adversarialText = `[VOC]
+Here is a normal chunk.
+[LA]
+Q: What was his destination?
+A: SECRET_ANSWER_DESTINATION_LONDON
+[PRO]
+Practice connected speech.`;
+
+      const renderedHtml = aefBlockEngine.renderPedagogicalContent(adversarialText);
+
+      assert.strictEqual(
+        renderedHtml.includes('SECRET_ANSWER_DESTINATION_LONDON'),
+        false,
+        'Gabarito não pode vazar mesmo com tags aninhadas ou sobrepostas'
+      );
+    });
+
+    it('LASK malformado com tag não fechada "[LASK" deve acionar Fail-Closed e omitir pergunta prévia', () => {
+      const adversarialText = `[LR]
+He went to London last summer.
+
+[LASK
+He went to London.
+Q: SECRET_QUESTION_DID_HE_GO_TO_LONDON?
+Ask: Where did he go?
+
+[PRO]
+Final pronunciation practice.`;
+
+      const parsedBlocks = parseLegacyPedagogicalText(adversarialText);
+      const laskBlock = parsedBlocks.find(b => b.type === 'LASK');
+      assert.ok(laskBlock, 'Deveria identificar bloco LASK');
+      assert.strictEqual(laskBlock?.failClosed, true, 'LASK malformado deve marcar failClosed = true');
+
+      const renderedHtml = aefBlockEngine.renderPedagogicalContent(adversarialText);
+
+      // Asserção inegociável da Regra 5 (Zero Perguntas Reveladas)
+      assert.strictEqual(
+        renderedHtml.includes('SECRET_QUESTION_DID_HE_GO_TO_LONDON'),
+        false,
+        'O HTML final JAMAIS deve expor a pergunta prévia em LASK'
+      );
+
+      assert.ok(renderedHtml.includes('Aviso Didático'));
+      assert.ok(renderedHtml.includes('Zero perguntas reveladas'));
+    });
+
+    it('LASK com pergunta exposta sem gatilho estruturado deve acionar Fail-Closed', () => {
+      const adversarialText = `[LASK]
+Why did she leave so early without saying goodbye?
+[PRO]
+Listen and repeat.`;
+
+      const parsedBlocks = parseLegacyPedagogicalText(adversarialText);
+      const laskBlock = parsedBlocks.find(b => b.type === 'LASK');
+      assert.ok(laskBlock);
+      assert.strictEqual(laskBlock?.failClosed, true);
+
+      const renderedHtml = aefBlockEngine.renderPedagogicalContent(adversarialText);
+      assert.strictEqual(
+        renderedHtml.includes('Why did she leave so early without saying goodbye?'),
+        false,
+        'Pergunta crua em LASK deve ser retida pelo Fail-Closed para não estragar o reflexo'
+      );
+      assert.ok(renderedHtml.includes('Modo Fail-Closed Ativado'));
+    });
+
+    it('Defesa em profundidade no renderizador: bloco LA construído com texto de resposta no prompt deve interceptar e acionar Fail-Closed', () => {
+      const poisonedBlock: PedagogicalBlock = {
+        type: 'LA',
+        questions: [
+          'Did Rodrigo like the idea? Answer: SECRET_DIRECT_LEAK_NO_HE_HATED_IT',
+        ],
+      };
+
+      const html = aefBlockEngine.renderPedagogicalBlock(poisonedBlock);
+      assert.strictEqual(
+        html.includes('SECRET_DIRECT_LEAK_NO_HE_HATED_IT'),
+        false,
+        'O renderizador deve interceptar respostas mesmo que inseridas diretamente no array de questões'
+      );
+      assert.ok(html.includes('Aviso Didático'));
+      assert.ok(html.includes('Zero respostas reveladas'));
+    });
+
+    it('Defesa em profundidade no renderizador: bloco LASK com prompt contendo "Question:" deve interceptar e acionar Fail-Closed', () => {
+      const poisonedBlock: PedagogicalBlock = {
+        type: 'LASK',
+        prompts: [
+          'He lived in Madrid. Question: SECRET_DIRECT_QUESTION_WHERE_DID_HE_LIVE?',
+        ],
+      };
+
+      const html = aefBlockEngine.renderPedagogicalBlock(poisonedBlock);
+      assert.strictEqual(
+        html.includes('SECRET_DIRECT_QUESTION_WHERE_DID_HE_LIVE'),
+        false,
+        'O renderizador deve interceptar perguntas prontas mesmo que inseridas no array de prompts'
+      );
+      assert.ok(html.includes('Aviso Didático'));
+      assert.ok(html.includes('Zero perguntas reveladas'));
+    });
+
+    it('Isolamento cirúrgico: falha em LA ou LASK não quebra os outros blocos válidos da lição', () => {
+      const raw = `[LR]
+Valid story paragraph one. Rodrigo arrived on time.
+
+[LA
+Corrupted LA without close tag and leaked A: SECRET_POISON_ANSWER
+
+[PRO]
+Rodrigo was standing in the kitchen.`;
+
+      const html = aefBlockEngine.renderPedagogicalContent(raw);
+
+      // LA foi isolado
+      assert.strictEqual(html.includes('SECRET_POISON_ANSWER'), false);
+      assert.ok(html.includes('Modo Fail-Closed Ativado'));
+
+      // Os blocos válidos permaneceram 100% íntegros e funcionais
+      assert.ok(html.includes('1. Listen & Read (LR)'));
+      assert.ok(html.includes('Rodrigo arrived on time.'));
+      assert.ok(html.includes('6. Pronunciation & Connected Speech (PRO)'));
+      assert.ok(html.includes('Rodrigo was standing in the kitchen.'));
+    });
+
+    it('Asserção formal estrita: NENHUMA resposta ou pergunta é vazada em cenários de teste de estresse', () => {
+      const stressCases = [
+        '[LA] Q: Where was she? Ans: SECRET_STRESS_1',
+        '[LA] Q: Is he ready? Resposta: SECRET_STRESS_2',
+        '[LA] Who called? [A] SECRET_STRESS_3',
+        '[LASK] Statement. Pergunta: SECRET_STRESS_4',
+        '[LASK] Statement. Ask: SECRET_STRESS_5',
+      ];
+
+      for (let i = 0; i < stressCases.length; i++) {
+        const text = stressCases[i];
+        const secretToken = `SECRET_STRESS_${i + 1}`;
+        const html = aefBlockEngine.renderPedagogicalContent(text);
+
+        assert.strictEqual(
+          html.includes(secretToken),
+          false,
+          `O segredo "${secretToken}" não pode aparecer no HTML final para o caso: ${text}`
+        );
+      }
+    });
+  });
+
+  // ==========================================================================
+  // 6. TRAVA ANTI-RETROCESSO (CI / BUILD GUARD): VALIDAÇÃO CANÔNICA ZOD
+  // ==========================================================================
+  describe('Trava Anti-Retrocesso (CI / Build Guard): Validação Canônica Zod de Novas Lições', () => {
+
+    it('assertCanonicalLesson deve aprovar lição canônica perfeitamente estruturada', () => {
+      const validLesson: CanonicalLesson = {
+        id: 'lesson-ms-01',
+        slug: 'rodrigo-and-the-coffee',
+        courseId: 'quickstart',
+        moduleId: 'module-01',
+        title: 'Rodrigo and the Coffee',
+        hasTrainingTrack: true,
+        trainingTrackId: 'track-ms-01',
+        thumbnailUrl: '/assets/images/lessons/thumb-01.webp',
+        artworkUrl: '/assets/images/lessons/art-01.webp',
+        goldenTip: 'Preste atenção em como as consoantes se conectam às vogais!',
+        blocks: [
+          {
+            type: 'LR',
+            paragraphs: ['Rodrigo went downstairs to make coffee.'],
+          },
+          {
+            type: 'VOC',
+            items: [
+              {
+                type: 'chunk',
+                target: 'went downstairs',
+                spokenTranslation: 'desceu as escadas',
+              },
+            ],
+          },
+          {
+            type: 'LA',
+            drills: [
+              {
+                negativeContext: 'He did not go upstairs.',
+                questionVariations: ['Where did Rodrigo go?'],
+                answerVariations: ['He went downstairs.'],
+              },
+            ],
+          },
+          {
+            type: 'LRT',
+            guideQuestions: ['Where did Rodrigo go?'],
+            keywords: ['downstairs', 'coffee'],
+          },
+          {
+            type: 'LASK',
+            drills: [
+              {
+                negativeContext: 'Rodrigo went downstairs to make coffee.',
+                questionVariations: ['Where did Rodrigo go?'],
+                answerVariations: [],
+              },
+            ],
+          },
+          {
+            type: 'PRO',
+            fullTextWithLinking: ['Rodrigo went_downstairs to make coffee.'],
+            goldenTip: 'Conecte went com downstairs sem pausa.',
+          },
+        ],
+      };
+
+      assert.strictEqual(isCanonicalLesson(validLesson), true);
+      const validated = validateCanonicalLesson(validLesson);
+      assert.strictEqual(validated.slug, 'rodrigo-and-the-coffee');
+      assert.strictEqual(validated.blocks.length, 6);
+
+      // Não deve lançar erro
+      assert.doesNotThrow(() => {
+        assertCanonicalLesson(validLesson);
+      });
+    });
+
+    it('assertCanonicalLesson deve rejeitar lição com campos obrigatórios ausentes ou tipos inválidos', () => {
+      const invalidLesson = {
+        id: 'lesson-bad',
+        // slug faltando!
+        title: 'Lição Inválida',
+        blocks: 'isto não é um array de blocos canônicos',
+      };
+
+      assert.strictEqual(isCanonicalLesson(invalidLesson), false);
+
+      const result = safeValidateCanonicalLesson(invalidLesson);
+      assert.strictEqual(result.success, false);
+      if (!result.success) {
+        assert.ok((result.error?.issues?.length ?? 0) > 0);
+      }
+
+      assert.throws(
+        () => {
+          assertCanonicalLesson(invalidLesson);
+        },
+        /Violação do Schema Canônico de Lições/
+      );
+    });
+
+    it('assertCanonicalLesson deve rejeitar lição com blocos vazios ou inválidos', () => {
+      const lessonWithBadBlock = {
+        id: 'lesson-02',
+        slug: 'bad-block-lesson',
+        title: 'Lição com Bloco Vazio',
+        blocks: [
+          {
+            type: 'LA',
+            drills: [], // Vazio! Min 1 obrigatório
+          },
+        ],
+      };
+
+      assert.strictEqual(isCanonicalLesson(lessonWithBadBlock), false);
+      assert.throws(
+        () => {
+          assertCanonicalLesson(lessonWithBadBlock);
+        },
+        /Violação do Schema Canônico de Lições/
+      );
+    });
+
+    it('safeValidateCanonicalLesson retorna mensagens detalhadas de diagnóstico para CI/CD', () => {
+      const payload = {
+        title: 'Apenas Título',
+      };
+
+      const res = safeValidateCanonicalLesson(payload);
+      assert.strictEqual(res.success, false);
+      if (!res.success) {
+        const issuesText = (res.error?.issues || []).map(i => `${i.path.join('.')}: ${i.message}`).join(', ');
+        assert.ok(issuesText.includes('id'));
+        assert.ok(issuesText.includes('slug'));
+        assert.ok(issuesText.includes('blocks'));
+      }
+    });
+  });
 });
+

@@ -144,94 +144,54 @@
     // =========================================================================
 
     async _mergePreRegistration(user, profile) {
-      if (!user || !user.email || !this.db) return profile;
+      if (!user || !user.email) return profile;
       const cleanEmail = user.email.toLowerCase().trim();
-      const legacyId = cleanEmail.replace(/[^a-zA-Z0-9]/g, "_");
 
-      let preRegData = null;
-      let preRegDocRef = null;
-
-      // 1. Direct document lookup by sanitized email ID
-      if (legacyId !== user.uid) {
-        try {
-          const directDoc = await this.db.collection('users').doc(legacyId).get();
-          if (directDoc.exists) {
-            preRegData = directDoc.data();
-            preRegDocRef = directDoc.ref;
-          }
-        } catch (e) {
-          console.warn("Direct doc lookup failed:", e);
+      // 1. Obtenção do ID Token para autorização server-side
+      let idToken = null;
+      try {
+        if (typeof user.getIdToken === "function") {
+          idToken = await user.getIdToken();
         }
+      } catch (tokErr) {
+        console.warn("[AEF Auth] Falha ao obter idToken para claim:", tokErr);
       }
 
-      // 2. Query Firestore by email field (in case doc ID was name/slug based)
-      if (!preRegData) {
-        try {
-          const snap = await this.db.collection('users').where('email', '==', cleanEmail).get();
-          for (const doc of snap.docs) {
-            if (doc.id !== user.uid) {
-              preRegData = doc.data();
-              preRegDocRef = doc.ref;
-              break;
-            }
+      // 2. Resolução Server-Side no Worker (Zero Trust - sem queries ou writes client-side em users/*)
+      const workerBase = (typeof window !== "undefined" && window.AEF_WORKER_URL)
+        || "https://agoraeufalo-webhook-hotmart.selexenglish.workers.dev";
+
+      try {
+        const res = await fetch(`${workerBase}/api/claim-preregistration`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(idToken ? { "Authorization": `Bearer ${idToken}` } : {})
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: cleanEmail,
+            name: user.displayName || (profile && profile.name) || "",
+            idToken: idToken
+          })
+        });
+
+        if (res.ok) {
+          const result = await res.json();
+          if (result && result.user) {
+            console.log("[AEF Auth] Pré-registro verificado e vinculado via worker server-side:", cleanEmail);
+            return {
+              ...(profile || {}),
+              ...result.user,
+              uid: user.uid,
+              id: user.uid
+            };
           }
-        } catch (e) {
-          console.warn("Query users by email fallback failed:", e);
+        } else {
+          console.warn("[AEF Auth] Worker /api/claim-preregistration retornou HTTP", res.status);
         }
-      }
-
-      // 3. Merge if pre-registration was found
-      if (preRegData) {
-        if (preRegData.tier && preRegData.tier !== 'free') {
-          profile.tier = preRegData.tier;
-        }
-        if (preRegData.role && preRegData.role !== 'student') {
-          profile.role = preRegData.role;
-        }
-        if (preRegData.whatsapp || preRegData.phone) {
-          const wa = preRegData.whatsapp || preRegData.phone;
-          profile.whatsapp = wa;
-          profile.phone = wa;
-        }
-        if (preRegData.name && (!profile.name || profile.name === 'Aluno AgoraEuFalo')) {
-          profile.name = preRegData.name;
-        }
-        if (preRegData.categories && preRegData.categories.length) {
-          profile.categories = Array.from(new Set([...(profile.categories || []), ...preRegData.categories]));
-        }
-        if (preRegData.enrolledProducts && preRegData.enrolledProducts.length) {
-          profile.enrolledProducts = Array.from(new Set([...(profile.enrolledProducts || []), ...preRegData.enrolledProducts]));
-        }
-        if (preRegData.purchasedProducts && preRegData.purchasedProducts.length) {
-          profile.purchasedProducts = Array.from(new Set([...(profile.purchasedProducts || []), ...preRegData.purchasedProducts]));
-        }
-        if (preRegData.subscription) {
-          profile.subscription = preRegData.subscription;
-        }
-        if (preRegData.vipCourseId) {
-          profile.vipCourseId = preRegData.vipCourseId;
-        }
-        if (preRegData.mentorSlug) {
-          profile.mentorSlug = preRegData.mentorSlug;
-        }
-        if (preRegData.meetUrl) {
-          profile.meetUrl = preRegData.meetUrl;
-        }
-
-        try {
-          await this.db.collection('users').doc(user.uid).set(profile, { merge: true });
-        } catch (setErr) {
-          console.warn("Could not merge profile into auth doc:", setErr);
-        }
-
-        // Safely delete the temporary pre-registration document
-        if (preRegDocRef && preRegDocRef.id !== user.uid) {
-          try {
-            await preRegDocRef.delete();
-          } catch (delErr) {
-            console.warn("Could not delete pre-registration doc:", delErr);
-          }
-        }
+      } catch (claimErr) {
+        console.warn("[AEF Auth] Falha de rede ao resolver pré-registro via worker:", claimErr);
       }
 
       return profile;
@@ -824,7 +784,47 @@
       if (enrolledProducts) {
         updates.enrolledProducts = enrolledProducts;
       }
-      await this.db.collection('users').doc(userId).set(updates, { merge: true });
+
+      // 1. Delega ao UserRepository se disponível
+      if (window.aefCloudSync && window.aefCloudSync.userRepository) {
+        try {
+          return await window.aefCloudSync.userRepository.saveUser({ uid: userId, ...updates });
+        } catch (repoErr) {
+          console.warn("[AEF Auth] UserRepository.saveUser falhou, tentando worker:", repoErr);
+        }
+      }
+
+      // 2. Roteamento Server-Side via Worker (/api/admin/users)
+      const workerBase = (typeof window !== "undefined" && window.AEF_WORKER_URL)
+        || "https://agoraeufalo-webhook-hotmart.selexenglish.workers.dev";
+      let idToken = null;
+      try {
+        if (this.currentUser && typeof this.currentUser.getIdToken === "function") {
+          idToken = await this.currentUser.getIdToken();
+        }
+      } catch (e) {}
+
+      try {
+        const res = await fetch(`${workerBase}/api/admin/users`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(idToken ? { "Authorization": `Bearer ${idToken}` } : {})
+          },
+          body: JSON.stringify({
+            userId,
+            userData: updates,
+            requesterEmail: this.currentUser ? this.currentUser.email : null
+          })
+        });
+        if (res.ok) {
+          const json = await res.json();
+          return json.user || updates;
+        }
+      } catch (e) {
+        console.warn("[AEF Auth] Falha ao atualizar via worker /api/admin/users:", e);
+      }
+
       return updates;
     }
 
@@ -842,26 +842,35 @@
 
     async deleteUserDoc(userId) {
       await this.ready();
-      let success = false;
-      if (this.db) {
-        try {
-          await this.db.collection('users').doc(userId).delete();
-          success = true;
-        } catch (e) {
-          console.warn('SDK deleteUserDoc failed, trying REST:', e);
+      const workerBase = (typeof window !== "undefined" && window.AEF_WORKER_URL)
+        || "https://agoraeufalo-webhook-hotmart.selexenglish.workers.dev";
+      let idToken = null;
+      try {
+        if (this.currentUser && typeof this.currentUser.getIdToken === "function") {
+          idToken = await this.currentUser.getIdToken();
         }
-      }
-      
-      if (!success) {
-        try {
-          const restUrl = `https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/users/${userId}`;
-          const res = await fetch(restUrl, { method: "DELETE" });
-          if (res.ok) success = true;
-        } catch(e) {
-          console.error("REST deleteUserDoc failed:", e);
+      } catch (e) {}
+
+      try {
+        const res = await fetch(`${workerBase}/api/admin/users`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(idToken ? { "Authorization": `Bearer ${idToken}` } : {})
+          },
+          body: JSON.stringify({
+            action: "delete_user",
+            userId,
+            requesterEmail: this.currentUser ? this.currentUser.email : null
+          })
+        });
+        if (res.ok) {
+          return true;
         }
+      } catch (e) {
+        console.warn("[AEF Auth] Falha ao deletar via worker /api/admin/users:", e);
       }
-      return success;
+      return false;
     }
 
     async deleteMenteeDoc(menteeId) {

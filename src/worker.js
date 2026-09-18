@@ -36,6 +36,8 @@
  *    /contato      -> contato.html
  */
 
+import edgeApiWorker from '../cloudflare-worker/worker.js';
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -45,6 +47,11 @@ export default {
     // Normaliza rota sem trailing slash (exceto raiz)
     if (path.length > 1 && path.endsWith('/')) {
       path = path.slice(0, -1);
+    }
+
+    // Roteamento nativo para Edge API (/api/*) e Webhook Hotmart (/webhook)
+    if (path.startsWith('/api/') || path === '/webhook') {
+      return edgeApiWorker.fetch(request, env);
     }
 
     // Proteção LGPD & Segurança: Bloqueio estrito a /data/, storage_staging/, arquivos .env, .csv ou .deprecated

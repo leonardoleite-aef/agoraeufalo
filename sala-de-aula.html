@@ -499,11 +499,12 @@
         try {
           const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
           if (!authed) return;
-          userProfile = window.aefPortalAuth.getProfile();
+          userProfile = window.aefPortalAuth.getCurrentProfile ? window.aefPortalAuth.getCurrentProfile() : (window.aefPortalAuth.currentProfile || {});
           if (userProfile) {
             userProfile.role = window.aefPortalAuth.isAdmin() ? 'admin' : (userProfile.role || 'student');
             userProfile.purchasedProducts = window.aefPortalAuth.getEnrolledProducts() || userProfile.enrolledProducts || [];
           }
+          window.currentUserProfile = userProfile;
         } catch (authErr) {
           console.warn("⚠️ Auth Check in Classroom:", authErr);
           return;
@@ -1370,9 +1371,29 @@
         }
       }
 
-      // 1. CHECAGEM DE ACESSO E PAYWALL RIGOROSA (AEF ACCESS ENGINE)
+      // 1. CHECAGEM DE ACESSO E PAYWALL RIGOROSA (DEFENSE-IN-DEPTH MODE)
       const auth = window.aefPortalAuth;
-      const user = auth ? { ...(auth.getProfile() || {}), purchasedProducts: (auth.getEnrolledProducts() || []) } : null;
+      const isAdmin = (auth && typeof auth.isAdmin === 'function' && auth.isAdmin()) || 
+                      (window.currentUserProfile && window.currentUserProfile.role === 'admin') || 
+                      (localStorage.getItem('aef_user_role') === 'admin') ||
+                      (localStorage.getItem('aef_user_tier') === 'admin_master') ||
+                      ((localStorage.getItem('aef_user_email') || '').toLowerCase().trim() === 'selexenglish@gmail.com');
+
+      const profile = (auth && typeof auth.getCurrentProfile === 'function' ? auth.getCurrentProfile() : auth?.currentProfile) || window.currentUserProfile || {};
+      const enrolled = (auth && typeof auth.getEnrolledProducts === 'function' ? auth.getEnrolledProducts() : []) || profile.enrolledProducts || [];
+
+      const user = {
+        ...profile,
+        uid: profile.uid || auth?.currentUser?.uid || localStorage.getItem('aef_user_uid') || '',
+        email: profile.email || auth?.currentUser?.email || localStorage.getItem('aef_user_email') || '',
+        name: profile.name || localStorage.getItem('aef_user_name') || '',
+        role: isAdmin ? 'admin' : (profile.role || localStorage.getItem('aef_user_role') || 'student'),
+        tier: isAdmin ? 'admin_master' : (auth && typeof auth.getActiveTier === 'function' ? auth.getActiveTier() : (profile.tier || 'free')),
+        categories: profile.categories || (isAdmin ? ['admin'] : []),
+        purchasedProducts: enrolled,
+        enrolledProducts: enrolled
+      };
+
       const AE = window.AEFAccessEngine;
 
       // Módulo é expressamente degustação gratuita?
@@ -1381,16 +1402,14 @@
         (activeCourse && Array.isArray(activeCourse.freeModuleIds) && activeCourse.freeModuleIds.includes(activeModule.id))
       );
 
-      const isAuthorized = AE
+      // Regra de Ouro: Admin tem passe livre irrestrito; caso contrário, valida estritamente via AEFAccessEngine
+      const isAuthorized = isAdmin || (AE
         ? (AE.hasAccess(user, activeCourse) || AE.hasModuleAccess(user, activeCourse, activeModule))
         : (() => {
-            const isAdmin = auth ? auth.isAdmin() : false;
-            const currentTier = auth ? auth.getActiveTier() : 'free';
-            const enrolled = (auth ? auth.getEnrolledProducts() : []) || [];
             const isCourseFree = activeCourse && (activeCourse.accessTier === 'free' || activeCourse.tierRequired === 'free');
-            const isEnrolled = enrolled.includes(activeCourse?.id) || enrolled.includes('all_access_master');
-            return isAdmin || isCourseFree || isModuleFree || isEnrolled;
-          })();
+            const isEnrolled = enrolled.includes(activeCourse?.id);
+            return isCourseFree || isModuleFree || isEnrolled;
+          })());
 
 
       const videoStage = document.getElementById("videoStage");
