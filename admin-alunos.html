@@ -23,7 +23,7 @@
   <script src="assets/js/aef-cloud-sync.js"></script>
   <script src="assets/js/aef-access-engine.js"></script>
   <script src="assets/js/aef-portal-auth.js"></script>
-  <script src="treino/data/registry.js"></script>
+  <script src="assets/js/aef-courses-registry.js"></script>
   <script src="assets/js/aef-audio-hub.js"></script>
   <script src="assets/js/aef-admin-nav.js"></script>
   <style>
@@ -913,7 +913,11 @@
 
       // 2. Carrega cursos do Firestore para identificação em tempo real de Salas VIP e matrículas
       try {
-        const cRes = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100');
+        if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+        const idToken = window.aefPortalAuth ? await window.aefPortalAuth.getIdToken() : null;
+        const cRes = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/courses?pageSize=100', {
+          headers: idToken ? { "Authorization": `Bearer ${idToken}` } : {}
+        });
         if (cRes.ok) {
           const cData = await cRes.json();
           ALL_COURSES_MAP.clear();
@@ -1267,6 +1271,7 @@
         const enrolledBadges = (s.enrolledProducts || [])
           .filter(p => p !== 'free_starter_pack' && p !== 'magic_stories_demo')
           .map(p => {
+          p = String(p || '');
           const names = {
             'ms-legacy': 'AgoraEuFalo English Club',
             'english-quickstart': 'QuickStart (Free)',

@@ -665,6 +665,18 @@
       return this.isAdmin();
     }
 
+    async getIdToken() {
+      const user = this.currentUser || this.auth?.currentUser;
+      if (user && typeof user.getIdToken === "function") {
+        try {
+          return await user.getIdToken();
+        } catch (e) {
+          console.warn("[AEF Auth] Falha ao obter idToken:", e);
+        }
+      }
+      return null;
+    }
+
     getEnrolledProducts() {
       if (this.isAdmin()) {
         return ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'];
