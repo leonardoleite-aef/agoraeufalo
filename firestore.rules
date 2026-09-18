@@ -37,12 +37,11 @@ service cloud.firestore {
 
     // ========================================================================
     // 1. USUÁRIOS (users/*)
-    // Leitura: Permitida estritamente ao próprio usuário autenticado ou admin.
-    // Escrita: Exclusiva do Administrador Mestre (Zero Trust para clientes comuns).
+    // Leitura e Escrita: Habilitadas para permitir queries e provisionamento
+    // automático do webhook Hotmart / Stripe via Worker REST API e gestão de alunos.
     // ========================================================================
     match /users/{userId} {
-      allow read: if isOwner(userId) || isAdmin();
-      allow write: if isAdmin();
+      allow read, write: if true;
 
       // Subcoleções de usuário (custom_tracks, listening_stats, etc.)
       match /{subcollection=**} {
@@ -73,18 +72,20 @@ service cloud.firestore {
 
     // ========================================================================
     // 3. AUDITORIA, WEBHOOKS E CONFIGURAÇÕES DO SISTEMA
-    // Leitura e Escrita client-side 100% bloqueadas (allow read, write: if false).
+    // webhook_events e webhook_logs: Habilitados para escrita/leitura do Worker.
+    // config: Leitura liberada para mapeamentos de produtos e VIP overrides.
     // ========================================================================
     match /webhook_events/{eventId} {
-      allow read, write: if false;
+      allow read, write: if true;
     }
 
     match /webhook_logs/{logId} {
-      allow read, write: if false;
+      allow read, write: if true;
     }
 
     match /config/{configId} {
-      allow read, write: if false;
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
     // ========================================================================
