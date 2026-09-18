@@ -526,11 +526,21 @@
    * Gera os badges HTML para as categorias de um aluno.
    * Retorna múltiplos badges se o aluno pertence a mais de uma categoria.
    */
+  // isUserAdmin: verifica APENAS o objeto do aluno — nunca a sessão atual.
+  // Usar em renderizações de lista para evitar session-bleed.
+  function isUserAdmin(u) {
+    if (!u) return false;
+    const email = (u.email || '').toLowerCase().trim();
+    return u.role === 'admin' || u.tier === 'admin_master' ||
+           (Array.isArray(u.categories) && u.categories.includes('admin')) ||
+           email === 'selexenglish@gmail.com';
+  }
+
   function renderCategoryBadges(user) {
     const cats = resolveUserCategories(user);
     const badges = [];
 
-    if (isAdmin(user)) {
+    if (isUserAdmin(user)) {
       badges.push(makeBadge("purple", "🔐", "ADMIN MESTRE"));
     }
 
@@ -576,7 +586,7 @@
    * Retorna o badge de tier para o portal/header do aluno (resumo de 1 linha)
    */
   function getPrimaryBadgeLabel(user) {
-    if (isAdmin(user)) return "👑 Administrador";
+    if (isUserAdmin(user)) return "👑 Administrador";
     const cats = resolveUserCategories(user);
     if (cats.includes(MEMBER_CATEGORIES.MENTORIA)) return "👑 Mentorado VIP";
     if (cats.includes(MEMBER_CATEGORIES.PAGO)) {
@@ -609,7 +619,7 @@
       counts.total++;
       const cats = resolveUserCategories(s);
 
-      if (isAdmin(s)) counts.admin++;
+      if (isUserAdmin(s)) counts.admin++;
       if (cats.includes(MEMBER_CATEGORIES.MENTORIA)) counts.member_mentoria++;
       if (cats.includes(MEMBER_CATEGORIES.PAGO)) {
         counts.member_pago++;
