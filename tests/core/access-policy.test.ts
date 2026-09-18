@@ -22,6 +22,8 @@ import {
   type PurchasedProduct,
   type WebhookEvent
 } from '../../src/types/core.ts';
+// @ts-expect-error importação de módulo JS no runner de testes
+import worker, { timingSafeEqual, extractHottok } from '../../cloudflare-worker/worker.js';
 
 describe('Suite de Testes de Regras de Acesso (V2 Blueprint)', () => {
   const referenceDate = new Date('2026-09-18T12:00:00Z');
@@ -752,6 +754,147 @@ describe('Suite de Testes de Regras de Acesso (V2 Blueprint)', () => {
         new Date('2026-09-26T00:00:00Z')
       );
       assert.strictEqual(allowedAfterGrace, false, 'Deve ter acesso bloqueado após o fim da data de tolerância');
+    });
+  });
+
+  describe('Autenticidade Estrita do Webhook Hotmart (P0-2 & timingSafeEqual)', () => {
+    const SECRET_HOTTOK = 'HOTTOK_SECRET_KEY_PROD_123456';
+
+    describe('Função de Comparação em Tempo Constante (timingSafeEqual)', () => {
+      it('deve retornar true para tokens estritamente idênticos', () => {
+        assert.strictEqual(timingSafeEqual('valid_token_123', 'valid_token_123'), true);
+      });
+
+      it('deve retornar false para tokens com mesmo tamanho porém caracteres distintos', () => {
+        assert.strictEqual(timingSafeEqual('valid_token_123', 'valid_token_124'), false);
+      });
+
+      it('deve retornar false para tokens de tamanhos distintos', () => {
+        assert.strictEqual(timingSafeEqual('short', 'much_longer_token'), false);
+      });
+
+      it('deve retornar false com segurança para valores vazios, nulos ou não-string', () => {
+        // @ts-expect-error teste de runtime
+        assert.strictEqual(timingSafeEqual('', 'valid'), false);
+        // @ts-expect-error teste de runtime
+        assert.strictEqual(timingSafeEqual(null, 'valid'), false);
+        // @ts-expect-error teste de runtime
+        assert.strictEqual(timingSafeEqual(undefined, 'valid'), false);
+        // @ts-expect-error teste de runtime
+        assert.strictEqual(timingSafeEqual(12345, '12345'), false);
+      });
+    });
+
+    describe('Extração de Token Hottok (extractHottok)', () => {
+      it('deve extrair token do cabeçalho X-HOTMART-HOTTOK', () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          headers: { 'X-HOTMART-HOTTOK': 'hdr_token_val' }
+        });
+        assert.strictEqual(extractHottok(req, null), 'hdr_token_val');
+      });
+
+      it('deve extrair token da query string se ausente nos headers', () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook?hottok=query_token_val');
+        assert.strictEqual(extractHottok(req, null), 'query_token_val');
+      });
+
+      it('deve extrair token do payload se ausente nos headers e query string', () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook');
+        const payload = { hottok: 'body_token_val' };
+        assert.strictEqual(extractHottok(req, payload), 'body_token_val');
+      });
+    });
+
+    describe('Autenticação de Requisições no Worker (worker.fetch)', () => {
+      const mockEnv = { HOTMART_HOTTOK: SECRET_HOTTOK };
+
+      it('deve abortar com HTTP 401 Unauthorized quando token estiver ausente e HOTMART_HOTTOK configurado', async () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ event: 'PURCHASE_APPROVED', email: 'teste@exemplo.com' })
+        });
+
+        const res = await worker.fetch(req, mockEnv, {});
+        assert.strictEqual(res.status, 401);
+        const data = await res.json() as { error: string };
+        assert.strictEqual(data.error, 'Unauthorized');
+      });
+
+      it('deve abortar com HTTP 401 Unauthorized quando token for inválido', async () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-HOTMART-HOTTOK': 'WRONG_INVALID_TOKEN'
+          },
+          body: JSON.stringify({ event: 'PURCHASE_APPROVED', email: 'teste@exemplo.com' })
+        });
+
+        const res = await worker.fetch(req, mockEnv, {});
+        assert.strictEqual(res.status, 401);
+        const data = await res.json() as { error: string };
+        assert.strictEqual(data.error, 'Unauthorized');
+      });
+
+      it('deve autorizar com HTTP 200 quando token for válido via cabeçalho X-HOTMART-HOTTOK', async () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-HOTMART-HOTTOK': SECRET_HOTTOK
+          },
+          body: JSON.stringify({
+            event: 'PURCHASE_APPROVED',
+            buyer: { email: '' } // ping de teste sem email retorna status 200 test_acknowledged
+          })
+        });
+
+        const res = await worker.fetch(req, mockEnv, {});
+        assert.strictEqual(res.status, 200);
+        const data = await res.json() as { status: string };
+        assert.strictEqual(data.status, 'test_acknowledged');
+      });
+
+      it('deve autorizar com HTTP 200 quando token for válido via corpo da mensagem', async () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hottok: SECRET_HOTTOK,
+            event: 'PURCHASE_APPROVED',
+            buyer: { email: '' }
+          })
+        });
+
+        const res = await worker.fetch(req, mockEnv, {});
+        assert.strictEqual(res.status, 200);
+        const data = await res.json() as { status: string };
+        assert.strictEqual(data.status, 'test_acknowledged');
+      });
+
+      it('deve abortar com HTTP 401 em requisição de corpo vazio sem token quando HOTMART_HOTTOK configurado', async () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          method: 'POST',
+          body: ''
+        });
+
+        const res = await worker.fetch(req, mockEnv, {});
+        assert.strictEqual(res.status, 401);
+      });
+
+      it('deve aceitar com HTTP 200 em requisição de corpo vazio com token válido no cabeçalho', async () => {
+        const req = new Request('https://api.agoraeufalo.com.br/webhook', {
+          method: 'POST',
+          headers: { 'X-HOTMART-HOTTOK': SECRET_HOTTOK },
+          body: ''
+        });
+
+        const res = await worker.fetch(req, mockEnv, {});
+        assert.strictEqual(res.status, 200);
+        const data = await res.json() as { status: string };
+        assert.strictEqual(data.status, 'ping_ok');
+      });
     });
   });
 });

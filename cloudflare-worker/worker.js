@@ -43,6 +43,58 @@ const PRODUCT_CATEGORY_MAPPING = {
   }
 };
 
+/**
+ * Comparação em tempo constante para mitigar ataques de timing (Timing Attack Mitigation).
+ * Suporta strings de forma determinística e segura em Cloudflare Workers, Node.js e V8.
+ */
+export function timingSafeEqual(a, b) {
+  if (typeof a !== "string" || typeof b !== "string") {
+    return false;
+  }
+  if (!a || !b) {
+    return false;
+  }
+
+  const lenA = a.length;
+  const lenB = b.length;
+  let mismatch = lenA === lenB ? 0 : 1;
+  const maxLen = Math.max(lenA, lenB);
+
+  for (let i = 0; i < maxLen; i++) {
+    const charA = i < lenA ? a.charCodeAt(i) : 0;
+    const charB = i < lenB ? b.charCodeAt(i) : 0;
+    mismatch |= (charA ^ charB);
+  }
+
+  return mismatch === 0;
+}
+
+/**
+ * Extrai o token Hottok a partir dos cabeçalhos oficiais da Hotmart, query string ou corpo da mensagem.
+ */
+export function extractHottok(request, payload) {
+  let token = null;
+
+  if (request && request.headers) {
+    token = request.headers.get("X-HOTMART-HOTTOK") ||
+            request.headers.get("x-hotmart-hottok") ||
+            request.headers.get("hottok");
+  }
+
+  if (!token && request && request.url) {
+    try {
+      const url = new URL(request.url);
+      token = url.searchParams.get("hottok");
+    } catch (_) {}
+  }
+
+  if (!token && payload) {
+    token = payload.hottok || (payload.data && payload.data.hottok);
+  }
+
+  return token ? String(token).trim() : null;
+}
+
 export default {
   async fetch(request, env, ctx) {
     // 1. Resposta para pre-flight CORS
@@ -94,6 +146,19 @@ export default {
       // 3. Leitura ultra-segura do corpo (evita erro 500 se o corpo for vazio no teste da Cloudflare)
       const rawText = await request.text();
       if (!rawText || !rawText.trim()) {
+        const incomingHottok = extractHottok(request, null);
+        if (env && env.HOTMART_HOTTOK) {
+          if (!incomingHottok || !timingSafeEqual(incomingHottok, env.HOTMART_HOTTOK)) {
+            console.warn("[AEF Webhook] [AEF Auth] Acesso não autorizado: Token Hottok ausente ou inválido em requisição vazia.");
+            return new Response(JSON.stringify({
+              error: "Unauthorized",
+              message: "Invalid or missing Hotmart Hottok authentication token."
+            }), {
+              status: 401,
+              headers: { "Content-Type": "application/json; charset=utf-8" }
+            });
+          }
+        }
         return new Response(JSON.stringify({
           received: true,
           status: "ping_ok",
@@ -116,11 +181,19 @@ export default {
         }
       }
 
-      // 5. Validação de segurança com Hottok
-      const incomingHottok = request.headers.get("X-HOTMART-HOTTOK") || request.headers.get("x-hotmart-hottok");
+      // 5. Autenticidade Estrita do Webhook Hotmart (P0-2 Zero Trust & Timing-Safe)
+      // Aborta imediatamente com HTTP 401 Unauthorized antes de qualquer operação no Firestore
+      const incomingHottok = extractHottok(request, payload);
       if (env && env.HOTMART_HOTTOK) {
-        if (!incomingHottok || env.HOTMART_HOTTOK !== incomingHottok) {
-          console.warn("[AEF Webhook] [AEF Auth] Token Hottok ausente ou inválido recebido.");
+        if (!incomingHottok || !timingSafeEqual(incomingHottok, env.HOTMART_HOTTOK)) {
+          console.warn("[AEF Webhook] [AEF Auth] Acesso não autorizado: Token Hottok ausente ou inválido.");
+          return new Response(JSON.stringify({
+            error: "Unauthorized",
+            message: "Invalid or missing Hotmart Hottok authentication token."
+          }), {
+            status: 401,
+            headers: { "Content-Type": "application/json; charset=utf-8" }
+          });
         }
       }
 
