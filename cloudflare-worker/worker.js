@@ -365,7 +365,7 @@ export function toFirestoreField(val) {
 export function toFirestoreFields(obj) {
   const fields = {};
   for (const [k, v] of Object.entries(obj)) {
-    if (v !== undefined && typeof v !== "function" && k !== "id") {
+    if (v !== undefined && typeof v !== "function" && k !== "id" && !k.startsWith("_")) {
       fields[k] = toFirestoreField(v);
     }
   }
@@ -399,6 +399,9 @@ export function parseRestDoc(doc, fallbackId = "") {
   if (!doc) return null;
   const docId = doc.name ? doc.name.split("/").pop() : fallbackId;
   const obj = { id: docId, uid: docId };
+  if (doc.updateTime) {
+    obj._updateTime = doc.updateTime;
+  }
   for (const [k, v] of Object.entries(doc.fields || {})) {
     obj[k] = parseRestField(v);
   }
@@ -457,19 +460,44 @@ export async function queryFirestoreUserByEmail(cleanEmail) {
   }
 }
 
-// Gravação direta na API REST do Firestore
-export async function writeFirestore(collection, docId, data) {
+// Gravação direta na API REST do Firestore com suporte a updateMask e precondições atômicas
+export async function writeFirestore(collection, docId, data, options = {}) {
   try {
     const fields = toFirestoreFields(data);
-    const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/${collection}/${docId}?key=${FIRESTORE_API_KEY}`;
+    let url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/${collection}/${docId}?key=${FIRESTORE_API_KEY}`;
     
-    await fetch(url, {
+    if (options.updateMask && Array.isArray(options.updateMask)) {
+      for (const path of options.updateMask) {
+        url += `&updateMask.fieldPaths=${encodeURIComponent(path)}`;
+      }
+    }
+    if (options.currentDocument) {
+      if (options.currentDocument.exists !== undefined) {
+        url += `&currentDocument.exists=${options.currentDocument.exists}`;
+      }
+      if (options.currentDocument.updateTime) {
+        url += `&currentDocument.updateTime=${encodeURIComponent(options.currentDocument.updateTime)}`;
+      }
+    }
+
+    const res = await fetch(url, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fields })
     });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      if (res.status === 400 || res.status === 409 || res.status === 412 || errText.includes("precondition") || errText.includes("FAILED_PRECONDITION")) {
+        return { success: false, preconditionFailed: true, error: errText };
+      }
+      console.warn(`[AEF Worker] [AEF Error] Falha ao persistir ${collection}/${docId}:`, errText);
+      return { success: false, error: errText };
+    }
+    return { success: true, data: await res.json() };
   } catch (e) {
     console.warn("[AEF Webhook] [AEF Error] Aviso na persistência do Firestore:", e.message || e);
+    return { success: false, error: e.message };
   }
 }
 
@@ -725,20 +753,82 @@ export async function handleClaimPreregistration(request, env) {
   const normalizedUser = normalizeUserV2(mergedData);
   normalizedUser.claimedFrom = (preReg && preReg.id !== uid) ? preReg.id : null;
 
-  // 7. Gravação Server-Side no Firestore (users/{uid})
-  await writeFirestore("users", uid, normalizedUser);
-
-  // 8. Marcação Atômica Claim-Once no documento de origem legado (§3.4)
+  // 7. Marcação Atômica Claim-Once no documento de origem legado (§1.6 e §3.4)
   if (legacyId !== uid && preReg && preReg.id === legacyId) {
-    await writeFirestore("users", legacyId, {
+    const linkOptions = {
+      updateMask: ["linkedUid", "claimedBy", "claimedAt", "schemaVersion", "updatedAt"],
+      currentDocument: { exists: true }
+    };
+    if (preReg._updateTime) {
+      linkOptions.currentDocument.updateTime = preReg._updateTime;
+    }
+
+    const linkRes = await writeFirestore("users", legacyId, {
       ...preReg,
       linkedUid: uid,
       claimedBy: uid,
       claimedAt: new Date().toISOString(),
       schemaVersion: 2,
       updatedAt: new Date().toISOString()
-    });
+    }, linkOptions);
+
+    if (linkRes && linkRes.preconditionFailed) {
+      // Conflito de concorrência atômica: outra requisição simultânea alterou o registro legado
+      const freshPreReg = await readFirestoreDoc("users", legacyId);
+      const freshLinkedUid = freshPreReg && (freshPreReg.linkedUid || freshPreReg.claimedBy);
+      
+      // Devolve 409 apenas se o documento já pertencer de fato a um terceiro (§Nota 2.b)
+      if (freshLinkedUid && freshLinkedUid !== uid) {
+        console.warn(`[AEF Claim] [AEF Conflict] Concorrência atômica detectada: pré-registro ${email} vinculado a terceiro (${freshLinkedUid}). Rejeitando UID ${uid}.`);
+        return new Response(JSON.stringify({
+          error: "Conflict",
+          message: `Este pré-registro já foi vinculado a outra conta de aluno (${freshLinkedUid}).`
+        }), {
+          status: 409,
+          headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+        });
+      }
+
+      // Se o linkedUid ainda estiver nulo ou for do próprio usuário, tenta a escrita novamente (retry transparente)
+      if (!freshLinkedUid || freshLinkedUid === uid) {
+        console.log(`[AEF Claim] [AEF Retry] Precondição falhou sem vínculo a terceiro (linkedUid: "${freshLinkedUid || 'nulo'}"). Executando retry transparente para UID ${uid}.`);
+        const retryOptions = {
+          updateMask: ["linkedUid", "claimedBy", "claimedAt", "schemaVersion", "updatedAt"],
+          currentDocument: { exists: true }
+        };
+        if (freshPreReg && freshPreReg._updateTime) {
+          retryOptions.currentDocument.updateTime = freshPreReg._updateTime;
+        }
+
+        const retryRes = await writeFirestore("users", legacyId, {
+          ...(freshPreReg || preReg),
+          linkedUid: uid,
+          claimedBy: uid,
+          claimedAt: new Date().toISOString(),
+          schemaVersion: 2,
+          updatedAt: new Date().toISOString()
+        }, retryOptions);
+
+        if (retryRes && retryRes.preconditionFailed) {
+          const finalCheck = await readFirestoreDoc("users", legacyId);
+          const finalLinkedUid = finalCheck && (finalCheck.linkedUid || finalCheck.claimedBy);
+          if (finalLinkedUid && finalLinkedUid !== uid) {
+            console.warn(`[AEF Claim] [AEF Conflict] Falha de concorrência definitiva: pré-registro ${email} pertence a ${finalLinkedUid}. Rejeitando UID ${uid}.`);
+            return new Response(JSON.stringify({
+              error: "Conflict",
+              message: `Este pré-registro já foi vinculado a outra conta de aluno (${finalLinkedUid}).`
+            }), {
+              status: 409,
+              headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+            });
+          }
+        }
+      }
+    }
   }
+
+  // 8. Gravação Server-Side no Firestore (users/{uid})
+  await writeFirestore("users", uid, normalizedUser);
 
   console.log(`[AEF Claim] Aluno legado ${email} vinculado com sucesso ao UID ${uid}`);
 

@@ -411,6 +411,89 @@ describe("Suite de Testes da Camada de Repositório (Fase 4 - Etapa 4.1)", () =>
       assert.equal(hydratedLesson.goldenTip, "Sacada de Ouro");
       assert.equal(hydratedLesson.videoUrl, "https://video.mp4");
     });
+
+    test("getCoursesMetadata e getCoursesHierarchy devem filtrar por isPublished == true quando não for admin (Verificação 1.2)", async () => {
+      let whereFilterApplied = false;
+      let whereField = "";
+      let whereOp = "";
+      let whereVal = false;
+
+      const mockDb = {
+        collection: (col: string) => {
+          assert.equal(col, "courses");
+          return {
+            where: (field: string, op: string, val: any) => {
+              whereFilterApplied = true;
+              whereField = field;
+              whereOp = op;
+              whereVal = val;
+              return {
+                get: async () => ({
+                  empty: false,
+                  forEach: (cb: any) => {
+                    cb({ id: "curso-pub-1", data: () => ({ title: "Curso Publicado", isPublished: true }) });
+                  },
+                  docs: [
+                    { id: "curso-pub-1", data: () => ({ title: "Curso Publicado", isPublished: true }) }
+                  ]
+                })
+              };
+            },
+            get: async () => {
+              throw new Error("Não deve chamar get() desprotegido sem where('isPublished', '==', true)!");
+            }
+          };
+        }
+      };
+
+      const mockSync = { init: async () => {}, db: mockDb };
+      const repo = new CourseRepository(mockSync);
+
+      const meta = await repo.getCoursesMetadata({});
+      assert.ok(whereFilterApplied, "Deve aplicar filtro where no Firestore");
+      assert.equal(whereField, "isPublished");
+      assert.equal(whereOp, "==");
+      assert.equal(whereVal, true);
+      assert.ok(meta["curso-pub-1"]);
+      assert.equal(meta["curso-pub-1"].title, "Curso Publicado");
+    });
+
+    test("getCoursesMetadata permite catálogo completo sem filtro isPublished para administrador", async () => {
+      let unfilteredCalled = false;
+      const mockDb = {
+        collection: (col: string) => ({
+          where: () => { throw new Error("Admin não deve ser forçado a filtrar apenas publicados"); },
+          get: async () => {
+            unfilteredCalled = true;
+            return {
+              empty: false,
+              forEach: (cb: any) => {
+                cb({ id: "curso-draft", data: () => ({ title: "Curso Rascunho", isPublished: false }) });
+              },
+              docs: [
+                { id: "curso-draft", data: () => ({ title: "Curso Rascunho", isPublished: false }) }
+              ]
+            };
+          }
+        })
+      };
+
+      (globalThis as any).window = {
+        aefPortalAuth: {
+          isAdmin: () => true
+        }
+      };
+
+      try {
+        const mockSync = { init: async () => {}, db: mockDb };
+        const repo = new CourseRepository(mockSync);
+        const meta = await repo.getCoursesMetadata({});
+        assert.ok(unfilteredCalled, "Admin deve chamar get() direto para ver cursos publicados e rascunhos");
+        assert.ok(meta["curso-draft"]);
+      } finally {
+        delete (globalThis as any).window;
+      }
+    });
   });
 });
 

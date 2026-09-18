@@ -590,5 +590,132 @@ describe('Suite de Testes de Endpoints Edge & Webhook (Chief Architect Audit)', 
       const data = await res.json() as { success: boolean };
       assert.strictEqual(data.success, true);
     });
+
+    it('deve rejeitar com HTTP 409 Conflict se precondição atômica falhar por concorrência de vinculação (Verificação 1.6)', async () => {
+      const email = 'aluno.concorrente@exemplo.com';
+      const uid1 = 'uid_vencedor_111';
+      const uid2 = 'uid_perdedor_222';
+      const legacyId = email.replace(/[^a-zA-Z0-9]/g, '_');
+      const token = await createSignedIdToken({ sub: uid2, email: email, email_verified: true });
+
+      let patchAttempts = 0;
+
+      globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+        const urlStr = String(input);
+        if (urlStr.includes('securetoken@system.gserviceaccount.com')) {
+          return new Response(JSON.stringify({ keys: [testPublicJwk] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+        // Primeira leitura: parece desvinculado
+        if (urlStr.includes(`/documents/users/${legacyId}`) && (!init || init.method === 'GET' || !init.method)) {
+          if (patchAttempts === 0) {
+            return new Response(JSON.stringify({
+              name: `projects/agoraeufalo-3463a/databases/(default)/documents/users/${legacyId}`,
+              updateTime: '2026-09-18T10:00:00.000Z',
+              fields: {
+                email: { stringValue: email },
+                tier: { stringValue: 'club_annual' }
+              }
+            }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+          } else {
+            // Releitura após falha de precondição: documento foi vinculado pelo UID concorrente
+            return new Response(JSON.stringify({
+              name: `projects/agoraeufalo-3463a/databases/(default)/documents/users/${legacyId}`,
+              updateTime: '2026-09-18T10:00:01.000Z',
+              fields: {
+                email: { stringValue: email },
+                linkedUid: { stringValue: uid1 },
+                tier: { stringValue: 'club_annual' }
+              }
+            }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+          }
+        }
+        // PATCH com precondição falha com status FAILED_PRECONDITION
+        if (init && init.method === 'PATCH' && urlStr.includes(`/documents/users/${legacyId}`)) {
+          patchAttempts++;
+          return new Response(JSON.stringify({
+            error: {
+              code: 400,
+              message: "The document's update_time does not match the precondition.",
+              status: "FAILED_PRECONDITION"
+            }
+          }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+        }
+        return new Response('Not Found', { status: 404 });
+      };
+
+      const req = new Request('https://api.agoraeufalo.com.br/api/claim-preregistration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const res = await worker.fetch(req, mockEnv, {});
+      assert.strictEqual(res.status, 409);
+      const data = await res.json() as { error: string; message: string };
+      assert.strictEqual(data.error, 'Conflict');
+      assert.ok(data.message.includes(uid1));
+    });
+
+    it('deve executar retry transparente com sucesso se precondição falhar mas linkedUid continuar livre (Nota 2.b)', async () => {
+      const email = 'aluno.retry.transparente@exemplo.com';
+      const uid = 'uid_retry_sucesso_333';
+      const legacyId = email.replace(/[^a-zA-Z0-9]/g, '_');
+      const token = await createSignedIdToken({ sub: uid, email: email, email_verified: true });
+
+      let patchAttempts = 0;
+
+      globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+        const urlStr = String(input);
+        if (urlStr.includes('securetoken@system.gserviceaccount.com')) {
+          return new Response(JSON.stringify({ keys: [testPublicJwk] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+        if (urlStr.includes(`/documents/users/${legacyId}`) && (!init || init.method === 'GET' || !init.method)) {
+          // Na primeira leitura updateTime = T0, na segunda (após conflito benigno) updateTime = T1, mas linkedUid ainda vazio!
+          return new Response(JSON.stringify({
+            name: `projects/agoraeufalo-3463a/databases/(default)/documents/users/${legacyId}`,
+            updateTime: patchAttempts === 0 ? '2026-09-18T10:00:00.000Z' : '2026-09-18T10:00:05.000Z',
+            fields: {
+              email: { stringValue: email },
+              tier: { stringValue: 'club_annual' }
+              // linkedUid NÃO está definido (livre!)
+            }
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+        if (init && init.method === 'PATCH') {
+          patchAttempts++;
+          if (patchAttempts === 1 && urlStr.includes(`/documents/users/${legacyId}`)) {
+            // Primeira tentativa de vincular falha com FAILED_PRECONDITION (ex: admin atualizou doc simultaneamente)
+            return new Response(JSON.stringify({
+              error: {
+                code: 400,
+                message: "The document's update_time does not match the precondition.",
+                status: "FAILED_PRECONDITION"
+              }
+            }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+          }
+          // Segunda tentativa (retry com novo updateTime) e escrita no users/{uid} sucedem!
+          return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+        return new Response('Not Found', { status: 404 });
+      };
+
+      const req = new Request('https://api.agoraeufalo.com.br/api/claim-preregistration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const res = await worker.fetch(req, mockEnv, {});
+      assert.strictEqual(res.status, 200);
+      const data = await res.json() as { success: boolean; claimed: boolean; user: any };
+      assert.strictEqual(data.success, true);
+      assert.strictEqual(data.claimed, true);
+      assert.strictEqual(data.user.uid, uid);
+      assert.ok(patchAttempts >= 2, 'Deve ter realizado retry na escrita');
+    });
   });
 });

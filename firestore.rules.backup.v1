@@ -1,0 +1,127 @@
+rules_version = '2';
+
+/**
+ * AgoraEuFalo • Regras de Segurança do Cloud Firestore (Zero Trust Architecture)
+ * Professor Leonardo Leite
+ * 
+ * Política P0-1: Escrita client-side terminantemente bloqueada em coleções centrais.
+ * Todas as mutações de perfil, assinaturas e webhooks são executadas com privilégios
+ * exclusivos server-side (Cloudflare Worker / Google Cloud Firebase Admin).
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========================================================================
+    // FUNÇÕES AUXILIARES DE AUTENTICAÇÃO E PERMISSÃO
+    // ========================================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && (
+        request.auth.uid == userId ||
+        request.auth.token.email == userId
+      );
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin' ||
+        request.auth.token.email == 'selexenglish@gmail.com'
+      );
+    }
+
+    // ========================================================================
+    // 1. USUÁRIOS (users/*)
+    // Leitura: Permitida estritamente ao próprio usuário autenticado ou admin.
+    // Escrita: Terminantemente bloqueada para clientes (allow write: if false).
+    // ========================================================================
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if false;
+
+      // Subcoleções de usuário (custom_tracks, listening_stats, etc.)
+      match /{subcollection=**} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if false;
+      }
+    }
+
+    // ========================================================================
+    // 2. CATÁLOGO DE CURSOS (courses/*)
+    // Leitura: Pública apenas para cursos publicados (isPublished == true) ou admin.
+    // Escrita: Terminantemente bloqueada para clientes (allow write: if false).
+    // ========================================================================
+    match /courses/{courseId} {
+      allow read: if resource.data.isPublished == true || isAdmin();
+      allow write: if false;
+
+      match /modules/{moduleId} {
+        allow read: if true;
+        allow write: if false;
+
+        match /lessons/{lessonId} {
+          allow read: if true;
+          allow write: if false;
+        }
+      }
+    }
+
+    // ========================================================================
+    // 3. AUDITORIA, WEBHOOKS E CONFIGURAÇÕES DO SISTEMA
+    // Leitura e Escrita client-side 100% bloqueadas (allow read, write: if false).
+    // ========================================================================
+    match /webhook_events/{eventId} {
+      allow read, write: if false;
+    }
+
+    match /webhook_logs/{logId} {
+      allow read, write: if false;
+    }
+
+    match /config/{configId} {
+      allow read, write: if false;
+    }
+
+    // ========================================================================
+    // 4. MENTORIA VIP & GESTÃO DE MENTORADOS (students/*)
+    // Leitura: Apenas o mentorado correspondente ou admin.
+    // Escrita: Bloqueada para clientes.
+    // ========================================================================
+    match /students/{studentId} {
+      allow read: if isOwner(studentId) || isAdmin();
+      allow write: if false;
+
+      match /{subcollection=**} {
+        allow read: if isOwner(studentId) || isAdmin();
+        allow write: if false;
+      }
+    }
+
+    // ========================================================================
+    // 5. CONTEÚDOS PÚBLICOS DE APOIO (Sugestões e Marketing Blocks)
+    // Leitura: Permitida para renderização na vitrine / player.
+    // Escrita: Bloqueada para clientes.
+    // ========================================================================
+    match /suggestions/{trackId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /marketing_blocks/{blockId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ========================================================================
+    // 6. POLÍTICA PADRÃO ZERO TRUST
+    // Qualquer documento ou coleção não mapeada explicitamente é bloqueada.
+    // ========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

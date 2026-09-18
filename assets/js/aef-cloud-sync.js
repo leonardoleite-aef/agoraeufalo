@@ -360,8 +360,13 @@
       // 1. Consulta remota leve no Firestore (apenas coleção "courses", sem subcoleções)
       if (this.sync.db) {
         try {
+          const coursesCol = this.sync.db.collection("courses");
+          const isUserAdmin = typeof window !== "undefined" && window.aefPortalAuth && typeof window.aefPortalAuth.isAdmin === "function" && window.aefPortalAuth.isAdmin();
+          const query = (!isUserAdmin && typeof coursesCol.where === "function")
+            ? coursesCol.where("isPublished", "==", true)
+            : coursesCol;
           const snap = await Promise.race([
-            this.sync.db.collection("courses").get(),
+            query.get(),
             new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
           ]);
           if (!snap.empty) {
@@ -457,8 +462,13 @@
 
       if (this.sync.db) {
         try {
+          const coursesCol = this.sync.db.collection("courses");
+          const isUserAdmin = typeof window !== "undefined" && window.aefPortalAuth && typeof window.aefPortalAuth.isAdmin === "function" && window.aefPortalAuth.isAdmin();
+          const query = (!isUserAdmin && typeof coursesCol.where === "function")
+            ? coursesCol.where("isPublished", "==", true)
+            : coursesCol;
           const snap = await Promise.race([
-            this.sync.db.collection("courses").get(),
+            query.get(),
             new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 6000))
           ]);
           if (!snap.empty) {
