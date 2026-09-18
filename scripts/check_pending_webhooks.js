@@ -3,16 +3,23 @@
  * AgoraEuFalo • Monitoramento de Webhooks Pendentes (Verificação 1.5)
  * Professor Leonardo Leite
  * 
- * Consulta rápida para listar webhooks com status == 'pending' há mais de 5 minutos
- * no Cloud Firestore (webhook_events/*), prevenindo perda silenciosa de eventos por crash.
+ * Consulta webhooks com status == 'pending' há mais de 5 minutos no Cloud Firestore
+ * (coleção 'webhook_events/*').
  * 
- * Uso:
- *   node scripts/check_pending_webhooks.js
- *   node scripts/check_pending_webhooks.js --threshold 10
+ * Como a regra Zero Trust bloqueia leituras não autenticadas (allow read, write: if false),
+ * este script suporta autenticação administrativa server-side via:
+ * 1. Arquivo de Service Account do Google Cloud / Firebase:
+ *    - Variável GOOGLE_APPLICATION_CREDENTIALS=/caminho/service-account.json
+ *    - Flag --key /caminho/service-account.json
+ *    - Arquivo local ./service-account.json ou ./firebase-service-account.json
+ * 2. Fallback REST para ambientes com token OAuth Bearer configurado
  */
 
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
 const FIRESTORE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || "agoraeufalo-3463a";
-const FIRESTORE_API_KEY = process.env.FIREBASE_API_KEY || "AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk";
 
 function parseRestField(field) {
   if (!field) return null;
@@ -47,12 +54,97 @@ function parseRestDoc(doc, fallbackId = "") {
   return obj;
 }
 
-export async function queryPendingWebhooks(options = {}) {
+/**
+ * Localiza o arquivo de credenciais de serviço local
+ */
+function findServiceAccountPath(customPath) {
+  if (customPath && fs.existsSync(customPath)) return customPath;
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS && fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+    return process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  }
+  if (process.env.FIREBASE_SERVICE_ACCOUNT && fs.existsSync(process.env.FIREBASE_SERVICE_ACCOUNT)) {
+    return process.env.FIREBASE_SERVICE_ACCOUNT;
+  }
+  const rootDir = path.resolve(__dirname, '..');
+  const candidates = [
+    path.join(rootDir, 'service-account.json'),
+    path.join(rootDir, 'firebase-service-account.json'),
+    path.join(rootDir, 'agoraeufalo-service-account.json')
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return null;
+}
+
+/**
+ * Gera um Google OAuth2 Access Token a partir de Service Account JSON nativamente (RS256)
+ */
+async function getAccessTokenFromServiceAccount(saPath) {
+  const sa = JSON.parse(fs.readFileSync(saPath, 'utf8'));
+  const now = Math.floor(Date.now() / 1000);
+
+  const header = { alg: "RS256", typ: "JWT" };
+  const payload = {
+    iss: sa.client_email,
+    sub: sa.client_email,
+    aud: "https://oauth2.googleapis.com/token",
+    scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/cloud-platform",
+    iat: now,
+    exp: now + 3600
+  };
+
+  const b64 = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
+  const unsignedToken = `${b64(header)}.${b64(payload)}`;
+
+  const signer = crypto.createSign('RSA-SHA256');
+  signer.update(unsignedToken);
+  signer.end();
+  const signature = signer.sign(sa.private_key, 'base64url');
+  const jwt = `${unsignedToken}.${signature}`;
+
+  const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      assertion: jwt
+    })
+  });
+
+  if (!tokenRes.ok) {
+    const errTxt = await tokenRes.text();
+    throw new Error(`Falha ao obter Access Token da Service Account: ${errTxt}`);
+  }
+
+  const tokenData = await tokenRes.json();
+  return tokenData.access_token;
+}
+
+async function queryPendingWebhooks(options = {}) {
   const thresholdMinutes = options.thresholdMinutes !== undefined ? options.thresholdMinutes : 5;
   const projectId = options.projectId || FIRESTORE_PROJECT_ID;
-  const apiKey = options.apiKey || FIRESTORE_API_KEY;
+  const saPath = findServiceAccountPath(options.keyPath);
 
-  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents:runQuery?key=${apiKey}`;
+  let headers = { "Content-Type": "application/json" };
+
+  if (saPath) {
+    const accessToken = await getAccessTokenFromServiceAccount(saPath);
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  } else if (process.env.FIREBASE_ACCESS_TOKEN) {
+    headers["Authorization"] = `Bearer ${process.env.FIREBASE_ACCESS_TOKEN}`;
+  } else {
+    // Sem credencial de serviço explícita
+    throw new Error(
+      "Credencial de serviço do Firebase/Google Cloud não encontrada.\n" +
+      "Como as regras Zero Trust bloqueiam leitura client-side em 'webhook_events/*',\n" +
+      "execute o script com:\n" +
+      "  node scripts/check_pending_webhooks.js --key /caminho/service-account.json\n" +
+      "  ou defina a variável: export GOOGLE_APPLICATION_CREDENTIALS=/caminho/service-account.json"
+    );
+  }
+
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents:runQuery`;
   const queryPayload = {
     structuredQuery: {
       from: [{ collectionId: "webhook_events" }],
@@ -68,7 +160,7 @@ export async function queryPendingWebhooks(options = {}) {
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(queryPayload)
   });
 
@@ -125,9 +217,16 @@ export async function queryPendingWebhooks(options = {}) {
 async function runCli() {
   const args = process.argv.slice(2);
   let threshold = 5;
+  let keyPath = null;
+
   const threshIdx = args.indexOf("--threshold");
   if (threshIdx !== -1 && args[threshIdx + 1]) {
     threshold = parseInt(args[threshIdx + 1], 10) || 5;
+  }
+
+  const keyIdx = args.indexOf("--key");
+  if (keyIdx !== -1 && args[keyIdx + 1]) {
+    keyPath = args[keyIdx + 1];
   }
 
   console.log("=================================================================");
@@ -139,7 +238,7 @@ async function runCli() {
   console.log("-----------------------------------------------------------------");
 
   try {
-    const report = await queryPendingWebhooks({ thresholdMinutes: threshold });
+    const report = await queryPendingWebhooks({ thresholdMinutes: threshold, keyPath });
 
     if (report.stalePending.length === 0) {
       console.log(`✅ Nenhum webhook pendente há mais de ${threshold} minutos!`);
@@ -163,11 +262,13 @@ async function runCli() {
       process.exit(1);
     }
   } catch (err) {
-    console.error("❌ Falha ao executar consulta no Firestore:", err.message || err);
+    console.error("❌ Falha na consulta de webhooks:", err.message || err);
     process.exit(1);
   }
 }
 
-if (process.argv[1] && process.argv[1].endsWith("check_pending_webhooks.js")) {
+if (require.main === module) {
   runCli();
 }
+
+module.exports = { queryPendingWebhooks };

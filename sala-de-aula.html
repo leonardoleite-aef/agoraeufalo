@@ -44,6 +44,7 @@
   <script src="assets/js/aef-portal-auth.js?v=20260902_1955"></script>
   <script src="assets/js/aef-learning-tracker.js"></script>
   <script src="assets/js/aef-quizzes-registry.js"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260906_01"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
   <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
@@ -562,7 +563,12 @@
         }
       }
 
-      if (courseId && window.aefCloudSync) {
+      // 5. Sincronização e Carregamento Inteligente (SWR: Stale-While-Revalidate)
+      // Se o curso já existe localmente no baseRegistry, monta a sala INSTANTANEAMENTE (<50ms)
+      // e executa a sincronização com o Firestore de forma transparente em segundo plano.
+      const hasLocalCourse = Boolean(courseId && baseCourses[courseId]);
+
+      if (!hasLocalCourse && courseId && window.aefCloudSync) {
         try {
           await window.aefCloudSync.init();
           if (window.aefCloudSync.getCourseHierarchy) {
@@ -588,7 +594,7 @@
         }
       }
 
-      // 5. Verifica Acesso
+      // 6. Verifica Acesso
       let hasAccess = false;
       if (courseId && baseCourses[courseId]) {
         hasAccess = window.AEFAccessEngine ? window.AEFAccessEngine.hasAccess(userProfile, baseCourses[courseId]) : true;
@@ -656,7 +662,50 @@
       initClassroom(targetModuleId, targetLessonId);
       applySidebarStates();
       updateIcons();
+
+      // Sincronização não-bloqueante em background (SWR) se o curso já foi renderizado a partir do cache local
+      if (hasLocalCourse && window.aefCloudSync) {
+        syncCourseInBackground(courseId, rawParam, baseCourses, userProfile);
+      }
     });
+
+    async function syncCourseInBackground(cId, rParam, baseCourses, userProfile) {
+      if (!window.aefCloudSync || !cId) return;
+      try {
+        await window.aefCloudSync.init();
+        let liveCourse = null;
+        if (window.aefCloudSync.getCourseHierarchy) {
+          liveCourse = await window.aefCloudSync.getCourseHierarchy(cId, baseCourses);
+          if ((!liveCourse || !liveCourse.title || liveCourse.title === cId) && rParam && !cId.startsWith("mentoria-")) {
+            const mentoriaCourse = await window.aefCloudSync.getCourseHierarchy(`mentoria-${rParam}`, baseCourses);
+            if (mentoriaCourse && mentoriaCourse.title && mentoriaCourse.title !== `mentoria-${rParam}`) {
+              liveCourse = mentoriaCourse;
+            }
+          }
+        } else {
+          const liveCourses = await window.aefCloudSync.getCoursesHierarchy(baseCourses);
+          if (liveCourses && liveCourses[cId]) {
+            liveCourse = liveCourses[cId];
+          }
+        }
+
+        if (liveCourse && liveCourse.id === cId) {
+          baseCourses[cId] = liveCourse;
+          COURSE_SEEDS[cId] = liveCourse;
+          if (activeCourse && activeCourse.id === cId) {
+            activeCourse = liveCourse;
+            if (activeLesson) {
+              selectLesson(activeLesson.id);
+            } else {
+              renderCourseSyllabus();
+              updateIcons();
+            }
+          }
+        }
+      } catch (syncErr) {
+        console.warn("⚠️ Background Live Firestore Sync in Classroom:", syncErr);
+      }
+    }
 
     function initClassroom(targetModuleId, targetLessonId) {
       if (!activeCourse) return;
@@ -1132,6 +1181,22 @@
 
       const downloads = resolveLessonDownloads(found);
 
+      function isDirectDownloadUrl(url) {
+        if (!url || typeof url !== 'string') return false;
+        const u = url.trim();
+        if (!u || u === '#' || u.startsWith('javascript:')) return false;
+        return (
+          u.startsWith('https://') ||
+          u.startsWith('http://') ||
+          u.startsWith('/') ||
+          u.startsWith('./') ||
+          u.startsWith('Material-PDF/') ||
+          u.toLowerCase().endsWith('.pdf') ||
+          u.toLowerCase().endsWith('.mp3') ||
+          u.toLowerCase().endsWith('.zip')
+        );
+      }
+
       // 1. Pedagogical Materials Card
       if (materialsCard) {
         if (downloads.length === 0) {
@@ -1155,8 +1220,8 @@
                 badgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
               }
 
-              const isRealUrl = item.url && item.url.startsWith('https://');
-              const isPrintable = dType === 'pdf' && !isRealUrl && found.processedContentHtml;
+              const isRealUrl = isDirectDownloadUrl(item.url);
+              const isPrintable = dType === 'pdf' && !isRealUrl && (found.processedContentHtml || found.rawScript);
 
               let actionAttr = '';
               if (isRealUrl) {
@@ -1210,12 +1275,12 @@
           let icon = 'download';
           if (dType === 'mp3') icon = 'headphones';
           else if (dType === 'file-text' || dType === 'pdf') icon = 'file-text';
-          const isRealUrl = item.url && item.url.startsWith('https://');
-          const isPrintable = dType === 'pdf' && !isRealUrl && found.processedContentHtml;
+          const isRealUrl = isDirectDownloadUrl(item.url);
+          const isPrintable = dType === 'pdf' && !isRealUrl && (found.processedContentHtml || found.rawScript);
 
           let actionAttr = '';
           if (isRealUrl) {
-            actionAttr = `href="${item.url}" target="_blank"`;
+            actionAttr = `href="${item.url}" target="_blank" download`;
           } else if (isPrintable) {
             actionAttr = `href="javascript:void(0)" onclick="window.printLessonApostila()"`;
           } else {
@@ -1234,12 +1299,12 @@
             let icon = 'download';
             if (dType === 'mp3') icon = 'headphones';
             else if (dType === 'file-text' || dType === 'pdf') icon = 'file-text';
-            const isRealUrl = item.url && item.url.startsWith('https://');
-            const isPrintable = dType === 'pdf' && !isRealUrl && found.processedContentHtml;
+            const isRealUrl = isDirectDownloadUrl(item.url);
+            const isPrintable = dType === 'pdf' && !isRealUrl && (found.processedContentHtml || found.rawScript);
 
             let actionAttr = '';
             if (isRealUrl) {
-              actionAttr = `href="${item.url}" target="_blank"`;
+              actionAttr = `href="${item.url}" target="_blank" download`;
             } else if (isPrintable) {
               actionAttr = `href="javascript:void(0)" onclick="window.printLessonApostila()"`;
             } else {
@@ -1259,26 +1324,36 @@
     }
 
     window.printLessonApostila = () => {
-      if (!activeLesson || !activeLesson.processedContentHtml) return;
-      const w = window.open('', '_blank', 'width=850,height=950');
-      if (!w) { alert('Permita popups para abrir a apostila.'); return; }
-      w.document.open();
-      w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-        <title>Apostila — ${escapeHtml(activeLesson.title || 'Aula AgoraEuFalo')}</title>
-        <style>
-          @media print { body { margin: 0; } }
-          body { font-family: 'Georgia', serif; max-width: 794px; margin: 0 auto; padding: 28px 36px; background: #fff; color: #0F172A; font-size: 15pt; line-height: 1.65; }
-          h1, h2, h3 { font-weight: 700; }
-          table { border-collapse: collapse; width: 100%; }
-          td, th { border: 1px solid #CBD5E1; padding: 8px; }
-        </style>
-        </head><body>
-        <h1 style="color:#0A192F;">${escapeHtml(activeLesson.title || 'Aula')}</h1>
-        ${activeLesson.processedContentHtml}
-        </body></html>`);
-      w.document.close();
-      w.focus();
-      setTimeout(() => w.print(), 600);
+      if (!activeLesson) return;
+      if (window.AEFPdfGenerator && typeof window.AEFPdfGenerator.generatePrintableHtml === 'function') {
+        const printableHtml = window.AEFPdfGenerator.generatePrintableHtml(
+          activeCourse,
+          activeModule,
+          activeLesson,
+          activeLesson.rawScript || ''
+        );
+        window.AEFPdfGenerator.printDocument(printableHtml);
+      } else {
+        const w = window.open('', '_blank', 'width=850,height=950');
+        if (!w) { alert('Permita popups para abrir a apostila.'); return; }
+        w.document.open();
+        w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+          <title>Apostila — ${escapeHtml(activeLesson.title || 'Aula AgoraEuFalo')}</title>
+          <script src="https://cdn.tailwindcss.com"><\/script>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+          <style>
+            @media print { body { margin: 0; } }
+            body { font-family: 'Plus Jakarta Sans', sans-serif; max-width: 800px; margin: 0 auto; padding: 28px 36px; background: #fff; color: #0F172A; line-height: 1.6; }
+          </style>
+          </head><body class="p-8">
+          <h1 class="text-2xl font-bold text-[#0A192F] mb-4">${escapeHtml(activeLesson.title || 'Aula')}</h1>
+          ${activeLesson.processedContentHtml || activeLesson.rawScript || ''}
+          </body></html>`);
+        w.document.close();
+        w.focus();
+        setTimeout(() => w.print(), 600);
+      }
     };
 
     function selectLesson(lessonId) {

@@ -230,7 +230,19 @@
       if (!courseId) throw new Error("courseId é obrigatório para getCourseHierarchy");
       await this.sync.init();
 
-      const baseCourses = baseRegistry || (typeof window !== "undefined" ? window.AEF_COURSES_REGISTRY || {} : {});
+      let baseCourses = baseRegistry;
+      if (!baseCourses) {
+        if (typeof window !== "undefined") {
+          baseCourses = window.AEF_COURSES_REGISTRY || {};
+        } else {
+          try {
+            const regModule = require("./aef-courses-registry.js");
+            baseCourses = regModule.AEF_COURSES_DATA || regModule;
+          } catch (e) {
+            baseCourses = {};
+          }
+        }
+      }
       let remoteCourse = null;
       let remoteFound = false;
 
@@ -290,21 +302,26 @@
               if (mRes.ok) {
                 const mData = await mRes.json();
                 if (mData && Array.isArray(mData.documents)) {
-                  for (const mDoc of mData.documents) {
+                  const modulePromises = mData.documents.map(async (mDoc) => {
                     const mid = mDoc.name.split("/").pop();
                     const mObj = parseRestDoc(mDoc, mid);
                     mObj.lessons = [];
 
-                    const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}/lessons`);
-                    if (lRes.ok) {
-                      const lData = await lRes.json();
-                      if (lData && Array.isArray(lData.documents)) {
-                        mObj.lessons = lData.documents.map(lDoc => parseRestDoc(lDoc, lDoc.name.split("/").pop()));
-                        mObj.lessons.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                    try {
+                      const lRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${courseId}/modules/${mid}/lessons`);
+                      if (lRes.ok) {
+                        const lData = await lRes.json();
+                        if (lData && Array.isArray(lData.documents)) {
+                          mObj.lessons = lData.documents.map(lDoc => parseRestDoc(lDoc, lDoc.name.split("/").pop()));
+                          mObj.lessons.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
+                        }
                       }
+                    } catch (le) {
+                      console.warn(`[AEF Repository] Falha REST ao buscar lições de ${courseId}/${mid}:`, le);
                     }
-                    remoteCourse.modules.push(mObj);
-                  }
+                    return mObj;
+                  });
+                  remoteCourse.modules = await Promise.all(modulePromises);
                   remoteCourse.modules.sort((a, b) => (parseInt(a.order) || 0) - (parseInt(b.order) || 0));
                 }
               }
@@ -348,10 +365,19 @@
      * Ideal para renderizar cards, vitrines, menus e dropdowns instantaneamente.
      */
     async getCoursesMetadata(baseRegistry = null) {
-      await this.sync.init();
-      const metaSource = (typeof window !== "undefined" && window.AEF_COURSES_METADATA)
-        ? window.AEF_COURSES_METADATA
-        : (baseRegistry || (typeof window !== "undefined" ? window.AEF_COURSES_REGISTRY || {} : {}));
+      let metaSource = baseRegistry;
+      if (!metaSource) {
+        if (typeof window !== "undefined") {
+          metaSource = window.AEF_COURSES_METADATA || window.AEF_COURSES_REGISTRY || {};
+        } else {
+          try {
+            const regModule = require("./aef-courses-registry.js");
+            metaSource = regModule.AEF_COURSES_METADATA || regModule.metadata || regModule.AEF_COURSES_DATA || regModule;
+          } catch (e) {
+            metaSource = {};
+          }
+        }
+      }
 
       const result = {};
       let remoteList = [];

@@ -86,9 +86,32 @@
       this.auth.onAuthStateChanged(async (user) => {
         this.currentUser = user;
         if (user) {
+          const isMasterAdmin = this.isMasterAdminEmail(user.email);
           this.currentProfile = await this.getProfile(user.uid);
+          if (isMasterAdmin) {
+            if (!this.currentProfile) {
+              this.currentProfile = {
+                uid: user.uid,
+                name: user.displayName || 'Prof. Leonardo Leite',
+                email: user.email,
+                avatarUrl: user.photoURL || '',
+                tier: 'admin_master',
+                role: 'admin',
+                enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'],
+                stats: { streakDays: 1, totalListeningMinutes: 0, lastTrainedAt: new Date().toISOString() },
+                createdAt: new Date().toISOString(),
+                lastLoginAt: new Date().toISOString()
+              };
+            } else {
+              this.currentProfile.role = 'admin';
+              this.currentProfile.tier = 'admin_master';
+              this.currentProfile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+            }
+          }
           if (this.currentProfile) {
-            this.currentProfile = await this._mergePreRegistration(user, this.currentProfile);
+            if (!isMasterAdmin) {
+              this.currentProfile = await this._mergePreRegistration(user, this.currentProfile);
+            }
             this.currentProfile = this.normalizeUserProfile(this.currentProfile);
             this._syncLocalStorage(this.currentProfile);
           }
@@ -109,6 +132,11 @@
         localStorage.setItem('aef_user_tier', profile.tier || 'free');
         localStorage.setItem('aef_user_role', profile.role || 'student');
         localStorage.setItem('aef_enrolled_products', JSON.stringify(profile.enrolledProducts || []));
+        if (profile.role === 'admin' || profile.tier === 'admin_master' || this.isMasterAdminEmail(profile.email)) {
+          localStorage.setItem('aef_is_admin', 'true');
+        } else {
+          localStorage.removeItem('aef_is_admin');
+        }
       } catch (e) {}
     }
 
@@ -226,8 +254,15 @@
         lastLoginAt: new Date().toISOString()
       };
 
-      await this.db.collection('users').doc(user.uid).set(newProfile);
-      newProfile = await this._mergePreRegistration(user, newProfile);
+      try {
+        await this.db.collection('users').doc(user.uid).set(newProfile);
+      } catch (dbErr) {
+        console.warn("[AEF Auth] Falha ao persistir perfil no Firestore:", dbErr);
+      }
+
+      if (!isMasterAdmin) {
+        newProfile = await this._mergePreRegistration(user, newProfile);
+      }
       this.currentProfile = newProfile;
       this._syncLocalStorage(newProfile);
       return { user, profile: newProfile };
@@ -242,43 +277,79 @@
       const isVipMentee = this.isVipMenteeEmail(email);
       const isHotmartReviewer = this.isHotmartReviewerEmail(email);
 
-      if (profile && isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
-        profile.role = 'admin';
-        profile.tier = 'admin_master';
-        profile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
-        await this.db.collection('users').doc(cred.user.uid).update({
-          role: 'admin',
-          tier: 'admin_master',
-          enrolledProducts: profile.enrolledProducts,
-          lastLoginAt: new Date().toISOString()
-        });
+      if (isMasterAdmin) {
+        if (!profile) {
+          profile = {
+            uid: cred.user.uid,
+            name: cred.user.displayName || 'Prof. Leonardo Leite',
+            email: email,
+            avatarUrl: cred.user.photoURL || '',
+            tier: 'admin_master',
+            role: 'admin',
+            enrolledProducts: ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'],
+            stats: { streakDays: 1, totalListeningMinutes: 0, lastTrainedAt: new Date().toISOString() },
+            createdAt: new Date().toISOString(),
+            lastLoginAt: new Date().toISOString()
+          };
+          try {
+            await this.db.collection('users').doc(cred.user.uid).set(profile);
+          } catch (dbErr) {
+            console.warn("[AEF Auth] Falha ao persistir perfil no Firestore:", dbErr);
+          }
+        } else if (profile.role !== 'admin' || profile.tier !== 'admin_master') {
+          profile.role = 'admin';
+          profile.tier = 'admin_master';
+          profile.enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
+          try {
+            await this.db.collection('users').doc(cred.user.uid).update({
+              role: 'admin',
+              tier: 'admin_master',
+              enrolledProducts: profile.enrolledProducts,
+              lastLoginAt: new Date().toISOString()
+            });
+          } catch (dbErr) {
+            console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+          }
+        }
       } else if (profile && isVipMentee && (profile.tier !== 'vip' || !profile.enrolledProducts?.includes('mentoria-andre'))) {
         profile.tier = 'vip';
         if (!profile.enrolledProducts) profile.enrolledProducts = [];
         if (!profile.enrolledProducts.includes('mentoria-andre')) profile.enrolledProducts.push('mentoria-andre');
         if (!profile.enrolledProducts.includes('ms-legacy')) profile.enrolledProducts.push('ms-legacy');
-        await this.db.collection('users').doc(cred.user.uid).update({
-          tier: 'vip',
-          enrolledProducts: profile.enrolledProducts,
-          lastLoginAt: new Date().toISOString()
-        });
+        try {
+          await this.db.collection('users').doc(cred.user.uid).update({
+            tier: 'vip',
+            enrolledProducts: profile.enrolledProducts,
+            lastLoginAt: new Date().toISOString()
+          });
+        } catch (dbErr) {
+          console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+        }
       } else if (profile && isHotmartReviewer) {
         profile.role = 'student';
         profile.tier = 'club_annual';
         profile.enrolledProducts = ['magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas'];
-        await this.db.collection('users').doc(cred.user.uid).update({
-          role: 'student',
-          tier: 'club_annual',
-          enrolledProducts: profile.enrolledProducts,
-          lastLoginAt: new Date().toISOString()
-        });
+        try {
+          await this.db.collection('users').doc(cred.user.uid).update({
+            role: 'student',
+            tier: 'club_annual',
+            enrolledProducts: profile.enrolledProducts,
+            lastLoginAt: new Date().toISOString()
+          });
+        } catch (dbErr) {
+          console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+        }
       } else if (profile) {
-        await this.db.collection('users').doc(cred.user.uid).update({
-          lastLoginAt: new Date().toISOString()
-        });
+        try {
+          await this.db.collection('users').doc(cred.user.uid).update({
+            lastLoginAt: new Date().toISOString()
+          });
+        } catch (dbErr) {
+          console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+        }
       }
 
-      if (profile) {
+      if (profile && !isMasterAdmin) {
         profile = await this._mergePreRegistration(cred.user, profile);
       }
 
@@ -316,7 +387,11 @@
           createdAt: new Date().toISOString(),
           lastLoginAt: new Date().toISOString()
         };
-        await this.db.collection('users').doc(user.uid).set(profile);
+        try {
+          await this.db.collection('users').doc(user.uid).set(profile);
+        } catch (dbErr) {
+          console.warn("[AEF Auth] Falha ao persistir perfil no Firestore:", dbErr);
+        }
       } else {
         if (isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
           profile.role = 'admin';
@@ -338,10 +413,14 @@
           updates.avatarUrl = user.photoURL;
           profile.avatarUrl = user.photoURL;
         }
-        await this.db.collection('users').doc(user.uid).update(updates);
+        try {
+          await this.db.collection('users').doc(user.uid).update(updates);
+        } catch (dbErr) {
+          console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+        }
       }
 
-      if (profile) {
+      if (profile && !isMasterAdmin) {
         profile = await this._mergePreRegistration(user, profile);
       }
 
@@ -406,7 +485,11 @@
               createdAt: new Date().toISOString(),
               lastLoginAt: new Date().toISOString()
             };
-            await this.db.collection('users').doc(user.uid).set(profile);
+            try {
+              await this.db.collection('users').doc(user.uid).set(profile);
+            } catch (dbErr) {
+              console.warn("[AEF Auth] Falha ao persistir perfil no Firestore:", dbErr);
+            }
           } else {
             if (isMasterAdmin && (profile.role !== 'admin' || profile.tier !== 'admin_master')) {
               profile.role = 'admin';
@@ -418,14 +501,20 @@
               if (!profile.enrolledProducts.includes('mentoria-andre')) profile.enrolledProducts.push('mentoria-andre');
               if (!profile.enrolledProducts.includes('ms-legacy')) profile.enrolledProducts.push('ms-legacy');
             }
-            await this.db.collection('users').doc(user.uid).update({
-              role: profile.role,
-              tier: profile.tier,
-              enrolledProducts: profile.enrolledProducts || [],
-              lastLoginAt: new Date().toISOString()
-            });
+            try {
+              await this.db.collection('users').doc(user.uid).update({
+                role: profile.role,
+                tier: profile.tier,
+                enrolledProducts: profile.enrolledProducts || [],
+                lastLoginAt: new Date().toISOString()
+              });
+            } catch (dbErr) {
+              console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+            }
           }
-          profile = await this._mergePreRegistration(user, profile);
+          if (profile && !isMasterAdmin) {
+            profile = await this._mergePreRegistration(user, profile);
+          }
           this.currentProfile = profile;
           this._syncLocalStorage(profile);
           return { user, profile };
@@ -544,7 +633,11 @@
     async updateProfile(data) {
       await this.ready();
       if (!this.currentUser) return;
-      await this.db.collection('users').doc(this.currentUser.uid).update(data);
+      try {
+        await this.db.collection('users').doc(this.currentUser.uid).update(data);
+      } catch (dbErr) {
+        console.warn("[AEF Auth] Falha ao atualizar perfil no Firestore:", dbErr);
+      }
       this.currentProfile = { ...this.currentProfile, ...data };
       this._syncLocalStorage(this.currentProfile);
       return this.currentProfile;
@@ -555,11 +648,15 @@
     // =========================================================================
 
     isAdmin() {
+      const directEmail = (this.currentUser?.email || this.auth?.currentUser?.email || '').toLowerCase().trim();
+      if (this.isMasterAdminEmail(directEmail)) return true;
+
       if (!this.currentProfile) {
         const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
         const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
         const cachedTier = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_tier') : null;
-        return (cachedRole === 'admin' || cachedTier === 'admin_master' || this.isMasterAdminEmail(cachedEmail));
+        const cachedIsAdmin = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_is_admin') === 'true' : false;
+        return (cachedRole === 'admin' || cachedTier === 'admin_master' || cachedIsAdmin || this.isMasterAdminEmail(cachedEmail));
       }
       return this.currentProfile.role === 'admin' || 
              this.currentProfile.tier === 'admin_master' || 

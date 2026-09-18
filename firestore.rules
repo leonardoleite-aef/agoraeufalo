@@ -30,42 +30,43 @@ service cloud.firestore {
       return isAuthenticated() && (
         request.auth.token.admin == true ||
         request.auth.token.role == 'admin' ||
-        request.auth.token.email == 'selexenglish@gmail.com'
+        request.auth.token.email == 'selexenglish@gmail.com' ||
+        (request.auth.token.email != null && request.auth.token.email.lower() == 'selexenglish@gmail.com')
       );
     }
 
     // ========================================================================
     // 1. USUÁRIOS (users/*)
     // Leitura: Permitida estritamente ao próprio usuário autenticado ou admin.
-    // Escrita: Terminantemente bloqueada para clientes (allow write: if false).
+    // Escrita: Exclusiva do Administrador Mestre (Zero Trust para clientes comuns).
     // ========================================================================
     match /users/{userId} {
       allow read: if isOwner(userId) || isAdmin();
-      allow write: if false;
+      allow write: if isAdmin();
 
       // Subcoleções de usuário (custom_tracks, listening_stats, etc.)
       match /{subcollection=**} {
         allow read: if isOwner(userId) || isAdmin();
-        allow write: if false;
+        allow write: if isAdmin();
       }
     }
 
     // ========================================================================
     // 2. CATÁLOGO DE CURSOS (courses/*)
     // Leitura: Pública apenas para cursos publicados (isPublished == true) ou admin.
-    // Escrita: Terminantemente bloqueada para clientes (allow write: if false).
+    // Escrita: Exclusiva do Administrador Mestre (Course Studio / painel de cursos).
     // ========================================================================
     match /courses/{courseId} {
       allow read: if resource.data.isPublished == true || isAdmin();
-      allow write: if false;
+      allow write: if isAdmin();
 
       match /modules/{moduleId} {
         allow read: if true;
-        allow write: if false;
+        allow write: if isAdmin();
 
         match /lessons/{lessonId} {
           allow read: if true;
-          allow write: if false;
+          allow write: if isAdmin();
         }
       }
     }
@@ -89,31 +90,31 @@ service cloud.firestore {
     // ========================================================================
     // 4. MENTORIA VIP & GESTÃO DE MENTORADOS (students/*)
     // Leitura: Apenas o mentorado correspondente ou admin.
-    // Escrita: Bloqueada para clientes.
+    // Escrita: Exclusiva do Administrador Mestre.
     // ========================================================================
     match /students/{studentId} {
       allow read: if isOwner(studentId) || isAdmin();
-      allow write: if false;
+      allow write: if isAdmin();
 
       match /{subcollection=**} {
         allow read: if isOwner(studentId) || isAdmin();
-        allow write: if false;
+        allow write: if isAdmin();
       }
     }
 
     // ========================================================================
     // 5. CONTEÚDOS PÚBLICOS DE APOIO (Sugestões e Marketing Blocks)
     // Leitura: Permitida para renderização na vitrine / player.
-    // Escrita: Bloqueada para clientes.
+    // Escrita: Exclusiva do Administrador Mestre.
     // ========================================================================
     match /suggestions/{trackId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isAdmin();
     }
 
     match /marketing_blocks/{blockId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isAdmin();
     }
 
     // ========================================================================
