@@ -22,7 +22,7 @@ No AgoraEuFalo, nós transformamos cada história em um **ciclo completo de cond
    Você isola os chunks contextuais mais importantes daquela história. Nada de palavras soltas: você aprende expressões inteiras que pode usar imediatamente na sua vida real.
 
 3. **Etapa 3 — Listen & Answer (O Treino do Reflexo Instantâneo):**  
-   Esta é a etapa mágica! O professor dispara uma série de perguntas rápidas, simples e diretas sobre a história. Você é desafiado a **responder em voz alta imediatamente**, sem pausar a aula e sem pensar na tradução em português. Se a pergunta for *"Did Tom go to the supermarket?"*, você responde no reflexo: *"Yes, he did! He went to the supermarket."* É aqui que a fala destrava!
+   Esta é a etapa mágica! O professor faz uma série de perguntas rápidas, simples e diretas sobre a história. Você é desafiado a **responder em voz alta imediatamente**, sem pausar a aula e sem pensar na tradução em português. Se a pergunta for *"Did Tom go to the supermarket?"*, você responde no reflexo: *"Yes, he did! He went to the supermarket."* É aqui que a fala destrava!
 
 4. **Etapa 4 — Look & Retell (Recontar a História com Pistas Visuais):**  
    Olhando para uma sequência de ilustrações ou tópicos da história, você reconta a narrativa com as suas próprias palavras. Isso desenvolve a autonomia da fala espontânea.

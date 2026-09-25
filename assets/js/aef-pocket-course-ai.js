@@ -505,7 +505,7 @@
             chunks: [
               { en: 'Top of the hour.', pt: 'No final do horário marcado.' },
               { en: 'I will take ownership of that.', pt: 'Eu fico responsável por isso.' },
-              { en: 'Shoot an email over.', pt: 'Disparar um e-mail rápido.' }
+              { en: 'Shoot an email over.', pt: 'Mandar um e-mail rápido.' }
             ]
           }
         }
