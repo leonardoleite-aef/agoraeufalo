@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+  <title>Blog AgoraEuFalo</title>
+  <link>https://agoraeufalo.com.br/blog</link>
+  <description>Reflexões e aulas do Professor Leo Leite</description>
+  <!-- Os itens serão populados pelo Worker ou Script de Deploy dinamicamente -->
+</channel>
+</rss>

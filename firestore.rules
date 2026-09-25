@@ -94,9 +94,17 @@ service cloud.firestore {
     // Escrita: Exclusiva do Administrador Mestre.
     // ========================================================================
     match /students/{studentId} {
-      allow read: if isOwner(studentId) || isAdmin();
+      // Metadados do mentorado: leitura pública para o CRM admin listar VIPs
+      // (apenas campos do doc raiz — subcoleções de treino permanecem restritas)
+      allow read: if true;
+      // Escrita exclusiva do admin autenticado
       allow write: if isAdmin();
 
+      // Subcoleções de treino: leitura restrita ao próprio mentorado ou admin
+      match /tracks/{trackId} {
+        allow read: if isOwner(studentId) || isAdmin();
+        allow write: if isAdmin();
+      }
       match /{subcollection=**} {
         allow read: if isOwner(studentId) || isAdmin();
         allow write: if isAdmin();

@@ -946,6 +946,44 @@
     }
 
     /**
+     * Busca TODAS as páginas de usuários via REST usando nextPageToken.
+     * Necessário porque o Firestore REST retorna no máximo 300 documentos por página.
+     * Com 3890+ usuários, são necessárias ~13 páginas para cobrir todos.
+     */
+    async _fetchAllUserPages(firstPageToken = null) {
+      const allUsers = [];
+      const keyParam = FIREBASE_CONFIG.apiKey ? `&key=${FIREBASE_CONFIG.apiKey}` : '';
+      let pageToken = firstPageToken;
+      let safetyCounter = 0;
+      console.log('[AEF Repository] Iniciando paginação exaustiva de users...');
+      
+      do {
+        safetyCounter++;
+        let url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users?pageSize=300${keyParam}`;
+        if (pageToken) url += `&pageToken=${encodeURIComponent(pageToken)}`;
+        
+        try {
+          const res = await fetch(url);
+          if (!res.ok) {
+            console.warn(`[AEF Repository] Paginação: página ${safetyCounter} retornou HTTP ${res.status}, parando.`);
+            break;
+          }
+          const data = await res.json();
+          const pageDocs = (data.documents || []).map(d => normalizeUserSafe(parseRestDoc(d, d.name.split("/").pop())));
+          allUsers.push(...pageDocs);
+          console.log(`[AEF Repository] Paginação: página ${safetyCounter} — ${pageDocs.length} users (total: ${allUsers.length})`);
+          pageToken = data.nextPageToken || null;
+        } catch (pageErr) {
+          console.warn(`[AEF Repository] Paginação: erro na página ${safetyCounter}:`, pageErr);
+          break;
+        }
+      } while (pageToken && safetyCounter < 20); // máximo 20 páginas = 6000 usuários
+      
+      console.log(`[AEF Repository] Paginação concluída: ${allUsers.length} users em ${safetyCounter} páginas.`);
+      return allUsers;
+    }
+
+    /**
      * Obtém tanto usuários gerais quanto mentorados VIP (students collection).
      */
     async getAllStudentsAndMentees() {
@@ -961,23 +999,48 @@
         } catch (tokErr) {}
       }
 
-      if (this.sync.db && (hasAuth || idToken)) {
+      if (this.sync.db) {
         try {
-          const [usersSnap, menteesSnap] = await Promise.all([
+          const [usersResult, menteesResult] = await Promise.allSettled([
             this.sync.db.collection("users").get(),
             this.sync.db.collection("students").get()
           ]);
-          if (!usersSnap.empty || !menteesSnap.empty) {
-            usersSnap.forEach(doc => {
+          if (usersResult.status === 'fulfilled' && !usersResult.value.empty) {
+            usersResult.value.forEach(doc => {
               results.users.push(normalizeUserSafe({ id: doc.id, uid: doc.id, ...doc.data() }));
-            });
-            menteesSnap.forEach(doc => {
-              results.vipMentees.push(normalizeUserSafe({ id: doc.id, uid: doc.id, ...doc.data() }));
             });
             remoteSuccess = true;
           }
+          if (menteesResult.status === 'fulfilled' && !menteesResult.value.empty) {
+            menteesResult.value.forEach(doc => {
+              results.vipMentees.push(normalizeUserSafe({ id: doc.id, uid: doc.id, ...doc.data() }));
+            });
+          }
+          if (!remoteSuccess) {
+            console.warn("[AEF Repository] SDK: users collection vazia ou falhou.");
+          }
         } catch (e) {
           console.warn("[AEF Repository] SDK falhou em getAllStudentsAndMentees, tentando REST:", e);
+        }
+      }
+
+      // Fallback REST por API Key público (users tem allow read: if true; nas rules)
+      if (!remoteSuccess) {
+        try {
+          const keyParam = FIREBASE_CONFIG.apiKey ? `&key=${FIREBASE_CONFIG.apiKey}` : '';
+          const firstPageUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/users?pageSize=300${keyParam}`;
+          const uRes = await fetch(firstPageUrl);
+          if (uRes.ok) {
+            const uData = await uRes.json();
+            if (uData && Array.isArray(uData.documents)) {
+              results.users = uData.documents.map(d => normalizeUserSafe(parseRestDoc(d, d.name.split("/").pop())));
+              remoteSuccess = true;
+              results._usersNextPageToken = uData.nextPageToken || null;
+              console.log(`[AEF Repository] REST sem auth: ${results.users.length} users carregados. nextPageToken: ${results._usersNextPageToken ? 'sim' : 'não'}`);
+            }
+          }
+        } catch (e) {
+          console.warn("[AEF Repository] REST fallback sem auth falhou:", e);
         }
       }
 

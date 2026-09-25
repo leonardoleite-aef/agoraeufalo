@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Podcast AgoraEuFalo</title>
+    <link>https://agoraeufalo.com.br/blog</link>
+    <language>pt-br</language>
+    <itunes:author>Professor Leonardo Leite</itunes:author>
+    <itunes:image href="https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg" />
+    <!-- Itens populados dinamicamente com as tags enclosure do MP3 -->
+  </channel>
+</rss>

@@ -39,7 +39,7 @@
 import edgeApiWorker from '../cloudflare-worker/worker.js';
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const host = url.hostname;
     let path = url.pathname;
@@ -49,9 +49,9 @@ export default {
       path = path.slice(0, -1);
     }
 
-    // Roteamento nativo para Edge API (/api/*) e Webhook Hotmart (/webhook)
-    if (path.startsWith('/api/') || path === '/webhook') {
-      return edgeApiWorker.fetch(request, env);
+    // Roteamento nativo para Edge API (/api/*), Storage (/storage/*) e Webhook Hotmart (/webhook)
+    if (path.startsWith('/api/') || path.startsWith('/storage/') || path === '/webhook') {
+      return edgeApiWorker.fetch(request, env, ctx);
     }
 
     // Proteção LGPD & Segurança: Bloqueio estrito a /data/, storage_staging/, arquivos .env, .csv ou .deprecated
@@ -156,7 +156,9 @@ export default {
         '/curso.html': '/curso',
         '/treino/player.html': '/player',
         '/player.html': '/player',
-        '/treino/player': '/player'
+        '/treino/player': '/player',
+        '/sala-lab.html': '/sala-lab',
+        '/player-lab.html': '/player-lab'
       };
 
       if (appLegacyRedirects[path]) {
@@ -171,6 +173,9 @@ export default {
         '/sala': '/sala-de-aula.html',
         '/curso': '/curso.html',
         '/player': '/player.html',
+        '/portal-lab': '/portal-lab.html',
+        '/sala-lab': '/sala-lab.html',
+        '/player-lab': '/player-lab.html',
         '/migracao': '/migracao/index.html'
       };
 
@@ -202,6 +207,12 @@ export default {
         '/login.html': '/login',
         '/cadastro': '/cadastro',
         '/cadastro.html': '/cadastro',
+        '/portal-lab': '/portal-lab',
+        '/portal-lab.html': '/portal-lab',
+        '/sala-lab': '/sala-lab',
+        '/sala-lab.html': '/sala-lab',
+        '/player-lab': '/player-lab',
+        '/player-lab.html': '/player-lab',
         '/migracao': '/migracao',
         '/migracao/index.html': '/migracao'
       };

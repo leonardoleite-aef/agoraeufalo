@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Sala de Aula • Cockpit de Treino Ativo (Lab)</title>
+  <meta name="description" content="Cockpit de Treino Ativo AgoraEuFalo+ • Sala de aula imersiva com console de estúdio, roteiro interativo e aulas do curso.">
+  
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <meta name="theme-color" content="#071224">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Fira Code"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              midnight: '#071224',
+              card: '#0D1E36',
+              surface: '#112240',
+              hover: '#1B3152',
+              ochre: '#C68A36',
+              'ochre-hover': '#B3792A',
+              amber: '#F59E0B',
+              canvas: '#060D1A',
+              border: '#EAE5DC'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Registry & Cloud SDKs -->
+  <script src="assets/js/aef-domain-router.js"></script>
+  <script src="https://unpkg.com/lucide@latest" onload="if (window.updateIcons) window.updateIcons();"></script>
+  <script src="assets/js/aef-courses-registry.js?v=20260902_1955"></script>
+  <script src="assets/js/aef-cloud-sync.js?v=20260902_1955"></script>
+  <script src="assets/js/aef-access-engine.js?v=1.0.2"></script>
+  <script src="assets/js/aef-portal-auth.js?v=20260902_1955"></script>
+  <script src="assets/js/aef-learning-tracker.js"></script>
+  <script src="assets/js/aef-quizzes-registry.js"></script>
+  <script src="assets/js/aef-pdf-generator.js?v=20260906_01"></script>
+  <script src="assets/js/aef-offers-registry.js"></script>
+
+  <!-- AgoraEuFalo Master Luxury Design System Core -->
+  <link rel="stylesheet" href="assets/css/aef-luxury-system.css">
+
+  <style>
+    /* Force Calm EdTech Dark Streaming Canvas over luxury-system light defaults */
+    html, body.sala-lab-body {
+      background-color: #071224 !important;
+      background: radial-gradient(circle at 15% 15%, rgba(198, 138, 54, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 85% 10%, rgba(14, 165, 233, 0.06) 0%, transparent 35%),
+                  radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+                  #071224 !important;
+      color: #F8FAFC !important;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C68A36; }
+
+    /* Interactive Lyrics / Chunk Highlight Effect (Dark Mode Karaokê Style) */
+    .interactive-chunk {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border-radius: 0.75rem;
+      border: 1px solid transparent !important;
+      padding: 0.6rem 0.85rem !important;
+      line-height: 1.8 !important;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+    .interactive-chunk:hover {
+      background-color: rgba(245, 158, 11, 0.1) !important;
+      border-color: rgba(245, 158, 11, 0.35) !important;
+      color: #FDE68A !important;
+      transform: translateX(4px);
+    }
+    .interactive-chunk.chunk-active {
+      background: linear-gradient(90deg, rgba(217, 119, 6, 0.28) 0%, rgba(245, 158, 11, 0.12) 100%) !important;
+      border-left: 4px solid #F59E0B !important;
+      border-color: rgba(245, 158, 11, 0.5) !important;
+      color: #FEF08A !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 18px -2px rgba(245, 158, 11, 0.22) !important;
+      transform: translateX(6px);
+    }
+
+    /* Dark Integrated Theme overrides for dynamically injected content */
+    #lessonProcessedContentContainer .bg-white,
+    #lessonProcessedContentContainer .bg-\[\#FAF8F5\],
+    #lessonProcessedContentContainer .bg-\[\#FDF8F0\],
+    #lessonProcessedContentContainer .bg-amber-50\/90,
+    #lessonProcessedContentContainer .bg-amber-50\/70,
+    #lessonProcessedContentContainer .bg-amber-50\/60,
+    #lessonProcessedContentContainer .bg-amber-50\/50,
+    #lessonProcessedContentContainer .bg-amber-50 {
+      background-color: rgba(13, 30, 54, 0.65) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      color: #F1F5F9 !important;
+    }
+    #lessonProcessedContentContainer .text-slate-800,
+    #lessonProcessedContentContainer .text-slate-900,
+    #lessonProcessedContentContainer .text-slate-700,
+    #lessonProcessedContentContainer .text-\[\#0A192F\],
+    #lessonProcessedContentContainer .text-amber-950,
+    #lessonProcessedContentContainer p,
+    #lessonProcessedContentContainer li {
+      color: #E2E8F0 !important;
+    }
+    #lessonProcessedContentContainer .border-b,
+    #lessonProcessedContentContainer .border,
+    #lessonProcessedContentContainer .border-\[\#EAE5DC\],
+    #lessonProcessedContentContainer .border-\[\#F0EBE1\] {
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    /* Tactile Console Active States */
+    .console-btn-active {
+      background: #C68A36 !important;
+      color: #0F172A !important;
+      border-color: #F59E0B !important;
+      font-weight: 800 !important;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.35) !important;
+    }
+  </style>
+</head>
+<body class="sala-lab-body bg-[#071224] min-h-screen text-slate-100 font-sans antialiased selection:bg-amber-400 selection:text-slate-950 flex flex-col">
+
+  <!-- ========================================================================= -->
+  <!-- 1. LAB NOTICE BAR (Simulador de Perfis & Blindagem Local)                  -->
+  <!-- ========================================================================= -->
+  <aside aria-label="Ambiente de Teste" class="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 text-slate-950 px-4 py-1.5 text-[11px] font-mono font-bold flex items-center justify-between border-b border-amber-400/40 shadow-xs z-50">
+    <div class="max-w-7xl mx-auto w-full flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded bg-slate-950 text-amber-300 font-black text-[9px] uppercase tracking-wider">LAB COCKPIT</span>
+        <span>Sala de Treino Ativo (sala-de-aula.html 100% intocado).</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] uppercase font-bold text-slate-900 hidden md:inline">Simular:</span>
+        <button type="button" onclick="window.setLabPreviewMode('club')" id="btn-lab-club" class="px-2.5 py-0.5 rounded bg-slate-950 text-white hover:bg-slate-800 text-[10px] font-bold cursor-pointer transition">
+          👑 Membro AgoraEuFalo
+        </button>
+        <button type="button" onclick="window.setLabPreviewMode('free')" id="btn-lab-free" class="px-2.5 py-0.5 rounded bg-white/30 text-slate-950 hover:bg-white/50 text-[10px] font-bold cursor-pointer transition">
+          🌱 Aluno Free
+        </button>
+        <a href="portal-lab.html" class="hidden sm:inline-flex items-center gap-1 text-[10px] uppercase font-black underline hover:text-white transition ml-2">
+          <span>Media Hub ➔</span>
+        </a>
+        <a href="sala-de-aula.html" class="hidden md:inline-flex items-center gap-1 text-[10px] uppercase font-bold text-slate-800 hover:text-white transition ml-1">
+          <span>Sala Clássica ➔</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. TOP APP HEADER (Cockpit Toolbar)                                       -->
+  <!-- ========================================================================= -->
+  <header class="bg-[#0A192F]/95 backdrop-blur-md text-white border-b border-white/15 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+      
+      <!-- Left: Exit / Breadcrumbs -->
+      <div class="flex items-center gap-3 min-w-0">
+        <a href="portal-lab.html" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition cursor-pointer flex items-center gap-1.5 text-xs font-bold shrink-0" title="Voltar ao Media Hub">
+          <i data-lucide="arrow-left" class="w-4 h-4 text-[#C68A36]"></i>
+          <span class="hidden sm:inline">Portal</span>
+        </a>
+
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-300 min-w-0 truncate">
+          <a id="topBreadcrumbCourseLink" href="curso.html?curso=ms-legacy" class="text-white hover:text-amber-400 flex items-center gap-1.5 transition font-black truncate shrink-0">
+            <span id="topBreadcrumbCourse">Magic Stories</span>
+          </a>
+          <span class="text-slate-500">•</span>
+          <span class="text-amber-400 font-mono shrink-0" id="topBreadcrumbModule">MS001</span>
+          <span class="text-slate-500 hidden md:inline">•</span>
+          <span class="truncate text-slate-200 hidden md:inline" id="topBreadcrumbLesson">Aula 01 • Listen & Read</span>
+        </div>
+      </div>
+
+      <!-- Right: Course Syllabus Drawer Toggle + Cinema Mode + Mobile Player Shortcut -->
+      <div class="flex items-center gap-2 shrink-0">
+        
+        <!-- Toggle Retractable Lessons Drawer -->
+        <button 
+          id="btnToggleSyllabusDrawer" 
+          onclick="window.toggleSyllabusDrawer()" 
+          class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center gap-2 shadow-md cursor-pointer active:scale-95"
+          title="Ver Aulas do Curso (Tecla A ou M)"
+        >
+          <i data-lucide="layers" class="w-4 h-4 text-slate-950"></i>
+          <span>Aulas do Curso</span>
+          <span id="topHeaderProgressBadge" class="hidden sm:inline-block px-1.5 py-0.2 rounded bg-slate-950 text-amber-300 font-mono text-[10px]">0%</span>
+        </button>
+
+        <!-- Player Direct Button -->
+        <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center gap-1.5 border border-white/15 cursor-pointer active:scale-95 hidden sm:flex" title="Praticar no Training Player">
+          <i data-lucide="headphones" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span>Player</span>
+        </button>
+
+        <!-- Cinema Mode Expand -->
+        <button id="btnToggleCinema" onclick="window.toggleCinemaStage()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition cursor-pointer" title="Modo Telão Cinema">
+          <i data-lucide="maximize" id="cinemaIcon" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 3. COCKPIT DE TREINO ATIVO (MAIN WORKSPACE)                                -->
+  <!-- ========================================================================= -->
+  <main id="classroomMainWorkspace" class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-3 pb-12 space-y-3.5">
+    
+    <!-- ======================================================================= -->
+    <!-- A. MISSÃO DO TREINO (HUD SUPERIOR COMPACTO)                             -->
+    <!-- ======================================================================= -->
+    <section id="cockpit-mission-hud" class="rounded-2xl bg-gradient-to-r from-[#0D1E36] via-[#112544] to-[#0A192F] border border-amber-500/30 p-3 sm:p-3.5 shadow-xl relative overflow-hidden text-white space-y-2">
+      <div class="absolute -right-16 -top-16 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+      <!-- Main Header Row: Badges, Title & Nav Stepper -->
+      <div class="flex items-center justify-between gap-3 relative z-10">
+        <!-- Left: Badge + Lesson Title -->
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span id="cockpitStageBadge" class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40 font-mono font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span id="currentLessonOrderBadge">AULA 01</span>
+          </span>
+          <span class="text-[11px] text-slate-400 font-mono font-bold shrink-0 hidden sm:inline" id="currentLessonDuration">03:39</span>
+          <h1 class="text-base sm:text-lg font-serif font-black text-white tracking-tight truncate" id="currentLessonTitle">
+            Aula 01 • Listen & Read (LR)
+          </h1>
+        </div>
+
+        <!-- Right: Stepper Buttons -->
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="btnPrevLesson" onclick="window.playPrevLesson()" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1 transition cursor-pointer active:scale-95 border border-white/15" title="Aula Anterior">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span class="hidden md:inline text-[11px]">Anterior</span>
+          </button>
+          
+          <button id="btnNextLesson" onclick="window.playNextLesson()" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1 transition cursor-pointer active:scale-95 border border-white/15" title="Próxima Aula">
+            <span class="hidden md:inline text-[11px]">Próxima</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-amber-400"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hidden span for description if needed by JS bindings -->
+      <span class="hidden" id="currentLessonDescription"></span>
+
+      <!-- Compact Practical Goal Callout -->
+      <div class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2.5 relative z-10 text-xs">
+        <div class="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-400/30 flex items-center justify-center shrink-0">
+          <i data-lucide="target" class="w-3.5 h-3.5"></i>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 min-w-0">
+          <span class="text-[10px] font-mono text-amber-400 font-extrabold uppercase tracking-wider shrink-0">OBJETIVO:</span>
+          <p class="text-[11px] sm:text-xs text-slate-200 font-medium truncate sm:whitespace-normal" id="cockpitMissionText">
+            Observar com extrema atenção muito mais pelos ouvidos do que pelos olhos. Sentir a melodia antes da grafia.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- B. PALCO CENTRAL (CONSOLE DE ESTÚDIO)                                   -->
+    <!-- ======================================================================= -->
+    <section id="cockpit-stage-container" class="space-y-2.5">
+      
+      <!-- Multi-Media Tabs (if present) -->
+      <div id="mediaTabsBar" class="hidden bg-[#0D1E36] px-4 py-2.5 rounded-2xl border border-white/15 flex items-center gap-2 overflow-x-auto custom-scrollbar shadow-md">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Cinema Screen Frame -->
+      <div id="cinemaScreenFrame" class="bg-[#0A192F] aspect-video max-h-[50vh] sm:max-h-[52vh] md:max-h-[460px] w-full rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-white/15 shadow-2xl relative flex items-center justify-center mx-auto">
+        <div class="w-full h-full" id="videoStage">
+          <video id="mainVideoPlayer" controls controlsList="nodownload" oncontextmenu="return false;" playsinline preload="none" poster="assets/images/thumbs/ms001/thumb_ms001_lr.jpg" class="w-full h-full object-contain bg-black"></video>
+        </div>
+      </div>
+
+      <!-- Tactile Studio Console Toolbar -->
+      <div id="tactileStudioConsole" class="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0D1E36] via-[#112544] to-[#0A192F] border border-white/15 shadow-xl flex flex-wrap items-center justify-between gap-2.5 text-white">
+        
+        <!-- Left: Studio Playback Controls (Seek -5s, Play, Seek +5s, Loop, Speed) -->
+        <div class="flex items-center gap-2">
+          <!-- -5s -->
+          <button onclick="window.seekActiveMedia(-5)" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 flex items-center justify-center transition cursor-pointer active:scale-95 text-xs font-bold" title="Voltar 5 segundos (Seta Esquerda)">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          </button>
+
+          <!-- Toggle Play/Pause -->
+          <button onclick="window.togglePlayPauseActiveMedia()" id="btnConsolePlay" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-md active:scale-95" title="Play / Pause (Barra de Espaço)">
+            <i data-lucide="play" id="consolePlayIcon" class="w-4 h-4 fill-current"></i>
+            <span id="consolePlayText">Play</span>
+          </button>
+
+          <!-- +5s -->
+          <button onclick="window.seekActiveMedia(5)" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white border border-white/15 flex items-center justify-center transition cursor-pointer active:scale-95 text-xs font-bold" title="Avançar 5 segundos (Seta Direita)">
+            <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+          </button>
+
+          <!-- Loop Mode Toggle -->
+          <button onclick="window.toggleLoopMode()" id="btnConsoleLoop" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 border border-white/15 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95" title="Repetição em Loop Contínuo">
+            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+            <span class="hidden sm:inline">Loop</span>
+          </button>
+
+          <!-- Playback Speed -->
+          <button onclick="window.cyclePlaybackRate()" id="btnConsoleSpeed" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 border border-white/15 font-mono font-extrabold text-xs transition cursor-pointer active:scale-95" title="Velocidade da Voz">
+            1.0x
+          </button>
+        </div>
+
+        <!-- Right: Action & Integration Buttons -->
+        <div class="flex items-center gap-2">
+          <!-- Send to Training Player -->
+          <button onclick="sendCurrentLessonToTrainingPlayer()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition flex items-center gap-1.5 border border-white/15 cursor-pointer active:scale-95" title="Escutar no Training Player">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span class="hidden md:inline">Player Mobile</span>
+          </button>
+
+          <!-- Lesson Downloads Action Area -->
+          <div id="lessonDownloadsActionArea" class="flex items-center gap-2">
+            <a id="pdfDownloadLink" href="javascript:void(0)" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/15 transition opacity-40 pointer-events-none">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span id="pdfBtnLabel">Apostila (PDF)</span>
+            </a>
+          </div>
+
+          <!-- Mark Complete -->
+          <button id="btnMarkComplete" onclick="toggleLessonCompletion()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-emerald-500/20 text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-white/15 transition cursor-pointer active:scale-95">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span id="completeBtnLabel">Concluir</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- C. ROTEIRO / LETRA INTERATIVA (INTERACTIVE CHUNKS)                      -->
+    <!-- ======================================================================= -->
+    <section id="interactive-script-section" class="space-y-4">
+      <div class="flex items-center justify-between border-b border-white/15 pb-2.5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/30 text-amber-400 flex items-center justify-center">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-black text-white">Roteiro Interativo • Letra & Chunks</h2>
+            <p class="text-xs text-slate-300">Toque em qualquer bloco para ouvir a melodia no ponto exato:</p>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono uppercase tracking-wider text-amber-300 font-bold bg-amber-500/15 border border-amber-400/30 px-2.5 py-1 rounded-full">
+          CLIQUE PARA TOCAR
+        </span>
+      </div>
+
+      <!-- Dark Integrated Container (Deep Navy semi-transparente, borda sutil, texto claro em alto contraste) -->
+      <div class="rounded-3xl bg-[#0B1A30]/85 backdrop-blur-md border border-white/15 p-5 sm:p-7 shadow-2xl text-slate-100 space-y-5">
+        
+        <!-- Processed Content Container -->
+        <div id="lessonProcessedContentContainer" class="space-y-3.5 text-[15px] sm:text-[16px] leading-[1.8] font-sans text-slate-100">
+          <!-- Dynamically Injected -->
+        </div>
+
+        <!-- Downloads / Materiais Complementares (Multi-downloads) -->
+        <div id="lessonMaterialsCard" class="hidden pt-4 border-t border-white/15 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="folder-down" class="w-4 h-4 text-amber-400"></i>
+              <span>Materiais de Apoio da Aula</span>
+            </span>
+            <span id="lessonMaterialsCount" class="text-[10px] font-mono font-bold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-400/30">0 itens</span>
+          </div>
+          <div id="lessonMaterialsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Dynamically Injected -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- D. BLOCO DE FIXAÇÃO (BATE-PRONTO DRILL)                                 -->
+    <!-- ======================================================================= -->
+    <section id="cockpit-drill-section" class="rounded-3xl bg-gradient-to-r from-[#07172F] via-[#0D2447] to-[#0A1D38] border-2 border-emerald-400/50 p-6 sm:p-7 shadow-2xl relative overflow-hidden text-white space-y-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-white">Bloco de Fixação • Reflexo Oral Imediato</h3>
+            <p class="text-xs text-slate-300">Treino rápido de pergunta & resposta no bate-pronto:</p>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-mono font-black text-[10px] uppercase">
+          SEM SPOILERS
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Drill Card 1: Estímulo -->
+        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+          <span class="text-[10px] font-mono uppercase text-emerald-400 font-extrabold tracking-wider">ESTÍMULO RÁPIDO:</span>
+          <p class="text-sm font-black text-white" id="drillStimulusText">
+            "She didn't know what to say."
+          </p>
+          <p class="text-xs text-slate-300">Formule a pergunta correspondente agora em voz alta!</p>
+        </div>
+
+        <!-- Drill Card 2: Resposta / Sentimento -->
+        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono uppercase text-amber-400 font-extrabold tracking-wider">CONFERÊNCIA DE REFLEXO:</span>
+            <div id="drillAnswerHidden" class="text-xs text-slate-300 pt-1">
+              <span class="bg-white/10 px-2 py-1 rounded text-slate-400 italic">Resposta oculta para não virar muleta</span>
+            </div>
+            <p id="drillAnswerRevealed" class="text-sm font-bold text-amber-300 hidden pt-1">
+              "Did she know what to say?"
+            </p>
+          </div>
+          <button type="button" onclick="window.toggleDrillAnswer()" class="self-start px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition cursor-pointer border border-white/15 active:scale-95">
+            <span id="drillAnswerBtnLabel">Revelar Resposta ➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- E. SACADA DE OURO DO PROFESSOR LEO                                      -->
+    <!-- ======================================================================= -->
+    <section class="p-6 sm:p-7 rounded-3xl backdrop-blur-md space-y-3 relative overflow-hidden" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1px solid rgba(245, 158, 11, 0.3); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(245, 158, 11, 0.15);">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shadow-sm">
+          <i data-lucide="lightbulb" class="w-4 h-4 text-amber-400 fill-amber-400/20"></i>
+        </div>
+        <span class="font-black text-xs sm:text-sm uppercase tracking-wider text-amber-400">Sacada de Ouro do Professor Leo:</span>
+      </div>
+      <p id="lessonGoldenTipText" class="text-sm sm:text-base font-medium leading-relaxed italic text-[#F1F5F9] pl-0.5">
+        "Não leia o texto tentando traduzir. Ouça o bloco sonoro completo e repita no mesmo andamento e melodia."
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. EMENTA RETRÁTIL (SLIDE-OVER DRAWER DE MÓDULOS E AULAS)                 -->
+  <!-- ========================================================================= -->
+  <div id="syllabusDrawerOverlay" class="fixed inset-0 z-50 bg-slate-950/35 backdrop-blur-[2px] hidden transition-opacity" onclick="window.toggleSyllabusDrawer()"></div>
+
+  <aside id="syllabusDrawer" class="fixed top-0 bottom-0 right-0 w-96 max-w-[90vw] bg-[#0A192F] border-l border-white/15 z-50 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl text-white">
+    
+    <div class="space-y-4 flex-1 flex flex-col min-h-0">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+        <div>
+          <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider" id="drawerCourseBadge">AULAS DO CURSO</span>
+          <h3 class="font-black text-base text-white truncate max-w-[200px]" id="drawerCourseTitle">Magic Stories</h3>
+        </div>
+        <button onclick="window.toggleSyllabusDrawer()" class="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white cursor-pointer transition" title="Fechar Lista de Aulas (ESC)">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Course Progress Pill -->
+      <div class="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-1.5 shrink-0">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-slate-300 font-medium" id="desktopCourseProgressSummary">0 de 0 concluídas</span>
+          <span class="text-amber-400 font-black font-mono" id="desktopProgressTextBadge">0%</span>
+        </div>
+        <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+          <div id="desktopCourseProgressBar" class="bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full transition-all duration-300" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Real-Time Search -->
+      <div class="relative shrink-0">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+        <input 
+          type="text" 
+          id="syllabusSearchInput" 
+          oninput="window.filterSyllabusLessons(this.value)" 
+          placeholder="Buscar aula ou tópico..." 
+          class="w-full pl-9 pr-3 py-2 rounded-xl bg-white/5 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition"
+        >
+      </div>
+
+      <!-- Accordion of Modules (Scrollable List) -->
+      <div id="desktopCourseSyllabus" class="space-y-2.5 overflow-y-auto custom-scrollbar flex-1 pr-1">
+        <!-- Dynamically Injected -->
+      </div>
+
+    </div>
+
+    <!-- Drawer Bottom Actions -->
+    <div class="pt-4 border-t border-white/10 shrink-0 space-y-2">
+      <a id="rightSidebarCourseLink" href="curso.html?curso=ms-legacy" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition border border-white/15">
+        <i data-lucide="layout-grid" class="w-4 h-4 text-amber-400"></i>
+        <span>Ver Grade Geral no Curso</span>
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT COCKPIT CONTROLLER                                             -->
+  <!-- ========================================================================= -->
+  <script>
+    function updateIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        try {
+          window.lucide.createIcons();
+        } catch (e) {}
+      }
+    }
+    window.updateIcons = updateIcons;
+    window.addEventListener("load", updateIcons);
+
+    const COURSE_SEEDS = window.AEF_COURSES_REGISTRY || {};
+
+    let activeCourse = null;
+    let activeModule = null;
+    let activeLesson = null;
+    let currentLessonMediaList = [];
+    let activeMediaIndex = 0;
+    let completedLessonIds = JSON.parse(localStorage.getItem("aef_completed_lessons") || "[]");
+
+    let isLoopActive = false;
+    let currentPlaybackRate = 1.0;
+
+    // ——— 1. EMENTA RETRÁTIL (DRAWER) CONTROLLER ———
+    window.toggleSyllabusDrawer = () => {
+      const drawer = document.getElementById("syllabusDrawer");
+      const overlay = document.getElementById("syllabusDrawerOverlay");
+      if (!drawer || !overlay) return;
+
+      const isClosed = drawer.classList.contains("translate-x-full");
+      if (isClosed) {
+        overlay.classList.remove("hidden");
+        drawer.classList.remove("translate-x-full");
+      } else {
+        overlay.classList.add("hidden");
+        drawer.classList.add("translate-x-full");
+      }
+    };
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const drawer = document.getElementById("syllabusDrawer");
+        if (drawer && !drawer.classList.contains("translate-x-full")) {
+          window.toggleSyllabusDrawer();
+        }
+      } else if ((e.key === "e" || e.key === "E" || e.key === "m" || e.key === "M") && document.activeElement.tagName !== 'INPUT') {
+        window.toggleSyllabusDrawer();
+      } else if (e.code === "Space" && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        window.togglePlayPauseActiveMedia();
+      } else if (e.key === "ArrowLeft" && document.activeElement.tagName !== 'INPUT') {
+        window.seekActiveMedia(-5);
+      } else if (e.key === "ArrowRight" && document.activeElement.tagName !== 'INPUT') {
+        window.seekActiveMedia(5);
+      }
+    });
+
+    // ——— 2. TACTILE STUDIO CONSOLE LOGIC ———
+    window.getActiveMediaElement = () => {
+      const stage = document.getElementById("videoStage");
+      if (!stage) return null;
+      return stage.querySelector("video") || stage.querySelector("audio");
+    };
+
+    window.togglePlayPauseActiveMedia = () => {
+      const mediaEl = window.getActiveMediaElement();
+      const playIcon = document.getElementById("consolePlayIcon");
+      const playText = document.getElementById("consolePlayText");
+      if (!mediaEl) return;
+
+      if (mediaEl.paused) {
+        mediaEl.play();
+        if (playIcon) playIcon.setAttribute("data-lucide", "pause");
+        if (playText) playText.innerText = "Pausar";
+      } else {
+        mediaEl.pause();
+        if (playIcon) playIcon.setAttribute("data-lucide", "play");
+        if (playText) playText.innerText = "Play";
+      }
+      updateIcons();
+    };
+
+    window.seekActiveMedia = (deltaSeconds) => {
+      const mediaEl = window.getActiveMediaElement();
+      if (!mediaEl) return;
+      mediaEl.currentTime = Math.max(0, Math.min(mediaEl.duration || 9999, mediaEl.currentTime + deltaSeconds));
+    };
+
+    window.toggleLoopMode = () => {
+      isLoopActive = !isLoopActive;
+      const mediaEl = window.getActiveMediaElement();
+      const loopBtn = document.getElementById("btnConsoleLoop");
+      if (mediaEl) mediaEl.loop = isLoopActive;
+
+      if (loopBtn) {
+        if (isLoopActive) {
+          loopBtn.className = "px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5 transition cursor-pointer shadow-md border border-amber-400";
+        } else {
+          loopBtn.className = "px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 border border-white/15 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95";
+        }
+      }
+    };
+
+    window.cyclePlaybackRate = () => {
+      const rates = [1.0, 1.25, 0.75];
+      const curIdx = rates.indexOf(currentPlaybackRate);
+      currentPlaybackRate = rates[(curIdx + 1) % rates.length];
+
+      const mediaEl = window.getActiveMediaElement();
+      if (mediaEl) mediaEl.playbackRate = currentPlaybackRate;
+
+      const btnSpeed = document.getElementById("btnConsoleSpeed");
+      if (btnSpeed) btnSpeed.innerText = `${currentPlaybackRate.toFixed(2).replace('.00', '')}x`;
+    };
+
+    window.toggleCinemaStage = () => {
+      const mainWorkspace = document.getElementById("classroomMainWorkspace");
+      const icon = document.getElementById("cinemaIcon");
+      if (!mainWorkspace) return;
+
+      const isCinema = mainWorkspace.classList.contains("max-w-none");
+      if (isCinema) {
+        mainWorkspace.classList.remove("max-w-none", "px-2");
+        mainWorkspace.classList.add("max-w-5xl", "px-4");
+        if (icon) icon.setAttribute("data-lucide", "maximize");
+      } else {
+        mainWorkspace.classList.remove("max-w-5xl", "px-4");
+        mainWorkspace.classList.add("max-w-none", "px-2");
+        if (icon) icon.setAttribute("data-lucide", "minimize");
+      }
+      updateIcons();
+    };
+
+    // ——— 3. DRILL FLASHCARD CONTROLLER ———
+    window.toggleDrillAnswer = () => {
+      const hiddenEl = document.getElementById("drillAnswerHidden");
+      const revealedEl = document.getElementById("drillAnswerRevealed");
+      const btn = document.getElementById("drillAnswerBtnLabel");
+      if (!hiddenEl || !revealedEl) return;
+
+      const isHidden = revealedEl.classList.contains("hidden");
+      if (isHidden) {
+        revealedEl.classList.remove("hidden");
+        hiddenEl.classList.add("hidden");
+        if (btn) btn.innerText = "Ocultar Resposta";
+      } else {
+        revealedEl.classList.add("hidden");
+        hiddenEl.classList.remove("hidden");
+        if (btn) btn.innerText = "Revelar Resposta ➔";
+      }
+    };
+
+    window.setLabPreviewMode = (mode) => {
+      localStorage.setItem("aef_lab_preview_mode", mode);
+      window.location.reload();
+    };
+
+    // ——— 4. INICIALIZAÇÃO DA SALA COM BLINDAGEM LOCAL ———
+    document.addEventListener("DOMContentLoaded", async () => {
+      const isLocalOrFile = window.location.protocol === 'file:' || 
+                            window.location.hostname === 'localhost' || 
+                            window.location.hostname === '127.0.0.1' ||
+                            !window.location.hostname;
+
+      const labMode = localStorage.getItem("aef_lab_preview_mode") || (isLocalOrFile ? "club" : "auto");
+      const btnClub = document.getElementById("btn-lab-club");
+      const btnFree = document.getElementById("btn-lab-free");
+      if (btnClub && btnFree) {
+        if (labMode === "free") {
+          btnFree.className = "px-2.5 py-0.5 rounded bg-slate-950 text-white font-bold text-[10px]";
+          btnClub.className = "px-2.5 py-0.5 rounded bg-white/20 text-slate-950 hover:bg-white/30 font-bold text-[10px]";
+        } else {
+          btnClub.className = "px-2.5 py-0.5 rounded bg-slate-950 text-white font-bold text-[10px]";
+          btnFree.className = "px-2.5 py-0.5 rounded bg-white/20 text-slate-950 hover:bg-white/30 font-bold text-[10px]";
+        }
+      }
+
+      // Validação de autenticação apenas em produção real
+      let userProfile = null;
+      if (!isLocalOrFile && window.aefPortalAuth) {
+        try {
+          const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
+          if (!authed) return;
+          userProfile = window.aefPortalAuth.getCurrentProfile ? window.aefPortalAuth.getCurrentProfile() : (window.aefPortalAuth.currentProfile || {});
+        } catch (authErr) {
+          console.warn("⚠️ Auth Check warning in Classroom Lab:", authErr);
+        }
+      }
+
+      const isAdmin = (labMode !== 'free') && (isLocalOrFile || (window.aefPortalAuth && window.aefPortalAuth.isAdmin()));
+      const userTier = (labMode === 'free') ? 'free' : (isAdmin ? 'admin_master' : 'club_annual');
+
+      let enrolledProducts = [];
+      if (labMode === 'free') {
+        enrolledProducts = [];
+      } else {
+        enrolledProducts = ['all_access_master', 'mentoria_vip', 'magic_stories_club', 'ms-legacy', 'english-quickstart', 'frases-prontas', 'first-steps', 'dtc_curso'];
+      }
+
+      window.currentUserProfile = {
+        ...(userProfile || {}),
+        role: isAdmin ? 'admin' : 'student',
+        tier: userTier,
+        purchasedProducts: enrolledProducts,
+        enrolledProducts: enrolledProducts
+      };
+
+      let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
+
+      // Resolve parâmetros de URL
+      const urlParams = new URLSearchParams(window.location.search);
+      let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno");
+      let targetModuleId = urlParams.get("modulo");
+      let targetLessonId = urlParams.get("aula");
+
+      const lastActivity = window.aefLearningTracker ? window.aefLearningTracker.getGlobalLastActivity() : null;
+      let courseId = rawParam || (lastActivity ? lastActivity.courseId : 'ms-legacy');
+
+      if (!baseCourses[courseId]) {
+        courseId = Object.keys(baseCourses)[0] || 'ms-legacy';
+      }
+
+      // SWR: Se o curso já existe localmente, monta o Cockpit INSTANTANEAMENTE (<50ms)
+      const hasLocalCourse = Boolean(courseId && baseCourses[courseId]);
+      activeCourse = baseCourses[courseId] || Object.values(baseCourses)[0];
+      window.activeCourse = activeCourse;
+
+      if (activeCourse) {
+        initClassroom(targetModuleId, targetLessonId);
+        updateIcons();
+      }
+
+      // SWR Firestore Loading em segundo plano
+      if (window.aefCloudSync) {
+        const syncPromise = window.aefCloudSync.init().then(async () => {
+          if (window.aefCloudSync.getCourseHierarchy) {
+            const liveCourse = await window.aefCloudSync.getCourseHierarchy(courseId, baseCourses);
+            if (liveCourse) {
+              baseCourses[courseId] = liveCourse;
+              activeCourse = liveCourse;
+              window.activeCourse = activeCourse;
+              renderCourseSyllabus();
+              updateIcons();
+            }
+          }
+        }).catch(e => console.log("Firestore sync fallback in lab:", e));
+
+        if (!hasLocalCourse) {
+          try {
+            await syncPromise;
+          } catch(e) {}
+          activeCourse = baseCourses[courseId] || Object.values(baseCourses)[0];
+          window.activeCourse = activeCourse;
+          initClassroom(targetModuleId, targetLessonId);
+          updateIcons();
+        }
+      }
+    });
+
+    function initClassroom(targetModuleId, targetLessonId) {
+      if (!activeCourse) return;
+
+      const topLink = document.getElementById("topBreadcrumbCourseLink");
+      if (topLink) topLink.href = `curso.html?curso=${activeCourse.id}`;
+
+      const rightLink = document.getElementById("rightSidebarCourseLink");
+      if (rightLink) rightLink.href = `curso.html?curso=${activeCourse.id}`;
+
+      const modules = activeCourse.modules || [];
+      const allLessons = getAllCourseLessons();
+      
+      let initialLessonId = targetLessonId;
+      if (!initialLessonId && allLessons.length > 0) {
+        initialLessonId = allLessons[0].id;
+      }
+
+      if (initialLessonId) {
+        const parentMod = modules.find(m => (m.lessons || []).some(l => l.id === initialLessonId));
+        if (parentMod) activeModule = parentMod;
+        selectLesson(initialLessonId);
+      } else if (targetModuleId) {
+        activeModule = modules.find(m => m.id === targetModuleId) || modules[0];
+        if (activeModule && activeModule.lessons && activeModule.lessons.length > 0) {
+          selectLesson(activeModule.lessons[0].id);
+        }
+      }
+      
+      renderCourseSyllabus();
+    }
+
+    function getAllCourseLessons() {
+      if (!activeCourse || !activeCourse.modules) return [];
+      const all = [];
+      activeCourse.modules.forEach(mod => {
+        (mod.lessons || []).forEach(les => {
+          if (les.published !== false) {
+            all.push({ ...les, moduleId: mod.id, moduleTitle: mod.title, moduleBadge: mod.badge });
+          }
+        });
+      });
+      return all;
+    }
+
+    function switchModuleAndLesson(moduleId, lessonId) {
+      if (!activeCourse) return;
+      const mod = (activeCourse.modules || []).find(m => m.id === moduleId);
+      if (mod) activeModule = mod;
+      selectLesson(lessonId);
+      renderCourseSyllabus();
+    }
+
+    window.toggleModuleAccordion = (accordionId) => {
+      const container = document.getElementById(accordionId);
+      const chevron = document.getElementById(`chevron-${accordionId}`);
+      if (container) {
+        container.classList.toggle('hidden');
+        if (chevron) {
+          chevron.classList.toggle('rotate-180', !container.classList.contains('hidden'));
+        }
+      }
+    };
+
+    window.filterSyllabusLessons = (query) => {
+      renderCourseSyllabus(query);
+    };
+
+    function renderCourseSyllabus(searchFilter = '') {
+      if (!activeCourse) return;
+      const modules = activeCourse.modules || [];
+      const q = (searchFilter || '').toLowerCase().trim();
+
+      const allCourseLessons = getAllCourseLessons();
+      let totalCompleted = 0;
+      allCourseLessons.forEach(l => {
+        if (completedLessonIds.includes(l.id)) totalCompleted++;
+      });
+      const globalPercent = allCourseLessons.length > 0 ? Math.round((totalCompleted / allCourseLessons.length) * 100) : 0;
+
+      // Update Global Progress in Drawer and Header
+      const bar = document.getElementById("desktopCourseProgressBar");
+      const summary = document.getElementById("desktopCourseProgressSummary");
+      const badge = document.getElementById("desktopProgressTextBadge");
+      const headerBadge = document.getElementById("topHeaderProgressBadge");
+
+      if (bar) bar.style.width = `${globalPercent}%`;
+      if (summary) summary.textContent = `${totalCompleted} de ${allCourseLessons.length} aulas concluídas`;
+      if (badge) badge.textContent = `${globalPercent}%`;
+      if (headerBadge) headerBadge.textContent = `${globalPercent}%`;
+
+      const drawerTitle = document.getElementById("drawerCourseTitle");
+      if (drawerTitle) drawerTitle.textContent = activeCourse.title || "Treinamento AgoraEuFalo";
+
+      const desktopContainer = document.getElementById("desktopCourseSyllabus");
+      if (!desktopContainer) return;
+
+      if (modules.length === 0) {
+        desktopContainer.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Nenhum módulo cadastrado neste curso.</div>`;
+        return;
+      }
+
+      desktopContainer.innerHTML = modules.map((mod, modIdx) => {
+        const modLessons = (mod.lessons || []).filter(l => l.published !== false);
+        
+        const filteredLessons = modLessons.filter(l => {
+          if (!q) return true;
+          return (l.title + ' ' + (l.description || '') + ' ' + mod.title).toLowerCase().includes(q);
+        });
+
+        if (q && filteredLessons.length === 0 && !mod.title.toLowerCase().includes(q)) {
+          return '';
+        }
+
+        const isCurrentModule = activeModule && activeModule.id === mod.id;
+        let completedInMod = 0;
+        modLessons.forEach(l => { if (completedLessonIds.includes(l.id)) completedInMod++; });
+        const isModDone = completedInMod === modLessons.length && modLessons.length > 0;
+
+        const lessonsListHtml = filteredLessons.map((les, lIdx) => {
+          const isCurLesson = activeLesson && activeLesson.id === les.id;
+          const isLesDone = completedLessonIds.includes(les.id);
+          const isQuiz = les.type === 'quiz' || !!les.quizId || (les.title && les.title.toLowerCase().includes('quiz'));
+
+          return `
+            <div onclick="switchModuleAndLesson('${mod.id}', '${les.id}'); window.toggleSyllabusDrawer();" class="p-3 rounded-xl transition cursor-pointer flex items-center justify-between gap-3 ${
+              isCurLesson 
+                ? 'bg-amber-500/20 border-2 border-amber-400 text-white font-black shadow-md' 
+                : 'bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 text-slate-200'
+            }">
+              <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                <div class="w-6 h-6 rounded-lg ${
+                  isLesDone 
+                    ? 'bg-emerald-500 text-slate-950 font-black' 
+                    : (isCurLesson ? 'bg-amber-400 text-slate-950 font-black' : 'bg-white/10 text-slate-300')
+                } flex items-center justify-center font-mono text-[10px] shrink-0">
+                  ${isLesDone ? '✓' : (lIdx + 1)}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="text-xs ${isCurLesson ? 'text-white font-black' : 'text-slate-200 font-bold'} truncate leading-tight">${les.title}</p>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <span class="text-[10px] text-slate-400 font-mono">${les.duration || '05:00'}</span>
+                    ${isQuiz ? '<span class="text-[9px] font-black text-amber-300 bg-amber-500/20 px-1.5 py-0.2 rounded border border-amber-400/30">🎯 Quiz</span>' : ''}
+                    ${isLesDone ? '<span class="text-[9px] font-bold text-emerald-400 bg-emerald-500/20 px-1 rounded">Feito</span>' : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="shrink-0">
+                <i data-lucide="${isCurLesson ? 'play-circle' : 'play'}" class="w-4 h-4 ${isCurLesson ? 'text-amber-400' : 'text-slate-400'}"></i>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const accordionId = `mod-${mod.id}`;
+        const isExpanded = isCurrentModule || !!q;
+
+        return `
+          <div class="rounded-2xl border border-white/10 bg-[#0D1E36] overflow-hidden shadow-sm">
+            <button onclick="window.toggleModuleAccordion('${accordionId}')" class="w-full p-3 bg-white/5 hover:bg-white/10 transition flex items-center justify-between gap-2.5 text-left cursor-pointer group">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 mb-0.5">
+                  <span class="text-[9px] font-mono font-bold text-amber-300 bg-amber-500/20 px-1.5 py-0.2 rounded border border-amber-400/30 uppercase">
+                    ${mod.badge || `MÓDULO 0${modIdx + 1}`}
+                  </span>
+                  <span class="text-[10px] font-mono text-slate-400">
+                    ${isModDone ? '✓ Concluído' : `${completedInMod}/${modLessons.length} Aulas`}
+                  </span>
+                </div>
+                <h4 class="font-black text-xs text-white truncate group-hover:text-amber-400 transition">${mod.title}</h4>
+              </div>
+              <div class="w-6 h-6 rounded-lg bg-white/10 text-slate-300 flex items-center justify-center shrink-0 transition">
+                <i data-lucide="chevron-down" id="chevron-${accordionId}" class="w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}"></i>
+              </div>
+            </button>
+            <div id="${accordionId}" class="p-2 space-y-1.5 bg-[#0A192F] ${isExpanded ? '' : 'hidden'} border-t border-white/10">
+              ${lessonsListHtml || '<p class="text-[11px] text-slate-400 p-2 italic">Nenhuma aula neste módulo.</p>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updateIcons();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatYouTubeEmbedUrl(url) {
+      if (!url) return '';
+      if (url.includes('/embed/')) return url.includes('?') ? url : `${url}?autoplay=0&rel=0`;
+      const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
+      const match = url.match(regExp);
+      if (match && match[1]) {
+        return `https://www.youtube.com/embed/${match[1]}?autoplay=0&rel=0`;
+      }
+      return url;
+    }
+
+    function resolveLessonMedia(found) {
+      if (Array.isArray(found.media) && found.media.length > 0) {
+        const validMedia = found.media.filter(m => typeof m === 'object' && m !== null && !Array.isArray(m));
+        if (validMedia.length > 0) return validMedia.map(m => ({ ...m }));
+      }
+      const list = [];
+      if (found.videoUrl && found.videoUrl.trim() !== '') {
+        const vUrl = found.videoUrl.trim();
+        let vType = 'video_mp4';
+        if (vUrl.includes('youtube.com') || vUrl.includes('youtu.be')) vType = 'video_youtube';
+        else if (vUrl.includes('vimeo.com')) vType = 'video_vimeo';
+        list.push({
+          type: vType,
+          url: vUrl,
+          title: 'Vídeo Principal',
+          thumbnailUrl: found.thumbnailUrl || ''
+        });
+        if (found.audioUrl && found.audioUrl.trim() !== '') {
+          list.push({
+            type: 'audio_mp3',
+            url: found.audioUrl.trim(),
+            title: 'Áudio de Imersão MP3',
+            thumbnailUrl: found.artworkUrl || found.thumbnailUrl || ''
+          });
+        }
+      } else if (found.audioUrl && found.audioUrl.trim() !== '') {
+        list.push({
+          type: 'audio_mp3',
+          url: found.audioUrl.trim(),
+          title: 'Áudio da Aula',
+          thumbnailUrl: found.artworkUrl || found.thumbnailUrl || ''
+        });
+      }
+      return list;
+    }
+
+    function renderActiveMedia(mediaItem, foundLesson) {
+      const videoStage = document.getElementById("videoStage");
+      if (!videoStage) return;
+
+      if (!mediaItem) {
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-2">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center shadow-lg">
+              <i data-lucide="headphones" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-black text-white">${escapeHtml(foundLesson ? foundLesson.title : 'Aula')}</h3>
+            <p class="text-xs text-slate-300">Treino didático & leitura de conteúdo.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const mType = mediaItem.type || 'video_mp4';
+
+      if (mType === 'video_youtube') {
+        const embedUrl = formatYouTubeEmbedUrl(mediaItem.url);
+        videoStage.innerHTML = `
+          <iframe class="w-full h-full border-0" src="${embedUrl}" title="${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Vídeo'))}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        `;
+      } else if (mType === 'video_vimeo') {
+        videoStage.innerHTML = `
+          <iframe class="w-full h-full border-0" src="${mediaItem.url}" title="${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Vídeo'))}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        `;
+      } else if (mType === 'audio_mp3') {
+        const coverImg = mediaItem.thumbnailUrl || (foundLesson ? (foundLesson.artworkUrl || foundLesson.thumbnailUrl) : '') || 'assets/images/cover-default-aef.jpg';
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0D1E36] via-[#0A192F] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-3.5 select-none">
+            <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400/40 bg-slate-900">
+              <img src="${coverImg}" alt="${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Áudio'))}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-lg">
+                  <i data-lucide="volume-2" class="w-5 h-5 fill-current"></i>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-1 max-w-md">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 font-mono font-bold text-[10px] uppercase tracking-wider">
+                ÁUDIO DE IMERSÃO & REFLEXO
+              </span>
+              <h3 class="text-sm sm:text-base font-black text-white leading-tight font-serif">${escapeHtml(mediaItem.title || (foundLesson ? foundLesson.title : 'Áudio'))}</h3>
+            </div>
+            <div class="w-full max-w-md bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/20 shadow-xl">
+              <audio id="activeAudioEl" controls controlsList="nodownload" oncontextmenu="return false;" playsinline class="w-full" src="${mediaItem.url}"></audio>
+            </div>
+          </div>
+        `;
+      } else {
+        const posterImg = mediaItem.thumbnailUrl || (foundLesson ? foundLesson.thumbnailUrl : '') || '';
+        videoStage.innerHTML = `
+          <video id="activeVideoEl" controls controlsList="nodownload" oncontextmenu="return false;" playsinline poster="${posterImg}" class="w-full h-full object-contain bg-black" src="${mediaItem.url}"></video>
+        `;
+      }
+    }
+
+    function renderMediaTabs() {
+      const tabsBar = document.getElementById("mediaTabsBar");
+      if (!tabsBar) return;
+
+      if (!currentLessonMediaList || currentLessonMediaList.length <= 1) {
+        tabsBar.innerHTML = "";
+        tabsBar.classList.add("hidden");
+        return;
+      }
+
+      tabsBar.classList.remove("hidden");
+      tabsBar.innerHTML = currentLessonMediaList.map((item, idx) => {
+        const isActive = idx === activeMediaIndex;
+        let icon = "play-circle";
+        if (item.type === "audio_mp3") icon = "headphones";
+        else if (item.type === "video_youtube") icon = "video";
+        else if (item.type === "video_vimeo") icon = "film";
+
+        const title = item.title || (item.type === "audio_mp3" ? `Áudio ${idx + 1}` : `Vídeo ${idx + 1}`);
+
+        return `
+          <button onclick="window.switchActiveMedia(${idx})" class="${isActive ? 'bg-amber-500 text-slate-950 font-black shadow-md border border-amber-400' : 'bg-white/10 hover:bg-white/20 text-slate-200 font-bold border border-white/10'} px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-2 transition cursor-pointer shrink-0 active:scale-95">
+            <i data-lucide="${icon}" class="w-3.5 h-3.5"></i>
+            <span>${escapeHtml(title)}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.switchActiveMedia = (idx) => {
+      if (!currentLessonMediaList || !currentLessonMediaList[idx]) return;
+      activeMediaIndex = idx;
+      renderMediaTabs();
+      renderActiveMedia(currentLessonMediaList[idx], activeLesson);
+      updateIcons();
+    };
+
+    function resolveLessonDownloads(found) {
+      if (Array.isArray(found.downloads) && found.downloads.length > 0) {
+        const valid = found.downloads.filter(d => typeof d === 'object' && d !== null && !Array.isArray(d));
+        if (valid.length > 0) {
+          return valid.map(d => ({
+            type: d.type || 'pdf',
+            url: (d.url || '').trim(),
+            title: d.title || (d.type === 'mp3' ? 'Áudio MP3' : 'Apostila (PDF)')
+          }));
+        }
+      }
+
+      let resolvedPdf = (found.pdfUrl && found.pdfUrl.trim() !== "") ? found.pdfUrl.trim() : "";
+      if (!resolvedPdf && activeModule && activeModule.pdfUrl) resolvedPdf = activeModule.pdfUrl.trim();
+      if (!resolvedPdf && activeCourse && activeCourse.pdfUrl) resolvedPdf = activeCourse.pdfUrl.trim();
+
+      if (resolvedPdf) {
+        return [{
+          type: 'pdf',
+          url: resolvedPdf,
+          title: 'Apostila Oficial da Aula (PDF)'
+        }];
+      }
+      return [];
+    }
+
+    function renderLessonDownloads(found, isAuthorized) {
+      const downloadsArea = document.getElementById("lessonDownloadsActionArea");
+      const materialsCard = document.getElementById("lessonMaterialsCard");
+      const materialsList = document.getElementById("lessonMaterialsList");
+      const materialsCount = document.getElementById("lessonMaterialsCount");
+
+      if (!isAuthorized) {
+        if (downloadsArea) {
+          downloadsArea.innerHTML = `
+            <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="px-3 py-2 rounded-xl bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center gap-1.5 border border-amber-400/40">
+              <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+              <span>Downloads Bloqueados</span>
+            </a>
+          `;
+        }
+        if (materialsCard) materialsCard.classList.add("hidden");
+        return;
+      }
+
+      const downloads = resolveLessonDownloads(found);
+      if (downloadsArea) {
+        if (downloads.length > 0 && downloads[0].url) {
+          downloadsArea.innerHTML = `
+            <a href="${downloads[0].url}" target="_blank" download class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition flex items-center gap-1.5 shadow-md active:scale-95">
+              <i data-lucide="download" class="w-3.5 h-3.5 fill-current"></i>
+              <span>Apostila (PDF)</span>
+            </a>
+          `;
+        } else {
+          downloadsArea.innerHTML = `
+            <button disabled class="px-3.5 py-2 rounded-xl bg-white/10 text-slate-400 font-bold text-xs flex items-center gap-1.5 border border-white/10 opacity-50 cursor-not-allowed">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>PDF em Breve</span>
+            </button>
+          `;
+        }
+      }
+
+      if (materialsCard && materialsList) {
+        if (downloads.length > 0) {
+          materialsCard.classList.remove("hidden");
+          if (materialsCount) materialsCount.textContent = `${downloads.length} itens`;
+          materialsList.innerHTML = downloads.map(item => `
+            <a href="${item.url || '#'}" target="_blank" download class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:border-amber-400/40 hover:bg-white/10 transition group">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-amber-400 font-black text-xs">
+                  <i data-lucide="${item.type === 'mp3' ? 'headphones' : 'file-text'}" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-xs font-bold text-slate-100 truncate">${escapeHtml(item.title)}</p>
+                  <span class="text-[9px] font-mono text-slate-400 uppercase">${item.type}</span>
+                </div>
+              </div>
+              <i data-lucide="download" class="w-4 h-4 text-amber-400 group-hover:scale-110 transition"></i>
+            </a>
+          `).join('');
+        } else {
+          materialsCard.classList.add("hidden");
+        }
+      }
+    }
+
+    // ——— 5. RENDERIZAÇÃO DA AULA ATIVA NO COCKPIT ———
+    function selectLesson(lessonId) {
+      const allCourseLessons = getAllCourseLessons();
+      const found = allCourseLessons.find(l => l.id === lessonId);
+      if (!found) return;
+
+      activeLesson = found;
+      window.activeLesson = activeLesson;
+
+      if (activeCourse && activeCourse.modules) {
+        const parentMod = activeCourse.modules.find(m => m.id === found.moduleId);
+        if (parentMod) {
+          activeModule = parentMod;
+          window.activeModule = activeModule;
+        }
+      }
+
+      // Salva no aefLearningTracker para persistência e continuidade
+      if (window.aefLearningTracker && activeCourse && activeModule) {
+        window.aefLearningTracker.saveLastActivity({
+          courseId: activeCourse.id,
+          courseTitle: activeCourse.title,
+          moduleId: activeModule.id,
+          moduleTitle: activeModule.shortTitle || activeModule.title,
+          lessonId: found.id,
+          lessonTitle: found.title,
+          lessonDuration: found.duration || "05:00",
+          thumbnailUrl: found.thumbnailUrl || found.artworkUrl || activeCourse.coverImageUrl || "assets/images/cover-default-aef.jpg",
+          source: "classroom"
+        });
+
+        try {
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set("curso", activeCourse.id);
+          newUrl.searchParams.set("modulo", activeModule.id);
+          newUrl.searchParams.set("aula", found.id);
+          window.history.replaceState({}, '', newUrl);
+        } catch (e) {}
+      }
+
+      // Atualiza Breadcrumbs e Títulos
+      const topBreadcrumbCourse = document.getElementById("topBreadcrumbCourse");
+      const topBreadcrumbModule = document.getElementById("topBreadcrumbModule");
+      const topBreadcrumbLesson = document.getElementById("topBreadcrumbLesson");
+      if (topBreadcrumbCourse && activeCourse) topBreadcrumbCourse.textContent = (activeCourse.title || "Magic Stories").split('•')[0].trim();
+      if (topBreadcrumbModule && activeModule) topBreadcrumbModule.textContent = activeModule.shortTitle || activeModule.title;
+      if (topBreadcrumbLesson) topBreadcrumbLesson.textContent = found.title;
+
+      const titleEl = document.getElementById("currentLessonTitle");
+      if (titleEl) titleEl.textContent = found.title;
+      const orderEl = document.getElementById("currentLessonOrderBadge");
+      if (orderEl) orderEl.textContent = `AULA 0${found.order || 1}`;
+      const durEl = document.getElementById("currentLessonDuration");
+      if (durEl) durEl.textContent = found.duration || "05:00";
+      
+      const descEl = document.getElementById("currentLessonDescription");
+      if (descEl) descEl.textContent = found.description || "Treino prático de reflexo oral com o Professor Leonardo Leite.";
+
+      // Missão Pedagógica Dinâmica do Leo
+      const missionTextEl = document.getElementById("cockpitMissionText");
+      const lTitle = (found.title || '').toLowerCase();
+      if (missionTextEl) {
+        if (lTitle.includes("listen & read") || lTitle.includes("lr")) {
+          missionTextEl.innerText = "Observar muito mais pelos ouvidos do que pelos olhos. Sentir a melodia antes da grafia, sem tradução mental.";
+        } else if (lTitle.includes("vocabulary") || lTitle.includes("voc")) {
+          missionTextEl.innerText = "Garantir 100% da compreensão contextual da história. Zero neura de decorar regras; foque no sentimento da estrutura e nos chunks contraintuitivos.";
+        } else if (lTitle.includes("listen & answer") || lTitle.includes("la")) {
+          missionTextEl.innerText = "Reflexo e velocidade de resposta oral. Responda imediatamente com respostas curtas ou 'I don't know' sem forçar decorar.";
+        } else if (lTitle.includes("look & retell") || lTitle.includes("lrt")) {
+          missionTextEl.innerText = "Produção autônoma guiada pelos estímulos visuais. Fale com o inglês que você tem hoje, no agora, de forma natural.";
+        } else if (lTitle.includes("listen & ask") || lTitle.includes("lask")) {
+          missionTextEl.innerText = "Desafio de formulação rápida de perguntas. Ao ouvir o estímulo afirmativo/negativo, formule a pergunta correspondente no reflexo imediato.";
+        } else if (lTitle.includes("pronunciation") || lTitle.includes("pro")) {
+          missionTextEl.innerText = "Treino mecânico de moldar a boca, conectar consoante com vogal (Linking Sounds) e manter o ritmo sem tropeçar.";
+        } else {
+          missionTextEl.innerText = found.description || "Ouça o bloco sonoro completo e repita no mesmo andamento até a fala virar reflexo.";
+        }
+      }
+
+      // Prev / Next Buttons
+      const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === found.id);
+      const btnPrev = document.getElementById("btnPrevLesson");
+      const btnNext = document.getElementById("btnNextLesson");
+
+      if (btnPrev) {
+        btnPrev.disabled = currentGlobalIdx <= 0;
+        btnPrev.classList.toggle("opacity-40", currentGlobalIdx <= 0);
+      }
+      if (btnNext) {
+        btnNext.disabled = currentGlobalIdx >= allCourseLessons.length - 1;
+        btnNext.classList.toggle("opacity-40", currentGlobalIdx >= allCourseLessons.length - 1);
+      }
+
+      // Validação de Acesso / Paywall
+      const user = window.currentUserProfile || {};
+      const AE = window.AEFAccessEngine;
+      const isCourseFree = activeCourse && (activeCourse.accessTier === 'free' || activeCourse.tierRequired === 'free');
+      const isModuleFree = activeModule && (activeModule.isFreeTier === true || (activeCourse && Array.isArray(activeCourse.freeModuleIds) && activeCourse.freeModuleIds.includes(activeModule.id)));
+      const isFirstLessonDemo = (allCourseLessons[0] && allCourseLessons[0].id === found.id);
+
+      const isAuthorized = (user.role === 'admin') || (user.tier === 'admin_master') || (user.tier === 'club_annual') ||
+                           (AE ? AE.hasAccess(user, activeCourse) : (isCourseFree || isModuleFree || isFirstLessonDemo));
+
+      const videoStage = document.getElementById("videoStage");
+
+      // PAYWALL EM MODO FREE SE NÃO FOR AUTORIZADO
+      if (!isAuthorized) {
+        const tabsBar = document.getElementById("mediaTabsBar");
+        if (tabsBar) tabsBar.classList.add("hidden");
+
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] flex flex-col items-center justify-center p-6 text-center space-y-4 select-none">
+            <div class="w-16 h-16 rounded-3xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-3xl shadow-xl">
+              🔒
+            </div>
+            <div class="space-y-2 max-w-md">
+              <span class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+                CONTEÚDO EXCLUSIVO AGORAEUFALO
+              </span>
+              <h3 class="text-xl sm:text-2xl font-black text-white leading-tight font-serif">Esta aula é exclusiva para membros</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                Esta aula e todo o acervo de áudios narrados fazem parte do treinamento oficial <strong>AgoraEuFalo</strong>.
+              </p>
+            </div>
+            <div class="pt-2 flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
+              <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=sala_lab_paywall" target="_blank" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                <span>Torne-se membro do AgoraEuFalo ➔</span>
+              </a>
+              <a href="portal-lab.html" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition flex items-center justify-center">
+                Voltar ao Media Hub
+              </a>
+            </div>
+            <p class="text-[10px] text-slate-400">Garantia incondicional de 7 dias • Acesso imediato na plataforma</p>
+          </div>
+        `;
+
+        const processedContainer = document.getElementById("lessonProcessedContentContainer");
+        if (processedContainer) {
+          processedContainer.innerHTML = `
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 text-center space-y-3">
+              <span class="text-3xl">📖</span>
+              <h4 class="text-base font-black text-white font-serif">Roteiro Interativo Protegido</h4>
+              <p class="text-xs text-slate-300 max-w-md mx-auto">O texto integral com chunks, conexões sonoras e sacadas do Professor Leo estão disponíveis exclusivamente para membros do AgoraEuFalo.</p>
+              <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="inline-flex px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
+                Inscreva-se no AgoraEuFalo ➔
+              </a>
+            </div>
+          `;
+        }
+
+        renderLessonDownloads(found, false);
+        return;
+      }
+
+      // RENDERIZAÇÃO AUTORIZADA
+      const isQuizLesson = found.type === 'quiz' || !!found.quizId || (found.title && (found.title.toLowerCase().includes('quiz') || found.title.toLowerCase() === 'anos'));
+      const consoleEl = document.getElementById("tactileStudioConsole");
+      const drillSection = document.getElementById("cockpit-drill-section");
+
+      if (isQuizLesson) {
+        const tabsBar = document.getElementById("mediaTabsBar");
+        if (tabsBar) {
+          tabsBar.innerHTML = "";
+          tabsBar.classList.add("hidden");
+        }
+        if (consoleEl) consoleEl.classList.add("hidden");
+        if (drillSection) drillSection.classList.add("hidden");
+
+        const REGISTRY_BASE = window.AEF_QUIZZES_REGISTRY || {};
+        const mergedReg = Object.assign({}, REGISTRY_BASE);
+        try {
+          const saved = localStorage.getItem("aef_custom_quizzes");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed && typeof parsed === 'object') Object.assign(mergedReg, parsed);
+          }
+        } catch(e) {}
+
+        let quizData = null;
+        if (found.quizId && mergedReg[found.quizId]) {
+          quizData = mergedReg[found.quizId];
+        } else if (found.quizData) {
+          quizData = typeof found.quizData === 'string' ? JSON.parse(found.quizData) : found.quizData;
+        } else if (found.quizDataJson) {
+          try { quizData = JSON.parse(found.quizDataJson); } catch(e) {}
+        } else if (found.quizId && REGISTRY_BASE[found.quizId]) {
+          quizData = REGISTRY_BASE[found.quizId];
+        } else {
+          // Busca inteligente por aproximação no ID ou título do quiz
+          const matchKey = Object.keys(mergedReg).find(k => 
+            (found.quizId && k.toLowerCase().includes(found.quizId.toLowerCase())) ||
+            (found.title && (k.toLowerCase().includes(found.title.toLowerCase()) || (mergedReg[k].title && mergedReg[k].title.toLowerCase().includes(found.title.toLowerCase()))))
+          );
+          quizData = matchKey ? mergedReg[matchKey] : (mergedReg['quiz-dtc-horas-01'] || Object.values(mergedReg)[0]);
+        }
+
+        renderQuizArena(quizData, found);
+      } else {
+        if (consoleEl) consoleEl.classList.remove("hidden");
+        if (drillSection) drillSection.classList.remove("hidden");
+        currentLessonMediaList = resolveLessonMedia(found);
+        activeMediaIndex = 0;
+        renderMediaTabs();
+        renderActiveMedia(currentLessonMediaList[0], found);
+      }
+
+      // Roteiro Interativo / Chunks
+      const processedContainer = document.getElementById("lessonProcessedContentContainer");
+      if (processedContainer) {
+        if (found.processedContentHtml) {
+          processedContainer.innerHTML = found.processedContentHtml;
+          // Torna blocos clicáveis para busca sonora e estilo letra sincronizada
+          const chunks = processedContainer.querySelectorAll("p, li, blockquote, .didactic-block");
+          chunks.forEach((el) => {
+            el.classList.add("interactive-chunk");
+            el.title = "Toque para focar a melodia deste bloco";
+            el.addEventListener("click", () => {
+              chunks.forEach(c => c.classList.remove("chunk-active"));
+              el.classList.add("chunk-active");
+            });
+          });
+        } else {
+          processedContainer.innerHTML = `
+            <div class="space-y-4">
+              <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-slate-200">
+                <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider block mb-1">Visão Geral da Lição</span>
+                <p class="text-slate-300 text-sm leading-relaxed">${found.description || 'Treinamento completo com áudios em alta fidelidade e materiais diagramados.'}</p>
+              </div>
+              <p class="text-slate-400 text-xs italic">Ouça a exposição no console acima com fones de ouvido para fixar a musicalidade.</p>
+            </div>
+          `;
+        }
+      }
+
+      // Sacada de Ouro do Leo
+      if (found.goldenTip) {
+        const tipEl = document.getElementById("lessonGoldenTipText");
+        if (tipEl) tipEl.innerText = `"${found.goldenTip}"`;
+      }
+
+      // Drill Stimulus & Answer Setup
+      const drillStimulus = document.getElementById("drillStimulusText");
+      const drillAnswerRevealed = document.getElementById("drillAnswerRevealed");
+      if (drillStimulus && drillAnswerRevealed) {
+        if (found.title && found.title.includes("01")) {
+          drillStimulus.innerText = `"She didn't know what to say."`;
+          drillAnswerRevealed.innerText = `"Did she know what to say?"`;
+        } else if (found.title && found.title.includes("02")) {
+          drillStimulus.innerText = `"He was ready to leave."`;
+          drillAnswerRevealed.innerText = `"Was he ready to leave?"`;
+        } else {
+          drillStimulus.innerText = `"I was working yesterday."`;
+          drillAnswerRevealed.innerText = `"Were you working yesterday?"`;
+        }
+      }
+
+      // Downloads
+      renderLessonDownloads(found, true);
+
+      // Concluir Aula Button State
+      const isCompleted = completedLessonIds.includes(found.id);
+      const markBtn = document.getElementById("btnMarkComplete");
+      const label = document.getElementById("completeBtnLabel");
+      if (markBtn && label) {
+        if (isCompleted) {
+          markBtn.className = "px-3.5 py-2 rounded-xl bg-emerald-600 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 border border-emerald-400 shadow-md cursor-pointer";
+          label.innerText = "Concluída ✓";
+        } else {
+          markBtn.className = "px-3.5 py-2 rounded-xl bg-white/10 hover:bg-emerald-500/20 text-slate-200 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 border border-white/15 transition cursor-pointer active:scale-95";
+          label.innerText = "Concluir";
+        }
+      }
+
+      renderCourseSyllabus();
+      updateIcons();
+    }
+
+    function toggleLessonCompletion() {
+      if (!activeLesson) return;
+      const id = activeLesson.id;
+      if (completedLessonIds.includes(id)) {
+        completedLessonIds = completedLessonIds.filter(x => x !== id);
+      } else {
+        completedLessonIds.push(id);
+      }
+      localStorage.setItem("aef_completed_lessons", JSON.stringify(completedLessonIds));
+      
+      if (window.aefLearningTracker && activeCourse) {
+        window.aefLearningTracker.toggleLessonCompleted(activeCourse.id, id);
+      }
+
+      selectLesson(id);
+      renderCourseSyllabus();
+    }
+
+    function sendCurrentLessonToTrainingPlayer() {
+      if (!activeLesson || !activeModule) return;
+      
+      let activityTab = "listen_read";
+      const lId = activeLesson.id.toLowerCase();
+      if (lId.includes("voc")) activityTab = "vocab";
+      else if (lId.includes("la")) activityTab = "listen_answer";
+      else if (lId.includes("lrt")) activityTab = "look_retell";
+      else if (lId.includes("lask")) activityTab = "listen_ask";
+      else if (lId.includes("pro")) activityTab = "pronunciation";
+
+      window.location.href = `player.html?curso=${activeCourse?.id}&modulo=${activeModule.id}&aula=${activeLesson.id}&activity=${activityTab}`;
+    }
+
+    window.playPrevLesson = () => {
+      const allCourseLessons = getAllCourseLessons();
+      if (!activeLesson || allCourseLessons.length === 0) return;
+      const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === activeLesson.id);
+      if (currentGlobalIdx > 0) {
+        const prev = allCourseLessons[currentGlobalIdx - 1];
+        switchModuleAndLesson(prev.moduleId, prev.id);
+      }
+    };
+
+    window.playNextLesson = () => {
+      const allCourseLessons = getAllCourseLessons();
+      if (!activeLesson || allCourseLessons.length === 0) return;
+      const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === activeLesson.id);
+      if (currentGlobalIdx >= 0 && currentGlobalIdx < allCourseLessons.length - 1) {
+        const next = allCourseLessons[currentGlobalIdx + 1];
+        switchModuleAndLesson(next.moduleId, next.id);
+      }
+    };
+
+    // =========================================================================
+    // MOTOR OFICIAL DE QUIZZES INTERATIVOS (AULAS DE FIXAÇÃO E COMPREENSÃO)
+    // =========================================================================
+    let currentQuizData = null;
+    let currentQuizIndex = 0;
+    let quizUserAnswers = {};
+    let quizSubmitted = {};
+
+    function showToast(msg) {
+      const toast = document.getElementById('classroom-toast');
+      const toastText = document.getElementById('classroom-toast-text');
+      if (!toast || !toastText) return;
+      toastText.innerText = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+    window.showToast = showToast;
+
+    function renderQuizArena(quiz, lesson) {
+      currentQuizData = quiz || {
+        id: lesson.id,
+        title: lesson.title,
+        questions: []
+      };
+      currentQuizIndex = 0;
+      quizUserAnswers = {};
+      quizSubmitted = {};
+      renderQuizQuestion();
+    }
+    window.renderQuizArena = renderQuizArena;
+
+    function renderQuizQuestion() {
+      const videoStage = document.getElementById("videoStage");
+      if (!videoStage || !currentQuizData) return;
+
+      const questions = currentQuizData.questions || [];
+      if (questions.length === 0) {
+        videoStage.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] text-white flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl border border-amber-400/40">🎯</div>
+            <h3 class="text-base font-black">${currentQuizData.title || 'Quiz de Escuta'}</h3>
+            <p class="text-xs text-slate-400 max-w-sm">Este quiz está sendo preparado com áudios Gemini TTS de alta fidelidade.</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (currentQuizIndex >= questions.length) {
+        renderQuizSummary();
+        return;
+      }
+
+      const q = questions[currentQuizIndex];
+      const qNum = currentQuizIndex + 1;
+      const totalQ = questions.length;
+      const selectedOptId = quizUserAnswers[currentQuizIndex];
+      const isAnswered = quizSubmitted[currentQuizIndex];
+      const isCorrect = isAnswered && q.options.find(o => o.id === selectedOptId)?.isCorrect;
+
+      videoStage.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] text-white flex flex-col p-4 sm:p-6 overflow-y-auto custom-scrollbar select-none">
+          <!-- Quiz Header -->
+          <div class="flex items-center justify-between gap-3 pb-3 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-mono font-black text-[10px] uppercase tracking-wider border border-amber-400/30">
+                🎯 QUIZ DE ESCUTA & COMPREENSÃO
+              </span>
+              <span class="text-xs text-slate-400 hidden sm:inline">•</span>
+              <span class="text-xs font-bold text-slate-300 truncate max-w-xs hidden sm:inline">${currentQuizData.title}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-xs font-mono font-black text-amber-400">Questão ${qNum}</span>
+              <span class="text-xs text-slate-500 font-mono">/ ${totalQ}</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-white/10 h-1.5 rounded-full my-3 overflow-hidden shrink-0">
+            <div class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-300" style="width: ${(qNum / totalQ) * 100}%"></div>
+          </div>
+
+          <!-- Arena Body -->
+          <div class="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full space-y-3.5 py-1">
+            <!-- Audio Trigger Card OR Text Mode Badge -->
+            ${q.audioUrl ? `
+              <div class="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3 shadow-lg">
+                <div class="flex items-center gap-3 min-w-0">
+                  <button onclick="window.playQuizAudio('${q.audioUrl}')" id="quizPlayBtn" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 flex items-center justify-center shadow-lg transition transform active:scale-95 cursor-pointer shrink-0">
+                    <i data-lucide="volume-2" id="quizPlayIcon" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                  </button>
+                  <div class="min-w-0">
+                    <p class="text-[10px] font-bold text-amber-300 uppercase tracking-wider">Estímulo Sonoro</p>
+                    <p class="text-xs text-slate-300 truncate">Ouça a fala para responder à questão</p>
+                  </div>
+                </div>
+                <audio id="quizAudioElement" src="${q.audioUrl}" preload="auto" class="hidden" onended="window.onQuizAudioEnded()"></audio>
+                <span class="text-[10px] font-mono text-slate-400 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 shrink-0">🎧 Aperte Play</span>
+              </div>
+            ` : `
+              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-2 text-amber-300">
+                <i data-lucide="file-text" class="w-4 h-4 text-amber-400"></i>
+                <span class="text-xs font-bold font-mono uppercase tracking-wider">Leitura & Sentimento da Estrutura</span>
+              </div>
+            `}
+
+            <!-- Prompt -->
+            <div>
+              <h3 class="text-sm sm:text-base font-black text-white font-serif leading-snug">
+                ${q.questionText}
+              </h3>
+            </div>
+
+            <!-- Options -->
+            <div class="grid grid-cols-1 gap-2">
+              ${q.options.map((opt, idx) => {
+                let optStyle = "bg-white/5 border-white/15 hover:border-amber-400/60 hover:bg-white/10 text-slate-100";
+                let indicator = `<span class="w-6 h-6 rounded-lg bg-white/10 text-slate-300 font-mono text-xs flex items-center justify-center font-bold shrink-0">${String.fromCharCode(65 + idx)}</span>`;
+
+                if (isAnswered) {
+                  if (opt.isCorrect) {
+                    optStyle = "bg-emerald-500/20 border-2 border-emerald-400 text-emerald-200 font-bold shadow-md";
+                    indicator = `<span class="w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 text-xs flex items-center justify-center font-black shrink-0">✓</span>`;
+                  } else if (opt.id === selectedOptId && !opt.isCorrect) {
+                    optStyle = "bg-rose-500/20 border-2 border-rose-400 text-rose-200 font-bold shadow-md";
+                    indicator = `<span class="w-6 h-6 rounded-lg bg-rose-500 text-white text-xs flex items-center justify-center font-black shrink-0">✕</span>`;
+                  } else {
+                    optStyle = "bg-white/5 border-white/10 opacity-40 text-slate-400";
+                  }
+                } else if (selectedOptId === opt.id) {
+                  optStyle = "bg-amber-500/20 border-2 border-amber-400 text-amber-200 font-bold";
+                }
+
+                const clickAttr = isAnswered ? '' : `onclick="window.selectQuizOption('${opt.id}')"`;
+                return `
+                  <div ${clickAttr} class="p-3 sm:p-3.5 rounded-xl border transition cursor-pointer flex items-center gap-3 ${optStyle}">
+                    ${indicator}
+                    <span class="text-xs sm:text-sm leading-relaxed">${opt.text}</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Action Area -->
+            ${!isAnswered ? `
+              <div class="pt-2 flex justify-end">
+                <button onclick="window.submitQuizAnswer()" id="btnSubmitQuiz" ${!selectedOptId ? 'disabled' : ''} class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer ${!selectedOptId ? 'opacity-40 cursor-not-allowed' : 'active:scale-95'}">
+                  <span>Confirmar Resposta</span>
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </button>
+              </div>
+            ` : `
+              <!-- Sacada do Leo Feedback -->
+              <div class="space-y-2.5 pt-1">
+                ${isCorrect ? `
+                  <div class="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-200 text-xs flex items-start gap-2.5">
+                    <span class="text-lg shrink-0">🎯</span>
+                    <div>
+                      <p class="font-black text-emerald-300 uppercase tracking-wider text-[10px] mb-0.5">EXCELENTE! OUVIDO AFIADO!</p>
+                      <p class="leading-relaxed">${q.goldenTip || 'Você captou com precisão a intenção e os chunks da conversa!'}</p>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="p-3.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-200 text-xs flex items-start gap-2.5">
+                    <span class="text-lg shrink-0">💡</span>
+                    <div>
+                      <p class="font-black text-amber-300 uppercase tracking-wider text-[10px] mb-0.5">SACADA DO LEO:</p>
+                      <p class="leading-relaxed">${q.retryHint || q.goldenTip || 'Ouça novamente com atenção na melodia das palavras conectadas.'}</p>
+                    </div>
+                  </div>
+                `}
+
+                <div class="flex items-center justify-between gap-2 pt-1">
+                  ${!isCorrect ? `
+                    <button onclick="window.retryCurrentQuizQuestion()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+                      <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                      <span>Tentar Novamente</span>
+                    </button>
+                  ` : `<div></div>`}
+
+                  <button onclick="window.nextQuizQuestion()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
+                    <span>${qNum === totalQ ? 'Ver Resultado Final ➔' : 'Próxima Questão ➔'}</span>
+                  </button>
+                </div>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+    window.renderQuizQuestion = renderQuizQuestion;
+
+    function selectQuizOption(optId) {
+      if (quizSubmitted[currentQuizIndex]) return;
+      quizUserAnswers[currentQuizIndex] = optId;
+      renderQuizQuestion();
+    }
+    window.selectQuizOption = selectQuizOption;
+
+    function submitQuizAnswer() {
+      if (!quizUserAnswers[currentQuizIndex]) return;
+      quizSubmitted[currentQuizIndex] = true;
+      renderQuizQuestion();
+    }
+    window.submitQuizAnswer = submitQuizAnswer;
+
+    function retryCurrentQuizQuestion() {
+      delete quizUserAnswers[currentQuizIndex];
+      delete quizSubmitted[currentQuizIndex];
+      renderQuizQuestion();
+    }
+    window.retryCurrentQuizQuestion = retryCurrentQuizQuestion;
+
+    function nextQuizQuestion() {
+      currentQuizIndex++;
+      renderQuizQuestion();
+    }
+    window.nextQuizQuestion = nextQuizQuestion;
+
+    function renderQuizSummary() {
+      const videoStage = document.getElementById("videoStage");
+      if (!videoStage || !currentQuizData) return;
+
+      const questions = currentQuizData.questions || [];
+      const totalQ = questions.length;
+      let correctCount = 0;
+      questions.forEach((q, idx) => {
+        const sel = quizUserAnswers[idx];
+        if (q.options.find(o => o.id === sel)?.isCorrect) correctCount++;
+      });
+
+      const accuracyPct = Math.round((correctCount / totalQ) * 100);
+      const isPassed = accuracyPct >= (currentQuizData.passingScore || 70);
+
+      videoStage.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17] text-white flex flex-col items-center justify-center p-6 text-center space-y-4 select-none">
+          <div class="w-20 h-20 rounded-3xl ${isPassed ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-400/40' : 'bg-amber-500/20 text-amber-400 border-2 border-amber-400/40'} flex items-center justify-center text-4xl shadow-2xl">
+            ${isPassed ? '🏆' : '🎧'}
+          </div>
+
+          <div class="space-y-1.5 max-w-md">
+            <span class="px-3 py-1 rounded-full ${isPassed ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' : 'bg-amber-500/20 text-amber-300 border border-amber-400/40'} font-mono font-black text-[10px] uppercase tracking-wider">
+              ${isPassed ? (currentQuizData.badge || 'OUVIDO AFIADO') : 'TREINO CONCLUÍDO'}
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white font-serif">
+              ${isPassed ? 'Parabéns! Ouvido Afiado!' : 'Bom treino! A repetição transforma som em reflexo.'}
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Você acertou <strong>${correctCount} de ${totalQ} questões</strong> (${accuracyPct}% de precisão auditiva).
+            </p>
+          </div>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3 w-full max-w-xs justify-center">
+            <button onclick="window.finishQuizAndRecordProgress()" class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Concluir & Registrar Progresso</span>
+            </button>
+            <button onclick="window.restartQuiz()" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>Refazer Quiz</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+    window.renderQuizSummary = renderQuizSummary;
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizUserAnswers = {};
+      quizSubmitted = {};
+      renderQuizQuestion();
+    }
+    window.restartQuiz = restartQuiz;
+
+    function finishQuizAndRecordProgress() {
+      if (activeCourse && activeLesson) {
+        if (window.aefLearningTracker) {
+          window.aefLearningTracker.markLessonCompleted(activeCourse.id, activeLesson.id);
+        }
+        if (!completedLessonIds.includes(activeLesson.id)) {
+          completedLessonIds.push(activeLesson.id);
+        }
+        localStorage.setItem("aef_completed_lessons", JSON.stringify(completedLessonIds));
+        renderCourseSyllabus();
+        showToast("🎉 Quiz concluído e registrado no seu histórico!");
+
+        const allCourseLessons = getAllCourseLessons();
+        const currentGlobalIdx = allCourseLessons.findIndex(l => l.id === activeLesson.id);
+        if (currentGlobalIdx >= 0 && currentGlobalIdx < allCourseLessons.length - 1) {
+          setTimeout(() => {
+            selectLesson(allCourseLessons[currentGlobalIdx + 1].id);
+          }, 1000);
+        }
+      }
+    }
+    window.finishQuizAndRecordProgress = finishQuizAndRecordProgress;
+
+    function playQuizAudio(url) {
+      const audioEl = document.getElementById("quizAudioElement");
+      const icon = document.getElementById("quizPlayIcon");
+      if (!audioEl) return;
+
+      if (audioEl.paused) {
+        audioEl.play().catch(e => console.warn("Audio play err:", e));
+        if (icon) {
+          icon.setAttribute("data-lucide", "pause");
+          if (window.lucide) lucide.createIcons();
+        }
+      } else {
+        audioEl.pause();
+        if (icon) {
+          icon.setAttribute("data-lucide", "volume-2");
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+    window.playQuizAudio = playQuizAudio;
+
+    function onQuizAudioEnded() {
+      const icon = document.getElementById("quizPlayIcon");
+      if (icon) {
+        icon.setAttribute("data-lucide", "volume-2");
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+    window.onQuizAudioEnded = onQuizAudioEnded;
+  </script>
+
+  <!-- Notification Toast -->
+  <div id="classroom-toast" class="fixed top-6 right-6 z-50 hidden bg-[#0D1E36] border border-amber-500 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-3">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="classroom-toast-text">Notificação</span>
+  </div>
+</body>
+</html>

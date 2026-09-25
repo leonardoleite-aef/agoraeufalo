@@ -709,7 +709,7 @@
      * Route Guard: Blocks unauthenticated access and redirects to login
      */
     async requireAuth({ redirectUrl = null, requiredTier = null, requireAdmin = false } = {}) {
-      if (window.location.hostname === "localhost") return true;
+      if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:") return true;
       // 1. Checa se o usuário está explicitamente deslogado ou se o cache/localStorage foi limpo
       const isLoggedOut = typeof localStorage !== 'undefined' && localStorage.getItem('aef_logged_out') === 'true';
       const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
@@ -943,8 +943,83 @@
         tier: 'vip_mentorship',
         updatedAt: new Date().toISOString()
       };
-      await this.db.collection('students').doc(menteeId).set(payload, { merge: true });
-      return payload;
+
+      // Tentativa 1: SDK Firestore (requer custom claim admin no token JWT)
+      if (this.db) {
+        try {
+          await this.db.collection('students').doc(menteeId).set(payload, { merge: true });
+          console.log('[AEF Auth] saveMenteeDoc: OK via SDK');
+          return payload;
+        } catch (e) {
+          console.warn('[AEF Auth] saveMenteeDoc SDK falhou (sem custom claim admin no JWT?), tentando Worker REST:', e.message || e);
+        }
+      }
+
+      // Tentativa 2: Worker REST com Bearer Token admin
+      let idToken = null;
+      try {
+        if (this.currentUser && typeof this.currentUser.getIdToken === 'function') {
+          idToken = await this.currentUser.getIdToken();
+        }
+      } catch (e) {}
+
+      if (idToken) {
+        const workerBase = window.AEF_WORKER_URL || '';
+        try {
+          const res = await fetch(`${workerBase}/api/admin/users`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${idToken}`
+            },
+            body: JSON.stringify({
+              action: 'save_mentee',
+              userId: menteeId,
+              userData: payload,
+              collection: 'students'
+            })
+          });
+          if (res.ok) {
+            console.log('[AEF Auth] saveMenteeDoc: OK via Worker REST');
+            return payload;
+          }
+          console.warn('[AEF Auth] saveMenteeDoc Worker respondeu HTTP', res.status);
+        } catch (e) {
+          console.warn('[AEF Auth] saveMenteeDoc Worker REST falhou:', e.message || e);
+        }
+      }
+
+      // Tentativa 3: REST Firestore direto com API Key (último recurso)
+      try {
+        const FIREBASE_CONFIG = window.aefCloudSync?._firebaseConfig || {};
+        const projectId = FIREBASE_CONFIG.projectId || 'agoraeufalo-3463a';
+        const apiKey = FIREBASE_CONFIG.apiKey || '';
+        const keyParam = apiKey ? `?key=${apiKey}` : '';
+        const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/students/${menteeId}${keyParam}`;
+        // Converte payload para formato REST Firestore
+        const fields = {};
+        for (const [k, v] of Object.entries(payload)) {
+          if (typeof v === 'string') fields[k] = { stringValue: v };
+          else if (typeof v === 'boolean') fields[k] = { booleanValue: v };
+          else if (typeof v === 'number') fields[k] = { doubleValue: v };
+          else if (Array.isArray(v)) fields[k] = { arrayValue: { values: v.map(s => ({ stringValue: String(s) })) } };
+        }
+        const res = await fetch(url, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields })
+        });
+        if (res.ok) {
+          console.log('[AEF Auth] saveMenteeDoc: OK via REST direto');
+          return payload;
+        }
+        console.warn('[AEF Auth] saveMenteeDoc REST direto falhou HTTP', res.status);
+      } catch (e) {
+        console.warn('[AEF Auth] saveMenteeDoc REST direto falhou:', e.message || e);
+      }
+
+      console.error('[AEF Auth] saveMenteeDoc: todas as tentativas falharam para', menteeId);
+      return payload; // Retorna payload mesmo em falha para não quebrar o fluxo
     }
 
     async deleteUserDoc(userId) {

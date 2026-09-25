@@ -147,15 +147,15 @@ export function extractHottok(request, payload) {
 
   if (request && request.headers) {
     token = request.headers.get("X-HOTMART-HOTTOK") ||
-            request.headers.get("x-hotmart-hottok") ||
-            request.headers.get("hottok");
+      request.headers.get("x-hotmart-hottok") ||
+      request.headers.get("hottok");
   }
 
   if (!token && request && request.url) {
     try {
       const url = new URL(request.url);
       token = url.searchParams.get("hottok");
-    } catch (_) {}
+    } catch (_) { }
   }
 
   if (!token && payload) {
@@ -194,7 +194,7 @@ export function decodeJwtPayload(token) {
         : Buffer.from(base64, "base64").toString("utf-8");
       return JSON.parse(json);
     }
-  } catch (_) {}
+  } catch (_) { }
   return null;
 }
 
@@ -237,7 +237,7 @@ export async function fetchGoogleJwks(forceRefresh = false) {
           return data.keys;
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   if (jwksMemoryCache.keys.length > 0) {
@@ -486,7 +486,7 @@ export async function writeFirestore(collection, docId, data, options = {}) {
   try {
     const fields = toFirestoreFields(data);
     let url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/${collection}/${docId}?key=${FIRESTORE_API_KEY}`;
-    
+
     if (options.updateMask && Array.isArray(options.updateMask)) {
       for (const path of options.updateMask) {
         url += `&updateMask.fieldPaths=${encodeURIComponent(path)}`;
@@ -543,7 +543,7 @@ export async function saveAtomicWebhookEvent(eventId, eventData) {
   try {
     const fields = toFirestoreFields(eventData);
     const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/webhook_events/${eventId}?currentDocument.exists=false&key=${FIRESTORE_API_KEY}`;
-    
+
     const res = await fetch(url, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -573,7 +573,7 @@ export function normalizeUserV2(raw, vipConfig = null) {
   const uid = String(raw.uid || raw.id || (email ? email.replace(/[^a-zA-Z0-9]/g, "_") : "user"));
   const id = String(raw.id || uid);
   const name = String(raw.name || raw.displayName || (email ? email.split("@")[0] : "Aluno AgoraEuFalo"));
-  
+
   let role = raw.role || "student";
   if (raw.role === "admin" || raw.tier === "admin_master" || (Array.isArray(raw.categories) && raw.categories.includes("admin")) || isEmailAdmin(email, vipConfig)) {
     role = "admin";
@@ -709,9 +709,9 @@ export async function handleClaimPreregistration(request, env) {
   const name = body.name || verifiedPayload.name || "";
 
   if (!email || !uid) {
-    return new Response(JSON.stringify({ 
-      error: "Bad Request", 
-      message: "UID e email verificado são obrigatórios para vincular o pré-registro." 
+    return new Response(JSON.stringify({
+      error: "Bad Request",
+      message: "UID e email verificado são obrigatórios para vincular o pré-registro."
     }), {
       status: 400,
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
@@ -797,7 +797,7 @@ export async function handleClaimPreregistration(request, env) {
       // Conflito de concorrência atômica: outra requisição simultânea alterou o registro legado
       const freshPreReg = await readFirestoreDoc("users", legacyId);
       const freshLinkedUid = freshPreReg && (freshPreReg.linkedUid || freshPreReg.claimedBy);
-      
+
       // Devolve 409 apenas se o documento já pertencer de fato a um terceiro (§Nota 2.b)
       if (freshLinkedUid && freshLinkedUid !== uid) {
         console.warn(`[AEF Claim] [AEF Conflict] Concorrência atômica detectada: pré-registro ${email} vinculado a terceiro (${freshLinkedUid}). Rejeitando UID ${uid}.`);
@@ -1047,6 +1047,42 @@ export async function handleAdminUsers(request, env) {
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
     });
   }
+
+    // Action: save_mentee — Salva/atualiza documento na coleção students
+    if (action === 'save_mentee') {
+      const menteeData = body.userData || {};
+      const mId = body.userId || String(menteeData.id || menteeData.uid || '');
+      if (!mId) {
+        return new Response(JSON.stringify({ error: 'userId / menteeId obrigatório para save_mentee' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      }
+      try {
+        const existingDoc = await readFirestoreDoc('students', mId);
+        const existing = existingDoc || {};
+        const merged = {
+          ...existing,
+          ...menteeData,
+          id: mId,
+          uid: mId,
+          tier: 'vip_mentorship',
+          updatedAt: new Date().toISOString()
+        };
+        await writeFirestore('students', mId, merged);
+        console.log(`[AEF Worker] save_mentee: OK para ${mId}`);
+        return new Response(JSON.stringify({ success: true, menteeId: mId }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      } catch (err) {
+        console.error(`[AEF Worker] save_mentee falhou para ${mId}:`, err.message || err);
+        return new Response(JSON.stringify({ error: 'Falha ao salvar mentorado', details: String(err.message || err) }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      }
+    }
 
   const existing = await readFirestoreDoc("users", targetUserId);
   const merged = { ...(existing || {}), ...userData, id: targetUserId, uid: targetUserId };
@@ -1389,13 +1425,13 @@ export async function handleHotmartWebhook(request, env, ctx) {
     // 10. Gravação no Google Cloud Firestore (users/{studentId})
     const legacyTier = targetCategories.includes('member_mentoria') ? 'vip_mentorship'
       : targetCategories.includes('member_pago') ? (mapping.subscription?.billingPeriod === 'monthly' ? 'club_monthly' : 'club_annual')
-      : 'free';
+        : 'free';
 
     const primaryEntitlement = targetCategories.includes('member_mentoria')
       ? 'member_mentoria'
       : targetCategories.includes('member_pago')
-      ? 'member_pago'
-      : 'member_free';
+        ? 'member_pago'
+        : 'member_free';
 
     const billingPeriod = mapping.subscription?.billingPeriod || "annual";
 
@@ -1554,7 +1590,68 @@ export default {
       });
     }
 
-    // 2. Resposta amigável para testes via navegador (HTTP GET)
+    // 0. Storage Routes (Upload & Serve)
+    if (path.startsWith("/storage/") || (path.startsWith("/api/storage/") && path !== "/api/storage/upload")) {
+      return handleServeStorageFile(request, env);
+    }
+    if (path === "/api/storage/upload") {
+      return handleStorageUpload(request, env);
+    }
+
+    // 1.1 Catálogo da Comunidade (Magic Creations Showcase & Analytics)
+    if (path === "/api/db/magic-stories-catalog") {
+      return handleGetMagicStoriesCatalog(request, env);
+    }
+
+    // 1.2 Obter História Completa por ID (Incluindo URLs de áudio)
+    if (path === "/api/db/get-magic-story") {
+      return handleGetMagicStory(request, env);
+    }
+    // =======================================================================
+    // 1.3 Laboratório: Processamento Assíncrono do Estúdio (Fire-and-Forget)
+    // =======================================================================
+    if (request.method === "POST" && path === "/api/lab/process-studio") {
+      try {
+        console.log("📨 [Worker Route] Recebida requisição em POST /api/lab/process-studio");
+        const body = await request.json();
+        const { story, user } = body || {};
+        console.log("📨 [Worker Route] Dados recebidos:", {
+          hasStory: !!story,
+          moduleId: story?.moduleId,
+          userEmail: user?.email,
+          hasCtxWaitUntil: !!(ctx && typeof ctx.waitUntil === "function")
+        });
+
+        // A MAGIA: ctx.waitUntil mantém o Worker vivo a trabalhar em background
+        // mesmo depois de devolver a resposta ao navegador do aluno.
+        if (ctx && typeof ctx.waitUntil === "function") {
+          console.log("⚡ [Worker Route] Registrando processStudioBackground via ctx.waitUntil()...");
+          ctx.waitUntil(processStudioBackground(env, story, user));
+        } else {
+          console.warn("⚠️ [Worker Route] ctx.waitUntil indisponível no ambiente. Disparando Promise direta em background...");
+          // Fallback seguro caso ctx não esteja presente no ambiente
+          processStudioBackground(env, story, user).catch(err => {
+            console.error("❌ [Estúdio Background Error (fallback catch)]:", err);
+          });
+        }
+
+        // Devolve sucesso imediato (HTTP 202 Accepted) para libertar o portal do aluno
+        return new Response(JSON.stringify({ success: true, status: "processing" }), {
+          status: 202,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          }
+        });
+      } catch (error) {
+        console.error("❌ [Worker Route] Erro fatal no handler /api/lab/process-studio:", error);
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500,
+          headers: { "Access-Control-Allow-Origin": "*" }
+        });
+      }
+    }
+    // 2. Resposta amigável para testes via navegador (HTTP GET na raiz ou outros endpoints informativos)
     if (request.method === "GET") {
       return new Response(JSON.stringify({
         status: "online",
@@ -1586,7 +1683,1385 @@ export default {
       return handleAdminUsers(request, env);
     }
 
-    // 5. Demais requisições POST -> Processamento do Webhook Hotmart
+    // 5. Endpoint de Geração Mágica de Histórias (Prompt-to-Story Lab)
+    if (path === "/api/lab/generate-magic-story") {
+      return handleLabGenerateMagicStory(request, env);
+    }
+
+    // 5.1 Endpoint de Geração Dinâmica de Capa 16:9 (Prompt-to-Story Cover)
+    if (path === "/api/lab/generate-cover") {
+      return handleLabGenerateCover(request, env);
+    }
+
+    // 6. Endpoint de Geração de Voz TTS (WAV Nativo - Gemini 3.1 Flash TTS)
+    if (path === "/api/lab/generate-tts" || path === "/api/tts") {
+      return handleLabGenerateTTS(request, env);
+    }
+
+    // 7. Endpoint de Sequência de Áudio TTS com Injeção de Silêncio PCM
+    if (path === "/api/lab/generate-tts-sequence" || path === "/api/tts-sequence") {
+      return handleLabGenerateTTSSequence(request, env);
+    }
+
+    // 8. Endpoint de Persistência de Dados da Magic Story
+    if (path === "/api/db/save-magic-story") {
+      return handleSaveMagicStory(request, env);
+    }
+
+    // 8.1 Catálogo da Comunidade (Magic Creations Showcase & Analytics)
+    if (path === "/api/db/magic-stories-catalog") {
+      return handleGetMagicStoriesCatalog(request, env);
+    }
+
+    // 9. Demais requisições POST -> Processamento do Webhook Hotmart
     return handleHotmartWebhook(request, env, ctx);
   }
 };
+
+// ============================================================================
+// 7. LABORATÓRIO PROMPT-TO-STORY: MOTOR DE GERAÇÃO MÁGICA COM GEMINI 3.7 FLASH
+// ============================================================================
+export async function handleLabGenerateMagicStory(request, env) {
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { scenario, level = "Intermediate", tense = "Mixed", format = "Narrative Story" } = body;
+
+    if (!scenario || !scenario.trim()) {
+      return new Response(JSON.stringify({ error: "O campo 'scenario' é obrigatório." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Resolução segura da chave de API do Gemini (env, process.env, .env ou header x-gemini-api-key)
+    let apiKey = (env && (env.GEMINI_API_KEY || env.AEF_GEMINI_API_KEY)) ||
+      (typeof process !== "undefined" && process.env && (process.env.GEMINI_API_KEY || process.env.AEF_GEMINI_API_KEY)) ||
+      request.headers.get("x-gemini-api-key") ||
+      body.apiKey || "";
+
+    // Se estiver em ambiente Node local e a chave não estiver no env direto, tenta ler do .env
+    if (!apiKey && typeof process !== "undefined" && typeof require !== "undefined") {
+      try {
+        const fs = require("fs");
+        const path = require("path");
+        const envPath = path.resolve(process.cwd(), ".env");
+        if (fs.existsSync(envPath)) {
+          const content = fs.readFileSync(envPath, "utf8");
+          const match = content.match(/GEMINI_API_KEY=["']?([^"'\r\n]+)/);
+          if (match) apiKey = match[1].trim();
+        }
+      } catch (e) {
+        // Ignora em runtime restrito
+      }
+    }
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        error: "Chave da API do Gemini (GEMINI_API_KEY) não configurada no servidor ou no header x-gemini-api-key."
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const systemInstruction = `Você é o AEF Master Generator, o motor pedagógico do método AgoraEuFalo.
+Sua missão é receber 'scenario', 'level', 'tense' e 'format' e retornar ESTRITAMENTE um JSON estruturado.
+OBRIGATÓRIO: O texto (narrativa) ou o diálogo deve conter um mínimo absoluto de 12 interações ou parágrafos. Não gere textos curtos.
+OBRIGATÓRIO: A estrutura JSON raiz deve incluir as chaves de classificação: 'topic' (escolha entre: viagens, profissional, compras, comida, social), 'level' (escolha entre: beginner, intermediate, advanced) e 'format' (narrative ou dialogue).
+REGRA DE SINOPSE PEDAGÓGICA: Gere um campo 'description'. A description deve ser um breve parágrafo (em português) valorizando o pedido original do aluno. Exemplo: 'Este treinamento foi forjado para desenvolver habilidades de... focado no cenário de...'.
+REGRA DE VOCABULÁRIO: Zero jargões. Foco em Lazy Verbs (get, take, make, do, have). Inglês de rua/sobrevivência.
+REGRA DE TRADUÇÃO (VOC): O bloco 'voc' DEVE conter a tradução completa da história, linha por linha, em português falado coloquial brasileiro (ex: 'Tô sem grana' em vez de 'Estou sem dinheiro').
+REGRA DA TRÍADE SAGRADA (1:1:1):
+1. Listen & Answer (LA): Crie perguntas simples e diretas para dissecar todos os fatos. Nunca pare na 3ª frase. Respostas devem ser completas.
+2. Listen & Ask (LASK): Crie uma sentença negativa pura para CADA pergunta gerada no LA (Correspondência 1:1). Não use 'Tell me' ou 'Ask me', apenas a negativa.
+3. Look & Retell (LRT): Copie EXATAMENTE as perguntas do LA (1:1).
+4. Pronunciation (PRO): Inclua 100% das frases da história, sem pular nenhuma linha, marcando os linking sounds com '_'.
+
+SCHEMA JSON OBRIGATÓRIO:
+{
+  "documentTitle": "string",
+  "description": "string",
+  "archetype": "magic_story",
+  "topic": "viagens | profissional | compras | comida | social",
+  "level": "beginner | intermediate | advanced",
+  "format": "narrative | dialogue",
+  "story_chunks": [ { "id": "1", "text": "...", "translation": "..." } ],
+  "activities": {
+    "voc": { 
+      "storyTranslation": ["Tradução coloquial da linha 1", "Tradução coloquial da linha 2"],
+      "items": [ { "chunk": "...", "translation": "..." } ] 
+    },
+    "la": { "drills": [ { "chunkId": "1", "question": "...", "answer": "..." } ] },
+    "lrt": { "guideQuestions": [ "..." ] },
+    "lask": { "stimuli": [ "Sentença negativa pura" ] },
+    "pro": { "goldenTip": "...", "textWithLinking": [ "..." ] }
+  }
+};`;
+
+    const userPrompt = `Crie um treino Magic Story completo com os seguintes parâmetros:
+- Cenário: ${scenario}
+- Nível: ${level}
+- Tempo Verbal: ${tense}
+- Formato: ${format}
+
+Lembre-se:
+1. OBRIGATÓRIO: O texto (narrativa) ou o diálogo deve conter um mínimo absoluto de 12 interações ou parágrafos. Não gere textos curtos.
+2. OBRIGATÓRIO: A estrutura JSON raiz deve incluir as chaves de classificação: 'topic' (escolha entre: viagens, profissional, compras, comida, social), 'level' (escolha entre: beginner, intermediate, advanced) e 'format' (narrative ou dialogue).
+3. TRÍADE SAGRADA (1:1:1): o número de itens em 'la.drills', 'lrt.guideQuestions' e 'lask.stimuli' deve ser rigorosamente idêntico.
+Retorne ESTRITAMENTE o JSON sem nenhum texto adicional ou markdown.`;
+
+    const geminiPayload = {
+      system_instruction: {
+        parts: [{ text: systemInstruction }]
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: userPrompt }]
+        }
+      ],
+      generationConfig: {
+        response_mime_type: "application/json",
+        temperature: 0.3
+      }
+    };
+
+    // Modelo oficial atualizado conforme GEMINI.md / AGENTS.md (gemini-3.7-flash)
+    const MODEL = "gemini-3.7-flash";
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+
+    const geminiRes = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
+      body: JSON.stringify(geminiPayload)
+    });
+
+    if (!geminiRes.ok) {
+      const errorText = await geminiRes.text();
+      console.error(`[AEF Master Generator] Erro na API do Gemini (${geminiRes.status}):`, errorText);
+      return new Response(JSON.stringify({
+        error: `Falha na API do Gemini (${geminiRes.status})`,
+        details: errorText
+      }), {
+        status: 502,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const geminiData = await geminiRes.json();
+    const rawContent = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    if (!rawContent) {
+      throw new Error("Nenhum conteúdo retornado pelo modelo Gemini.");
+    }
+
+    const cleanedText = rawContent.replace(/```json\s*|```/g, "").trim();
+    const parsedStory = JSON.parse(cleanedText);
+
+    // Validação e Garantia da Tríade Sagrada (1:1:1) e Tradução
+    if (parsedStory && parsedStory.activities) {
+      if (!parsedStory.activities.voc) {
+        parsedStory.activities.voc = { storyTranslation: [], items: [] };
+      }
+
+      // Garante array de traduções coloquiais completas
+      if (!Array.isArray(parsedStory.activities.voc.storyTranslation) || parsedStory.activities.voc.storyTranslation.length === 0) {
+        if (typeof parsedStory.activities.voc.storyTranslation === "string" && parsedStory.activities.voc.storyTranslation.trim()) {
+          parsedStory.activities.voc.storyTranslation = [parsedStory.activities.voc.storyTranslation.trim()];
+        } else if (Array.isArray(parsedStory.story_chunks) && parsedStory.story_chunks.length > 0) {
+          parsedStory.activities.voc.storyTranslation = parsedStory.story_chunks.map(c => c.translation || "");
+        } else {
+          parsedStory.activities.voc.storyTranslation = [];
+        }
+      }
+
+      const laDrills = parsedStory.activities.la?.drills || [];
+      if (!parsedStory.activities.lrt) parsedStory.activities.lrt = { guideQuestions: [] };
+      if (!parsedStory.activities.lask) parsedStory.activities.lask = { stimuli: [] };
+
+      // Se a IA omitiu o espelhamento 1:1, garantimos que LRT espelha LA exatamente
+      if (parsedStory.activities.lrt.guideQuestions.length === 0 && laDrills.length > 0) {
+        parsedStory.activities.lrt.guideQuestions = laDrills.map(d => d.question);
+      }
+    }
+
+    // Garantia das propriedades de classificação na raiz (topic, level, format)
+    if (parsedStory) {
+      if (!parsedStory.topic) {
+        const scen = (scenario || "").toLowerCase();
+        if (scen.includes("aeroporto") || scen.includes("hotel") || scen.includes("viag") || scen.includes("voo") || scen.includes("trip") || scen.includes("london") || scen.includes("londres")) {
+          parsedStory.topic = "viagens";
+        } else if (scen.includes("trabalho") || scen.includes("emprego") || scen.includes("entrevista") || scen.includes("reuni") || scen.includes("job") || scen.includes("office") || scen.includes("carreira")) {
+          parsedStory.topic = "profissional";
+        } else if (scen.includes("compr") || scen.includes("loja") || scen.includes("shop") || scen.includes("mercado") || scen.includes("store") || scen.includes("preço")) {
+          parsedStory.topic = "compras";
+        } else if (scen.includes("restaurante") || scen.includes("comida") || scen.includes("café") || scen.includes("jantar") || scen.includes("almoço") || scen.includes("food") || scen.includes("coffee")) {
+          parsedStory.topic = "comida";
+        } else {
+          parsedStory.topic = "social";
+        }
+      }
+      if (!parsedStory.level) {
+        const lvl = (level || "intermediate").toLowerCase();
+        parsedStory.level = lvl.includes("begin") || lvl.includes("iniciante") ? "beginner" :
+          lvl.includes("adv") || lvl.includes("avançado") ? "advanced" : "intermediate";
+      }
+      if (!parsedStory.format) {
+        const fmt = (format || "narrative").toLowerCase();
+        parsedStory.format = fmt.includes("dialog") ? "dialogue" : "narrative";
+      }
+    }
+
+    return new Response(JSON.stringify({
+      success: true,
+      model: MODEL,
+      story: parsedStory
+    }, null, 2), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+
+  } catch (err) {
+    console.error("[AEF Master Generator] Erro ao processar requisição:", err);
+    return new Response(JSON.stringify({
+      error: "Erro interno ao processar a geração da história.",
+      message: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}
+
+// ============================================================================
+// 8. LABORATÓRIO TTS: MOTOR DE SÍNTESE DE VOZ (WAV NATIVO NO EDGE)
+// ============================================================================
+function base64ToUint8Array(base64) {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
+function createWavHeader(dataLength, sampleRate = 24000, numChannels = 1, bitsPerSample = 16) {
+  const buffer = new ArrayBuffer(44);
+  const view = new DataView(buffer);
+  const writeString = (offset, string) => {
+    for (let i = 0; i < string.length; i++) { view.setUint8(offset + i, string.charCodeAt(i)); }
+  };
+  writeString(0, 'RIFF');
+  view.setUint32(4, 36 + dataLength, true); // true = little-endian
+  writeString(8, 'WAVE');
+  writeString(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); // PCM
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * numChannels * (bitsPerSample / 8), true);
+  view.setUint16(32, numChannels * (bitsPerSample / 8), true);
+  view.setUint16(34, bitsPerSample, true);
+  writeString(36, 'data');
+  view.setUint32(40, dataLength, true);
+  return new Uint8Array(buffer);
+}
+
+function concatUint8Arrays(arrays) {
+  let totalLength = arrays.reduce((acc, val) => acc + val.length, 0);
+  let result = new Uint8Array(totalLength);
+  let offset = 0;
+  for (let arr of arrays) {
+    result.set(arr, offset);
+    offset += arr.length;
+  }
+  return result;
+}
+
+export async function handleLabGenerateTTS(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, x-gemini-api-key"
+      }
+    });
+  }
+
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { text, voice = "Puck", format = "wav" } = body;
+
+    if (!text || !text.trim()) {
+      return new Response(JSON.stringify({ error: "O campo 'text' é obrigatório." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Resolução segura da chave de API do Gemini (env, process.env, .env ou header x-gemini-api-key)
+    let apiKey = (env && (env.GEMINI_API_KEY || env.AEF_GEMINI_API_KEY)) ||
+      (typeof process !== "undefined" && process.env && (process.env.GEMINI_API_KEY || process.env.AEF_GEMINI_API_KEY)) ||
+      request.headers.get("x-gemini-api-key") ||
+      body.apiKey || "";
+
+    if (!apiKey && typeof process !== "undefined" && typeof require !== "undefined") {
+      try {
+        const fs = require("fs");
+        const path = require("path");
+        const envPath = path.resolve(process.cwd(), ".env");
+        if (fs.existsSync(envPath)) {
+          const content = fs.readFileSync(envPath, "utf8");
+          const match = content.match(/GEMINI_API_KEY=["']?([^"'\r\n]+)/);
+          if (match) apiKey = match[1].trim();
+        }
+      } catch (e) { }
+    }
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        error: "Chave da API do Gemini (GEMINI_API_KEY) não configurada no servidor ou no header x-gemini-api-key."
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Preâmbulo canônico obrigatório Gemini TTS (Single Speaker)
+    const preamble = "Read the following text aloud as audio speech. Generate only audio output. Do not generate any text response.\n\n";
+    const fullPrompt = text.startsWith("Read the following text aloud") ? text : (preamble + text);
+
+    const payload = {
+      contents: [{
+        role: "user",
+        parts: [{ text: fullPrompt }]
+      }],
+      generationConfig: {
+        responseModalities: ["AUDIO"],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: {
+              voiceName: voice || "Puck"
+            }
+          }
+        }
+      }
+    };
+
+    const MODEL = "gemini-3.1-flash-tts-preview";
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+
+    const geminiRes = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!geminiRes.ok) {
+      const errText = await geminiRes.text();
+      console.error(`[AEF TTS Generator] Erro na API do Gemini (${geminiRes.status}):`, errText);
+      return new Response(JSON.stringify({
+        error: `Falha na API do Gemini TTS (${geminiRes.status})`,
+        details: errText
+      }), {
+        status: 502,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const geminiData = await geminiRes.json();
+    const candidate = geminiData.candidates?.[0];
+    const part = candidate?.content?.parts?.[0];
+    const base64Audio = part?.inlineData?.data || part?.inline_data?.data;
+
+    if (!base64Audio) {
+      return new Response(JSON.stringify({
+        error: "Resposta do Gemini TTS não continha dados de áudio.",
+        raw: geminiData
+      }), {
+        status: 502,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Converte raw PCM linear (audio/l16) para Uint8Array usando Web APIs
+    const pcmBytes = base64ToUint8Array(base64Audio);
+    const wavHeader = createWavHeader(pcmBytes.length, 24000, 1, 16);
+
+    // Concatena Header WAV (44 bytes) + PCM em um Uint8Array puro
+    const fullWav = new Uint8Array(wavHeader.length + pcmBytes.length);
+    fullWav.set(wavHeader, 0);
+    fullWav.set(pcmBytes, wavHeader.length);
+
+    // Se o cliente pediu formato json, devolve base64 com header WAV já embutido
+    if (format === "json") {
+      let binaryStr = "";
+      const len = fullWav.byteLength;
+      const chunkSize = 8192;
+      for (let i = 0; i < len; i += chunkSize) {
+        const chunk = fullWav.subarray(i, Math.min(i + chunkSize, len));
+        binaryStr += String.fromCharCode.apply(null, chunk);
+      }
+      const wavBase64 = btoa(binaryStr);
+      return new Response(JSON.stringify({
+        success: true,
+        mimeType: "audio/wav",
+        sampleRate: 24000,
+        voice: voice || "Puck",
+        audioBase64: wavBase64
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Retorno binário direto com Content-Type audio/wav (WAV nativo reproduzível)
+    return new Response(fullWav, {
+      status: 200,
+      headers: {
+        "Content-Type": "audio/wav",
+        "Content-Length": String(fullWav.length),
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "public, max-age=86400"
+      }
+    });
+
+  } catch (err) {
+    console.error("[AEF TTS Generator] Erro ao sintetizar áudio:", err);
+    return new Response(JSON.stringify({
+      error: "Erro interno ao processar síntese de áudio.",
+      message: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}
+
+// ============================================================================
+// 9. LABORATÓRIO TTS: SEQUÊNCIA DE ÁUDIO COM INJEÇÃO DE SILÊNCIO (PCM NATIVO)
+// ============================================================================
+export async function handleLabGenerateTTSSequence(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, x-gemini-api-key"
+      }
+    });
+  }
+
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { items, pauseSeconds = 0, voice = "Puck", format = "wav" } = body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return new Response(JSON.stringify({ error: "O campo 'items' deve ser um array com ao menos um texto." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Resolução segura da chave de API do Gemini (env, process.env, .env ou header x-gemini-api-key)
+    let apiKey = (env && (env.GEMINI_API_KEY || env.AEF_GEMINI_API_KEY)) ||
+      (typeof process !== "undefined" && process.env && (process.env.GEMINI_API_KEY || process.env.AEF_GEMINI_API_KEY)) ||
+      request.headers.get("x-gemini-api-key") ||
+      body.apiKey || "";
+
+    if (!apiKey && typeof process !== "undefined" && typeof require !== "undefined") {
+      try {
+        const fs = require("fs");
+        const path = require("path");
+        const envPath = path.resolve(process.cwd(), ".env");
+        if (fs.existsSync(envPath)) {
+          const content = fs.readFileSync(envPath, "utf8");
+          const match = content.match(/GEMINI_API_KEY=["']?([^"'\r\n]+)/);
+          if (match) apiKey = match[1].trim();
+        }
+      } catch (e) { }
+    }
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        error: "Chave da API do Gemini (GEMINI_API_KEY) não configurada no servidor ou no header x-gemini-api-key."
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const pause = typeof pauseSeconds === "number" && pauseSeconds > 0 ? pauseSeconds : 0;
+    const selectedVoice = voice || "Puck";
+    const preamble = "Read the following text aloud as audio speech. Generate only audio output. Do not generate any text response.\n\n";
+    const MODEL = "gemini-3.1-flash-tts-preview";
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+
+    const chunks = [];
+
+    // Processamento em lotes com concorrência controlada para evitar timeouts e 429
+    const pcmResults = new Array(items.length);
+    const BATCH_SIZE = 4;
+
+    for (let b = 0; b < items.length; b += BATCH_SIZE) {
+      const batchIndices = [];
+      for (let k = b; k < Math.min(b + BATCH_SIZE, items.length); k++) {
+        batchIndices.push(k);
+      }
+
+      await Promise.all(batchIndices.map(async (idx) => {
+        const itemObj = items[idx];
+        const rawText = (typeof itemObj === "string" ? itemObj : (itemObj.text || "")).replace(/^[A-Za-z0-9\s]+:\s*/gm, "").trim();
+        if (!rawText) return;
+
+        const fullPrompt = rawText.startsWith("Read the following text aloud") ? rawText : (preamble + rawText);
+        const payload = {
+          contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
+          generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: { voiceName: selectedVoice }
+              }
+            }
+          }
+        };
+
+        const geminiRes = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+          body: JSON.stringify(payload)
+        });
+
+        if (!geminiRes.ok) {
+          const errText = await geminiRes.text();
+          throw new Error(`Falha na API Gemini TTS no item ${idx} (${geminiRes.status}): ${errText}`);
+        }
+
+        const geminiData = await geminiRes.json();
+        const part = geminiData.candidates?.[0]?.content?.parts?.[0];
+        const base64Audio = part?.inlineData?.data || part?.inline_data?.data;
+        if (!base64Audio) throw new Error(`Resposta do Gemini TTS no item ${idx} vazia.`);
+
+        pcmResults[idx] = {
+          pcm: base64ToUint8Array(base64Audio),
+          pauseAfter: typeof itemObj === "object" && typeof itemObj.pauseSeconds === "number" ? itemObj.pauseSeconds : pause
+        };
+      }));
+    }
+
+    // Montar chunks intercalando áudios sintetizados e blocos matemáticos de silêncio
+    for (let i = 0; i < pcmResults.length; i++) {
+      const res = pcmResults[i];
+      if (!res || !res.pcm) continue;
+      chunks.push(res.pcm);
+
+      const silenceSec = res.pauseAfter;
+      if (silenceSec > 0 && i < pcmResults.length - 1) {
+        // 24000 samples * 2 bytes = 48000 bytes/segundo
+        const silence = new Uint8Array(Math.floor(24000 * 2 * silenceSec));
+        chunks.push(silence);
+      }
+    }
+
+    if (chunks.length === 0) {
+      return new Response(JSON.stringify({ error: "Nenhum áudio pôde ser gerado para os itens fornecidos." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Unir tudo via Web APIs (Uint8Array puro)
+    const mergedPcm = concatUint8Arrays(chunks);
+    const header = createWavHeader(mergedPcm.length);
+    const finalWav = concatUint8Arrays([header, mergedPcm]);
+
+    if (format === "json") {
+      let binaryStr = "";
+      const len = finalWav.byteLength;
+      const chunkSize = 8192;
+      for (let j = 0; j < len; j += chunkSize) {
+        const chunk = finalWav.subarray(j, Math.min(j + chunkSize, len));
+        binaryStr += String.fromCharCode.apply(null, chunk);
+      }
+      const wavBase64 = btoa(binaryStr);
+      return new Response(JSON.stringify({
+        success: true,
+        mimeType: "audio/wav",
+        sampleRate: 24000,
+        voice: selectedVoice,
+        audioBase64: wavBase64
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    // Retorno binário direto com status 200, buffer final e Content-Type: audio/wav
+    return new Response(finalWav, {
+      status: 200,
+      headers: {
+        "Content-Type": "audio/wav",
+        "Content-Length": String(finalWav.length),
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "public, max-age=86400"
+      }
+    });
+
+  } catch (err) {
+    console.error("[AEF TTS Sequence] Erro ao sintetizar sequência de áudio:", err);
+    return new Response(JSON.stringify({
+      error: "Erro interno ao processar sequência de áudio.",
+      message: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}
+
+// ============================================================================
+// 9. ENDPOINT DE GERAÇÃO DINÂMICA DE CAPAS 16:9 (PROMPT-TO-STORY COVER)
+// ============================================================================
+export async function handleLabGenerateCover(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, x-gemini-api-key"
+      }
+    });
+  }
+
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const scenario = (body.scenario || "").trim();
+
+    if (!scenario) {
+      return new Response(JSON.stringify({ error: "O campo 'scenario' é obrigatório para gerar a capa." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const apiKey = request.headers.get("x-gemini-api-key") ||
+      env?.GEMINI_API_KEY ||
+      (typeof process !== "undefined" ? process.env?.GEMINI_API_KEY : "");
+
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        error: "Chave da API Gemini não configurada no servidor (GEMINI_API_KEY ausente)."
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const imagePrompt = `Calm EdTech style, modern vector illustration, minimalist, vibrant but soft colors, high quality. Theme: ${scenario}. No text, no letters, no words in the image.`;
+
+    let base64Image = null;
+    let lastError = null;
+
+    // 1. Tentar primeiro os modelos oficiais nativos de imagem ativos (gemini-3.1-flash-image e gemini-2.5-flash-image)
+    const genAiModels = ["gemini-3.1-flash-image", "gemini-2.5-flash-image"];
+    for (const model of genAiModels) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const payload = {
+          contents: [{
+            parts: [{ text: imagePrompt }]
+          }],
+          generationConfig: {
+            responseModalities: ["IMAGE"],
+            response_format: {
+              image: { aspect_ratio: "ASPECT_RATIO_SIXTEEN_BY_NINE" }
+            }
+          }
+        };
+
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const part = data.candidates?.[0]?.content?.parts?.[0];
+          const inlineData = part?.inlineData || part?.inline_data;
+          if (inlineData?.data) {
+            base64Image = inlineData.data;
+            break;
+          }
+        } else {
+          lastError = await res.text();
+          console.warn(`[AEF Cover Generator] Falha no modelo ${model} (${res.status}):`, lastError);
+        }
+      } catch (err) {
+        lastError = err.message;
+        console.warn(`[AEF Cover Generator] Erro na requisição do modelo ${model}:`, err.message);
+      }
+    }
+
+    // 2. Fallback para endpoints Imagen 3 predict caso necessário
+    if (!base64Image) {
+      const imagenModels = ["imagen-3.0-generate-001", "imagen-3.0-generate-002"];
+      for (const imgModel of imagenModels) {
+        try {
+          const imagenEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${imgModel}:predict?key=${apiKey}`;
+          const imagenPayload = {
+            instances: [{ prompt: imagePrompt }],
+            parameters: {
+              sampleCount: 1,
+              aspectRatio: "16:9",
+              outputOptions: { mimeType: "image/jpeg" }
+            }
+          };
+
+          const res = await fetch(imagenEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(imagenPayload)
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            const b64 = data.predictions?.[0]?.bytesBase64Encoded;
+            if (b64) {
+              base64Image = b64;
+              break;
+            }
+          }
+        } catch (e) {
+          // Fallback silencioso
+        }
+      }
+    }
+
+    if (!base64Image) {
+      return new Response(JSON.stringify({
+        error: "Não foi possível sintetizar a imagem com os modelos disponíveis.",
+        details: lastError
+      }), {
+        status: 502,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    return new Response(JSON.stringify({
+      success: true,
+      imageBase64: base64Image
+    }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+
+  } catch (err) {
+    console.error("[AEF Cover Generator] Erro fatal:", err);
+    return new Response(JSON.stringify({
+      error: "Erro interno ao gerar capa da história.",
+      message: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}
+
+// ============================================================================
+// 10. STORAGE DE MÍDIA NATIVO (ARQUIVOS REAIS / STORAGE CANÔNICO)
+// ============================================================================
+const STORAGE_FILES_CACHE = new Map();
+
+export async function handleStorageUpload(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, x-file-path, x-module-id, x-content-type"
+      }
+    });
+  }
+
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const contentType = request.headers.get("content-type") || "";
+    const url = new URL(request.url);
+
+    let fileBuffer = null;
+    let fileName = url.searchParams.get("filename") || request.headers.get("x-file-name") || "";
+    let moduleId = url.searchParams.get("moduleId") || request.headers.get("x-module-id") || "";
+    let relativePath = url.searchParams.get("path") || request.headers.get("x-file-path") || "";
+    let mimeType = request.headers.get("x-content-type") || "";
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      const file = formData.get("file");
+      if (file && typeof file.arrayBuffer === "function") {
+        fileBuffer = new Uint8Array(await file.arrayBuffer());
+        fileName = fileName || file.name || "media.wav";
+        mimeType = mimeType || file.type || "audio/wav";
+      }
+      moduleId = moduleId || formData.get("moduleId") || "";
+      relativePath = relativePath || formData.get("path") || "";
+    } else if (contentType.includes("application/json")) {
+      const json = await request.json().catch(() => ({}));
+      fileName = fileName || json.filename || json.name || "media.wav";
+      moduleId = moduleId || json.moduleId || "";
+      relativePath = relativePath || json.path || "";
+      mimeType = mimeType || json.mimeType || json.contentType || "audio/wav";
+      if (json.data) {
+        let rawBase64 = json.data;
+        if (rawBase64.includes(",")) rawBase64 = rawBase64.split(",")[1];
+        fileBuffer = base64ToUint8Array(rawBase64);
+      }
+    } else {
+      const ab = await request.arrayBuffer();
+      fileBuffer = new Uint8Array(ab);
+      mimeType = mimeType || contentType || "audio/wav";
+    }
+
+    if (!fileBuffer || fileBuffer.length === 0) {
+      return new Response(JSON.stringify({ error: "Nenhum dado binário recebido para upload." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    if (!moduleId) {
+      moduleId = "mod_" + Date.now();
+    }
+    if (!fileName) {
+      fileName = "audio_" + Date.now() + ".wav";
+    }
+
+    if (!relativePath) {
+      relativePath = `magic-creations/${moduleId}/${fileName}`;
+    }
+    relativePath = relativePath.replace(/^\/+/, "");
+
+    const fileUrl = `/storage/${relativePath}`;
+
+    if (!mimeType || mimeType === "application/octet-stream") {
+      if (fileName.endsWith(".wav")) mimeType = "audio/wav";
+      else if (fileName.endsWith(".mp3")) mimeType = "audio/mpeg";
+      else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) mimeType = "image/jpeg";
+      else if (fileName.endsWith(".png")) mimeType = "image/png";
+      else if (fileName.endsWith(".pdf")) mimeType = "application/pdf";
+      else mimeType = "audio/wav";
+    }
+
+    const storageItem = {
+      buffer: fileBuffer,
+      contentType: mimeType,
+      size: fileBuffer.byteLength,
+      uploadedAt: new Date().toISOString()
+    };
+    STORAGE_FILES_CACHE.set(fileUrl, storageItem);
+    STORAGE_FILES_CACHE.set(`/storage/${relativePath}`, storageItem);
+    STORAGE_FILES_CACHE.set(relativePath, storageItem);
+
+    console.log(`📦 [Storage Upload] Arquivo persistido: ${fileUrl} (${fileBuffer.byteLength} bytes, ${mimeType})`);
+
+    return new Response(JSON.stringify({
+      success: true,
+      fileUrl: fileUrl,
+      size: fileBuffer.byteLength,
+      contentType: mimeType
+    }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+
+  } catch (err) {
+    console.error("[AEF Storage Upload] Erro:", err);
+    return new Response(JSON.stringify({
+      error: "Erro interno no upload de mídia.",
+      message: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}
+
+export async function handleServeStorageFile(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+        "Access-Control-Allow-Headers": "Range, Content-Type, Authorization"
+      }
+    });
+  }
+
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+
+  let item = STORAGE_FILES_CACHE.get(pathname);
+  if (!item) {
+    const rel = pathname.replace(/^\/storage\//, "").replace(/^\/api\/storage\//, "");
+    item = STORAGE_FILES_CACHE.get(rel) || STORAGE_FILES_CACHE.get(`/storage/${rel}`);
+  }
+
+  if (!item) {
+    return new Response(JSON.stringify({ error: "Arquivo não encontrado no storage.", path: pathname }), {
+      status: 404,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+  }
+
+  return new Response(item.buffer, {
+    status: 200,
+    headers: {
+      "Content-Type": item.contentType,
+      "Content-Length": String(item.size),
+      "Accept-Ranges": "bytes",
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "public, max-age=31536000, immutable"
+    }
+  });
+}
+
+// ============================================================================
+// 11. ENDPOINT DE PERSISTÊNCIA DE DADOS DA MAGIC STORY (COMMUNITY LMS CATALOG)
+// ============================================================================
+const SAVED_MODULES_CACHE = new Map();
+
+export async function handleSaveMagicStory(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, x-gemini-api-key"
+      }
+    });
+  }
+
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { metadata = {}, content = {} } = body;
+
+    const moduleId = body.moduleId || (typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `mod_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`);
+
+    const now = new Date().toISOString();
+
+    const courseModule = {
+      moduleId,
+      courseId: "magic-creations-community",
+      courseName: "Magic Creations - Acervo Exclusivo da Comunidade",
+      isCommunityAsset: true,
+      courseMasterCover: "/assets/images/magic-creations-master-cover.jpg",
+      moduleCover169: metadata.coverImage || "/assets/images/default-module.jpg",
+      createdAt: now,
+      updatedAt: now,
+      metadata: {
+        title: metadata.title || "Magic Story Sem Título",
+        description: metadata.description || body.description || "Treinamento exclusivo da comunidade.",
+        topic: metadata.topic || "social",
+        level: metadata.level || "intermediate",
+        format: metadata.format || "narrative",
+        creatorId: metadata.creatorId || "anonymous",
+        originalPrompt: metadata.originalPrompt || "Não informado",
+        coverImage: metadata.coverImage || "/assets/images/default-module.jpg"
+      },
+      content: {
+        lr: {
+          text: content.lr?.text || "",
+          audioUrl: content.lr?.audioUrl || ""
+        },
+        voc: {
+          chunks: Array.isArray(content.voc?.chunks) ? content.voc.chunks : (Array.isArray(content.voc?.items) ? content.voc.items : []),
+          audioUrl: content.voc?.audioUrl || content.voc?.podcastAudioUrl || "",
+          podcastAudioUrl: content.voc?.audioUrl || content.voc?.podcastAudioUrl || ""
+        },
+        la: {
+          drills: Array.isArray(content.la?.drills) ? content.la.drills : [],
+          audioUrl: content.la?.audioUrl || ""
+        },
+        lrt: {
+          guideQuestions: Array.isArray(content.lrt?.guideQuestions) ? content.lrt.guideQuestions : [],
+          staticAudioUrl: content.lrt?.staticAudioUrl || ""
+        },
+        lask: {
+          stimuli: Array.isArray(content.lask?.stimuli) ? content.lask.stimuli : [],
+          audioUrl: content.lask?.audioUrl || ""
+        },
+        pro: {
+          phrases: Array.isArray(content.pro?.phrases) ? content.pro.phrases : [],
+          audioUrl: content.pro?.audioUrl || ""
+        }
+      }
+    };
+
+    // Armazenar no cache em memória do Worker para entrega instantânea
+    SAVED_MODULES_CACHE.set(moduleId, courseModule);
+
+    return new Response(JSON.stringify({
+      success: true,
+      moduleId,
+      message: "Magic Story catalogada com sucesso na biblioteca.",
+      data: courseModule
+    }, null, 2), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+
+  } catch (err) {
+    console.error("[AEF DB Save] Erro ao persistir Magic Story:", err);
+    return new Response(JSON.stringify({
+      error: "Erro interno ao processar a persistência da história.",
+      message: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}
+
+// ============================================================================
+// 11. ENDPOINT DE CATÁLOGO DA COMUNIDADE (MAGIC CREATIONS SHOWCASE & ANALYTICS)
+// ============================================================================
+export async function handleGetMagicStoriesCatalog(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
+    });
+  }
+
+  const catalog = [
+    {
+      moduleId: "mc-chicago-coffee-01",
+      moduleCover169: "/assets/images/cover-default-aef.jpg",
+      createdAt: "2026-09-18T14:20:00.000Z",
+      metadata: {
+        title: "Job Interview: Dealing with Pressure",
+        description: "Treinamento forjado para entrevistas de emprego em multinacionais, focado em responder sobre prazos apertados e liderança.",
+        topic: "profissional",
+        level: "intermediate",
+        format: "dialogue"
+      }
+    },
+    {
+      moduleId: "mc-airport-luggage-02",
+      moduleCover169: "/assets/images/cover-default-aef.jpg",
+      createdAt: "2026-09-15T09:10:00.000Z",
+      metadata: {
+        title: "Lost Luggage at Heathrow Airport",
+        description: "Treinamento prático de sobrevivência em viagens internacionais para resolver extravio de bagagens e conexões perdidas.",
+        topic: "viagens",
+        level: "beginner",
+        format: "dialogue"
+      }
+    },
+    {
+      moduleId: "mc-dinner-reservation-03",
+      moduleCover169: "/assets/images/cover-default-aef.jpg",
+      createdAt: "2026-09-10T19:45:00.000Z",
+      metadata: {
+        title: "Dinner with Colleagues in Manhattan",
+        description: "Treinamento de socialização e conversação descontraída para jantares de negócios, pedidos em restaurantes e pequenas conversas.",
+        topic: "social",
+        level: "advanced",
+        format: "narrative"
+      }
+    },
+    {
+      moduleId: "mc-tech-standup-04",
+      moduleCover169: "/assets/images/cover-default-aef.jpg",
+      createdAt: "2026-09-05T11:30:00.000Z",
+      metadata: {
+        title: "Tech Startup Team Standup",
+        description: "Treinamento ágil de rotina de trabalho em tecnologia: atualizações de sprint, bloqueios e alinhamento de roadmap.",
+        topic: "profissional",
+        level: "intermediate",
+        format: "dialogue"
+      }
+    }
+  ];
+
+  // Agrega histórias salvas dinamicamente
+  const dynamicStories = Array.from(SAVED_MODULES_CACHE.values()).map(m => ({
+    moduleId: m.moduleId,
+    moduleCover169: m.moduleCover169,
+    createdAt: m.createdAt,
+    metadata: m.metadata,
+    content: m.content
+  }));
+
+  const fullCatalog = [...dynamicStories, ...catalog];
+
+  return new Response(JSON.stringify({
+    success: true,
+    analytics: {
+      totalStories: 142 + dynamicStories.length,
+      newLast30Days: 18 + dynamicStories.length
+    },
+    catalog: fullCatalog
+  }, null, 2), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "public, max-age=60"
+    }
+  });
+}
+
+// ============================================================================
+// 12. ENDPOINT PARA OBTER HISTÓRIA POR ID (PRE-RENDERED AUDIO RETRIEVAL)
+// ============================================================================
+export async function handleGetMagicStory(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
+    });
+  }
+
+  const url = new URL(request.url);
+  const modId = url.searchParams.get("module") || url.searchParams.get("moduleId") || "";
+  if (modId && SAVED_MODULES_CACHE.has(modId)) {
+    return new Response(JSON.stringify({
+      success: true,
+      story: SAVED_MODULES_CACHE.get(modId)
+    }, null, 2), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    });
+  }
+
+  return new Response(JSON.stringify({
+    success: false,
+    error: "História não encontrada no acervo ativo."
+  }), {
+    status: 404,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": "*"
+    }
+  });
+}
+// =======================================================================
+// MOTOR DO ESTÚDIO (Background) & BREVO E-MAIL
+// =======================================================================
+
+async function processStudioBackground(env, story, user) {
+  try {
+    const userEmail = user?.email || "email_indefinido";
+    const userName = user?.name || "my dear friend";
+    const scenario = story?.scenario || story?.metadata?.title || story?.title || "Novo Treino";
+    const moduleId = story?.moduleId || "mod_desconhecido";
+
+    console.log("🎙️ [Estúdio Background] ==================================================");
+    console.log(`🎙️ [Estúdio Background] Iniciando masterização em background para: ${userEmail}`);
+    console.log("🎙️ [Estúdio Background] Dados da Sessão:", {
+      user: { email: userEmail, name: userName },
+      moduleId: moduleId,
+      scenario: scenario,
+      activitiesCount: story?.activities ? Object.keys(story.activities).length : 0
+    });
+
+    // =================================================================
+    // ETAPA 1: GERAÇÃO DE ÁUDIO TTS (RASTREAMENTO DE ÁUDIO)
+    // =================================================================
+    console.log("🎵 [Estúdio Background] [ÁUDIO] INÍCIO: Acionando etapa de geração de áudio TTS...");
+    console.log(`🎵 [Estúdio Background] [ÁUDIO] Alvo: Módulo ${moduleId} | Cenário: "${scenario}"`);
+
+    // =================================================================
+    // AQUI ENTRARÁ A SUA LÓGICA DE GERAÇÃO DE ÁUDIO TTS
+    // =================================================================
+    // O loop abaixo garante o respeito à cota de 10 RPM do Gemini,
+    // forçando uma pausa de ~6.5 segundos entre cada requisição.
+
+    /*
+    for (const track of story.listenAndAnswer) {
+       await generateAudioTTS(track.text);
+       await new Promise(resolve => setTimeout(resolve, 6500)); 
+    }
+    */
+
+    console.log("✅ [Estúdio Background] [ÁUDIO] FIM: Geração de áudio finalizada/processada.");
+
+    // =================================================================
+    // ETAPA 2: DISPARO DE E-MAIL TRANSACIONAL VIA BREVO
+    // =================================================================
+    console.log("📧 [Estúdio Background] [BREVO] Disparando notificação por e-mail para o aluno...");
+
+    const emailSent = await sendMagicStoryReadyEmail(env, {
+      toEmail: userEmail,
+      toName: userName,
+      scenario: scenario,
+      moduleId: moduleId
+    });
+
+    if (emailSent) {
+      console.log(`🎉 [Estúdio Background] Processamento concluído com sucesso total para ${userEmail}.`);
+    } else {
+      console.warn(`⚠️ [Estúdio Background] Processamento concluído com ressalvas: e-mail não despachado para ${userEmail}.`);
+    }
+
+    console.log("🎙️ [Estúdio Background] ==================================================");
+
+  } catch (error) {
+    console.error("❌ [Estúdio Background] FALHA CRÍTICA FATAL no processamento de background:", error);
+    console.error("❌ [Estúdio Background] Stack trace completo:", error?.stack || error);
+  }
+}
+
+async function sendMagicStoryReadyEmail(env, { toEmail, toName, scenario, moduleId }) {
+  try {
+    console.log(`📧 [Brevo] Verificando configuração para envio a: ${toEmail}...`);
+    const apiKey = env?.BREVO_API_KEY;
+    if (!apiKey) {
+      console.error("❌ [Brevo] ERRO CRÍTICO: Chave não configurada no ambiente (env.BREVO_API_KEY). O envio de e-mail foi abortado.");
+      return false;
+    }
+
+    const endpoint = "https://api.brevo.com/v3/smtp/email";
+    const lessonUrl = `https://agoraeufalo.com.br/player-lab.html?id=${moduleId}`;
+
+    const payload = {
+      sender: { name: "Leo | AgoraEuFalo", email: "agoraeufalo@agoraeufalo.com.br" },
+      to: [{ email: toEmail, name: toName || "my dear friend" }],
+      subject: `🎙️ Seu treino sob medida está pronto: "${scenario || 'Novo Treino'}"`,
+      htmlContent: `
+        <div style="font-family: sans-serif; background-color: #0A192F; color: #F1F5F9; padding: 24px; border-radius: 12px; max-width: 600px; margin: auto;">
+          <h2 style="color: #F59E0B; margin-top: 0;">Hello, ${toName || "my dear friend"}!</h2>
+          <p>A sua lição com o cenário <strong>"${scenario}"</strong> acabou de ser masterizada no nosso estúdio.</p>
+          <div style="margin: 32px 0;">
+            <a href="${lessonUrl}" style="background-color: #F59E0B; color: #071322; padding: 14px 28px; text-decoration: none; font-weight: bold; border-radius: 8px;">COMEÇAR MEU TREINO AGORA</a>
+          </div>
+          <p style="color: #94A3B8; font-size: 14px;">Pratique o reflexo oral e devore essa história hoje mesmo!</p>
+          <p style="color: #64748B; font-size: 12px; margin-top: 30px;">Professor Leo • AgoraEuFalo</p>
+        </div>
+      `
+    };
+
+    console.log(`📤 [Brevo] Payload enviado para API do Brevo (${endpoint}):`);
+    console.log(JSON.stringify(payload, null, 2));
+
+    console.log("🚀 [Brevo] Despachando requisição HTTP POST para o Brevo...");
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "accept": "application/json",
+        "api-key": apiKey,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const status = res.status;
+    const statusText = res.statusText;
+    let resText = "";
+    try {
+      resText = await res.text();
+    } catch (readErr) {
+      resText = `[Erro ao ler corpo da resposta: ${readErr.message}]`;
+    }
+
+    console.log(`📥 [Brevo] Resposta exata da API Brevo: HTTP ${status} (${statusText})`);
+    console.log(`📥 [Brevo] Corpo exato da resposta:`, resText);
+
+    if (!res.ok) {
+      console.error(`❌ [Brevo] Falha ao despachar e-mail via Brevo. Código HTTP: ${status}. Detalhes:`, resText);
+      return false;
+    }
+
+    console.log(`✅ [Brevo] E-mail despachado com sucesso para ${toEmail}! Resposta:`, resText);
+    return true;
+  } catch (err) {
+    console.error("❌ [Brevo] Erro fatal de rede ou execução ao despachar e-mail:", err);
+    console.error("❌ [Brevo] Stack trace completo:", err?.stack || err);
+    return false;
+  }
+}

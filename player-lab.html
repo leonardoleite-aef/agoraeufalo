@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Player Lab • Magic Stories Studio (Laboratório)</title>
+  <meta name="description" content="Player de Treino do Laboratório AgoraEuFalo - Magic Stories geradas por IA com Tríade Sagrada (LA, LRT, LASK).">
+  <meta name="theme-color" content="#071224">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AEF Player Lab">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Playfair Display & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            aef: {
+              midnight: '#071224',
+              navy: '#0A192F',
+              card: '#0D1E36',
+              surface: '#112240',
+              hover: '#1B3152',
+              amber: '#F59E0B',
+              'amber-dark': '#D97706',
+              'amber-light': '#FCD34D',
+              border: 'rgba(255, 255, 255, 0.08)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Vector Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core AEF Ecosystem Scripts -->
+  <script src="assets/js/aef-domain-router.js"></script>
+  <script src="assets/js/aef-courses-registry.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-access-engine.js?v=1.0.2"></script>
+  <script src="assets/js/aef-learning-tracker.js"></script>
+
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #071224;
+      color: #F8FAFC;
+      -webkit-tap-highlight-color: transparent;
+      padding-top: var(--sat);
+      padding-bottom: var(--sab);
+    }
+    .ambient-glow {
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, rgba(7, 18, 36, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .linking-sound {
+      color: #38BDF8;
+      border-bottom: 2px solid rgba(56, 189, 248, 0.5);
+      padding: 0 1px;
+      font-weight: 700;
+    }
+    .reveal-transition {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-[#071224] text-slate-100 selection:bg-amber-500 selection:text-slate-950">
+
+  <div class="ambient-glow"></div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP COCKPIT HEADER                                                     -->
+  <!-- ========================================================================= -->
+  <header class="relative z-30 border-b border-white/10 bg-[#0A192F]/90 backdrop-blur-xl px-4 py-3 shrink-0">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
+      
+      <!-- Voltar ao Portal Lab -->
+      <a href="/portal-lab" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold transition active:scale-95 border border-white/10 shrink-0">
+        <i data-lucide="arrow-left" class="w-4 h-4 text-amber-400"></i>
+        <span class="hidden sm:inline">Voltar ao</span><span>Portal Lab</span>
+      </a>
+
+      <!-- Status & Título do Cockpit -->
+      <div class="flex items-center gap-2 min-w-0 text-center">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+        <div class="truncate">
+          <h1 id="top-story-title" class="text-xs sm:text-sm font-bold text-white truncate">
+            Carregando Magic Story...
+          </h1>
+          <p class="text-[10px] font-mono text-amber-400 tracking-wider uppercase">
+            COCKPIT DE TREINO • TRÍADE SAGRADA (1:1:1)
+          </p>
+        </div>
+      </div>
+
+      <!-- Ações do Cabeçalho: Recarregar / Nova História -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="window.reloadActiveStory()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition border border-white/10" title="Recarregar História">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+        <a href="/portal-lab#gerador" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-black uppercase tracking-wider transition flex items-center gap-1.5 shadow-md active:scale-95">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 fill-current"></i>
+          <span class="hidden sm:inline">Forjar</span><span>Nova História</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. NAVEGAÇÃO ENTRE AS 6 ARENAS CANÔNICAS (LR, VOC, LA, LRT, LASK, PRO)     -->
+  <!-- ========================================================================= -->
+  <nav class="relative z-20 bg-[#0D1E36]/80 backdrop-blur-md border-b border-white/10 py-2.5 px-4 overflow-x-auto no-scrollbar shrink-0">
+    <div class="max-w-5xl mx-auto flex items-center justify-start sm:justify-center gap-2 min-w-max">
+      
+      <button onclick="window.switchArena('lr')" id="tab-lr" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-amber-500 text-slate-950 border-amber-400 shadow-md">
+        <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
+        <span>1. Listen & Read</span>
+      </button>
+
+      <button onclick="window.switchArena('voc')" id="tab-voc" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-white/5 hover:bg-white/10 text-slate-300 border-white/10">
+        <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>2. Vocabulary</span>
+      </button>
+
+      <button onclick="window.switchArena('la')" id="tab-la" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-white/5 hover:bg-white/10 text-slate-300 border-white/10">
+        <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>3. Listen & Answer</span>
+        <span id="la-badge-count" class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px]">0</span>
+      </button>
+
+      <button onclick="window.switchArena('lrt')" id="tab-lrt" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-white/5 hover:bg-white/10 text-slate-300 border-white/10">
+        <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>4. Look & Retell</span>
+      </button>
+
+      <button onclick="window.switchArena('lask')" id="tab-lask" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-white/5 hover:bg-white/10 text-slate-300 border-white/10">
+        <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>5. Listen & Ask</span>
+      </button>
+
+      <button onclick="window.switchArena('pro')" id="tab-pro" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-white/5 hover:bg-white/10 text-slate-300 border-white/10">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>6. Pronunciation</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- 3. PALCO PRINCIPAL (CONTAINER DINÂMICO DAS 6 ARENAS)                      -->
+  <!-- ========================================================================= -->
+  <main class="relative z-10 flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 overflow-y-auto">
+    
+    <!-- ======================================================================= -->
+    <!-- ARENA 1: LISTEN & READ (LR)                                             -->
+    <!-- ======================================================================= -->
+    <section id="arena-lr" class="space-y-4">
+      <div class="border-b border-white/10 pb-3">
+        <h2 class="text-lg font-extrabold text-white font-serif">1. Listen & Read (LR)</h2>
+        <p class="text-xs text-slate-400">Foque estritamente nos ouvidos. Absorva a cadência e o som real.</p>
+      </div>
+
+      <!-- Container de Frases (Texto Contínuo com Botão Master) -->
+      <div id="lr-sentences-container" class="pt-2">
+        <!-- Injetado dinamicamente -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- ARENA 2: VOCABULARY SESSION (VOC)                                       -->
+    <!-- ======================================================================= -->
+    <section id="arena-voc" class="hidden space-y-6">
+      <div class="border-b border-white/10 pb-3">
+        <h2 class="text-lg font-extrabold text-white font-serif">2. Vocabulary Session (VOC)</h2>
+        <p class="text-xs text-slate-400">Compreensão total com Português Falado Brasileiro Real (`spokenTranslation`) e Matriz de Chunks.</p>
+      </div>
+
+      <!-- Box de Áudio dos Chunks do Vocabulário (Deep Dive) -->
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-amber-900 font-bold flex items-center gap-2"><i data-lucide="headphones" class="w-5 h-5"></i> Deep Dive Vocabulary (Áudio Explicativo)</h3>
+          <p class="text-amber-800 text-sm mt-1">Áudio completo guiado com pronúncia, repetição e significado coloquial dos blocos sonoros.</p>
+        </div>
+        <button class="bg-amber-500 text-amber-950 px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-amber-400 transition-colors shrink-0" onclick="window.playUrlAudio(REAL_TRACK.activities.voc.audioUrl, this)">
+          <i data-lucide="play" class="w-4 h-4"></i> Ouvir Deep Dive (VOC)
+        </button>
+      </div>
+
+      <!-- História com Tradução Falada Real Linha a Linha -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">História com Tradução Coloquial</h3>
+        <div id="voc-story-container" class="space-y-3">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- Matriz de Sound Chunks com Botões de Áudio Individuais -->
+      <div class="space-y-3 pt-4 border-t border-white/10">
+        <h3 class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">Matriz de Chunks Sonoros</h3>
+        <div id="voc-chunks-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- ARENA 3: LISTEN & ANSWER (LA) - A RESPOSTA COMEÇA OCULTA!               -->
+    <!-- ======================================================================= -->
+    <section id="arena-la" class="hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-white font-serif">3. Listen & Answer (LA)</h2>
+          <p class="text-xs text-slate-400">Reflexo imediato sem muletas: <strong>a resposta começa oculta</strong>. Responda no bate-pronto!</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.playUrlAudio(REAL_TRACK.activities.la.audioUrl, this)" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-md shrink-0">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir Drills (LA)
+          </button>
+          <button onclick="window.toggleAllAnswers(true)" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold transition border border-white/10">
+            Revelar Todas
+          </button>
+          <button onclick="window.toggleAllAnswers(false)" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 text-xs font-bold transition border border-white/10">
+            Ocultar Todas
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista de Drills com Resposta Oculta por Padrão -->
+      <div id="la-drills-container" class="space-y-3.5 pt-2">
+        <!-- Injetado dinamicamente -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- ARENA 4: LOOK & RETELL (LRT)                                            -->
+    <!-- ======================================================================= -->
+    <section id="arena-lrt" class="hidden space-y-5">
+      <div class="border-b border-white/10 pb-3">
+        <h2 class="text-lg font-extrabold text-white font-serif">4. Look & Retell (LRT)</h2>
+        <p class="text-xs text-slate-400">Speaking autônomo guiado pelas mesmas perguntas do LA. Fale com suas próprias palavras!</p>
+      </div>
+
+      <!-- Palco de Perguntas-Guia de LA -->
+      <div class="p-5 rounded-2xl bg-[#0D1E36] border border-white/10 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">Perguntas-Guia Visuais (Espelho do LA)</span>
+          <span class="text-[10px] font-mono text-slate-400">Zero áudio prévio</span>
+        </div>
+        <div id="lrt-questions-container" class="space-y-2.5">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+
+      <!-- Dica de Prática do Leo -->
+      <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs space-y-1">
+        <strong>💡 Regra de Ouro do Look & Retell:</strong>
+        <p class="text-slate-300">Não tente decorar a história inteira de cabeça. Olhe para cada pergunta acima e fale a resposta em voz alta com a sua voz de hoje. Se você respondeu as perguntas em Listen & Answer, seu cérebro já tem o mapa pronto.</p>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- ARENA 5: LISTEN & ASK (LASK) - DESAFIO DE FORMULAÇÃO DE PERGUNTAS      -->
+    <!-- ======================================================================= -->
+    <section id="arena-lask" class="hidden space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-white font-serif">5. Listen & Ask (LASK)</h2>
+          <p class="text-xs text-slate-400">Desafio de liderar a conversa: ouça o estímulo negativo e formule a pergunta correspondente no reflexo.</p>
+        </div>
+        <div>
+          <button onclick="window.playUrlAudio(REAL_TRACK.activities.lask.audioUrl, this)" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-md shrink-0">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir Desafio (LASK)
+          </button>
+        </div>
+      </div>
+
+      <!-- Container de Estímulos Negativos com Pergunta Oculta -->
+      <div id="lask-stimuli-container" class="space-y-3.5 pt-2">
+        <!-- Injetado dinamicamente -->
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- ARENA 6: PRONUNCIATION & CONNECTED SPEECH (PRO)                         -->
+    <!-- ======================================================================= -->
+    <section id="arena-pro" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-white font-serif">6. Pronunciation & Connected Speech (PRO)</h2>
+          <p class="text-xs text-slate-400">Musicalidade e ritmo mecânico da boca: conecte consoantes finais com vogais iniciais.</p>
+        </div>
+        <div>
+          <button onclick="window.playUrlAudio(REAL_TRACK.activities.pro.audioUrl, this)" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-md shrink-0">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i> Ouvir Pronúncia Completa
+          </button>
+        </div>
+      </div>
+
+      <!-- Sacada de Ouro do Professor Leo em Destaque Monumental Âmbar -->
+      <div id="pro-golden-tip-box" class="p-5 rounded-2xl bg-gradient-to-br from-amber-500/15 via-[#0F1E36] to-[#0A192F] border border-amber-500/40 shadow-xl space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="p-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs">💡</span>
+          <h3 class="text-sm font-bold text-amber-300 uppercase font-mono tracking-wider">Sacada de Ouro do Professor Leo</h3>
+        </div>
+        <p id="pro-golden-tip-text" class="text-xs sm:text-sm text-[#F1F5F9] leading-relaxed font-sans">
+          Carregando Sacada de Ouro...
+        </p>
+      </div>
+
+      <!-- Texto Completo com Linking Sounds Marcados -->
+      <div class="p-5 rounded-2xl bg-[#0D1E36] border border-white/10 space-y-3">
+        <div class="flex items-center justify-between border-b border-white/10 pb-2">
+          <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">Texto Integral com Conexões (Linking Sounds)</span>
+          <span class="text-[10px] font-mono text-sky-400">_ = Ligação Consoante-Vogal</span>
+        </div>
+        <div id="pro-linking-text-container" class="space-y-3 text-sm sm:text-base leading-relaxed">
+          <!-- Injetado dinamicamente -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. CONTROLES DE REPRODUÇÃO (DOCK ERGONÔMICO NO RODAPÉ)                    -->
+  <!-- ========================================================================= -->
+  <footer class="relative z-30 bg-[#0A192F]/95 backdrop-blur-2xl border-t border-white/10 px-4 py-3 shrink-0">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      
+      <!-- Informações da Faixa / Frase Ativa -->
+      <div class="flex items-center gap-3 min-w-0 w-full sm:w-auto">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-slate-950 flex items-center justify-center shrink-0 font-bold">
+          <i data-lucide="music" class="w-5 h-5"></i>
+        </div>
+        <div class="min-w-0 flex-1 sm:flex-initial">
+          <h4 id="dock-track-title" class="text-xs font-bold text-white truncate">Magic Story</h4>
+          <p id="dock-activity-label" class="text-[11px] text-amber-400 font-mono truncate">1. LISTEN & READ</p>
+        </div>
+      </div>
+
+      <!-- Controles de Áudio / TTS Master -->
+      <div class="flex items-center gap-2">
+        <button onclick="window.speakCurrentArena()" id="btn-dock-play" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-black uppercase tracking-wider transition flex items-center gap-2 shadow-lg active:scale-95">
+          <i data-lucide="play" class="w-4 h-4 fill-current" id="icon-dock-play"></i>
+          <span id="dock-play-text">Ouvir Atividade</span>
+        </button>
+        <button onclick="window.stopAudio()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition border border-white/10 active:scale-95" title="Parar Áudio">
+          <i data-lucide="square" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Velocidade e Status -->
+      <div class="flex items-center gap-2">
+        <button onclick="window.cycleSpeed()" id="btn-dock-speed" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-mono font-bold transition border border-white/10">
+          1.0x
+        </button>
+        <span class="text-[10px] font-mono text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+          SISTEMA ATIVO
+        </span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 5. ENGINE JAVASCRIPT DO PLAYER LAB (CANONICAL SCRIPTS & REAL_TRACK BINDING)-->
+  <!-- ========================================================================= -->
+  <script>
+    // 1. DICIONÁRIO DE SCRIPTS CANÔNICOS INEGOCIÁVEIS DO PROFESSOR LEO LEITE
+    const AEF_CANONICAL_SCRIPTS = {
+      lr: "Hello, my dear friend, and welcome to Listen and Read. Here, you're going to relax, listen to the story or dialogue, and read along. The most important thing to be aware of is that when you listen and read for the first time, you naturally focus on reading rather than the sounds. So, it's very important that you pay very close attention to what you are listening to. Use this activity to truly recognize the sounds as you read.",
+      voc: "Hello, my dear friend, and welcome to the Vocabulary Session of this Magic Story. In this activity, you're going to learn the core words and chunks you need to understand the story and communicate naturally.",
+      la: "Hello, my dear friend, and welcome to Listen and Answer. In this activity, you're going to listen to a question and answer freely. Don't worry about making mistakes, just use your own English. You don't have to get it right. We are not testing if you remember or if you understood the story; we are practicing your reflex. For example, if you hear the question: 'How old is Grazi?' and you say, 'I don't know, I think she's 15' or 'I think she's 55', that is a correct answer! We are just testing your oral reflex.",
+      lrt: "Hello, my dear friend, and welcome to Look and Retell. In this activity, you're going to look at the questions you have just answered, using them as a guide to retell the story the way you remember it, and with your own words. Don't worry about making mistakes. Relax, and don't feel forced. If you answered all the questions in the Listen and Answer activity, you will be able to retell the story naturally.",
+      lask: "Hello, my dear friend, and welcome to the Listen and Ask activity. This is a more challenging activity because you're going to listen to a negative statement, and you will have to ask the question. Asking questions in English can be very tricky. That's exactly why you need to practice. So, ask the question out loud, and then you will hear the answer.",
+      pro: "Hello, my dear friend, and welcome to the Pronunciation practice. In this activity, you will model the pronunciation. This is very similar to learning how to sing a song. Listen closely, repeat, and match the rhythm and the sounds."
+    };
+
+    // 2. OBJETO CANÔNICO DA FAIXA DO PLAYER LAB (REAL_TRACK)
+    let REAL_TRACK = null;
+    let CURRENT_ARENA = 'lr';
+    let PLAYBACK_SPEED = 1.0;
+    let IS_SPEAKING = false;
+
+    // Fallback de História Canônica de Demonstração (Entrevista de Emprego)
+    const DEMO_MAGIC_STORY = {
+      "documentTitle": "Job Interview: Handling Pressure and Team Challenges",
+      "description": "Treinamento forjado para desenvolver segurança em entrevistas de emprego, focado em lidar com pressão, equipes difíceis e prazos apertados.",
+      "metadata": {
+        "title": "Job Interview: Handling Pressure and Team Challenges",
+        "description": "Treinamento forjado para desenvolver segurança em entrevistas de emprego, focado em lidar com pressão, equipes difíceis e prazos apertados.",
+        "topic": "profissional",
+        "level": "intermediate",
+        "format": "dialogue"
+      },
+      "archetype": "magic_story",
+      "story_chunks": [
+        { "id": "1", "text": "Recruiter: What did you do at your last job in Chicago?", "translation": "Recrutador: O que você fez no seu último trabalho em Chicago?" },
+        { "id": "2", "text": "Leo: I had a small team, and we made apps for local businesses.", "translation": "Leo: Eu tinha uma equipe pequena, e nós fazíamos aplicativos para empresas locais." },
+        { "id": "3", "text": "Recruiter: What was the hardest part about working with your team?", "translation": "Recrutador: Qual foi a parte mais difícil de trabalhar com a sua equipe?" },
+        { "id": "4", "text": "Leo: We got a lot of mixed messages, so we had some big arguments.", "translation": "Leo: Nós recebíamos muitas informações desencontradas, então tínhamos algumas discussões sérias." },
+        { "id": "5", "text": "Recruiter: And how did you deal with tight deadlines and heavy pressure?", "translation": "Recrutador: E como você lidou com prazos apertados e muita pressão?" },
+        { "id": "6", "text": "Leo: I took short breaks, made a simple plan, and got the job done on time.", "translation": "Leo: Eu fazia pausas curtas, montava um plano simples e entregava o trabalho no prazo." }
+      ],
+      "activities": {
+        "voc": {
+          "storyTranslation": [
+            "Recrutador: O que você fez no seu último trabalho em Chicago?",
+            "Leo: Eu tinha uma equipe pequena, e nós fazíamos aplicativos para empresas locais.",
+            "Recrutador: Qual foi a parte mais difícil de trabalhar com a sua equipe?",
+            "Leo: Nós recebíamos muitas informações desencontradas, então tínhamos algumas discussões sérias.",
+            "Recrutador: E como você lidou com prazos apertados e muita pressão?",
+            "Leo: Eu fazia pausas curtas, montava um plano simples e entregava o trabalho no prazo."
+          ],
+          "items": [
+            { "chunk": "had a small team", "translation": "tinha uma equipe pequena" },
+            { "chunk": "made apps", "translation": "fazia aplicativos / criava apps" },
+            { "chunk": "got mixed messages", "translation": "recebeu informações desencontradas" },
+            { "chunk": "had some big arguments", "translation": "teve discussões sérias" },
+            { "chunk": "took short breaks", "translation": "fazia pausas curtas" },
+            { "chunk": "got the job done", "translation": "deu conta do recado / concluiu o trabalho" }
+          ]
+        },
+        "la": {
+          "drills": [
+            { "chunkId": "1", "question": "Where was Leo's last job?", "answer": "Leo's last job was in Chicago." },
+            { "chunkId": "2", "question": "What did Leo have at his last job?", "answer": "Leo had a small team at his last job." },
+            { "chunkId": "2", "question": "What did Leo and his team make for local businesses?", "answer": "Leo and his team made apps for local businesses." },
+            { "chunkId": "4", "question": "Why did the team have big arguments?", "answer": "The team had big arguments because they got a lot of mixed messages." },
+            { "chunkId": "5", "question": "What did the recruiter ask about deadlines and pressure?", "answer": "The recruiter asked how Leo dealt with tight deadlines and heavy pressure." },
+            { "chunkId": "6", "question": "How did Leo get the job done on time?", "answer": "Leo took short breaks, made a simple plan, and got the job done on time." }
+          ]
+        },
+        "lrt": {
+          "guideQuestions": [
+            "Where was Leo's last job?",
+            "What did Leo have at his last job?",
+            "What did Leo and his team make for local businesses?",
+            "Why did the team have big arguments?",
+            "What did the recruiter ask about deadlines and pressure?",
+            "How did Leo get the job done on time?"
+          ]
+        },
+        "lask": {
+          "stimuli": [
+            "Leo's last job wasn't in Chicago.",
+            "Leo didn't have a small team at his last job.",
+            "Leo and his team didn't make apps for local businesses.",
+            "The team didn't have big arguments because of mixed messages.",
+            "The recruiter didn't ask how Leo dealt with tight deadlines and heavy pressure.",
+            "Leo didn't take short breaks, make a simple plan, or get the job done on time."
+          ]
+        },
+        "pro": {
+          "goldenTip": "Conecte consoantes finais com vogais iniciais, como em 'what_did_you', 'had_a' e 'done_on', para manter a fala fluida e natural sem tropeçar.",
+          "textWithLinking": [
+            "Recruiter: What_did_you do_at_your last_job_in Chicago?",
+            "Leo: I had_a small team, and_we made_apps for local businesses.",
+            "Recruiter: What was the hardest_part_about working with_your team?",
+            "Leo: We got_a lot_of mixed messages, so we had_some big_arguments.",
+            "Recruiter: And_how did_you deal with tight deadlines_and heavy pressure?",
+            "Leo: I took_short breaks, made_a simple plan, and got the job done_on time."
+          ]
+        }
+      }
+    };
+
+    // 3. CONSTRUTOR DO OBJETO CANÔNICO REAL_TRACK
+    function buildRealTrack(story) {
+      if (!story) story = DEMO_MAGIC_STORY;
+      
+      const storyMetadata = story.metadata || {};
+      const storyDescription = storyMetadata.description || story.description || "";
+
+      const storyChunks = Array.isArray(story.story_chunks) ? story.story_chunks : [];
+      const laDrills = story.activities?.la?.drills || [];
+      const lrtQuestions = story.activities?.lrt?.guideQuestions || laDrills.map(d => d.question);
+      const laskStimuli = story.activities?.lask?.stimuli || [];
+      
+      let vocTranslations = story.activities?.voc?.storyTranslation;
+      if (!Array.isArray(vocTranslations) || vocTranslations.length === 0) {
+        vocTranslations = storyChunks.map(c => c.translation || "");
+      }
+
+      const vocItems = story.activities?.voc?.items || story.activities?.voc?.chunks || [];
+      const proLinking = story.activities?.pro?.textWithLinking || storyChunks.map(c => c.text);
+      const proTip = story.activities?.pro?.goldenTip || "Conecte as consoantes finais com vogais para manter o ritmo vivo da fala.";
+      const lrFullText = story.activities?.lr?.text || storyChunks.map(c => c.text).join('\n\n');
+
+      // Recupera URLs de áudio do objeto da história (vindas do Storage/DB The Leo Way)
+      const lrAudio = story.activities?.lr?.audioUrl || story.content?.lr?.audioUrl || "";
+      const vocAudio = story.activities?.voc?.audioUrl || story.activities?.voc?.podcastAudioUrl || story.content?.voc?.audioUrl || story.content?.voc?.podcastAudioUrl || "";
+      const laAudio = story.activities?.la?.audioUrl || story.content?.la?.audioUrl || "";
+      const laskAudio = story.activities?.lask?.audioUrl || story.content?.lask?.audioUrl || "";
+      const proAudio = story.activities?.pro?.audioUrl || story.content?.pro?.audioUrl || "";
+
+      REAL_TRACK = {
+        id: story.moduleId || story.id || (new URLSearchParams(window.location.search).get('module')) || 'track_demo_001',
+        moduleId: story.moduleId || (new URLSearchParams(window.location.search).get('module')) || '',
+        title: storyMetadata.title || story.documentTitle || "Magic Story Treino",
+        description: storyDescription,
+        metadata: {
+          ...storyMetadata,
+          description: storyDescription
+        },
+        archetype: story.archetype || "magic_story",
+        storyChunks: storyChunks,
+        activities: {
+          lr: {
+            id: 'lr',
+            title: '1. Listen & Read',
+            text: lrFullText,
+            audioUrl: lrAudio,
+            sentences: storyChunks.map(c => ({
+              id: c.id,
+              text: c.text,
+              spokenTranslation: c.translation || ""
+            }))
+          },
+          voc: {
+            id: 'voc',
+            title: '2. Vocabulary Session',
+            storyTranslation: vocTranslations,
+            items: vocItems,
+            chunks: vocItems,
+            audioUrl: vocAudio
+          },
+          la: {
+            id: 'la',
+            title: '3. Listen & Answer',
+            drills: laDrills,
+            audioUrl: laAudio
+          },
+          lrt: {
+            id: 'lrt',
+            title: '4. Look & Retell',
+            guideQuestions: lrtQuestions
+          },
+          lask: {
+            id: 'lask',
+            title: '5. Listen & Ask',
+            stimuli: laskStimuli,
+            audioUrl: laskAudio
+          },
+          pro: {
+            id: 'pro',
+            title: '6. Pronunciation & Connected Speech',
+            goldenTip: proTip,
+            textWithLinking: proLinking,
+            audioUrl: proAudio
+          }
+        }
+      };
+
+      console.log("🎯 [Player Lab] REAL_TRACK Construído (The Leo Way):", REAL_TRACK);
+      return REAL_TRACK;
+    }
+
+    // 4. MOTOR CANÔNICO DE REPRODUÇÃO BASEADO EM URL (STORAGE NATIVO)
+    let currentAudio = null;
+    let currentAudioUrl = null;
+    let currentButtonEl = null;
+
+    window.playUrlAudio = function(audioUrl, buttonEl) {
+      if (!audioUrl) {
+        console.warn("[Player Lab] URL de áudio não disponível para esta atividade.");
+        alert("Áudio não encontrado no banco de dados para esta atividade.");
+        return;
+      }
+
+      // Se já estiver tocando este mesmo áudio, pausar (e manter posição para retomar)
+      if (currentAudio && currentAudioUrl === audioUrl && !currentAudio.paused) {
+        currentAudio.pause();
+        if (buttonEl) {
+          const orig = buttonEl.dataset.originalHtml || buttonEl.innerHTML;
+          buttonEl.innerHTML = orig;
+          if (window.lucide) lucide.createIcons();
+        }
+        updatePlayDockUI(false);
+        return;
+      }
+
+      // Se estiver pausado no mesmo áudio, retomar de onde parou!
+      if (currentAudio && currentAudioUrl === audioUrl && currentAudio.paused) {
+        currentAudio.play();
+        if (buttonEl) {
+          if (!buttonEl.dataset.originalHtml) buttonEl.dataset.originalHtml = buttonEl.innerHTML;
+          buttonEl.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i> Pausar';
+          if (window.lucide) lucide.createIcons();
+        }
+        currentButtonEl = buttonEl;
+        updatePlayDockUI(true);
+        return;
+      }
+
+      // Novo áudio: interromper anterior
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+      if (currentButtonEl && currentButtonEl !== buttonEl) {
+        currentButtonEl.innerHTML = currentButtonEl.dataset.originalHtml || currentButtonEl.innerHTML;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      currentAudioUrl = audioUrl;
+      currentButtonEl = buttonEl;
+      currentAudio = new Audio(audioUrl);
+      currentAudio.playbackRate = PLAYBACK_SPEED;
+
+      if (buttonEl) {
+        if (!buttonEl.dataset.originalHtml) buttonEl.dataset.originalHtml = buttonEl.innerHTML;
+        buttonEl.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Carregando...';
+        if (window.lucide) lucide.createIcons();
+      }
+      updatePlayDockUI(true);
+
+      currentAudio.oncanplay = () => {
+        if (buttonEl) {
+          buttonEl.innerHTML = '<i data-lucide="pause" class="w-4 h-4"></i> Pausar';
+          if (window.lucide) lucide.createIcons();
+        }
+      };
+
+      currentAudio.play().catch(err => {
+        console.error("Erro ao reproduzir áudio:", err);
+        if (buttonEl) {
+          buttonEl.innerHTML = buttonEl.dataset.originalHtml || '';
+          if (window.lucide) lucide.createIcons();
+        }
+        updatePlayDockUI(false);
+      });
+
+      currentAudio.onended = () => {
+        if (buttonEl) {
+          buttonEl.innerHTML = buttonEl.dataset.originalHtml || '';
+          if (window.lucide) lucide.createIcons();
+        }
+        currentAudio = null;
+        currentAudioUrl = null;
+        currentButtonEl = null;
+        updatePlayDockUI(false);
+      };
+
+      currentAudio.onerror = (e) => {
+        console.error("Erro na tag de áudio:", e);
+        if (buttonEl) {
+          buttonEl.innerHTML = buttonEl.dataset.originalHtml || '';
+          if (window.lucide) lucide.createIcons();
+        }
+        currentAudio = null;
+        currentAudioUrl = null;
+        currentButtonEl = null;
+        updatePlayDockUI(false);
+      };
+    };
+
+    // 4.1 MOTOR DE ÁUDIO DINÂMICO (FALLBACK GEMINI TTS VIA WORKER)
+    async function playNativeAudio(textToSpeak, voiceName = "Puck", btnElement = null) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+        currentAudioUrl = null;
+      }
+      
+      // Limpar nomes de locutores (ex: "Clerk: ", "Shopper: ", "Leo: ", "Recruiter: ")
+      const cleanText = (textToSpeak || '').replace(/^[A-Za-z0-9\s]+:\s*/gm, '').trim();
+      if (!cleanText) return;
+      
+      const originalIcon = btnElement ? btnElement.innerHTML : '';
+      if (btnElement) {
+        btnElement.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-amber-400"></i>';
+        if (window.lucide) lucide.createIcons();
+      }
+
+      try {
+        const response = await fetch('/api/lab/generate-tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: cleanText, voice: voiceName })
+        });
+        if (!response.ok) throw new Error('Falha no TTS: ' + response.status);
+        const blob = await response.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        currentAudio = new Audio(audioUrl);
+        currentAudio.playbackRate = PLAYBACK_SPEED;
+        currentAudio.onended = () => {
+          if (btnElement) {
+            btnElement.innerHTML = originalIcon;
+            if (window.lucide) lucide.createIcons();
+          }
+          updatePlayDockUI(false);
+        };
+        currentAudio.onerror = (e) => {
+          console.error("Erro no elemento Audio:", e);
+          if (btnElement) {
+            btnElement.innerHTML = originalIcon;
+            if (window.lucide) lucide.createIcons();
+          }
+          updatePlayDockUI(false);
+        };
+        await currentAudio.play();
+        updatePlayDockUI(true);
+      } catch (err) {
+        console.error("Erro ao tocar áudio nativo:", err);
+        if (btnElement) {
+          btnElement.innerHTML = originalIcon;
+          if (window.lucide) lucide.createIcons();
+        }
+        updatePlayDockUI(false);
+      }
+    }
+    window.AEFPlay = (text, btn) => playNativeAudio(text, "Puck", btn);
+
+    // 5. CARREGAMENTO DA HISTÓRIA ATIVA
+    async function loadActiveStory() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlModule = urlParams.get('module');
+
+      let raw = localStorage.getItem('aef_lab_active_story');
+      let story = null;
+      if (raw) {
+        try {
+          story = JSON.parse(raw);
+        } catch (e) {
+          console.warn("[Player Lab] Erro ao parsear história do localStorage, usando fallback demo.", e);
+        }
+      }
+      if (!story && window.lastGeneratedMagicStory) {
+        story = window.lastGeneratedMagicStory;
+      }
+
+      // Se houver um módulo na URL e ele não coincidir com a história local em cache (ou faltar audioUrl)
+      if (urlModule && (!story || (story.moduleId && story.moduleId !== urlModule) || !story.activities?.lr?.audioUrl)) {
+        try {
+          const fullRes = await fetch(`/api/db/get-magic-story?module=${encodeURIComponent(urlModule)}`);
+          if (fullRes.ok) {
+            const fullData = await fullRes.json();
+            if (fullData.story) {
+              const s = fullData.story;
+              story = {
+                moduleId: s.moduleId,
+                documentTitle: s.metadata?.title || s.documentTitle || "Magic Story",
+                description: s.metadata?.description || "",
+                metadata: s.metadata,
+                story_chunks: s.content?.lr?.text ? s.content.lr.text.split('\n').filter(Boolean).map((t, i) => ({ id: String(i+1), text: t })) : [],
+                activities: {
+                  lr: { text: s.content?.lr?.text || "", audioUrl: s.content?.lr?.audioUrl || "" },
+                  voc: { chunks: s.content?.voc?.chunks || [], items: s.content?.voc?.chunks || [], audioUrl: s.content?.voc?.audioUrl || s.content?.voc?.podcastAudioUrl || "" },
+                  la: { drills: s.content?.la?.drills || [], audioUrl: s.content?.la?.audioUrl || "" },
+                  lrt: { guideQuestions: s.content?.lrt?.guideQuestions || [] },
+                  lask: { stimuli: (s.content?.lask?.stimuli || []).map(st => typeof st === 'string' ? st : (st.statement || "")), audioUrl: s.content?.lask?.audioUrl || "" },
+                  pro: { textWithLinking: s.content?.pro?.phrases || [], goldenTip: "Conecte as consoantes com vogais.", audioUrl: s.content?.pro?.audioUrl || "" }
+                }
+              };
+            }
+          }
+          if (!story || story.moduleId !== urlModule) {
+            const catRes = await fetch('/api/db/magic-stories-catalog');
+            if (catRes.ok) {
+              const catData = await catRes.json();
+              const found = (catData.catalog || []).find(c => c.moduleId === urlModule);
+              if (found) {
+                story = {
+                  ...DEMO_MAGIC_STORY,
+                  moduleId: found.moduleId,
+                  documentTitle: found.metadata?.title || DEMO_MAGIC_STORY.documentTitle,
+                  description: found.metadata?.description || DEMO_MAGIC_STORY.description,
+                  metadata: found.metadata
+                };
+              }
+            }
+          }
+        } catch (catErr) {
+          console.warn("[Player Lab] Erro ao buscar módulo do catálogo:", catErr);
+        }
+      }
+
+      if (!story) {
+        story = DEMO_MAGIC_STORY;
+      }
+
+      buildRealTrack(story);
+      renderAllArenas();
+      switchArena('lr');
+    }
+
+    window.reloadActiveStory = async () => {
+      await loadActiveStory();
+    };
+
+    // 6. RENDERIZAÇÃO DAS 6 ARENAS
+    function renderAllArenas() {
+      if (!REAL_TRACK) return;
+
+      // Atualiza Título
+      const topTitle = document.getElementById('top-story-title');
+      const dockTitle = document.getElementById('dock-track-title');
+      if (topTitle) topTitle.innerText = REAL_TRACK.title;
+      if (dockTitle) dockTitle.innerText = REAL_TRACK.title;
+
+      // Atualiza Badge do LA
+      const laBadge = document.getElementById('la-badge-count');
+      if (laBadge) laBadge.innerText = REAL_TRACK.activities.la.drills.length;
+
+      // 1. RENDERIZA LISTEN & READ (LR) - Texto Contínuo com Botão Master e PDF Dinâmico
+      const lrContainer = document.getElementById('lr-sentences-container');
+      if (lrContainer) {
+        const lrText = REAL_TRACK.activities.lr.text || REAL_TRACK.activities.lr.sentences.map(s => s.text).join('\n\n');
+        const paragraphs = lrText.split(/\n+/).filter(Boolean);
+        const urlParams = new URLSearchParams(window.location.search);
+        const moduleId = urlParams.get('module') || REAL_TRACK.moduleId || REAL_TRACK.id || '';
+        const description = REAL_TRACK.metadata?.description || REAL_TRACK.description || '';
+        
+        const synopsisBoxHtml = description ? `
+          <div class="mb-6 p-4 bg-slate-50 border-l-4 border-amber-500 rounded-r-lg">
+            <p class="text-sm text-slate-700 italic font-medium">
+              <i data-lucide="info" class="w-4 h-4 inline-block mr-1 -mt-0.5 text-amber-600"></i>
+              ${description}
+            </p>
+          </div>
+        ` : '';
+
+        lrContainer.innerHTML = `
+          <div class="space-y-4">
+            ${synopsisBoxHtml}
+            <div class="flex flex-wrap gap-4 mb-6">
+              <!-- Botão de Áudio Canônico via URL (Storage The Leo Way) -->
+              <button onclick="window.playUrlAudio(REAL_TRACK.activities.lr.audioUrl, this)" class="bg-amber-500 text-slate-900 px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-amber-400 transition-colors">
+                <i data-lucide="play" class="w-4 h-4"></i> Tocar Faixa Contínua
+              </button>
+
+              <!-- Botão: PDF Booklet Dinâmico -->
+              <button onclick="window.open('/v2-pdf-factory.html?module=' + (new URLSearchParams(window.location.search).get('module') || '${moduleId}'), '_blank')" class="bg-slate-800 text-amber-500 border border-slate-700 hover:border-amber-500 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors">
+                <i data-lucide="file-text" class="w-4 h-4"></i> Material de Apoio (PDF)
+              </button>
+            </div>
+            <div class="p-6 sm:p-8 rounded-2xl bg-slate-800 border border-slate-700 shadow-inner">
+              <div class="space-y-4 text-base sm:text-lg leading-relaxed text-slate-100 font-sans">
+                ${paragraphs.map(p => `<p class="leading-relaxed">${p}</p>`).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      // 2. RENDERIZA VOCABULARY SESSION (VOC)
+      const vocStoryContainer = document.getElementById('voc-story-container');
+      if (vocStoryContainer) {
+        vocStoryContainer.innerHTML = REAL_TRACK.activities.lr.sentences.map((s, idx) => {
+          const trans = REAL_TRACK.activities.voc.storyTranslation[idx] || s.spokenTranslation || "";
+          return `
+            <div class="p-4 rounded-2xl bg-[#0D1E36] border border-white/10 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono font-bold text-slate-400">FRASE ${idx + 1}</span>
+              </div>
+              <p class="text-base font-semibold text-white leading-relaxed">${s.text}</p>
+              ${trans ? `
+                <p class="text-xs sm:text-sm text-amber-200/90 italic font-serif leading-relaxed border-t border-white/5 pt-1.5 mt-1">
+                  💬 ${trans}
+                </p>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      const vocChunksGrid = document.getElementById('voc-chunks-grid');
+      if (vocChunksGrid) {
+        vocChunksGrid.innerHTML = REAL_TRACK.activities.voc.items.map((item, idx) => `
+          <div class="p-3.5 rounded-xl bg-[#0D1E36] border border-white/10 hover:border-amber-500/30 transition flex items-center justify-between gap-2.5">
+            <div class="min-w-0 flex-1">
+              <h4 class="text-sm font-bold text-amber-300 truncate">${item.chunk}</h4>
+              <p class="text-xs text-slate-300 truncate font-serif italic">${item.translation}</p>
+            </div>
+            <button onclick="window.AEFPlay('${escapeQuotes(item.chunk)}', this)" class="p-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 transition shrink-0 active:scale-90" title="Ouvir Chunk">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // 3. RENDERIZA LISTEN & ANSWER (LA) - RESPOSTAS OBRIGATORIAMENTE OCULTAS NO INÍCIO!
+      const laContainer = document.getElementById('la-drills-container');
+      if (laContainer) {
+        laContainer.innerHTML = REAL_TRACK.activities.la.drills.map((drill, idx) => `
+          <div id="la-card-${idx}" class="p-4 sm:p-5 rounded-2xl bg-[#0D1E36] border border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">DRILL #${idx + 1}</span>
+            </div>
+            
+            <!-- Pergunta em Destaque -->
+            <p class="text-base sm:text-lg font-bold text-white leading-relaxed">
+              ❓ ${drill.question}
+            </p>
+
+            <!-- Ação de Revelação: Resposta Oculta por Padrão para Forçar o Reflexo -->
+            <div class="pt-1">
+              <button onclick="window.toggleAnswer(${idx})" id="btn-reveal-${idx}" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 text-xs font-bold transition flex items-center gap-1.5 border border-amber-500/20 active:scale-95">
+                <i data-lucide="eye" class="w-3.5 h-3.5" id="icon-reveal-${idx}"></i>
+                <span id="text-reveal-${idx}">Revelar Resposta (Confirmar Reflexo)</span>
+              </button>
+            </div>
+
+            <!-- Bloco de Resposta Oculto -->
+            <div id="la-answer-${idx}" class="hidden p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/30 text-amber-100 text-sm sm:text-base font-semibold space-y-1">
+              <span class="text-[10px] font-mono text-amber-400 font-bold uppercase">Resposta Sugerida:</span>
+              <p class="text-white pt-0.5">${drill.answer}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 4. RENDERIZA LOOK & RETELL (LRT) - Perguntas-Guia Visuais
+      const lrtContainer = document.getElementById('lrt-questions-container');
+      if (lrtContainer) {
+        lrtContainer.innerHTML = REAL_TRACK.activities.lrt.guideQuestions.map((q, idx) => `
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-amber-500/20 transition">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 font-mono text-xs font-black flex items-center justify-center shrink-0">
+              ${idx + 1}
+            </span>
+            <p class="text-sm font-semibold text-slate-100 flex-1">${q}</p>
+          </div>
+        `).join('');
+      }
+
+      // 5. RENDERIZA LISTEN & ASK (LASK) - Sentenças Negativas
+      const laskContainer = document.getElementById('lask-stimuli-container');
+      if (laskContainer) {
+        laskContainer.innerHTML = REAL_TRACK.activities.lask.stimuli.map((stimulus, idx) => {
+          const correspondingQuestion = REAL_TRACK.activities.lrt.guideQuestions[idx] || "";
+          return `
+            <div class="p-4 sm:p-5 rounded-2xl bg-[#0D1E36] border border-white/10 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono font-bold text-rose-400 uppercase tracking-wider">ESTÍMULO NEGATIVO #${idx + 1}</span>
+              </div>
+
+              <!-- Sentença Negativa Desafio -->
+              <p class="text-base sm:text-lg font-bold text-rose-200 leading-relaxed">
+                🛑 "${stimulus}"
+              </p>
+
+              <!-- Ação de Revelar a Pergunta -->
+              <div class="pt-1">
+                <button onclick="window.toggleLaskQuestion(${idx})" id="btn-lask-${idx}" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 text-xs font-bold transition flex items-center gap-1.5 border border-amber-500/20 active:scale-95">
+                  <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+                  <span id="text-lask-${idx}">Ver Pergunta Correspondente</span>
+                </button>
+              </div>
+
+              <!-- Pergunta Oculta -->
+              <div id="lask-q-${idx}" class="hidden p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-100 text-sm sm:text-base font-semibold space-y-1">
+                <span class="text-[10px] font-mono text-amber-400 font-bold uppercase">Pergunta Correta:</span>
+                <p class="text-white">${correspondingQuestion}</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 6. RENDERIZA PRONUNCIATION (PRO)
+      const proGoldenTipText = document.getElementById('pro-golden-tip-text');
+      if (proGoldenTipText) {
+        proGoldenTipText.innerText = REAL_TRACK.activities.pro.goldenTip;
+      }
+
+      const proLinkingContainer = document.getElementById('pro-linking-text-container');
+      if (proLinkingContainer) {
+        proLinkingContainer.innerHTML = REAL_TRACK.activities.pro.textWithLinking.map((line, idx) => {
+          // Formata as conexões marcadas com '_' em links visuais destacados
+          const formattedLine = line.replace(/(\w+)_(\w+)/g, '<span class="linking-sound">$1&nbsp;⌒&nbsp;$2</span>');
+          const cleanLineForSpeech = line.replace(/_/g, ' ');
+          return `
+            <div class="p-3.5 rounded-xl bg-white/5 border border-white/5 hover:border-amber-500/30 transition flex items-start gap-3">
+              <button onclick="window.AEFPlay('${escapeQuotes(cleanLineForSpeech)}', this)" class="p-2 rounded-lg bg-white/10 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 transition shrink-0" title="Ouvir com Conexão">
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+              </button>
+              <p class="text-slate-100 font-medium leading-relaxed flex-1 pt-0.5">${formattedLine}</p>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // 7. ALTERNÂNCIA ENTRE AS 6 ARENAS
+    window.switchArena = (arenaId) => {
+      CURRENT_ARENA = arenaId;
+      const arenas = ['lr', 'voc', 'la', 'lrt', 'lask', 'pro'];
+      
+      arenas.forEach(a => {
+        const sec = document.getElementById(`arena-${a}`);
+        const tab = document.getElementById(`tab-${a}`);
+        if (sec) {
+          if (a === arenaId) sec.classList.remove('hidden');
+          else sec.classList.add('hidden');
+        }
+        if (tab) {
+          if (a === arenaId) {
+            tab.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-amber-500 text-slate-950 border-amber-400 shadow-md";
+          } else {
+            tab.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border bg-white/5 hover:bg-white/10 text-slate-300 border-white/10";
+          }
+        }
+      });
+
+      const dockActivityLabel = document.getElementById('dock-activity-label');
+      if (dockActivityLabel && REAL_TRACK?.activities?.[arenaId]) {
+        dockActivityLabel.innerText = REAL_TRACK.activities[arenaId].title.toUpperCase();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // 8. MECÂNICA DE REVELAÇÃO DO LISTEN & ANSWER (LA)
+    window.toggleAnswer = (idx) => {
+      const ans = document.getElementById(`la-answer-${idx}`);
+      const btnText = document.getElementById(`text-reveal-${idx}`);
+      const icon = document.getElementById(`icon-reveal-${idx}`);
+      if (!ans) return;
+
+      const isHidden = ans.classList.contains('hidden');
+      if (isHidden) {
+        ans.classList.remove('hidden');
+        if (btnText) btnText.innerText = "Ocultar Resposta";
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        ans.classList.add('hidden');
+        if (btnText) btnText.innerText = "Revelar Resposta (Confirmar Reflexo)";
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
+    };
+
+    window.toggleAllAnswers = (show) => {
+      if (!REAL_TRACK) return;
+      REAL_TRACK.activities.la.drills.forEach((_, idx) => {
+        const ans = document.getElementById(`la-answer-${idx}`);
+        const btnText = document.getElementById(`text-reveal-${idx}`);
+        if (!ans) return;
+        if (show) {
+          ans.classList.remove('hidden');
+          if (btnText) btnText.innerText = "Ocultar Resposta";
+        } else {
+          ans.classList.add('hidden');
+          if (btnText) btnText.innerText = "Revelar Resposta (Confirmar Reflexo)";
+        }
+      });
+      if (window.lucide) lucide.createIcons();
+    };
+
+    window.toggleLaskQuestion = (idx) => {
+      const q = document.getElementById(`lask-q-${idx}`);
+      const text = document.getElementById(`text-lask-${idx}`);
+      if (!q) return;
+      if (q.classList.contains('hidden')) {
+        q.classList.remove('hidden');
+        if (text) text.innerText = "Ocultar Pergunta";
+      } else {
+        q.classList.add('hidden');
+        if (text) text.innerText = "Ver Pergunta Correspondente";
+      }
+    };
+
+    // 9. CONTROLES DO DOCK DE ÁUDIO
+    window.speakCurrentArena = () => {
+      if (!REAL_TRACK) return;
+      const btn = document.getElementById('btn-dock-play');
+
+      // 1. Se a arena atual possuir áudio URL no Storage/DB, reproduz canonicamente
+      const act = REAL_TRACK.activities?.[CURRENT_ARENA];
+      if (act && act.audioUrl) {
+        window.playUrlAudio(act.audioUrl, btn);
+        return;
+      }
+
+      // 2. Fallback dinâmico via Gemini TTS Worker
+      let arenaContent = "";
+      if (CURRENT_ARENA === 'lr') {
+        arenaContent = REAL_TRACK.activities.lr.text || REAL_TRACK.activities.lr.sentences.map(s => s.text).join(". ");
+      } else if (CURRENT_ARENA === 'voc') {
+        arenaContent = REAL_TRACK.activities.lr.sentences.map(s => s.text).join(". ");
+      } else if (CURRENT_ARENA === 'la') {
+        arenaContent = REAL_TRACK.activities.la.drills.map(d => `${d.question} ... ${d.answer}`).join(". ");
+      } else if (CURRENT_ARENA === 'lrt') {
+        arenaContent = REAL_TRACK.activities.lrt.guideQuestions.join(". ");
+      } else if (CURRENT_ARENA === 'lask') {
+        arenaContent = REAL_TRACK.activities.lask.stimuli.join(". ");
+      } else if (CURRENT_ARENA === 'pro') {
+        arenaContent = REAL_TRACK.activities.pro.textWithLinking.map(l => l.replace(/_/g, ' ')).join(". ");
+      }
+
+      playNativeAudio(arenaContent, "Puck", btn);
+    };
+
+    window.playAllSentences = () => {
+      window.speakCurrentArena();
+    };
+
+    window.stopAudio = () => {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+        currentAudioUrl = null;
+      }
+      if (currentButtonEl) {
+        currentButtonEl.innerHTML = currentButtonEl.dataset.originalHtml || currentButtonEl.innerHTML;
+        if (window.lucide) lucide.createIcons();
+        currentButtonEl = null;
+      }
+      updatePlayDockUI(false);
+    };
+
+    window.cycleSpeed = () => {
+      const speeds = [0.8, 1.0, 1.2];
+      const curIdx = speeds.indexOf(PLAYBACK_SPEED);
+      PLAYBACK_SPEED = speeds[(curIdx + 1) % speeds.length];
+      const btn = document.getElementById('btn-dock-speed');
+      if (btn) btn.innerText = `${PLAYBACK_SPEED.toFixed(1)}x`;
+      if (currentAudio) {
+        currentAudio.playbackRate = PLAYBACK_SPEED;
+      }
+    };
+
+    function updatePlayDockUI(playing) {
+      const btnText = document.getElementById('dock-play-text');
+      const icon = document.getElementById('icon-dock-play');
+      if (btnText) btnText.innerText = playing ? "Reproduzindo..." : "Ouvir Atividade";
+      if (icon) {
+        icon.setAttribute('data-lucide', playing ? 'pause' : 'play');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function escapeQuotes(str) {
+      return (str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    // Inicialização ao carregar a página
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.lucide) lucide.createIcons();
+      await loadActiveStory();
+    });
+  </script>
+</body>
+</html>

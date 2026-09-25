@@ -26,6 +26,8 @@
   <script src="/assets/js/aef-courses-registry.js"></script>
   <script src="/assets/js/aef-audio-hub.js"></script>
   <script src="/assets/js/aef-admin-nav.js"></script>
+  <!-- Motor de e-mail transacional Brevo (E1-E6 templates) -->
+  <script src="/assets/js/aef-email-engine.js"></script>
   <style>
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
@@ -43,6 +45,8 @@
   </style>
 </head>
 <body class="ambient-bg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
+  <!-- Banner de erro de sincronização (não-bloqueante) -->
+  <div id="save-error-banner" class="hidden fixed top-4 right-4 z-50 px-4 py-3 bg-rose-100 border border-rose-300 text-rose-800 text-xs font-bold rounded-xl shadow-lg max-w-sm cursor-pointer" onclick="this.classList.add('hidden')">⚠️ </div>
 
   <!-- Main Content Container -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
@@ -426,7 +430,15 @@
           </div>
         </div>
 
-        <div class="pt-3 mt-1 border-t border-slate-100 shrink-0">
+        <div class="pt-2 mt-1 border-t border-slate-100 shrink-0 space-y-2">
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+            <input type="checkbox" id="add-send-welcome-email" checked
+              class="rounded text-amber-600 focus:ring-amber-500">
+            <label for="add-send-welcome-email" class="text-xs text-slate-600">
+              ✉️ Enviar e-mail de boas-vindas ao novo aluno
+              <span class="text-amber-700 font-bold">(Brevo)</span>
+            </label>
+          </div>
           <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer">
             Salvar Aluno no Firestore
           </button>
@@ -578,14 +590,24 @@
         </div>
 
         <!-- Pinned Bottom Actions Footer -->
-        <div class="flex items-center gap-2.5 pt-3 mt-1 border-t border-slate-100 shrink-0">
-          <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-            <span>Excluir Aluno</span>
-          </button>
-          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer">
-            Salvar Alterações no Firestore
-          </button>
+        <div class="pt-2 mt-1 border-t border-slate-100 shrink-0 space-y-2">
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+            <input type="checkbox" id="edit-send-email-notification" checked
+              class="rounded text-amber-600 focus:ring-amber-500">
+            <label for="edit-send-email-notification" class="text-xs text-slate-600">
+              ✉️ Notificar aluno por e-mail sobre alterações de plano/acesso
+              <span class="text-amber-700 font-bold">(Brevo)</span>
+            </label>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <button type="button" onclick="triggerDeleteFromEditModal()" class="py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shrink-0" title="Excluir este aluno permanentemente">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+              <span>Excluir Aluno</span>
+            </button>
+            <button type="submit" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer">
+              Salvar Alterações no Firestore
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -810,6 +832,54 @@
     let FILTERED_COUNT = 0;
     let PENDING_DELETE_STUDENT = null;
 
+    /**
+     * Normaliza arrays de produtos que podem conter strings OU objetos V2
+     * {productId, courseId, gateway, ...} e retorna sempre array de strings simples.
+     * Necessário porque normalizeUserV2() no worker converte enrolledProducts em objetos.
+     */
+    function extractProductIds(arr) {
+      if (!Array.isArray(arr)) return [];
+      return arr.map(p => {
+        if (typeof p === 'string') return p.trim();
+        if (p && typeof p === 'object') {
+          return (p.courseId || p.productId || p.id || '').trim();
+        }
+        return '';
+      }).filter(Boolean);
+    }
+
+    // Exibe banner de erro de sincronização de forma não-bloqueante
+    function showSyncError(message) {
+      const banner = document.getElementById('save-error-banner');
+      if (banner) {
+        banner.textContent = '⚠️ ' + message;
+        banner.classList.remove('hidden');
+        setTimeout(() => banner.classList.add('hidden'), 8000);
+      }
+      console.error('[CRM Sync Error]', message);
+    }
+
+    /**
+     * Envia e-mail de acesso (E2_AUTH_MAGIC_LINK) para o aluno via Brevo.
+     * Chamado pelo botão ✉️ na tabela de alunos.
+     */
+    async function sendAccessEmail(email, name) {
+      if (!window.aefEmailEngine) {
+        alert('Motor de e-mail não carregado. Recarregue a página.');
+        return;
+      }
+      if (!confirm(`Disparar e-mail de acesso para ${name} (${email})?`)) return;
+      try {
+        await window.aefEmailEngine.sendEmail('E2_AUTH_MAGIC_LINK', email, name, {
+          name: name,
+          magicLink: 'https://app.agoraeufalo.com.br/login'
+        });
+        alert(`✅ E-mail de acesso enviado via Brevo para ${email}`);
+      } catch (e) {
+        alert(`❌ Falha ao enviar e-mail: ${e.message}`);
+      }
+    }
+
     function resolveVipCourse(student) {
       if (!student) return null;
       const email = (student.email || '').toLowerCase().trim();
@@ -896,7 +966,7 @@
             <td colspan="6" class="py-8 text-center text-slate-400">
               <div class="flex items-center justify-center gap-2">
                 <i data-lucide="loader" class="w-4 h-4 animate-spin text-amber-500"></i>
-                <span>Carregando alunos do Firestore...</span>
+                <span id="loading-status">Carregando alunos do Firestore...</span>
               </div>
             </td>
           </tr>
@@ -937,10 +1007,27 @@
           console.warn("Could not load courses from Firestore:", err);
         }
 
-        // 3. Sincroniza com Firestore (Single Source of Truth)
+        // 3. Sincroniza com Firestore (Single Source of Truth) com paginação exaustiva
         try {
           if (window.aefPortalAuth) await window.aefPortalAuth.ready();
-          const { users, vipMentees } = await window.aefPortalAuth.getAllStudentsAndMentees();
+          
+          // Carga inicial (primeira página + vipMentees)
+          let firestoreData = { users: [], vipMentees: [] };
+          if (window.aefCloudSync?.userRepository) {
+            firestoreData = await window.aefCloudSync.userRepository.getAllStudentsAndMentees();
+          } else if (window.aefPortalAuth) {
+            firestoreData = await window.aefPortalAuth.getAllStudentsAndMentees();
+          }
+          let { users, vipMentees } = firestoreData;
+          
+          // Paginação exaustiva: busca as páginas restantes se houver nextPageToken
+          if (firestoreData._usersNextPageToken && window.aefCloudSync?.userRepository?._fetchAllUserPages) {
+            const statusEl = document.querySelector('#loading-status');
+            if (statusEl) statusEl.textContent = `Carregando mais alunos... (${users.length} até agora)`;
+            const extraUsers = await window.aefCloudSync.userRepository._fetchAllUserPages(firestoreData._usersNextPageToken);
+            users = [...users, ...extraUsers];
+            console.log(`[CRM] Paginação concluída: ${users.length} users carregados no total.`);
+          }
 
           // Add Firestore Mentees
           vipMentees.forEach(m => {
@@ -949,7 +1036,7 @@
             const mergedProducts = Array.from(new Set([
               ...(existing.enrolledProducts || []),
               ...(m.enrolledProducts || []),
-              ...(m.purchasedProducts || [])
+              ...extractProductIds(m.purchasedProducts)
             ]));
             const mergedCats = Array.from(new Set([
               ...(existing.categories || []),
@@ -983,7 +1070,7 @@
             const mergedProducts = Array.from(new Set([
               ...(existing.enrolledProducts || []),
               ...(u.enrolledProducts || []),
-              ...(u.purchasedProducts || [])
+              ...extractProductIds(u.purchasedProducts)
             ]));
 
             const mergedCats = Array.from(new Set([
@@ -1150,7 +1237,7 @@
         if (!matchesSearch) return false;
 
         // 2. Secondary Course Filter
-        const prods = s.purchasedProducts || s.enrolledProducts || [];
+        const prods = [...extractProductIds(s.purchasedProducts), ...extractProductIds(s.enrolledProducts)];
         if (COURSE_FILTER !== 'all') {
           if (!prods.includes(COURSE_FILTER)) return false;
         }
@@ -1183,7 +1270,7 @@
 
       const headers = ["Nome", "E-mail", "WhatsApp / Telefone", "Tier / Plano", "Cursos Concedidos", "Origem"];
       const rows = filtered.map(s => {
-        const prods = (s.enrolledProducts || []).join('; ');
+        const prods = extractProductIds(s.enrolledProducts).join('; ');
         return [
           `"${(s.name || '').replace(/"/g, '""')}"`,
           `"${(s.email || '').replace(/"/g, '""')}"`,
@@ -1268,7 +1355,7 @@
         const AE = window.AEFAccessEngine;
         const tierBadge = AE ? AE.renderCategoryBadges(s) : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">🌱 FREE</span>';
 
-        const enrolledBadges = (s.enrolledProducts || [])
+        const enrolledBadges = extractProductIds(s.enrolledProducts)
           .map(p => {
             if (!p) return '';
             if (typeof p === 'object') {
@@ -1361,6 +1448,11 @@
                 </button>
                 <button onclick="openEditStudentModal('${s.email}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="sendAccessEmail('${s.email}', '${(s.name || '').replace(/'/g, '')}')"
+                  class="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition cursor-pointer"
+                  title="Enviar E-mail de Acesso via Brevo">
+                  <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                 </button>
                 <button onclick="openDeleteStudentModal('${s.email}', '${safeEscapedName}', '${s.id || ''}', '${s.tier || 'free'}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 border border-rose-200 transition cursor-pointer" title="Excluir Aluno Permanentemente">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -1528,7 +1620,7 @@
 
       // Render purchased products checkboxes dynamically
       const container = document.getElementById('edit-purchased-products');
-      const purchased = student.purchasedProducts || student.enrolledProducts || [];
+      const purchased = [...extractProductIds(student.purchasedProducts), ...extractProductIds(student.enrolledProducts)];
       
       if (ALL_AVAILABLE_COURSES_CACHE.length > 0) {
         container.innerHTML = ALL_AVAILABLE_COURSES_CACHE.map(course => {
@@ -1863,6 +1955,20 @@ Bons treinos e nos vemos na Sala de Aula!`;
         successMsg += `\n\n✉️ E-mail oficial do Firebase com Link de Acesso disparado para ${cleanEmail}.`;
       }
       alert(successMsg);
+
+      // E-mail de boas-vindas E1 via Brevo
+      const shouldWelcome = document.getElementById('add-send-welcome-email')?.checked;
+      if (shouldWelcome && window.aefEmailEngine && cleanEmail) {
+        try {
+          await window.aefEmailEngine.sendEmail('E1_WELCOME_ONBOARDING', cleanEmail, name, {
+            name: name,
+            portalUrl: 'https://app.agoraeufalo.com.br/portal'
+          });
+          console.log(`✉️ [CRM Brevo] Boas-vindas E1 enviado para ${cleanEmail}`);
+        } catch (e) {
+          console.warn('[CRM Brevo] Falha no e-mail E1:', e);
+        }
+      }
     }
 
     async function handleUpdateStudent(e) {
@@ -1977,6 +2083,25 @@ Bons treinos e nos vemos na Sala de Aula!`;
       updateMetrics();
       closeEditStudentModal();
       alert(`✅ Aluno ${name} atualizado com sucesso!`);
+
+      // Notificação Brevo E5 se plano/cursos foram alterados
+      const shouldNotify = document.getElementById('edit-send-email-notification')?.checked;
+      if (shouldNotify && window.aefEmailEngine) {
+        try {
+          await window.aefEmailEngine.sendEmail('E5_PLAN_CHANGED', cleanEmail, name, {
+            name: name,
+            newPlanName: legacyTier === 'club_annual' ? 'AEF Club Annual'
+              : legacyTier === 'club_monthly' ? 'AEF Club Mensal'
+              : legacyTier === 'vip_mentorship' ? 'Mentoria VIP'
+              : legacyTier === 'lifetime' ? 'Acesso Vitalício'
+              : 'AgoraEuFalo Free',
+            portalUrl: 'https://app.agoraeufalo.com.br/portal'
+          });
+          console.log(`✉️ [CRM Brevo] Notificação E5 enviada para ${cleanEmail}`);
+        } catch (mailErr) {
+          console.warn('[CRM Brevo] Falha na notificação E5 (não-bloqueante):', mailErr);
+        }
+      }
     }
 
     async function handleSavePrescription(e) {

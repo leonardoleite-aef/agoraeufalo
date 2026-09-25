@@ -66,7 +66,7 @@
       if (this.isLocal()) return;
       
       const adminPages = ['admin', 'admin-cursos', 'admin-usuarios', 'admin-vendas', 'admin-marketing', 'admin-quiz', 'admin-webhooks', 'admin-alunos', 'admin-pdf-factory', 'tts-studio', 'blog-panel', 'seo-manager'];
-      const appPages = ['portal', 'curso', 'sala-de-aula', 'player'];
+      const appPages = ['portal', 'curso', 'sala-de-aula', 'player', 'portal-lab', 'sala-lab', 'player-lab'];
 
       const pageBase = this.page.split('.')[0] || '';
       const isPublic = this.isPublicDomain();

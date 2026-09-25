@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- 1. SEO Primary Meta Tags -->
+  <title>Eu consegui publicar no Blog do Leo | AgoraEuFalo</title>
+  <meta name="title" content=" | AgoraEuFalo">
+  <meta name="description" content="">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://agoraeufalo.com.br/blog/.html">
+
+  <!-- 2. Open Graph / WhatsApp / Facebook / LinkedIn -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://agoraeufalo.com.br/blog/.html">
+  <meta property="og:title" content=" | AgoraEuFalo">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="https://agoraeufalo.com.br/">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="AgoraEuFalo">
+
+  <!-- 3. Twitter / X Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://agoraeufalo.com.br/blog/.html">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="https://agoraeufalo.com.br/">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png">
+
+  <!-- Structured Data (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://agoraeufalo.com.br/blog/.html#article",
+        "headline": "",
+        "description": "",
+        "image": "https://agoraeufalo.com.br/",
+        "datePublished": "",
+        "dateModified": "",
+        "author": {
+          "@type": "Person",
+          "name": "Leonardo Leite",
+          "url": "https://agoraeufalo.com.br/#instructor"
+        },
+        "publisher": {
+          "@type": "EducationalOrganization",
+          "name": "AgoraEuFalo",
+          "url": "https://agoraeufalo.com.br/",
+          "logo": "https://agoraeufalo.com.br/assets/images/logo.png"
+        },
+        "mainEntityOfPage": "https://agoraeufalo.com.br/blog/.html"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0A192F',
+              petrol: '#0D2040',
+              slate: '#1E293B',
+              accent: '#C57E1E',
+              'accent-hover': '#D98A26',
+              'accent-light': '#FDF8F0',
+              muted: '#64748B',
+              subtle: '#F8FAFC'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="../assets/css/styles.css">
+
+  <style>
+    .prose-content h2 { font-size: 1.65rem; font-weight: 800; color: #0A192F; margin-top: 2rem; margin-bottom: 0.85rem; letter-spacing: -0.02em; }
+    .prose-content h3 { font-size: 1.3rem; font-weight: 700; color: #1E293B; margin-top: 1.5rem; margin-bottom: 0.6rem; }
+    .prose-content p { margin-bottom: 1.25rem; line-height: 1.8; color: #334155; }
+    .prose-content blockquote { border-left: 4px solid #C57E1E; padding: 1rem 1.25rem; font-style: italic; color: #1E293B; background: #FDF8F0; border-radius: 0 1rem 1rem 0; margin: 1.75rem 0; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen selection:bg-amber-100 selection:text-brand-accent">
+
+  <!-- ========================================================================= -->
+  <!-- HEADER INSTITUCIONAL                                                      -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo Oficial -->
+      <a href="../index.html" class="flex items-center gap-3 group" aria-label="Página Inicial AgoraEuFalo">
+        <img 
+          src="../assets/images/logo.png" 
+          alt="Logo AgoraEuFalo - Professor Leonardo Leite" 
+          class="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+      </a>
+
+      <!-- Menu de Navegação Desktop -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-slate-600">
+        <a href="../index.html" class="hover:text-brand-accent transition-colors">Início</a>
+        <a href="index.html" class="text-amber-600 font-extrabold hover:text-amber-700 transition-colors">Blog</a>
+        <a href="../guia-magic-stories.html" class="hover:text-brand-accent transition-colors">Guia Definitivo</a>
+        <a href="../projeto-aef.html" class="hover:text-brand-accent transition-colors">Projeto AEF</a>
+        <a href="../contato.html" class="hover:text-brand-accent transition-colors">Contato</a>
+      </nav>
+
+      <!-- Botão CTA Header -->
+      <div class="flex items-center gap-3">
+        <a 
+          href="../projeto-aef.html" 
+          class="btn-cta-primary px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap inline-flex items-center gap-2 shadow-md hover:scale-105 transition-all"
+        >
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Garantir Vaga 2026</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- POST ARTICLE CONTAINER                                                    -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 py-10 sm:py-16">
+    <article class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 font-medium mb-6">
+        <a href="../index.html" class="hover:text-brand-accent">Início</a>
+        <span>/</span>
+        <a href="index.html" class="hover:text-brand-accent">Blog</a>
+        <span>/</span>
+        <span class="text-amber-700 font-bold"></span>
+      </nav>
+
+      <!-- Post Header -->
+      <header class="space-y-4 border-b border-slate-200 pb-8 mb-8">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-200">
+            
+          </span>
+          <span class="text-xs text-slate-500 font-medium flex items-center gap-1">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> 
+          </span>
+          <span class="text-slate-300">•</span>
+          <span class="text-xs text-slate-500 font-medium"></span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-navy tracking-tight leading-tight">
+          
+        </h1>
+
+        <p class="text-lg sm:text-xl text-slate-600 font-medium leading-relaxed">
+          <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">Eu consegui publicar no Blog do Leo</h1>
+        </p>
+
+        <!-- Author Card Mini -->
+        <div class="flex items-center gap-3.5 pt-4">
+          <img src="../assets/images/leonardo-leite.png" alt="Prof. Leonardo Leite" class="w-12 h-12 rounded-full object-cover border-2 border-amber-500 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-slate-900">Professor Leonardo Leite</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-900">35 anos de sala de aula</span>
+            </div>
+            <p class="text-xs text-slate-500">Fundador do Método AgoraEuFalo • Especialista em Escuta & Fala</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- YouTube Embed Container (Se houver) -->
+      
+          <div class="aspect-w-16 aspect-h-9 mb-12 rounded-xl overflow-hidden shadow-lg border border-slate-200">
+              <video controls class="w-full h-full object-cover">
+                  <source src="https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/videos%2Fblog_media%2F1789591676849_Airplane_flights_3_LA.mp4?alt=media" type="video/mp4">
+                  Seu navegador não suporta o elemento de vídeo.
+              </video>
+          </div>
+
+      <!-- Post Body Content -->
+      <div class="prose-content text-slate-700 text-base sm:text-lg leading-relaxed space-y-6">
+        
+             <div class="my-8 bg-amber-50 border-2 border-amber-200 rounded-xl p-6 relative overflow-hidden shadow-sm">
+                <div class="absolute top-0 right-0 bg-amber-200 text-amber-900 text-xs font-bold px-3 py-1 rounded-bl-lg">LISTEN & ANSWER</div>
+                <h4 class="text-xl font-bold text-slate-900 mb-4 pr-12">Wow! It's been working so far! I'm really glad Leo created this!</h4>
+                
+                <div class="flex items-center gap-4 bg-white border border-amber-200 rounded-lg p-3 mb-6 shadow-sm">
+                   <button onclick="this.nextElementSibling.play()" class="w-10 h-10 flex-shrink-0 bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center justify-center transition-colors">
+                       <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                   </button>
+                   <audio src="https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fblog_tts%2F1789591675116_tts_phrase_1789591675115.mp3?alt=media" class="hidden"></audio>
+                   <div class="flex-grow">
+                       <div class="text-sm font-medium text-slate-900">Training Audio</div>
+                       <div class="text-xs text-slate-500">Listen carefully</div>
+                   </div>
+                </div>
+                
+                <div x-data="{ revealed: false }" class="mt-4">
+                    <button @click="revealed = !revealed" x-show="!revealed" class="w-full py-3 border-2 border-dashed border-amber-300 text-amber-700 font-medium rounded-lg hover:bg-amber-100 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="eye"></i> Revelar Resposta Oculta
+                    </button>
+                    <div x-show="revealed" style="display: none;" class="p-4 bg-white rounded-lg border border-amber-200">
+                        <p class="text-slate-800 font-medium"></p>
+                    </div>
+                </div>
+             </div>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">este é um teste feito pelo programador e desenvolvedor do AgoraEuFalo para provar que o que eu desenvolvi e codei, funciona. Now, let's see if this thing really works:</p>
+
+             <div class="my-8 bg-amber-50 border-2 border-amber-200 rounded-xl p-6 relative overflow-hidden shadow-sm">
+                <div class="absolute top-0 right-0 bg-amber-200 text-amber-900 text-xs font-bold px-3 py-1 rounded-bl-lg">LISTEN & ANSWER</div>
+                <h4 class="text-xl font-bold text-slate-900 mb-4 pr-12">Wow! It's been working so far! I'm really glad Leo created this!</h4>
+                
+                <div class="flex items-center gap-4 bg-white border border-amber-200 rounded-lg p-3 mb-6 shadow-sm">
+                   <button onclick="this.nextElementSibling.play()" class="w-10 h-10 flex-shrink-0 bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center justify-center transition-colors">
+                       <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                   </button>
+                   <audio src="https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/audio%2Fblog_tts%2F1789591675116_tts_phrase_1789591675115.mp3?alt=media" class="hidden"></audio>
+                   <div class="flex-grow">
+                       <div class="text-sm font-medium text-slate-900">Training Audio</div>
+                       <div class="text-xs text-slate-500">Listen carefully</div>
+                   </div>
+                </div>
+                
+                <div x-data="{ revealed: false }" class="mt-4">
+                    <button @click="revealed = !revealed" x-show="!revealed" class="w-full py-3 border-2 border-dashed border-amber-300 text-amber-700 font-medium rounded-lg hover:bg-amber-100 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="eye"></i> Revelar Resposta Oculta
+                    </button>
+                    <div x-show="revealed" style="display: none;" class="p-4 bg-white rounded-lg border border-amber-200">
+                        <p class="text-slate-800 font-medium"></p>
+                    </div>
+                </div>
+             </div>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:04.6] Time for speaking activation.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:06.3] I am going to ask you eight</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:08.0] direct questions about the story.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:09.7] When you hear the question,</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:11.1] answer out loud</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:12.1] immediately during the pause.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:13.8] Then listen to the model answer.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:15.7] Let's begin.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:19.2] Question one: What does the agent</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:21.2] ask to see first?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:30.4] The agent asks for the passenger's</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:32.3] passport and ticket.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:35.9] Question two.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:37.0] What kind of seat does</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:38.0] the passenger want?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:41.3] The</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:49.5] Question 3: What seat number does</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[00:51.5] the agent assign to the passenger?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:03.6] Question 4: How many bags</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:05.3] does the passenger check in?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:09.1] The</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:12.4] just one big suitcase.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:16.4] Question 5: What gate does</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:18.1] the passenger need to go to?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:24.6] The passenger needs</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:25.5] to go to gate 4B.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:29.5] Question 6:</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:30.4] What time does boarding start?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:38.4] Boarding starts at 10:30.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:42.7] Question 7.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:43.6] Where can the passenger put</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:44.7] the backpack inside the cabin?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:52.1] Under the seat in front of him</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:53.5] or in the overhead bin?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:57.4] Question 8.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:58.3] What drink does the passenger</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[01:59.5] ask for on the plane?</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:07.9] The passenger asks</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:08.9] for a glass of water.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:12.5] All right, great.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:13.6] This activity is a reflex exercise.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:16.7] It's not a comprehension</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:18.3] check questionnaire.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:20.1] Go back and repeat this exercise</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:22.8] until you feel comfortable</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:24.5] understanding the questions</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:25.8] and speaking your own answers.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:28.5] See you in look</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:29.5] and retell activity.</p>
+<p class="text-lg leading-relaxed text-slate-700 mb-6">[02:31.3] Cheers.</p>
+
+      </div>
+
+      <!-- Leo's Golden Tip Box -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50/50 border border-amber-200 shadow-sm my-10 space-y-3">
+        <div class="flex items-center gap-2.5 text-amber-900 font-bold text-base">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600"></i>
+          <span>A Sacada de Ouro do Professor Leo:</span>
+        </div>
+        <p class="text-sm sm:text-base text-amber-950/80 leading-relaxed italic">
+          "Sem sacada."
+        </p>
+      </div>
+
+      <!-- Social Share Bar (Exclusivo WhatsApp) -->
+      <div class="flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm my-8">
+        <span class="text-xs font-bold text-slate-700 flex items-center gap-2">
+          <i data-lucide="share-2" class="w-4 h-4 text-amber-600"></i> Compartilhe este post com quem precisa destravar o inglês:
+        </span>
+        <a href="https://api.whatsapp.com/send?text=%20-%20https://agoraeufalo.com.br/blog/.html" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all hover:scale-105">
+          <i data-lucide="message-circle" class="w-4 h-4"></i> Compartilhar no WhatsApp
+        </a>
+      </div>
+
+      <!-- Redes Sociais do Professor Leo (YT, Instagram, Substack) -->
+      <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm my-8 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h3 class="text-sm font-extrabold text-brand-navy flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i> Siga o Professor Leo nas Redes
+          </h3>
+          <span class="text-[10px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">Canais Oficiais</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@agoraeufaloingles" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-red-50/80 border border-slate-100 hover:border-red-200 transition-all group">
+            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 group-hover:text-red-700 transition-colors">YouTube</h4>
+              <p class="text-[10px] text-slate-400">Aulas e treinos</p>
+            </div>
+          </a>
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/leonardoagoraeufalo/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-pink-50/80 border border-slate-100 hover:border-pink-200 transition-all group">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-pink-600 to-purple-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 group-hover:text-pink-700 transition-colors">Instagram</h4>
+              <p class="text-[10px] text-slate-400">@leonardoagoraeufalo</p>
+            </div>
+          </a>
+
+          <!-- Substack -->
+          <a href="https://leoleite.substack.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-orange-50/80 border border-slate-100 hover:border-orange-200 transition-all group">
+            <div class="w-9 h-9 rounded-xl bg-[#FF6719] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 group-hover:text-orange-700 transition-colors">Substack</h4>
+              <p class="text-[10px] text-slate-400">Artigos e newsletters</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Direct Question to Professor Leo Box -->
+      <section class="p-6 sm:p-8 rounded-3xl bg-white border-2 border-amber-400/50 shadow-md my-10 space-y-6 relative overflow-hidden" id="duvidas-box">
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div class="flex items-center gap-3.5">
+            <div class="relative">
+              <img src="../assets/images/leonardo-leite.png" alt="Professor Leonardo Leite" class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-500 shadow-sm">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white absolute -bottom-0.5 -right-0.5" title="Professor Online"></span>
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-brand-navy">Ficou com alguma dúvida sobre esta aula?</h3>
+              <p class="text-xs text-slate-500">Mande sua pergunta. Eu leio pessoalmente e te respondo no seu WhatsApp ou E-mail!</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-200 self-start sm:self-auto shrink-0">
+            💬 Resposta Direta do Leo
+          </span>
+        </div>
+
+        <form id="ask-leo-form" onsubmit="handleAskLeoSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700">Seu Nome:</label>
+              <input 
+                type="text" 
+                id="ask-name" 
+                required 
+                placeholder="Ex: Carlos Silva" 
+                class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
+              >
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700">Seu WhatsApp ou E-mail para resposta:</label>
+              <input 
+                type="text" 
+                id="ask-contact" 
+                required 
+                placeholder="(31) 99999-9999 ou seu@email.com" 
+                class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
+              >
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700">Sua Pergunta ou Dúvida sobre o Inglês:</label>
+            <textarea 
+              id="ask-message" 
+              required 
+              rows="3" 
+              placeholder="Professor Leo, na parte do Connected Speech, como eu faço para..." 
+              class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all resize-y"
+            ></textarea>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+            <button 
+              type="submit" 
+              id="ask-submit-btn" 
+              class="btn-cta-primary px-6 py-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-md hover:scale-[1.02] transition-all"
+            >
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>Enviar Pergunta para o Professor Leo</span>
+            </button>
+
+            <a 
+              href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20tirar%20uma%20d%C3%BAvida!" 
+              target="_blank" 
+              class="text-xs text-slate-500 hover:text-emerald-700 font-semibold flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Ou fale agora no WhatsApp</span>
+            </a>
+          </div>
+        </form>
+
+        <!-- Estado de Sucesso -->
+        <div id="ask-success-msg" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-2">
+          <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-sm">
+            <i data-lucide="check" class="w-5 h-5"></i>
+          </div>
+          <h4 class="text-sm font-bold text-emerald-900">Pergunta enviada com sucesso!</h4>
+          <p class="text-xs text-emerald-800 max-w-md mx-auto">
+            O Professor Leonardo Leite já recebeu sua mensagem em <strong>selexenglish@gmail.com</strong> e vai te responder diretamente no seu WhatsApp/E-mail assim que terminar as mentorias de hoje.
+          </p>
+        </div>
+      </section>
+
+      <!-- Conversion Box (Projeto 2026) -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-brand-navy text-white space-y-5 shadow-2xl my-12">
+        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-brand-accent text-brand-navy inline-block">SELO OFICIAL • PROJETO 2026</span>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Pronto para falar inglês com naturalidade e destravar o seu ouvido em 2026?</h3>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+          Entre para o <strong>Projeto AgoraEuFalo 2026</strong>. Tenha acesso completo aos 30 Ciclos do Magic Stories, English Quick Start, Kit de Frases Prontas e <strong>Mentorias Semanais ao Vivo</strong> direto com o Professor Leonardo Leite.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="../projeto-aef.html" class="btn-cta-primary px-6 py-3.5 rounded-xl text-sm font-extrabold inline-flex items-center gap-2 shadow-lg hover:scale-105 transition-all">
+            <span>Garantir Vaga no Projeto 2026</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="https://wa.me/5531999817975?text=Hello%20Leo!%20Li%20o%20post%20no%20Blog%20e%20quero%20conhecer%20o%20Projeto%202026!" target="_blank" class="px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm inline-flex items-center gap-2 transition-colors border border-slate-700">
+            <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+            <span>Falar com o Leo no WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER OFICIAL                                                            -->
+  <!-- ========================================================================= -->
+  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800/80">
+        <div>
+          <a href="../index.html" class="inline-block mb-2">
+            <img src="../assets/images/logo-fundo-escuro.png" alt="Logo AgoraEuFalo" class="h-8 w-auto object-contain">
+          </a>
+          <p class="text-xs text-slate-400">Treinamento prático de escuta e fala em língua inglesa com o Professor Leonardo Leite.</p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-300">
+          <a href="../index.html" class="hover:text-white transition-colors">Início</a>
+          <a href="index.html" class="hover:text-white transition-colors">Blog</a>
+          <a href="../projeto-aef.html" class="hover:text-white transition-colors">Projeto AEF</a>
+          <a href="../contato.html" class="hover:text-white transition-colors">Contato</a>
+          <a href="../termos-de-uso.html" class="hover:text-white transition-colors">Termos de Uso</a>
+          <a href="../politica-de-privacidade.html" class="hover:text-white transition-colors">Política de Privacidade</a>
+        </div>
+      </div>
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>© 2026 AgoraEuFalo. Todos os direitos reservados.</p>
+        <p>Professor Leonardo Leite • 35 anos de sala de aula.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+
+    function playPostVideo(youtubeId) {
+      const container = document.getElementById('post-video-container');
+      if (!container || !youtubeId) return;
+
+      container.innerHTML = `
+        <iframe 
+          class="w-full h-full" 
+          src="https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+          title="Aula do Professor Leonardo Leite" 
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen
+        ></iframe>
+      `;
+      container.classList.remove('cursor-pointer');
+      container.onclick = null;
+    }
+
+    function handleAskLeoSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('ask-submit-btn');
+      const form = document.getElementById('ask-leo-form');
+      const success = document.getElementById('ask-success-msg');
+      const name = document.getElementById('ask-name').value;
+      const contact = document.getElementById('ask-contact').value;
+      const message = document.getElementById('ask-message').value;
+
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Enviando para o Leo...</span>';
+      if (window.lucide) window.lucide.createIcons();
+
+      fetch('https://formsubmit.co/ajax/selexenglish@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Nome: name,
+          Contato: contact,
+          Pergunta: message,
+          Artigo: window.location.href,
+          _subject: 'Nova Dúvida no Blog AgoraEuFalo (' + name + ')'
+        })
+      })
+      .then(response => {
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+      })
+      .catch(error => {
+        window.open('https://wa.me/5531999817975?text=' + encodeURIComponent('Hello Leo! Sou ' + name + ' (' + contact + '). Minha dúvida sobre a aula é: ' + message), '_blank');
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+      });
+    }
+  </script>
+</body>
+</html>
