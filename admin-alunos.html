@@ -1034,8 +1034,8 @@
             const email = (m.email || `${m.id}@agoraeufalo.com.br`).toLowerCase().trim();
             const existing = combined.get(email) || {};
             const mergedProducts = Array.from(new Set([
-              ...(existing.enrolledProducts || []),
-              ...(m.enrolledProducts || []),
+              ...extractProductIds(existing.enrolledProducts),
+              ...extractProductIds(m.enrolledProducts),
               ...extractProductIds(m.purchasedProducts)
             ]));
             const mergedCats = Array.from(new Set([
@@ -1068,8 +1068,8 @@
 
             // Safely merge enrolled products without wiping out VIP grants
             const mergedProducts = Array.from(new Set([
-              ...(existing.enrolledProducts || []),
-              ...(u.enrolledProducts || []),
+              ...extractProductIds(existing.enrolledProducts),
+              ...extractProductIds(u.enrolledProducts),
               ...extractProductIds(u.purchasedProducts)
             ]));
 
@@ -1109,10 +1109,11 @@
           const vipCourse = resolveVipCourse(s);
           if (vipCourse) {
             s.vipCourseId = vipCourse.id;
-            if (!s.enrolledProducts) s.enrolledProducts = [];
-            if (!s.enrolledProducts.includes(vipCourse.id)) {
-              s.enrolledProducts.unshift(vipCourse.id);
+            const currentProds = extractProductIds(s.enrolledProducts || []);
+            if (!currentProds.includes(vipCourse.id)) {
+              currentProds.unshift(vipCourse.id);
             }
+            s.enrolledProducts = currentProds;
             if (!s.tier || !s.tier.includes('vip')) {
               s.tier = 'vip_mentorship';
             }
@@ -1270,7 +1271,7 @@
 
       const headers = ["Nome", "E-mail", "WhatsApp / Telefone", "Tier / Plano", "Cursos Concedidos", "Origem"];
       const rows = filtered.map(s => {
-        const prods = extractProductIds(s.enrolledProducts).join('; ');
+        const prods = Array.from(new Set(extractProductIds(s.enrolledProducts))).join('; ');
         return [
           `"${(s.name || '').replace(/"/g, '""')}"`,
           `"${(s.email || '').replace(/"/g, '""')}"`,
@@ -1355,6 +1356,7 @@
         const AE = window.AEFAccessEngine;
         const tierBadge = AE ? AE.renderCategoryBadges(s) : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">🌱 FREE</span>';
 
+        const seenBadges = new Set();
         const enrolledBadges = extractProductIds(s.enrolledProducts)
           .map(p => {
             if (!p) return '';
@@ -1396,8 +1398,16 @@
             } else if (pStr === 'ms-legacy' || pStr === 'dtc_curso' || pStr === 'all_access_master' || pStr === 'fs-aef-ec') {
               badgeClass = "bg-sky-50 text-sky-900 border-sky-200 font-bold";
             }
-            return `<span class="px-2 py-0.5 rounded-md border text-[10px] ${badgeClass}">${label}</span>`;
-          }).join(' ') || '<span class="text-[10px] text-slate-400 italic">Nenhum</span>';
+            return { label, badgeClass };
+          })
+          .filter(item => {
+            if (!item || !item.label) return false;
+            if (seenBadges.has(item.label)) return false;
+            seenBadges.add(item.label);
+            return true;
+          })
+          .map(item => `<span class="px-2 py-0.5 rounded-md border text-[10px] ${item.badgeClass}">${item.label}</span>`)
+          .join(' ') || '<span class="text-[10px] text-slate-400 italic">Nenhum</span>';
 
         const tracksCount = s.tracksCount || ((s.tier && String(s.tier).includes('vip')) || (s.categories && s.categories.includes('member_mentoria')) ? 1 : 0);
         const avatarHtml = `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-200 to-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs shrink-0">${(String(s.name || 'A')).substring(0, 2).toUpperCase()}</div>`;
