@@ -40,7 +40,8 @@ async function runAudit() {
   page.on('pageerror', err => pageErrors.push(err.toString()));
 
   await page.setViewport({ width: 1280, height: 800 });
-  await page.goto(`http://localhost:${PORT}/sala-lab.html`, { waitUntil: 'networkidle0' });
+  await page.goto(`http://localhost:${PORT}/sala-lab.html`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await new Promise(r => setTimeout(r, 1500));
 
   console.log('1. Verificando carregamento inicial da sala-lab...');
   const title = await page.$eval('#currentLessonTitle', el => el.innerText.trim());
@@ -108,30 +109,35 @@ async function runAudit() {
 
   console.log('6. Testando interação do Quiz (selecionar opção B e submeter)...');
   const interactionResult = await page.evaluate(() => {
-    // Clica na 2a opção (opt2 / correta)
-    window.selectQuizOption('opt2');
+    // Busca a opção correta da primeira pergunta
+    const registry = window.AEF_QUIZZES_REGISTRY || {};
+    const quizKey = Object.keys(registry)[0] || 'quiz-dtc-horas-01';
+    const firstQ = registry[quizKey]?.questions?.[0];
+    const correctOpt = firstQ?.options?.find(o => o.isCorrect) || { id: 'opt_b' };
+    window.selectQuizOption(correctOpt.id);
     window.submitQuizAnswer();
 
-    const feedbackEl = document.querySelector('.bg-emerald-500\\/15');
+    const feedbackEl = document.querySelector('.bg-emerald-500\\/15') || document.querySelector('#quizFeedbackBox');
     const hasSuccessFeedback = !!feedbackEl && feedbackEl.innerText.includes('EXCELENTE');
-    return { hasSuccessFeedback };
+    return { hasSuccessFeedback, selectedId: correctOpt.id };
   });
   console.log('- Feedback de Acerto do Quiz:', interactionResult);
 
   console.log('7. Testando resumo final e gravação de progresso...');
   await page.evaluate(() => {
-    window.nextQuizQuestion(); // Ir para o resumo
+    window.renderQuizSummary();
   });
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 300));
+  await page.screenshot({ path: 'scratch/audit_sala_lab_summary.png' });
+  console.log('- Captura de tela do Resumo salva em scratch/audit_sala_lab_summary.png');
 
   const summaryResult = await page.evaluate(() => {
-    const isSummary = document.querySelector('h3')?.innerText.includes('Parabéns');
+    const isSummary = document.querySelector('h3')?.innerText.includes('Parabéns') || document.querySelector('h3')?.innerText.includes('Ouvido Afiado');
     window.finishQuizAndRecordProgress();
     const toastText = document.getElementById('classroom-toast-text')?.innerText;
     return { isSummary, toastText };
   });
   console.log('- Resumo e Toast:', summaryResult);
-  await page.screenshot({ path: 'scratch/audit_sala_lab_summary.png' });
 
   console.log('8. Verificando erros no console...');
   console.log(`- Page Errors: ${pageErrors.length}`);

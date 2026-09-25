@@ -157,6 +157,22 @@
     }
 
     /**
+     * Marca uma aula como concluída (idempotente)
+     */
+    markLessonCompleted(courseId, lessonId) {
+      if (!lessonId) return false;
+      try {
+        const list = this.getCompletedLessons();
+        if (!list.includes(lessonId)) {
+          return this.toggleLessonCompleted(courseId, lessonId);
+        }
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    /**
      * Adiciona segundos de escuta ativa (Listening Time) e atualiza streak
      */
     recordListeningTime(studentId = 'public', seconds = 0) {

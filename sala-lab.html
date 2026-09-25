@@ -1572,6 +1572,12 @@
       currentQuizIndex = 0;
       quizUserAnswers = {};
       quizSubmitted = {};
+
+      const tactileConsole = document.getElementById("tactileStudioConsole");
+      const drillSection = document.getElementById("cockpit-drill-section");
+      if (tactileConsole) tactileConsole.classList.add("hidden");
+      if (drillSection) drillSection.classList.add("hidden");
+
       renderQuizQuestion();
     }
     window.renderQuizArena = renderQuizArena;
@@ -1826,7 +1832,14 @@
     function finishQuizAndRecordProgress() {
       if (activeCourse && activeLesson) {
         if (window.aefLearningTracker) {
-          window.aefLearningTracker.markLessonCompleted(activeCourse.id, activeLesson.id);
+          if (typeof window.aefLearningTracker.markLessonCompleted === 'function') {
+            window.aefLearningTracker.markLessonCompleted(activeCourse.id, activeLesson.id);
+          } else if (typeof window.aefLearningTracker.toggleLessonCompleted === 'function') {
+            const list = window.aefLearningTracker.getCompletedLessons?.() || [];
+            if (!list.includes(activeLesson.id)) {
+              window.aefLearningTracker.toggleLessonCompleted(activeCourse.id, activeLesson.id);
+            }
+          }
         }
         if (!completedLessonIds.includes(activeLesson.id)) {
           completedLessonIds.push(activeLesson.id);
