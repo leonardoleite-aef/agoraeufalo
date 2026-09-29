@@ -1514,10 +1514,6 @@
                   <div class="p-4 sm:p-5 space-y-2">
                     <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
                     <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || ''}</p>
-                    <!-- CATEGORY TAGS -->
-                    <div class="flex flex-wrap gap-1.5 pt-1">
-                      ${(course.categories || []).map(cat => `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">${cat === 'magic_stories' ? '🪄 Magic Stories' : cat === 'foundations' ? '🧱 Foundations' : cat === 'survival' ? '🆘 Survival' : cat === 'real_english' ? '🎙️ Real English' : cat}</span>`).join('')}
-                    </div>
                   </div>
                 </div>
 
@@ -1540,16 +1536,6 @@
 
           // ——— 2. SEÇÃO "CATÁLOGO COMPLETO DE CURSOS" (RENDERIZA TODOS OS CURSOS) ———
           if (!hasAccess) {
-            
-            const catLabels = {
-              'magic_stories': '🪄 Magic Stories',
-              'foundations': '🧱 Foundations',
-              'survival': '🆘 Survival',
-              'real_english': '🎙️ Real English'
-            };
-            
-            let catHtml = (course.categories || []).map(cat => `<span class="px-2 py-1 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">${catLabels[cat] || cat}</span>`).join('');
-
             // Card Bloqueado com Cadeado 🔒 e Gatilho para a Landing Page (Vitrine)
             allCoursesHtml += `
               <div onclick="window.location.href='/curso?curso=${course.slug || course.id}'" class="bg-white border-2 border-slate-200/90 hover:border-amber-400/80 rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition flex flex-col justify-between relative group cursor-pointer">
@@ -1576,11 +1562,6 @@
                       <h4 class="font-black text-sm sm:text-base text-[#0A192F] leading-snug">${course.title}</h4>
                     </div>
                     <p class="text-xs text-[#7A7369] line-clamp-2 leading-relaxed font-medium">${course.description || 'Treinamento exclusivo do ecossistema AgoraEuFalo. Clique para desbloquear seu acesso.'}</p>
-                    
-                    <!-- CATEGORY TAGS (Blog Archive Style) -->
-                    <div class="flex flex-wrap gap-1.5 pt-2">
-                      ${catHtml}
-                    </div>
                   </div>
                 </div>
 

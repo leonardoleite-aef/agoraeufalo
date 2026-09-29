@@ -2118,10 +2118,6 @@
                   <div class="p-5 space-y-2.5">
                     <h4 class="font-black text-base text-white leading-snug line-clamp-1">${course.title}</h4>
                     <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed font-normal">${course.description || 'Treinamento completo com áudios e apostilas diagramadas.'}</p>
-                    
-                    <div class="flex flex-wrap gap-1.5 pt-1">
-                      ${(course.categories || []).map(cat => `<span class="px-2.5 py-0.5 rounded-md bg-white/5 text-slate-200 border border-white/15 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">${cat === 'magic_stories' ? '🪄 Magic Stories' : cat === 'foundations' ? '🧱 Foundations' : cat === 'survival' ? '🆘 Survival' : cat === 'real_english' ? '🎙️ Real English' : cat}</span>`).join('')}
-                    </div>
                   </div>
                 </div>
 
@@ -2185,10 +2181,6 @@
                 <div class="p-5 space-y-2.5">
                   <h4 class="font-black text-base text-white leading-snug line-clamp-1">${course.title}</h4>
                   <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed font-normal">${course.description || 'Treinamento exclusivo do ecossistema AgoraEuFalo. Clique para desbloquear.'}</p>
-                  
-                  <div class="flex flex-wrap gap-1.5 pt-1">
-                    ${(course.categories || []).map(cat => `<span class="px-2.5 py-0.5 rounded-md bg-white/5 text-slate-300 border border-white/10 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">${cat === 'magic_stories' ? '🪄 Magic Stories' : cat === 'foundations' ? '🧱 Foundations' : cat === 'survival' ? '🆘 Survival' : cat === 'real_english' ? '🎙️ Real English' : cat}</span>`).join('')}
-                  </div>
                 </div>
               </div>
 
