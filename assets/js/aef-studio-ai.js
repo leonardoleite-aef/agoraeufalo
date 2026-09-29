@@ -4,15 +4,17 @@
  * 
  * Este motor permite que qualquer usuário/assistente no navegador (Mac, PC, iPad)
  * execute tarefas completas de Inteligência Artificial sem depender de terminal:
- * 1. 🎙️ Transcrição Multimodal de Áudio/Vídeo com Gemini 2.5 Flash / Fallbacks
+ * 1. 🎙️ Transcrição Multimodal de Áudio/Vídeo com Gemini Flash
  * 2. ✨ Estruturação Pedagógica (Sentimento da Estrutura, Chunks & Zero Traduções Óbvias)
  * 3. 💡 Extração da Sacada de Ouro do Professor Leo
+ * 4. 🎨 Geração de Imagens & Capas (1:1 e 16:9)
  */
 
 (function (window) {
   'use strict';
 
   const SUPPORTED_MODELS = [
+    'gemini-3.7-flash',
     'gemini-3.6-flash',
     'gemini-3.8-flash',
     'gemini-3.5-flash-lite',
@@ -21,12 +23,15 @@
 
   class AEFStudioAI {
     constructor() {
-      this.apiKey = localStorage.getItem('AEF_GEMINI_API_KEY') || '';
+      this.apiKey = this.getApiKey();
     }
 
     getApiKey() {
       if (!this.apiKey) {
-        this.apiKey = localStorage.getItem('AEF_GEMINI_API_KEY') || '';
+        this.apiKey = localStorage.getItem('AEF_GEMINI_API_KEY') 
+          || localStorage.getItem('aef_gemini_api_key') 
+          || localStorage.getItem('GEMINI_API_KEY') 
+          || '';
       }
       return this.apiKey.trim();
     }
@@ -35,8 +40,10 @@
       this.apiKey = (key || '').trim();
       if (this.apiKey) {
         localStorage.setItem('AEF_GEMINI_API_KEY', this.apiKey);
+        localStorage.setItem('aef_gemini_api_key', this.apiKey);
       } else {
         localStorage.removeItem('AEF_GEMINI_API_KEY');
+        localStorage.removeItem('aef_gemini_api_key');
       }
     }
 
@@ -115,13 +122,13 @@
       for (const model of SUPPORTED_MODELS) {
         try {
           if (onProgress) onProgress(`Processando com ${model}...`);
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(this.getApiKey())}`;
 
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
-              'x-goog-api-key': apiKey
+              'x-goog-api-key': this.getApiKey()
             },
             body: JSON.stringify(payload)
           });
@@ -131,7 +138,7 @@
             const msg = errJson.error?.message || `HTTP ${response.status}: ${response.statusText}`;
             console.warn(`[Gemini API] Falha no modelo ${model}: ${msg}`);
             lastError = new Error(`[${model}] ${msg}`);
-            continue; // Tenta o próximo modelo suportado
+            continue;
           }
 
           const resData = await response.json();
@@ -189,6 +196,65 @@ Retorne APENAS o texto da transcrição limpo e pontuado, sem introduções, sem
       return text.trim();
     }
 
+    safeParseAiJson(rawJson) {
+      if (!rawJson || typeof rawJson !== 'string') return {};
+      const trimmed = rawJson.trim();
+
+      // 1. Parse direto
+      try {
+        return JSON.parse(trimmed);
+      } catch (err1) {}
+
+      // 2. Extrai substring entre primeiro { e último }
+      try {
+        const firstBrace = trimmed.indexOf('{');
+        const lastBrace = trimmed.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+          return JSON.parse(trimmed.slice(firstBrace, lastBrace + 1));
+        }
+      } catch (err2) {}
+
+      // 3. Fallback inteligente via Regex
+      const result = { goldenTip: '', processedContentHtml: '', summary: '' };
+
+      const tipMatch = trimmed.match(/"goldenTip"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+      if (tipMatch) {
+        result.goldenTip = tipMatch[1].replace(/\\"/g, '"').replace(/\\n/g, ' ').trim();
+      }
+
+      const summaryMatch = trimmed.match(/"summary"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+      if (summaryMatch) {
+        result.summary = summaryMatch[1].replace(/\\"/g, '"').trim();
+      }
+
+      const htmlStartMatch = trimmed.match(/"processedContentHtml"\s*:\s*"/i);
+      if (htmlStartMatch) {
+        const startIdx = htmlStartMatch.index + htmlStartMatch[0].length;
+        let endIdx = trimmed.search(/",\s*"summary"/i);
+        if (endIdx === -1) endIdx = trimmed.lastIndexOf('"}');
+        if (endIdx === -1) endIdx = trimmed.lastIndexOf('}');
+        if (endIdx > startIdx) {
+          let extractedHtml = trimmed.slice(startIdx, endIdx)
+            .replace(/\\"/g, '"')
+            .replace(/\\n/g, '\n')
+            .replace(/\\t/g, ' ')
+            .trim();
+          if (extractedHtml.endsWith('"')) extractedHtml = extractedHtml.slice(0, -1);
+          result.processedContentHtml = extractedHtml;
+        }
+      }
+
+      if (result.processedContentHtml || result.goldenTip) {
+        return result;
+      }
+
+      return {
+        goldenTip: "Repita com cadência até a melodia da fala virar reflexo natural!",
+        processedContentHtml: `<div class="p-5 bg-amber-50 rounded-2xl border-2 border-amber-200 text-slate-900 leading-relaxed space-y-3">${trimmed}</div>`,
+        summary: "Didática da aula"
+      };
+    }
+
     /**
      * 2. ESTRUTURAÇÃO PEDAGÓGICA DA MASTERCLASS & SACADA DE OURO
      */
@@ -201,18 +267,13 @@ Retorne APENAS o texto da transcrição limpo e pontuado, sem introduções, sem
 
 REGRAS PEDAGÓGICAS CANÔNICAS ABSOLUTAS:
 1. DIDÁTICA DO "SENTIMENTO DA ESTRUTURA" (ZERO JARGÕES GRAMATICAIS):
-   - Proibição absoluta de explicar a língua por nomenclaturas acadêmicas abstratas (ex: "Past Perfect Continuous", "Preposições de tempo").
+   - Proibição absoluta de explicar a língua por nomenclaturas acadêmicas abstratas.
    - Explique SEMPRE pela intenção, pelo sentimento da estrutura, pelo contexto emocional e prático de quando a frase é dita na vida real.
 2. A REGRA CANÔNICA DE "ZERO TRADUÇÕES ÓBVIAS":
    - Proibição absoluta de traduzir números universais (ex: 1973, 2026), dias da semana óbvios ou palavras de compreensão universal.
-   - Traduções aplicam-se SOMENTE a expressões contraintuitivas, idiomáticas ou onde a lógica do inglês diverge do português falado brasileiro real (spokenTranslation).
+   - Traduções aplicam-se SOMENTE a expressões contraintuitivas, idiomáticas ou onde a lógica do inglês diverge do português falado brasileiro real.
 3. DESIGN CALM EDTECH DE ALTO CONTRASTE (ZERO CAIXAS ESCURAS):
-   - O HTML gerado deve usar exclusivamente caixas didáticas claras com Tailwind CSS:
-     • Box Principal: <div class="p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-slate-900 space-y-3">...</div>
-     • Cards Internos: <div class="p-3 bg-white rounded-xl border border-amber-200">...</div>
-     • Títulos: <h3 class="font-black text-sm uppercase tracking-wider text-amber-950 font-sans">...</h3>
-     • Textos: <p class="text-xs text-slate-700">...</p>
-     • Destaques em Negrito: <b>...</b> ou <i>...</i>
+   - O HTML gerado deve usar exclusivamente caixas didáticas claras com Tailwind CSS (bg-amber-50/90, border-2 border-amber-200, bg-white, text-slate-900).
 4. EXTRAÇÃO DA SACADA DE OURO DO PROFESSOR LEO (goldenTip):
    - Uma sacada monumental, prática, libertadora e acolhedora de 1 a 2 frases com a sabedoria direta do Professor Leo sobre a aula.
 
@@ -243,138 +304,151 @@ Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML p
         systemInstruction: {
           parts: [{ text: systemPrompt }]
         },
-      safeParseAiJson(rawJson) {
-        if (!rawJson || typeof rawJson !== 'string') return {};
-        const trimmed = rawJson.trim();
-
-        // 1. Parse direto
-        try {
-          return JSON.parse(trimmed);
-        } catch (err1) {}
-
-        // 2. Extrai substring entre primeiro { e último }
-        try {
-          const firstBrace = trimmed.indexOf('{');
-          const lastBrace = trimmed.lastIndexOf('}');
-          if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-            return JSON.parse(trimmed.slice(firstBrace, lastBrace + 1));
-          }
-        } catch (err2) {}
-
-        // 3. Fallback inteligente via Regex
-        const result = { goldenTip: '', processedContentHtml: '', summary: '' };
-
-        const tipMatch = trimmed.match(/"goldenTip"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
-        if (tipMatch) {
-          result.goldenTip = tipMatch[1].replace(/\\"/g, '"').replace(/\\n/g, ' ').trim();
-        }
-
-        const summaryMatch = trimmed.match(/"summary"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
-        if (summaryMatch) {
-          result.summary = summaryMatch[1].replace(/\\"/g, '"').trim();
-        }
-
-        const htmlStartMatch = trimmed.match(/"processedContentHtml"\s*:\s*"/i);
-        if (htmlStartMatch) {
-          const startIdx = htmlStartMatch.index + htmlStartMatch[0].length;
-          let endIdx = trimmed.search(/",\s*"summary"/i);
-          if (endIdx === -1) endIdx = trimmed.lastIndexOf('"}');
-          if (endIdx === -1) endIdx = trimmed.lastIndexOf('}');
-          if (endIdx > startIdx) {
-            let extractedHtml = trimmed.slice(startIdx, endIdx)
-              .replace(/\\"/g, '"')
-              .replace(/\\n/g, '\n')
-              .replace(/\\t/g, ' ')
-              .trim();
-            if (extractedHtml.endsWith('"')) extractedHtml = extractedHtml.slice(0, -1);
-            result.processedContentHtml = extractedHtml;
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 8192,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              goldenTip: { type: "STRING" },
+              processedContentHtml: { type: "STRING" },
+              summary: { type: "STRING" }
+            },
+            required: ["goldenTip", "processedContentHtml"]
           }
         }
+      };
 
-        if (result.processedContentHtml || result.goldenTip) {
-          return result;
-        }
+      const resData = await this.callGeminiApi(payload, onProgress);
+      const rawJson = resData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+      const parsed = this.safeParseAiJson(rawJson);
 
-        return {
-          goldenTip: "Repita com cadência até a melodia da fala virar reflexo natural!",
-          processedContentHtml: `<div class="p-5 bg-amber-50 rounded-2xl border-2 border-amber-200 text-slate-900 leading-relaxed space-y-3">${trimmed}</div>`,
-          summary: "Didática da aula"
-        };
+      return {
+        goldenTip: parsed.goldenTip || '',
+        processedContentHtml: parsed.processedContentHtml || '',
+        summary: parsed.summary || ''
+      };
+    }
+
+    /**
+     * 3. GERAÇÃO DE IMAGENS E CAPAS (1:1 e 16:9)
+     */
+    async generateVisualAsset(prompt, aspectRatio = '16:9', onProgress = null) {
+      const apiKey = this.getApiKey();
+      if (!apiKey) {
+        this.promptApiKeyConfig();
+        if (!this.hasApiKey()) throw new Error("Chave da API do Gemini necessária para gerar imagens.");
       }
 
-      async structureMasterclass(rawScript, lessonTitle = "", courseTitle = "", onProgress = null) {
-        if (!rawScript || rawScript.trim().length < 10) {
-          throw new Error("O roteiro bruto (rawScript) está muito curto ou vazio. Cole o texto ou transcreva a aula primeiro.");
-        }
+      const geminiImageModels = [
+        'gemini-3.1-flash-image',
+        'gemini-3.1-flash-image-preview',
+        'gemini-3-pro-image',
+        'imagen-3.0-generate-002',
+        'imagen-4.0-generate-001'
+      ];
 
-        const systemPrompt = `Você é o Arquiteto Pedagógico Sênior do ecossistema AgoraEuFalo, codificando a didática consagrada de mais de 35 anos de sala de aula do Professor Leonardo Leite.
+      const ratioInstruction = aspectRatio === '16:9'
+        ? 'Output a 16:9 widescreen horizontal aspect ratio image.'
+        : 'Output a 1:1 square aspect ratio image.';
 
-REGRAS PEDAGÓGICAS CANÔNICAS ABSOLUTAS:
-1. DIDÁTICA DO "SENTIMENTO DA ESTRUTURA" (ZERO JARGÕES GRAMATICAIS):
-   - Proibição absoluta de explicar a língua por nomenclaturas acadêmicas abstratas.
-   - Explique SEMPRE pela intenção, pelo sentimento da estrutura, pelo contexto emocional e prático de quando a frase é dita na vida real.
-2. A REGRA CANÔNICA DE "ZERO TRADUÇÕES ÓBVIAS":
-   - Proibição absoluta de traduzir números universais (ex: 1973, 2026), dias da semana óbvios ou palavras de compreensão universal.
-   - Traduções aplicam-se SOMENTE a expressões contraintuitivas, idiomáticas ou onde a lógica do inglês diverge do português falado brasileiro real.
-3. DESIGN CALM EDTECH DE ALTO CONTRASTE (ZERO CAIXAS ESCURAS):
-   - O HTML gerado deve usar exclusivamente caixas didáticas claras com Tailwind CSS (bg-amber-50/90, border-2 border-amber-200, bg-white, text-slate-900).
-4. EXTRAÇÃO DA SACADA DE OURO DO PROFESSOR LEO (goldenTip):
-   - Uma sacada monumental, prática, libertadora e acolhedora de 1 a 2 frases com a sabedoria direta do Professor Leo sobre a aula.
+      const fullPrompt = `${prompt}\n\n${ratioInstruction}`;
 
-FORMATO DE SAÍDA OBRIGATÓRIO:
-Retorne EXCLUSIVAMENTE um objeto JSON válido (sem markdown de código em volta) com a seguinte estrutura:
-{
-  "goldenTip": "A sacada de ouro prática do Professor Leo",
-  "processedContentHtml": "<div class=\\"space-y-6\\">...</div>",
-  "summary": "Resumo pedagógico em 2 linhas"
-}`;
+      let lastError = null;
 
-        const userMessage = `Título do Curso: ${courseTitle || 'Curso de Inglês AgoraEuFalo'}
-Título da Aula: ${lessonTitle || 'Aula'}
-Roteiro Bruto / Transcrição da Aula:
-"""
-${rawScript}
-"""
+      for (const model of geminiImageModels) {
+        try {
+          if (onProgress) onProgress(`Gerando imagem (${aspectRatio}) com ${model}...`);
+          
+          if (model.startsWith('imagen-')) {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${encodeURIComponent(this.getApiKey())}`;
+            const payload = {
+              instances: [{ prompt: fullPrompt }],
+              parameters: {
+                sampleCount: 1,
+                aspectRatio: aspectRatio,
+                personGeneration: 'allow_adult'
+              }
+            };
 
-Por favor, analise a transcrição e gere o JSON com a Sacada de Ouro e o HTML pedagógico completo estruturado nos padrões de luxo do AgoraEuFalo.`;
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
 
-        const payload = {
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: userMessage }]
+            if (!response.ok) {
+              const errJson = await response.json().catch(() => ({}));
+              lastError = new Error(`[${model}] ${errJson.error?.message || response.statusText}`);
+              continue;
             }
-          ],
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
-          },
-          generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 8192,
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "OBJECT",
-              properties: {
-                goldenTip: { type: "STRING" },
-                processedContentHtml: { type: "STRING" },
-                summary: { type: "STRING" }
+
+            const resData = await response.json();
+            const b64 = resData.predictions?.[0]?.bytesBase64Encoded 
+              || resData.predictions?.[0]?.image?.imageBytes 
+              || resData.predictions?.[0]?.imageBytes;
+
+            if (b64) {
+              return { base64: b64, mimeType: 'image/jpeg' };
+            }
+          } else {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(this.getApiKey())}`;
+            const payload = {
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: fullPrompt }]
+                }
+              ],
+              generationConfig: {
+                responseModalities: ["IMAGE"]
+              }
+            };
+
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'x-goog-api-key': this.getApiKey()
               },
-              required: ["goldenTip", "processedContentHtml"]
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              const errJson = await response.json().catch(() => ({}));
+              const msg = errJson.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+              console.warn(`[Gemini Image API] Falha no modelo ${model}: ${msg}`);
+              lastError = new Error(`[${model}] ${msg}`);
+              continue;
             }
+
+            const resData = await response.json();
+            const parts = resData.candidates?.[0]?.content?.parts || [];
+            for (const part of parts) {
+              const inline = part.inlineData || part.inline_data;
+              if (inline && inline.data) {
+                return {
+                  base64: inline.data,
+                  mimeType: inline.mimeType || inline.mime_type || 'image/jpeg'
+                };
+              }
+            }
+
+            console.warn(`[Gemini Image API] Modelo ${model} respondeu sem inlineData:`, resData);
+            lastError = new Error(`[${model}] Resposta sem dados de imagem`);
           }
-        };
-
-        const resData = await this.callGeminiApi(payload, onProgress);
-        const rawJson = resData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-        const parsed = this.safeParseAiJson(rawJson);
-
-        return {
-          goldenTip: parsed.goldenTip || '',
-          processedContentHtml: parsed.processedContentHtml || '',
-          summary: parsed.summary || ''
-        };
+        } catch (err) {
+          console.warn(`[Gemini Image API] Erro no modelo ${model}:`, err);
+          lastError = err;
+        }
       }
+
+      throw lastError || new Error("Nenhum modelo de geração de imagem respondeu com sucesso.");
+    }
   }
 
+  // Instância singleton global
   window.AEFStudioAI = new AEFStudioAI();
+  window.aefStudioAi = window.AEFStudioAI;
 })(window);

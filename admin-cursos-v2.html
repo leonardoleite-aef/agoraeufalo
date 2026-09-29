@@ -1352,7 +1352,14 @@
           await window.aefCloudSync.init();
           const remoteList = await window.aefCloudSync.getCoursesList(ALL_COURSES);
           if (remoteList && Object.keys(remoteList).length > 0) {
-            ALL_COURSES = { ...ALL_COURSES, ...remoteList };
+            for (const [cid, rCourse] of Object.entries(remoteList)) {
+              const localModules = ALL_COURSES[cid]?.modules || [];
+              ALL_COURSES[cid] = {
+                ...(ALL_COURSES[cid] || {}),
+                ...rCourse,
+                modules: (rCourse.modules && rCourse.modules.length > 0) ? rCourse.modules : localModules
+              };
+            }
           }
         }
       } catch (err) {

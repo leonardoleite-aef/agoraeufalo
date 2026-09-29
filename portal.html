@@ -1191,7 +1191,8 @@
      * Calcula o badge do curso dinamicamente baseado no modelo comercial e no acesso do aluno.
      * Substitui o badge estático de curso que foi descontinuado.
      */
-    function resolveBadgeLabel(course, hasAccess) {
+    window.resolveBadgeLabel = function resolveBadgeLabel(course, hasAccess) {
+      if (!course) return 'EXCLUSIVO CLUB';
       const tier = course.accessTier || 'all_access';
       if (hasAccess) {
         return (tier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'))) ? 'MENTORIA VIP' : 'LIBERADO';
@@ -1203,6 +1204,9 @@
         return 'WORKSHOP';
       }
       return 'EXCLUSIVO CLUB';
+    };
+    function resolveBadgeLabel(course, hasAccess) {
+      return window.resolveBadgeLabel(course, hasAccess);
     }
 
       // ——— RECOMENDAÇÃO DO HERO "CONTINUAR DE ONDE PAROU" ———
@@ -1321,7 +1325,24 @@
     });
 
     // ——— 7. UPSELL ENGINE & CATÁLOGOS DE CURSOS ———
+    if (!window.resolveBadgeLabel) {
+      window.resolveBadgeLabel = function(course, hasAccess) {
+        if (!course) return 'EXCLUSIVO CLUB';
+        const tier = course.accessTier || 'all_access';
+        if (hasAccess) {
+          return (tier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'))) ? 'MENTORIA VIP' : 'LIBERADO';
+        }
+        if (tier === 'free') return 'AULA ABERTA';
+        if (tier === 'mentoria_vip') return 'MENTORIA VIP';
+        if (tier === 'standalone') {
+          if (course.priceInCents) return 'WORKSHOP • R$ ' + (course.priceInCents / 100).toFixed(0);
+          return 'WORKSHOP';
+        }
+        return 'EXCLUSIVO CLUB';
+      };
+    }
     async function renderCoursesShowcase(enrolledProducts, isAdmin = false, currentEmail = '', currentTier = 'free') {
+      const resolveBadgeLabel = window.resolveBadgeLabel;
       const baseSeed = (typeof OFFICIAL_COURSES_MATRIX !== 'undefined') ? OFFICIAL_COURSES_MATRIX : {};
       window.AEFCoursesMatrix = window.AEFCoursesMatrix || Object.assign({}, baseSeed, window.AEF_COURSES_REGISTRY || {});
       let courses = window.AEFCoursesMatrix;
