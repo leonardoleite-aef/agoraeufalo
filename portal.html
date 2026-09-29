@@ -945,7 +945,7 @@
       if (titleEl) titleEl.innerText = `Desbloquear ${course.title || 'Treinamento'}`;
       if (descEl) descEl.innerText = course.description || "Faça o upgrade para o AgoraEuFalo English Club para ter acesso imediato a todas as aulas, áudios narrados e treinos de reflexo deste treinamento.";
       if (imgEl) imgEl.src = course.coverImageUrl || "assets/images/cover-default-aef.jpg";
-      if (badgeEl) badgeEl.innerText = course.badge || "EXCLUSIVO CLUB";
+      if (badgeEl) badgeEl.innerText = resolveBadgeLabel(course, false);
 
       let checkoutUrl = course.standaloneCheckoutHotmart || course.freeTierCtaUrl || "https://pay.hotmart.com/T107479074N?off=mgwnab3h";
       if (window.aefOffersRegistry && typeof window.aefOffersRegistry.getOfferById === 'function') {
@@ -1187,6 +1187,24 @@
       }
       if (statCompletedEl) statCompletedEl.innerText = completedList.length;
 
+    /**
+     * Calcula o badge do curso dinamicamente baseado no modelo comercial e no acesso do aluno.
+     * Substitui o badge estático de curso que foi descontinuado.
+     */
+    function resolveBadgeLabel(course, hasAccess) {
+      const tier = course.accessTier || 'all_access';
+      if (hasAccess) {
+        return (tier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'))) ? 'MENTORIA VIP' : 'LIBERADO';
+      }
+      if (tier === 'free') return 'AULA ABERTA';
+      if (tier === 'mentoria_vip') return 'MENTORIA VIP';
+      if (tier === 'standalone') {
+        if (course.priceInCents) return 'WORKSHOP • R$ ' + (course.priceInCents / 100).toFixed(0);
+        return 'WORKSHOP';
+      }
+      return 'EXCLUSIVO CLUB';
+    }
+
       // ——— RECOMENDAÇÃO DO HERO "CONTINUAR DE ONDE PAROU" ———
       function hasAccessToCourse(courseId, tier, enrolled, adminFlag, courseMatrix) {
         const course = courseMatrix ? courseMatrix[courseId] : null;
@@ -1404,7 +1422,7 @@
         .filter(c => {
           if (c.published === false || c.isPublished === false) return false;
           
-          const isMentorshipCourse = c.id.startsWith('mentoria-') || (c.badge && String(c.badge).toUpperCase().includes('MENTORIA'));
+          const isMentorshipCourse = c.accessTier === 'mentoria_vip' || (c.id && c.id.startsWith('mentoria-'));
           const courseOwnerEmail = (c.studentEmail || '').trim().toLowerCase();
           const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
           
@@ -1465,7 +1483,7 @@
             ? window.AEFAccessEngine.hasAccess(userObj, course)
             : (isAdmin || isOwner || enrolledProducts.includes(id) || course.tierRequired === 'free');
             
-          const isMentorshipCourse = course.id.startsWith('mentoria-') || (course.badge && String(course.badge).toUpperCase().includes('MENTORIA'));
+          const isMentorshipCourse = course.accessTier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'));
 
           const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
           const completedInThisCourse = courseProg.completedLessons || [];
@@ -1507,7 +1525,7 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
                     <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full ${isMentorshipCourse ? 'bg-emerald-600' : 'bg-[#C68A36]'} text-white font-mono font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1">
                       <span>✓</span>
-                      <span>${course.badge || (isMentorshipCourse ? 'MENTORIA VIP' : 'LIBERADO')}</span>
+                      <span>${resolveBadgeLabel(course, true)}</span>
                     </span>
                   </div>
 

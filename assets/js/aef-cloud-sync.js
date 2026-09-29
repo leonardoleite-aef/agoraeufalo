@@ -160,7 +160,13 @@
       accessTier,
       access,
       isPublished: course.isPublished !== undefined ? Boolean(course.isPublished) : (course.published !== false),
-      categories: Array.isArray(course.categories) ? course.categories : ["magic_stories"]
+      categories: Array.isArray(course.categories) ? course.categories : [],
+      standaloneCheckoutHotmart: course.standaloneCheckoutHotmart || null,
+      standaloneCheckoutStripe: course.standaloneCheckoutStripe || null,
+      hotmartProductId: course.hotmartProductId || null,
+      includedInClubSubscription: course.includedInClubSubscription === true,
+      meetUrl: course.meetUrl || null,
+      studentEmail: course.studentEmail || null
     };
   }
 

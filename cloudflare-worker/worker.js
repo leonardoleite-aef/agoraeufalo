@@ -1229,6 +1229,29 @@ export async function handleHotmartWebhook(request, env, ctx) {
     const studentId = email.replace(/[^a-zA-Z0-9]/g, "_");
     const nowIso = receivedAt;
     const subCode = (subscription.subscriber_code || subscription.code || "").trim();
+    const productId = prodId;
+
+    // Resolve courseId a partir do hotmartProductId consultando a coleção courses
+    let resolvedCourseId = productId; // fallback: usa o productId diretamente
+    try {
+      const coursesResp = await fetch(
+        `https://firestore.googleapis.com/v1/projects/${typeof FIREBASE_CONFIG !== 'undefined' && FIREBASE_CONFIG?.projectId ? FIREBASE_CONFIG.projectId : FIRESTORE_PROJECT_ID}/databases/(default)/documents/courses?pageSize=50&key=${FIRESTORE_API_KEY}`,
+        { headers: typeof FIREBASE_ADMIN_HEADERS !== 'undefined' ? FIREBASE_ADMIN_HEADERS : {} }
+      );
+      if (coursesResp.ok) {
+        const coursesData = await coursesResp.json();
+        const matchingCourse = (coursesData.documents || []).find(doc => {
+          const f = doc.fields || {};
+          return f.hotmartProductId?.stringValue === String(productId);
+        });
+        if (matchingCourse) {
+          resolvedCourseId = matchingCourse.name.split('/').pop();
+          console.log(`[AEF Worker] Hotmart productId ${productId} → courseId: ${resolvedCourseId}`);
+        }
+      }
+    } catch (e) {
+      console.warn('[AEF Worker] Falha ao resolver hotmartProductId para courseId:', e.message);
+    }
 
     // 7. Dedup Atômico: Gravação condicional em webhook_events/{eventId} (exists=false) com status: "pending" (§3.4)
     const dedupResult = await saveAtomicWebhookEvent(eventId, {
@@ -1321,7 +1344,7 @@ export async function handleHotmartWebhook(request, env, ctx) {
     ]);
 
     const activeMappings = { ...PRODUCT_CATEGORY_MAPPING, ...(dynamicMappings || {}) };
-    let mapping = activeMappings[prodId] || activeMappings["8460579"] || PRODUCT_CATEGORY_MAPPING["8460579"];
+    let mapping = activeMappings[prodId] || activeMappings[resolvedCourseId] || activeMappings["8460579"] || PRODUCT_CATEGORY_MAPPING["8460579"];
 
     if (offerCode.includes("VIP") || prodName.toUpperCase().includes("VIP") || prodName.includes("2026")) {
       mapping = activeMappings["PROJETO_AEF_2026"] || PRODUCT_CATEGORY_MAPPING["PROJETO_AEF_2026"];
@@ -1357,6 +1380,9 @@ export async function handleHotmartWebhook(request, env, ctx) {
 
     let targetCategories = [...mapping.categories];
     let targetCourses = [...mapping.enrolledProducts];
+    if (resolvedCourseId && resolvedCourseId !== "8460579" && !targetCourses.includes(resolvedCourseId)) {
+      targetCourses.push(resolvedCourseId);
+    }
     let accessStatus = "active";
     let summary = "";
     let expiresAt = null;
@@ -1440,7 +1466,7 @@ export async function handleHotmartWebhook(request, env, ctx) {
         id: subCode || `sub_${studentId}_hotmart`,
         subscriptionCode: subCode || undefined,
         entitlement: primaryEntitlement,
-        productId: prodId,
+        productId: resolvedCourseId,
         billingPeriod: billingPeriod,
         status: accessStatus,
         expiresAt: expiresAt,

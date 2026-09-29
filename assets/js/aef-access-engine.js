@@ -682,8 +682,8 @@
       accessTier = "standalone";
     } else if (raw.accessTier === "all_access" || raw.accessTier === "club") {
       accessTier = "all_access";
-    } else if (raw.accessTier === "mentoria_vip" || id.startsWith("mentoria-")) {
-      accessTier = "standalone";
+    } else if (raw.accessTier === 'mentoria_vip' || id.startsWith('mentoria-')) {
+      accessTier = 'mentoria_vip';
     }
 
     let access = {
@@ -712,9 +712,9 @@
       } else if (accessTier === "standalone") {
         const prodId = raw.productId || raw.requiresProductId || id;
         access.requiresProductId = Array.isArray(prodId) ? prodId : [String(prodId)];
-        if (id.startsWith("mentoria-") || raw.accessTier === "mentoria_vip") {
-          access.entitlements = ["member_mentoria"];
-        }
+      } else if (accessTier === "mentoria_vip") {
+        access.entitlements = ["member_mentoria"];
+        access.requiresProductId = [id];
       }
 
       if (Array.isArray(raw.accessCategories)) {
@@ -736,7 +736,12 @@
       slug,
       accessTier,
       access,
-      isPublished
+      isPublished,
+      standaloneCheckoutHotmart: raw.standaloneCheckoutHotmart || null,
+      standaloneCheckoutStripe: raw.standaloneCheckoutStripe || null,
+      hotmartProductId: raw.hotmartProductId || null,
+      includedInClubSubscription: raw.includedInClubSubscription === true,
+      meetUrl: raw.meetUrl || null
     };
   }
 
