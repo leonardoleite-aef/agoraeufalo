@@ -492,7 +492,7 @@
           </label>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <label class="flex items-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/10 cursor-pointer hover:bg-white/5 transition">
-              <input type="checkbox" value="magic_stories_legacy" class="editor-legacy-chk rounded accent-amber-500 w-3.5 h-3.5">
+              <input type="checkbox" value="ms-legacy" class="editor-legacy-chk rounded accent-amber-500 w-3.5 h-3.5">
               <span class="text-xs text-slate-300">Magic Stories Clássico</span>
             </label>
             <label class="flex items-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/10 cursor-pointer hover:bg-white/5 transition">
@@ -1671,7 +1671,6 @@
 
       // Artwork Studio inputs
       document.getElementById("artInputTitle").value = course.title || "";
-      const tier = course.accessTier || 'all_access';
       const suggestedBadge = tier === 'free' ? 'AULA ABERTA' : tier === 'standalone' ? 'WORKSHOP' : tier === 'mentoria_vip' ? 'MENTORIA VIP' : 'MASTERCLASS';
       document.getElementById("artInputBadge").value = (course.badge || suggestedBadge);
       document.getElementById("artInputPalette").value = course.themeColor || "amber";
