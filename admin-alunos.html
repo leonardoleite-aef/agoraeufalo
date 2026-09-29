@@ -2270,7 +2270,20 @@ Bons treinos e nos vemos na Sala de Aula!`;
       const modTitle = document.getElementById('vip-space-module-title').value.trim() || `Welcome ${name}!`;
       const meetUrl = document.getElementById('vip-space-meet-url').value.trim();
 
-      const studentId = rawSlug || name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      let studentId = rawSlug;
+      if (!studentId) {
+        if (email === 'mateus.s.gomes.novo@gmail.com' || name.toLowerCase().includes('mateus') || name.toLowerCase().includes('matheus')) {
+          studentId = 'mateus.s.gomes.novo';
+        } else if (email === 'andrebarrote1992@gmail.com' || name.toLowerCase().includes('barrote')) {
+          studentId = 'andre';
+        } else if (email === 'estevaopin@gmail.com' || name.toLowerCase().includes('estêvão') || name.toLowerCase().includes('estevao')) {
+          studentId = 'estevaopin';
+        } else if (email === 'thomasskt21@gmail.com' || name.toLowerCase().includes('thomas')) {
+          studentId = 'thomasskt21';
+        } else {
+          studentId = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+      }
       const courseId = `mentoria-${studentId}`;
 
       const btn = document.getElementById('btn-submit-vip-space');

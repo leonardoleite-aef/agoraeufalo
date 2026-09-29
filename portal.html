@@ -1396,15 +1396,39 @@
       const normalizedCurrentEmail = (currentEmail || '').trim().toLowerCase();
 
       // Extrai, filtra e ordena a matriz de cursos para uma vitrine hierárquica e limpa
+      const seenCourseIds = new Set();
+      const seenMentorshipKeys = new Set();
+
       const visibleCourses = Object.entries(courses)
         .map(([id, c]) => Object.assign({ id }, c))
         .filter(c => {
-          if (c.published === false) return false;
-          // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade absoluta
+          if (c.published === false || c.isPublished === false) return false;
+          
           const isMentorshipCourse = c.id.startsWith('mentoria-') || (c.badge && String(c.badge).toUpperCase().includes('MENTORIA'));
           const courseOwnerEmail = (c.studentEmail || '').trim().toLowerCase();
           const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
+          
+          // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade absoluta
           if (isMentorshipCourse && !isAdmin && !isOwner) return false;
+
+          // Se for mentoria VIP, valida integridade (evita cursos órfãos/fantasmas sem aluno ou módulos)
+          if (isMentorshipCourse) {
+            const hasOwner = Boolean(courseOwnerEmail || c.studentId);
+            const hasContent = Boolean(c.modules && c.modules.length > 0) || Boolean(c.coverImageUrl && !c.coverImageUrl.includes('cover-default-aef'));
+            if (!hasOwner && !hasContent) return false;
+
+            // Deduplicação inteligente de mentorias: no máximo 1 sala por mentorado na vitrine
+            const studentKey = courseOwnerEmail || c.studentId || (c.title ? c.title.toLowerCase().replace(/[^a-z0-9]/g, '') : '');
+            if (studentKey) {
+              if (seenMentorshipKeys.has(studentKey)) return false;
+              seenMentorshipKeys.add(studentKey);
+            }
+          }
+
+          // Deduplicação geral por ID de curso
+          if (seenCourseIds.has(c.id)) return false;
+          seenCourseIds.add(c.id);
+
           return true;
         });
 
@@ -1431,6 +1455,8 @@
       for (const course of visibleCourses) {
         const id = course.id;
         try {
+          const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
+          const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
 
           totalVisibleCatalog++;
 
