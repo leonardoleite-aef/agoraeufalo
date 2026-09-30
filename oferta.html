@@ -209,15 +209,22 @@
                    </div>
                  `;
               } else if (b.type === 'guarantee') {
+                 const gDaysMatch = (b.content || '').match(/(7|15|30)\s*dias?/i);
+                 const gDays = gDaysMatch ? gDaysMatch[1] : '7';
+                 const gContent = b.content || `Garantia Incondicional de ${gDays} Dias. Seu risco é absolutamente zero. Se você não gostar do método, devolvemos 100% do seu dinheiro, sem burocracia.`;
+                 
                  blocksHtml += `
                    <div class="relative overflow-hidden flex flex-col sm:flex-row items-center gap-8 bg-gradient-to-r from-amber-500/10 to-[#0A192F] border border-amber-500/30 rounded-3xl p-8 sm:p-12 shadow-2xl group">
                      <div class="absolute right-0 top-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] -mr-20 -mt-20"></div>
-                     <div class="shrink-0 relative z-10">
-                       <i data-lucide="shield-check" class="w-24 h-24 text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]"></i>
+                     
+                     <div class="relative flex flex-col items-center justify-center w-24 h-24 shrink-0 bg-amber-500/20 rounded-full border-2 border-amber-500 text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] z-10">
+                       <span class="text-4xl font-black">${gDays}</span>
+                       <span class="absolute -bottom-3 bg-amber-500 text-slate-950 text-[11px] font-black uppercase px-3 py-1 rounded-full tracking-wider">DIAS</span>
                      </div>
-                     <div class="relative z-10 text-center sm:text-left">
+
+                     <div class="relative z-10 text-center sm:text-left mt-4 sm:mt-0">
                        ${b.title ? `<h2 class="text-3xl font-black text-white mb-3">${b.title}</h2>` : ''}
-                       <div class="text-slate-300 text-lg leading-relaxed max-w-xl">${b.content || 'Garantia Incondicional de 7 Dias. Seu risco é absolutamente zero. Se você não gostar do método, devolvemos 100% do seu dinheiro, sem burocracia.'}</div>
+                       <div class="text-slate-300 text-lg leading-relaxed max-w-xl">${gContent.replace(/\\n/g, '<br>')}</div>
                      </div>
                    </div>
                  `;
@@ -262,7 +269,16 @@
                  const title = ofF.title?.stringValue || 'Oferta';
                  const badge = ofF.badge?.stringValue || '';
                  const hmOffer = ofF.hotmart?.mapValue?.fields || {};
-                 const checkoutUrl = hmOffer.checkoutUrl?.stringValue || '';
+                 let checkoutUrl = hmOffer.checkoutUrl?.stringValue || '';
+                 
+                 // Add tracking SRC
+                 if (checkoutUrl) {
+                    try {
+                       const u = new URL(checkoutUrl);
+                       u.searchParams.set('src', `landing_${currentPageSlug}`);
+                       checkoutUrl = u.toString();
+                    } catch(e) {}
+                 }
                  
                  const pricing = ofF.pricing?.mapValue?.fields || {};
                  const price = pricing.offerPrice?.doubleValue || pricing.offerPrice?.integerValue || 0;
@@ -284,6 +300,22 @@
                     `;
                  }
 
+                 // If Hotmart URL exists, use JS Modal via openHotmartCheckout
+                 let ctaHtml = '';
+                 if (checkoutUrl && checkoutUrl !== '') {
+                     ctaHtml = `
+                       <button type="button" onclick="window.openHotmartCheckout('${checkoutUrl}')" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition-all shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-4">
+                          <span>Garantir Minha Vaga ➔</span>
+                       </button>
+                     `;
+                 } else {
+                     ctaHtml = `
+                       <button type="button" disabled class="w-full py-4 px-6 rounded-xl bg-slate-800 text-slate-500 font-black text-xs sm:text-sm uppercase tracking-wider mt-4 cursor-not-allowed">
+                          <span>Oferta Indisponível</span>
+                       </button>
+                     `;
+                 }
+
                  const cardHtml = `
                     <div class="bg-[#112240] border border-amber-500/30 rounded-3xl p-6 sm:p-8 flex flex-col shadow-2xl relative">
                        ${badge ? `<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-wider">${badge}</div>` : ''}
@@ -293,11 +325,8 @@
                           ${oldPrice > price ? `<div class="text-sm text-slate-400 line-through mb-1">De R$ ${Number(oldPrice).toFixed(2).replace('.',',')}</div>` : ''}
                           <div class="text-3xl font-black text-amber-400">${inst || `R$ ${Number(price).toFixed(2).replace('.',',')}`}</div>
                        </div>
-
-                       <button onclick="window.openHotmartCheckout('${checkoutUrl}')" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition-all shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-4">
-                          <span>Garantir Minha Vaga ➔</span>
-                       </button>
-
+                       
+                       ${ctaHtml}
                        ${stripeHtml}
                     </div>
                  `;
@@ -336,7 +365,9 @@
          // Inject tracking SRC
          url.searchParams.set('src', `landing_${currentPageSlug}`);
          
-         if (window.hotmart_widget) {
+         if (window.HM && window.HM.checkout) {
+            window.HM.checkout.open({ url: url.toString() });
+         } else if (window.hotmart_widget) {
             hotmart_widget.open({ url: url.toString() });
          } else {
             window.open(url.toString(), '_blank');
