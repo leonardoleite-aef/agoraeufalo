@@ -125,7 +125,9 @@
         
         if (offerBlocks.length > 0) {
            const offersContainer = document.getElementById('offersContainer');
-           offersContainer.innerHTML = ''; // clear
+           
+           let activeCount = 0;
+           let htmlBuffer = '';
 
            for (const offerId of offerBlocks) {
               const offerRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/offers/${offerId}${apiKey}`);
@@ -178,9 +180,19 @@
                        ${stripeHtml}
                     </div>
                  `;
-                 offersContainer.insertAdjacentHTML('beforeend', cardHtml);
+                 
+                 activeCount++;
+                 htmlBuffer += cardHtml;
               }
            }
+           
+           if (activeCount === 1) {
+              offersContainer.className = 'grid grid-cols-1 gap-8 items-start justify-center max-w-md mx-auto';
+           } else {
+              offersContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-8 items-start justify-center';
+           }
+           offersContainer.innerHTML = htmlBuffer;
+           
         } else {
            document.getElementById('offersContainer').innerHTML = '<p class="col-span-full text-center text-slate-400">Nenhuma oferta vinculada a esta página no momento.</p>';
         }
