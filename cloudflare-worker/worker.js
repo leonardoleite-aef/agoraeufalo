@@ -1358,6 +1358,78 @@ export async function handleHotmartWebhook(request, env, ctx) {
       };
     }
 
+    // 9.1. RESOLUÇÃO VIA COLEÇÃO offers/ (Nova arquitetura)
+    // Busca a oferta que tem hotmart.offerCode === offerCode OU hotmart.productId === prodId
+    let resolvedOffer = null;
+    try {
+      const offersResp = await fetch(
+        `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/offers?pageSize=100&key=${FIRESTORE_API_KEY}`
+      );
+      if (offersResp.ok) {
+        const offersData = await offersResp.json();
+        const allOffers = offersData.documents || [];
+        
+        // Prioridade 1: match por offerCode exato
+        if (offerCode) {
+          resolvedOffer = allOffers.find(doc => {
+            const f = doc.fields || {};
+            const hmOffer = f.hotmart?.mapValue?.fields;
+            return hmOffer?.offerCode?.stringValue?.toUpperCase() === offerCode;
+          });
+        }
+        
+        // Prioridade 2: match por hotmartProductId
+        if (!resolvedOffer) {
+          resolvedOffer = allOffers.find(doc => {
+            const f = doc.fields || {};
+            const hmOffer = f.hotmart?.mapValue?.fields;
+            return hmOffer?.productId?.stringValue === prodId;
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('[AEF Worker] Falha ao consultar offers/:', e.message);
+    }
+
+    // Se encontrou oferta no Firestore, usa seus Entregáveis para montar o mapping
+    if (resolvedOffer) {
+      const rf = resolvedOffer.fields || {};
+      const accessTier = rf.accessTier?.stringValue || 'club_annual';
+      const grantedCourseIds = rf.grantedCourseIds?.arrayValue?.values?.map(v => v.stringValue) || [];
+      
+      // Derivar categories a partir do accessTier
+      const tierToCategories = {
+        'free': ['member_free'],
+        'club_monthly': ['member_free', 'member_pago'],
+        'club_annual': ['member_free', 'member_pago'],
+        'standalone': ['member_free', 'member_pago'],
+        'mentoria_vip': ['member_free', 'member_pago', 'member_mentoria'],
+        'lifetime': ['member_free', 'member_pago']
+      };
+      
+      const tierToBillingPeriod = {
+        'free': 'lifetime',
+        'club_monthly': 'monthly',
+        'club_annual': 'annual',
+        'standalone': 'lifetime',
+        'mentoria_vip': 'annual',
+        'lifetime': 'lifetime'
+      };
+      
+      mapping = {
+        categories: tierToCategories[accessTier] || ['member_free', 'member_pago'],
+        subscription: { billingPeriod: rf.pricing?.mapValue?.fields?.billingPeriod?.stringValue || tierToBillingPeriod[accessTier] || 'annual' },
+        role: 'student',
+        enrolledProducts: grantedCourseIds.includes('*')
+          ? ['ms-legacy', 'english-quickstart', 'frases-prontas'] // TODO: listar todos os cursos dinamicamente
+          : grantedCourseIds,
+        productName: rf.title?.stringValue || 'AgoraEuFalo'
+      };
+      
+      console.log(`[AEF Worker] Oferta resolvida via Firestore offers/: accessTier=${accessTier}, courses=[${mapping.enrolledProducts.join(',')}]`);
+    }
+    // Se NÃO encontrou, mantém o fallback para PRODUCT_CATEGORY_MAPPING (backward compat)
+
     // Aplica VIP Overrides dinâmicos do Firestore caso o e-mail esteja configurado
     const emailLower = email.toLowerCase().trim();
     if (vipConfig && vipConfig.overrides && vipConfig.overrides[emailLower]) {

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oferta Especial | AgoraEuFalo</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+
+  <!-- Hotmart Widget Loader -->
+  <script src="https://static.hotmart.com/checkout/widget.min.js"></script>
+</head>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <main class="w-full flex-1">
+    <!-- Hero Section -->
+    <section class="w-full bg-[#0A192F] py-16 sm:py-24 border-b border-white/5 relative overflow-hidden">
+      <!-- Decorative background -->
+      <div class="absolute inset-0 bg-[url('assets/images/pattern.svg')] opacity-5 pointer-events-none"></div>
+      
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center space-y-6">
+        <h1 id="heroHeadline" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+          Carregando Oferta...
+        </h1>
+        <p id="heroSubheadline" class="text-base sm:text-lg text-slate-300 max-w-2xl">
+          Aguarde um momento enquanto carregamos os detalhes.
+        </p>
+        
+        <div id="heroVideoContainer" class="w-full max-w-3xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl hidden mt-8 border border-white/10">
+          <iframe id="heroVideoFrame" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ofertas Section -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <div id="offersContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start justify-center">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer minimal -->
+  <footer class="border-t border-white/5 py-8 text-center text-xs text-slate-500">
+    <p>&copy; 2026 AgoraEuFalo. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const FIREBASE_PROJECT_ID = 'agoraeufalo-3463a';
+    const FIREBASE_API_KEY = 'AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk';
+
+    let currentPageSlug = '';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      currentPageSlug = urlParams.get('p');
+      
+      if (!currentPageSlug) {
+        document.getElementById('heroHeadline').innerText = 'Página Não Encontrada';
+        document.getElementById('heroSubheadline').innerText = 'Verifique o link e tente novamente.';
+        return;
+      }
+
+      await loadLandingPage(currentPageSlug);
+    });
+
+    async function loadLandingPage(slug) {
+      try {
+        const apiKey = FIREBASE_API_KEY ? `?key=${FIREBASE_API_KEY}` : '';
+        const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/landing_pages/${slug}${apiKey}`;
+        
+        const res = await fetch(url);
+        if (!res.ok) {
+           document.getElementById('heroHeadline').innerText = 'Oferta não encontrada ou indisponível';
+           document.getElementById('heroSubheadline').innerText = 'A oferta pode ter expirado.';
+           return;
+        }
+
+        const doc = await res.json();
+        const f = doc.fields || {};
+        
+        // Status check
+        if (f.status?.stringValue !== 'published') {
+           document.getElementById('heroHeadline').innerText = 'Oferta Indisponível';
+           document.getElementById('heroSubheadline').innerText = 'Esta página ainda não foi publicada.';
+           return;
+        }
+
+        // Fill Hero
+        const hero = f.hero?.mapValue?.fields || {};
+        document.title = f.title?.stringValue || 'Oferta Especial | AgoraEuFalo';
+        document.getElementById('heroHeadline').innerText = hero.headline?.stringValue || 'Oferta Especial';
+        document.getElementById('heroSubheadline').innerText = hero.subheadline?.stringValue || '';
+        
+        const ytId = hero.youtubeVideoId?.stringValue;
+        if (ytId) {
+           const vc = document.getElementById('heroVideoContainer');
+           const vf = document.getElementById('heroVideoFrame');
+           vf.src = `https://www.youtube.com/embed/${ytId}?rel=0`;
+           vc.classList.remove('hidden');
+        }
+
+        // Load Offers
+        const offerBlocks = (f.offerBlocks?.arrayValue?.values || []).map(v => v.mapValue?.fields?.offerId?.stringValue).filter(Boolean);
+        
+        if (offerBlocks.length > 0) {
+           const offersContainer = document.getElementById('offersContainer');
+           offersContainer.innerHTML = ''; // clear
+
+           for (const offerId of offerBlocks) {
+              const offerRes = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/offers/${offerId}${apiKey}`);
+              if (offerRes.ok) {
+                 const offerDoc = await offerRes.json();
+                 const ofF = offerDoc.fields || {};
+                 
+                 // If paused, skip or show as disabled (will skip for now)
+                 if (ofF.status?.stringValue !== 'active') continue;
+
+                 const title = ofF.title?.stringValue || 'Oferta';
+                 const badge = ofF.badge?.stringValue || '';
+                 const hmOffer = ofF.hotmart?.mapValue?.fields || {};
+                 const checkoutUrl = hmOffer.checkoutUrl?.stringValue || '';
+                 
+                 const pricing = ofF.pricing?.mapValue?.fields || {};
+                 const price = pricing.offerPrice?.doubleValue || pricing.offerPrice?.integerValue || 0;
+                 const oldPrice = pricing.regularPrice?.doubleValue || pricing.regularPrice?.integerValue || 0;
+                 const inst = pricing.installmentsText?.stringValue || '';
+
+                 const stripeOffer = ofF.stripe?.mapValue?.fields || {};
+                 const stripeUrl = stripeOffer.checkoutUrl?.stringValue || '';
+
+                 // Render Card
+                 let stripeHtml = '';
+                 if (stripeUrl) {
+                    stripeHtml = `
+                      <div class="mt-4 text-center">
+                        <a href="${stripeUrl}" target="_blank" class="text-[11px] text-slate-400 underline hover:text-white transition">
+                          Pagar com cartão internacional (USD/EUR) via Stripe
+                        </a>
+                      </div>
+                    `;
+                 }
+
+                 const cardHtml = `
+                    <div class="bg-[#112240] border border-amber-500/30 rounded-3xl p-6 sm:p-8 flex flex-col shadow-2xl relative">
+                       ${badge ? `<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-wider">${badge}</div>` : ''}
+                       <h3 class="text-xl sm:text-2xl font-black text-white text-center mb-4 mt-2">${title}</h3>
+                       
+                       <div class="my-6 text-center">
+                          ${oldPrice > price ? `<div class="text-sm text-slate-400 line-through mb-1">De R$ ${Number(oldPrice).toFixed(2).replace('.',',')}</div>` : ''}
+                          <div class="text-3xl font-black text-amber-400">${inst || `R$ ${Number(price).toFixed(2).replace('.',',')}`}</div>
+                       </div>
+
+                       <button onclick="window.openHotmartCheckout('${checkoutUrl}')" class="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm uppercase tracking-wider transition transform hover:scale-105 shadow-xl">
+                          Garantir Minha Vaga →
+                       </button>
+
+                       ${stripeHtml}
+                    </div>
+                 `;
+                 offersContainer.insertAdjacentHTML('beforeend', cardHtml);
+              }
+           }
+        } else {
+           document.getElementById('offersContainer').innerHTML = '<p class="col-span-full text-center text-slate-400">Nenhuma oferta vinculada a esta página no momento.</p>';
+        }
+
+      } catch(e) {
+        console.error('Error fetching landing page', e);
+        document.getElementById('heroHeadline').innerText = 'Erro de Comunicação';
+        document.getElementById('heroSubheadline').innerText = 'Tente recarregar a página.';
+      }
+    }
+
+    // Expose openHotmartCheckout globally
+    window.openHotmartCheckout = function(checkoutUrl) {
+      if (!checkoutUrl) {
+         alert('Link de checkout indisponível no momento.');
+         return;
+      }
+      try {
+         const url = new URL(checkoutUrl);
+         // Inject tracking SRC
+         url.searchParams.set('src', `landing_${currentPageSlug}`);
+         
+         if (window.hotmart_widget) {
+            hotmart_widget.open({ url: url.toString() });
+         } else {
+            window.open(url.toString(), '_blank');
+         }
+      } catch (e) {
+         console.warn("Invalid URL", checkoutUrl);
+         window.open(checkoutUrl, '_blank');
+      }
+    };
+  </script>
+</body>
+</html>

@@ -183,6 +183,9 @@
               <a href="/vendas" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('vendas')}">
                 <span>⚡</span> <span>Vendas</span>
               </a>
+              <a href="/landing-pages" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('landing-pages')}">
+                <span>📑</span> <span>Landing Pages</span>
+              </a>
               <a href="/webhooks" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('webhooks')}">
                 <span>🔗</span> <span>Webhooks</span>
               </a>
@@ -230,6 +233,7 @@
             <a href="/" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin')}">🏛️ Hub</a>
             <a href="/alunos" class="px-2.5 py-1 rounded-lg shrink-0 ${active('alunos')}">👥 Alunos</a>
             <a href="/vendas" class="px-2.5 py-1 rounded-lg shrink-0 ${active('vendas')}">⚡ Vendas</a>
+            <a href="/landing-pages" class="px-2.5 py-1 rounded-lg shrink-0 ${active('landing-pages')}">📑 LPs</a>
             <a href="/webhooks" class="px-2.5 py-1 rounded-lg shrink-0 ${active('webhooks')}">🔗 Webhooks</a>
             <a href="/marketing" class="px-2.5 py-1 rounded-lg shrink-0 ${active('marketing')}">🎯 Marketing</a>
             <a href="/admin-cursos" class="px-2.5 py-1 rounded-lg shrink-0 ${active('admin-cursos')}">📦 Cursos</a>

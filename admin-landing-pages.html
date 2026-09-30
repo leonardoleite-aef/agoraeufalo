@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Pages Builder | AgoraEuFalo Admin</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            aef: {
+              navy: '#0A192F',
+              'navy-light': '#112240',
+              'navy-dark': '#060D17',
+              gold: '#C68A36',
+              amber: '#F59E0B',
+              slate: '#1E293B',
+              card: '#0D1B2A'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="assets/js/aef-domain-router.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="assets/js/aef-cloud-sync.js"></script>
+  <script src="assets/js/aef-portal-auth.js"></script>
+  <script src="assets/js/aef-access-engine.js"></script>
+  <script src="assets/js/aef-offers-registry.js"></script>
+  <script src="assets/js/aef-admin-nav.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(10, 25, 47, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+  </style>
+</head>
+<body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <div id="aef-admin-header-container"></div>
+
+  <main class="max-w-[98vw] 2xl:max-w-[1920px] w-full mx-auto p-4 sm:p-6 flex-1 space-y-6">
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0A192F] via-[#112240] to-[#0A192F] border border-white/10 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <div class="space-y-2 z-10">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-0.5 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            DEPARTAMENTO DE VENDAS
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
+            FASE 3: LANDING PAGES
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          Construtor de Landing Pages
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+          Crie páginas de vendas combinando Ofertas como blocos modulares.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2.5 z-10 shrink-0">
+        <button onclick="openPageModal()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center gap-2 cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>+ Nova Página de Vendas</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid de Páginas -->
+    <section id="pagesContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div class="col-span-full text-center text-slate-500 py-10">Carregando páginas...</div>
+    </section>
+  </main>
+
+  <!-- Modal de Criação / Edição -->
+  <div id="pageModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-[#0A192F] border border-white/15 rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+      
+      <div class="p-5 border-b border-white/10 flex items-center justify-between bg-[#112240]">
+        <div>
+          <h3 class="text-base sm:text-lg font-black text-white" id="modalPageTitle">Configurar Landing Page</h3>
+        </div>
+        <button onclick="closePageModal()" class="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="pageForm" onsubmit="handleSavePage(event)" class="p-5 sm:p-6 overflow-y-auto custom-scrollbar flex-1 space-y-4 text-xs">
+        <input type="hidden" id="formPageId">
+        <input type="hidden" id="formCreatedAt">
+
+        <!-- Info -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Título Interno</label>
+            <input type="text" id="formTitle" required class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Slug (URL)</label>
+            <input type="text" id="formSlug" required placeholder="ex: black-friday-2026" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-amber-400 focus:outline-none">
+          </div>
+          <div>
+             <label class="block font-bold text-slate-300 mb-1">Tipo</label>
+             <select id="formType" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+                <option value="campaign">Campanha (Múltiplas Ofertas)</option>
+                <option value="product">Produto Único</option>
+             </select>
+          </div>
+          <div>
+             <label class="block font-bold text-slate-300 mb-1">Status</label>
+             <select id="formStatus" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-medium focus:border-amber-400 focus:outline-none">
+                <option value="published">Publicado</option>
+                <option value="draft">Rascunho</option>
+             </select>
+          </div>
+        </div>
+
+        <!-- Hero -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">Hero (Capa)</span>
+          
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Headline (Título Principal)</label>
+            <input type="text" id="formHeadline" required class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-bold focus:border-amber-400 focus:outline-none text-sm">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Sub-headline</label>
+            <input type="text" id="formSubheadline" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-slate-300 focus:border-amber-400 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">YouTube Video ID (Opcional)</label>
+            <input type="text" id="formYoutubeId" placeholder="ex: dQw4w9WgXcQ" class="w-full bg-[#112240] border border-white/15 rounded-xl px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Offers Selector -->
+        <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
+          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">Ofertas da Página</span>
+          <p class="text-[10px] text-slate-500">Selecione as ofertas comerciais ativas que serão exibidas como blocos de checkout nesta página.</p>
+          
+          <div id="offersCheckboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 max-h-60 overflow-y-auto custom-scrollbar">
+             <!-- Rendered dynamically via JS -->
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
+          <button type="button" onclick="closePageModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black transition">
+            Salvar Página
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const AEF_PROJECT_ID = 'agoraeufalo-3463a';
+    const AEF_API_KEY = 'AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk';
+
+    let allLandingPages = [];
+    let activeOffersCache = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.lucide) window.lucide.createIcons();
+      await loadData();
+    });
+
+    async function loadData() {
+      // 1. Fetch active offers to select from
+      if (window.aefOffersRegistry) {
+         const allO = await window.aefOffersRegistry.getAllOffers();
+         activeOffersCache = allO.filter(o => o.status === 'active');
+      }
+
+      // 2. Fetch landing pages from Firestore directly
+      try {
+        const url = `https://firestore.googleapis.com/v1/projects/${AEF_PROJECT_ID}/databases/(default)/documents/landing_pages?pageSize=100${AEF_API_KEY ? '&key=' + AEF_API_KEY : ''}`;
+        
+        const res = await fetch(url);
+        if (res.ok) {
+           const data = await res.json();
+           allLandingPages = (data.documents || []).map(doc => {
+              const f = doc.fields || {};
+              return {
+                 id: doc.name.split('/').pop(),
+                 title: f.title?.stringValue || '',
+                 slug: f.slug?.stringValue || '',
+                 status: f.status?.stringValue || 'draft',
+                 type: f.type?.stringValue || 'campaign',
+                 hero: {
+                    headline: f.hero?.mapValue?.fields?.headline?.stringValue || '',
+                    subheadline: f.hero?.mapValue?.fields?.subheadline?.stringValue || '',
+                    youtubeVideoId: f.hero?.mapValue?.fields?.youtubeVideoId?.stringValue || ''
+                 },
+                 offerBlocks: (f.offerBlocks?.arrayValue?.values || []).map(v => {
+                    const mf = v.mapValue?.fields || {};
+                    return { offerId: mf.offerId?.stringValue || '' };
+                 }),
+                 createdAt: f.createdAt?.stringValue || '',
+                 updatedAt: f.updatedAt?.stringValue || ''
+              };
+           });
+        }
+      } catch(e) {
+         console.error('Error loading landing pages', e);
+      }
+      
+      renderPagesGrid();
+    }
+
+    function renderPagesGrid() {
+      const container = document.getElementById('pagesContainer');
+      if (allLandingPages.length === 0) {
+        container.innerHTML = `<div class="col-span-full py-10 text-center text-slate-500 font-bold">Nenhuma landing page criada ainda.</div>`;
+        return;
+      }
+
+      container.innerHTML = allLandingPages.map(p => {
+        const statusColor = p.status === 'published' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400';
+        return `
+          <div class="bg-[#0A192F] border border-white/10 rounded-3xl p-5 shadow-xl flex flex-col justify-between space-y-4">
+             <div>
+                <div class="flex items-center justify-between mb-2">
+                   <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-lg ${statusColor}">
+                      ${p.status === 'published' ? 'Publicado' : 'Rascunho'}
+                   </span>
+                   <a href="/oferta.html?p=${p.slug}" target="_blank" class="text-amber-400 hover:text-amber-300">
+                     <i data-lucide="external-link" class="w-4 h-4"></i>
+                   </a>
+                </div>
+                <h3 class="font-bold text-white">${p.title}</h3>
+                <p class="text-xs text-slate-400 font-mono mt-1">/oferta.html?p=${p.slug}</p>
+             </div>
+             <div class="text-[11px] text-slate-500">
+                ${p.offerBlocks?.length || 0} oferta(s) conectada(s)
+             </div>
+             <div class="pt-3 border-t border-white/5 flex items-center justify-end">
+                <button onclick="openPageModal('${p.id}')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition">
+                   Editar
+                </button>
+             </div>
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function openPageModal(id = null) {
+      document.getElementById('formPageId').value = id || '';
+      const offersHtml = activeOffersCache.map(o => `
+         <label class="flex items-center gap-2 p-2 rounded-lg bg-[#112240] border border-white/5 cursor-pointer hover:bg-white/5 transition">
+            <input type="checkbox" name="formSelectedOffers" value="${o.id}" class="w-4 h-4 rounded text-amber-500 accent-amber-500 focus:ring-amber-400">
+            <div>
+               <div class="text-xs font-bold text-white">${o.title}</div>
+               <div class="text-[10px] text-slate-400">${o.pricing?.installmentsText || ''}</div>
+            </div>
+         </label>
+      `).join('');
+      document.getElementById('offersCheckboxes').innerHTML = offersHtml;
+
+      if (id) {
+         const p = allLandingPages.find(x => x.id === id);
+         document.getElementById('modalPageTitle').innerText = `Editar Página: ${p.title}`;
+         document.getElementById('formTitle').value = p.title;
+         document.getElementById('formSlug').value = p.slug;
+         document.getElementById('formType').value = p.type;
+         document.getElementById('formStatus').value = p.status;
+         document.getElementById('formHeadline').value = p.hero?.headline || '';
+         document.getElementById('formSubheadline').value = p.hero?.subheadline || '';
+         document.getElementById('formYoutubeId').value = p.hero?.youtubeVideoId || '';
+         document.getElementById('formCreatedAt').value = p.createdAt || '';
+         
+         const selectedIds = p.offerBlocks.map(ob => ob.offerId);
+         document.querySelectorAll('input[name="formSelectedOffers"]').forEach(cb => {
+            cb.checked = selectedIds.includes(cb.value);
+         });
+      } else {
+         document.getElementById('modalPageTitle').innerText = 'Nova Landing Page';
+         document.getElementById('pageForm').reset();
+         document.getElementById('formCreatedAt').value = '';
+      }
+      document.getElementById('pageModal').classList.remove('hidden');
+    }
+
+    function closePageModal() {
+      document.getElementById('pageModal').classList.add('hidden');
+    }
+
+    async function handleSavePage(e) {
+      e.preventDefault();
+      const apiKey = AEF_API_KEY ? `?key=${AEF_API_KEY}` : '';
+      
+      const id = document.getElementById('formPageId').value || document.getElementById('formSlug').value;
+      const title = document.getElementById('formTitle').value;
+      const slug = document.getElementById('formSlug').value;
+      const createdAt = document.getElementById('formCreatedAt').value || new Date().toISOString();
+      
+      const selectedOffers = Array.from(document.querySelectorAll('input[name="formSelectedOffers"]:checked')).map(cb => cb.value);
+      const offerBlocks = selectedOffers.map((oId, idx) => ({
+         mapValue: {
+            fields: {
+               offerId: { stringValue: oId },
+               displayOrder: { integerValue: String(idx + 1) }
+            }
+         }
+      }));
+
+      const payload = {
+         fields: {
+            id: { stringValue: id },
+            title: { stringValue: title },
+            slug: { stringValue: slug },
+            status: { stringValue: document.getElementById('formStatus').value },
+            type: { stringValue: document.getElementById('formType').value },
+            hero: {
+               mapValue: {
+                  fields: {
+                     headline: { stringValue: document.getElementById('formHeadline').value },
+                     subheadline: { stringValue: document.getElementById('formSubheadline').value },
+                     youtubeVideoId: { stringValue: document.getElementById('formYoutubeId').value }
+                  }
+               }
+            },
+            offerBlocks: { arrayValue: { values: offerBlocks } },
+            createdAt: { stringValue: createdAt },
+            updatedAt: { stringValue: new Date().toISOString() }
+         }
+      };
+
+      try {
+         // Requer Admin JWT (idealmente), mas como estamos no builder podemos tentar usar o accessToken
+         let idToken = null;
+         if (window.aefPortalAuth && window.aefPortalAuth.currentUser) {
+            idToken = await window.aefPortalAuth.currentUser.getIdToken();
+         }
+         
+         const headers = { 'Content-Type': 'application/json' };
+         if (idToken) headers['Authorization'] = `Bearer ${idToken}`;
+         
+         const url = `https://firestore.googleapis.com/v1/projects/${AEF_PROJECT_ID}/databases/(default)/documents/landing_pages/${id}${apiKey}`;
+         const res = await fetch(url, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify(payload)
+         });
+         
+         if (res.ok) {
+            alert('Página salva com sucesso!');
+            closePageModal();
+            await loadData();
+         } else {
+            alert('Erro ao salvar página HTTP ' + res.status);
+         }
+      } catch (err) {
+         alert('Falha: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
