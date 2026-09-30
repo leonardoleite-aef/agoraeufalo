@@ -187,9 +187,14 @@
 
     async function loadData() {
       // 1. Fetch active offers to select from
-      if (window.aefOffersRegistry) {
-         const allO = await window.aefOffersRegistry.getAllOffers();
-         activeOffersCache = allO.filter(o => o.status === 'active');
+      try {
+        if (window.aefOffersRegistry) {
+           const allO = await window.aefOffersRegistry.getAllOffers();
+           activeOffersCache = allO.filter(o => o.status === 'active');
+        }
+      } catch (e) {
+        console.warn('Erro ao carregar ofertas. Usando cache vazio.', e);
+        activeOffersCache = [];
       }
 
       // 2. Fetch landing pages from Firestore directly
@@ -341,7 +346,7 @@
                   }
                }
             },
-            offerBlocks: { arrayValue: { values: offerBlocks } },
+            offerBlocks: offerBlocks.length > 0 ? { arrayValue: { values: offerBlocks } } : { arrayValue: {} },
             createdAt: { stringValue: createdAt },
             updatedAt: { stringValue: new Date().toISOString() }
          }
