@@ -34,20 +34,27 @@
 <body class="bg-[#060D17] text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
 
   <main class="w-full flex-1">
-    <!-- Hero Section -->
-    <section class="w-full bg-[#0A192F] py-16 sm:py-24 border-b border-white/5 relative overflow-hidden">
-      <!-- Decorative background -->
-      <div class="absolute inset-0 bg-[url('assets/images/pattern.svg')] opacity-5 pointer-events-none"></div>
-      
+    <!-- Hero Section Cinemático -->
+    <section class="relative pt-16 pb-20 sm:pt-24 sm:pb-32 overflow-hidden bg-gradient-to-b from-[#060D17] via-[#0A192F] to-[#060D17] text-white">
+      <!-- Glow de Ambiente Âmbar -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-amber-500/10 pointer-events-none blur-3xl rounded-full"></div>
+
       <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center space-y-6">
-        <h1 id="heroHeadline" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+        
+        <!-- Badge Institucional (Opcional, mas dá o tom) -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider shadow-inner mb-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+          <span>AgoraEuFalo • Oferta Oficial</span>
+        </div>
+
+        <h1 id="heroHeadline" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white">
           Carregando Oferta...
         </h1>
-        <p id="heroSubheadline" class="text-base sm:text-lg text-slate-300 max-w-2xl">
-          Aguarde um momento enquanto carregamos os detalhes.
+        <p id="heroSubheadline" class="text-lg sm:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
+          Aguarde um momento enquanto carregamos os detalhes da sua inscrição.
         </p>
         
-        <div id="heroVideoContainer" class="w-full max-w-3xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl hidden mt-8 border border-white/10">
+        <div id="heroVideoContainer" class="w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl hidden mt-10 border-2 border-white/10 relative z-20">
           <iframe id="heroVideoFrame" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </div>
@@ -285,8 +292,8 @@
                           <div class="text-3xl font-black text-amber-400">${inst || `R$ ${Number(price).toFixed(2).replace('.',',')}`}</div>
                        </div>
 
-                       <button onclick="window.openHotmartCheckout('${checkoutUrl}')" class="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm uppercase tracking-wider transition transform hover:scale-105 shadow-xl">
-                          Garantir Minha Vaga →
+                       <button onclick="window.openHotmartCheckout('${checkoutUrl}')" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider transition-all shadow-lg shadow-amber-500/25 active:scale-95 flex items-center justify-center gap-2 cursor-pointer mt-4">
+                          <span>Garantir Minha Vaga ➔</span>
                        </button>
 
                        ${stripeHtml}
