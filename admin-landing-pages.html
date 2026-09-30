@@ -107,6 +107,19 @@
         <input type="hidden" id="formPageId">
         <input type="hidden" id="formCreatedAt">
 
+        <!-- Magic Build AI -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-[#060D17] border border-emerald-500/20 mb-4">
+          <div class="flex flex-col sm:flex-row gap-3 items-end">
+            <div class="flex-1">
+              <label class="block font-bold text-emerald-400 mb-1 uppercase tracking-wider text-[10px]">✨ Motor Gemini (Magic Build)</label>
+              <textarea id="aiPrompt" rows="2" placeholder="Ex: Crie uma página para o curso AEF Club focada em adultos que já tentaram de tudo mas continuam travados." class="w-full bg-[#112240] border border-emerald-500/30 rounded-xl px-3 py-2 text-white font-medium focus:border-emerald-400 focus:outline-none custom-scrollbar text-xs"></textarea>
+            </div>
+            <button type="button" id="btnMagicBuild" onclick="runMagicBuild()" class="shrink-0 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl transition shadow-lg shadow-emerald-500/20">
+              Gerar Estrutura
+            </button>
+          </div>
+        </div>
+
         <!-- Info -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -703,6 +716,63 @@
          alert('Erro: ' + err.message);
       } finally {
          btn.innerText = 'Salvar Oferta';
+         btn.disabled = false;
+      }
+    }
+
+    async function runMagicBuild() {
+      const prompt = document.getElementById('aiPrompt').value.trim();
+      if (!prompt) {
+         alert('Por favor, digite algumas instruções para a IA no campo do Magic Build.');
+         return;
+      }
+      const btn = document.getElementById('btnMagicBuild');
+      const originalText = btn.innerText;
+      btn.innerText = 'Raciocinando... 🧠';
+      btn.disabled = true;
+
+      try {
+         const url = 'https://admin.agoraeufalo.com.br/api/admin/landing-pages/generate';
+         const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+               'x-gemini-api-key': AEF_API_KEY
+            },
+            body: JSON.stringify({
+               prompt: prompt,
+               courseInfo: 'Professor: Leonardo Leite. Método: Foco em adultos que travam na fala, sem regras gramaticais, método "Sentimento da Estrutura".'
+            })
+         });
+
+         const data = await res.json();
+         if (!res.ok) throw new Error(data.error || 'Falha na geração');
+         
+         const payload = data.data;
+         if (!payload) throw new Error('Estrutura JSON vazia recebida do Gemini.');
+
+         // Preencher campos
+         if (payload.hero) {
+            document.getElementById('formHeadline').value = payload.hero.headline || '';
+            document.getElementById('formSubheadline').value = payload.hero.subheadline || '';
+         }
+
+         if (payload.contentBlocks && Array.isArray(payload.contentBlocks)) {
+            currentContentBlocks = payload.contentBlocks.map((b, i) => ({
+               id: 'block_' + Date.now() + '_' + i,
+               type: b.type || 'text',
+               title: b.title || '',
+               content: b.content || '',
+               order: i
+            }));
+            renderContentBlocks();
+         }
+
+         alert('✨ Estrutura gerada com sucesso! Revise e edite conforme necessário antes de salvar a página.');
+      } catch (err) {
+         alert('Erro no Magic Build: ' + err.message);
+      } finally {
+         btn.innerText = originalText;
          btn.disabled = false;
       }
     }

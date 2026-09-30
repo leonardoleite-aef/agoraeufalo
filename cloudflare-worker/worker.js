@@ -1811,6 +1811,11 @@ export default {
       return handleGetMagicStoriesCatalog(request, env);
     }
 
+    // 8.2 Endpoint de Geração IA de Landing Pages
+    if (path === "/api/admin/landing-pages/generate") {
+      return handleGenerateLandingPage(request, env);
+    }
+
     // 9. Demais requisições POST -> Processamento do Webhook Hotmart
     return handleHotmartWebhook(request, env, ctx);
   }
@@ -3161,5 +3166,108 @@ async function sendMagicStoryReadyEmail(env, { toEmail, toName, scenario, module
     console.error("❌ [Brevo] Erro fatal de rede ou execução ao despachar e-mail:", err);
     console.error("❌ [Brevo] Stack trace completo:", err?.stack || err);
     return false;
+  }
+}// ============================================================================
+// 12. ENDPOINT DE GERAÇÃO IA DE LANDING PAGES COM GEMINI 3.7 FLASH
+// ============================================================================
+export async function handleGenerateLandingPage(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, x-gemini-api-key"
+      }
+    });
+  }
+
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed. Use POST." }), {
+      status: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { prompt, courseInfo } = body;
+
+    if (!prompt) {
+      return new Response(JSON.stringify({ error: "O campo 'prompt' é obrigatório." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const apiKey = request.headers.get("x-gemini-api-key") || env?.GEMINI_API_KEY || (typeof process !== "undefined" ? process.env?.GEMINI_API_KEY : "");
+    if (!apiKey) {
+      return new Response(JSON.stringify({ error: "GEMINI_API_KEY ausente." }), {
+        status: 500,
+        headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+      });
+    }
+
+    const sysPrompt = `Você é um copywriter de elite no estilo AgoraEuFalo (Professor Leo Leite). 
+Seu objetivo é gerar a estrutura (JSON) para uma Landing Page de Alta Conversão baseada nas informações fornecidas.
+Regras de Copy: Tom direto, sem promessas milagrosas ("fluência em 30 dias"), bem humorado, acolhedor. Proibido jargões corporativos.
+Estrutura exigida em JSON puro:
+{
+  "hero": {
+    "headline": "A Grande Promessa (H1, chamativo)",
+    "subheadline": "Frase de apoio (explicativa, H2)"
+  },
+  "contentBlocks": [
+    // Retorne de 3 a 5 blocos seguindo estes tipos exatos: "text" (simples), "benefits" (lista de vantagens), "guarantee" (texto sobre garantia, mencione o prazo em dias exatos no texto), "about_leo" (texto sobre o professor), "faq" (perguntas frequentes).
+    // O array de contentBlocks deve seguir o formato:
+    { "type": "text", "title": "Opcional, título da seção", "content": "Texto formatado em HTML simples, se necessário. Para faq, o formato é 'P: ...\\nR: ...'" }
+  ]
+}`;
+
+    const userPrompt = `Curso/Produto info: ${courseInfo || 'Nenhuma informacao pre-definida.'}\n\nInstrução do usuário: ${prompt}`;
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${apiKey}`;
+    const payload = {
+      systemInstruction: { parts: [{ text: sysPrompt }] },
+      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+      generationConfig: {
+        temperature: 0.7,
+        responseMimeType: "application/json"
+      }
+    };
+
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Falha Gemini API (${res.status}): ${errText}`);
+    }
+
+    const data = await res.json();
+    let jsonStr = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!jsonStr) throw new Error("Gemini retornou resposta vazia.");
+    
+    let parsedObj;
+    try {
+       parsedObj = JSON.parse(jsonStr);
+    } catch(e) {
+       jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
+       parsedObj = JSON.parse(jsonStr);
+    }
+
+    return new Response(JSON.stringify({ success: true, data: parsedObj }), {
+      status: 200,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
+  } catch (err) {
+    console.error("Erro AI Magic Build:", err);
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*" }
+    });
   }
 }
