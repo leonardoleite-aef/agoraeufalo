@@ -127,7 +127,22 @@ service cloud.firestore {
     }
 
     // ========================================================================
-    // 6. POLÍTICA PADRÃO ZERO TRUST
+    // 6. OFERTAS & LANDING PAGES (Vendas V2)
+    // Leitura: Pública para vitrines e campanhas.
+    // Escrita: Exclusiva do Administrador Mestre.
+    // ========================================================================
+    match /offers/{offerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /landing_pages/{pageId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ========================================================================
+    // 7. POLÍTICA PADRÃO ZERO TRUST
     // Qualquer documento ou coleção não mapeada explicitamente é bloqueada.
     // ========================================================================
     match /{document=**} {
