@@ -142,6 +142,10 @@ A área de membros opera com conexão bidirecional perfeita entre teoria e trein
 
 ---
 
+### 6.2. Política de Segurança & "Zero Trust" (Firestore Rules)
+O banco de dados Firestore opera sob a política de **Zero Trust Architecture**. Isso significa que **qualquer nova coleção criada no banco de dados será sumariamente bloqueada (Erro 403) por padrão**, a menos que seja explicitamente liberada no arquivo `firestore.rules`.
+- **Regra de Engenharia:** Sempre que um agente criar uma nova feature que exija uma coleção nova (ex: `landing_pages`, `offers`), é **obrigatório** editar o arquivo `firestore.rules` para conceder as permissões adequadas (ex: `allow read: if true; allow write: if isAdmin();`) e realizar o deploy das regras. O esquecimento desta etapa quebra a funcionalidade no frontend.
+
 ## 7. Arquitetura de Tiers no Google Cloud Firestore (Single Source of Truth)
 O banco de dados Firestore é a **fonte única da verdade**, eliminando bifurcações ou arquivos estáticos legados:
 
