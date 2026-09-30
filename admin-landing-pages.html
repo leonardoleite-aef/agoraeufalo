@@ -321,11 +321,6 @@
       const createdAt = document.getElementById('formCreatedAt').value || new Date().toISOString();
       
       const selectedOffers = Array.from(document.querySelectorAll('input[name="formSelectedOffers"]:checked')).map(cb => cb.value);
-      
-      if (selectedOffers.length === 0) {
-         alert('⚠️ Obrigatório: Você precisa selecionar pelo menos uma Oferta para construir esta Landing Page.');
-         return;
-      }
 
       const offerBlocks = selectedOffers.map((oId, idx) => ({
          mapValue: {
