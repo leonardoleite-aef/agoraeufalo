@@ -136,9 +136,11 @@
         // Parse and Render Content Blocks
         const contentBlocksRaw = (f.contentBlocks?.arrayValue?.values || []).map(v => {
            const mf = v.mapValue?.fields || {};
+           const titleRaw = mf.title?.stringValue || '';
+           const internalLabels = ['Texto Simples', 'Dor / Agitação', 'Benefícios', 'FAQ', 'Garantia', 'Sobre o Autor'];
            return {
               type: mf.type?.stringValue || 'text',
-              title: mf.title?.stringValue || '',
+              title: internalLabels.includes(titleRaw) ? '' : titleRaw,
               content: mf.content?.stringValue || '',
               order: mf.order?.integerValue || 0
            };
@@ -223,7 +225,7 @@
                  blocksHtml += `
                    <div class="flex flex-col sm:flex-row items-center gap-10 p-8 sm:p-14 bg-[#060D17] rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden">
                      <div class="w-40 h-40 rounded-full bg-slate-800 shrink-0 overflow-hidden border-4 border-amber-500/50 shadow-[0_0_30px_rgba(245,158,11,0.2)] relative z-10">
-                        <img src="/assets/images/leo-avatar.png" alt="Professor Leonardo Leite" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Leonardo+Leite&background=0D1B2A&color=F59E0B&size=200'">
+                        <img src="/assets/images/leonardo-leite.png" alt="Professor Leonardo Leite" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Leonardo+Leite&background=0D1B2A&color=F59E0B&size=200'">
                      </div>
                      <div class="relative z-10 text-center sm:text-left">
                        <h2 class="text-3xl font-black text-white mb-4">Professor Leonardo Leite</h2>
