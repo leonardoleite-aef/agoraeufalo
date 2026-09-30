@@ -414,6 +414,23 @@
           </select>
         </div>
 
+        <!-- Bloco Global: Link da Vitrine -->
+        <div class="mt-4 pt-4 border-t border-white/5 space-y-3">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Página de Vendas (Link da Vitrine)</label>
+          <p class="text-[10px] text-slate-500 leading-tight">URL para onde o aluno é direcionado ao clicar no cadeado do curso na vitrine (quando não possui acesso).</p>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+             <div>
+                <select id="editorCourseLpSelect" onchange="handleLpSelect(this.value)" class="w-full px-3 py-2 rounded-xl bg-[#060D17] border border-white/10 text-white font-bold text-xs focus:border-amber-400 focus:outline-none cursor-pointer">
+                   <option value="">🔗 Digitar URL Customizada...</option>
+                </select>
+             </div>
+             <div>
+                <input type="text" id="editorCourseSalesUrl" placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-[#060D17] border border-white/10 text-white text-xs font-mono focus:border-amber-400 focus:outline-none">
+             </div>
+          </div>
+        </div>
+
         <!-- Painel Condicional: Standalone / Avulso -->
         <div id="editor-standalone-panel" class="hidden p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1330,6 +1347,7 @@
     document.addEventListener("DOMContentLoaded", async () => {
       if (window.lucide) lucide.createIcons();
       await loadAllCourses();
+      await loadLandingPagesForSelect();
       
       // Auto-open course via URL param if present
       const urlParams = new URLSearchParams(window.location.search);
@@ -1338,6 +1356,30 @@
         openCourseEditor(paramCourse);
       }
     });
+
+    async function loadLandingPagesForSelect() {
+      try {
+        const FIREBASE_CONFIG = window.aefCloudSync?._firebaseConfig || {};
+        const projectId = FIREBASE_CONFIG.projectId || 'agoraeufalo-3463a';
+        const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/landing_pages${FIREBASE_CONFIG.apiKey ? '?key='+FIREBASE_CONFIG.apiKey : ''}`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = await res.json();
+        const lps = (data.documents || []).map(doc => {
+           const id = doc.name.split("/").pop();
+           const fields = doc.fields || {};
+           const title = fields.title?.stringValue || id;
+           return { id, title };
+        });
+        const select = document.getElementById('editorCourseLpSelect');
+        if (!select) return;
+        const html = `<option value="">🔗 Digitar URL Customizada...</option>` + 
+           lps.map(lp => `<option value="https://agoraeufalo.com.br/oferta.html?p=${lp.id}">${lp.title} (/oferta.html?p=${lp.id})</option>`).join("");
+        select.innerHTML = html;
+      } catch (e) {
+        console.warn("Failed to load LPs for select", e);
+      }
+    }
 
     // ==========================================
     // 1. CARREGAMENTO E DADOS (Cloud & Registry)
@@ -1659,6 +1701,15 @@
       document.getElementById("editorCourseAccessTier").value = tier;
       handleAccessTierChange(tier);
 
+      // Link da Vitrine
+      const sUrl = course.salesUrl || "";
+      document.getElementById("editorCourseSalesUrl").value = sUrl;
+      const select = document.getElementById("editorCourseLpSelect");
+      if (select) {
+         select.value = sUrl;
+         if (select.selectedIndex === -1) select.value = "";
+      }
+
       // Standalone fields
       document.getElementById("editorCoursePriceInCents").value = course.priceInCents || "";
       document.getElementById("editorCourseHotmartUrl").value = course.standaloneCheckoutHotmart || "";
@@ -1692,6 +1743,12 @@
 
       standalonePanel.classList.toggle("hidden", val !== "standalone");
       mentoriaPanel.classList.toggle("hidden", val !== "mentoria_vip");
+    }
+
+    function handleLpSelect(val) {
+      if (val) {
+         document.getElementById('editorCourseSalesUrl').value = val;
+      }
     }
 
     function updateCoursePublishedUi(isPub) {
@@ -1744,6 +1801,7 @@
       course.themeColor = themeColor;
       course.coverImageUrl = cover;
       course.accessTier = accessTier;
+      course.salesUrl = document.getElementById("editorCourseSalesUrl").value.trim() || null;
 
       // Standalone
       if (accessTier === "standalone") {
