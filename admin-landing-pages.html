@@ -179,7 +179,17 @@
 
         <!-- Offers Selector -->
         <div class="space-y-3 p-4 rounded-2xl bg-[#060D17] border border-white/10">
-          <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">Ofertas da Página</span>
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 uppercase tracking-wider text-[11px] block">Ofertas da Página</span>
+            <div class="flex gap-2">
+              <button type="button" id="btnRefreshOffers" onclick="refreshOffersCache(true)" class="text-[10px] bg-white/5 hover:bg-white/10 text-slate-300 px-2 py-1.5 rounded transition" title="Atualizar lista de ofertas">
+                🔄 Atualizar Lista
+              </button>
+              <a href="/admin-vendas.html" target="_blank" class="text-[10px] bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 px-2 py-1.5 rounded transition font-bold" title="Criar oferta em nova aba">
+                + Criar Oferta
+              </a>
+            </div>
+          </div>
           <p class="text-[10px] text-slate-500">Selecione as ofertas comerciais ativas que serão exibidas como blocos de checkout nesta página.</p>
           
           <div id="offersCheckboxes" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 max-h-60 overflow-y-auto custom-scrollbar">
@@ -213,16 +223,56 @@
     });
 
     async function loadData() {
-      // 1. Fetch active offers to select from
+    async function refreshOffersCache(preserveSelection = false) {
+      const btn = document.getElementById('btnRefreshOffers');
+      if (btn) btn.innerHTML = '⏳';
       try {
         if (window.aefOffersRegistry) {
+           await window.aefOffersRegistry.init(true); // force remote fetch
            const allO = await window.aefOffersRegistry.getAllOffers();
            activeOffersCache = allO.filter(o => o.status === 'active');
+        } else {
+           const apiKey = AEF_API_KEY ? `?key=${AEF_API_KEY}` : '';
+           const oRes = await fetch(`https://firestore.googleapis.com/v1/projects/${AEF_PROJECT_ID}/databases/(default)/documents/offers${apiKey}`);
+           if (oRes.ok) {
+              const oData = await oRes.json();
+              activeOffersCache = (oData.documents || [])
+                 .filter(d => d.fields?.status?.stringValue === 'active')
+                 .map(d => ({
+                    id: d.name.split('/').pop(),
+                    title: d.fields?.title?.stringValue || 'Oferta',
+                    pricing: {
+                       installmentsText: d.fields?.pricing?.mapValue?.fields?.installmentsText?.stringValue || ''
+                    }
+                 }));
+           }
         }
-      } catch (e) {
-        console.warn('Erro ao carregar ofertas. Usando cache vazio.', e);
-        activeOffersCache = [];
+      } catch(e) {
+         console.warn("Failed to refresh offers:", e);
       }
+      
+      // Re-render checkboxes if modal is open
+      if (!document.getElementById('pageModal').classList.contains('hidden')) {
+         const currentlySelected = Array.from(document.querySelectorAll('input[name="formSelectedOffers"]:checked')).map(cb => cb.value);
+         
+         const offersHtml = activeOffersCache.map(o => `
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-[#112240] border border-white/5 cursor-pointer hover:bg-white/5 transition">
+               <input type="checkbox" name="formSelectedOffers" value="${o.id}" class="w-4 h-4 rounded text-amber-500 accent-amber-500 focus:ring-amber-400" ${preserveSelection && currentlySelected.includes(o.id) ? 'checked' : ''}>
+               <div>
+                  <div class="text-xs font-bold text-white">${o.title}</div>
+                  <div class="text-[10px] text-slate-400">${o.pricing?.installmentsText || ''}</div>
+               </div>
+            </label>
+         `).join('');
+         document.getElementById('offersCheckboxes').innerHTML = offersHtml;
+      }
+      if (btn) btn.innerHTML = '🔄 Atualizar Lista';
+    }
+
+    async function loadData() {
+      // 1. Fetch active offers to select from
+      await refreshOffersCache();
+
 
       // 2. Fetch landing pages from Firestore directly
       try {
