@@ -52,6 +52,11 @@
       </div>
     </section>
 
+    <!-- Content Blocks (Dynamic Copy) -->
+    <div id="contentBlocksContainerWrapper" class="flex flex-col space-y-16 py-8 sm:py-16 w-full max-w-4xl mx-auto px-4 sm:px-6">
+       <!-- Rendered dynamically -->
+    </div>
+
     <!-- Ofertas Section -->
     <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
       <div id="offersContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start justify-center">
@@ -118,6 +123,78 @@
            const vf = document.getElementById('heroVideoFrame');
            vf.src = `https://www.youtube.com/embed/${ytId}?rel=0`;
            vc.classList.remove('hidden');
+        }
+
+        // Parse and Render Content Blocks
+        const contentBlocksRaw = (f.contentBlocks?.arrayValue?.values || []).map(v => {
+           const mf = v.mapValue?.fields || {};
+           return {
+              type: mf.type?.stringValue || 'text',
+              title: mf.title?.stringValue || '',
+              content: mf.content?.stringValue || '',
+              order: mf.order?.integerValue || 0
+           };
+        }).sort((a,b) => a.order - b.order);
+
+        const blocksContainer = document.getElementById('contentBlocksContainerWrapper');
+        if (contentBlocksRaw.length > 0) {
+           let blocksHtml = '';
+           for (const b of contentBlocksRaw) {
+              if (b.type === 'text') {
+                 blocksHtml += `
+                   <div class="space-y-4 text-center">
+                     ${b.title ? `<h2 class="text-2xl sm:text-3xl font-black text-white">${b.title}</h2>` : ''}
+                     <div class="text-slate-300 text-lg leading-relaxed max-w-2xl mx-auto space-y-4">${b.content.replace(/\\n/g, '<br>')}</div>
+                   </div>
+                 `;
+              } else if (b.type === 'pain_agitation') {
+                 blocksHtml += `
+                   <div class="bg-rose-950/20 border border-rose-500/20 rounded-3xl p-8 sm:p-12 text-center">
+                     ${b.title ? `<h2 class="text-3xl font-black text-rose-400 mb-6">${b.title}</h2>` : ''}
+                     <div class="text-slate-300 text-lg leading-relaxed max-w-2xl mx-auto italic">"${b.content.replace(/\\n/g, '<br>')}"</div>
+                   </div>
+                 `;
+              } else if (b.type === 'benefits') {
+                 blocksHtml += `
+                   <div class="bg-[#112240] rounded-3xl p-8 sm:p-12">
+                     ${b.title ? `<h2 class="text-2xl sm:text-3xl font-black text-amber-400 text-center mb-8">${b.title}</h2>` : ''}
+                     <div class="text-slate-300 text-lg leading-relaxed space-y-4">${b.content.replace(/\\n/g, '<br>')}</div>
+                   </div>
+                 `;
+              } else if (b.type === 'faq') {
+                 blocksHtml += `
+                   <div class="border-t border-white/10 pt-12">
+                     ${b.title ? `<h2 class="text-2xl sm:text-3xl font-black text-white text-center mb-8">${b.title}</h2>` : ''}
+                     <div class="text-slate-300 text-base leading-relaxed space-y-6 max-w-2xl mx-auto">${b.content.replace(/\\n/g, '<br>')}</div>
+                   </div>
+                 `;
+              } else if (b.type === 'guarantee') {
+                 blocksHtml += `
+                   <div class="flex flex-col sm:flex-row items-center gap-8 bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-3xl p-8 sm:p-10">
+                     <div class="w-24 h-24 shrink-0 bg-amber-500/20 rounded-full flex items-center justify-center border border-amber-500 text-amber-500 font-black text-3xl">7</div>
+                     <div>
+                       ${b.title ? `<h2 class="text-2xl font-black text-white mb-2">${b.title}</h2>` : ''}
+                       <div class="text-slate-300">${b.content || 'Garantia Incondicional de 7 Dias. Seu risco é zero.'}</div>
+                     </div>
+                   </div>
+                 `;
+              } else if (b.type === 'about_leo') {
+                 blocksHtml += `
+                   <div class="flex flex-col sm:flex-row items-center gap-8 p-8 sm:p-10 bg-[#0A192F] rounded-3xl border border-white/5">
+                     <div class="w-32 h-32 rounded-full bg-slate-800 shrink-0 overflow-hidden border-2 border-amber-500/50">
+                        <img src="/assets/images/leo-avatar.png" alt="Professor Leonardo Leite" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Leonardo+Leite&background=0D1B2A&color=F59E0B&size=200'">
+                     </div>
+                     <div>
+                       <h2 class="text-2xl font-black text-white mb-2">Professor Leonardo Leite</h2>
+                       <p class="text-slate-400">Mais de 35 anos de experiência e criador do ecossistema AgoraEuFalo. Especialista em destravar a fala do adulto brasileiro focando no "Sentimento da Estrutura".</p>
+                     </div>
+                   </div>
+                 `;
+              }
+           }
+           blocksContainer.innerHTML = blocksHtml;
+        } else {
+           blocksContainer.classList.add('hidden');
         }
 
         // Load Offers
