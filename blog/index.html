@@ -565,6 +565,8 @@
               const slugs = new Set(firestoreList.map(p => p.slug));
               const nonDuplicatedSeeds = defaultPublishedSeed.filter(s => !slugs.has(s.slug));
               livePublishedPosts = [...firestoreList, ...nonDuplicatedSeeds];
+              // Sort by date descending so the newest post is ALWAYS the Hero post
+              livePublishedPosts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
               renderBlogFeed();
             }
           }
