@@ -1195,7 +1195,7 @@
       if (!course) return 'EXCLUSIVO CLUB';
       const tier = course.accessTier || 'all_access';
       if (hasAccess) {
-        return (tier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'))) ? 'MENTORIA VIP' : 'LIBERADO';
+        return (tier === 'mentoria_vip' || course.tierRequired === 'vip' || (course.id && course.id.startsWith('mentoria-')) || (course.badge && course.badge.toUpperCase().includes('MENTORIA'))) ? 'MENTORIA VIP' : 'LIBERADO';
       }
       if (tier === 'free') return 'AULA ABERTA';
       if (tier === 'mentoria_vip') return 'MENTORIA VIP';
@@ -1330,7 +1330,7 @@
         if (!course) return 'EXCLUSIVO CLUB';
         const tier = course.accessTier || 'all_access';
         if (hasAccess) {
-          return (tier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'))) ? 'MENTORIA VIP' : 'LIBERADO';
+          return (tier === 'mentoria_vip' || course.tierRequired === 'vip' || (course.id && course.id.startsWith('mentoria-')) || (course.badge && course.badge.toUpperCase().includes('MENTORIA'))) ? 'MENTORIA VIP' : 'LIBERADO';
         }
         if (tier === 'free') return 'AULA ABERTA';
         if (tier === 'mentoria_vip') return 'MENTORIA VIP';
@@ -1442,10 +1442,15 @@
         .map(([id, c]) => Object.assign({ id }, c))
         .filter(c => {
           if (c.published === false || c.isPublished === false) return false;
-          
-          const isMentorshipCourse = c.accessTier === 'mentoria_vip' || (c.id && c.id.startsWith('mentoria-'));
+          const isMentorshipCourse = c.accessTier === 'mentoria_vip' || 
+                                     c.tierRequired === 'vip' || 
+                                     (c.id && c.id.startsWith('mentoria-')) || 
+                                     (c.badge && c.badge.toUpperCase().includes('MENTORIA'));
           const courseOwnerEmail = (c.studentEmail || '').trim().toLowerCase();
-          const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
+          const targetStudentId = (c.studentId || '').trim().toLowerCase();
+          const userUid = (userObj.uid || '').trim().toLowerCase();
+          const isOwner = (normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail) || 
+                          (userUid && targetStudentId && userUid === targetStudentId);
           
           // Se for curso VIP de outro mentorado e não for o dono nem admin, protege privacidade absoluta
           if (isMentorshipCourse && !isAdmin && !isOwner) return false;
@@ -1495,7 +1500,10 @@
         const id = course.id;
         try {
           const courseOwnerEmail = (course.studentEmail || '').trim().toLowerCase();
-          const isOwner = normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail;
+          const targetStudentId = (course.studentId || '').trim().toLowerCase();
+          const userUid = (userObj.uid || '').trim().toLowerCase();
+          const isOwner = (normalizedCurrentEmail && courseOwnerEmail && normalizedCurrentEmail === courseOwnerEmail) || 
+                          (userUid && targetStudentId && userUid === targetStudentId);
 
           totalVisibleCatalog++;
 
@@ -1504,7 +1512,10 @@
             ? window.AEFAccessEngine.hasAccess(userObj, course)
             : (isAdmin || isOwner || enrolledProducts.includes(id) || course.tierRequired === 'free');
             
-          const isMentorshipCourse = course.accessTier === 'mentoria_vip' || (course.id && course.id.startsWith('mentoria-'));
+          const isMentorshipCourse = course.accessTier === 'mentoria_vip' || 
+                                     course.tierRequired === 'vip' || 
+                                     (course.id && course.id.startsWith('mentoria-')) || 
+                                     (course.badge && course.badge.toUpperCase().includes('MENTORIA'));
 
           const courseProg = window.aefLearningTracker ? window.aefLearningTracker.getCourseProgress(id) : { completedLessons: [] };
           const completedInThisCourse = courseProg.completedLessons || [];
