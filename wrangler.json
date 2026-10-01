@@ -8,5 +8,11 @@
     "binding": "ASSETS",
     "html_handling": "none",
     "not_found_handling": "404-page"
-  }
+  },
+  "r2_buckets": [
+    {
+      "binding": "AEF_MEDIA",
+      "bucket_name": "aef-media"
+    }
+  ]
 }

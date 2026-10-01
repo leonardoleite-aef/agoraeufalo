@@ -645,7 +645,14 @@
                   ⭐ POST EM DESTAQUE
                 </span>
               </div>
-              ${heroPost.youtubeId ? `
+              ${heroPost.podcastAudioUrl ? `
+                <div class="absolute bottom-4 right-4">
+                  <span class="px-3 py-1.5 rounded-xl text-xs font-black bg-slate-950 text-white shadow-lg shadow-amber-900/20 flex items-center gap-2 border border-slate-800">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                    🎧 Episódio de Podcast
+                  </span>
+                </div>
+              ` : heroPost.youtubeId ? `
                 <div class="absolute bottom-4 right-4">
                   <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-950/80 text-white backdrop-blur-md flex items-center gap-1.5">
                     <i data-lucide="play-circle" class="w-4 h-4 text-amber-400"></i> Com Vídeo-Aula
@@ -665,7 +672,7 @@
                 </div>
 
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-navy group-hover:text-amber-700 transition-colors tracking-tight leading-snug">
-                  <a href="${heroPost.slug}.html">
+                  <a href="post.html?slug=${heroPost.slug}">
                     ${heroPost.title}
                   </a>
                 </h2>
@@ -684,7 +691,7 @@
                   </div>
                 </div>
 
-                <a href="${heroPost.slug}.html" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-amber-700 group-hover:text-amber-800 group-hover:translate-x-1 transition-all">
+                <a href="post.html?slug=${heroPost.slug}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-amber-700 group-hover:text-amber-800 group-hover:translate-x-1 transition-all">
                   <span>Ler Artigo Completo</span>
                   <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
@@ -716,6 +723,11 @@
                     <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900">
                       ${p.category}
                     </span>
+                    ${p.podcastAudioUrl ? `
+                      <span class="absolute bottom-3 right-3 px-2 py-1 rounded-md text-[10px] font-black bg-slate-950/90 text-white backdrop-blur-sm flex items-center gap-1">
+                        🎧 Podcast
+                      </span>
+                    ` : ''}
                   </div>
                   <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
                     <div class="space-y-1.5">
@@ -725,7 +737,7 @@
                         <span>${p.date || '2026'}</span>
                       </div>
                       <h4 class="text-base font-bold text-brand-navy group-hover:text-amber-700 transition-colors leading-snug line-clamp-2">
-                        <a href="${p.slug}.html">
+                        <a href="post.html?slug=${p.slug}">
                           ${p.title}
                         </a>
                       </h4>
@@ -735,7 +747,7 @@
                     </div>
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                       <span class="text-[11px] text-slate-400">Por Prof. Leonardo Leite</span>
-                      <a href="${p.slug}.html" class="font-bold text-amber-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                      <a href="post.html?slug=${p.slug}" class="font-bold text-amber-700 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                         <span>Ler</span> <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                       </a>
                     </div>

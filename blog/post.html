@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- 1. SEO Primary Meta Tags -->
-  <title>{{POST_META_TITLE}} | AgoraEuFalo</title>
-  <meta name="title" content="{{POST_META_TITLE}} | AgoraEuFalo">
-  <meta name="description" content="{{POST_META_DESCRIPTION}}">
+  <title>AgoraEuFalo | AgoraEuFalo</title>
+  <meta name="title" content="AgoraEuFalo | AgoraEuFalo">
+  <meta name="description" content="O podcast oficial e blog do AgoraEuFalo.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <link rel="canonical" href="https://agoraeufalo.com.br/blog/{{POST_SLUG}}.html">
+  <link rel="canonical" href="https://agoraeufalo.com.br/blog/.html">
 
   <!-- 2. Open Graph / WhatsApp / Facebook / LinkedIn -->
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://agoraeufalo.com.br/blog/{{POST_SLUG}}.html">
-  <meta property="og:title" content="{{POST_TITLE}} | AgoraEuFalo">
-  <meta property="og:description" content="{{POST_META_DESCRIPTION}}">
-  <meta property="og:image" content="https://agoraeufalo.com.br/{{POST_IMAGE_URL}}">
+  <meta property="og:url" content="https://agoraeufalo.com.br/blog/.html">
+  <meta property="og:title" content="AgoraEuFalo | AgoraEuFalo">
+  <meta property="og:description" content="O podcast oficial e blog do AgoraEuFalo.">
+  <meta property="og:image" content="https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="pt_BR">
@@ -24,10 +24,10 @@
 
   <!-- 3. Twitter / X Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://agoraeufalo.com.br/blog/{{POST_SLUG}}.html">
-  <meta name="twitter:title" content="{{POST_TITLE}}">
-  <meta name="twitter:description" content="{{POST_META_DESCRIPTION}}">
-  <meta name="twitter:image" content="https://agoraeufalo.com.br/{{POST_IMAGE_URL}}">
+  <meta name="twitter:url" content="https://agoraeufalo.com.br/blog/.html">
+  <meta name="twitter:title" content="AgoraEuFalo">
+  <meta name="twitter:description" content="O podcast oficial e blog do AgoraEuFalo.">
+  <meta name="twitter:image" content="https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg">
 
   <!-- Favicon & App Icons -->
   <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
@@ -40,12 +40,12 @@
     "@graph": [
       {
         "@type": "Article",
-        "@id": "https://agoraeufalo.com.br/blog/{{POST_SLUG}}.html#article",
-        "headline": "{{POST_TITLE}}",
-        "description": "{{POST_META_DESCRIPTION}}",
-        "image": "https://agoraeufalo.com.br/{{POST_IMAGE_URL}}",
-        "datePublished": "{{POST_PUBLISHED_DATE}}",
-        "dateModified": "{{POST_MODIFIED_DATE}}",
+        "@id": "https://agoraeufalo.com.br/blog/.html#article",
+        "headline": "AgoraEuFalo",
+        "description": "O podcast oficial e blog do AgoraEuFalo.",
+        "image": "https://agoraeufalo.com.br/assets/images/og-magic-stories.jpg",
+        "datePublished": "",
+        "dateModified": "",
         "author": {
           "@type": "Person",
           "name": "Leonardo Leite",
@@ -57,7 +57,7 @@
           "url": "https://agoraeufalo.com.br/",
           "logo": "https://agoraeufalo.com.br/assets/images/logo.png"
         },
-        "mainEntityOfPage": "https://agoraeufalo.com.br/blog/{{POST_SLUG}}.html"
+        "mainEntityOfPage": "https://agoraeufalo.com.br/blog/.html"
       }
     ]
   }
@@ -154,24 +154,24 @@
         <span>/</span>
         <a href="index.html" class="hover:text-brand-accent">Blog</a>
         <span>/</span>
-        <span class="text-amber-700 font-bold">{{POST_CATEGORY}}</span>
+        <span class="text-amber-700 font-bold"><span id="dyn-category"></span></span>
       </nav>
 
       <!-- Post Header -->
       <header class="space-y-4 border-b border-slate-200 pb-8 mb-8">
         <div class="flex flex-wrap items-center gap-3">
           <span class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-200">
-            {{POST_CATEGORY}}
+            <span id="dyn-category"></span>
           </span>
           <span class="text-xs text-slate-500 font-medium flex items-center gap-1">
-            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> {{POST_READ_TIME}}
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i> <span id="dyn-read-time"></span>
           </span>
           <span class="text-slate-300">•</span>
-          <span class="text-xs text-slate-500 font-medium">{{POST_DATE}}</span>
+          <span class="text-xs text-slate-500 font-medium"><span id="dyn-date"></span></span>
         </div>
 
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-navy tracking-tight leading-tight">
-          {{POST_TITLE}}
+          AgoraEuFalo
         </h1>
 
         <p class="text-lg sm:text-xl text-slate-600 font-medium leading-relaxed">
@@ -192,40 +192,36 @@
       </header>
 
 
+      
       <!-- Podcast Audio Player (Se houver) -->
-      {{IF_PODCAST}}
-      <div class="mb-10 p-5 sm:p-6 bg-slate-900 rounded-3xl border border-slate-800 shadow-xl flex flex-col sm:flex-row items-center gap-6">
+      <div id="dyn-podcast-block" class="mb-10 p-5 sm:p-6 bg-slate-900 rounded-3xl border border-slate-800 shadow-xl flex flex-col sm:flex-row items-center gap-6 hidden">
         <div class="w-24 h-24 sm:w-32 sm:h-32 shrink-0 rounded-2xl overflow-hidden bg-slate-800 shadow-md border border-slate-700">
-          <img src="https://agoraeufalo.com.br/{{POST_PODCAST_COVER_URL}}" alt="Podcast Cover" class="w-full h-full object-cover">
+          <img id="dyn-podcast-cover" src="" alt="Podcast Cover" class="w-full h-full object-cover">
         </div>
         <div class="flex-1 w-full space-y-3">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">🎧 Ouça o Episódio</span>
             <span class="text-xs text-slate-400 font-medium">AgoraEuFalo Podcasts</span>
           </div>
-          <h3 class="text-lg sm:text-xl font-bold text-white leading-snug">{{POST_TITLE}}</h3>
-          <audio controls controlsList="nodownload" class="w-full h-10 mt-2 custom-audio-player">
-            <source src="{{POST_PODCAST_AUDIO_URL}}" type="audio/mpeg">
+          <h3 id="dyn-podcast-title" class="text-lg sm:text-xl font-bold text-white leading-snug">...</h3>
+          <audio id="dyn-podcast-audio" controls controlsList="nodownload" class="w-full h-10 mt-2 custom-audio-player">
+            <source src="" type="audio/mpeg">
             Seu navegador não suporta o elemento de áudio.
           </audio>
           <div class="flex items-center gap-4 text-[10px] text-slate-500 font-medium pt-1">
-            <a href="{{POST_PODCAST_AUDIO_URL}}" target="_blank" download class="hover:text-emerald-400 transition-colors flex items-center gap-1"><i data-lucide="download" class="w-3 h-3"></i> Baixar MP3</a>
+            <a id="dyn-podcast-download" href="#" target="_blank" download class="hover:text-emerald-400 transition-colors flex items-center gap-1"><i data-lucide="download" class="w-3 h-3"></i> Baixar MP3</a>
             <a href="https://podcasts.apple.com" target="_blank" class="hover:text-white transition-colors flex items-center gap-1"><i data-lucide="headphones" class="w-3 h-3"></i> Apple Podcasts</a>
             <a href="https://spotify.com" target="_blank" class="hover:text-emerald-400 transition-colors flex items-center gap-1"><i data-lucide="music" class="w-3 h-3"></i> Spotify</a>
           </div>
         </div>
       </div>
-      <style>
-        .custom-audio-player::-webkit-media-controls-panel { background-color: #1e293b; color: #fff; }
-        .custom-audio-player::-webkit-media-controls-current-time-display,
-        .custom-audio-player::-webkit-media-controls-time-remaining-display { color: #cbd5e1; }
-      </style>
-      {{END_IF_PODCAST}}
+
 
       <!-- YouTube Embed Container (Se houver) -->
       {{POST_MEDIA_SECTION}}
 
       <!-- Post Body Content -->
+      <div id="dyn-body-content" class="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-a:text-amber-600"></div>
       <div class="prose-content text-slate-700 text-base sm:text-lg leading-relaxed space-y-6">
         {{POST_BODY_CONTENT}}
       </div>
@@ -246,7 +242,7 @@
         <span class="text-xs font-bold text-slate-700 flex items-center gap-2">
           <i data-lucide="share-2" class="w-4 h-4 text-amber-600"></i> Compartilhe este post com quem precisa destravar o inglês:
         </span>
-        <a href="https://api.whatsapp.com/send?text={{ENCODED_TITLE}}%20-%20https://agoraeufalo.com.br/blog/{{POST_SLUG}}.html" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all hover:scale-105">
+        <a href="https://api.whatsapp.com/send?text={{ENCODED_TITLE}}%20-%20https://agoraeufalo.com.br/blog/.html" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all hover:scale-105">
           <i data-lucide="message-circle" class="w-4 h-4"></i> Compartilhar no WhatsApp
         </a>
       </div>
@@ -496,5 +492,55 @@
       });
     }
   </script>
+
+  <script src="../assets/js/aef-portal-auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
+      if (!slug) {
+         window.location.href = 'index.html';
+         return;
+      }
+      
+      try {
+         await window.aefPortalAuth.ready();
+         const db = window.aefPortalAuth.db;
+         const snapshot = await db.collection('blog_posts').where('slug', '==', slug).get();
+         if (snapshot.empty) {
+            document.getElementById('dyn-title').innerText = "Artigo não encontrado";
+            return;
+         }
+         
+         const post = snapshot.docs[0].data();
+         
+         // Update UI
+         document.title = post.title + " | AgoraEuFalo";
+         document.getElementById('dyn-title').innerText = post.title;
+         
+         if (document.getElementById('dyn-category')) document.getElementById('dyn-category').innerText = post.category || 'Artigo';
+         if (document.getElementById('dyn-read-time')) document.getElementById('dyn-read-time').innerText = post.readTime || '5 min';
+         if (document.getElementById('dyn-date')) document.getElementById('dyn-date').innerText = post.date || '';
+         
+         document.getElementById('dyn-body-content').innerHTML = post.bodyHtml || post.subtitle || '';
+         
+         // Podcast UI
+         if (post.podcastAudioUrl) {
+            document.getElementById('dyn-podcast-block').classList.remove('hidden');
+            document.getElementById('dyn-podcast-cover').src = post.podcastCoverUrl || post.imageUrl || '../assets/images/og-magic-stories.jpg';
+            document.getElementById('dyn-podcast-title').innerText = post.title;
+            document.getElementById('dyn-podcast-audio').src = post.podcastAudioUrl;
+            document.getElementById('dyn-podcast-download').href = post.podcastAudioUrl;
+         }
+         
+         // Highlight.js or Icons
+         if (window.lucide) window.lucide.createIcons();
+         
+      } catch (err) {
+         console.error(err);
+      }
+    });
+  </script>
+
 </body>
 </html>
