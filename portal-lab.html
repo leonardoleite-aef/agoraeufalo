@@ -1573,9 +1573,23 @@
       const dropdownUserEmail = document.getElementById("dropdown-user-email");
       const drawerName = document.getElementById("drawer-user-name");
 
-      if (headerInitials) headerInitials.innerText = initials;
-      if (drawerInitials) drawerInitials.innerText = initials;
-      if (modalInitials) modalInitials.innerText = initials;
+      const isLL = initials === 'LL' || effEmail.includes('selexenglish');
+      const avatarHtml = `<img src="/assets/images/leonardo-leite.png" alt="Leonardo Leite" class="w-full h-full object-cover rounded-full">`;
+      
+      const updateAvatar = (el) => {
+        if (!el) return;
+        if (isLL) {
+           el.innerHTML = avatarHtml;
+           if (el.parentElement) el.parentElement.classList.add('overflow-hidden');
+        } else {
+           el.innerText = initials;
+           if (el.parentElement) el.parentElement.classList.remove('overflow-hidden');
+        }
+      };
+
+      updateAvatar(headerInitials);
+      updateAvatar(drawerInitials);
+      updateAvatar(modalInitials);
       if (headerDisplayName) headerDisplayName.innerText = firstName;
       if (dropdownUserName) dropdownUserName.innerText = effName;
       if (dropdownUserEmail) dropdownUserEmail.innerText = effEmail;
