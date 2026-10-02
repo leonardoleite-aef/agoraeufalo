@@ -4815,7 +4815,7 @@ const AEF_COURSES_DATA = {
     },
     "accessTier": "all_access",
     "themeColor": "indigo",
-    "tierRequired": "vip",
+    "tierRequired": "all_access",
     "updatedAt": "2026-09-18T11:27:50.555Z",
     "modules": [
       {
@@ -5560,7 +5560,7 @@ const AEF_COURSES_DATA = {
     "isPublished": true,
     "themeColor": "emerald",
     "description": "O Crash Course: Airports & Flights (Nível 1 - Iniciante) foi desenhado para quem vai viajar e quer passar pelo check-in, raio-X, portão de embarque e atendimento de bordo com total segurança — sem travar e sem depender de tradutor no celular.",
-    "tierRequired": "vip",
+    "tierRequired": "all_access",
     "coverImageUrl": "https://assets.agoraeufalo.com.br/courses/covers/1789064532612_course_cover_1789064532593.jpg",
     "published": true,
     "modules": [
@@ -8503,7 +8503,7 @@ const AEF_COURSES_DATA = {
     "themeColor": "amber",
     "updatedAt": "2026-09-18T11:27:47.104Z",
     "id": "aef-experience",
-    "tierRequired": "vip",
+    "tierRequired": "all_access",
     "schemaVersion": 2,
     "badge": "CURSO GRATUITO",
     "access": {
