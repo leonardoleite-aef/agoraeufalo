@@ -124,7 +124,7 @@
         "real_english"
       ],
       "themeColor": "emerald",
-      "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789198485748_thomas_image.jpeg?alt=media",
+      "coverImageUrl": "https://assets.agoraeufalo.com.br/covers/mentoria/1789198485748_thomas_image.jpeg",
       "description": "Espaço individual de mentoria executiva e imersão acelerada de Thomas Henrique Silva com o Professor Leonardo Leite.",
       "meetUrl": "https://meet.google.com/uyj-dfzg-pmh",
       "published": true,
@@ -155,7 +155,7 @@
         "real_english"
       ],
       "themeColor": "emerald",
-      "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789245580830_mateus.jpeg?alt=media",
+      "coverImageUrl": "https://assets.agoraeufalo.com.br/courses/covers/1789245580830_mateus.jpeg",
       "description": "Espaço individual de mentoria executiva e imersão acelerada de Mateus Gomes com o Professor Leonardo Leite.",
       "meetUrl": "https://meet.google.com/kmu-hwdu-xrm",
       "published": true,
@@ -186,7 +186,7 @@
         "real_english"
       ],
       "themeColor": "emerald",
-      "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/covers%2Fmentoria%2F1789395193562_estevao_img.jpeg?alt=media",
+      "coverImageUrl": "https://assets.agoraeufalo.com.br/covers/mentoria/1789395193562_estevao_img.jpeg",
       "description": "Espaço individual de mentoria executiva e imersão acelerada de Estêvão Pinheiro com o Professor Leonardo Leite.",
       "meetUrl": "https://meet.google.com/bbr-kzuy-edc",
       "published": true,

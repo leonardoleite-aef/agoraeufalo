@@ -622,13 +622,28 @@
       }
 
       if (!saved) {
-        const restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}`;
+        let idToken = null;
+        try {
+          if (typeof window !== "undefined" && window.aefPortalAuth) {
+            idToken = await window.aefPortalAuth.getIdToken();
+          }
+        } catch (e) {}
+        
+        let restUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/courses/${cid}`;
+        
+        const fieldsObj = toFirestoreRestFields(payload);
+        const updateMaskParams = Object.keys(fieldsObj).map(k => `updateMask.fieldPaths=${k}`).join('&');
+        restUrl += `?${updateMaskParams}`;
+        
+        const headers = { "Content-Type": "application/json" };
+        if (idToken) headers["Authorization"] = `Bearer ${idToken}`;
+        
         const res = await fetch(restUrl, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields: toFirestoreRestFields(payload) })
+          headers: headers,
+          body: JSON.stringify({ fields: fieldsObj })
         });
-        if (!res.ok) throw new Error(`REST Error: ${res.statusText}`);
+        if (!res.ok) throw new Error(`REST Error: ${res.status} ${res.statusText}`);
       }
 
       try {
