@@ -5,6 +5,7 @@
  */
 const AEF_COURSES_DATA = {
   "dtc_curso": {
+    "salesUrl": "https://agoraeufalo.com.br/lp-dates-and-times.html",
     "id": "dtc_curso",
     "title": "Dates and Times - Curso Rápido",
     "slug": "dtc_curso",
@@ -174,6 +175,7 @@ const AEF_COURSES_DATA = {
     ]
   },
   "english-quickstart": {
+    "salesUrl": "https://agoraeufalo.com.br/lp-english-quickstart.html",
     "id": "english-quickstart",
     "title": "English QuickStart • Fundamentos da Fala",
     "slug": "english-quickstart",
@@ -311,6 +313,7 @@ const AEF_COURSES_DATA = {
     ]
   },
   "ms-legacy": {
+    "salesUrl": "https://agoraeufalo.com.br/lp-magic-stories-legacy.html",
     "id": "ms-legacy",
     "title": "Magic Stories Legacy • O Acervo Clássico",
     "slug": "ms-legacy",
@@ -4793,6 +4796,7 @@ const AEF_COURSES_DATA = {
     ]
   },
   "fs-aef-ec": {
+    "salesUrl": "https://agoraeufalo.com.br/lp-first-steps.html",
     "description": "Aqui você vai aprender todos os pontos fundamentais de como a lingua inglesa funciona para o aluno iniciante. Se você não é iniciante, aproveite para revisar o que já esqueceu.",
     "schemaVersion": 2,
     "isPublished": true,
@@ -5536,6 +5540,7 @@ const AEF_COURSES_DATA = {
     ]
   },
   "airport_flight_level_1": {
+    "salesUrl": "https://agoraeufalo.com.br/lp-airport-and-flights.html",
     "access": {
       "legacyGrantIds": [],
       "entitlements": [
@@ -5556,7 +5561,7 @@ const AEF_COURSES_DATA = {
     "themeColor": "emerald",
     "description": "O Crash Course: Airports & Flights (Nível 1 - Iniciante) foi desenhado para quem vai viajar e quer passar pelo check-in, raio-X, portão de embarque e atendimento de bordo com total segurança — sem travar e sem depender de tradutor no celular.",
     "tierRequired": "vip",
-    "coverImageUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fcovers%2F1789064532612_course_cover_1789064532593.jpg?alt=media",
+    "coverImageUrl": "https://assets.agoraeufalo.com.br/courses/covers/1789064532612_course_cover_1789064532593.jpg",
     "published": true,
     "modules": [
       {
@@ -5572,13 +5577,13 @@ const AEF_COURSES_DATA = {
         "lessons": [
           {
             "published": true,
-            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789064801657_thumb_1789064801631.jpg?alt=media",
+            "thumbnailUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789064801657_thumb_1789064801631.jpg",
             "moduleId": "ciclo-01",
             "hasTrainingTrack": true,
             "duration": "02:23",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789175771897_Airplane_flights_1.mp4?alt=media",
+            "videoUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789175771897_Airplane_flights_1.mp4",
             "quizId": "",
-            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789181495247_Airport_and_Flights_apostila.pdf?alt=media",
+            "pdfUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789181495247_Airport_and_Flights_apostila.pdf",
             "order": 1,
             "id": "aula-1789064668266",
             "downloads": [
@@ -6072,7 +6077,7 @@ const AEF_COURSES_DATA = {
             "type": "lesson",
             "title": "1- Airport & Flights - Dialogue",
             "aiStatus": "draft_pending",
-            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789175826128_Airplane_flights_1.mp3?alt=media",
+            "audioUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789175826128_Airplane_flights_1.mp3",
             "goldenTip": "",
             "media": [
               "[object Object]"
@@ -6088,7 +6093,7 @@ const AEF_COURSES_DATA = {
             "downloads": [
               "[object Object]"
             ],
-            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789229837747_Airplane_flights_2_voc.mp3?alt=media",
+            "audioUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789229837747_Airplane_flights_2_voc.mp3",
             "aiStatus": "draft_pending",
             "processedContentHtml": "",
             "id": "aula-1789229704239",
@@ -6467,19 +6472,19 @@ const AEF_COURSES_DATA = {
               }
             ],
             "quizId": "",
-            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789230130309_Apostila_airport_flight_level_1_2_vocabulary_breakdown_frases_usadas_em_aeroportos_e_viagens_de_aviao.pdf?alt=media",
+            "pdfUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789230130309_Apostila_airport_flight_level_1_2_vocabulary_breakdown_frases_usadas_em_aeroportos_e_viagens_de_aviao.pdf",
             "duration": "01:27",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789229820163_Airplane_flights_2_voc.mp4?alt=media",
+            "videoUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789229820163_Airplane_flights_2_voc.mp4",
             "title": "2- Vocabulary Breakdown",
             "type": "lesson",
             "updatedAt": "2026-09-12T23:59:47.954Z",
             "rawScript": "",
             "courseId": "airport_flight_level_1",
-            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789229945454_thumb_1789229945424.jpg?alt=media",
+            "thumbnailUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789229945454_thumb_1789229945424.jpg",
             "goldenTip": ""
           },
           {
-            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789254002995_Apostila_airport_flight_level_1_3_airports_flights_listen_and_answer_activity.pdf?alt=media",
+            "pdfUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789254002995_Apostila_airport_flight_level_1_3_airports_flights_listen_and_answer_activity.pdf",
             "quizId": "",
             "sentences": [
               {
@@ -6887,10 +6892,10 @@ const AEF_COURSES_DATA = {
             "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; width: 100%; max-width: 700px; margin: 0 auto; padding: 15px; box-sizing: border-box; background-color: #FFFFFF;\">\n  <h2 style=\"color: #276749; text-align: center; border-bottom: 2px solid #38A169; padding-bottom: 5px; margin-top: 0; margin-bottom: 12px; font-size: 20px;\">Listen and Answer</h2>\n\n  <style>\n    .compact-bubble {\n      background-color: #F0FFF4;\n      border-left: 3px solid #38A169;\n      border-radius: 6px;\n      padding: 8px 12px;\n      margin-bottom: 8px;\n    }\n    .compact-question {\n      color: #2D3748;\n      font-weight: 500;\n      margin: 0 0 8px 0;\n      font-size: 13px;\n    }\n    .ruled-line {\n      border-bottom: 1px dashed #CBD5E0;\n      height: 10px;\n    }\n  </style>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What does the agent ask to see first?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What kind of seat does the passenger want?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What seat number does the agent assign to the passenger?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">How many bags does the passenger check in?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What gate does the passenger need to go to?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What time does boarding start?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">Where can the passenger put the backpack inside the cabin?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n\n  <div class=\"compact-bubble\">\n    <p class=\"compact-question\">What drink does the passenger ask for on the plane?</p>\n    <div class=\"ruled-line\"></div>\n  </div>\n</div>",
             "title": "3- Airports & flights Listen and answer activity",
             "aiStatus": "ai_reviewed",
-            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253121849_Airplane_flights_3_LA.mp3?alt=media",
+            "audioUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789253121849_Airplane_flights_3_LA.mp3",
             "id": "aula-1789235201111",
             "goldenTip": "Esta é a primeira atividade prática de escuta e fala. Escutar e responder. Você não precisa lembrar nem decorar a historia ou o diálogo. Responda por reflexo. Isto não é um exercício de compreensão. É um exercício de reflexo.",
-            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253492210_art_1789253490580.jpg?alt=media",
+            "artworkUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789253492210_art_1789253490580.jpg",
             "updatedAt": "2026-09-12T23:14:57.754Z",
             "rawScript": "LISTEN AND ANSWER\n\n1. What does the agent ask to see first?\n2. What kind of seat does the passenger want?\n3. What seat number does the agent assign to the passenger?\n4. How many bags does the passenger check in?\n5. What gate does the passenger need to go to?\n6. What time does boarding start?\n7. Where can the passenger put the backpack inside the cabin?\n8. What drink does the passenger ask for on the plane?\n",
             "media": [
@@ -6898,8 +6903,8 @@ const AEF_COURSES_DATA = {
             ],
             "courseId": "airport_flight_level_1",
             "published": true,
-            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253490590_thumb_1789253490564.jpg?alt=media",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789253104571_Airplane_flights_3_LA.mp4?alt=media",
+            "thumbnailUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789253490590_thumb_1789253490564.jpg",
+            "videoUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789253104571_Airplane_flights_3_LA.mp4",
             "duration": "02:43",
             "hasTrainingTrack": true,
             "order": 3,
@@ -6920,20 +6925,20 @@ const AEF_COURSES_DATA = {
             "moduleId": "ciclo-01",
             "published": true,
             "duration": "05:00",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252394568_Airplane_flights_4_LRT.mp4?alt=media",
+            "videoUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789252394568_Airplane_flights_4_LRT.mp4",
             "id": "aula-1789252227676",
-            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252407200_Airplane_flights_4_LRT.mp3?alt=media",
-            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252304359_art_1789252302000.jpg?alt=media",
+            "audioUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789252407200_Airplane_flights_4_LRT.mp3",
+            "artworkUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789252304359_art_1789252302000.jpg",
             "aiStatus": "ai_reviewed",
             "rawScript": "LOOK AND RETELL\n1. What does the agent ask to see first?\n2. What kind of seat does the passenger want?\n3. What seat number does the agent assign to the passenger?\n4. How many bags does the passenger check in?\n5. What gate does the passenger need to go to?\n6. What time does boarding start?\n7. Where can the passenger put the backpack inside the cabin?\n8. What drink does the passenger ask for on the plane?",
             "updatedAt": "2026-09-12T22:43:37.712Z",
-            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789252302026_thumb_1789252301973.jpg?alt=media",
+            "thumbnailUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789252302026_thumb_1789252301973.jpg",
             "goldenTip": "Esta atividade é o momento que você só precisa falar. E não vai acontecer de primeira. Você precisa repetir muitas vezes. Como se fosse um treino físico. Não force. Não se estresse. Tenha paciência e aceite o desafio. 😉",
             "media": [
               "[object Object]"
             ],
             "quizId": "",
-            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789253015545_Apostila_airport_flight_level_1_4_airport_flights_look_and_retell.pdf?alt=media",
+            "pdfUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789253015545_Apostila_airport_flight_level_1_4_airport_flights_look_and_retell.pdf",
             "title": "4 - Airport & Flights - Look and Retell"
           },
           {
@@ -6942,12 +6947,12 @@ const AEF_COURSES_DATA = {
             "updatedAt": "2026-09-13T04:28:35.800Z",
             "id": "aula-1789272667348",
             "quizId": "",
-            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789273701816_Apostila_airport_flight_level_1_5_airport_flights_listen_and_ask.pdf?alt=media",
+            "pdfUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789273701816_Apostila_airport_flight_level_1_5_airport_flights_listen_and_ask.pdf",
             "order": 5,
             "goldenTip": "Esta atividade é super importante para que você se dê a oportunidade de fazer perguntas. Se você  não usar essa atividade, jamais se dará a oportunidade de praticar perguntas. E quanto mais treinar, mais preparado ou preparada você estará quando precisar de verdade.",
             "type": "lesson",
             "duration": "06:55",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272862796_Airplane_flights_5_LASK.mp4?alt=media",
+            "videoUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789272862796_Airplane_flights_5_LASK.mp4",
             "sentences": [
               {
                 "end": 6.853,
@@ -8158,42 +8163,42 @@ const AEF_COURSES_DATA = {
                 "text": "Thank you and I'll see you soon. "
               }
             ],
-            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272752152_art_1789272749983.jpg?alt=media",
+            "artworkUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789272752152_art_1789272749983.jpg",
             "hasTrainingTrack": true,
             "moduleId": "ciclo-01",
-            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272749996_thumb_1789272749966.jpg?alt=media",
+            "thumbnailUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789272749996_thumb_1789272749966.jpg",
             "downloads": [
               {
                 "title": "Apostila Diagramada (5_airport_flights_listen_and_ask)",
-                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789273701816_Apostila_airport_flight_level_1_5_airport_flights_listen_and_ask.pdf?alt=media",
+                "url": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789273701816_Apostila_airport_flight_level_1_5_airport_flights_listen_and_ask.pdf",
                 "type": "pdf"
               }
             ],
             "media": [
               {
                 "thumbnailUrl": "",
-                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272862796_Airplane_flights_5_LASK.mp4?alt=media",
+                "url": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789272862796_Airplane_flights_5_LASK.mp4",
                 "type": "video_mp4",
                 "title": "airport_flights_LASK_video",
                 "durationStr": ""
               }
             ],
-            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789272875704_Airplane_flights_5_LASK.mp3?alt=media",
+            "audioUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789272875704_Airplane_flights_5_LASK.mp3",
             "aiStatus": "draft_pending",
             "title": "5- Airport & Flights - Listen and Ask",
             "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; box-sizing: border-box; background-color: #FFFFFF;\">\n  <!-- Main Title -->\n  <h1 style=\"color: #1B365D; text-align: center; margin: 0 0 10px 0; font-size: 26px; font-weight: bold;\">AgoraEuFalo - Survival English</h1>\n  \n  <!-- Subtitle Blue Bubble Box -->\n  <div style=\"background-color: #1E40AF; color: #FFFFFF; text-align: center; border-radius: 20px; padding: 6px 18px; margin: 0 auto 20px auto; width: fit-content; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;\">\n    Airport &amp; Flights\n  </div>\n\n  <!-- Main Cream Bubble Box -->\n  <div style=\"background-color: #FFFDF0; border: 1px solid #EAE2B7; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);\">\n    <h2 style=\"color: #2B2D42; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 20px; border-bottom: 2px solid #F4A261; padding-bottom: 8px;\">Listen and Ask Activity</h2>\n\n    <!-- Sentence 1 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">1. The agent didn't ask for a credit card.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 2 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">2. The passenger doesn't want an aisle seat.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 3 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">3. The seat number isn't 22B.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 4 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">4. The passenger didn't check in three heavy boxes.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 5 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">5. The flight doesn't leave from Gate 12A.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 6 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">6. Boarding doesn't start at noon.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 7 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">7. The backpack cannot be left in the middle of the aisle.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n\n    <!-- Sentence 8 -->\n    <div style=\"background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin-bottom: 0;\">\n      <p style=\"color: #1F2937; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;\">8. The passenger didn't ask for a cup of hot coffee.</p>\n      <div style=\"border-bottom: 1px dashed #9CA3AF; height: 10px;\"></div>\n    </div>\n  </div>\n</div>",
             "published": true
           },
           {
-            "thumbnailUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276003405_thumb_1789276003367.jpg?alt=media",
-            "audioUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276099578_6_Airplane_flights_pro.mp3?alt=media",
-            "artworkUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276005464_art_1789276003391.jpg?alt=media",
+            "thumbnailUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789276003405_thumb_1789276003367.jpg",
+            "audioUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789276099578_6_Airplane_flights_pro.mp3",
+            "artworkUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789276005464_art_1789276003391.jpg",
             "aiStatus": "draft_pending",
             "processedContentHtml": "<div style=\"font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; box-sizing: border-box; background-color: #FFFFFF;\">\n  <!-- Main Title -->\n  <h1 style=\"color: #1B365D; text-align: center; margin: 0 0 10px 0; font-size: 26px; font-weight: bold;\">AgoraEuFalo - Survival English</h1>\n  \n  <!-- Subtitle Blue Bubble Box -->\n  <div style=\"background-color: #1E40AF; color: #FFFFFF; text-align: center; border-radius: 20px; padding: 6px 18px; margin: 0 auto 20px auto; width: fit-content; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;\">\n    Airport &amp; Flights\n  </div>\n\n  <!-- Main Cream Bubble Box -->\n  <div style=\"background-color: #FFFDF0; border: 1px solid #EAE2B7; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);\">\n    <h2 style=\"color: #2B2D42; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 20px; border-bottom: 2px solid #F4A261; padding-bottom: 8px;\">Pronunciation Practice</h2>\n\n    <style>\n      .practice-box {\n        background-color: #FFFFFF;\n        border: 1px solid #E2E8F0;\n        border-left: 4px solid #2563EB;\n        border-radius: 8px;\n        padding: 10px 14px;\n        margin-bottom: 8px;\n        color: #1F2937;\n        font-size: 14px;\n        font-weight: 600;\n      }\n    </style>\n\n    <div class=\"practice-box\">1. Good morning! Can I have your passport and ticket, please?</div>\n    <div class=\"practice-box\">2. Good morning. Here you go.</div>\n    <div class=\"practice-box\">3. Can I get a window seat?</div>\n    <div class=\"practice-box\">4. Sure, let me check. Yes, window seat 14A is open.</div>\n    <div class=\"practice-box\">5. Do you have any bags to check in today?</div>\n    <div class=\"practice-box\">6. Just this big suitcase.</div>\n    <div class=\"practice-box\">7. Can I take this backpack with me on the plane?</div>\n    <div class=\"practice-box\">8. Yes, you can take it with you.</div>\n    <div class=\"practice-box\">9. Here is your boarding pass. Gate 4B.</div>\n    <div class=\"practice-box\">10. Boarding starts at 10:30.</div>\n    <div class=\"practice-box\">11. Thank you very much! Have a great day.</div>\n    <div class=\"practice-box\">12. Excuse me, where can I put my backpack?</div>\n    <div class=\"practice-box\">13. You can put it under the seat in front of you.</div>\n    <div class=\"practice-box\">14. Or get some space in the overhead bin.</div>\n    <div class=\"practice-box\">15. Perfect, thank you.</div>\n    <div class=\"practice-box\">16. And can I have a glass of water, please?</div>\n    <div class=\"practice-box\">17. Of course! Here you go. Enjoy your flight.</div>\n    <div class=\"practice-box\">18. Thanks a lot!</div>\n  </div>\n</div>",
             "media": [
               {
                 "type": "video_mp4",
-                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276072937_6_Airplane_flights_pro.mp4?alt=media",
+                "url": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789276072937_6_Airplane_flights_pro.mp4",
                 "title": "6_airport_flights_pro_video",
                 "durationStr": "",
                 "thumbnailUrl": ""
@@ -8480,13 +8485,13 @@ const AEF_COURSES_DATA = {
               {
                 "type": "pdf",
                 "title": "Apostila Diagramada (6_pronunciation_practice)",
-                "url": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789276673305_Apostila_airport_flight_level_1_6_pronunciation_practice.pdf?alt=media"
+                "url": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789276673305_Apostila_airport_flight_level_1_6_pronunciation_practice.pdf"
               }
             ],
             "quizId": "",
-            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fpdfs%2F1789276673305_Apostila_airport_flight_level_1_6_pronunciation_practice.pdf?alt=media",
+            "pdfUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/pdfs/1789276673305_Apostila_airport_flight_level_1_6_pronunciation_practice.pdf",
             "duration": "02:07",
-            "videoUrl": "https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o/courses%2Fairport_flight_level_1%2Fciclo-01%2F1789276072937_6_Airplane_flights_pro.mp4?alt=media"
+            "videoUrl": "https://assets.agoraeufalo.com.br/courses/airport_flight_level_1/ciclo-01/1789276072937_6_Airplane_flights_pro.mp4"
           }
         ]
       }
