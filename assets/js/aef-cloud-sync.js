@@ -1797,22 +1797,48 @@
      * Uses resilient REST API with XHR progress monitoring.
      * @param {File|Blob} file 
      * @param {string} folder e.g. "videos/public", "audio/students"
+    /**
+     * Uploads any file directly to Cloudflare R2 (aef-course-content) via Worker Edge API
+     * Returns canonical URL: https://assets.agoraeufalo.com.br/...
+     * @param {File|Blob} file File or Blob to upload
+     * @param {string} folder Target folder path (e.g. 'courses/english-quickstart/covers')
      * @param {function} onProgress callback with percentage (0 to 100)
-     * @returns {Promise<string>} Download URL from Google Cloud
+     * @returns {Promise<string>} Canonical R2 Assets URL
      */
     async uploadFileToStorage(file, folder = "uploads", onProgress = null) {
       if (!file) throw new Error("Nenhum arquivo selecionado para upload.");
 
-      const filename = `${Date.now()}_${file.name ? file.name.replace(/[^a-zA-Z0-9._-]/g, "_") : "media.bin"}`;
-      const filePath = `${folder}/${filename}`;
-      const encodedName = encodeURIComponent(filePath);
-      const bucket = FIREBASE_CONFIG.storageBucket;
-      const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o?uploadType=media&name=${encodedName}`;
+      let defaultExt = ".bin";
+      if (file.type === "audio/wav") defaultExt = ".wav";
+      else if (file.type === "audio/mpeg" || file.type === "audio/mp3") defaultExt = ".mp3";
+      else if (file.type === "application/pdf") defaultExt = ".pdf";
+      else if (file.type === "image/jpeg") defaultExt = ".jpg";
+      else if (file.type === "image/png") defaultExt = ".png";
+      else if (file.type === "video/mp4") defaultExt = ".mp4";
+
+      const rawName = file.name ? file.name.replace(/[^a-zA-Z0-9._-]/g, "_") : `media_${Date.now()}${defaultExt}`;
+      const filename = rawName.includes(".") ? `${Date.now()}_${rawName}` : `${Date.now()}_${rawName}${defaultExt}`;
+      const cleanFolder = (folder || "uploads").replace(/^\/+|\/+$/g, "");
+
+      let idToken = null;
+      if (typeof window !== "undefined" && window.aefPortalAuth && typeof window.aefPortalAuth.getIdToken === "function") {
+        try {
+          idToken = await window.aefPortalAuth.getIdToken();
+        } catch (e) {
+          console.warn("Aviso ao obter idToken para upload R2:", e);
+        }
+      }
 
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", uploadUrl, true);
+        xhr.open("PUT", "/api/admin/upload-asset", true);
         xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+        xhr.setRequestHeader("X-File-Name", filename);
+        xhr.setRequestHeader("X-Folder", cleanFolder);
+        xhr.setRequestHeader("X-Content-Type", file.type || "application/octet-stream");
+        if (idToken) {
+          xhr.setRequestHeader("Authorization", `Bearer ${idToken}`);
+        }
 
         if (xhr.upload && onProgress) {
           xhr.upload.onprogress = (e) => {
@@ -1826,18 +1852,25 @@
         xhr.onload = () => {
           if (xhr.status === 200 || xhr.status === 201) {
             if (onProgress) onProgress(100);
-            const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodedName}?alt=media`;
-            console.log("☁️ [AEFCloudSync] Arquivo enviado com sucesso para a Nuvem:", downloadUrl);
-            resolve(downloadUrl);
+            try {
+              const data = JSON.parse(xhr.responseText);
+              const downloadUrl = data.url || `https://assets.agoraeufalo.com.br/${cleanFolder}/${filename}`;
+              console.log("☁️ [AEFCloudSync] Arquivo enviado com sucesso para Cloudflare R2:", downloadUrl);
+              resolve(downloadUrl);
+            } catch (e) {
+              const downloadUrl = `https://assets.agoraeufalo.com.br/${cleanFolder}/${filename}`;
+              console.log("☁️ [AEFCloudSync] Arquivo enviado para R2 (fallback parse):", downloadUrl);
+              resolve(downloadUrl);
+            }
           } else {
-            console.error("❌ [AEFCloudSync] Erro HTTP no upload:", xhr.status, xhr.responseText);
-            reject(new Error(`Erro HTTP ${xhr.status} no envio para a nuvem.`));
+            console.error("❌ [AEFCloudSync] Erro HTTP no upload R2:", xhr.status, xhr.responseText);
+            reject(new Error(`Erro HTTP ${xhr.status} no envio para o R2: ${xhr.responseText}`));
           }
         };
 
         xhr.onerror = () => {
-          console.error("❌ [AEFCloudSync] Erro de rede durante o upload.");
-          reject(new Error("Falha de conexão com o Google Cloud Storage."));
+          console.error("❌ [AEFCloudSync] Erro de rede durante o upload para o Cloudflare R2.");
+          reject(new Error("Falha de conexão com o Cloudflare R2 Edge."));
         };
 
         xhr.send(file);

@@ -141,6 +141,17 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+
+    // ========================================================================
+    // 8. BLOG POSTS & PODCASTS (CMS Omnichannel)
+    // Leitura: Pública para renderização na vitrine / blog.
+    // Escrita: Exclusiva do Administrador Mestre.
+    // ========================================================================
+    match /blog_posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // ========================================================================
     // 7. POLÍTICA PADRÃO ZERO TRUST
     // Qualquer documento ou coleção não mapeada explicitamente é bloqueada.

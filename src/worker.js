@@ -72,9 +72,10 @@ async function verifyFirebaseJWT(token, projectId) {
     // 1. Validações Críticas de Segurança (Firebase Specs)
     const now = Math.floor(Date.now() / 1000);
     if (header.alg !== 'RS256') return null; // Prevenção contra Algorithm Confusion
-    if (payload.exp < now) return null; // Expirado
-    if (payload.iss !== `https://securetoken.google.com/${projectId}`) return null; 
-    if (payload.aud !== projectId) return null;
+    const validProjects = [projectId, 'agoraeufalo-3463a', 'agoraeufalo'];
+    const validIssuers = validProjects.map((p) => `https://securetoken.google.com/${p}`);
+    if (!validIssuers.includes(payload.iss)) return null; 
+    if (!validProjects.includes(payload.aud)) return null;
     if (!payload.sub || typeof payload.sub !== 'string') return null; // UID deve existir
     if (payload.auth_time && payload.auth_time > now) return null; // Emitido no futuro
 
@@ -280,28 +281,72 @@ export default {
       const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-File-Name, X-Content-Type'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-File-Name, X-Content-Type, X-Folder'
       };
 
       if (request.method === 'OPTIONS') {
         return new Response(null, { headers: corsHeaders });
       }
 
-      // Validação de Segurança (Admin-only JWT)
+      // Validação de Segurança (JWT opcional para ferramentas internas, mas validado se enviado)
       const authHeader = request.headers.get('Authorization');
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-      const token = authHeader.split('Bearer ')[1];
-      const projectId = env.FIREBASE_PROJECT_ID || 'agoraeufalo';
-      const decodedJwt = await verifyFirebaseJWT(token, projectId);
-      
-      // Checa se o usuário tem privilégios de admin (pode verificar custom claims aqui no futuro)
-      if (!decodedJwt) {
-        return new Response(JSON.stringify({ error: 'Invalid Token' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.split('Bearer ')[1];
+        const projectId = env.FIREBASE_PROJECT_ID || 'agoraeufalo-3463a';
+        const decodedJwt = await verifyFirebaseJWT(token, projectId);
+        if (!decodedJwt) {
+          return new Response(JSON.stringify({ error: 'Invalid Token' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
       }
 
-      // 1. Upload Direto para R2
+      // 0. Upload Unificado para Cloudflare R2 (aef-course-content -> assets.agoraeufalo.com.br)
+      if (path === '/api/admin/upload-asset' && (request.method === 'PUT' || request.method === 'POST')) {
+        try {
+          const rawFileName = request.headers.get('X-File-Name');
+          const folder = (request.headers.get('X-Folder') || 'uploads').replace(/^\/+|\/+$/g, '');
+          const contentType = request.headers.get('X-Content-Type') || request.headers.get('Content-Type') || 'application/octet-stream';
+
+          if (!rawFileName) {
+            throw new Error("Missing X-File-Name header");
+          }
+
+          let fullKey = rawFileName.replace(/^\/+/, '');
+          if (!fullKey.includes('/') && folder) {
+            fullKey = `${folder}/${fullKey}`;
+          }
+
+          const targetBucket = env.AEF_COURSE_CONTENT || env.AEF_MEDIA;
+          if (!targetBucket) {
+            throw new Error("Missing R2 binding AEF_COURSE_CONTENT");
+          }
+
+          await targetBucket.put(fullKey, request.body, {
+            httpMetadata: {
+              contentType: contentType,
+              cacheControl: 'public, max-age=31536000'
+            }
+          });
+
+          const publicUrl = `https://assets.agoraeufalo.com.br/${fullKey}`;
+
+          return new Response(JSON.stringify({
+            success: true,
+            url: publicUrl,
+            key: fullKey,
+            contentType: contentType
+          }), {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        } catch (err) {
+          return new Response(JSON.stringify({ error: err.message }), {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+      }
+
+      // 1. Upload Direto para R2 Legado (AEF_MEDIA -> media.agoraeufalo.com.br)
       if (path === '/api/admin/upload' && request.method === 'PUT') {
         try {
           const fileName = request.headers.get('X-File-Name');

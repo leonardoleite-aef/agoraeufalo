@@ -13,6 +13,10 @@
     {
       "binding": "AEF_MEDIA",
       "bucket_name": "aef-media"
+    },
+    {
+      "binding": "AEF_COURSE_CONTENT",
+      "bucket_name": "aef-course-content"
     }
   ]
 }

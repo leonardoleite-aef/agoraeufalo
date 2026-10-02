@@ -1251,28 +1251,36 @@
 
     async function _uploadToStorage(blob, fileName, mimeType, onProgress) {
       const token = await _getAuthToken();
-      const headers = { 'Content-Type': mimeType };
-      if (token) headers['Authorization'] = 'Bearer ' + token;
+      const cleanFileName = fileName.replace(/^\/+/, '');
+      const parts = cleanFileName.split('/');
+      const actualFile = parts.pop();
+      const folder = parts.join('/') || 'blog-media';
 
-      // Firebase Storage REST upload (multipart não disponível via REST simples → usa media upload)
-      const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o?uploadType=media&name=${encodeURIComponent(fileName)}`;
-
-      // Usa XHR para ter progresso
+      // Cloudflare R2 upload via Worker endpoint
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', uploadUrl);
-        Object.entries(headers).forEach(([k, v]) => xhr.setRequestHeader(k, v));
+        xhr.open('PUT', '/api/admin/upload-asset');
+        xhr.setRequestHeader('Content-Type', mimeType || 'application/octet-stream');
+        xhr.setRequestHeader('X-File-Name', actualFile);
+        xhr.setRequestHeader('X-Folder', folder);
+        xhr.setRequestHeader('X-Content-Type', mimeType || 'application/octet-stream');
+        if (token) xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
         if (onProgress) xhr.upload.addEventListener('progress', e => {
           if (e.lengthComputable) onProgress(Math.round(e.loaded / e.total * 100));
         });
         xhr.onload = () => {
           if (xhr.status >= 200 && xhr.status < 300) {
-            const data = JSON.parse(xhr.responseText);
-            const url = `https://firebasestorage.googleapis.com/v0/b/${data.bucket}/o/${encodeURIComponent(data.name)}?alt=media`;
-            resolve(url);
-          } else reject(new Error(`Storage ${xhr.status}: ${xhr.responseText}`));
+            try {
+              const data = JSON.parse(xhr.responseText);
+              const url = data.url || `https://assets.agoraeufalo.com.br/${folder}/${actualFile}`;
+              resolve(url);
+            } catch(e) {
+              resolve(`https://assets.agoraeufalo.com.br/${folder}/${actualFile}`);
+            }
+          } else reject(new Error(`R2 Upload ${xhr.status}: ${xhr.responseText}`));
         };
-        xhr.onerror = () => reject(new Error('Erro de rede no upload'));
+        xhr.onerror = () => reject(new Error('Erro de rede no upload para Cloudflare R2'));
         xhr.send(blob);
       });
     }
@@ -1478,18 +1486,23 @@
         for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
         const audioBlob = new Blob([byteArr], { type: 'audio/mpeg' });
 
-        // 3. Upload para Firebase Storage via REST
-        const fileName = `blog-audio/la-block-${Date.now()}.mp3`;
-        const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/agoraeufalo-3463a.firebasestorage.app/o?uploadType=media&name=${encodeURIComponent(fileName)}`;
+        // 3. Upload para Cloudflare R2 via endpoint /api/admin/upload-asset
+        const fileName = `la-block-${Date.now()}.mp3`;
+        const folder = 'blog-audio';
         const token = await _getAuthToken();
-        const uploadHeaders = { 'Content-Type': 'audio/mpeg' };
+        const uploadHeaders = {
+          'Content-Type': 'audio/mpeg',
+          'X-File-Name': fileName,
+          'X-Folder': folder,
+          'X-Content-Type': 'audio/mpeg'
+        };
         if (token) uploadHeaders['Authorization'] = 'Bearer ' + token;
 
-        const uploadRes = await fetch(uploadUrl, { method: 'POST', headers: uploadHeaders, body: audioBlob });
-        if (!uploadRes.ok) throw new Error(`Storage upload ${uploadRes.status}`);
+        const uploadRes = await fetch('/api/admin/upload-asset', { method: 'PUT', headers: uploadHeaders, body: audioBlob });
+        if (!uploadRes.ok) throw new Error(`R2 upload ${uploadRes.status}`);
         const uploadData = await uploadRes.json();
 
-        const audioUrl = `https://firebasestorage.googleapis.com/v0/b/${uploadData.bucket}/o/${encodeURIComponent(uploadData.name)}?alt=media`;
+        const audioUrl = uploadData.url || `https://assets.agoraeufalo.com.br/${folder}/${fileName}`;
         _pendingBlocks[index].data.audioUrl = audioUrl;
         _renderBlocksList();
         showToast('Áudio gerado e salvo com sucesso! 🎙️');

@@ -3220,7 +3220,7 @@ Estrutura exigida em JSON puro:
   "contentBlocks": [
     // Retorne de 3 a 5 blocos seguindo estes tipos exatos: "text" (simples), "benefits" (lista de vantagens), "guarantee" (texto sobre garantia, mencione o prazo em dias exatos no texto), "about_leo" (texto sobre o professor), "faq" (perguntas frequentes).
     // O array de contentBlocks deve seguir o formato:
-    { "type": "text", "title": "Opcional, título da seção", "content": "Texto formatado em HTML simples, se necessário. Para faq, o formato é 'P: ...\\nR: ...'" }
+    { "type": "text", "title": "Opcional, título da seção", "content": "Texto formatado em HTML simples para parágrafos. ATENÇÃO: Para 'benefits', NUNCA use HTML (nada de <ul> ou <li>), retorne apenas os itens em texto puro separados por quebra de linha (\\n). Para 'faq', o formato é 'P: ...\\nR: ...' separados por quebra de linha dupla (\\n\\n)." }
   ]
 }`;
 

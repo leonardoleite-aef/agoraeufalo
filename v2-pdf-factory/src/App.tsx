@@ -2,9 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { PDFViewer, pdf } from '@react-pdf/renderer';
 import { AEFDocument } from './renderer/PDFDocument';
 import { PDFDocumentPayloadSchema } from './schemas/pdfSchema';
-import { db, storage } from './lib/firebase';
+import { db } from './lib/firebase';
 import { collection, getDocs, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface LessonOption {
   path: string;
@@ -90,11 +89,27 @@ function App() {
       // Magia do React-PDF: Extrai o binário sem renderizar na tela
       const blob = await pdf(<AEFDocument data={parsedData} />).toBlob();
       
-      setPublishStatus('2/3 Fazendo upload no Storage...');
-      const fileName = `pdf_materials_v2/${parsedData.documentId}_${Date.now()}.pdf`;
-      const storageRef = ref(storage, fileName);
-      await uploadBytes(storageRef, blob);
-      const downloadUrl = await getDownloadURL(storageRef);
+      setPublishStatus('2/3 Fazendo upload no Cloudflare R2...');
+      const cleanDocId = (parsedData.documentId || 'material').replace(/[^a-zA-Z0-9_-]/g, '_');
+      const fileName = `${cleanDocId}_${Date.now()}.pdf`;
+      const folder = 'pdf_materials_v2';
+      
+      const uploadRes = await fetch('/api/admin/upload-asset', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/pdf',
+          'X-File-Name': fileName,
+          'X-Folder': folder,
+          'X-Content-Type': 'application/pdf'
+        },
+        body: blob
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error(`Falha no upload para o Cloudflare R2 (HTTP ${uploadRes.status})`);
+      }
+      const uploadJson = await uploadRes.json();
+      const downloadUrl = uploadJson.url || `https://assets.agoraeufalo.com.br/${folder}/${fileName}`;
       
       setPublishStatus('3/3 Salvando Receita no Firestore...');
       // 1. Atualizar a aula
