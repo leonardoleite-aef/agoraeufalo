@@ -58,20 +58,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         const offer = R.getOfferById(id);
         if (!offer || offer.status !== 'active') return '';
         const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
-        return `
+        const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || \`R$ \${offer.pricing?.offerPrice || ''}\`;
+        const descText = offer.description || (offer.title.includes('QuickStart') ? 'O atalho prático para quem precisa de resultados rápidos.' : 'Curso prático focado em resultado.');
+        return \`
           <div class="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
             <div class="p-6 space-y-3">
-              <h3 class="text-lg font-bold text-slate-900">${offer.name}</h3>
-              <p class="text-xs text-slate-500 leading-relaxed min-h-[40px]">${offer.description || 'Curso prático.'}</p>
+              <h3 class="text-lg font-bold text-slate-900">\${offer.title}</h3>
+              <p class="text-xs text-slate-500 leading-relaxed min-h-[40px]">\${descText}</p>
             </div>
             <div class="px-6 pb-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span class="font-black text-lg text-slate-900">${offer.pricing}</span>
-              <button onclick="window.aefCheckoutModal.open('${url}')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition cursor-pointer">
+              <span class="font-black text-lg text-slate-900">\${priceText}</span>
+              <button onclick="window.aefCheckoutModal.open('\${url}')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition cursor-pointer">
                 Comprar
               </button>
             </div>
           </div>
-        `;
+        \`;
       }).join('');
       if (html) {
         coursesGrid.innerHTML = html;
@@ -89,23 +91,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!offer || offer.status !== 'active') return '';
         const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
         const isHighlight = id === 'ms-club-anual';
-        return `
-          <div class="${isHighlight ? 'bg-gradient-to-b from-[#112240] to-[#0A192F] border-amber-400 transform md:-translate-y-4' : 'bg-white/5 border-white/10 hover:border-amber-400/30'} border-2 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 relative shadow-xl">
-            ${isHighlight ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md whitespace-nowrap">Mais Recomendado</div>' : ''}
+        const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || \`R$ \${offer.pricing?.offerPrice || ''}\`;
+        const descText = offer.description || (id === 'ms-club-mensal' ? 'Acesso total mês a mês, cancele quando quiser.' : (id === 'ms-club-anual' ? 'O plano mais escolhido com desconto imbatível.' : 'Acesso vitalício sem cobranças recorrentes.'));
+        
+        return \`
+          <div class="\${isHighlight ? 'bg-gradient-to-b from-[#112240] to-[#0A192F] border-amber-400 transform md:-translate-y-4' : 'bg-white/5 border-white/10 hover:border-amber-400/30'} border-2 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 relative shadow-xl">
+            \${isHighlight ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md whitespace-nowrap">Mais Recomendado</div>' : ''}
             <div class="space-y-6">
               <div>
-                <h3 class="text-xl font-bold ${isHighlight ? 'text-amber-400' : 'text-white'}">${offer.name}</h3>
+                <h3 class="text-xl font-bold \${isHighlight ? 'text-amber-400' : 'text-white'}">\${offer.title}</h3>
               </div>
               <div class="flex items-baseline gap-1">
-                <span class="${isHighlight ? 'text-4xl' : 'text-3xl'} font-black text-white">${offer.pricing}</span>
+                <span class="\${isHighlight ? 'text-4xl' : 'text-3xl'} font-black text-white">\${priceText}</span>
               </div>
-              <p class="text-sm text-slate-300 min-h-[60px]">${offer.description || ''}</p>
+              <p class="text-sm text-slate-300 min-h-[60px]">\${descText}</p>
             </div>
-            <button onclick="window.aefCheckoutModal.open('${url}')" class="mt-8 w-full py-3.5 rounded-xl ${isHighlight ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-amber-500/20' : 'bg-white/10 hover:bg-white/20 text-white'} border border-white/15 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
-              Assinar ${offer.name}
+            <button onclick="window.aefCheckoutModal.open('\${url}')" class="mt-8 w-full py-3.5 rounded-xl \${isHighlight ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-amber-500/20' : 'bg-white/10 hover:bg-white/20 text-white'} border border-white/15 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
+              Assinar \${offer.title}
             </button>
           </div>
-        `;
+        \`;
       }).join('');
       plansGrid.innerHTML = html;
     }
