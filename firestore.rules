@@ -35,13 +35,29 @@ service cloud.firestore {
       );
     }
 
+    function isAllowedAdminEmail(email) {
+      return email != null && (
+        email.lower() == 'selexenglish@gmail.com' ||
+        email.lower() == 'leonardo@agoraeufalo.com.br' ||
+        email.lower() == 'leo@agoraeufalo.com.br'
+      );
+    }
+
+    function isAttemptingAdminWrite() {
+      return request.resource.data.get('role', '') == 'admin' ||
+             request.resource.data.get('tier', '') == 'admin_master' ||
+             ('admin' in request.resource.data.get('categories', [])) ||
+             ('admin' in request.resource.data.get('legacyEntitlements', []));
+    }
+
     // ========================================================================
     // 1. USUÁRIOS (users/*)
     // Leitura e Escrita: Habilitadas para permitir queries e provisionamento
     // automático do webhook Hotmart / Stripe via Worker REST API e gestão de alunos.
     // ========================================================================
     match /users/{userId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if !isAttemptingAdminWrite() || isAllowedAdminEmail(request.resource.data.email);
 
       // Subcoleções de usuário (custom_tracks, listening_stats, etc.)
       match /{subcollection=**} {

@@ -107,10 +107,12 @@ export async function getDynamicVipOverrides(forceRefresh = false) {
 export function isEmailAdmin(email, vipConfig = null) {
   if (!email) return false;
   const clean = String(email).toLowerCase().trim();
-  if (vipConfig && Array.isArray(vipConfig.adminEmails)) {
-    return vipConfig.adminEmails.includes(clean);
-  }
-  return clean === "selexenglish@gmail.com";
+  const HARDCODED_ADMINS = [
+    "selexenglish@gmail.com",
+    "leonardo@agoraeufalo.com.br",
+    "leo@agoraeufalo.com.br"
+  ];
+  return HARDCODED_ADMINS.includes(clean);
 }
 
 /**
@@ -486,6 +488,27 @@ export async function queryFirestoreUserByEmail(cleanEmail, excludeUid = null) {
 // Gravação direta na API REST do Firestore com suporte a updateMask e precondições atômicas
 export async function writeFirestore(collection, docId, data, options = {}) {
   try {
+    // ABSOLUTE SECURITY DEVICE (Requested by Leo)
+    // No one can become an admin unless explicitly whitelisted here.
+    if (collection === "users" || collection === "students") {
+      const isAllowedAdmin = [
+        "selexenglish@gmail.com",
+        "leonardo@agoraeufalo.com.br",
+        "leo@agoraeufalo.com.br"
+      ].includes(String(data.email || "").toLowerCase().trim());
+
+      if (!isAllowedAdmin) {
+        if (data.role === "admin") data.role = "student";
+        if (data.tier === "admin_master") data.tier = "free";
+        if (Array.isArray(data.categories)) {
+          data.categories = data.categories.filter(c => c !== "admin" && c !== "admin_master");
+        }
+        if (Array.isArray(data.legacyEntitlements)) {
+          data.legacyEntitlements = data.legacyEntitlements.filter(c => c !== "admin" && c !== "admin_master");
+        }
+      }
+    }
+
     const fields = toFirestoreFields(data);
     let url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/${collection}/${docId}?key=${FIRESTORE_API_KEY}`;
 
@@ -1572,6 +1595,36 @@ export async function handleHotmartWebhook(request, env, ctx) {
       }
     ];
 
+    let finalCategories = new Set(existingUser?.categories || ["member_free"]);
+    let finalCourses = new Set(existingUser?.enrolledProducts || []);
+    let finalPurchased = new Set(existingUser?.purchasedProducts || []);
+    
+    if (accessStatus === "revoked" || accessStatus === "canceled_immediate") {
+        if (mapping && mapping.categories) {
+            mapping.categories.forEach(c => {
+                if (c !== "member_free" && !c.startsWith("legado_")) {
+                    finalCategories.delete(c);
+                }
+            });
+        }
+        if (mapping && mapping.enrolledProducts) {
+            mapping.enrolledProducts.forEach(c => {
+                finalCourses.delete(c);
+                finalPurchased.delete(c);
+            });
+        }
+        if (resolvedCourseId) {
+            finalCourses.delete(resolvedCourseId);
+            finalPurchased.delete(resolvedCourseId);
+        }
+    } else {
+        targetCategories.forEach(c => finalCategories.add(c));
+        targetCourses.forEach(c => {
+            finalCourses.add(c);
+            finalPurchased.add(c);
+        });
+    }
+
     const studentRecord = {
       id: studentId,
       uid: studentId,
@@ -1579,11 +1632,11 @@ export async function handleHotmartWebhook(request, env, ctx) {
       email: email,
       phone: phone,
       whatsapp: phone,
-      role: mapping.role || "student",
+      role: existingUser?.role || "student",
       tier: legacyTier,
-      categories: targetCategories,
-      enrolledProducts: targetCourses,
-      purchasedProducts: targetCourses,
+      categories: Array.from(finalCategories),
+      enrolledProducts: Array.from(finalCourses),
+      purchasedProducts: Array.from(finalPurchased),
       subscriptions: subscriptions,
       subscriptionWatermarks: {
         ...(existingUser?.subscriptionWatermarks || {}),
@@ -1593,7 +1646,7 @@ export async function handleHotmartWebhook(request, env, ctx) {
         ...(existingUser?.productWatermarks || {}),
         [prodId]: occurredAt
       },
-      legacyEntitlements: targetCategories.filter(c => c === 'member_free' || c.startsWith('legado_')),
+      legacyEntitlements: existingUser?.legacyEntitlements || targetCategories.filter(c => c === 'member_free' || c.startsWith('legado_')),
       schemaVersion: 2,
       lastEvent: event,
       lastEventId: eventId,
