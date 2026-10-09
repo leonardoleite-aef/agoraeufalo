@@ -37,9 +37,7 @@ service cloud.firestore {
 
     function isAllowedAdminEmail(email) {
       return email != null && (
-        email.lower() == 'selexenglish@gmail.com' ||
-        email.lower() == 'leonardo@agoraeufalo.com.br' ||
-        email.lower() == 'leo@agoraeufalo.com.br'
+        email.lower() == 'selexenglish@gmail.com'
       );
     }
 

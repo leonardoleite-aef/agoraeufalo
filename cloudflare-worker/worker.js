@@ -108,9 +108,7 @@ export function isEmailAdmin(email, vipConfig = null) {
   if (!email) return false;
   const clean = String(email).toLowerCase().trim();
   const HARDCODED_ADMINS = [
-    "selexenglish@gmail.com",
-    "leonardo@agoraeufalo.com.br",
-    "leo@agoraeufalo.com.br"
+    "selexenglish@gmail.com"
   ];
   return HARDCODED_ADMINS.includes(clean);
 }
@@ -492,9 +490,7 @@ export async function writeFirestore(collection, docId, data, options = {}) {
     // No one can become an admin unless explicitly whitelisted here.
     if (collection === "users" || collection === "students") {
       const isAllowedAdmin = [
-        "selexenglish@gmail.com",
-        "leonardo@agoraeufalo.com.br",
-        "leo@agoraeufalo.com.br"
+        "selexenglish@gmail.com"
       ].includes(String(data.email || "").toLowerCase().trim());
 
       if (!isAllowedAdmin) {
