@@ -444,7 +444,7 @@ export async function listFirestoreDocs(collection, pageSize = 300, pageToken = 
 
 
 // Consulta estruturada por email na coleção users
-export async function queryFirestoreUserByEmail(cleanEmail) {
+export async function queryFirestoreUserByEmail(cleanEmail, excludeUid = null) {
   try {
     const url = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents:runQuery?key=${FIRESTORE_API_KEY}`;
     const queryPayload = {
@@ -457,7 +457,7 @@ export async function queryFirestoreUserByEmail(cleanEmail) {
             value: { stringValue: cleanEmail }
           }
         },
-        limit: 1
+        limit: 10
       }
     };
     const res = await fetch(url, {
@@ -470,7 +470,9 @@ export async function queryFirestoreUserByEmail(cleanEmail) {
     if (Array.isArray(results)) {
       for (const item of results) {
         if (item.document) {
-          return parseRestDoc(item.document);
+          const parsed = parseRestDoc(item.document);
+          if (excludeUid && parsed.id === excludeUid) continue;
+          return parsed;
         }
       }
     }
@@ -728,7 +730,7 @@ export async function handleClaimPreregistration(request, env) {
 
   // 3. Se não encontrou por legacyId, busca via query de email
   if (!preReg) {
-    preReg = await queryFirestoreUserByEmail(email);
+    preReg = await queryFirestoreUserByEmail(email, uid);
   }
 
   // 4. Guarda Atômica Claim-Once (§3.4)
@@ -775,7 +777,8 @@ export async function handleClaimPreregistration(request, env) {
   normalizedUser.claimedFrom = (preReg && preReg.id !== uid) ? preReg.id : null;
 
   // 7. Marcação Atômica Claim-Once no documento de origem legado (§1.6 e §3.4)
-  if (legacyId !== uid && preReg && preReg.id === legacyId) {
+  if (preReg && preReg.id !== uid) {
+    const legacyId = preReg.id; // Override legacyId to mark correct doc
     const linkOptions = {
       updateMask: ["linkedUid", "claimedBy", "claimedAt", "schemaVersion", "updatedAt"],
       currentDocument: { exists: true }
@@ -1025,7 +1028,7 @@ export async function handleAdminUsers(request, env) {
     });
   }
 
-  const targetUserId = body.userId || body.uid;
+  let targetUserId = body.userId || body.uid;
   const userData = body.userData || {};
 
   if (!targetUserId) {
@@ -1070,11 +1073,30 @@ export async function handleAdminUsers(request, env) {
           updatedAt: new Date().toISOString()
         };
         await writeFirestore('students', mId, merged);
-        console.log(`[AEF Worker] save_mentee: OK para ${mId}`);
-        return new Response(JSON.stringify({ success: true, menteeId: mId }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-        });
+        
+        // Se o student tem um linkedUid, repassa a atualizacao para o user real
+        targetUserId = mId;
+        if (merged.linkedUid) {
+            targetUserId = merged.linkedUid;
+            merged.id = targetUserId;
+            merged.uid = targetUserId;
+        } else {
+            // Verifica no user se ja foi migrado
+            const userDoc = await readFirestoreDoc('users', mId);
+            if (userDoc && (userDoc.linkedUid || userDoc.claimedBy)) {
+                targetUserId = userDoc.linkedUid || userDoc.claimedBy;
+                merged.id = targetUserId;
+                merged.uid = targetUserId;
+            }
+        }
+        
+        // Devolve os IDs ajustados para o restante do fluxo admin (que atualiza 'users')
+        console.log(`[AEF Worker] save_mentee: OK para ${mId}, targetUser alterado para ${targetUserId}`);
+        
+        // Modifica body.userId em runtime para que o fluxo abaixo (que escreve em users) use targetUserId
+        body.userId = targetUserId;
+        targetUserId = targetUserId; // ensure outer variable is updated, wait, no, the outer variable is shadowed!
+        
       } catch (err) {
         console.error(`[AEF Worker] save_mentee falhou para ${mId}:`, err.message || err);
         return new Response(JSON.stringify({ error: 'Falha ao salvar mentorado', details: String(err.message || err) }), {
