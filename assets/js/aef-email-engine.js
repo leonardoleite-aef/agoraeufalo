@@ -1,73 +1,114 @@
 /**
  * 🏛️ AgoraEuFalo • Motor Unificado de Comunicação & E-mails Transacionais (Brevo)
  * 
- * Suporta envio via Brevo API v3 (https://api.brevo.com/v3/smtp/email)
- * e fila de contingência no Google Cloud Firestore ('mail/{mailId}').
+ * Envio direto via Brevo API v3 (https://api.brevo.com/v3/smtp/email).
  * 
- * Contém os 6 Templates Canônicos de Lifecycle:
- * E1 - Boas-Vindas & Onboarding (com Link Mágico)
- * E2 - Acesso Direto / Magic Link / Senha
- * E3 - Novo Conteúdo Liberado na Plataforma
- * E4 - Confirmação de Matrícula / Compra (Hotmart & Stripe)
- * E5 - Alteração de Plano / Upgrade
- * E6 - Suspensão / Falha de Cobrança / Cancelamento
+ * Catálogo dos Templates Canônicos de Lifecycle:
+ * - E1_WELCOME_ONBOARDING: Boas-Vindas & Onboarding (com Link do Portal)
+ * - E2_AUTH_MAGIC_LINK: Lembrete de Acesso à Plataforma
+ * - E3_NEW_CONTENT: Novo Conteúdo Liberado na Plataforma
+ * - E4_PURCHASE_CONFIRMED: Confirmação de Matrícula / Compra (Hotmart & Stripe)
+ * - E4_PRODUCT_ACCESS: Confirmação de Acesso a Novo(s) Produto(s) Liberado(s)
+ * - E5_PLAN_UPGRADE: Upgrade Celebratório de Plano
+ * - E5_PLAN_DOWNGRADE: Downgrade Acolhedor de Plano (histórico preservado)
+ * - E5_PLAN_CHANGED: Alteração Neutra de Plano (alias retrocompatível)
+ * - E6_SUSPENSION_CANCELLATION: Suspensão / Falha de Cobrança / Cancelamento
+ * - E8_VIP_PRESCRIPTION: Prescrição de Áudio Sob Medida (Mentoria VIP)
  */
 
-(function(window) {
+(function(root) {
   'use strict';
 
-  const BREVO_API_ENDPOINT = 'https://api.brevo.com/v3/smtp/email';
-  const DEFAULT_SENDER_NAME = 'Professor Leonardo Leite • AgoraEuFalo';
-  const DEFAULT_SENDER_EMAIL = 'selexenglish@gmail.com';
+  const DEFAULT_SENDER_NAME = 'Leonardo Leite • AgoraEuFalo';
+  const DEFAULT_SENDER_EMAIL = 'contato@agoraeufalo.com.br';
+  const DEFAULT_REPLY_TO_EMAIL = 'selexenglish@gmail.com';
+  const DEFAULT_PORTAL_URL = 'https://app.agoraeufalo.com.br/portal';
   const SUPPORT_WHATSAPP = 'https://wa.me/5511999999999';
 
-  // Token de configuração MCP Brevo fornecido pelo Professor Leo Leite
-  const MCP_CONFIG_TOKEN = 'eyJhcGlfa2V5IjoieGtleXNpYi1mZjZlY2Y0MjQ2NmM3MTAyYmRkYzJlYmJiNzg4OTllMzI4NjAyYmQyZTMyZjRlNmEzN2JmYWNiMzlmOWRkYTQ0LVdMNUhnSm5Xc2VZVFlzNGkifQ==';
+  const PLAN_LABELS = {
+    free: 'AgoraEuFalo Free',
+    club_monthly: 'AEF Club Mensal',
+    club_annual: 'AEF Club Anual',
+    vip_mentorship: 'Mentoria VIP Individual',
+    lifetime: 'Acesso Vitalício',
+    pago: 'AEF Club'
+  };
+
+  /**
+   * Escapa caracteres perigosos para HTML (& < > " ')
+   */
+  function _esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /**
+   * Valida URLs para permitir apenas protocolo http:// ou https://
+   */
+  function _safeUrl(url, fallback) {
+    const fallbackUrl = fallback || DEFAULT_PORTAL_URL;
+    if (!url || typeof url !== 'string') return fallbackUrl;
+    const trimmed = url.trim();
+    if (/^https?:\/\//i.test(trimmed)) {
+      return trimmed;
+    }
+    return fallbackUrl;
+  }
 
   class AEFEmailEngine {
     constructor() {
-      this.apiKey = this._getStoredApiKey();
       this.senderName = DEFAULT_SENDER_NAME;
       this.senderEmail = DEFAULT_SENDER_EMAIL;
+      this.replyToEmail = DEFAULT_REPLY_TO_EMAIL;
+      this.PLAN_LABELS = PLAN_LABELS;
     }
 
-    _getStoredApiKey() {
-      try {
-        const stored = localStorage.getItem('aef_brevo_api_key');
-        if (stored && stored.length > 10) return stored;
-        if (typeof atob === 'function' && MCP_CONFIG_TOKEN) {
-          const parsed = JSON.parse(atob(MCP_CONFIG_TOKEN));
-          return parsed.api_key || '';
-        }
-      } catch (e) {}
-      return '';
+    _esc(s) {
+      return _esc(s);
     }
 
-    setApiKey(key) {
-      this.apiKey = String(key || '').trim();
-      try {
-        if (this.apiKey) {
-          localStorage.setItem('aef_brevo_api_key', this.apiKey);
-        } else {
-          localStorage.removeItem('aef_brevo_api_key');
-        }
-      } catch (e) {}
+    _safeUrl(url, fallback) {
+      return _safeUrl(url, fallback);
     }
 
-    hasApiKey() {
-      return Boolean(this.apiKey && this.apiKey.length > 10);
+    /**
+     * Converte identificador técnico de plano/tier para label humanizado
+     */
+    planLabel(tier) {
+      if (!tier) return '';
+      const str = String(tier).trim();
+      const lower = str.toLowerCase();
+      if (PLAN_LABELS[lower]) {
+        return PLAN_LABELS[lower];
+      }
+      for (const val of Object.values(PLAN_LABELS)) {
+        if (val.toLowerCase() === lower) return val;
+      }
+      return str
+        .replace(/[_-]+/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
     }
 
     /**
      * Gera o invólucro visual de luxo (Calm EdTech) para todos os e-mails
      */
+    /* CONTRATO: title/preheader/badge/ctaText/footerNote/contentHtml chegam JA ESCAPADOS pelo template; ctaUrl e validado/escapado aqui. */
     _wrapEmailTemplate({ preheader, title, badge, contentHtml, ctaText, ctaUrl, footerNote }) {
+      const safeCtaUrl = _safeUrl(ctaUrl, DEFAULT_PORTAL_URL);
+      const cleanTitle = (title || '').replace(/<[^>]*>/g, '');
+      const cleanPreheader = (preheader || cleanTitle || '').replace(/<[^>]*>/g, '');
+
       return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
+  <title>${cleanTitle}</title>
   <style>
     body { margin: 0; padding: 0; background-color: #060D17; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
     table { border-collapse: collapse; }
@@ -85,7 +126,7 @@
 <body style="margin: 0; padding: 30px 10px; background-color: #060D17;">
   <!-- Preheader invisível para clientes de e-mail -->
   <div style="display: none; max-height: 0px; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
-    ${preheader || title}
+    ${cleanPreheader}
   </div>
 
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -105,9 +146,9 @@
             
             ${contentHtml}
 
-            ${ctaUrl && ctaText ? `
+            ${safeCtaUrl && ctaText ? `
               <div style="text-align: center; margin: 28px 0 10px 0;">
-                <a href="${ctaUrl}" class="btn" target="_blank">${ctaText}</a>
+                <a href="${_esc(safeCtaUrl)}" class="btn" target="_blank">${ctaText}</a>
               </div>
             ` : ''}
 
@@ -127,7 +168,7 @@
               Inglês não é matéria para passar em prova; inglês é experiência viva.
             </p>
             <p style="margin: 0;">
-              Dúvidas pedagógicas ou suporte técnico: <a href="mailto:selexenglish@gmail.com">selexenglish@gmail.com</a>
+              Dúvidas pedagógicas ou suporte técnico: <a href="mailto:${_esc(DEFAULT_REPLY_TO_EMAIL)}">${_esc(DEFAULT_REPLY_TO_EMAIL)}</a>
             </p>
           </div>
 
@@ -144,7 +185,7 @@
      */
     buildTemplate(templateId, data = {}) {
       const studentName = (data.name || 'Friend').trim().split(' ')[0];
-      const portalUrl = data.magicLink || 'https://agoraeufalo.com.br/portal.html';
+      const portalUrl = _safeUrl(data.magicLink || data.portalUrl, DEFAULT_PORTAL_URL);
 
       switch (templateId) {
         // E1: Boas-Vindas & Onboarding
@@ -154,7 +195,7 @@
             html: this._wrapEmailTemplate({
               preheader: 'Bem-vindo ao AgoraEuFalo com o Professor Leonardo Leite.',
               badge: 'Boas-Vindas • Sala Liberada',
-              title: `Hello, ${studentName}!`,
+              title: `Hello, ${_esc(studentName)}!`,
               contentHtml: `
                 <p>Que alegria ter você aqui comigo nesta nova jornada!</p>
                 <p>Nesses mais de 35 anos de sala de aula, uma coisa sempre ficou clara: <strong>você não precisa de mais regras gramaticais para falar inglês</strong>. O que você precisa é treinar seu ouvido com curiosidade até que as respostas comecem a sair no reflexo automático.</p>
@@ -172,65 +213,72 @@
             })
           };
 
-        // E2: Magic Link / Acesso Direto / Recuperação
-        case 'E2_AUTH_MAGIC_LINK':
+        // E2: Lembrete de Acesso à Plataforma
+        case 'E2_AUTH_MAGIC_LINK': {
+          const e2LoginUrl = data.email
+            ? ('https://app.agoraeufalo.com.br/login?email=' + encodeURIComponent(data.email))
+            : portalUrl;
           return {
-            subject: `Seu link de acesso rápido ao AgoraEuFalo 🔑`,
+            subject: `Seu lembrete de acesso ao AgoraEuFalo 🔑`,
             html: this._wrapEmailTemplate({
-              preheader: 'Acesse o portal do aluno com 1 toque.',
-              badge: 'Segurança & Acesso Rápido',
-              title: `Seu Acesso Rápido, ${studentName}`,
+              preheader: 'Acesse sua sala de aula e continue seus treinos.',
+              badge: 'Lembrete de Acesso',
+              title: `Hello, ${_esc(studentName)}!`,
               contentHtml: `
-                <p>Você solicitou acesso à sua conta no AgoraEuFalo.</p>
-                <p>Para entrar direto na sua sala de aula e no Training Player com total segurança, clique no botão abaixo:</p>
+                <p>Aqui está o seu atalho para acessar a plataforma do AgoraEuFalo.</p>
+                <p>Para entrar direto na sua sala de aula e no Training Player com total comodidade, clique no botão abaixo:</p>
                 <div class="box-amber">
-                  ⏱️ <strong>Atenção:</strong> Por motivos de segurança, este link é pessoal e expira em instantes.
+                  💡 <strong>Como entrar:</strong> Na tela de login, você pode entrar com sua senha ou clicar no botão <strong>"Receber Link Mágico"</strong> para receber um link de acesso instantâneo diretamente no seu e-mail, sem precisar memorizar senhas.
                 </div>
               `,
-              ctaText: 'Entrar no AgoraEuFalo Agora ➔',
-              ctaUrl: portalUrl,
-              footerNote: 'Se você não solicitou este acesso, pode ignorar esta mensagem com tranquilidade.'
+              ctaText: 'Acessar o AgoraEuFalo Agora ➔',
+              ctaUrl: _safeUrl(e2LoginUrl, portalUrl),
+              footerNote: 'Se você não solicitou este lembrete de acesso, pode desconsiderar esta mensagem com tranquilidade.'
             })
           };
+        }
 
         // E3: Novo Conteúdo Disponível
-        case 'E3_NEW_CONTENT':
+        case 'E3_NEW_CONTENT': {
           const contentTitle = data.contentTitle || 'Nova Lição de Treino';
+          const contentDesc = data.contentDescription || 'Um novo treino focado no Sentimento da Estrutura e musicalidade da língua inglesa viva.';
           return {
             subject: `Tem aula nova esperando pelo seu ouvido hoje, my friend! 🎧`,
             html: this._wrapEmailTemplate({
               preheader: `Novo conteúdo disponível: ${contentTitle}`,
               badge: 'Novo Conteúdo • Prática Ativa',
-              title: `Tem treino novo para você, ${studentName}!`,
+              title: `Hello, ${_esc(studentName)}!`,
               contentHtml: `
                 <p>Acabei de liberar um novo material no ecossistema:</p>
                 <div class="box-amber">
-                  <strong style="font-size: 17px;">📌 ${contentTitle}</strong><br>
-                  ${data.contentDescription || 'Um novo treino focado no Sentimento da Estrutura e musicalidade da língua inglesa viva.'}
+                  <strong style="font-size: 17px;">📌 ${_esc(contentTitle)}</strong><br>
+                  ${_esc(contentDesc)}
                 </div>
                 <p>Pegue seus fones de ouvido e dedique 10 minutinhos de treino focado hoje. A consistência diária vence qualquer decoreba!</p>
               `,
               ctaText: 'Ouvir e Praticar Agora ➔',
-              ctaUrl: data.contentUrl || portalUrl,
+              ctaUrl: _safeUrl(data.contentUrl, portalUrl),
               footerNote: 'Disponível tanto no computador quanto direto no seu smartphone.'
             })
           };
+        }
 
-        // E4: Confirmação de Compra / Matrícula
-        case 'E4_PURCHASE_CONFIRMED':
+        // E4: Confirmação de Compra / Matrícula (Hotmart & Stripe)
+        case 'E4_PURCHASE_CONFIRMED': {
           const productName = data.productName || 'AgoraEuFalo Club';
+          const platformName = data.platform || 'Hotmart / Stripe';
           return {
             subject: `Pagamento confirmado! Você agora é membro oficial 🚀`,
             html: this._wrapEmailTemplate({
               preheader: `Sua matrícula em ${productName} foi aprovada com sucesso.`,
               badge: 'Matrícula Confirmada',
-              title: `Parabéns pela decisão, ${studentName}!`,
+              title: `Hello, ${_esc(studentName)}!`,
               contentHtml: `
-                <p>O seu pagamento para <strong>${productName}</strong> foi aprovado e o seu acesso já está liberado no sistema.</p>
+                <p>O seu pagamento para <strong>${_esc(productName)}</strong> foi aprovado e o seu acesso já está liberado no sistema.</p>
                 <div class="box-amber">
-                  ✅ <strong>Status da Matrícula:</strong> Ativa & Confirmada<br>
-                  📦 <strong>Produto:</strong> ${productName}<br>
-                  💳 <strong>Plataforma de Pagamento:</strong> ${data.platform || 'Hotmart / Stripe'}
+                  ✅ <strong>Status da Matrícula:</strong> Ativa &amp; Confirmada<br>
+                  📦 <strong>Produto:</strong> ${_esc(productName)}<br>
+                  💳 <strong>Plataforma de Pagamento:</strong> ${_esc(platformName)}
                 </div>
                 <p>Sua sala de aula completa, os materiais em PDF diagramados e as trilhas do Training Player de Bolso já estão disponíveis na sua conta.</p>
               `,
@@ -239,46 +287,158 @@
               footerNote: 'Você também pode gerenciar sua assinatura e recibos a qualquer momento no Portal.'
             })
           };
+        }
 
-        // E5: Troca de Plano / Upgrade
-        case 'E5_PLAN_CHANGED':
-          const newPlanName = data.newPlanName || 'Membro VIP';
+        // E4: Confirmação de Acesso a Novo(s) Produto(s) Liberado(s)
+        case 'E4_PRODUCT_ACCESS': {
+          const rawProducts = Array.isArray(data.products)
+            ? data.products
+            : (data.products ? [data.products] : (data.productName ? [data.productName] : ['Conteúdo AgoraEuFalo']));
+          const productListHtml = rawProducts
+            .filter(Boolean)
+            .map(p => `<li><strong>${_esc(p)}</strong></li>`)
+            .join('');
           return {
-            subject: `Seu plano foi atualizado no AgoraEuFalo ⭐️`,
+            subject: `Novo acesso liberado para você no AgoraEuFalo 🎓`,
             html: this._wrapEmailTemplate({
-              preheader: `Seu novo plano é ${newPlanName}.`,
-              badge: 'Atualização de Plano',
-              title: `Tudo pronto, ${studentName}!`,
+              preheader: 'Seu acesso a novos conteúdos foi liberado na plataforma.',
+              badge: 'Novo Acesso Liberado',
+              title: `Hello, ${_esc(studentName)}!`,
               contentHtml: `
-                <p>Confirmamos a alteração do seu plano para <strong>${newPlanName}</strong>.</p>
-                <p>Os novos módulos, treinos e funcionalidades do seu novo nível de acesso já foram atribuídos ao seu perfil no Firestore.</p>
+                <p>Um novo acesso foi liberado para você na plataforma AgoraEuFalo!</p>
+                <p>Você já pode acessar e praticar o(s) seguinte(s) conteúdo(s):</p>
+                <div class="box-amber">
+                  <ul style="margin: 8px 0; padding-left: 20px;">
+                    ${productListHtml}
+                  </ul>
+                </div>
+                <p>Sua sala de aula e todas as atividades práticas correspondentes já estão prontas para você treinar no Training Player.</p>
+              `,
+              ctaText: 'Acessar Meus Treinos Agora ➔',
+              ctaUrl: portalUrl,
+              footerNote: 'Coloque os fones de ouvido e aproveite seus novos treinos!'
+            })
+          };
+        }
+
+        // E5: Upgrade Celebratório de Plano
+        case 'E5_PLAN_UPGRADE': {
+          const rawPlan = data.newPlanName || data.plan || data.tier || 'club_monthly';
+          const newPlanLabel = this.planLabel(rawPlan) || rawPlan;
+          return {
+            subject: `Parabéns pelo upgrade! Seu novo nível no AgoraEuFalo está liberado 🚀`,
+            html: this._wrapEmailTemplate({
+              preheader: `Seu upgrade para ${newPlanLabel} foi confirmado com sucesso.`,
+              badge: 'Upgrade Confirmado',
+              title: `Hello, ${_esc(studentName)}!`,
+              contentHtml: `
+                <p>Que notícia fantástica! O seu upgrade para <strong>${_esc(newPlanLabel)}</strong> foi confirmado com sucesso.</p>
+                <div class="box-amber">
+                  ⭐️ <strong>Novo Nível de Acesso:</strong> ${_esc(newPlanLabel)}<br>
+                  🔓 Todos os novos módulos, masterclasses e trilhas de treino correspondentes já foram liberados no seu perfil.
+                </div>
+                <p>Você deu mais um passo significativo para destravar seu inglês pela escuta viva e reflexo automático. Agora é aproveitar ao máximo cada treino no Training Player!</p>
               `,
               ctaText: 'Explorar Meus Novos Treinos ➔',
               ctaUrl: portalUrl,
-              footerNote: 'Caso tenha dúvidas sobre os novos recursos liberados, nossa equipe está à disposição.'
+              footerNote: 'Caso precise de qualquer orientação sobre os novos recursos, estou à disposição.'
             })
           };
+        }
+
+        // E5: Downgrade Acolhedor de Plano (histórico preservado)
+        case 'E5_PLAN_DOWNGRADE': {
+          const rawPlan = data.newPlanName || data.plan || data.tier || 'free';
+          const newPlanLabel = this.planLabel(rawPlan) || rawPlan;
+          return {
+            subject: `Atualização sobre o seu plano no AgoraEuFalo`,
+            html: this._wrapEmailTemplate({
+              preheader: `Seu plano foi atualizado para ${newPlanLabel}.`,
+              badge: 'Atualização de Plano',
+              title: `Hello, ${_esc(studentName)}!`,
+              contentHtml: `
+                <p>Escrevo para confirmar que o seu plano no AgoraEuFalo foi alterado para <strong>${_esc(newPlanLabel)}</strong>.</p>
+                <div class="box-amber">
+                  📋 <strong>O que muda:</strong> Seu acesso foi ajustado para os recursos e conteúdos do plano ${_esc(newPlanLabel)}.<br>
+                  💾 <strong>Seu histórico está 100% preservado:</strong> Todas as suas aulas concluídas, estatísticas e ritmo de estudo continuam guardados com segurança na sua conta.
+                </div>
+                <p>Foi um privilégio caminhar com você neste ciclo, e as portas continuam sempre abertas. Caso deseje reativar seu plano completo e retomar todos os treinos avançados a qualquer momento, você pode fazer isso de forma simples:</p>
+              `,
+              ctaText: 'Conhecer Planos e Reativar ➔',
+              ctaUrl: _safeUrl(data.reactivationUrl, 'https://agoraeufalo.com.br/precos.html'),
+              footerNote: 'Você continua com acesso à sua conta e aos treinos abertos no Portal.'
+            })
+          };
+        }
+
+        // E5: Alteração Neutra de Plano (alias retrocompatível)
+        case 'E5_PLAN_CHANGED': {
+          const rawPlan = data.newPlanName || data.plan || data.tier || 'club_monthly';
+          const newPlanLabel = this.planLabel(rawPlan) || rawPlan;
+          return {
+            subject: `Seu plano foi atualizado no AgoraEuFalo ⭐️`,
+            html: this._wrapEmailTemplate({
+              preheader: `Seu novo plano é ${newPlanLabel}.`,
+              badge: 'Atualização de Plano',
+              title: `Hello, ${_esc(studentName)}!`,
+              contentHtml: `
+                <p>Confirmamos a alteração do seu plano para <strong>${_esc(newPlanLabel)}</strong>.</p>
+                <p>Os novos módulos, treinos e funcionalidades do seu novo nível de acesso já foram atribuídos ao seu perfil na plataforma.</p>
+              `,
+              ctaText: 'Explorar Meus Novos Treinos ➔',
+              ctaUrl: portalUrl,
+              footerNote: 'Caso tenha dúvidas sobre os recursos liberados, nossa equipe está à disposição.'
+            })
+          };
+        }
 
         // E6: Suspensão / Falha de Cobrança / Cancelamento
-        case 'E6_SUSPENSION_CANCELLATION':
+        case 'E6_SUSPENSION_CANCELLATION': {
+          const reasonText = data.reason || 'Houve uma falha na renovação da assinatura ou solicitação de encerramento.';
           return {
             subject: `Importante sobre o seu acesso ao AgoraEuFalo ⚠️`,
             html: this._wrapEmailTemplate({
               preheader: 'Aviso importante sobre sua assinatura.',
               badge: 'Aviso de Assinatura',
-              title: `Olá, ${studentName}`,
+              title: `Hello, ${_esc(studentName)}!`,
               contentHtml: `
                 <p>Escrevo para informar que sua assinatura do AgoraEuFalo teve uma alteração recente no status de pagamento.</p>
                 <div class="box-amber">
-                  ⚠️ <strong>Detalhes:</strong> ${data.reason || 'Houve uma falha na renovação da assinatura ou solicitação de encerramento.'}
+                  ⚠️ <strong>Detalhes:</strong> ${_esc(reasonText)}
                 </div>
-                <p>Se você deseja continuar com seus treinos e manter todo o seu histórico de streaks e práticas ativo, basta regularizar sua forma de pagamento pelo link abaixo:</p>
+                <p>Se você deseja continuar com seus treinos e manter todo o seu histórico e ritmo ativo, basta regularizar sua forma de pagamento pelo link abaixo:</p>
               `,
               ctaText: 'Regularizar Meu Acesso ➔',
-              ctaUrl: data.recoveryUrl || 'https://agoraeufalo.com.br/precos.html',
+              ctaUrl: _safeUrl(data.recoveryUrl, 'https://agoraeufalo.com.br/precos.html'),
               footerNote: 'Se você realmente optou pelo encerramento, agradeço profundamente pela companhia nesta jornada!'
             })
           };
+        }
+
+        // E8: Prescrição VIP Sob Medida
+        case 'E8_VIP_PRESCRIPTION': {
+          const prescriptionTitle = data.title || 'Novo Áudio de Treino Personalizado';
+          const prescriptionUrl = _safeUrl(data.url, portalUrl);
+          return {
+            subject: `Professor Leo prescreveu um treino sob medida para você 👑`,
+            html: this._wrapEmailTemplate({
+              preheader: `Novo áudio prescrito na Mentoria VIP: ${prescriptionTitle}`,
+              badge: 'Mentoria VIP • Prescrição Individual',
+              title: `Hello, ${_esc(studentName)}!`,
+              contentHtml: `
+                <p>Acabei de prescrever um novo áudio de treino sob medida especialmente para você na sua Mentoria VIP.</p>
+                <div class="box-amber">
+                  <strong style="font-size: 17px;">🎧 ${_esc(prescriptionTitle)}</strong><br>
+                  Este material foi gravado e orientado sob medida para o seu momento atual, focando no seu ritmo de fala e afinação de escuta.
+                </div>
+                <p>Coloque os fones de ouvido, relaxe os ombros e faça sua sessão de treino hoje. Estou acompanhando de perto sua evolução!</p>
+              `,
+              ctaText: 'Ouvir Meu Treino VIP ➔',
+              ctaUrl: prescriptionUrl,
+              footerNote: 'Disponível com exclusividade na sua área de Mentoria VIP no Portal.'
+            })
+          };
+        }
 
         default:
           throw new Error(`[AEFEmailEngine] Template '${templateId}' não reconhecido.`);
@@ -287,10 +447,46 @@
 
     /**
      * Envia e-mail transacional via Brevo API
+     * Suporta chamada posicional: sendEmail(templateId, toEmail, toName, params)
+     * Ou objeto único de opções: sendEmail({ templateId, toEmail, toName, params })
      */
-    async sendTransactionalEmail({ templateId, toEmail, toName, params = {} }) {
-      if (!toEmail) {
+    async sendEmail(templateIdOrOptions, toEmail, toName, params = {}) {
+      if (templateIdOrOptions && typeof templateIdOrOptions === 'object') {
+        return this.sendTransactionalEmail(templateIdOrOptions);
+      }
+      return this.sendTransactionalEmail({
+        templateId: templateIdOrOptions,
+        toEmail,
+        toName,
+        params
+      });
+    }
+
+    /**
+     * Envia e-mail transacional delegando de forma segura ao Worker Cloudflare
+     */
+    async sendTransactionalEmail(templateIdOrOptions, toEmailArg, toNameArg, paramsArg = {}) {
+      let templateId, toEmail, toName, params;
+
+      if (templateIdOrOptions && typeof templateIdOrOptions === 'object') {
+        templateId = templateIdOrOptions.templateId;
+        toEmail = templateIdOrOptions.toEmail;
+        toName = templateIdOrOptions.toName;
+        params = templateIdOrOptions.params || {};
+      } else {
+        templateId = templateIdOrOptions;
+        toEmail = toEmailArg;
+        toName = toNameArg;
+        params = paramsArg || {};
+      }
+
+      if (!toEmail || typeof toEmail !== 'string' || !toEmail.trim()) {
         throw new Error('[AEFEmailEngine] E-mail do destinatário obrigatório.');
+      }
+      toEmail = toEmail.trim();
+
+      if (!templateId) {
+        throw new Error('[AEFEmailEngine] ID do template obrigatório.');
       }
 
       const template = this.buildTemplate(templateId, {
@@ -299,81 +495,77 @@
         ...params
       });
 
-      console.log(`📬 [AEFEmailEngine] Preparando envio de '${templateId}' para ${toEmail}...`);
+      console.log(`📬 [AEFEmailEngine] Solicitando envio do template '${templateId}' para ${toEmail} via Worker...`);
 
-      // 1. Se possuir Brevo API Key, envia diretamente via REST API
-      if (this.hasApiKey()) {
+      // Obtenção do token JWT atual via window.aefPortalAuth (Firebase)
+      let authToken = '';
+      if (typeof window !== 'undefined' && window.aefPortalAuth && typeof window.aefPortalAuth.getIdToken === 'function') {
         try {
-          const response = await fetch(BREVO_API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-              'accept': 'application/json',
-              'api-key': this.apiKey,
-              'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-              sender: {
-                name: this.senderName,
-                email: this.senderEmail
-              },
-              to: [
-                {
-                  email: toEmail,
-                  name: toName || toEmail.split('@')[0]
-                }
-              ],
-              subject: template.subject,
-              htmlContent: template.html
-            })
-          });
-
-          if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            console.error('❌ [AEFEmailEngine] Erro na API Brevo:', response.status, errData);
-            throw new Error(`Brevo API Error ${response.status}: ${JSON.stringify(errData)}`);
-          }
-
-          const resData = await response.json();
-          console.log('✅ [AEFEmailEngine] E-mail enviado com sucesso via Brevo:', resData);
-          return { success: true, provider: 'brevo', messageId: resData.messageId };
-        } catch (err) {
-          console.warn('⚠️ [AEFEmailEngine] Falha ao enviar via Brevo API direta. Tentando fila Firestore...', err);
-        }
-      } else {
-        console.info('ℹ️ [AEFEmailEngine] Brevo API Key não configurada localmente. Registrando na fila Firestore/mail...');
-      }
-
-      // 2. Fila Firestore de Contingência ('mail/{mailId}') para Firebase Extension / Cloud Function
-      if (window.firebase && window.firebase.firestore) {
-        try {
-          const db = window.firebase.firestore();
-          const mailDoc = await db.collection('mail').add({
-            to: toEmail,
-            message: {
-              subject: template.subject,
-              html: template.html
-            },
-            templateId: templateId,
-            createdAt: new Date().toISOString(),
-            status: 'queued'
-          });
-
-          console.log(`✅ [AEFEmailEngine] E-mail enfileirado no Firestore ('mail/${mailDoc.id}'):`, template.subject);
-          return { success: true, provider: 'firestore_queue', queueId: mailDoc.id };
-        } catch (dbErr) {
-          console.error('❌ [AEFEmailEngine] Erro ao gravar na fila Firestore:', dbErr);
+          authToken = await window.aefPortalAuth.getIdToken();
+        } catch (e) {
+          console.warn('⚠️ [AEFEmailEngine] Falha ao obter token de autenticação Firebase.', e);
         }
       }
 
-      return {
-        success: false,
-        warning: 'API Key não informada e Firestore indisponível. Template gerado localmente com sucesso.',
-        template
-      };
+      if (!authToken) {
+        throw new Error('[AEFEmailEngine] Usuário não autenticado no cliente. Impossível enviar e-mail via Worker.');
+      }
+
+      // Identifica o endpoint de forma dinâmica
+      const isLocal = (typeof window !== 'undefined' && (window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')));
+      const WORKER_ENDPOINT = isLocal
+        ? 'http://localhost:8787/api/admin/send-email'
+        : 'https://admin.agoraeufalo.com.br/api/admin/send-email';
+
+      let response;
+      try {
+        response = await fetch(WORKER_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            toEmail: toEmail,
+            toName: toName,
+            subject: template.subject,
+            html: template.html
+          })
+        });
+      } catch (networkErr) {
+        console.error('❌ [AEFEmailEngine] Erro de rede/conexão com o Worker:', networkErr);
+        throw new Error(`[AEFEmailEngine] Falha de conexão ao enviar e-mail: ${networkErr.message}`);
+      }
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        const errMsg = (errData && errData.error)
+          ? errData.error
+          : (typeof errData === 'object' ? JSON.stringify(errData) : String(errData));
+        console.error('❌ [AEFEmailEngine] Erro no Worker:', response.status, errData);
+        throw new Error(`[AEFEmailEngine] Erro do Servidor (${response.status}): ${errMsg}`);
+      }
+
+      const resData = await response.json().catch(() => ({}));
+      const messageId = resData.messageId || 'enviado_worker';
+      console.log('✅ [AEFEmailEngine] E-mail enviado com sucesso via Worker:', { messageId });
+      return { success: true, provider: 'brevo_worker', messageId };
     }
   }
 
-  // Instância singleton global
-  window.aefEmailEngine = new AEFEmailEngine();
+  // Registra no ambiente do navegador ou stub global se disponível
+  const targetScope = (typeof window !== 'undefined') ? window : (root || {});
+  if (targetScope) {
+    targetScope.AEFEmailEngine = AEFEmailEngine;
+    targetScope.aefEmailEngine = new AEFEmailEngine();
+  }
 
-})(typeof window !== 'undefined' ? window : this);
+  // Exportação CommonJS para testes em Node.js
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = AEFEmailEngine;
+    module.exports.AEFEmailEngine = AEFEmailEngine;
+    module.exports.PLAN_LABELS = PLAN_LABELS;
+    module.exports.aefEmailEngine = (targetScope && targetScope.aefEmailEngine) || new AEFEmailEngine();
+  }
+
+})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));

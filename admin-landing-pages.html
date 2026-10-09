@@ -391,17 +391,20 @@
                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-lg ${statusColor}">
                       ${p.status === 'published' ? 'Publicado' : 'Rascunho'}
                    </span>
-                   <a href="/oferta.html?p=${p.slug}" target="_blank" class="text-amber-400 hover:text-amber-300">
+                   <a href="${window.AEFDomainRouter ? window.AEFDomainRouter.getPublicUrl('oferta.html?p=' + p.slug) : '/oferta.html?p=' + p.slug}" target="_blank" class="text-amber-400 hover:text-amber-300">
                      <i data-lucide="external-link" class="w-4 h-4"></i>
                    </a>
                 </div>
                 <h3 class="font-bold text-white">${p.title}</h3>
-                <p class="text-xs text-slate-400 font-mono mt-1">/oferta.html?p=${p.slug}</p>
+                <p class="text-[10px] text-slate-400 font-mono mt-1">${window.AEFDomainRouter ? window.AEFDomainRouter.getPublicUrl('oferta.html?p=' + p.slug).replace('https://', '') : '/oferta.html?p=' + p.slug}</p>
              </div>
              <div class="text-[11px] text-slate-500">
                 ${p.offerBlocks?.length || 0} oferta(s) conectada(s)
              </div>
-             <div class="pt-3 border-t border-white/5 flex items-center justify-end">
+             <div class="pt-3 border-t border-white/5 flex items-center justify-end gap-2">
+                <button onclick="deleteLandingPage('${p.id}', '${p.title.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 font-bold text-xs transition">
+                   Excluir
+                </button>
                 <button onclick="openPageModal('${p.id}')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition">
                    Editar
                 </button>
@@ -410,6 +413,40 @@
         `;
       }).join('');
       if (window.lucide) window.lucide.createIcons();
+    }
+
+    async function deleteLandingPage(id, title) {
+      if (!confirm(`Tem certeza absoluta que deseja EXCLUIR a landing page "${title}"? Isso não pode ser desfeito.`)) return;
+      
+      const apiKey = AEF_API_KEY ? `?key=${AEF_API_KEY}` : '';
+      
+      try {
+         let idToken = null;
+         if (window.aefPortalAuth && window.aefPortalAuth.currentUser) {
+            idToken = await window.aefPortalAuth.currentUser.getIdToken();
+         }
+         
+         const headers = { 'Content-Type': 'application/json' };
+         if (idToken) headers['Authorization'] = `Bearer ${idToken}`;
+         
+         const url = `https://firestore.googleapis.com/v1/projects/${AEF_PROJECT_ID}/databases/(default)/documents/landing_pages/${id}${apiKey}`;
+         const res = await fetch(url, {
+            method: 'DELETE',
+            headers
+         });
+         
+         if (res.ok) {
+            // Remove locally and re-render
+            allLandingPages = allLandingPages.filter(p => p.id !== id);
+            renderPagesGrid();
+         } else {
+            const err = await res.json();
+            alert(`Erro ao excluir: ${err.error?.message || 'Desconhecido'}`);
+         }
+      } catch(e) {
+         console.error('Delete error', e);
+         alert('Falha na comunicação com o servidor ao excluir.');
+      }
     }
 
     function openPageModal(id = null) {

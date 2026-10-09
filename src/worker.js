@@ -78,6 +78,7 @@ async function verifyFirebaseJWT(token, projectId) {
     if (!validProjects.includes(payload.aud)) return null;
     if (!payload.sub || typeof payload.sub !== 'string') return null; // UID deve existir
     if (payload.auth_time && payload.auth_time > now) return null; // Emitido no futuro
+    if (typeof payload.exp !== 'number' || payload.exp <= now) return null; // Token expirado (ou sem exp)
 
     // 2. Fetch das Chaves com Cache de Borda (In-Memory)
     if (!cachedJwks || now > jwksExpirationTime) {
@@ -157,6 +158,97 @@ async function generateSignedUrl(url, expiresAt, secretKey) {
 }
 
 
+
+// ============================================================================
+// ENVIO DE E-MAIL TRANSACIONAL (Brevo) — endpoint protegido para o painel admin
+// A chave fica APENAS como segredo do Worker: `wrangler secret put BREVO_API_KEY`
+// ============================================================================
+const MAIL_BREVO_URL = 'https://api.brevo.com/v3/smtp/email';
+const MAIL_SENDER = { name: 'Leonardo Leite • AgoraEuFalo', email: 'contato@agoraeufalo.com.br' };
+const MAIL_REPLY_TO = { name: 'Leonardo Leite • AgoraEuFalo', email: 'selexenglish@gmail.com' };
+const MAIL_ALLOWED_ORIGINS = [
+  'https://admin.agoraeufalo.com.br',
+  'https://agoraeufalo.com.br',
+  'https://app.agoraeufalo.com.br',
+  'http://127.0.0.1:5500',
+  'http://localhost:5500',
+  'http://localhost:8787',
+  'null'
+];
+const MAIL_MAX_HTML_BYTES = 200 * 1024;
+
+function mailAdminEmails(env) {
+  const raw = (env && env.ADMIN_EMAILS) || 'selexenglish@gmail.com';
+  return String(raw).split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+}
+
+async function handleAdminSendEmail(request, env) {
+  const origin = request.headers.get('Origin');
+  const cors = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Vary': 'Origin'
+  };
+  if (origin && MAIL_ALLOWED_ORIGINS.includes(origin)) cors['Access-Control-Allow-Origin'] = origin;
+  const reply = (obj, status) => new Response(JSON.stringify(obj), {
+    status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors }
+  });
+
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+  if (request.method !== 'POST') return reply({ error: 'Method Not Allowed' }, 405);
+  if (origin && !MAIL_ALLOWED_ORIGINS.includes(origin)) return reply({ error: 'Origin not allowed' }, 403);
+
+  // 1. Autenticação obrigatória (Firebase ID token válido, assinado e não expirado)
+  const authHeader = request.headers.get('Authorization') || '';
+  if (!authHeader.startsWith('Bearer ')) return reply({ error: 'Authentication required' }, 401);
+  const projectId = env.FIREBASE_PROJECT_ID || 'agoraeufalo-3463a';
+  const jwt = await verifyFirebaseJWT(authHeader.slice(7), projectId);
+  if (!jwt) return reply({ error: 'Invalid or expired token' }, 401);
+
+  // 2. Autorização: somente admins (mesmo critério do firestore.rules)
+  const email = String(jwt.email || '').toLowerCase();
+  const isAdmin = (email && jwt.email_verified !== false && mailAdminEmails(env).includes(email))
+    || jwt.admin === true || jwt.role === 'admin';
+  if (!isAdmin) return reply({ error: 'Admin only' }, 403);
+
+  // 3. Configuração do segredo
+  if (!env.BREVO_API_KEY) return reply({ error: 'BREVO_API_KEY não configurada no Worker' }, 500);
+
+  // 4. Validação do corpo (1 destinatário por chamada; remetente fixo no servidor)
+  let body;
+  try { body = await request.json(); } catch (e) { return reply({ error: 'Invalid JSON' }, 400); }
+  const toEmail = String(body.toEmail || '').trim();
+  const toName = String(body.toName || '').trim().slice(0, 120);
+  const subject = String(body.subject || '').trim();
+  const html = String(body.html || '');
+  if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(toEmail) || toEmail.length > 254) return reply({ error: 'Invalid toEmail' }, 400);
+  if (!subject || subject.length > 300) return reply({ error: 'Invalid subject' }, 400);
+  if (!html || new TextEncoder().encode(html).length > MAIL_MAX_HTML_BYTES) return reply({ error: 'Invalid html' }, 400);
+
+  // 5. Envio via Brevo
+  let res;
+  try {
+    res = await fetch(MAIL_BREVO_URL, {
+      method: 'POST',
+      headers: { 'accept': 'application/json', 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        sender: MAIL_SENDER,
+        replyTo: MAIL_REPLY_TO,
+        to: [{ email: toEmail, name: toName || toEmail.split('@')[0] }],
+        subject,
+        htmlContent: html
+      })
+    });
+  } catch (e) {
+    return reply({ error: 'Falha de rede ao contatar o Brevo' }, 502);
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    console.error('[send-email] Brevo HTTP', res.status, JSON.stringify(data));
+    return reply({ error: 'Brevo rejeitou o envio', brevoStatus: res.status, brevoMessage: data.message || null }, 502);
+  }
+  return reply({ success: true, messageId: data.messageId || null }, 200);
+}
 
 export default {
   async fetch(request, env, ctx) {
@@ -277,6 +369,10 @@ export default {
     // ============================================================
     // ROTAS DE ADMIN (Upload R2 e Sync RSS)
     // ============================================================
+    if (path === '/api/admin/send-email') {
+      return handleAdminSendEmail(request, env);
+    }
+
     if (path.startsWith('/api/admin/')) {
       const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
@@ -480,6 +576,7 @@ export default {
         '/pdf-factory': '/admin-pdf-factory.html',
         '/pdf-factory-v2': '/v2-factory/index.html',
         '/tts': '/tts-studio.html',
+        '/youtube-lab': '/admin-youtube-lab.html',
         '/blog': '/blog-panel.html',
         '/seo': '/seo-manager.html'
       };
@@ -523,6 +620,7 @@ export default {
         '/portal-lab': '/portal-lab.html',
         '/sala-lab': '/sala-lab.html',
         '/player-lab': '/player-lab.html',
+        '/youtube-lab': '/youtube-lab.html',
         '/migracao': '/migracao/index.html'
       };
 
@@ -560,6 +658,7 @@ export default {
         '/sala-lab.html': '/sala-lab',
         '/player-lab': '/player-lab',
         '/player-lab.html': '/player-lab',
+        '/youtube-lab.html': '/youtube-lab',
         '/migracao': '/migracao',
         '/migracao/index.html': '/migracao'
       };

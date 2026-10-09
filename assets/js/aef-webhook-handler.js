@@ -149,7 +149,9 @@
               amountFormatted: { stringValue: logEntry.amountFormatted || 'R$ 0,00' },
               status: { stringValue: logEntry.status || 'processed' },
               resultSummary: { stringValue: logEntry.resultSummary || '' },
-              processedAt: { stringValue: logEntry.processedAt || new Date().toISOString() }
+              processedAt: { stringValue: logEntry.processedAt || new Date().toISOString() },
+              emailSent: { booleanValue: Boolean(logEntry.emailSent) },
+              emailError: { stringValue: logEntry.emailError || '' }
             }
           };
           fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/webhook_logs/${logEntry.id}?key=AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk`, {
@@ -477,6 +479,39 @@
         }
       };
 
+      // 0. Verifica se o usuário já existia antes desta transação
+      let userExistedBefore = false;
+      let previousTier = null;
+      let previousUserData = null;
+
+      try {
+        if (this.db) {
+          const existingSnap = await this.db.collection('users').doc(studentId).get();
+          if (existingSnap && existingSnap.exists) {
+            userExistedBefore = true;
+            previousUserData = existingSnap.data() || {};
+            previousTier = previousUserData.tier || previousUserData.legacy?.tier || null;
+          }
+        } else {
+          // REST Fallback para verificar se usuário já existia
+          const checkRes = await fetch(`https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/users/${studentId}?key=AIzaSyCdcFzySfxGK6Uo0DM1-y_HpACvt5E71Sk`);
+          if (checkRes.ok) {
+            const data = await checkRes.json();
+            if (data && data.fields) {
+              userExistedBefore = true;
+              previousTier = data.fields.tier?.stringValue || null;
+            }
+          }
+        }
+      } catch (checkErr) {
+        console.warn('⚠️ [AEFWebhook] Não foi possível verificar usuário existente previamente:', checkErr);
+      }
+
+      // Se previousTier não foi identificado via banco, tenta extrair do payload
+      if (!previousTier) {
+        previousTier = payload.previous_tier || data.previous_tier || subscription.previous_plan || null;
+      }
+
       // 1. Sincroniza usuário no Firestore ('users/{studentId}')
       try {
         if (this.db) {
@@ -522,7 +557,108 @@
         } catch (e) {}
       }
 
-      // 3. Monta e Salva o Log de Auditoria (Conforme WebhookEvent V2)
+      // 3. Monta e Dispara E-mail Sistêmico via aefEmailEngine
+      let emailSent = false;
+      let emailError = null;
+
+      try {
+        if (!window.aefEmailEngine || typeof window.aefEmailEngine.sendEmail !== 'function') {
+          emailError = 'Motor de e-mail window.aefEmailEngine.sendEmail não disponível.';
+          console.warn('⚠️ [AEFWebhook] ' + emailError);
+        } else {
+          const magicLinkUrl = `https://agoraeufalo.com.br/portal.html?email=${encodeURIComponent(email)}&welcome=true`;
+
+          if (event === 'PURCHASE_APPROVED') {
+            const isSubscriptionProduct = targetTier === 'club_monthly' || targetTier === 'club_annual' || isRecurrent || Boolean(subscription && (subscription.subscriber_code || subscription.code));
+
+            /*
+             * Limitação de verificação prévia do aluno:
+             * Se a verificação remota no Firestore falhar ou for inconclusiva, não é possível saber com
+             * segurança absoluta se o aluno é novo ou preexistente.
+             * Heurística mais segura adotada:
+             * - Se for identificado como aluno NOVO (!userExistedBefore e !isRecurrent) -> E1_WELCOME_ONBOARDING.
+             * - Se o aluno for EXISTENTE comprando curso avulso (não assinatura) -> E4_PRODUCT_ACCESS com products=[baseMapping.productName].
+             * - Se for renovação ou compra de assinatura -> E4_PURCHASE_CONFIRMED.
+             */
+            let templateId;
+            let emailParams;
+
+            if (!userExistedBefore && !isRecurrent) {
+              templateId = 'E1_WELCOME_ONBOARDING';
+              emailParams = {
+                magicLink: magicLinkUrl,
+                email: email,
+                productName: baseMapping.productName,
+                platform: payload.id && String(payload.id).startsWith('stripe_') ? 'Stripe' : 'Hotmart'
+              };
+            } else if (userExistedBefore && !isSubscriptionProduct) {
+              templateId = 'E4_PRODUCT_ACCESS';
+              emailParams = {
+                magicLink: magicLinkUrl,
+                email: email,
+                productName: baseMapping.productName,
+                products: [baseMapping.productName],
+                platform: payload.id && String(payload.id).startsWith('stripe_') ? 'Stripe' : 'Hotmart'
+              };
+            } else {
+              templateId = 'E4_PURCHASE_CONFIRMED';
+              emailParams = {
+                magicLink: magicLinkUrl,
+                email: email,
+                productName: baseMapping.productName,
+                platform: payload.id && String(payload.id).startsWith('stripe_') ? 'Stripe' : 'Hotmart'
+              };
+            }
+
+            await window.aefEmailEngine.sendEmail(templateId, email, name, emailParams);
+            emailSent = true;
+          } else if (event === 'SWITCH_PLAN') {
+            // Rank hierárquico dos tiers para detecção de upgrade vs downgrade
+            const TIER_RANK = {
+              'free': 0,
+              'club_monthly': 1,
+              'club_annual': 2,
+              'lifetime': 3,
+              'vip_mentorship': 4
+            };
+
+            let switchTemplate = 'E5_PLAN_CHANGED';
+            if (previousTier && TIER_RANK[previousTier] !== undefined && TIER_RANK[targetTier] !== undefined) {
+              const prevRank = TIER_RANK[previousTier];
+              const targetRank = TIER_RANK[targetTier];
+              if (targetRank > prevRank) {
+                switchTemplate = 'E5_PLAN_UPGRADE';
+              } else if (targetRank < prevRank) {
+                switchTemplate = 'E5_PLAN_DOWNGRADE';
+              } else {
+                switchTemplate = 'E5_PLAN_CHANGED';
+              }
+            } else {
+              switchTemplate = 'E5_PLAN_CHANGED';
+            }
+
+            await window.aefEmailEngine.sendEmail(switchTemplate, email, name, {
+              newPlanName: targetTier,
+              magicLink: magicLinkUrl,
+              email: email
+            });
+            emailSent = true;
+          } else if (event === 'SUBSCRIPTION_CANCELLATION' || event === 'PURCHASE_DELAYED' || event === 'PURCHASE_REFUNDED') {
+            await window.aefEmailEngine.sendEmail('E6_SUSPENSION_CANCELLATION', email, name, {
+              reason: resultSummary,
+              recoveryUrl: 'https://agoraeufalo.com.br/precos.html',
+              magicLink: magicLinkUrl,
+              email: email
+            });
+            emailSent = true;
+          }
+        }
+      } catch (mailErr) {
+        emailError = mailErr?.message || String(mailErr);
+        console.warn('⚠️ [AEFWebhook] Falha no disparo do e-mail sistêmico:', mailErr);
+      }
+
+      // 4. Monta e Salva o Log de Auditoria (Conforme WebhookEvent V2)
       const logEntry = {
         id: eventId,
         provider: 'hotmart',
@@ -543,52 +679,12 @@
         amountFormatted: formattedPrice,
         status: logStatus,
         resultSummary: resultSummary,
-        rawPayload: payload
+        rawPayload: payload,
+        emailSent: emailSent,
+        emailError: emailError
       };
 
       await this.saveWebhookLog(logEntry);
-
-      // 4. Disparo Sistêmico de E-mail via aefEmailEngine (Brevo / Firestore Queue)
-      try {
-        if (window.aefEmailEngine && typeof window.aefEmailEngine.sendTransactionalEmail === 'function') {
-          const magicLinkUrl = `https://agoraeufalo.com.br/portal.html?email=${encodeURIComponent(email)}&welcome=true`;
-
-          if (event === 'PURCHASE_APPROVED') {
-            await window.aefEmailEngine.sendTransactionalEmail({
-              templateId: !isRecurrent ? 'E1_WELCOME_ONBOARDING' : 'E4_PURCHASE_CONFIRMED',
-              toEmail: email,
-              toName: name,
-              params: {
-                magicLink: magicLinkUrl,
-                productName: baseMapping.productName,
-                platform: payload.id && String(payload.id).startsWith('stripe_') ? 'Stripe' : 'Hotmart'
-              }
-            });
-          } else if (event === 'SWITCH_PLAN') {
-            await window.aefEmailEngine.sendTransactionalEmail({
-              templateId: 'E5_PLAN_CHANGED',
-              toEmail: email,
-              toName: name,
-              params: {
-                newPlanName: targetTier,
-                magicLink: magicLinkUrl
-              }
-            });
-          } else if (event === 'SUBSCRIPTION_CANCELLATION' || event === 'PURCHASE_DELAYED' || event === 'PURCHASE_REFUNDED') {
-            await window.aefEmailEngine.sendTransactionalEmail({
-              templateId: 'E6_SUSPENSION_CANCELLATION',
-              toEmail: email,
-              toName: name,
-              params: {
-                reason: resultSummary,
-                recoveryUrl: 'https://agoraeufalo.com.br/precos.html'
-              }
-            });
-          }
-        }
-      } catch (mailErr) {
-        console.warn('⚠️ [AEFWebhook] Falha no disparo do e-mail sistêmico:', mailErr);
-      }
 
       return {
         success: true,
@@ -599,6 +695,8 @@
         enrolledProducts: targetCourses,
         accessStatus: accessStatus,
         summary: resultSummary,
+        emailSent: emailSent,
+        emailError: emailError,
         logEntry: logEntry
       };
     }

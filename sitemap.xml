@@ -207,4 +207,37 @@
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
   </url>
+
+  <!-- 14. Landing Pages Estáticas de Cursos e Assinaturas -->
+  <url>
+    <loc>https://agoraeufalo.com.br/lp-magic-stories-legacy.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://agoraeufalo.com.br/lp-first-steps.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://agoraeufalo.com.br/lp-english-quickstart.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://agoraeufalo.com.br/lp-dates-and-times.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://agoraeufalo.com.br/lp-airport-and-flights.html</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
 </urlset>

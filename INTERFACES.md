@@ -88,3 +88,8 @@ Este documento é o inventário oficial de todas as interfaces ativas, interativ
 | **Post: Magic Story 02 (Tom)** | [agoraeufalo.com.br/blog/magic-story-02-historia-do-tom-present-perfect](https://agoraeufalo.com.br/blog/magic-story-02-historia-do-tom-present-perfect.html) | [`blog/magic-story-02-historia-do-tom-present-perfect.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog/magic-story-02-historia-do-tom-present-perfect.html) | Mini-história com foco no uso natural do Present Perfect. |
 | **Post: Treino Rápido de Ouvido** | [agoraeufalo.com.br/blog/como-treinar-o-ouvido-para-entender-ingles-rapido](https://agoraeufalo.com.br/blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html) | [`blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html`](file:///Users/macbookpro/Desktop/agoraeufalo_site/blog/como-treinar-o-ouvido-para-entender-ingles-rapido.html) | Técnicas para decodificar fala rápida e conexões sonoras de nativos. |
 
+
+### YouTube Lab (Sandbox)
+- `youtube-lab.html` : Vitrine de vídeos e consumo de vídeo individual (`?v=`).
+- `admin-youtube-lab.html` : Painel de curadoria.
+- `sala-de-aula-lab.html` : Simulador da sala de aula com Paywall dinâmico e overrides (`?simulate=free`).

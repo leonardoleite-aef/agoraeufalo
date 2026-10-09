@@ -2096,30 +2096,52 @@
     }
 
     /**
-     * Sends transactional emails via Resend API / Cloud Function Trigger
-     * Supports: magic_link, new_vip_track, new_course_module, forum_reply, meet_reminder, streak_milestone, hotmart_welcome
+     * Dispara e-mails transacionais delegando ao motor oficial window.aefEmailEngine.
+     * Mapeia triggerEvents para os templates canônicos (E1 a E6).
+     * @param {string} triggerEvent Evento disparador (ex.: magic_link, welcome, etc.)
+     * @param {Object} payload Dados do destinatário e parâmetros do template
+     * @returns {Promise<Object>} Resultado retornado pelo aefEmailEngine
      */
     async sendTransactionalEmail(triggerEvent, payload) {
-      console.log(`📨 [AEFCloudSync] Disparando e-mail transacional (${triggerEvent}) para ${payload.email}`);
-      try {
-        const response = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer re_aef_live_transacional"
-          },
-          body: JSON.stringify({
-            from: "Professor Leonardo Leite <contato@agoraeufalo.com.br>",
-            to: [payload.email],
-            subject: payload.subject,
-            html: payload.html
-          })
-        });
-        return await response.json();
-      } catch (err) {
-        console.warn("⚠️ [AEFCloudSync] Simulação de envio de e-mail transacional local:", triggerEvent, payload);
-        return { success: true, simulated: true };
+      if (!window.aefEmailEngine || typeof window.aefEmailEngine.sendEmail !== 'function') {
+        throw new Error('Motor de e-mail não carregado');
       }
+
+      const TRIGGER_TO_TEMPLATE_MAP = {
+        'magic_link': 'E2_AUTH_MAGIC_LINK',
+        'hotmart_welcome': 'E1_WELCOME_ONBOARDING',
+        'welcome': 'E1_WELCOME_ONBOARDING',
+        'new_vip_track': 'E3_NEW_CONTENT',
+        'new_course_module': 'E3_NEW_CONTENT',
+        'new_content': 'E3_NEW_CONTENT',
+        'purchase_confirmed': 'E4_PURCHASE_CONFIRMED',
+        'product_access': 'E4_PRODUCT_ACCESS',
+        'plan_upgrade': 'E5_PLAN_UPGRADE',
+        'plan_downgrade': 'E5_PLAN_DOWNGRADE',
+        'plan_changed': 'E5_PLAN_CHANGED',
+        'suspension': 'E6_SUSPENSION_CANCELLATION',
+        'cancellation': 'E6_SUSPENSION_CANCELLATION',
+        'E1_WELCOME_ONBOARDING': 'E1_WELCOME_ONBOARDING',
+        'E2_AUTH_MAGIC_LINK': 'E2_AUTH_MAGIC_LINK',
+        'E3_NEW_CONTENT': 'E3_NEW_CONTENT',
+        'E4_PURCHASE_CONFIRMED': 'E4_PURCHASE_CONFIRMED',
+        'E4_PRODUCT_ACCESS': 'E4_PRODUCT_ACCESS',
+        'E5_PLAN_UPGRADE': 'E5_PLAN_UPGRADE',
+        'E5_PLAN_DOWNGRADE': 'E5_PLAN_DOWNGRADE',
+        'E5_PLAN_CHANGED': 'E5_PLAN_CHANGED',
+        'E6_SUSPENSION_CANCELLATION': 'E6_SUSPENSION_CANCELLATION'
+      };
+
+      const templateId = TRIGGER_TO_TEMPLATE_MAP[triggerEvent];
+      if (!templateId) {
+        throw new Error('template não mapeado');
+      }
+
+      const toEmail = payload?.email || payload?.toEmail;
+      const toName = payload?.name || payload?.toName || '';
+      const params = payload?.params ? { ...payload.params, ...payload } : (payload || {});
+
+      return await window.aefEmailEngine.sendEmail(templateId, toEmail, toName, params);
     }
 
     /**

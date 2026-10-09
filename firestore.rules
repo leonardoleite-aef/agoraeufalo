@@ -153,6 +153,22 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // 9. YOUTUBE LAB (Curadoria de Vídeos + Materiais com Cadastro)
+    // Doc raiz: leitura pública (vitrine, SEO, página de consumo).
+    // gated/*: leitura exclusiva de usuários com sessão Firebase válida.
+    // Escrita: exclusiva do Administrador Mestre.
+    // ========================================================================
+    match /youtube_archive/{videoId} {
+      allow read: if true;
+      allow write: if isAdmin();
+
+      match /gated/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+    }
+
+    // ========================================================================
     // 7. POLÍTICA PADRÃO ZERO TRUST
     // Qualquer documento ou coleção não mapeada explicitamente é bloqueada.
     // ========================================================================

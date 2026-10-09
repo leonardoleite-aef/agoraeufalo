@@ -227,6 +227,20 @@
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.lucide) lucide.createIcons();
 
+      // Pré-preenche o campo de e-mail se passado via query param (?email=...)
+      try {
+        const urlEmail = new URLSearchParams(window.location.search).get('email');
+        if (urlEmail) {
+          const cleanEmail = urlEmail.trim();
+          const userEmailInput = document.getElementById('userEmailInput');
+          if (userEmailInput) userEmailInput.value = cleanEmail;
+          const forgotEmailInput = document.getElementById('forgotEmailInput');
+          if (forgotEmailInput) forgotEmailInput.value = cleanEmail;
+        }
+      } catch (e) {
+        console.warn('Erro ao processar query param email:', e);
+      }
+
       // Check if arriving from a Magic Link in email
       if (window.location.search.includes('apiKey=') || window.location.search.includes('magicLink=')) {
         showToast("Validando Link Mágico de acesso...", "info");

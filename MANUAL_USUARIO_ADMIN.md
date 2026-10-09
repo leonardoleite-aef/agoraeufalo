@@ -339,3 +339,12 @@ Toda publicação de artigo no blog segue a regra institucional de **+5.000 cara
 ---
 
 **Fim do Documento 2 • Manual Operacional do Professor Leo Leite**
+
+## YouTube Lab Manager
+- **Acesso:** `/admin-youtube-lab.html` (Requer perfil Mestre Admin)
+- **Operação:**
+  1. Cole a URL de qualquer vídeo do Professor Leo.
+  2. O sistema extrai o ID e tenta preencher Título e Thumbnail.
+  3. Você pode vincular a uma aula oficial usando as caixas "Vínculo Pedagógico" para criar uma "Ponte" para a sala de aula.
+  4. Ative `Destacar na Home` para que o vídeo apareça na `index.html`. O limite é de 3 vídeos.
+  5. Insira URLs de PDF ou Áudio (opcional) que ficarão protegidas por login.

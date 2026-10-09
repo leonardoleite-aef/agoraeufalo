@@ -432,11 +432,10 @@
 
         <div class="pt-2 mt-1 border-t border-slate-100 shrink-0 space-y-2">
           <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-            <input type="checkbox" id="add-send-welcome-email" checked
+            <input type="checkbox" id="add-send-welcome-email"
               class="rounded text-amber-600 focus:ring-amber-500">
             <label for="add-send-welcome-email" class="text-xs text-slate-600">
-              ✉️ Enviar e-mail de boas-vindas ao novo aluno
-              <span class="text-amber-700 font-bold">(Brevo)</span>
+              ✉️ Enviar também e-mail de boas-vindas <span class="text-amber-700 font-bold">(Brevo)</span>
             </label>
           </div>
           <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm cursor-pointer">
@@ -576,14 +575,18 @@
               </span>
               <span class="text-[10px] text-amber-700 font-bold">1-Clique</span>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button type="button" onclick="sendWelcomeMagicLinkFromEditModal()" class="py-2 px-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
                 <i data-lucide="mail" class="w-3.5 h-3.5"></i>
-                <span>Disparar Link por E-mail</span>
+                <span>Disparar Link</span>
+              </button>
+              <button type="button" onclick="sendPasswordResetFromEditModal()" class="py-2 px-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs" title="Enviar e-mail oficial do Firebase para redefinição de senha">
+                <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+                <span>Redefinir Senha</span>
               </button>
               <button type="button" onclick="sendWhatsappInstructionsFromEditModal()" class="py-2 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
                 <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                <span>Enviar Acesso no WhatsApp</span>
+                <span>Enviar no WhatsApp</span>
               </button>
             </div>
           </div>
@@ -670,6 +673,14 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Sacada de Ouro do Leo</label>
           <input type="text" id="prescribe-golden-tip" placeholder="Escreva a Sacada de Ouro do Leo aqui..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:outline-none">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <input type="checkbox" id="prescribe-send-email-notification" checked
+            class="rounded text-amber-600 focus:ring-amber-500">
+          <label for="prescribe-send-email-notification" class="text-xs text-slate-600">
+            ✉️ Notificar mentorado por e-mail <span class="text-amber-700 font-bold">(Brevo)</span>
+          </label>
         </div>
 
         <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-sm mt-3 cursor-pointer">
@@ -859,25 +870,74 @@
       console.error('[CRM Sync Error]', message);
     }
 
+    function escapeHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str);
+    }
+
     /**
      * Envia e-mail de acesso (E2_AUTH_MAGIC_LINK) para o aluno via Brevo.
-     * Chamado pelo botão ✉️ na tabela de alunos.
+     * Chamado pelo botão ✉️ na tabela de alunos ou ações de CRM.
      */
     async function sendAccessEmail(email, name) {
-      if (!window.aefEmailEngine) {
-        alert('Motor de e-mail não carregado. Recarregue a página.');
+      if (typeof window.aefEmailEngine?.sendEmail !== 'function') {
+        alert('Motor de e-mail não disponível ou não inicializado. Recarregue a página.');
         return;
       }
-      if (!confirm(`Disparar e-mail de acesso para ${name} (${email})?`)) return;
+      if (!email) {
+        alert('E-mail não informado.');
+        return;
+      }
+      const studentName = name || 'o aluno';
+      if (!confirm(`Disparar e-mail de acesso para ${studentName} (${email})?`)) return;
       try {
-        await window.aefEmailEngine.sendEmail('E2_AUTH_MAGIC_LINK', email, name, {
-          name: name,
-          magicLink: 'https://app.agoraeufalo.com.br/login'
-        });
-        alert(`✅ E-mail de acesso enviado via Brevo para ${email}`);
+        await window.aefEmailEngine.sendEmail('E2_AUTH_MAGIC_LINK', email, studentName, { email });
+        alert(`✅ E-mail de acesso enviado com sucesso via Brevo para ${email}`);
       } catch (e) {
         alert(`❌ Falha ao enviar e-mail: ${e.message}`);
       }
+    }
+
+    /**
+     * Dispara link oficial do Firebase para redefinição de senha do aluno.
+     */
+    async function sendPasswordResetForStudent(email, name) {
+      if (!email) {
+        alert('E-mail não informado.');
+        return;
+      }
+      const studentName = name || 'o aluno';
+      if (!confirm(`Enviar link real de redefinição de senha para ${studentName} (${email})?`)) {
+        return;
+      }
+      if (!window.aefPortalAuth || typeof window.aefPortalAuth.sendPasswordReset !== 'function') {
+        alert('Módulo de autenticação (aefPortalAuth) não disponível.');
+        return;
+      }
+      try {
+        if (typeof window.aefPortalAuth.ready === 'function') {
+          await window.aefPortalAuth.ready();
+        }
+        await window.aefPortalAuth.sendPasswordReset(email);
+        alert(`✅ E-mail de redefinição de senha enviado com sucesso para ${email}!`);
+      } catch (err) {
+        alert(`❌ Erro ao enviar redefinição de senha: ${err.message}`);
+      }
+    }
+
+    async function sendPasswordResetFromEditModal() {
+      const email = document.getElementById('edit-student-email')?.value.trim().toLowerCase();
+      const name = document.getElementById('edit-student-name')?.value.trim() || 'Aluno';
+      await sendPasswordResetForStudent(email, name);
     }
 
     function resolveVipCourse(student) {
@@ -1453,16 +1513,21 @@
             </td>
             <td class="py-3 px-4 text-right">
               <div class="flex items-center justify-end gap-1.5">
-                <button onclick="shareStudentAccess('${s.email}')" class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition cursor-pointer" title="Enviar Instruções de Acesso via WhatsApp / Copiar Mensagem">
+                <button type="button" data-action="share-access" data-email="${escapeAttr(s.email || '')}" class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition cursor-pointer" title="Enviar Instruções de Acesso via WhatsApp / Copiar Mensagem">
                   <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
                 </button>
-                <button onclick="openEditStudentModal('${s.email}')" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
+                <button type="button" data-action="edit-student" data-email="${escapeAttr(s.email || '')}" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer" title="Editar Plano e Cursos">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                 </button>
-                <button onclick="sendAccessEmail('${s.email}', '${(s.name || '').replace(/'/g, '')}')"
+                <button type="button" data-action="send-access-email" data-email="${escapeAttr(s.email || '')}" data-name="${escapeAttr(s.name || '')}"
                   class="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition cursor-pointer"
                   title="Enviar E-mail de Acesso via Brevo">
                   <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" data-action="reset-password" data-email="${escapeAttr(s.email || '')}" data-name="${escapeAttr(s.name || '')}"
+                  class="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition cursor-pointer"
+                  title="Enviar Link de Redefinição de Senha (Firebase)">
+                  <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
                 </button>
                 <button onclick="openDeleteStudentModal('${s.email}', '${safeEscapedName}', '${s.id || ''}', '${s.tier || 'free'}')" class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 border border-rose-200 transition cursor-pointer" title="Excluir Aluno Permanentemente">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -1496,6 +1561,28 @@
 
       updateIcons();
     }
+
+    // Listener delegado para ações da tabela de alunos (resistente a aspas e apóstrofos)
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if (action === 'send-access-email') {
+        const email = btn.dataset.email || '';
+        const name = btn.dataset.name || '';
+        sendAccessEmail(email, name);
+      } else if (action === 'share-access') {
+        const email = btn.dataset.email || '';
+        shareStudentAccess(email);
+      } else if (action === 'edit-student') {
+        const email = btn.dataset.email || '';
+        openEditStudentModal(email);
+      } else if (action === 'reset-password') {
+        const email = btn.dataset.email || '';
+        const name = btn.dataset.name || '';
+        sendPasswordResetForStudent(email, name);
+      }
+    });
 
     function renderAdminsTable() {
       const tbody = document.getElementById('admins-table-body');
@@ -1535,6 +1622,7 @@
       const n = document.getElementById('new-student-name'); if (n) n.value = '';
       const e = document.getElementById('new-student-email'); if (e) e.value = '';
       const w = document.getElementById('new-student-whatsapp'); if (w) w.value = '';
+      const bChk = document.getElementById('add-send-welcome-email'); if (bChk) bChk.checked = false;
       document.getElementById('add-student-modal').classList.remove('hidden');
       updateIcons();
     }
@@ -1845,6 +1933,8 @@ Bons treinos e nos vemos na Sala de Aula!`;
       if (document.getElementById('prescribe-script')) document.getElementById('prescribe-script').value = '';
       document.getElementById('prescribe-summary').value = '';
       document.getElementById('prescribe-golden-tip').value = '';
+      const emailChk = document.getElementById('prescribe-send-email-notification');
+      if (emailChk) emailChk.checked = true;
       document.getElementById('prescribe-modal').classList.remove('hidden');
     }
 
@@ -1968,15 +2058,19 @@ Bons treinos e nos vemos na Sala de Aula!`;
 
       // E-mail de boas-vindas E1 via Brevo
       const shouldWelcome = document.getElementById('add-send-welcome-email')?.checked;
-      if (shouldWelcome && window.aefEmailEngine && cleanEmail) {
-        try {
-          await window.aefEmailEngine.sendEmail('E1_WELCOME_ONBOARDING', cleanEmail, name, {
-            name: name,
-            portalUrl: 'https://app.agoraeufalo.com.br/portal'
-          });
-          console.log(`✉️ [CRM Brevo] Boas-vindas E1 enviado para ${cleanEmail}`);
-        } catch (e) {
-          console.warn('[CRM Brevo] Falha no e-mail E1:', e);
+      if (shouldWelcome && cleanEmail) {
+        if (typeof window.aefEmailEngine?.sendEmail !== 'function') {
+          showSyncError('Motor de e-mail não disponível para enviar boas-vindas via Brevo.');
+        } else {
+          try {
+            await window.aefEmailEngine.sendEmail('E1_WELCOME_ONBOARDING', cleanEmail, name, {
+              portalUrl: 'https://app.agoraeufalo.com.br/portal'
+            });
+            console.log(`✉️ [CRM Brevo] Boas-vindas E1 enviado para ${cleanEmail}`);
+          } catch (e) {
+            console.warn('[CRM Brevo] Falha no e-mail E1:', e);
+            showSyncError(`Falha ao enviar e-mail de boas-vindas para ${cleanEmail}: ${e.message}`);
+          }
         }
       }
     }
@@ -2018,6 +2112,10 @@ Bons treinos e nos vemos na Sala de Aula!`;
 
       // Retém cursos VIP já matriculados para não perder a Sala VIP ao editar permissões gerais
       const existingStudent = ALL_STUDENTS_LIST.find(s => s.email.toLowerCase() === email);
+      const prevTier = existingStudent?.tier || 'free';
+      const prevEnrolled = Array.isArray(existingStudent?.enrolledProducts)
+        ? [...existingStudent.enrolledProducts]
+        : (Array.isArray(existingStudent?.purchasedProducts) ? [...existingStudent.purchasedProducts] : []);
       const existingVipCourses = (existingStudent?.enrolledProducts || []).filter(p => typeof p === 'string' && (p.startsWith('mentoria-') || p === 'mentoria_vip' || p === 'all_access_master'));
       if (existingStudent?.vipCourseId && !existingVipCourses.includes(existingStudent.vipCourseId)) {
         existingVipCourses.push(existingStudent.vipCourseId);
@@ -2094,22 +2192,63 @@ Bons treinos e nos vemos na Sala de Aula!`;
       closeEditStudentModal();
       alert(`✅ Aluno ${name} atualizado com sucesso!`);
 
-      // Notificação Brevo E5 se plano/cursos foram alterados
+      // Notificação Brevo se plano/cursos foram alterados
       const shouldNotify = document.getElementById('edit-send-email-notification')?.checked;
-      if (shouldNotify && window.aefEmailEngine) {
-        try {
-          await window.aefEmailEngine.sendEmail('E5_PLAN_CHANGED', cleanEmail, name, {
-            name: name,
-            newPlanName: legacyTier === 'club_annual' ? 'AEF Club Annual'
-              : legacyTier === 'club_monthly' ? 'AEF Club Mensal'
-              : legacyTier === 'vip_mentorship' ? 'Mentoria VIP'
-              : legacyTier === 'lifetime' ? 'Acesso Vitalício'
-              : 'AgoraEuFalo Free',
-            portalUrl: 'https://app.agoraeufalo.com.br/portal'
-          });
-          console.log(`✉️ [CRM Brevo] Notificação E5 enviada para ${cleanEmail}`);
-        } catch (mailErr) {
-          console.warn('[CRM Brevo] Falha na notificação E5 (não-bloqueante):', mailErr);
+      if (shouldNotify) {
+        if (typeof window.aefEmailEngine?.sendEmail !== 'function') {
+          showSyncError('Motor de e-mail não disponível para enviar notificações.');
+        } else {
+          // (a) Se tier mudou, calcula rank e envia E5_PLAN_UPGRADE ou E5_PLAN_DOWNGRADE
+          if (legacyTier !== prevTier) {
+            const TIER_RANK = {
+              free: 0,
+              member_free: 0,
+              club_monthly: 1,
+              club_annual: 2,
+              lifetime: 3,
+              vip_mentorship: 4,
+              vip: 4,
+              admin_master: 5,
+              admin: 5
+            };
+            const prevRank = TIER_RANK[prevTier];
+            const newRank = TIER_RANK[legacyTier];
+            const isAdminTier = (t) => t === 'admin_master' || t === 'admin';
+            // Só notifica se ambos os tiers são conhecidos, o nível realmente mudou (aliases do mesmo rank não contam) e nenhum é admin.
+            const shouldSendTierMail = prevRank !== undefined && newRank !== undefined
+              && prevRank !== newRank && !isAdminTier(prevTier) && !isAdminTier(legacyTier);
+            if (shouldSendTierMail) {
+              const templateId = newRank > prevRank ? 'E5_PLAN_UPGRADE' : 'E5_PLAN_DOWNGRADE';
+              try {
+                await window.aefEmailEngine.sendEmail(templateId, cleanEmail, name, {
+                  newPlanName: legacyTier,
+                  portalUrl: 'https://app.agoraeufalo.com.br/portal'
+                });
+                console.log(`✉️ [CRM Brevo] Notificação ${templateId} enviada para ${cleanEmail}`);
+              } catch (tierErr) {
+                console.warn(`[CRM Brevo] Falha na notificação ${templateId}:`, tierErr);
+                showSyncError(`Falha ao enviar e-mail de alteração de plano para ${cleanEmail}: ${tierErr.message}`);
+              }
+            }
+          }
+
+          // (b) Se entraram produtos novos (diff finalEnrolledProducts - anteriores), envia E4_PRODUCT_ACCESS
+          const prevSet = new Set(prevEnrolled.map(p => String(p).toLowerCase()));
+          const newProductsIds = finalEnrolledProducts.filter(p => !prevSet.has(String(p).toLowerCase()));
+
+          if (newProductsIds.length > 0) {
+            const newProductTitles = newProductsIds.map(id => ALL_COURSES_MAP.get(id)?.title || id);
+            try {
+              await window.aefEmailEngine.sendEmail('E4_PRODUCT_ACCESS', cleanEmail, name, {
+                products: newProductTitles,
+                portalUrl: 'https://app.agoraeufalo.com.br/portal'
+              });
+              console.log(`✉️ [CRM Brevo] Notificação E4_PRODUCT_ACCESS enviada para ${cleanEmail}`);
+            } catch (prodErr) {
+              console.warn('[CRM Brevo] Falha na notificação E4_PRODUCT_ACCESS:', prodErr);
+              showSyncError(`Falha ao enviar e-mail de liberação de cursos para ${cleanEmail}: ${prodErr.message}`);
+            }
+          }
         }
       }
     }
@@ -2185,6 +2324,40 @@ Bons treinos e nos vemos na Sala de Aula!`;
       } catch (err) {
         console.error("Erro ao salvar prescrição:", err);
         alert(`❌ Erro ao salvar prescrição: ${err.message}`);
+        return;
+      }
+
+      // Notificação por e-mail do mentorado via Brevo (não-bloqueante / aviso separado)
+      const shouldNotify = document.getElementById('prescribe-send-email-notification')?.checked;
+      if (shouldNotify) {
+        const menteeStudent = ALL_STUDENTS_LIST.find(s =>
+          s.id === menteeId ||
+          s.menteeSlug === menteeId ||
+          (s.email && s.email.toLowerCase() === menteeId.toLowerCase()) ||
+          (s.vipCourseId && s.vipCourseId === `mentoria-${menteeId}`) ||
+          (typeof resolveVipCourse === 'function' && (resolveVipCourse(s)?.studentId === menteeId || resolveVipCourse(s)?.id === `mentoria-${menteeId}`))
+        );
+        const menteeEmail = menteeStudent?.email;
+        const menteeName = menteeStudent?.name || menteeId;
+
+        if (!menteeEmail) {
+          console.warn(`[CRM Brevo] E-mail do mentorado "${menteeId}" não encontrado em ALL_STUDENTS_LIST.`);
+          showSyncError(`Prescrição publicada, mas o e-mail do mentorado "${menteeId}" não foi encontrado para envio da notificação.`);
+        } else if (typeof window.aefEmailEngine?.sendEmail !== 'function') {
+          console.warn('[CRM Brevo] Motor de e-mail não disponível para enviar notificação VIP.');
+          showSyncError('Prescrição publicada, mas o motor de e-mail não estava disponível para notificar o mentorado.');
+        } else {
+          try {
+            await window.aefEmailEngine.sendEmail('E8_VIP_PRESCRIPTION', menteeEmail, menteeName, {
+              title,
+              url: 'https://app.agoraeufalo.com.br/portal'
+            });
+            console.log(`✉️ [CRM Brevo] Notificação E8_VIP_PRESCRIPTION enviada para ${menteeEmail}`);
+          } catch (mailErr) {
+            console.warn('[CRM Brevo] Falha ao enviar notificação VIP:', mailErr);
+            showSyncError(`Prescrição publicada, mas ocorreu falha ao enviar o e-mail para ${menteeEmail}: ${mailErr.message}`);
+          }
+        }
       }
     }
 

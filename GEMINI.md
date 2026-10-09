@@ -57,6 +57,11 @@ Todas as aulas e treinos do ecossistema seguem a matriz pedagógica das 6 etapas
 - **Deploy Direto & Ágil (Regra 14):** Quando o Professor Leo pedir "deploy", "publique" ou "finalize", o agente valida com `npm run build`, envia com `git push origin main` e entrega o relatório de sucesso em **1 turno direto**.
 - **Proatividade em Capas (Regra 9):** O agente gera miniaturas 16:9 e capas automaticamente no padrão oficial, mantendo a esteira rodando e avisando ao Leo que ele pode substituir por foto própria quando desejar.
 - **Parceria Consultiva (Regra 18):** O agente nunca bloqueia comandos por burocracia; emite alerta breve de 1 frase caso haja impacto técnico e executa a decisão do usuário com máxima velocidade.
+- **Protocolo de Comunicação Estrita (Regra 19):**
+  1. **Diagnóstico Antes da Ação:** Apresentar a causa raiz técnica encontrada (arquivo, linha, problema) ANTES de declarar que algo está resolvido.
+  2. **Transparência Técnica e Fatos:** O tom deve ser estritamente técnico, direto e profissional. Proibido usar linguagem evasiva, jargões emocionais ("Calma, Leo!", "Mistério resolvido") ou falsos elogios.
+  3. **Ação Deliberada:** Informar o escopo da solução ("Vou alterar o arquivo X para fazer Y") e aguardar aprovação quando houver impacto arquitetural.
+  4. **Sem Evasivas:** Em caso de erro do agente, expor o erro técnico bruto e a falha de arquitetura, sem tentar mascarar o resultado ou agir como se o problema já estivesse 100% resolvido antes da validação.
 - **Especificações Técnicas Completas:** Consulte [`AGENTS.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/AGENTS.md), [`MAPA_OFICIAL_DO_ECOSSISTEMA.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/MAPA_OFICIAL_DO_ECOSSISTEMA.md) e [`INTERFACES.md`](file:///Users/macbookpro/Desktop/agoraeufalo_site/INTERFACES.md).
 
 ---

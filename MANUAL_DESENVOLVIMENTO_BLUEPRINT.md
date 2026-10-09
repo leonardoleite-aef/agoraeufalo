@@ -409,3 +409,12 @@ Quando você quiser criar um novo projeto SaaS, curso digital ou plataforma de m
 ---
 
 **Fim do Documento 1 • AgoraEuFalo Engineering Standards**
+
+## YouTube Lab (v2)
+- **Modelo de Dados:**
+  - `youtube_archive/{videoId}`: Doc público de leitura livre.
+  - `youtube_archive/{videoId}/gated/materials`: Doc restrito a `isAuthenticated()`.
+- **Máquina de Estados de Materiais:**
+  - A interface `youtube-lab.html` aguarda o callback do Firebase Auth. Se logado, tenta ler a subcoleção `gated/materials`. Se falhar por 403 ou não houver usuário, exibe o Estado Bloqueado.
+- **Paywall Dinâmico (M1/M2):**
+  - Implementado `triggerConversionPaywall` em `sala-de-aula-lab.html`. Ele consulta `aefOffersRegistry` em tempo de execução para gerar os links da Hotmart, garantindo Zero Hardcoding de preços.

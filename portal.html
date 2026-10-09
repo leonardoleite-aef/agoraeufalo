@@ -1400,7 +1400,8 @@
                 availableStandalone: f.availableStandalone?.booleanValue ?? false,
                 standalonePrice: f.standalonePrice?.stringValue || '',
                 standaloneCheckoutHotmart: f.standaloneCheckoutHotmart?.stringValue || '',
-                standaloneCheckoutStripe: f.standaloneCheckoutStripe?.stringValue || ''
+                standaloneCheckoutStripe: f.standaloneCheckoutStripe?.stringValue || '',
+                salesUrl: f.salesUrl?.stringValue || ''
               };
             });
             Object.assign(window.AEFCoursesMatrix, cloudCourses);
