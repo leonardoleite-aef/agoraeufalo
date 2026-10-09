@@ -7,11 +7,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const snap = await window.firebase.firestore().collection('youtube_archive')
         .where('featuredOnHome', '==', true)
-        .where('status', '==', 'active')
         .get();
         
       const videos = [];
-      snap.forEach(doc => videos.push(doc.data()));
+      snap.forEach(doc => {
+        const data = doc.data();
+        if (data.status === 'active') videos.push(data);
+      });
       videos.sort((a, b) => (a.homeOrder || 99) - (b.homeOrder || 99));
       
       const ytGrid = document.getElementById('yt-home-grid');
@@ -37,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </a>
           `;
         }).join('');
-        lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons();
       }
     } catch(err) {
       console.error('Error fetching youtube archive', err);
@@ -59,11 +61,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!offer || offer.status !== 'active') return '';
         const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
         const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || \`R$ \${offer.pricing?.offerPrice || ''}\`;
-        const descText = offer.description || (offer.title.includes('QuickStart') ? 'O atalho prático para quem precisa de resultados rápidos.' : 'Curso prático focado em resultado.');
+        const titleText = offer.title || offer.name || '';
+        const descText = offer.description || (titleText.includes('QuickStart') ? 'O atalho prático para quem precisa de resultados rápidos.' : 'Curso prático focado em resultado.');
         return \`
           <div class="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
             <div class="p-6 space-y-3">
-              <h3 class="text-lg font-bold text-slate-900">\${offer.title}</h3>
+              <h3 class="text-lg font-bold text-slate-900">\${titleText}</h3>
               <p class="text-xs text-slate-500 leading-relaxed min-h-[40px]">\${descText}</p>
             </div>
             <div class="px-6 pb-6 pt-4 border-t border-slate-100 flex items-center justify-between">
@@ -78,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (html) {
         coursesGrid.innerHTML = html;
       } else {
-        document.getElementById('cursos-avulsos').classList.add('hidden');
+        document.getElementById('cursos-avulsos')?.classList.add('hidden');
       }
     }
 
@@ -92,6 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
         const isHighlight = id === 'ms-club-anual';
         const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || \`R$ \${offer.pricing?.offerPrice || ''}\`;
+        const titleText = offer.title || offer.name || '';
         const descText = offer.description || (id === 'ms-club-mensal' ? 'Acesso total mês a mês, cancele quando quiser.' : (id === 'ms-club-anual' ? 'O plano mais escolhido com desconto imbatível.' : 'Acesso vitalício sem cobranças recorrentes.'));
         
         return \`
@@ -99,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             \${isHighlight ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md whitespace-nowrap">Mais Recomendado</div>' : ''}
             <div class="space-y-6">
               <div>
-                <h3 class="text-xl font-bold \${isHighlight ? 'text-amber-400' : 'text-white'}">\${offer.title}</h3>
+                <h3 class="text-xl font-bold \${isHighlight ? 'text-amber-400' : 'text-white'}">\${titleText}</h3>
               </div>
               <div class="flex items-baseline gap-1">
                 <span class="\${isHighlight ? 'text-4xl' : 'text-3xl'} font-black text-white">\${priceText}</span>
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               <p class="text-sm text-slate-300 min-h-[60px]">\${descText}</p>
             </div>
             <button onclick="window.aefCheckoutModal.open('\${url}')" class="mt-8 w-full py-3.5 rounded-xl \${isHighlight ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-amber-500/20' : 'bg-white/10 hover:bg-white/20 text-white'} border border-white/15 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
-              Assinar \${offer.title}
+              Assinar \${titleText}
             </button>
           </div>
         \`;
