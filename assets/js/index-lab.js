@@ -52,71 +52,111 @@ document.addEventListener('DOMContentLoaded', async () => {
     await window.aefOffersRegistry.init();
     const R = window.aefOffersRegistry;
     
-    // Standalone Courses
-    const standaloneIds = ['eqs-completo', 'frases-prontas-vitalicio'];
+    const allOffers = await R.getAllOffers({ status: 'active' });
+    
+    const standaloneOffers = [];
+    const planOffers = [];
+
+    allOffers.forEach(o => {
+      // Ignorar ofertas auxiliares, ocultas ou OTOs na vitrine pública da Home
+      if (o.category === 'migration' || o.id.includes('oto') || o.id.includes('trial')) return;
+      if (o.productId === 'mentoria-vip') return;
+
+      if (o.pricing?.billingType === 'subscription' || o.accessDuration?.isLifetime) {
+        planOffers.push(o);
+      } else {
+        standaloneOffers.push(o);
+      }
+    });
+
+    // Standalone Courses Grid
     const coursesGrid = document.getElementById('cursos-avulsos-grid');
     if (coursesGrid) {
-      const html = standaloneIds.map(id => {
-        const offer = R.getOfferById(id);
-        if (!offer || offer.status !== 'active') return '';
-        const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
-        const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || `R$ ${offer.pricing?.offerPrice || ''}`;
-        const titleText = offer.title || offer.name || '';
-        const descText = offer.description || (titleText.includes('QuickStart') ? 'O atalho prático para quem precisa de resultados rápidos.' : 'Curso prático focado em resultado.');
-        return `
-          <div class="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-            <div class="p-6 space-y-3">
-              <h3 class="text-lg font-bold text-slate-900">${titleText}</h3>
-              <p class="text-xs text-slate-500 leading-relaxed min-h-[40px]">${descText}</p>
-            </div>
-            <div class="px-6 pb-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span class="font-black text-lg text-slate-900">${priceText}</span>
-              <button onclick="window.aefCheckoutModal.open('${url}')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition cursor-pointer">
-                Comprar
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-      if (html) {
-        coursesGrid.innerHTML = html;
-      } else {
+      if (standaloneOffers.length === 0) {
         document.getElementById('cursos-avulsos')?.classList.add('hidden');
+      } else {
+        coursesGrid.innerHTML = standaloneOffers.map(offer => {
+          const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
+          const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || `R$ ${offer.pricing?.offerPrice || ''}`;
+          const titleText = offer.title || offer.name || '';
+          const descText = offer.description || offer.hotmartSetupSpec?.notes || 'Curso prático focado em resultado.';
+          return `
+            <div class="bg-white border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+              <div class="p-6 space-y-3">
+                <h3 class="text-lg font-bold text-slate-900">${titleText}</h3>
+                <p class="text-xs text-slate-500 leading-relaxed min-h-[40px]">${descText}</p>
+              </div>
+              <div class="px-6 pb-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span class="font-black text-lg text-slate-900">${priceText}</span>
+                <button onclick="window.aefCheckoutModal ? window.aefCheckoutModal.open('${url}') : window.open('${url}', '_blank')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition cursor-pointer">
+                  Comprar
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
       }
     }
 
-    // Plans
-    const planIds = ['ms-club-mensal', 'ms-club-anual', 'all-access-lifetime'];
+    // Plans Grid
     const plansGrid = document.getElementById('planos-assinatura-grid');
     if (plansGrid) {
-      const html = planIds.map(id => {
-        const offer = R.getOfferById(id);
-        if (!offer || offer.status !== 'active') return '';
-        const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
-        const isHighlight = id === 'ms-club-anual';
-        const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || `R$ ${offer.pricing?.offerPrice || ''}`;
-        const titleText = offer.title || offer.name || '';
-        const descText = offer.description || (id === 'ms-club-mensal' ? 'Acesso total mês a mês, cancele quando quiser.' : (id === 'ms-club-anual' ? 'O plano mais escolhido com desconto imbatível.' : 'Acesso vitalício sem cobranças recorrentes.'));
+      if (planOffers.length === 0) {
+        document.getElementById('planos-assinatura')?.classList.add('hidden');
+      } else {
+        // Garantir que a anuidade fique no meio visualmente se houverem múltiplos
+        planOffers.sort((a, b) => (b.pricing?.offerPrice || 0) - (a.pricing?.offerPrice || 0)); 
         
-        return `
-          <div class="${isHighlight ? 'bg-gradient-to-b from-[#112240] to-[#0A192F] border-amber-400 transform md:-translate-y-4' : 'bg-white/5 border-white/10 hover:border-amber-400/30'} border-2 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 relative shadow-xl">
-            ${isHighlight ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md whitespace-nowrap">Mais Recomendado</div>' : ''}
-            <div class="space-y-6">
-              <div>
-                <h3 class="text-xl font-bold ${isHighlight ? 'text-amber-400' : 'text-white'}">${titleText}</h3>
+        plansGrid.innerHTML = planOffers.map(offer => {
+          const url = R.generateTrackingUrl(offer, 'home_lab', offer.id);
+          const isHighlight = offer.id === 'ms-club-anual'; // Regra de negócio para destacar o principal
+          const priceText = offer.hotmartSetupSpec?.installmentsFormatted || offer.pricing?.installmentsText || `R$ ${offer.pricing?.offerPrice || ''}`;
+          const titleText = offer.title || offer.name || '';
+          const descText = offer.description || offer.hotmartSetupSpec?.notes || 'Acesso premium.';
+          
+          return `
+            <div class="${isHighlight ? 'bg-gradient-to-b from-[#112240] to-[#0A192F] border-amber-400 transform md:-translate-y-4' : 'bg-white/5 border-white/10 hover:border-amber-400/30'} border-2 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 relative shadow-xl">
+              ${isHighlight ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md whitespace-nowrap">Mais Recomendado</div>' : ''}
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-xl font-bold ${isHighlight ? 'text-amber-400' : 'text-white'}">${titleText}</h3>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="${isHighlight ? 'text-4xl' : 'text-3xl'} font-black text-white">${priceText}</span>
+                </div>
+                <p class="text-sm text-slate-300 min-h-[60px]">${descText}</p>
               </div>
-              <div class="flex items-baseline gap-1">
-                <span class="${isHighlight ? 'text-4xl' : 'text-3xl'} font-black text-white">${priceText}</span>
-              </div>
-              <p class="text-sm text-slate-300 min-h-[60px]">${descText}</p>
+              <button onclick="window.aefCheckoutModal ? window.aefCheckoutModal.open('${url}') : window.open('${url}', '_blank')" class="mt-8 w-full py-3.5 rounded-xl ${isHighlight ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-amber-500/20' : 'bg-white/10 hover:bg-white/20 text-white'} border border-white/15 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
+                Assinar Plano
+              </button>
             </div>
-            <button onclick="window.aefCheckoutModal.open('${url}')" class="mt-8 w-full py-3.5 rounded-xl ${isHighlight ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 shadow-amber-500/20' : 'bg-white/10 hover:bg-white/20 text-white'} border border-white/15 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
-              Assinar ${titleText}
-            </button>
-          </div>
-        `;
-      }).join('');
-      plansGrid.innerHTML = html;
+          `;
+        }).join('');
+      }
     }
+    
+    // SEO: JSON-LD Schema Injection
+    const schemaObj = {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": allOffers.map((o, index) => ({
+        "@type": "Product",
+        "position": index + 1,
+        "name": o.title,
+        "description": o.hotmartSetupSpec?.notes || o.description || o.title,
+        "offers": {
+          "@type": "Offer",
+          "price": o.pricing?.offerPrice || 0,
+          "priceCurrency": o.pricing?.currency || "BRL",
+          "availability": o.status === 'active' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          "url": R.generateTrackingUrl(o, 'seo', o.id)
+        }
+      }))
+    };
+    
+    const scriptTag = document.createElement('script');
+    scriptTag.type = 'application/ld+json';
+    scriptTag.textContent = JSON.stringify(schemaObj);
+    document.head.appendChild(scriptTag);
   }
 });
