@@ -1779,9 +1779,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (window.aefPortalAuth) await window.aefPortalAuth.ready();
   if (!window.firebase || !window.firebase.firestore) return;
   try {
-    const snap = await window.firebase.firestore().collection("youtube_archive").where("status", "==", "active").orderBy("publishedAt", "desc").limit(1).get();
+    const snap = await window.firebase.firestore().collection("youtube_archive").where("status", "==", "active").get();
     if (!snap.empty) {
-      const v = snap.docs[0].data();
+      const docs = snap.docs.map(d => d.data());
+      docs.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+      const v = docs[0];
       document.getElementById("yt-lab-dash-title").innerText = v.title;
       if(v.description) document.getElementById("yt-lab-dash-desc").innerText = v.description;
       document.getElementById("yt-lab-dash-thumb").innerHTML = `<img src="${v.thumbnailUrl}" class="w-full h-full object-cover">`;

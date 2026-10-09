@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadLibraryMode() {
   try {
-    const snap = await db.collection('youtube_archive').where('status', '==', 'active').orderBy('publishedAt', 'desc').get();
+    const snap = await db.collection('youtube_archive').where('status', '==', 'active').get();
     const grid = document.getElementById('libraryGrid');
     grid.innerHTML = '';
     
@@ -36,8 +36,10 @@ async function loadLibraryMode() {
       return;
     }
     
-    snap.forEach(doc => {
-      const v = doc.data();
+    const docs = snap.docs.map(d => d.data());
+    docs.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+    
+    docs.forEach(v => {
       const card = document.createElement('a');
       card.href = `?v=${v.videoId}`;
       card.className = "block bg-white rounded-2xl shadow-sm hover:shadow-xl transition overflow-hidden border border-slate-100 group";
