@@ -1997,6 +1997,7 @@ Bons treinos e nos vemos na Sala de Aula!`;
         whatsapp,
         phone: whatsapp,
         categories,
+        legacyEntitlements: categories.filter(c => ['legado_1', 'legado_2', 'member_free'].includes(c)),
         role,
         purchasedProducts: initialCourses,
         tier: legacyTier, // backward compat
@@ -2131,6 +2132,7 @@ Bons treinos e nos vemos na Sala de Aula!`;
         whatsapp,
         phone: whatsapp,
         categories,
+        legacyEntitlements: categories.filter(c => ['legado_1', 'legado_2', 'member_free'].includes(c)),
         purchasedProducts: finalEnrolledProducts,
         tier: legacyTier,
         role: effectiveRole,
@@ -2606,7 +2608,12 @@ Bons treinos e nos vemos na Sala de Aula!`;
       const editAdminChk = document.getElementById('edit-is-admin');
       if (editAdminChk) {
         editAdminChk.addEventListener('change', () => {
-          if (editAdminChk.checked) document.getElementById('edit-student-role').value = 'admin';
+          const roleSelect = document.getElementById('edit-student-role');
+          if (editAdminChk.checked) {
+            roleSelect.value = 'admin';
+          } else if (roleSelect.value === 'admin') {
+            roleSelect.value = 'student';
+          }
         });
       }
     }
