@@ -17,10 +17,10 @@ window.renderConversionPaywallHtml = async function(course, src, thumbnailUrl, i
   let overlayClass = '';
   
   if (isTransparent) {
-    overlayClass = 'bg-[#060D17]/80 backdrop-blur-md';
+    overlayClass = 'bg-[#060D17]/60 backdrop-blur-sm';
   } else {
     bgStyle = thumbnailUrl ? `background-image: url('${thumbnailUrl}'); background-size: cover; background-position: center;` : '';
-    overlayClass = thumbnailUrl ? 'bg-[#060D17]/85 backdrop-blur-sm' : 'bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17]';
+    overlayClass = thumbnailUrl ? 'bg-[#060D17]/70 backdrop-blur-sm' : 'bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17]';
   }
 
   const fallbackHtml = `
