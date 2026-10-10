@@ -43,7 +43,7 @@
       const modalHtml = `
         <div 
           id="${this.modalId}" 
-          class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center px-3 sm:px-4 md:px-6 opacity-0 transition-opacity duration-300"
+          class="fixed inset-0 z-[9999] bg-slate-950/85 backdrop-blur-md hidden items-center justify-center px-3 sm:px-4 md:px-6 opacity-0 transition-opacity duration-300"
           style="padding-top: max(3.5rem, env(safe-area-inset-top, 3rem)); padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1rem));"
         >
           <div class="relative w-full max-w-4xl h-[86vh] sm:h-[92vh] max-h-[850px] bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col">
