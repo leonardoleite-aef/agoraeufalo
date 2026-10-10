@@ -909,7 +909,7 @@
           spinner.className = "fixed inset-0 z-[100] flex items-center justify-center";
           spinner.innerHTML = '<div id="m1-paywall-container" class="w-full h-full relative"></div>';
           if (window.triggerConversionPaywall) {
-             window.triggerConversionPaywall(document.getElementById('m1-paywall-container'), c, urlParams.get('src') || 'sala_paywall', null, true);
+             window.triggerConversionPaywall(document.getElementById('m1-paywall-container'), c, urlParams.get('src') || 'sala_paywall', null, true, true);
           }
           window.hasM1Paywall = true;
           // Não dá return, deixa a sala de aula montar atrás!
@@ -1500,6 +1500,20 @@
       if (!isAuthorized) {
         const tabsBar = document.getElementById("mediaTabsBar");
         if (tabsBar) tabsBar.classList.add("hidden");
+
+        if (window.hasM1Paywall) {
+          // Se já tem um paywall bloqueando a tela inteira, renderiza apenas a miniatura do vídeo sem box adicional
+          const bgImg = found.thumbnailUrl || 'assets/images/thumbs/ms001/thumb_ms001_lr.jpg';
+          videoStage.innerHTML = `
+            <div class="w-full h-full bg-[#060D17] relative flex items-center justify-center overflow-hidden rounded-2xl">
+              <img src="${bgImg}" class="w-full h-full object-cover opacity-50 blur-[2px] transition-all" />
+              <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md absolute border border-white/20 shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </div>
+            </div>
+          `;
+          return;
+        }
 
         const srcParam = new URLSearchParams(window.location.search).get('src') || 'sala_paywall';
         if (window.triggerConversionPaywall) {

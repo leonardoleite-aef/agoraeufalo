@@ -1,4 +1,4 @@
-window.renderConversionPaywallHtml = async function(course, src, thumbnailUrl, isTransparent = false) {
+window.renderConversionPaywallHtml = async function(course, src, thumbnailUrl, isTransparent = false, isCourseMode = false) {
   if (!window.aefOffersRegistry) return `<p>Erro: aefOffersRegistry não carregado</p>`;
   await window.aefOffersRegistry.init();
   const R = window.aefOffersRegistry;
@@ -42,6 +42,9 @@ window.renderConversionPaywallHtml = async function(course, src, thumbnailUrl, i
   const offerUrl = R.generateTrackingUrl(targetOffer, source, course?.id);
   const priceText = targetOffer.hotmartSetupSpec?.installmentsFormatted || targetOffer.pricing?.installmentsText || `R$ ${targetOffer.pricing?.offerPrice || ''}`;
   const offerTitle = targetOffer.title || targetOffer.name || 'Upgrade Premium';
+  
+  const titleText = isCourseMode ? "Este curso é exclusivo" : "Esta aula é exclusiva";
+  const descText = isCourseMode ? "Você não tem acesso a este treinamento." : "Para acessar o material completo,";
 
   let html = `<div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-4 select-none z-[100]" style="${bgStyle}">
     <div class="absolute inset-0 ${overlayClass}"></div>
@@ -52,8 +55,8 @@ window.renderConversionPaywallHtml = async function(course, src, thumbnailUrl, i
       </div>
       <div class="space-y-2 max-w-md">
         <span class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">CONTEÚDO EXCLUSIVO</span>
-        <h3 class="text-xl sm:text-2xl font-black text-white leading-tight font-serif">Esta aula é exclusiva</h3>
-        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">Para acessar o material completo, faça o upgrade para <b>${offerTitle}</b>.</p>
+        <h3 class="text-xl sm:text-2xl font-black text-white leading-tight font-serif">${titleText}</h3>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">${descText} faça o upgrade para <b>${offerTitle}</b>.</p>
       </div>
       
       <div class="pt-4 flex flex-col items-center gap-3 w-full justify-center max-w-sm">
@@ -73,6 +76,6 @@ window.renderConversionPaywallHtml = async function(course, src, thumbnailUrl, i
 };
 
 // Global paywall renderer function
-window.triggerConversionPaywall = async function(containerEl, course, src, thumbnailUrl, isTransparent = false) {
-  containerEl.innerHTML = await window.renderConversionPaywallHtml(course, src, thumbnailUrl, isTransparent);
+window.triggerConversionPaywall = async function(containerEl, course, src, thumbnailUrl, isTransparent = false, isCourseMode = false) {
+  containerEl.innerHTML = await window.renderConversionPaywallHtml(course, src, thumbnailUrl, isTransparent, isCourseMode);
 };
