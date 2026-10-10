@@ -5,9 +5,70 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 1. Ocultar containers inicialmente (Skeleton behavior)
   const standaloneGrid = document.getElementById('cursos-avulsos-grid');
   const membershipGrid = document.getElementById('planos-assinatura-grid');
+  const ytGrid = document.getElementById('yt-home-grid');
   
   if (standaloneGrid) standaloneGrid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-500 font-bold animate-pulse">Carregando catálogo...</div>';
   if (membershipGrid) membershipGrid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-500 font-bold animate-pulse">Carregando ecossistema...</div>';
+
+  // 1.1. Bloco Dinâmico do YouTube Lab (via Firestore REST API)
+  if (ytGrid) {
+    try {
+      const ytRes = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/youtube_archive');
+      if (ytRes.ok) {
+        const ytData = await ytRes.json();
+        if (ytData.documents && ytData.documents.length > 0) {
+          const videos = ytData.documents
+            .map(d => d.fields)
+            .filter(f => f.status?.stringValue === 'active')
+            .map(f => ({
+              videoId: f.videoId?.stringValue,
+              title: f.title?.stringValue,
+              thumbnailUrl: f.thumbnailUrl?.stringValue,
+              publishedAt: f.publishedAt?.stringValue,
+              homeOrder: parseInt(f.homeOrder?.integerValue || '99', 10),
+              featuredOnHome: f.featuredOnHome ? f.featuredOnHome.booleanValue : true,
+              materialsAvailable: {
+                pdf: f.materialsAvailable?.mapValue?.fields?.pdf?.booleanValue || false,
+                audio: f.materialsAvailable?.mapValue?.fields?.audio?.booleanValue || false
+              }
+            }))
+            .filter(v => v.featuredOnHome !== false);
+
+          videos.sort((a, b) => (a.homeOrder - b.homeOrder) || (new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0)));
+
+          if (videos.length === 0) {
+            document.getElementById('youtube-lab')?.classList.add('hidden');
+          } else {
+            ytGrid.className = videos.length === 1 ? "max-w-md mx-auto mb-12" : "grid grid-cols-1 md:grid-cols-3 gap-8 mb-12";
+            ytGrid.innerHTML = videos.slice(0, 3).map(v => {
+              let badgesHtml = '';
+              if (v.materialsAvailable.pdf) badgesHtml += `<span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200 text-[10px] font-bold">📄 PDF</span>`;
+              if (v.materialsAvailable.audio) badgesHtml += `<span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded border border-amber-200 text-[10px] font-bold">🎧 Áudio</span>`;
+              return `
+                <a href="youtube-lab.html?v=${v.videoId}" class="block bg-[#FAF8F5] border-2 border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition group">
+                  <div class="aspect-video bg-slate-900 relative overflow-hidden">
+                    <img src="${v.thumbnailUrl}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-500" alt="${v.title}">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition"><i data-lucide="play" class="w-6 h-6 fill-white ml-0.5"></i></div>
+                    </div>
+                  </div>
+                  <div class="p-6 space-y-3">
+                    <h3 class="text-lg font-bold text-slate-900 leading-tight font-serif">${v.title}</h3>
+                    ${badgesHtml ? `<div class="flex gap-2 text-[10px] font-bold uppercase tracking-wider">${badgesHtml}</div>` : ''}
+                  </div>
+                </a>
+              `;
+            }).join('');
+            if (window.lucide) window.lucide.createIcons();
+          }
+        } else {
+          document.getElementById('youtube-lab')?.classList.add('hidden');
+        }
+      }
+    } catch(err) {
+      console.warn('Erro ao carregar YouTube Lab na Home:', err);
+    }
+  }
 
   try {
     const AEF_COURSES = window.AEF_COURSES_DATA || (window.getAllCoursesMetadata ? window.getAllCoursesMetadata() : {});
