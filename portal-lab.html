@@ -1776,35 +1776,47 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   if (window.aefPortalAuth) await window.aefPortalAuth.ready();
-  if (!window.firebase || !window.firebase.firestore) return;
   try {
-    const snap = await window.firebase.firestore().collection("youtube_archive").where("status", "==", "active").get();
-    if (!snap.empty) {
-      const docs = snap.docs.map(d => d.data());
-      docs.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
-      
-      const grid = document.getElementById("yt-lab-dash-grid");
-      grid.innerHTML = '';
-      
-      const top3 = docs.slice(0, 3);
-      top3.forEach(v => {
-        const card = document.createElement('a');
-        card.href = `youtube-lab.html?v=${v.videoId}`;
-        card.className = "flex flex-col bg-white rounded-2xl border border-[#EAE5DC] overflow-hidden shadow-sm hover:shadow-md transition group";
-        card.innerHTML = `
-          <div class="aspect-video relative overflow-hidden bg-slate-100 border-b border-[#EAE5DC]">
-            <img src="${v.thumbnailUrl}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
-          </div>
-          <div class="p-4">
-            <h4 class="font-bold text-sm text-[#0A192F] leading-tight line-clamp-2">${v.title}</h4>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-      document.getElementById("youtube-lab-dashboard-block").classList.remove("hidden");
+    const res = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/youtube_archive');
+    if (!res.ok) throw new Error("Failed to load youtube archive");
+    const data = await res.json();
+    if (data.documents && data.documents.length > 0) {
+      const docs = data.documents
+        .map(d => d.fields)
+        .filter(f => f.status?.stringValue === "active")
+        .map(f => ({
+          videoId: f.videoId?.stringValue,
+          title: f.title?.stringValue,
+          thumbnailUrl: f.thumbnailUrl?.stringValue,
+          publishedAt: f.publishedAt?.stringValue
+        }));
+        
+      if (docs.length > 0) {
+        docs.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+        
+        const grid = document.getElementById("yt-lab-dash-grid");
+        grid.innerHTML = '';
+        
+        const top3 = docs.slice(0, 3);
+        top3.forEach(v => {
+          const card = document.createElement('a');
+          card.href = `youtube-lab.html?v=${v.videoId}`;
+          card.className = "flex flex-col bg-white rounded-2xl border border-[#EAE5DC] overflow-hidden shadow-sm hover:shadow-md transition group";
+          card.innerHTML = `
+            <div class="aspect-video relative overflow-hidden bg-slate-100 border-b border-[#EAE5DC]">
+              <img src="${v.thumbnailUrl}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
+            </div>
+            <div class="p-4">
+              <h4 class="font-bold text-sm text-[#0A192F] leading-tight line-clamp-2">${v.title}</h4>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        document.getElementById("youtube-lab-dashboard-block").classList.remove("hidden");
+      }
     }
-  } catch(e) { console.error("YT Lab dashboard", e); }
+  } catch(e) { console.error("YT Lab dashboard error", e); }
 });
 </script>
 </body>
