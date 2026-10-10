@@ -905,14 +905,16 @@
                                (c.modules && c.modules.some(m => m.isFreeTier));
                                
         if (!hasFreeContent) {
-          // Bloqueio completo na raiz (M1)
+          // Bloqueio completo na raiz (M1) com sala ao fundo
+          spinner.className = "fixed inset-0 z-[100] flex items-center justify-center";
           spinner.innerHTML = '<div id="m1-paywall-container" class="w-full h-full relative"></div>';
           if (window.triggerConversionPaywall) {
-             window.triggerConversionPaywall(document.getElementById('m1-paywall-container'), c, urlParams.get('src') || 'sala_paywall');
+             window.triggerConversionPaywall(document.getElementById('m1-paywall-container'), c, urlParams.get('src') || 'sala_paywall', null, true);
           }
-          return;
+          window.hasM1Paywall = true;
+          // Não dá return, deixa a sala de aula montar atrás!
         }
-        // Se tiver free content, deixa passar. O gate por aula (M2) decide.
+        // Se tiver free content (ou se já montou M1), deixa passar para montar a interface.
       }
 
       // 6. Montagem Instantânea do Cockpit (SWR <50ms)
@@ -926,7 +928,7 @@
       }
 
       // Remove spinner e revela workspace
-      if (spinner && spinner.parentNode) {
+      if (spinner && spinner.parentNode && !window.hasM1Paywall) {
         spinner.parentNode.removeChild(spinner);
       }
       if (workspace) workspace.style.display = 'block';
@@ -1501,7 +1503,7 @@
 
         const srcParam = new URLSearchParams(window.location.search).get('src') || 'sala_paywall';
         if (window.triggerConversionPaywall) {
-          window.triggerConversionPaywall(videoStage, activeCourse, srcParam);
+          window.triggerConversionPaywall(videoStage, activeCourse, srcParam, found.thumbnailUrl);
         } else {
           videoStage.innerHTML = '<div class="absolute inset-0 bg-[#060D17] flex items-center justify-center p-6 text-center text-white"><h3>Acesso Exclusivo</h3><a href="portal-lab.html" class="px-4 py-2 mt-4 bg-amber-500 text-slate-900 rounded-xl font-bold">Voltar ao Portal</a></div>';
         }
