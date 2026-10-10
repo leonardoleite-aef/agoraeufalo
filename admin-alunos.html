@@ -2146,14 +2146,75 @@ Bons treinos e nos vemos na Sala de Aula!`;
         updateData.meetUrl = meetUrl;
       }
 
+      // Sincroniza o array de assinaturas (subscriptions) com as checkboxes
+      let updatedSubscriptions = Array.isArray(existingStudent?.subscriptions) ? [...existingStudent.subscriptions] : [];
+      
+      // Revoga pagamentos caso as checkboxes estejam desmarcadas
+      updatedSubscriptions.forEach(s => {
+        if (!hasPago && s.entitlement === 'member_pago') {
+          s.status = 'canceled';
+          s.lastEventId = 'ADMIN_REVOKED';
+          s.updatedAt = new Date().toISOString();
+        }
+        if (!hasMentoria && s.entitlement === 'member_mentoria') {
+          s.status = 'canceled';
+          s.lastEventId = 'ADMIN_REVOKED';
+          s.updatedAt = new Date().toISOString();
+        }
+      });
+
       if (hasPago) {
+        let pagoSub = updatedSubscriptions.find(s => s.entitlement === 'member_pago' && s.status === 'active');
+        if (!pagoSub) pagoSub = updatedSubscriptions.find(s => s.entitlement === 'member_pago');
+        if (pagoSub) {
+          pagoSub.status = 'active';
+          pagoSub.billingPeriod = billingPeriod;
+          pagoSub.lastEventId = 'ADMIN_UPDATED';
+          pagoSub.updatedAt = new Date().toISOString();
+        } else {
+          updatedSubscriptions.push({
+            id: `sub_${targetDocId}_manual`,
+            entitlement: 'member_pago',
+            productId: '8460579',
+            billingPeriod: billingPeriod,
+            status: 'active',
+            gateway: 'manual',
+            lastEventId: 'ADMIN_UPDATED',
+            updatedAt: new Date().toISOString()
+          });
+        }
+        // Retrocompatibilidade
         updateData.subscription = {
           billingPeriod: billingPeriod,
           status: 'active',
           gateway: 'manual',
           lastEvent: 'ADMIN_UPDATED'
         };
+      } else {
+        updateData.subscription = null;
       }
+
+      if (hasMentoria) {
+        let mentoriaSub = updatedSubscriptions.find(s => s.entitlement === 'member_mentoria');
+        if (mentoriaSub) {
+          mentoriaSub.status = 'active';
+          mentoriaSub.lastEventId = 'ADMIN_UPDATED';
+          mentoriaSub.updatedAt = new Date().toISOString();
+        } else {
+          updatedSubscriptions.push({
+            id: `sub_${targetDocId}_mentoria`,
+            entitlement: 'member_mentoria',
+            productId: 'mentoria',
+            billingPeriod: 'lifetime',
+            status: 'active',
+            gateway: 'manual',
+            lastEventId: 'ADMIN_UPDATED',
+            updatedAt: new Date().toISOString()
+          });
+        }
+      }
+
+      updateData.subscriptions = updatedSubscriptions;
 
       try {
         if (window.aefPortalAuth) {
@@ -2602,6 +2663,22 @@ Bons treinos e nos vemos na Sala de Aula!`;
       if (editPagoChk) {
         editPagoChk.addEventListener('change', () => {
           document.getElementById('edit-billing-period-row')?.classList.toggle('hidden', !editPagoChk.checked);
+          
+          // FIX DE UX (Zero Fricção): Se desmarcar 'Member Pago', desmarca automaticamente os acessos avulsos do Club
+          if (!editPagoChk.checked) {
+            const clubCourseIds = (ALL_AVAILABLE_COURSES_CACHE || [])
+                .filter(c => c.accessTier === 'all_access')
+                .map(c => c.id);
+            // Inclui IDs clássicos que a Hotmart mapeia hardcoded
+            const hardcodedClubIds = ["ms-legacy", "english-quickstart", "frases-prontas", "dates-and-times", "magic-stories-legacy", "first-steps", "quickstart"];
+            const allClubIds = [...clubCourseIds, ...hardcodedClubIds];
+            
+            document.querySelectorAll('#edit-purchased-products input[name="edit-purchased"]').forEach(chk => {
+                if (allClubIds.includes(chk.value) || chk.nextElementSibling?.innerText.includes('Club')) {
+                    chk.checked = false;
+                }
+            });
+          }
         });
       }
       // Admin checkbox syncs with role dropdown
