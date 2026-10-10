@@ -119,12 +119,24 @@
             <div class="space-y-4 p-4 rounded-xl bg-white/5 border border-white/10">
               <h3 class="font-bold text-sm text-white flex items-center gap-2"><i data-lucide="folder-lock" class="w-4 h-4 text-emerald-400"></i> Arquivos Gated (Requer Login)</h3>
               <div>
-                <label class="block text-xs font-bold text-slate-400 mb-2">URL do PDF</label>
-                <input type="url" id="vPdf" placeholder="https://..." class="w-full px-3 py-2 bg-[#060D17] border border-white/10 rounded-lg text-xs text-white">
+                <label class="block text-xs font-bold text-slate-400 mb-2">Arquivo PDF (Exclusivo)</label>
+                <div class="flex gap-2">
+                  <input type="url" id="vPdf" placeholder="URL gerada..." class="flex-1 px-3 py-2 bg-[#060D17] border border-white/10 rounded-lg text-xs text-white opacity-50" readonly>
+                  <label class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs cursor-pointer flex items-center justify-center gap-2 transition whitespace-nowrap">
+                    <i data-lucide="upload" class="w-3.5 h-3.5"></i> Subir PDF
+                    <input type="file" id="filePdf" accept=".pdf" class="hidden" onchange="uploadGatedFile('pdf')">
+                  </label>
+                </div>
               </div>
               <div>
-                <label class="block text-xs font-bold text-slate-400 mb-2">URL do Áudio (MP3)</label>
-                <input type="url" id="vAudio" placeholder="https://..." class="w-full px-3 py-2 bg-[#060D17] border border-white/10 rounded-lg text-xs text-white">
+                <label class="block text-xs font-bold text-slate-400 mb-2">Áudio da Aula (MP3 Exclusivo)</label>
+                <div class="flex gap-2">
+                  <input type="url" id="vAudio" placeholder="URL gerada..." class="flex-1 px-3 py-2 bg-[#060D17] border border-white/10 rounded-lg text-xs text-white opacity-50" readonly>
+                  <label class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs cursor-pointer flex items-center justify-center gap-2 transition whitespace-nowrap">
+                    <i data-lucide="upload" class="w-3.5 h-3.5"></i> Subir MP3
+                    <input type="file" id="fileAudio" accept="audio/mp3,audio/mpeg" class="hidden" onchange="uploadGatedFile('audio')">
+                  </label>
+                </div>
               </div>
             </div>
 

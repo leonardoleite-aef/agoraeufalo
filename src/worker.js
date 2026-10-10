@@ -488,6 +488,62 @@ export default {
       return new Response("Not Found", { status: 404, headers: corsHeaders });
     }
 
+    // ============================================================
+    // YOUTUBE LAB - ZERO TRUST HANDSHAKE FOR GATED MATERIALS
+    // ============================================================
+    if (path === '/api/youtube-lab/handshake') {
+      const corsHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { headers: corsHeaders });
+      }
+
+      if (request.method === 'POST') {
+        try {
+          const payload = await request.json();
+          
+          if (!payload.authToken || !payload.userId || !payload.targetUrl) {
+            return new Response(JSON.stringify({ allowed: false, reason: 'BAD_REQUEST' }), {
+              status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders }
+            });
+          }
+
+          const projectId = env.FIREBASE_PROJECT_ID || 'agoraeufalo-3463a';
+          const decodedJwt = await verifyFirebaseJWT(payload.authToken, projectId);
+          
+          if (!decodedJwt || decodedJwt.sub !== payload.userId) {
+            return new Response(JSON.stringify({ allowed: false, reason: 'ACCESS_DENIED' }), {
+              status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders }
+            });
+          }
+          
+          // Signed URL para 1 hora de validade
+          const expirationWindow = 60 * 60;
+          const expiresAt = Math.floor(Date.now() / 1000) + expirationWindow;
+          const secretKey = env.HMAC_SECRET_KEY || 'default_secret_key_for_dev_only';
+          const signedUrl = await generateSignedUrl(payload.targetUrl, expiresAt, secretKey);
+
+          return new Response(JSON.stringify({
+            allowed: true,
+            mediaUrl: signedUrl,
+            expiresAt: expiresAt,
+            reason: 'ENTITLEMENT_GRANTED'
+          }), {
+            status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders }
+          });
+
+        } catch (error) {
+          return new Response(JSON.stringify({ error: "Internal Server Error" }), { 
+            status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+          });
+        }
+      }
+    }
+
     // Roteamento nativo para Edge API (/api/*), Storage (/storage/*) e Webhook Hotmart (/webhook)
     if (path.startsWith('/api/') || path.startsWith('/storage/') || path === '/webhook') {
       return edgeApiWorker.fetch(request, env, ctx);

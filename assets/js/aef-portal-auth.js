@@ -650,15 +650,15 @@
       if (this.isMasterAdminEmail(directEmail)) return true;
 
       if (!this.currentProfile) {
-        const cachedRole = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_role') : null;
         const cachedEmail = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_email') : null;
-        const cachedTier = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_user_tier') : null;
-        const cachedIsAdmin = typeof localStorage !== 'undefined' ? localStorage.getItem('aef_is_admin') === 'true' : false;
-        return (cachedRole === 'admin' || cachedTier === 'admin_master' || cachedIsAdmin || this.isMasterAdminEmail(cachedEmail));
+        if (cachedEmail && this.isMasterAdminEmail(cachedEmail)) return true;
+        // Do NOT trust localStorage cachedRole='admin' or aef_is_admin='true' if the email is not selexenglish.
+        // This prevents the "ghost admin" bug where testing a student account in the same browser grants them all courses.
+        return false;
       }
-      return this.currentProfile.role === 'admin' || 
-             this.currentProfile.tier === 'admin_master' || 
-             this.isMasterAdminEmail(this.currentProfile.email);
+      
+      // If we have a profile loaded, still enforce the absolute security device
+      return this.isMasterAdminEmail(this.currentProfile.email);
     }
 
     isRealAdmin() {

@@ -291,3 +291,56 @@ window.editVideo = async function(id) {
   
   toggleView('editor');
 };
+
+async function uploadGatedFile(type) {
+  const fileInput = document.getElementById(type === 'pdf' ? 'filePdf' : 'fileAudio');
+  const urlInput = document.getElementById(type === 'pdf' ? 'vPdf' : 'vAudio');
+  const file = fileInput.files[0];
+  
+  if (!file) return;
+  
+  const videoId = document.getElementById('videoId').value;
+  if (!videoId) {
+    alert("Por favor, puxe os dados do vídeo primeiro (cole a URL e clique em Puxar Dados).");
+    fileInput.value = '';
+    return;
+  }
+
+  // Desabilita input durante upload
+  urlInput.value = "Fazendo upload para R2...";
+  
+  try {
+    const ext = file.name.split('.').pop();
+    // Guarda na pasta fechada youtube-lab/
+    const fileName = `youtube-lab/${videoId}_${type}.${ext}`;
+    
+    const idToken = await window.firebase.auth().currentUser.getIdToken();
+    
+    // Bate no endpoint administrativo /api/admin/upload do worker.js (Upload Direto R2)
+    const res = await fetch('/api/admin/upload', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${idToken}`,
+        'X-File-Name': fileName,
+        'X-Content-Type': file.type
+      },
+      body: file
+    });
+    
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.error || "Falha no upload do Cloudflare");
+    }
+    
+    const data = await res.json();
+    urlInput.value = data.url; // Retorna a URL base do R2
+    alert(`Upload de ${type.toUpperCase()} concluído com sucesso!`);
+    
+  } catch(e) {
+    console.error(e);
+    alert("Erro no upload: " + e.message);
+    urlInput.value = "";
+  } finally {
+    fileInput.value = '';
+  }
+}

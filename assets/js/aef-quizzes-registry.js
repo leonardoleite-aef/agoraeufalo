@@ -154,6 +154,212 @@ const AEF_QUIZZES_DATA = {
         "retryHint": "Lembre-se do 'Sentimento da Estrutura': o inglês enxerga a idade como quem a pessoa É naquele momento."
       }
     ]
+  },
+  "quiz-1788820884388": {
+    "id": "quiz-1788820884388",
+    "title": "DTS_mod_1_horas_5_questions",
+    "description": "Teste seu ouvido para reconhecer horas faladas e períodos do dia.",
+    "category": "Horas",
+    "badge": "TESTE DE ESCUTA",
+    "passingScore": 70,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "dialogue_comprehension",
+        "questionText": "Escute o que a pessoa fala e marque apenas as horas que você compreende",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832624752_quiz_quiz-1788820884388_q1_1788832624752.wav",
+        "voice": "Aoede",
+        "audioScript": "I have an english class at a quarter to three this afternoon.",
+        "options": [
+          { "id": "opt_a", "text": "3:15", "isCorrect": false },
+          { "id": "opt_b", "text": "4:45", "isCorrect": false },
+          { "id": "opt_c", "text": "2:45", "isCorrect": true }
+        ],
+        "goldenTip": "Boa! nem sempre a hora é o número que você escuta.",
+        "retryHint": "Nem sempre a hora é o número que você escuta."
+      },
+      {
+        "id": "q2",
+        "type": "dialogue_comprehension",
+        "questionText": "Ouça o áudio e selecione a opção correta:",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832643074_quiz_quiz-1788820884388_q2_1788832643074.wav",
+        "voice": "Charon",
+        "audioScript": "I usually get to work at half past nine in the morning. I often stay until late in the evening, though.",
+        "options": [
+          { "id": "opt_a", "text": "3:49", "isCorrect": false },
+          { "id": "opt_b", "text": "9:30", "isCorrect": true },
+          { "id": "opt_c", "text": "9:00", "isCorrect": false }
+        ],
+        "goldenTip": "Saber dizer a hora é facil. Difícil é entender a hora dos outros.",
+        "retryHint": "Contexto e treino de escuta são chave!"
+      },
+      {
+        "id": "q3",
+        "type": "dialogue_comprehension",
+        "questionText": "Ouça o áudio e selecione a opção correta:",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832744005_quiz_quiz-1788820884388_q3_1788832744005.wav",
+        "voice": "Fenrir",
+        "audioScript": "James: Hey Leo! Let's meet for lunch today!\nLeo: Sure! We usually break for lunch around noon.\nJames: I'll meet you outside then!",
+        "options": [
+          { "id": "opt_a", "text": "por volta de meio dia", "isCorrect": true },
+          { "id": "opt_b", "text": "uma da tarde", "isCorrect": false },
+          { "id": "opt_c", "text": "meia noite", "isCorrect": false }
+        ],
+        "goldenTip": "Boa. Quando a hora não usa números é mais dificil!",
+        "retryHint": "Essa hora não tem números! Tente de novo!",
+        "audioMode": "dual",
+        "speaker1Name": "Jennie",
+        "speaker1Voice": "Aoede",
+        "speaker2Name": "Leo",
+        "speaker2Voice": "Charon"
+      },
+      {
+        "id": "q4",
+        "type": "dialogue_comprehension",
+        "questionText": "Ouça o áudio e selecione a opção correta:",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832840653_quiz_quiz-1788820884388_q4_1788832840652.wav",
+        "voice": "Fenrir",
+        "audioScript": "Leo: Hey Jennie! I'll pick you up at work tonight! What time do you get off?\nJennie: You're so sweet Leo! I get off at a quarter past seven. Will be waiting for ya! Thanks!",
+        "options": [
+          { "id": "opt_a", "text": "3:45", "isCorrect": false },
+          { "id": "opt_b", "text": "7:15", "isCorrect": true },
+          { "id": "opt_c", "text": "7:45", "isCorrect": false }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro.",
+        "audioMode": "dual",
+        "speaker1Name": "Leo",
+        "speaker1Voice": "Fenrir",
+        "speaker2Name": "Jennie",
+        "speaker2Voice": "Aoede"
+      },
+      {
+        "id": "q5",
+        "type": "dialogue_comprehension",
+        "questionText": "Ouça o áudio e selecione a opção correta:",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832882686_quiz_quiz-1788820884388_q5_1788832882686.wav",
+        "voice": "Charon",
+        "audioScript": "I'm gonna go to bed early tonight. [sighs] I'm off to the airport at ten past six in the morning.",
+        "options": [
+          { "id": "opt_a", "text": "10:30 da manhã", "isCorrect": false },
+          { "id": "opt_b", "text": "3:30 da manhã", "isCorrect": false },
+          { "id": "opt_c", "text": "6:10 da manhã", "isCorrect": true }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro."
+      }
+    ]
+  },
+  "quiz-1788825310582": {
+    "id": "quiz-1788825310582",
+    "title": "DTS_Anos",
+    "description": "Teste auditivo para reconhecer anos e décadas em diálogos do dia a dia.",
+    "category": "Geral",
+    "badge": "TESTE DE ESCUTA",
+    "passingScore": 70,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "dialogue_comprehension",
+        "questionText": "Ouça o áudio e selecione o ano que você ouviu:",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832944761_quiz_quiz-1788825310582_q1_1788832944760.wav",
+        "voice": "Aoede",
+        "audioScript": "Jennie: \"Wait, is this the original family farmhouse?\"\nLiam: \"Yeah, my great-grandfather actually laid the foundation back in eighteen-oh-six.\"",
+        "options": [
+          { "id": "opt_a", "text": "1906", "isCorrect": false },
+          { "id": "opt_b", "text": "1806", "isCorrect": true },
+          { "id": "opt_c", "text": "1860", "isCorrect": false },
+          { "id": "opt_1788827989664", "text": "1989", "isCorrect": false }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro.",
+        "audioMode": "dual",
+        "speaker1Name": "Jennie",
+        "speaker1Voice": "Kore",
+        "speaker2Name": "Liam",
+        "speaker2Voice": "Charon"
+      },
+      {
+        "id": "q2",
+        "type": "dialogue_comprehension",
+        "questionText": "Em qual ano eles se mudaram para o apartamento?",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788832976320_quiz_quiz-1788825310582_q2_1788832976320.wav",
+        "voice": "Aoede",
+        "audioScript": "Rodrigo: \"Wait, did you guys move into this apartment in twenty twenty-one?\"\nJennie: \"No, we signed the lease right before that, actually. It was late twenty-twenty, right in the middle of everything.\"",
+        "options": [
+          { "id": "opt_a", "text": "2019", "isCorrect": false },
+          { "id": "opt_b", "text": "2020", "isCorrect": true },
+          { "id": "opt_c", "text": "2021", "isCorrect": false },
+          { "id": "opt_1788827953976", "text": "2022", "isCorrect": false }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro.",
+        "audioMode": "dual",
+        "speaker1Name": "Rodrigo",
+        "speaker1Voice": "Fenrir",
+        "speaker2Name": "Jennie",
+        "speaker2Voice": "Leda"
+      },
+      {
+        "id": "q3",
+        "type": "dialogue_comprehension",
+        "questionText": "Que ano ele começou no emprego dele?",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788833005131_quiz_quiz-1788825310582_q3_1788833005131.wav",
+        "voice": "Fenrir",
+        "audioScript": "\"I started my current job in twenty nineteen, and I really love working here.\"",
+        "options": [
+          { "id": "opt_a", "text": "2018", "isCorrect": false },
+          { "id": "opt_b", "text": "2019", "isCorrect": true },
+          { "id": "opt_c", "text": "2020", "isCorrect": false },
+          { "id": "opt_1788828310562", "text": "2009", "isCorrect": false }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro.",
+        "audioMode": "single"
+      },
+      {
+        "id": "q4",
+        "type": "dialogue_comprehension",
+        "questionText": "Em que ano o carro foi comprado?",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788833033564_quiz_quiz-1788825310582_q4_1788833033564.wav",
+        "voice": "Aoede",
+        "audioScript": "Jennie: When did you buy this car?\nJoe: I bought it brand new in twenty fifteen.",
+        "options": [
+          { "id": "opt_a", "text": "2014", "isCorrect": false },
+          { "id": "opt_b", "text": "2015", "isCorrect": true },
+          { "id": "opt_c", "text": "2016", "isCorrect": false },
+          { "id": "opt_1788828445415", "text": "2005", "isCorrect": false }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro.",
+        "audioMode": "dual",
+        "speaker1Name": "Jennie",
+        "speaker1Voice": "Aoede",
+        "speaker2Name": "Joe",
+        "speaker2Voice": "Puck"
+      },
+      {
+        "id": "q5",
+        "type": "dialogue_comprehension",
+        "questionText": "Em que ano o irmão se formou?",
+        "audioUrl": "https://assets.agoraeufalo.com.br/quizzes/audio/1788833159562_quiz_quiz-1788825310582_q5_1788833159562.wav",
+        "audioMode": "single",
+        "voice": "Leda",
+        "speaker1Name": "Rodrigo",
+        "speaker1Voice": "Aoede",
+        "speaker2Name": "Liam",
+        "speaker2Voice": "Puck",
+        "audioScript": "My brother graduated from high school back in nineteen ninety-five.",
+        "options": [
+          { "id": "opt_a", "text": "1985", "isCorrect": false },
+          { "id": "opt_b", "text": "1999", "isCorrect": false },
+          { "id": "opt_c", "text": "2005", "isCorrect": false },
+          { "id": "opt_1788833268529", "text": "1995", "isCorrect": true }
+        ],
+        "goldenTip": "Explicação prática e sem gramatiquês do Leo.",
+        "retryHint": "Ouça novamente com atenção ao bloco sonoro."
+      }
+    ]
   }
 };
 

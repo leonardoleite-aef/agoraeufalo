@@ -138,6 +138,11 @@ async function loadLessonMode(id) {
 }
 
 window.playVideo = function(id) {
+  const user = window.firebase?.auth()?.currentUser;
+  if (!user) {
+    window.openAuthModal();
+    return;
+  }
   const container = document.getElementById('playerContainer');
   container.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" class="w-full h-full border-0 absolute inset-0" allow="autoplay; fullscreen"></iframe>`;
 }
@@ -156,23 +161,58 @@ function renderMaterialsAllowed(mat) {
   list.innerHTML = '';
   
   if (mat.pdfUrl) {
-    const a = document.createElement('a');
-    a.href = mat.pdfUrl;
-    a.target = '_blank';
-    a.className = "px-4 py-2 bg-white border border-amber-200 rounded-xl text-amber-900 font-bold text-sm flex items-center gap-2 hover:bg-amber-50 transition shadow-sm";
-    a.innerHTML = `<i data-lucide="file-text" class="w-4 h-4"></i> ${mat.pdfLabel || 'PDF'}`;
-    list.appendChild(a);
+    const btn = document.createElement('button');
+    btn.onclick = () => window.downloadGatedFile(mat.pdfUrl);
+    btn.className = "px-4 py-2 bg-white border border-amber-200 rounded-xl text-amber-900 font-bold text-sm flex items-center gap-2 hover:bg-amber-50 transition shadow-sm";
+    btn.innerHTML = `<i data-lucide="file-text" class="w-4 h-4"></i> ${mat.pdfLabel || 'PDF'}`;
+    list.appendChild(btn);
   }
   if (mat.audioUrl) {
-    const a = document.createElement('a');
-    a.href = mat.audioUrl;
-    a.target = '_blank';
-    a.className = "px-4 py-2 bg-white border border-amber-200 rounded-xl text-amber-900 font-bold text-sm flex items-center gap-2 hover:bg-amber-50 transition shadow-sm";
-    a.innerHTML = `<i data-lucide="headphones" class="w-4 h-4"></i> ${mat.audioLabel || 'MP3'}`;
-    list.appendChild(a);
+    const btn = document.createElement('button');
+    btn.onclick = () => window.downloadGatedFile(mat.audioUrl);
+    btn.className = "px-4 py-2 bg-white border border-amber-200 rounded-xl text-amber-900 font-bold text-sm flex items-center gap-2 hover:bg-amber-50 transition shadow-sm";
+    btn.innerHTML = `<i data-lucide="headphones" class="w-4 h-4"></i> ${mat.audioLabel || 'MP3'}`;
+    list.appendChild(btn);
   }
-  lucide.createIcons();
+  if(window.lucide) window.lucide.createIcons();
 }
+
+window.downloadGatedFile = async function(targetUrl) {
+  const user = window.firebase?.auth()?.currentUser;
+  if (!user) {
+    window.openAuthModal();
+    return;
+  }
+  
+  // Efeito de loading no cursor/botão poderia entrar aqui
+  document.body.style.cursor = 'wait';
+  
+  try {
+    const token = await user.getIdToken();
+    const res = await fetch('/api/youtube-lab/handshake', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        authToken: token,
+        userId: user.uid,
+        targetUrl: targetUrl
+      })
+    });
+    
+    if (!res.ok) throw new Error("Acesso negado pelo servidor.");
+    
+    const data = await res.json();
+    if (data.allowed && data.mediaUrl) {
+      window.open(data.mediaUrl, '_blank');
+    } else {
+      throw new Error("Erro na geração do link seguro.");
+    }
+  } catch (err) {
+    alert("Erro ao baixar o arquivo: " + err.message);
+  } finally {
+    document.body.style.cursor = 'default';
+  }
+};
 
 async function loadSidebar(currentId) {
   try {

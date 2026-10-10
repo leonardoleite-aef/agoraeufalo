@@ -896,6 +896,15 @@
               baseCourses[courseId] = liveCourse;
               activeCourse = liveCourse;
               window.activeCourse = activeCourse;
+              
+              // Se nenhuma aula foi selecionada OU a aula solicitada (targetLessonId) não é a aula ativa atual:
+              if (!activeLesson || (targetLessonId && activeLesson.id !== targetLessonId)) {
+                initClassroom(targetModuleId, targetLessonId);
+              } else if (activeLesson) {
+                // Atualiza dados da lição ativa com a carga nova do Firestore
+                selectLesson(activeLesson.id);
+              }
+
               renderCourseSyllabus();
               updateIcons();
             }
@@ -923,6 +932,11 @@
       const rightLink = document.getElementById("rightSidebarCourseLink");
       if (rightLink) rightLink.href = `curso.html?curso=${activeCourse.id}`;
 
+      const topBreadcrumbCourse = document.getElementById("topBreadcrumbCourse");
+      if (topBreadcrumbCourse && activeCourse) {
+        topBreadcrumbCourse.textContent = (activeCourse.title || "Curso").split('•')[0].trim();
+      }
+
       const modules = activeCourse.modules || [];
       const allLessons = getAllCourseLessons();
       
@@ -934,7 +948,13 @@
       if (initialLessonId) {
         const parentMod = modules.find(m => (m.lessons || []).some(l => l.id === initialLessonId));
         if (parentMod) activeModule = parentMod;
-        selectLesson(initialLessonId);
+        
+        const exists = allLessons.some(l => l.id === initialLessonId);
+        if (exists) {
+          selectLesson(initialLessonId);
+        } else if (allLessons.length > 0 && !activeLesson) {
+          selectLesson(allLessons[0].id);
+        }
       } else if (targetModuleId) {
         activeModule = modules.find(m => m.id === targetModuleId) || modules[0];
         if (activeModule && activeModule.lessons && activeModule.lessons.length > 0) {
@@ -1518,15 +1538,19 @@
         } catch(e) {}
 
         let quizData = null;
-        if (found.quizId && mergedReg[found.quizId]) {
-          quizData = mergedReg[found.quizId];
-        } else if (found.quizData) {
+        if (found.quizDataJson) {
+          try { quizData = typeof found.quizDataJson === 'string' ? JSON.parse(found.quizDataJson) : found.quizDataJson; } catch(e) {}
+        }
+        if (!quizData && found.quizData) {
           quizData = typeof found.quizData === 'string' ? JSON.parse(found.quizData) : found.quizData;
-        } else if (found.quizDataJson) {
-          try { quizData = JSON.parse(found.quizDataJson); } catch(e) {}
-        } else if (found.quizId && REGISTRY_BASE[found.quizId]) {
+        }
+        if (!quizData && found.quizId && mergedReg[found.quizId]) {
+          quizData = mergedReg[found.quizId];
+        }
+        if (!quizData && found.quizId && REGISTRY_BASE[found.quizId]) {
           quizData = REGISTRY_BASE[found.quizId];
-        } else {
+        }
+        if (!quizData) {
           // Busca inteligente por aproximação no ID ou título do quiz
           const matchKey = Object.keys(mergedReg).find(k => 
             (found.quizId && k.toLowerCase().includes(found.quizId.toLowerCase())) ||
