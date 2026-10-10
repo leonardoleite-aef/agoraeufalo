@@ -1412,6 +1412,11 @@
                 freeTierCtaUrl: f.freeTierCtaUrl?.stringValue || '',
                 accessCategories: f.accessCategories?.arrayValue?.values ? f.accessCategories.arrayValue.values.map(v => v.stringValue) : [],
                 categories: f.categories?.arrayValue?.values ? f.categories.arrayValue.values.map(v => v.stringValue) : [],
+                legacyGrants: f.legacyGrants ? (f.legacyGrants.arrayValue?.values ? f.legacyGrants.arrayValue.values.map(v => v.stringValue) : []) : [],
+                access: f.access?.mapValue?.fields ? {
+                  entitlements: f.access.mapValue.fields.entitlements?.arrayValue?.values ? f.access.mapValue.fields.entitlements.arrayValue.values.map(v => v.stringValue) : [],
+                  requiresProductId: f.access.mapValue.fields.requiresProductId?.arrayValue?.values ? f.access.mapValue.fields.requiresProductId.arrayValue.values.map(v => v.stringValue) : []
+                } : undefined,
                 accessTier: f.accessTier?.stringValue || '',
                 priceInCents: f.priceInCents?.integerValue ? parseInt(f.priceInCents.integerValue, 10) : null,
                 availableForPurchase: f.availableForPurchase?.booleanValue ?? false,
