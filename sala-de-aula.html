@@ -56,6 +56,7 @@
   <script src="assets/js/aef-quizzes-registry.js"></script>
   <script src="assets/js/aef-pdf-generator.js?v=20260906_01"></script>
   <script src="assets/js/aef-offers-registry.js"></script>
+  <script src="assets/js/aef-paywall.js"></script>
   <script src="assets/js/aef-checkout-modal.js"></script>
 
   <!-- AgoraEuFalo Master Luxury Design System Core -->
@@ -805,9 +806,15 @@
                             window.location.hostname === '127.0.0.1' ||
                             !window.location.hostname;
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const isSimulateFree = urlParams.get('simulate') === 'free';
+
       // 2. Validação assíncrona de autenticação
       let userProfile = null;
-      if (!isLocalOrFile && window.aefPortalAuth) {
+      if (isSimulateFree) {
+        userProfile = { role: 'student', tier: 'free', enrolledProducts: [] };
+        window.currentUserProfile = userProfile;
+      } else if (!isLocalOrFile && window.aefPortalAuth) {
         try {
           const authed = await window.aefPortalAuth.requireAuth({ redirectUrl: '/login' });
           if (!authed) return;
@@ -835,7 +842,6 @@
       let baseCourses = (typeof window.AEF_COURSES_REGISTRY !== 'undefined' ? window.AEF_COURSES_REGISTRY : COURSE_SEEDS);
 
       // 4. Resolve o Course ID com suporte a Mentoria VIP
-      const urlParams = new URLSearchParams(window.location.search);
       let rawParam = urlParams.get("curso") || urlParams.get("id") || urlParams.get("aluno");
       let targetModuleId = urlParams.get("modulo");
       let targetLessonId = urlParams.get("aula");
@@ -890,22 +896,25 @@
         hasAccess = window.AEFAccessEngine ? window.AEFAccessEngine.hasAccess(userProfile, baseCourses[courseId]) : true;
       }
 
-      if (courseId && !hasAccess && !isLocalOrFile) {
-        spinner.className = "fixed inset-0 z-50 flex items-center justify-center p-6"; // Transparent overlay
-        
-        spinner.innerHTML = `
-          <div class="absolute inset-0 bg-[#060D17]/60 backdrop-blur-sm"></div>
-          <div class="relative z-10 flex flex-col items-center gap-4 max-w-md text-center p-8 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border border-rose-500/30 text-white">
-            <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center mb-2 border border-rose-500/40 shadow-xl">
-              <i data-lucide="lock" class="w-8 h-8"></i>
-            </div>
-            <h2 class="text-2xl font-black text-white font-serif tracking-tight">Acesso Restrito</h2>
-            <p class="text-sm text-slate-300 mb-4 leading-relaxed">Você ainda não tem acesso a este curso ou sua assinatura expirou.</p>
-            <a href="portal.html" class="w-full px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 font-black rounded-xl hover:scale-105 transition shadow-xl text-xs uppercase tracking-wider flex items-center justify-center">Voltar ao Portal</a>
-          </div>
-        `;
-        if (window.lucide) window.lucide.createIcons();
-        window.hasM1Paywall = true;
+      const shouldCheckAccess = !isLocalOrFile || isSimulateFree;
+
+      if (courseId && !hasAccess && shouldCheckAccess) {
+        const c = baseCourses[courseId];
+        const hasFreeContent = c.accessTier === 'free' || 
+                               (c.freeModuleIds && c.freeModuleIds.length > 0) || 
+                               (c.modules && c.modules.some(m => m.isFreeTier));
+                               
+        if (!hasFreeContent) {
+          // Bloqueio completo na raiz (M1) com sala ao fundo
+          spinner.className = "fixed inset-0 z-[100] flex items-center justify-center";
+          spinner.innerHTML = '<div id="m1-paywall-container" class="w-full h-full relative"></div>';
+          if (window.triggerConversionPaywall) {
+             window.triggerConversionPaywall(document.getElementById('m1-paywall-container'), c, urlParams.get('src') || 'sala_paywall', null, true, true);
+          }
+          window.hasM1Paywall = true;
+          // Não dá return, deixa a sala de aula montar atrás!
+        }
+        // Se tiver free content (ou se já montou M1), deixa passar para montar a interface.
       }
 
       // 6. Montagem Instantânea do Cockpit (SWR <50ms)
@@ -1525,37 +1534,12 @@
           return;
         }
 
-        const bgStyle = found.thumbnailUrl ? `background-image: url('${found.thumbnailUrl}'); background-size: cover; background-position: center;` : '';
-        const overlayClass = found.thumbnailUrl ? 'bg-[#060D17]/70 backdrop-blur-sm' : 'bg-gradient-to-b from-[#0A192F] via-[#0D1E36] to-[#060D17]';
-
-        videoStage.innerHTML = `
-          <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-4 select-none" style="${bgStyle}">
-            <div class="absolute inset-0 ${overlayClass}"></div>
-            <div class="relative z-10 flex flex-col items-center gap-4 w-full">
-              <div class="w-16 h-16 rounded-3xl bg-amber-500/20 text-amber-400 border border-amber-400/40 flex items-center justify-center text-3xl shadow-xl">
-                🔒
-              </div>
-              <div class="space-y-2 max-w-md">
-                <span class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono font-bold text-[10px] uppercase tracking-wider">
-                  CONTEÚDO EXCLUSIVO AGORAEUFALO
-                </span>
-                <h3 class="text-xl sm:text-2xl font-black text-white leading-tight font-serif">Esta aula é exclusiva para membros</h3>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                  Esta aula e todo o acervo de áudios narrados fazem parte do treinamento oficial <strong>AgoraEuFalo</strong>.
-                </p>
-              </div>
-              <div class="pt-2 flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
-                <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h&src=sala_paywall" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-                  <span>Torne-se membro do AgoraEuFalo ➔</span>
-                </a>
-                <a href="portal.html" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition flex items-center justify-center">
-                  Voltar ao Portal
-                </a>
-              </div>
-              <p class="text-[10px] text-slate-400">Garantia incondicional de 7 dias • Acesso imediato na plataforma</p>
-            </div>
-          </div>
-        `;
+        const srcParam = new URLSearchParams(window.location.search).get('src') || 'sala_paywall';
+        if (window.triggerConversionPaywall) {
+          window.triggerConversionPaywall(videoStage, activeCourse, srcParam, found.thumbnailUrl);
+        } else {
+          videoStage.innerHTML = '<div class="absolute inset-0 bg-[#060D17] flex items-center justify-center p-6 text-center text-white"><h3>Acesso Exclusivo</h3><a href="portal.html" class="px-4 py-2 mt-4 bg-amber-500 text-slate-950 rounded-xl font-bold">Voltar ao Portal</a></div>';
+        }
 
         const processedContainer = document.getElementById("lessonProcessedContentContainer");
         if (processedContainer) {
@@ -1564,10 +1548,12 @@
               <span class="text-3xl">📖</span>
               <h4 class="text-base font-black text-white font-serif">Roteiro Interativo Protegido</h4>
               <p class="text-xs text-slate-300 max-w-md mx-auto">O texto integral com chunks, conexões sonoras e sacadas do Professor Leo estão disponíveis exclusivamente para membros do AgoraEuFalo.</p>
-              <a href="https://pay.hotmart.com/T107479074N?off=mgwnab3h" target="_blank" class="inline-flex px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-md">
-                Inscreva-se no AgoraEuFalo ➔
-              </a>
             </div>
+          `;
+        }
+
+        renderLessonDownloads(found, false);
+        return;
           `;
         }
 

@@ -247,6 +247,15 @@ async function loadVideos() {
   }
 }
 
+window.filterVideos = function() {
+  const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  const rows = document.querySelectorAll('#videosTableBody tr');
+  rows.forEach(tr => {
+    const text = tr.textContent.toLowerCase();
+    tr.style.display = text.includes(query) ? '' : 'none';
+  });
+};
+
 window.editVideo = async function(id) {
   const v = currentVideos.find(x => x.videoId === id);
   if (!v) return;

@@ -290,6 +290,20 @@
 
     </section>
 
+    <!-- B1.5 YOUTUBE LAB RECENT -->
+    <section id="youtube-lab-dashboard-block" class="hidden space-y-4">
+      <div class="flex items-center justify-between px-1">
+        <h3 class="font-bold text-[#0A192F] flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-red-600 text-white text-[10px] uppercase font-black tracking-wider">YouTube Lab</span>
+          Novas Aulas Abertas
+        </h3>
+        <a href="youtube-lab.html" class="text-xs font-bold text-amber-600 hover:text-amber-700 hover:underline transition">Ver Acervo ➔</a>
+      </div>
+      <div id="yt-lab-dash-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- JS renderiza até 3 cards aqui -->
+      </div>
+    </section>
+
     <!-- B2. SHOWCASE AD: TRAINING PLAYER MOBILE ("LEVE O PROFESSOR LEO NO BOLSO") -->
     <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#060D1A] via-[#0A192F] to-[#112240] border border-amber-500/30 p-6 sm:p-8 shadow-2xl text-white">
       
@@ -531,6 +545,10 @@
         <a href="player.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
           <i data-lucide="headphones" class="w-4 h-4 text-[#8C8275]"></i>
           <span>Training Player</span>
+        </a>
+        <a href="youtube-lab.html" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-[#6E675F] hover:bg-[#F9F6F0] transition">
+          <i data-lucide="youtube" class="w-4 h-4 text-[#8C8275]"></i>
+          <span>YouTube Lab</span>
         </a>
       </nav>
     </div>
@@ -1755,5 +1773,52 @@
 
     </div>
   </div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  if (window.aefPortalAuth) await window.aefPortalAuth.ready();
+  try {
+    const res = await fetch('https://firestore.googleapis.com/v1/projects/agoraeufalo-3463a/databases/(default)/documents/youtube_archive');
+    if (!res.ok) throw new Error("Failed to load youtube archive");
+    const data = await res.json();
+    if (data.documents && data.documents.length > 0) {
+      const docs = data.documents
+        .map(d => d.fields)
+        .filter(f => f.status?.stringValue === "active")
+        .map(f => ({
+          videoId: f.videoId?.stringValue,
+          title: f.title?.stringValue,
+          thumbnailUrl: f.thumbnailUrl?.stringValue,
+          publishedAt: f.publishedAt?.stringValue
+        }));
+        
+      if (docs.length > 0) {
+        docs.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+        
+        const grid = document.getElementById("yt-lab-dash-grid");
+        if (grid) {
+          grid.innerHTML = '';
+          const top3 = docs.slice(0, 3);
+          top3.forEach(v => {
+            const card = document.createElement('a');
+            card.href = `youtube-lab.html?v=${v.videoId}`;
+            card.className = "flex flex-col bg-white rounded-2xl border border-[#EAE5DC] overflow-hidden shadow-sm hover:shadow-md transition group";
+            card.innerHTML = `
+              <div class="aspect-video relative overflow-hidden bg-slate-100 border-b border-[#EAE5DC]">
+                <img src="${v.thumbnailUrl}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>
+              </div>
+              <div class="p-4">
+                <h4 class="font-bold text-sm text-[#0A192F] leading-tight line-clamp-2">${v.title}</h4>
+              </div>
+            `;
+            grid.appendChild(card);
+          });
+          document.getElementById("youtube-lab-dashboard-block")?.classList.remove("hidden");
+        }
+      }
+    }
+  } catch(e) { console.error("YT Lab dashboard error", e); }
+});
+</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const SALA_PATH = 'sala-de-aula-lab.html';
+const SALA_PATH = 'sala-de-aula.html';
 let db = null;
 let currentVideoId = null;
 

@@ -90,6 +90,9 @@
             'blog': 'Blog CMS',
             'blog-panel': 'Blog CMS',
             'blog-panel.html': 'Blog CMS',
+            'youtube-lab': 'YouTube Lab Manager',
+            'admin-youtube-lab': 'YouTube Lab Manager',
+            'admin-youtube-lab.html': 'YouTube Lab Manager',
             'seo': 'SEO Manager',
             'seo-manager': 'SEO Manager',
             'seo-manager.html': 'SEO Manager'
@@ -203,6 +206,9 @@
               </a>
               <a href="/blog" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('blog')}">
                 <span>📝</span> <span>Blog CMS</span>
+              </a>
+              <a href="/youtube-lab" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('youtube-lab')}">
+                <span>🎬</span> <span>YouTube Lab</span>
               </a>
               <a href="/seo" class="px-2.5 py-1.5 rounded-xl transition flex items-center gap-1.5 ${active('seo')}">
                 <span>🔍</span> <span>SEO</span>

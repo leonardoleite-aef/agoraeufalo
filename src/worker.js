@@ -610,6 +610,10 @@ export default {
         '/tts-studio': '/tts',
         '/blog-panel.html': '/blog',
         '/blog-panel': '/blog',
+        '/admin-youtube-lab.html': '/youtube-lab',
+        '/admin-youtube-lab': '/youtube-lab',
+        '/admin-youtube.html': '/youtube-lab',
+        '/admin-youtube': '/youtube-lab',
         '/seo-manager.html': '/seo',
         '/seo-manager': '/seo'
       };
@@ -677,6 +681,7 @@ export default {
         '/sala-lab': '/sala-lab.html',
         '/player-lab': '/player-lab.html',
         '/youtube-lab': '/youtube-lab.html',
+        '/youtube': '/youtube-lab.html',
         '/migracao': '/migracao/index.html'
       };
 
@@ -759,6 +764,10 @@ export default {
         '/tts-studio.html': '/tts',
         '/blog-panel': '/blog',
         '/blog-panel.html': '/blog',
+        '/admin-youtube-lab': '/youtube-lab',
+        '/admin-youtube-lab.html': '/youtube-lab',
+        '/admin-youtube': '/youtube-lab',
+        '/admin-youtube.html': '/youtube-lab',
         '/seo': '/seo',
         '/seo-manager': '/seo',
         '/seo-manager.html': '/seo'
@@ -793,6 +802,8 @@ export default {
         '/aefclub': '/aefclub.html',
         '/vendas': '/vendas.html',
         '/vendas.html': '/vendas.html',
+        '/youtube': '/youtube-lab.html',
+        '/youtube-lab': '/youtube-lab.html',
         '/oferta': '/oferta.html',
         '/cursos': '/cursos.html',
         '/ebook': '/ebook.html',
