@@ -246,14 +246,20 @@
       if (course.accessTier === 'free') return true;
       if (course.accessTier === 'all_access') {
         let allowedCats = [MEMBER_CATEGORIES.PAGO, MEMBER_CATEGORIES.MENTORIA];
+        let hasEntitlements = false;
+        
         if (course.access && Array.isArray(course.access.entitlements) && course.access.entitlements.length > 0) {
-          allowedCats = course.access.entitlements;
-        } else if (course.legacyGrants) {
+          allowedCats = [...course.access.entitlements];
+          hasEntitlements = true;
+        } 
+        
+        if (course.legacyGrants && Array.isArray(course.legacyGrants) && course.legacyGrants.length > 0) {
           allowedCats = allowedCats.concat(course.legacyGrants);
-        } else {
+        } else if (!hasEntitlements && !course.legacyGrants) {
           // Fallback para manter o acesso até o curso ser salvo novamente no painel
           allowedCats.push(MEMBER_CATEGORIES.LEGADO_1, MEMBER_CATEGORIES.LEGADO_2);
         }
+        
         return userCats.some(cat => allowedCats.includes(cat));
       }
       if (course.accessTier === 'standalone') {
